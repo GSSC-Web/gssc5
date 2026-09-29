@@ -1,0 +1,219 @@
+[DOCUMENT]
+TITLE: Objectives
+UID: GSSC-OBJECTIVES
+VERSION: 5.0.0
+PREFIX: GSSC-OBJ-
+
+[[SECTION]]
+UID: CUSTOMER-OBJECTIVES
+TITLE: Customer Objectives
+
+[REQUIREMENT]
+UID: GSSC-OBJ-8
+TITLE: Home Page
+STATEMENT: >>>
+The GSSC Website should have a home page.
+<<<
+RATIONALE: >>>
+The site should maintain feature parity with the legacy site unless otherwise specified.
+<<<
+
+[REQUIREMENT]
+UID: GSSC-OBJ-9
+TITLE: Membership Information Page
+STATEMENT: >>>
+The GSSC Website should have a membership information page.
+<<<
+RATIONALE: >>>
+The site should maintain feature parity with the legacy site unless otherwise specified.
+<<<
+
+[REQUIREMENT]
+UID: GSSC-OBJ-10
+TITLE: Leadership Page
+STATEMENT: >>>
+The GSSC Website should have a leadership page.
+<<<
+RATIONALE: >>>
+The site should maintain feature parity with the legacy site unless otherwise specified.
+<<<
+
+[REQUIREMENT]
+UID: GSSC-OBJ-11
+TITLE: Calendar
+STATEMENT: >>>
+The GSSC Website should have a calendar.
+<<<
+RATIONALE: >>>
+The site should maintain feature parity with the legacy site unless otherwise specified.
+<<<
+
+[REQUIREMENT]
+UID: GSSC-OBJ-12
+TITLE: Research Tools Page
+STATEMENT: >>>
+The GSSC Website should have a research tools page.
+<<<
+RATIONALE: >>>
+The site should maintain feature parity with the legacy site unless otherwise specified.
+<<<
+
+[REQUIREMENT]
+UID: GSSC-OBJ-13
+TITLE: Publications Page
+STATEMENT: >>>
+The GSSC Website should have a publications page.
+<<<
+RATIONALE: >>>
+The site should maintain feature parity with the legacy site unless otherwise specified.
+<<<
+
+[REQUIREMENT]
+UID: GSSC-OBJ-14
+TITLE: Newsletters Page
+STATEMENT: >>>
+The GSSC Website should have a newsletters page.
+<<<
+RATIONALE: >>>
+The site should maintain feature parity with the legacy site unless otherwise specified.
+<<<
+
+[REQUIREMENT]
+UID: GSSC-OBJ-15
+TITLE: Dedicated Publication Pages
+STATEMENT: >>>
+The GSSC Website should have pages for each GSSC publication.
+<<<
+RATIONALE: >>>
+The site should maintain feature parity with the legacy site unless otherwise specified.
+<<<
+
+[[SECTION]]
+UID: SPECIAL-PUBLICATION-OBJECTIVES
+TITLE: Special Publications
+
+[REQUIREMENT]
+UID: GSSC-OBJ-16
+TITLE: Stanislaus County Cemetery Project Pages
+STATEMENT: >>>
+The GSSC Website should have pages for the Stanislaus County Cemetery Project.
+<<<
+RATIONALE: >>>
+The site should maintain feature parity with the legacy site unless otherwise specified.
+<<<
+
+[REQUIREMENT]
+UID: GSSC-OBJ-17
+TITLE: War Veterans Cemetery Project
+STATEMENT: >>>
+The GSSC Website should have pages for the Civil War Veterans Project.
+<<<
+RATIONALE: >>>
+The site should maintain feature parity with the legacy site unless otherwise specified.
+<<<
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: MEMBERS-OBJECTIVES
+TITLE: Member's Functions
+
+[REQUIREMENT]
+UID: GSSC-OBJ-18
+TITLE: Member Elections
+STATEMENT: >>>
+The GSSC Website should support elections by the membership for GSSC leadership.
+<<<
+RATIONALE: >>>
+GSSC elections should be digitized and accessible.
+<<<
+
+[REQUIREMENT]
+UID: GSSC-OBJ-19
+TITLE: Member Publications
+STATEMENT: >>>
+The GSSC Website should support publications by the membership.
+<<<
+RATIONALE: >>>
+GSSC publications should be streamlined without requiring developer intervention.
+<<<
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: DEVELOPMENT-OBJECTIVES
+TITLE: Development Objectives
+
+[REQUIREMENT]
+UID: GSSC-OBJ-1
+TITLE: Public Domain
+STATEMENT: >>>
+The GSSC Website should have a public facing primary domain.
+<<<
+RATIONALE: >>>
+Guests, visitors, and interested persons should be able to learn more about the GSSC.
+<<<
+
+[REQUIREMENT]
+UID: GSSC-OBJ-2
+TITLE: Member Subdomain
+STATEMENT: >>>
+The GSSC Website should have a members-only subdomain.
+<<<
+RATIONALE: >>>
+Members of the GSSC should have an internal area where they can manage their memberships, access members-only resources, and perform private actions related to the GSSC.
+<<<
+
+[REQUIREMENT]
+UID: GSSC-OBJ-3
+TITLE: Unified Backend
+STATEMENT: >>>
+The GSSC Website should have a unified backend supporting the public and members-only spaces.
+<<<
+RATIONALE: >>>
+This will enable changes to the public domain to be made from the members-only area by members with sufficient permissions. It will allow for content to be shared between the two spaces without duplication.
+<<<
+
+[REQUIREMENT]
+UID: GSSC-OBJ-4
+TITLE: Website Security
+STATEMENT: >>>
+The GSSC Website should be secure.
+<<<
+RATIONALE: >>>
+An unsecure site poses a risk to the consumers of the site.
+<<<
+
+[REQUIREMENT]
+UID: GSSC-OBJ-5
+TITLE: Maintainer Useability
+STATEMENT: >>>
+The GSSC Website should be modifiable by individuals without programming knowledge.
+<<<
+RATIONALE: >>>
+This will reduce load on the developers by empowering the owners to make changes they desire at will.
+<<<
+
+[REQUIREMENT]
+UID: GSSC-OBJ-6
+TITLE: Multiuser Support
+STATEMENT: >>>
+The GSSC Website should be modifiable by multiple users at once.
+<<<
+RATIONALE: >>>
+This will reduce load on the developers by empowering the owners to make changes they desire at will.
+<<<
+
+[REQUIREMENT]
+UID: GSSC-OBJ-7
+TITLE: Member-Driven Content
+STATEMENT: >>>
+The GSSC Website should dynamically create content which may be user driven.
+<<<
+RATIONALE: >>>
+Pages which could be generated by users, such as new publications, newsletters, events, etc. should not require developer intervention.
+<<<
+
+[[/SECTION]]
