@@ -43,6 +43,9 @@ ELEMENTS:
   - TITLE: CHANGE_DRIVER
     TYPE: String
     REQUIRED: True
+  - TITLE: REVIEW_STATUS
+    TYPE: SingleChoice(Changed, Approved, Baselined)
+    REQUIRED: True
   RELATIONS:
   - TYPE: Parent
     ROLE: Satisfies
@@ -66,10 +69,11 @@ TITLE: Public Frontend
 UID: GSSC-PIR-1
 TITLE: Public Frontend Application
 STATEMENT: >>>
-The GSSC Website SHALL have a public-accessible frontend application.
+The GSSC Website SHALL have a publicly accessible frontend application on its public-facing primary domain.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-2
+CHANGE_DRIVER: GSSC5-9
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-OBJ-1
@@ -86,7 +90,8 @@ STATEMENT: >>>
 The GSSC Website Public Frontend SHALL have a home page.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-2
+CHANGE_DRIVER: GSSC5-9
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-OBJ-8
@@ -99,7 +104,8 @@ STATEMENT: >>>
 The GSSC Website Public Frontend SHALL have a membership information page.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-2
+CHANGE_DRIVER: GSSC5-9
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-OBJ-9
@@ -112,7 +118,8 @@ STATEMENT: >>>
 The GSSC Website Public Frontend SHALL have a leadership page.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-2
+CHANGE_DRIVER: GSSC5-9
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-OBJ-10
@@ -125,7 +132,8 @@ STATEMENT: >>>
 The GSSC Website Public Frontend SHALL have a public calendar.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-2
+CHANGE_DRIVER: GSSC5-9
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-OBJ-11
@@ -138,7 +146,8 @@ STATEMENT: >>>
 The GSSC Website Public Frontend SHALL have a public research tools page.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-2
+CHANGE_DRIVER: GSSC5-9
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-OBJ-12
@@ -155,7 +164,8 @@ STATEMENT: >>>
 The GSSC Website Public Frontend SHALL have a publications page.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-2
+CHANGE_DRIVER: GSSC5-9
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-OBJ-13
@@ -163,12 +173,13 @@ RELATIONS:
 
 [REQUIREMENT]
 UID: GSSC-PIR-17
-TITLE: Standalone Publication Pages
+TITLE: Dedicated Publication Pages
 STATEMENT: >>>
-The GSSC Website Public Frontend SHALL have dedicated publications pages for each publication it features.
+The GSSC Website Public Frontend SHALL have a dedicated page for each GSSC publication.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-2
+CHANGE_DRIVER: GSSC5-9
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-OBJ-15
@@ -182,10 +193,11 @@ TITLE: Public Projects
 UID: GSSC-PIR-18
 TITLE: Cemetery Project
 STATEMENT: >>>
-The GSSC Website Public Frontend SHALL have pages documenting the Stanislaus Country Cemetery Project.
+The GSSC Website Public Frontend SHALL have pages documenting the Stanislaus County Cemetery Project.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-2
+CHANGE_DRIVER: GSSC5-9
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-OBJ-16
@@ -193,12 +205,13 @@ RELATIONS:
 
 [REQUIREMENT]
 UID: GSSC-PIR-19
-TITLE: Civil War Veterans Project
+TITLE: War Veterans of Stanislaus County
 STATEMENT: >>>
-The GSSC Website SHALL have pages for exploration of the Stanislaus County Civil War Veterans project.
+The GSSC Website Public Frontend SHALL have pages for the War Veterans of Stanislaus County publication, including Civil War veterans and veterans of other wars.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-2
+CHANGE_DRIVER: GSSC5-9
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-OBJ-17
@@ -215,7 +228,8 @@ STATEMENT: >>>
 The GSSC Website Public Frontend SHALL have a newsletters page.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-2
+CHANGE_DRIVER: GSSC5-9
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-OBJ-14
@@ -223,12 +237,13 @@ RELATIONS:
 
 [REQUIREMENT]
 UID: GSSC-PIR-9
-TITLE: Members Access
+TITLE: Access to the Member Subdomain
 STATEMENT: >>>
-The GSSC Website Public Frontend SHALL provide access for to the Member Frontend.
+The GSSC Website Public Frontend SHALL provide access to the Member Frontend on the members-only subdomain.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-2
+CHANGE_DRIVER: GSSC5-9
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-OBJ-2
@@ -253,7 +268,8 @@ STATEMENT: >>>
 The GSSC Website Member Frontent SHALL provide capability to manage a member's own account.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-2
+CHANGE_DRIVER: GSSC5-9
+REVIEW_STATUS: Changed
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-OBJ-20
@@ -266,7 +282,8 @@ STATEMENT: >>>
 The GSSC Website Member Frontend SHALL provide capability for administrators to manage a member's account
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-2
+CHANGE_DRIVER: GSSC5-9
+REVIEW_STATUS: Changed
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-OBJ-20
@@ -281,7 +298,8 @@ STATEMENT: >>>
 The GSSC Website Member Frontend SHALL provide a forum for elections by the membership for GSSC leadership, and for other decisions.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-2
+CHANGE_DRIVER: GSSC5-9
+REVIEW_STATUS: Changed
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-OBJ-18
@@ -294,7 +312,8 @@ STATEMENT: >>>
 The GSSC Website Member Frontend SHALL provide an editor for members to create/modify publications and page contents of the Public GSSC Frontend.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-2
+CHANGE_DRIVER: GSSC5-9
+REVIEW_STATUS: Changed
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-OBJ-19
@@ -307,7 +326,8 @@ STATEMENT: >>>
 The GSSC Website Member Frontend SHALL provide an editor for members to create/modify announcements for either or both of the frontends.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-2
+CHANGE_DRIVER: GSSC5-9
+REVIEW_STATUS: Changed
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-OBJ-19
@@ -324,7 +344,8 @@ STATEMENT: >>>
 The GSSC Website Member Frontend SHALL provide a member directory to view the list of other active members of the organization.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-2
+CHANGE_DRIVER: GSSC5-9
+REVIEW_STATUS: Changed
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-OBJ-21
@@ -337,7 +358,8 @@ STATEMENT: >>>
 The GSSC Website Member Frontend SHALL provide a member directory for administrators to view the list of registered members of the organization.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-2
+CHANGE_DRIVER: GSSC5-9
+REVIEW_STATUS: Changed
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-OBJ-21
