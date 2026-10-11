@@ -1,0 +1,4 @@
+[submodule "gssc5-web"]
+	path = gssc5-web
+	url = git@github.com:GSSC-Web/gssc5-web.git
+	branch = master

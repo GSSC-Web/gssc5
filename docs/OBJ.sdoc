@@ -2,11 +2,66 @@
 TITLE: Objectives
 UID: GSSC-OBJECTIVES
 VERSION: 5.0.0
-PREFIX: GSSC-OBJ-
+
+[GRAMMAR]
+ELEMENTS:
+- TAG: TEXT
+  FIELDS:
+  - TITLE: UID
+    TYPE: String
+    REQUIRED: False
+  - TITLE: STATEMENT
+    TYPE: String
+    REQUIRED: True
+- TAG: SECTION
+  PROPERTIES:
+    IS_COMPOSITE: True
+    PREFIX: None
+    VIEW_STYLE: Narrative
+  FIELDS:
+  - TITLE: UID
+    TYPE: String
+    REQUIRED: False
+  - TITLE: TITLE
+    TYPE: String
+    REQUIRED: True
+- TAG: REQUIREMENT
+  PROPERTIES:
+    PREFIX: GSSC-OBJ-
+    VIEW_STYLE: Table
+  FIELDS:
+  - TITLE: UID
+    TYPE: String
+    REQUIRED: True
+  - TITLE: TITLE
+    TYPE: String
+    REQUIRED: True
+  - TITLE: STATEMENT
+    TYPE: String
+    REQUIRED: True
+  - TITLE: RATIONALE
+    TYPE: String
+    REQUIRED: True
+  - TITLE: COMMENT
+    TYPE: String
+    REQUIRED: False
+  - TITLE: OWNER
+    TYPE: SingleChoice(Customer, Developer)
+    REQUIRED: True
+  - TITLE: CHANGE_DRIVER
+    TYPE: String
+    REQUIRED: True
+  - TITLE: REVIEW_STATUS
+    TYPE: SingleChoice(Changed, Approved, Baselined)
+    REQUIRED: True
 
 [[SECTION]]
 UID: CUSTOMER-OBJECTIVES
 TITLE: Customer Objectives
+
+[[SECTION]]
+UID: LEGACY-FEATURE-PARITY
+TITLE: Legacy Feature Parity
 
 [REQUIREMENT]
 UID: GSSC-OBJ-8
@@ -17,6 +72,9 @@ The GSSC Website should have a home page.
 RATIONALE: >>>
 The site should maintain feature parity with the legacy site unless otherwise specified.
 <<<
+OWNER: Customer
+CHANGE_DRIVER: GSSC5-1
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-OBJ-9
@@ -27,6 +85,9 @@ The GSSC Website should have a membership information page.
 RATIONALE: >>>
 The site should maintain feature parity with the legacy site unless otherwise specified.
 <<<
+OWNER: Customer
+CHANGE_DRIVER: GSSC5-1
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-OBJ-10
@@ -37,6 +98,9 @@ The GSSC Website should have a leadership page.
 RATIONALE: >>>
 The site should maintain feature parity with the legacy site unless otherwise specified.
 <<<
+OWNER: Customer
+CHANGE_DRIVER: GSSC5-1
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-OBJ-11
@@ -47,6 +111,9 @@ The GSSC Website should have a calendar.
 RATIONALE: >>>
 The site should maintain feature parity with the legacy site unless otherwise specified.
 <<<
+OWNER: Customer
+CHANGE_DRIVER: GSSC5-1
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-OBJ-12
@@ -57,6 +124,9 @@ The GSSC Website should have a research tools page.
 RATIONALE: >>>
 The site should maintain feature parity with the legacy site unless otherwise specified.
 <<<
+OWNER: Customer
+CHANGE_DRIVER: GSSC5-1
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-OBJ-13
@@ -67,16 +137,9 @@ The GSSC Website should have a publications page.
 RATIONALE: >>>
 The site should maintain feature parity with the legacy site unless otherwise specified.
 <<<
-
-[REQUIREMENT]
-UID: GSSC-OBJ-14
-TITLE: Newsletters Page
-STATEMENT: >>>
-The GSSC Website should have a newsletters page.
-<<<
-RATIONALE: >>>
-The site should maintain feature parity with the legacy site unless otherwise specified.
-<<<
+OWNER: Customer
+CHANGE_DRIVER: GSSC5-1
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-OBJ-15
@@ -85,8 +148,11 @@ STATEMENT: >>>
 The GSSC Website should have pages for each GSSC publication.
 <<<
 RATIONALE: >>>
-The site should maintain feature parity with the legacy site unless otherwise specified.
+Readers should be able to open each GSSC publication on its own page. Some legacy publications are only a direct file or an external link, and those should gain a page as well.
 <<<
+OWNER: Customer
+CHANGE_DRIVER: GSSC5-1
+REVIEW_STATUS: Approved
 
 [[SECTION]]
 UID: SPECIAL-PUBLICATION-OBJECTIVES
@@ -101,22 +167,56 @@ The GSSC Website should have pages for the Stanislaus County Cemetery Project.
 RATIONALE: >>>
 The site should maintain feature parity with the legacy site unless otherwise specified.
 <<<
+OWNER: Customer
+CHANGE_DRIVER: GSSC5-1
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-OBJ-17
-TITLE: War Veterans Cemetery Project
+TITLE: War Veterans of Stanislaus County
 STATEMENT: >>>
-The GSSC Website should have pages for the Civil War Veterans Project.
+The GSSC Website should have pages for the War Veterans of Stanislaus County publication, including Civil War veterans and veterans of other wars.
 <<<
 RATIONALE: >>>
 The site should maintain feature parity with the legacy site unless otherwise specified.
 <<<
+OWNER: Customer
+CHANGE_DRIVER: GSSC5-1
+REVIEW_STATUS: Approved
+
+[[/SECTION]]
+
+[REQUIREMENT]
+UID: GSSC-OBJ-14
+TITLE: Newsletters Page
+STATEMENT: >>>
+The GSSC Website should have a newsletters page.
+<<<
+RATIONALE: >>>
+The site should maintain feature parity with the legacy site unless otherwise specified.
+<<<
+OWNER: Customer
+CHANGE_DRIVER: GSSC5-1
+REVIEW_STATUS: Approved
 
 [[/SECTION]]
 
 [[SECTION]]
 UID: MEMBERS-OBJECTIVES
 TITLE: Member's Functions
+
+[REQUIREMENT]
+UID: GSSC-OBJ-20
+TITLE: Member Accounts
+STATEMENT: >>>
+The GSSC Website should let members manage their own accounts and let authorized administrators manage member accounts.
+<<<
+RATIONALE: >>>
+Members should be able to update their own membership information without first contacting the organization. Administrators need to correct and maintain those accounts for the organization.
+<<<
+OWNER: Customer
+CHANGE_DRIVER: GSSC5-1
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-OBJ-18
@@ -127,6 +227,9 @@ The GSSC Website should support elections by the membership for GSSC leadership.
 RATIONALE: >>>
 GSSC elections should be digitized and accessible.
 <<<
+OWNER: Customer
+CHANGE_DRIVER: GSSC5-1
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-OBJ-19
@@ -137,6 +240,22 @@ The GSSC Website should support publications by the membership.
 RATIONALE: >>>
 GSSC publications should be streamlined without requiring developer intervention.
 <<<
+OWNER: Customer
+CHANGE_DRIVER: GSSC5-1
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-OBJ-21
+TITLE: Member Directory
+STATEMENT: >>>
+The GSSC Website should give members a directory of fellow members and the contact information those members make available for collaboration within the organization.
+<<<
+RATIONALE: >>>
+Members need one another's contact information in order to collaborate. The directory is for members.
+<<<
+OWNER: Customer
+CHANGE_DRIVER: GSSC5-1
+REVIEW_STATUS: Approved
 
 [[/SECTION]]
 
@@ -148,13 +267,16 @@ TITLE: Development Objectives
 
 [REQUIREMENT]
 UID: GSSC-OBJ-1
-TITLE: Public Domain
+TITLE: Public-Facing Domain
 STATEMENT: >>>
-The GSSC Website should have a public facing primary domain.
+The GSSC Website should have a public-facing primary domain.
 <<<
 RATIONALE: >>>
 Guests, visitors, and interested persons should be able to learn more about the GSSC.
 <<<
+OWNER: Developer
+CHANGE_DRIVER: GSSC5-1
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-OBJ-2
@@ -165,6 +287,9 @@ The GSSC Website should have a members-only subdomain.
 RATIONALE: >>>
 Members of the GSSC should have an internal area where they can manage their memberships, access members-only resources, and perform private actions related to the GSSC.
 <<<
+OWNER: Developer
+CHANGE_DRIVER: GSSC5-1
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-OBJ-3
@@ -173,47 +298,62 @@ STATEMENT: >>>
 The GSSC Website should have a unified backend supporting the public and members-only spaces.
 <<<
 RATIONALE: >>>
-This will enable changes to the public domain to be made from the members-only area by members with sufficient permissions. It will allow for content to be shared between the two spaces without duplication.
+This will enable changes to the public site to be made from the members-only area by members with sufficient permissions. It will allow for content to be shared between the two spaces without duplication.
 <<<
+OWNER: Developer
+CHANGE_DRIVER: GSSC5-1
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-OBJ-4
 TITLE: Website Security
 STATEMENT: >>>
-The GSSC Website should be secure.
+The GSSC Website should protect visitor and member information, and the integrity of published content, against unauthorized access, modification, and disclosure.
 <<<
 RATIONALE: >>>
-An unsecure site poses a risk to the consumers of the site.
+An insecure site puts the people who use it, and the society's records, at risk.
 <<<
+OWNER: Developer
+CHANGE_DRIVER: GSSC5-1
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-OBJ-5
-TITLE: Maintainer Useability
+TITLE: Maintainer Usability
 STATEMENT: >>>
 The GSSC Website should be modifiable by individuals without programming knowledge.
 <<<
 RATIONALE: >>>
-This will reduce load on the developers by empowering the owners to make changes they desire at will.
+This will reduce load on the developers by empowering maintainers to make changes they desire at will.
 <<<
+OWNER: Developer
+CHANGE_DRIVER: GSSC5-1
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-OBJ-6
 TITLE: Multiuser Support
 STATEMENT: >>>
-The GSSC Website should be modifiable by multiple users at once.
+The GSSC Website should allow more than one authorized person to modify content at the same time, without blocking one another or losing each other's changes.
 <<<
 RATIONALE: >>>
-This will reduce load on the developers by empowering the owners to make changes they desire at will.
+Several officers and volunteers need to update the site during the same period, and that work should stay off the developers.
 <<<
+OWNER: Developer
+CHANGE_DRIVER: GSSC5-1
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-OBJ-7
 TITLE: Member-Driven Content
 STATEMENT: >>>
-The GSSC Website should dynamically create content which may be user driven.
+The GSSC Website should let authorized users create and publish content, including publications, newsletters, and events, without developer intervention.
 <<<
 RATIONALE: >>>
 Pages which could be generated by users, such as new publications, newsletters, events, etc. should not require developer intervention.
 <<<
+OWNER: Developer
+CHANGE_DRIVER: GSSC5-1
+REVIEW_STATUS: Approved
 
 [[/SECTION]]

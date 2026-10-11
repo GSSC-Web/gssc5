@@ -36,6 +36,11 @@ description = "Start the StrictDoc web server (http://127.0.0.1:5111)"
 alias = "s"
 run = "strictdoc server ."
 
+[tasks.watch]
+description = "Start the StrictDoc web server (http://127.0.0.1:5111)"
+alias = "w"
+run = "strictdoc server . --watch"
+
 [tasks.auto-uid]
 description = "Assign missing requirement UIDs in-place"
 run = "strictdoc manage auto-uid ."
