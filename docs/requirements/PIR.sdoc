@@ -1,0 +1,356 @@
+[DOCUMENT]
+TITLE: Platform Integration Requirements
+UID: GSSC-PLATFORM-INTEGRATION-REQUIREMENTS
+VERSION: 5.0.0
+
+[GRAMMAR]
+ELEMENTS:
+- TAG: SECTION
+  PROPERTIES:
+    IS_COMPOSITE: True
+    PREFIX: None
+    VIEW_STYLE: Narrative
+  FIELDS:
+  - TITLE: UID
+    TYPE: String
+    REQUIRED: False
+  - TITLE: TITLE
+    TYPE: String
+    REQUIRED: True
+- TAG: REQUIREMENT
+  PROPERTIES:
+    PREFIX: GSSC-PIR-
+    VIEW_STYLE: Table
+  FIELDS:
+  - TITLE: UID
+    TYPE: String
+    REQUIRED: True
+  - TITLE: TITLE
+    TYPE: String
+    REQUIRED: True
+  - TITLE: STATEMENT
+    TYPE: String
+    REQUIRED: True
+  - TITLE: RATIONALE
+    TYPE: String
+    REQUIRED: False
+  - TITLE: COMMENT
+    TYPE: String
+    REQUIRED: False
+  - TITLE: DERIVED
+    TYPE: SingleChoice(True, False)
+    REQUIRED: True
+  - TITLE: CHANGE_DRIVER
+    TYPE: String
+    REQUIRED: True
+  RELATIONS:
+  - TYPE: Parent
+    ROLE: Satisfies
+    REVERSE_ROLE: Satisfied By
+
+[[SECTION]]
+UID: GSSC-PIR-INTRODUCTION
+TITLE: Introduction
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PIR-REQUIREMENTS
+TITLE: Requirements
+
+[[SECTION]]
+UID: GSSC-PIR-PUBLIC-FRONTEND
+TITLE: Public Frontend
+
+[REQUIREMENT]
+UID: GSSC-PIR-1
+TITLE: Public Frontend Application
+STATEMENT: >>>
+The GSSC Website SHALL have a public-accessible frontend application.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-2
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-OBJ-1
+  ROLE: Satisfies
+
+[[SECTION]]
+UID: GSSC-PIR-PUBLIC-FEATURES
+TITLE: Public Frontend Features
+
+[REQUIREMENT]
+UID: GSSC-PIR-2
+TITLE: Public Home Page
+STATEMENT: >>>
+The GSSC Website Public Frontend SHALL have a home page.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-2
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-OBJ-8
+  ROLE: Satisfies
+
+[REQUIREMENT]
+UID: GSSC-PIR-3
+TITLE: Public Membership Information Page
+STATEMENT: >>>
+The GSSC Website Public Frontend SHALL have a membership information page.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-2
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-OBJ-9
+  ROLE: Satisfies
+
+[REQUIREMENT]
+UID: GSSC-PIR-4
+TITLE: Public Leadership Page
+STATEMENT: >>>
+The GSSC Website Public Frontend SHALL have a leadership page.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-2
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-OBJ-10
+  ROLE: Satisfies
+
+[REQUIREMENT]
+UID: GSSC-PIR-5
+TITLE: Public Calendar
+STATEMENT: >>>
+The GSSC Website Public Frontend SHALL have a public calendar.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-2
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-OBJ-11
+  ROLE: Satisfies
+
+[REQUIREMENT]
+UID: GSSC-PIR-6
+TITLE: Public Research Tools Page
+STATEMENT: >>>
+The GSSC Website Public Frontend SHALL have a public research tools page.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-2
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-OBJ-12
+  ROLE: Satisfies
+
+[[SECTION]]
+UID: GSSC-PIR-PUBLICATIONS
+TITLE: Publications Pages
+
+[REQUIREMENT]
+UID: GSSC-PIR-7
+TITLE: Public Publications Page
+STATEMENT: >>>
+The GSSC Website Public Frontend SHALL have a publications page.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-2
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-OBJ-13
+  ROLE: Satisfies
+
+[REQUIREMENT]
+UID: GSSC-PIR-17
+TITLE: Standalone Publication Pages
+STATEMENT: >>>
+The GSSC Website Public Frontend SHALL have dedicated publications pages for each publication it features.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-2
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-OBJ-15
+  ROLE: Satisfies
+
+[[SECTION]]
+UID: GSSC-PIR-PUBLIC-PROJECTS
+TITLE: Public Projects
+
+[REQUIREMENT]
+UID: GSSC-PIR-18
+TITLE: Cemetery Project
+STATEMENT: >>>
+The GSSC Website Public Frontend SHALL have pages documenting the Stanislaus Country Cemetery Project.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-2
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-OBJ-16
+  ROLE: Satisfies
+
+[REQUIREMENT]
+UID: GSSC-PIR-19
+TITLE: Civil War Veterans Project
+STATEMENT: >>>
+The GSSC Website SHALL have pages for exploration of the Stanislaus County Civil War Veterans project.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-2
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-OBJ-17
+  ROLE: Satisfies
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[REQUIREMENT]
+UID: GSSC-PIR-8
+TITLE: Public Newsletters Page
+STATEMENT: >>>
+The GSSC Website Public Frontend SHALL have a newsletters page.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-2
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-OBJ-14
+  ROLE: Satisfies
+
+[REQUIREMENT]
+UID: GSSC-PIR-9
+TITLE: Members Access
+STATEMENT: >>>
+The GSSC Website Public Frontend SHALL provide access for to the Member Frontend.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-2
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-OBJ-2
+  ROLE: Satisfies
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PIR-MEMBER-FRONTEND
+TITLE: Member Frontend
+
+[[SECTION]]
+UID: GSSC-PIR-MEMBER-ACCOUNTS
+TITLE: Member Accounts
+
+[REQUIREMENT]
+UID: GSSC-PIR-10
+TITLE: Member Account Management
+STATEMENT: >>>
+The GSSC Website Member Frontent SHALL provide capability to manage a member's own account.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-2
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-OBJ-20
+  ROLE: Satisfies
+
+[REQUIREMENT]
+UID: GSSC-PIR-11
+TITLE: Administrator Account Management
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL provide capability for administrators to manage a member's account
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-2
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-OBJ-20
+  ROLE: Satisfies
+
+[[/SECTION]]
+
+[REQUIREMENT]
+UID: GSSC-PIR-13
+TITLE: Member Elections
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL provide a forum for elections by the membership for GSSC leadership, and for other decisions.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-2
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-OBJ-18
+  ROLE: Satisfies
+
+[REQUIREMENT]
+UID: GSSC-PIR-15
+TITLE: Member Publications
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL provide an editor for members to create/modify publications and page contents of the Public GSSC Frontend.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-2
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-OBJ-19
+  ROLE: Satisfies
+
+[REQUIREMENT]
+UID: GSSC-PIR-16
+TITLE: Member Announcements
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL provide an editor for members to create/modify announcements for either or both of the frontends.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-2
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-OBJ-19
+  ROLE: Satisfies
+
+[[SECTION]]
+UID: GSSC-PIR-MEMBER-DIRECTORY
+TITLE: Member Directory
+
+[REQUIREMENT]
+UID: GSSC-PIR-12
+TITLE: Active Member Directory
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL provide a member directory to view the list of other active members of the organization.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-2
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-OBJ-21
+  ROLE: Satisfies
+
+[REQUIREMENT]
+UID: GSSC-PIR-14
+TITLE: Registered Member Directory for Administrators
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL provide a member directory for administrators to view the list of registered members of the organization.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-2
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-OBJ-21
+  ROLE: Satisfies
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PIR-BACKEND
+TITLE: Unified Backend
+
+[[/SECTION]]
+
+[[/SECTION]]
