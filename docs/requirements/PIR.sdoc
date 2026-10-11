@@ -5,6 +5,14 @@ VERSION: 5.0.0
 
 [GRAMMAR]
 ELEMENTS:
+- TAG: TEXT
+  FIELDS:
+  - TITLE: UID
+    TYPE: String
+    REQUIRED: False
+  - TITLE: STATEMENT
+    TYPE: String
+    REQUIRED: True
 - TAG: SECTION
   PROPERTIES:
     IS_COMPOSITE: True
@@ -257,6 +265,20 @@ RELATIONS:
 UID: GSSC-PIR-MEMBER-FRONTEND
 TITLE: Member Frontend
 
+[REQUIREMENT]
+UID: GSSC-PIR-21
+TITLE: Members-Only Subdomain
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL be the members-only subdomain.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-9
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-OBJ-2
+  ROLE: Satisfies
+
 [[SECTION]]
 UID: GSSC-PIR-MEMBER-ACCOUNTS
 TITLE: Member Accounts
@@ -265,11 +287,11 @@ TITLE: Member Accounts
 UID: GSSC-PIR-10
 TITLE: Member Account Management
 STATEMENT: >>>
-The GSSC Website Member Frontent SHALL provide capability to manage a member's own account.
+The GSSC Website Member Frontend SHALL let members manage their own accounts.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-9
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-OBJ-20
@@ -279,14 +301,17 @@ RELATIONS:
 UID: GSSC-PIR-11
 TITLE: Administrator Account Management
 STATEMENT: >>>
-The GSSC Website Member Frontend SHALL provide capability for administrators to manage a member's account
+The GSSC Website Member Frontend SHALL let authorized administrators manage member accounts.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-9
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-OBJ-20
+  ROLE: Satisfies
+- TYPE: Parent
+  VALUE: GSSC-OBJ-4
   ROLE: Satisfies
 
 [[/SECTION]]
@@ -295,25 +320,62 @@ RELATIONS:
 UID: GSSC-PIR-13
 TITLE: Member Elections
 STATEMENT: >>>
-The GSSC Website Member Frontend SHALL provide a forum for elections by the membership for GSSC leadership, and for other decisions.
+The GSSC Website Member Frontend SHALL support elections by the membership for GSSC leadership.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-9
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-OBJ-18
   ROLE: Satisfies
 
 [REQUIREMENT]
-UID: GSSC-PIR-15
-TITLE: Member Publications
+UID: GSSC-PIR-20
+TITLE: Member Page Modifications
 STATEMENT: >>>
-The GSSC Website Member Frontend SHALL provide an editor for members to create/modify publications and page contents of the Public GSSC Frontend.
+The GSSC Website Member Frontend SHALL let members with the necessary permissions modify public pages and the sections therein, including publications, without programming knowledge.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-9
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-OBJ-7
+  ROLE: Satisfies
+- TYPE: Parent
+  VALUE: GSSC-OBJ-5
+  ROLE: Satisfies
+- TYPE: Parent
+  VALUE: GSSC-OBJ-4
+  ROLE: Satisfies
+
+[REQUIREMENT]
+UID: GSSC-PIR-22
+TITLE: Simultaneous Editing
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL let members with the necessary permissions modify different public pages and the sections therein, including publications, at the same time, and SHALL limit modification of a given public page or section to one user at a time.
+<<<
+RATIONALE: >>>
+The website does not resolve editing conflicts. One user at a time on a public page or section prevents lost changes, while other members with the necessary permissions can still modify other public pages or sections.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-9
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-OBJ-6
+  ROLE: Satisfies
+
+[REQUIREMENT]
+UID: GSSC-PIR-15
+TITLE: Member Publications
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL support publications by the membership.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-9
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-OBJ-19
@@ -323,14 +385,17 @@ RELATIONS:
 UID: GSSC-PIR-16
 TITLE: Member Announcements
 STATEMENT: >>>
-The GSSC Website Member Frontend SHALL provide an editor for members to create/modify announcements for either or both of the frontends.
+The GSSC Website Member Frontend SHALL let authorized members create and publish announcements for the public frontend, the member frontend, or both, without programming knowledge and without developer intervention.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-9
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-OBJ-19
+  VALUE: GSSC-OBJ-7
+  ROLE: Satisfies
+- TYPE: Parent
+  VALUE: GSSC-OBJ-5
   ROLE: Satisfies
 
 [[SECTION]]
@@ -339,13 +404,13 @@ TITLE: Member Directory
 
 [REQUIREMENT]
 UID: GSSC-PIR-12
-TITLE: Active Member Directory
+TITLE: Member Directory
 STATEMENT: >>>
-The GSSC Website Member Frontend SHALL provide a member directory to view the list of other active members of the organization.
+The GSSC Website Member Frontend SHALL give members a directory of fellow members and the contact information those members make available for collaboration within the organization.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-9
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-OBJ-21
@@ -355,14 +420,14 @@ RELATIONS:
 UID: GSSC-PIR-14
 TITLE: Registered Member Directory for Administrators
 STATEMENT: >>>
-The GSSC Website Member Frontend SHALL provide a member directory for administrators to view the list of registered members of the organization.
+The GSSC Website Member Frontend SHALL provide a member directory for authorized administrators to view the list of registered members of the organization.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-9
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-OBJ-21
+  VALUE: GSSC-OBJ-4
   ROLE: Satisfies
 
 [[/SECTION]]
