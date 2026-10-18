@@ -1,8 +1,13 @@
-[DOCUMENT]
-TITLE: Backend L2 Requirements
-
 [GRAMMAR]
 ELEMENTS:
+- TAG: TEXT
+  FIELDS:
+  - TITLE: UID
+    TYPE: String
+    REQUIRED: False
+  - TITLE: STATEMENT
+    TYPE: String
+    REQUIRED: True
 - TAG: SECTION
   PROPERTIES:
     IS_COMPOSITE: True
@@ -17,7 +22,7 @@ ELEMENTS:
     REQUIRED: True
 - TAG: REQUIREMENT
   PROPERTIES:
-    PREFIX: GSSC-PL2R-
+    PREFIX: GSSC-OBJ-
     VIEW_STYLE: Table
   FIELDS:
   - TITLE: UID
@@ -31,17 +36,16 @@ ELEMENTS:
     REQUIRED: True
   - TITLE: RATIONALE
     TYPE: String
-    REQUIRED: False
+    REQUIRED: True
   - TITLE: COMMENT
     TYPE: String
     REQUIRED: False
-  - TITLE: DERIVED
-    TYPE: SingleChoice(True, False)
+  - TITLE: OWNER
+    TYPE: SingleChoice(Customer, Developer)
     REQUIRED: True
   - TITLE: CHANGE_DRIVER
     TYPE: String
     REQUIRED: True
-  RELATIONS:
-  - TYPE: Parent
-    ROLE: Satisfies
-    REVERSE_ROLE: Satisfied By
+  - TITLE: REVIEW_STATUS
+    TYPE: SingleChoice(Changed, Approved, Baselined)
+    REQUIRED: True
