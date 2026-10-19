@@ -1,2 +1,2197 @@
 [DOCUMENT]
 TITLE: Public High Level Requirements
+UID: GSSC-PUBLIC-HIGH-LEVEL-REQUIREMENTS
+VERSION: 5.0.0
+
+[GRAMMAR]
+ELEMENTS:
+- TAG: TEXT
+  FIELDS:
+  - TITLE: UID
+    TYPE: String
+    REQUIRED: False
+  - TITLE: STATEMENT
+    TYPE: String
+    REQUIRED: True
+- TAG: SECTION
+  PROPERTIES:
+    IS_COMPOSITE: True
+    PREFIX: None
+    VIEW_STYLE: Narrative
+  FIELDS:
+  - TITLE: UID
+    TYPE: String
+    REQUIRED: False
+  - TITLE: TITLE
+    TYPE: String
+    REQUIRED: True
+- TAG: REQUIREMENT
+  PROPERTIES:
+    PREFIX: GSSC-PHLR-
+    VIEW_STYLE: Table
+  FIELDS:
+  - TITLE: UID
+    TYPE: String
+    REQUIRED: True
+  - TITLE: TITLE
+    TYPE: String
+    REQUIRED: True
+  - TITLE: STATEMENT
+    TYPE: String
+    REQUIRED: True
+  - TITLE: RATIONALE
+    TYPE: String
+    REQUIRED: True
+  - TITLE: COMMENT
+    TYPE: String
+    REQUIRED: False
+  - TITLE: DERIVED
+    TYPE: SingleChoice(True, False)
+    REQUIRED: True
+  - TITLE: CHANGE_DRIVER
+    TYPE: String
+    REQUIRED: True
+  - TITLE: REVIEW_STATUS
+    TYPE: SingleChoice(Changed, Approved, Baselined)
+    REQUIRED: True
+  RELATIONS:
+  - TYPE: Parent
+    ROLE: Refines
+    REVERSE_ROLE: Refined By
+
+[[SECTION]]
+UID: GSSC-PHLR-APPLICATION
+TITLE: Application Requirements
+
+[[SECTION]]
+UID: GSSC-PHLR-PUBLIC-FRONTEND
+TITLE: Public Frontend
+
+[REQUIREMENT]
+UID: GSSC-PHLR-128
+TITLE: Public Frontend Application
+STATEMENT: >>>
+The GSSC Website SHALL have a publicly accessible frontend application.
+<<<
+RATIONALE: >>>
+This is the Public Frontend. The other public requirements describe that application. The Member Frontend is a separate application.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-1
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-129
+TITLE: Public Primary Domain
+STATEMENT: >>>
+The GSSC Website Public Frontend SHALL be on the public-facing primary domain.
+<<<
+RATIONALE: >>>
+The Public Frontend is the application on the public-facing primary domain. This requirement does not set the domain name. The Member Frontend is the members-only subdomain.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-1
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PHLR-HEADER
+TITLE: Header Requirements
+
+[[SECTION]]
+UID: GSSC-PHLR-IDENTITY
+TITLE: Header Identity
+
+[REQUIREMENT]
+UID: GSSC-PHLR-1
+TITLE: Header Logo
+STATEMENT: >>>
+The GSSC Website Public Frontend Header SHALL include the GSSC Logo in every layout.
+<<<
+RATIONALE: >>>
+No Public Frontend PIR requires a logo. The legacy public site shows the GSSC Logo. The Header includes that logo whether or not the layout also has room for the organization's name.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-PHLR-19
+TITLE: Header Organization Name
+STATEMENT: >>>
+The GSSC Website Public Frontend Header SHALL include the name of the Genealogical Society of Stanislaus County, either in full or as an acronym, when the layout permits.
+<<<
+RATIONALE: >>>
+No Public Frontend PIR requires the organization's name in the Header. The legacy public site displays the society's full name. The Header includes that name, or the acronym, only when the layout has room for it. The GSSC Logo remains present either way.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PHLR-ACCOUNT-ACCESS
+TITLE: Header Account Access
+
+[REQUIREMENT]
+UID: GSSC-PHLR-2
+TITLE: Header Login
+STATEMENT: >>>
+When no member is logged in, the Header Login option SHALL redirect the visitor to the members-only application.
+<<<
+RATIONALE: >>>
+The legacy public site has no login in its Header. The members-only application is the Member Frontend. Choosing login takes the visitor there.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-9
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-18
+TITLE: Header Member Access
+STATEMENT: >>>
+When a member is logged in, the Header SHALL offer access to the members-only application in place of Header Login.
+<<<
+RATIONALE: >>>
+A logged-in member still needs a way to open the Member Frontend. That option replaces login rather than appearing beside it. Logout remains a separate option.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-9
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-8
+TITLE: Header Greeting
+STATEMENT: >>>
+The GSSC Website Public Frontend Header SHALL greet a member who is logged in.
+<<<
+RATIONALE: >>>
+No Public Frontend PIR requires a greeting. The legacy public site has none in its Header. This requirement shows a logged-in member that the Header recognizes them.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-PHLR-9
+TITLE: Header Logout
+STATEMENT: >>>
+When a member is logged in, the Header Logout option SHALL log that member out of the members-only application and leave the visitor on the public page.
+<<<
+RATIONALE: >>>
+No Public Frontend PIR requires logout. The legacy public site has none in its Header. A logged-in member needs a way to end the Member Frontend session. Logout ends that session and leaves the visitor on the public page.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+
+[[/SECTION]]
+
+[REQUIREMENT]
+UID: GSSC-PHLR-3
+TITLE: Header Contact
+STATEMENT: >>>
+The GSSC Website Public Frontend Header SHALL open an overlay in which a visitor can draft a message to the organization.
+<<<
+RATIONALE: >>>
+No Public Frontend PIR requires a way to contact the society. The legacy public site has no message overlay. This requirement gives the Header a contact option that opens an overlay for drafting a message. The society's phone number, email address, and postal address are shown in the Footer.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-PHLR-4
+TITLE: Header Site Search
+STATEMENT: >>>
+The GSSC Website Public Frontend Header SHALL provide a way to search the site.
+<<<
+RATIONALE: >>>
+No Public Frontend PIR requires site search, and the legacy public site does not provide it. This requirement adds a Header search so a visitor can find content on the site.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+
+[[SECTION]]
+UID: GSSC-PHLR-NAVIGATION
+TITLE: Navigation Menu
+
+[REQUIREMENT]
+UID: GSSC-PHLR-5
+TITLE: Navigation Menu
+STATEMENT: >>>
+The GSSC Website Public Frontend Header SHALL include a Navigation Menu.
+<<<
+RATIONALE: >>>
+No Public Frontend PIR requires a menu in the Header. The legacy public site presents a menu of its main pages. This requirement places that menu in the Header. Each page the menu opens is a separate requirement. The membership application from the legacy menu is not included.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-PHLR-10
+TITLE: Home Page Access
+STATEMENT: >>>
+The Navigation Menu SHALL provide access to the public home page.
+<<<
+RATIONALE: >>>
+This is how a visitor reaches the public home page from the Header. The requirement does not set the entry's label.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-2
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-11
+TITLE: Membership Information Page Access
+STATEMENT: >>>
+The Navigation Menu SHALL provide access to the public membership information page.
+<<<
+RATIONALE: >>>
+This is how a visitor reaches the public membership information page from the Header. The requirement does not set the entry's label.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-3
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-126
+TITLE: Leadership Page Access
+STATEMENT: >>>
+The Navigation Menu SHALL provide access to the public leadership page.
+<<<
+RATIONALE: >>>
+This is how a visitor reaches the public leadership page from the Header. The requirement does not set the entry's label.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-4
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-12
+TITLE: Calendar Access
+STATEMENT: >>>
+The Navigation Menu SHALL provide access to the public calendar.
+<<<
+RATIONALE: >>>
+This is how a visitor reaches the public calendar from the Header. The requirement does not set the entry's label.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-5
+  ROLE: Refines
+
+[[SECTION]]
+UID: GSSC-PHLR-PUBLICATIONS
+TITLE: Publications
+
+[REQUIREMENT]
+UID: GSSC-PHLR-13
+TITLE: Publications Page Access
+STATEMENT: >>>
+The Navigation Menu SHALL provide access to the public publications page.
+<<<
+RATIONALE: >>>
+This is how a visitor reaches the public publications page from the Header. The requirement does not set the entry's label. Access reached through this page is specified separately.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-7
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-16
+TITLE: Cemetery Project Access
+STATEMENT: >>>
+The Navigation Menu SHALL provide access to the Stanislaus County Cemetery Project as a child of access to the public publications page.
+<<<
+RATIONALE: >>>
+The legacy menu lists its pages in one flat list. The Public Frontend has pages for the Stanislaus County Cemetery Project, and this requirement reaches those pages through the public publications page. The requirement does not set the entry's label.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-18
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-7
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-17
+TITLE: War Veterans Access
+STATEMENT: >>>
+The Navigation Menu SHALL provide access to the War Veterans of Stanislaus County publication as a child of access to the public publications page.
+<<<
+RATIONALE: >>>
+The legacy menu lists its pages in one flat list. The Public Frontend has pages for that publication, including Civil War veterans and veterans of other wars, and this requirement reaches those pages through the public publications page. The requirement does not set the entry's label.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-19
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-7
+  ROLE: Refines
+
+[[/SECTION]]
+
+[REQUIREMENT]
+UID: GSSC-PHLR-14
+TITLE: Research Tools Page Access
+STATEMENT: >>>
+The Navigation Menu SHALL provide access to the public research tools page.
+<<<
+RATIONALE: >>>
+This is how a visitor reaches the public research tools page from the Header. The requirement does not set the entry's label.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-6
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-15
+TITLE: Newsletters Page Access
+STATEMENT: >>>
+The Navigation Menu SHALL provide access to the public newsletters page.
+<<<
+RATIONALE: >>>
+This is how a visitor reaches the public newsletters page from the Header. The requirement does not set the entry's label.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-8
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PHLR-FOOTER
+TITLE: Footer Requirements
+
+[REQUIREMENT]
+UID: GSSC-PHLR-20
+TITLE: Footer Contact
+STATEMENT: >>>
+The GSSC Website Public Frontend Footer SHALL open an overlay in which a visitor can draft a message to the organization.
+<<<
+RATIONALE: >>>
+No Public Frontend PIR requires a footer contact option. The legacy footer offers a webmaster email address. This requirement instead opens an overlay for drafting a message. The society's phone number, email address, and postal address are separate Footer requirements.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-PHLR-24
+TITLE: Footer Phone Number
+STATEMENT: >>>
+The GSSC Website Public Frontend Footer SHALL include the society's phone number.
+<<<
+RATIONALE: >>>
+No Public Frontend PIR requires the society's phone number. The legacy public page shows it at the top of the page. This requirement places that phone number in the Footer, separate from the message overlay. It does not set the current number.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-PHLR-25
+TITLE: Footer Email Address
+STATEMENT: >>>
+The GSSC Website Public Frontend Footer SHALL include the society's email address.
+<<<
+RATIONALE: >>>
+No Public Frontend PIR requires the society's email address. The legacy public page shows it at the top of the page. This requirement places that email address in the Footer, separate from the message overlay. It does not set the current address.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-PHLR-26
+TITLE: Footer Postal Address
+STATEMENT: >>>
+The GSSC Website Public Frontend Footer SHALL include the society's postal address.
+<<<
+RATIONALE: >>>
+No Public Frontend PIR requires the society's postal address. The legacy public page shows it at the top of the page. This requirement places that postal address in the Footer, separate from the message overlay. It does not set the current address.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-PHLR-21
+TITLE: Footer Organization Name
+STATEMENT: >>>
+The GSSC Website Public Frontend Footer SHALL include the full name of the Genealogical Society of Stanislaus County.
+<<<
+RATIONALE: >>>
+No Public Frontend PIR requires the organization's name in the Footer. The legacy footer includes the society's full name. This requirement keeps that full name in the Footer and does not allow the acronym in its place.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-PHLR-22
+TITLE: Footer Copyright
+STATEMENT: >>>
+The GSSC Website Public Frontend Footer SHALL include a copyright statement.
+<<<
+RATIONALE: >>>
+No Public Frontend PIR requires a copyright statement. The legacy public site includes a copyright notice and the words "All Rights Reserved." This requirement keeps a copyright statement in the Footer and does not set its wording.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-PHLR-23
+TITLE: Footer Social Media
+STATEMENT: >>>
+The GSSC Website Public Frontend Footer SHALL include links to the society's social media.
+<<<
+RATIONALE: >>>
+No Public Frontend PIR requires social media links. The legacy public site links to the society's Facebook page. This requirement keeps links to the society's social media in the Footer and does not name the services.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PHLR-ANNOUNCEMENTS
+TITLE: Announcement Requirements
+
+[[SECTION]]
+UID: GSSC-PHLR-URGENT-ANNOUNCEMENT-CONTAINER
+TITLE: Urgent Announcement Container
+
+[REQUIREMENT]
+UID: GSSC-PHLR-27
+TITLE: Urgent Announcement Placement
+STATEMENT: >>>
+The Urgent Announcement Container SHALL hold each urgent public announcement on every public page except the home page.
+<<<
+RATIONALE: >>>
+Public announcements are allocated by GSSC-PIR-33. This requirement places the urgent ones on the other public pages. What makes a public announcement urgent is defined with the backend requirements. The home page announcements display is a separate feature and is defined separately. The legacy public site has no container of this kind.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-33
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-34
+TITLE: Urgent Announcement Selection
+STATEMENT: >>>
+Selecting an announcement in the Urgent Announcement Container SHALL redirect the visitor to the home page announcements display, focused on that announcement.
+<<<
+RATIONALE: >>>
+The container is a way to reach the selected announcement on the home page. The home page announcements display is defined separately.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-33
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PHLR-URGENT-ANNOUNCEMENT-CONTENTS
+TITLE: Urgent Announcement Contents
+
+[REQUIREMENT]
+UID: GSSC-PHLR-30
+TITLE: Urgent Announcement Title
+STATEMENT: >>>
+The Urgent Announcement Contents SHALL include the title of an urgent public announcement.
+<<<
+RATIONALE: >>>
+The title is part of the data for an urgent public announcement. The home page announcements display is defined separately.
+<<<
+DERIVED: False
+CHANGE_DRIVER: >>>
+GSSC5-10
+<<<
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-33
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-31
+TITLE: Urgent Announcement Text
+STATEMENT: >>>
+The Urgent Announcement Contents SHALL include the text of an urgent public announcement.
+<<<
+RATIONALE: >>>
+The text is part of the data for an urgent public announcement. The home page announcements display is defined separately.
+<<<
+DERIVED: False
+CHANGE_DRIVER: >>>
+GSSC5-10
+<<<
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-33
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PHLR-CONTACT
+TITLE: Contact Requirements
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PHLR-ERRORS
+TITLE: Error Handler Requirements
+
+[[SECTION]]
+UID: GSSC-PHLR-APPLICATION-ERRORS
+TITLE: Application Errors
+
+[REQUIREMENT]
+UID: GSSC-PHLR-35
+TITLE: Application Error Name
+STATEMENT: >>>
+The Application Error Contents SHALL include the error name.
+<<<
+RATIONALE: >>>
+No Public Frontend PIR allocates application error contents. The error name tells the visitor which error occurred.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-PHLR-36
+TITLE: Application Error Description
+STATEMENT: >>>
+The Application Error Contents SHALL include the error description.
+<<<
+RATIONALE: >>>
+No Public Frontend PIR allocates application error contents. The error description tells the visitor what the error means.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-PHLR-37
+TITLE: Application Error Reference Number
+STATEMENT: >>>
+The Application Error Contents SHALL include an error reference number.
+<<<
+RATIONALE: >>>
+No Public Frontend PIR allocates application error contents. The reference number associates that instance of the error with backend logging when the error is included in a bug report. This requirement does not set the number's format.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-PHLR-38
+TITLE: Application Error Debugging Information
+STATEMENT: >>>
+When the visitor is a logged-in administrator, the Application Error Contents SHALL include debugging information.
+<<<
+RATIONALE: >>>
+No Public Frontend PIR allocates debugging information. A logged-in administrator uses that information to diagnose the application error. This requirement does not define that debugging data or how the administrator role is granted.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PHLR-HTTP-ERRORS
+TITLE: HTTP Errors
+
+[REQUIREMENT]
+UID: GSSC-PHLR-39
+TITLE: HTTP Error Code
+STATEMENT: >>>
+The HTTP Error Contents SHALL include the error code.
+<<<
+RATIONALE: >>>
+No Public Frontend PIR allocates HTTP error contents. The error code is the HTTP status of the failed response.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-PHLR-40
+TITLE: HTTP Error Name
+STATEMENT: >>>
+The HTTP Error Contents SHALL include the error name.
+<<<
+RATIONALE: >>>
+No Public Frontend PIR allocates HTTP error contents. The error name tells the visitor which HTTP error occurred.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-PHLR-41
+TITLE: HTTP Error Description
+STATEMENT: >>>
+The HTTP Error Contents SHALL include the error description.
+<<<
+RATIONALE: >>>
+No Public Frontend PIR allocates HTTP error contents. The error description tells the visitor what the HTTP error means.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-PHLR-42
+TITLE: HTTP Error Request Information
+STATEMENT: >>>
+When the visitor is a logged-in administrator, the HTTP Error Contents SHALL include the request packet information.
+<<<
+RATIONALE: >>>
+No Public Frontend PIR allocates request information on an HTTP error. A logged-in administrator uses the request packet information to diagnose the failed request. This requirement does not define how that information is captured or how the administrator role is granted.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-PHLR-43
+TITLE: HTTP Error Response Information
+STATEMENT: >>>
+When the visitor is a logged-in administrator, the HTTP Error Contents SHALL include the response packet information.
+<<<
+RATIONALE: >>>
+No Public Frontend PIR allocates response information on an HTTP error. A logged-in administrator uses the response packet information to diagnose the failed response. This requirement does not define how that information is captured or how the administrator role is granted.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PHLR-PAGES
+TITLE: Page Requirements
+
+[[SECTION]]
+UID: GSSC-PHLR-PAGES-COMMON
+TITLE: Common Page Requirements
+
+[REQUIREMENT]
+UID: GSSC-PHLR-44
+TITLE: Common Page Header
+STATEMENT: >>>
+Unless otherwise specified, a public page SHALL include the Header at the top of the page.
+<<<
+RATIONALE: >>>
+No Public Frontend PIR allocates placement of the Header. This is the default placement of the Header on a public page. Another requirement may specify otherwise.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-PHLR-46
+TITLE: Common Page Footer
+STATEMENT: >>>
+Unless otherwise specified, a public page SHALL include the Footer at the bottom of the page.
+<<<
+RATIONALE: >>>
+No Public Frontend PIR allocates placement of the Footer. This is the default placement of the Footer on a public page. Another requirement may specify otherwise.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-PHLR-47
+TITLE: Common Page Announcements Bar
+STATEMENT: >>>
+Unless otherwise specified, a public page SHALL include the Announcements Bar when there is an announcement to display.
+<<<
+RATIONALE: >>>
+The Announcements Bar is the Urgent Announcement Container. This requirement places that container on a public page when it has an announcement to display. Another requirement may specify otherwise.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-33
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-48
+TITLE: Common Page Errors
+STATEMENT: >>>
+Unless otherwise specified, a public page SHALL display the error contents when an error occurs.
+<<<
+RATIONALE: >>>
+No Public Frontend PIR allocates how a page presents an error. A public page displays the error contents so the visitor sees the error that occurred. Those contents are the Application Error Contents or the HTTP Error Contents. Another requirement may specify otherwise.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PHLR-HOME-PAGE
+TITLE: Home Page Requirements
+
+[REQUIREMENT]
+UID: GSSC-PHLR-49
+TITLE: Home Page Announcements Display
+STATEMENT: >>>
+The public home page SHALL include the Announcements Display in place of the Announcements Bar.
+<<<
+RATIONALE: >>>
+GSSC-PHLR-47 includes the Announcements Bar on a public page unless otherwise specified. This requirement specifies the Announcements Display for the home page. The legacy home page shows announcement text and has no carousel.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-2
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-33
+  ROLE: Refines
+
+[[SECTION]]
+UID: GSSC-PHLR-HOME-ANNOUNCEMENTS
+TITLE: Announcements Display
+
+[REQUIREMENT]
+UID: GSSC-PHLR-50
+TITLE: Announcement Slide
+STATEMENT: >>>
+The Announcements Display SHALL present each announcement as a slide.
+<<<
+RATIONALE: >>>
+Each announcement in the display has its own slide. The legacy home page shows announcement text in place and has no slides.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-2
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-33
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-51
+TITLE: Announcement Slide Title
+STATEMENT: >>>
+An Announcements Display slide SHALL include the announcement's title.
+<<<
+RATIONALE: >>>
+The title is part of the data for an announcement slide.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-2
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-33
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-52
+TITLE: Announcement Slide Description
+STATEMENT: >>>
+An Announcements Display slide SHALL include the announcement's description.
+<<<
+RATIONALE: >>>
+The description is part of the data for an announcement slide.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-2
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-33
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-53
+TITLE: Announcement Slide Links
+STATEMENT: >>>
+An Announcements Display slide SHALL include the announcement's relevant links.
+<<<
+RATIONALE: >>>
+Relevant links are part of the data for an announcement slide. The legacy home page includes a link on some announcement text, such as a festival flyer.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-2
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-33
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-54
+TITLE: Announcement Slide Resources
+STATEMENT: >>>
+An Announcements Display slide SHALL include the announcement's relevant resources.
+<<<
+RATIONALE: >>>
+Relevant resources are part of the data for an announcement slide, separate from its links.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-2
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-33
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-55
+TITLE: Announcement Slide Graphic
+STATEMENT: >>>
+An Announcements Display slide SHALL include a graphic related to the announcement.
+<<<
+RATIONALE: >>>
+The graphic is part of the data for an announcement slide. This requirement does not set the graphic's format.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-2
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-33
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-56
+TITLE: Announcement Slide Rotation
+STATEMENT: >>>
+The Announcements Display SHALL advance from one announcement slide to the next automatically.
+<<<
+RATIONALE: >>>
+The display moves through the announcement slides on its own. This requirement does not set the interval. The legacy home page does not advance announcements.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-2
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-33
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-57
+TITLE: Announcement Slide Switching
+STATEMENT: >>>
+The Announcements Display SHALL allow the visitor to switch the visible announcement slide.
+<<<
+RATIONALE: >>>
+The visitor can change which announcement slide is visible. This requirement does not set the control used to switch slides.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-2
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-33
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PHLR-HOME-FEATURED-PHOTOS
+TITLE: Featured Photos
+
+[REQUIREMENT]
+UID: GSSC-PHLR-58
+TITLE: Featured Photo
+STATEMENT: >>>
+The Featured Photos gallery SHALL include one featured photo.
+<<<
+RATIONALE: >>>
+The legacy home page shows featured photographs. This requirement sets the gallery's featured photo to one.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-2
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-59
+TITLE: Random Featured Photos
+STATEMENT: >>>
+The Featured Photos gallery SHALL include two randomly selected photos.
+<<<
+RATIONALE: >>>
+The gallery adds two photos chosen at random, separate from the one featured photo. This requirement does not set the selection method.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-2
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-60
+TITLE: Featured Photo Description
+STATEMENT: >>>
+When a photo in the Featured Photos gallery has a description, the gallery SHALL include that description.
+<<<
+RATIONALE: >>>
+A description is included for a gallery photo that has one.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-2
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PHLR-HOME-PURPOSE
+TITLE: Organization Purpose
+
+[REQUIREMENT]
+UID: GSSC-PHLR-61
+TITLE: Organization Purpose Information
+STATEMENT: >>>
+The Organization Purpose SHALL include information about the purpose of the Genealogical Society of Stanislaus County.
+<<<
+RATIONALE: >>>
+The legacy home page includes a Purpose of the Society section. This requirement keeps that information on the home page and does not set its wording.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-2
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-62
+TITLE: Organization Purpose Photo
+STATEMENT: >>>
+The Organization Purpose SHALL include a randomized photo related to the society.
+<<<
+RATIONALE: >>>
+The legacy home page shows a society photograph with the purpose section. This requirement uses a photo related to the society and chooses it at random. It does not set the selection method.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-2
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PHLR-MEMBER-INFO-PAGE
+TITLE: Membership Information Page Requirements
+
+[[SECTION]]
+UID: GSSC-PHLR-MEETING-INFORMATION
+TITLE: Meeting Information
+
+[REQUIREMENT]
+UID: GSSC-PHLR-63
+TITLE: General Meeting Location
+STATEMENT: >>>
+The Meeting Information SHALL include the general meeting location.
+<<<
+RATIONALE: >>>
+The legacy home page states the general meeting location. This requirement places that location on the membership information page and does not set the current address.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-3
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-64
+TITLE: General Meeting Frequency
+STATEMENT: >>>
+The Meeting Information SHALL include the general meeting frequency.
+<<<
+RATIONALE: >>>
+The legacy home page states how often general meetings occur. This requirement places that frequency on the membership information page and does not set the current interval.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-3
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-65
+TITLE: General Meeting Schedule
+STATEMENT: >>>
+The Meeting Information SHALL include the general meeting schedule.
+<<<
+RATIONALE: >>>
+The legacy home page states the day, time, and exceptions for general meetings. This requirement places that schedule on the membership information page and does not set the current day or time.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-3
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-66
+TITLE: Next Meeting Information
+STATEMENT: >>>
+The Meeting Information SHALL include information on the next meeting.
+<<<
+RATIONALE: >>>
+The legacy home page announces the next meeting. This requirement places information on the next meeting on the membership information page and does not set that information's wording.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-3
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PHLR-MEMBER-BENEFITS
+TITLE: Member Benefits
+
+[REQUIREMENT]
+UID: GSSC-PHLR-67
+TITLE: Membership Benefit Information
+STATEMENT: >>>
+The Member Benefits SHALL include information on the society's membership benefits, including programs, workshops, seminars, newsletters, queries, surname registration, interest groups, and research trips.
+<<<
+RATIONALE: >>>
+The legacy home page describes these as member benefits. This requirement places that information on the membership information page as one body of membership benefit information and does not set its wording. It does not define the newsletters page.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-3
+  ROLE: Refines
+
+[[/SECTION]]
+
+[REQUIREMENT]
+UID: GSSC-PHLR-75
+TITLE: Membership Application
+STATEMENT: >>>
+The membership information page SHALL allow a visitor to apply for membership.
+<<<
+RATIONALE: >>>
+The legacy site provides a membership application. This requirement places that application on the membership information page and does not set the form.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-3
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PHLR-LEADERS-PAGE
+TITLE: Leadership Page Requirements
+
+[[SECTION]]
+UID: GSSC-PHLR-OFFICERS-AND-DIRECTORS
+TITLE: Officers and Directors
+
+[REQUIREMENT]
+UID: GSSC-PHLR-76
+TITLE: Current Officers
+STATEMENT: >>>
+The Officers and Directors SHALL include the current officers and the name of each member in the position.
+<<<
+RATIONALE: >>>
+The legacy leadership page lists the current officers and the name of the member in each office. This requirement keeps that information on the leadership page and does not set the current names or offices.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-4
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-77
+TITLE: Current Directors at Large
+STATEMENT: >>>
+The Officers and Directors SHALL include the current Directors at Large and the name of each member in the position.
+<<<
+RATIONALE: >>>
+The legacy leadership page lists the current Directors at Large and the name of the member in each position. This requirement keeps that information on the leadership page and does not set the current names.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-4
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-78
+TITLE: Officer and Director Email
+STATEMENT: >>>
+The Officers and Directors SHALL include the email address of each listed member for contact.
+<<<
+RATIONALE: >>>
+The legacy leadership page gives an email address for each listed officer and Director at Large. This requirement keeps that contact email and does not set the current addresses.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-4
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-79
+TITLE: Vacant Officer or Director Position
+STATEMENT: >>>
+The Officers and Directors SHALL indicate a vacant position as vacant.
+<<<
+RATIONALE: >>>
+The legacy leadership page marks an empty Director at Large position as Vacant. This requirement indicates a vacant officer or Director at Large position in the same way.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-4
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PHLR-COMMITTEE-CHAIRS
+TITLE: Committee Chairs
+
+[REQUIREMENT]
+UID: GSSC-PHLR-80
+TITLE: Current Committee Chairs
+STATEMENT: >>>
+The Committee Chairs SHALL include the current committee chairs and the name of each member in the chair.
+<<<
+RATIONALE: >>>
+The legacy leadership page lists committee roles and the name of each member in the role. This requirement keeps the current committee chairs on the leadership page and does not set the current names or committees.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-4
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-81
+TITLE: Committee Chair Email
+STATEMENT: >>>
+The Committee Chairs SHALL include the email address of each listed member for contact.
+<<<
+RATIONALE: >>>
+The legacy leadership page gives an email address for each listed committee member. This requirement keeps that contact email and does not set the current addresses.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-4
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-82
+TITLE: Vacant Committee Chair
+STATEMENT: >>>
+The Committee Chairs SHALL indicate a vacant chair as vacant.
+<<<
+RATIONALE: >>>
+The legacy leadership page marks an empty committee role as Vacant. This requirement indicates a vacant committee chair in the same way.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-4
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PHLR-CALENDAR-PAGE
+TITLE: Calendar Page Requirements
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PHLR-RESEARCH-PAGE
+TITLE: Research Tools Page Requirements
+
+[REQUIREMENT]
+UID: GSSC-PHLR-83
+TITLE: Public Research Tools
+STATEMENT: >>>
+The research tools page SHALL list the current public research tools recommended by the society.
+<<<
+RATIONALE: >>>
+The legacy research tools page lists tools the society recommends, including charts, an external society, and Stanislaus County cemetery files. This requirement keeps a current list of recommended public research tools on the research tools page and does not set that list.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-6
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PHLR-PUBLICATIONS-PAGE
+TITLE: Publications Page Requirements
+
+[REQUIREMENT]
+UID: GSSC-PHLR-84
+TITLE: Society Publications List
+STATEMENT: >>>
+The publications page SHALL list the society's publications.
+<<<
+RATIONALE: >>>
+The publications page presents the society's publications. This requirement does not set that list. The Cemetery Project and the War Veterans Project have their own pages. Another publication uses a Generic Resource Publication page when it has a digital version, and a Generic Information Page otherwise.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-7
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-85
+TITLE: Publication Dedicated Page Link
+STATEMENT: >>>
+A listing on the publications page SHALL link to that publication's dedicated page.
+<<<
+RATIONALE: >>>
+Each publication in the list opens its own dedicated page.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-7
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-17
+  ROLE: Refines
+
+[[SECTION]]
+UID: GSSC-PHLR-CEMETERY-PROJECT
+TITLE: Cemetery Project
+
+[REQUIREMENT]
+UID: GSSC-PHLR-86
+TITLE: Cemetery Project Landing Page
+STATEMENT: >>>
+The Cemetery Project SHALL include a landing page.
+<<<
+RATIONALE: >>>
+The Stanislaus County Cemetery Project has a landing page of its own. The project description is a separate Generic Resource Publication page.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-18
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-17
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-87
+TITLE: Cemetery Project Abstract
+STATEMENT: >>>
+The Cemetery Project landing page SHALL include an abstract of the project.
+<<<
+RATIONALE: >>>
+The abstract is part of the landing page. This requirement does not set its wording.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-18
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-88
+TITLE: Covered Cemeteries
+STATEMENT: >>>
+The Cemetery Project landing page SHALL list the Stanislaus County cemeteries covered by the project.
+<<<
+RATIONALE: >>>
+The landing page names the county cemeteries the project covers. This requirement does not set that list.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-18
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-89
+TITLE: Cemetery Search Filter Links
+STATEMENT: >>>
+The Cemetery Project landing page SHALL link each covered cemetery to the search filters dedicated to that cemetery.
+<<<
+RATIONALE: >>>
+Each cemetery in the landing-page list opens the search filters for that cemetery.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-18
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-127
+TITLE: Cemetery Search Filters
+STATEMENT: >>>
+The search filters dedicated to a cemetery SHALL filter the Cemetery Project data to the entries from that cemetery.
+<<<
+RATIONALE: >>>
+Choosing a cemetery's filters limits the project data to that cemetery's entries. The project-wide search page is a separate feature.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-18
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-90
+TITLE: Cemetery Project Description Link
+STATEMENT: >>>
+The Cemetery Project landing page SHALL link to the project description on a Generic Resource Publication page.
+<<<
+RATIONALE: >>>
+The project description is viewed as a Generic Resource Publication, and the landing page links to that page.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-18
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-17
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-91
+TITLE: Cemetery Project Database Download
+STATEMENT: >>>
+The Cemetery Project landing page SHALL link to a download of the project database.
+<<<
+RATIONALE: >>>
+The landing page offers the project database as a download. This requirement does not set the file format.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-18
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-92
+TITLE: Cemetery Page
+STATEMENT: >>>
+Each cemetery covered by the Cemetery Project SHALL have a Generic Cemetery Page.
+<<<
+RATIONALE: >>>
+Every covered cemetery has its own page, using the generic cemetery page.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-18
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-17
+  ROLE: Refines
+
+[[SECTION]]
+UID: GSSC-PHLR-GENERIC-CEMETERY-PAGE
+TITLE: Generic Cemetery Page
+
+[REQUIREMENT]
+UID: GSSC-PHLR-93
+TITLE: Cemetery Information
+STATEMENT: >>>
+The Generic Cemetery Page SHALL include the cemetery information documented by the Cemetery Project.
+<<<
+RATIONALE: >>>
+The page includes the information sections the project documents for that cemetery. This requirement does not name those sections.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-18
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-94
+TITLE: Cemetery Burial Records
+STATEMENT: >>>
+The Generic Cemetery Page SHALL include that cemetery's burial records.
+<<<
+RATIONALE: >>>
+The cemetery's burial records are part of the page. This requirement does not set how the records are presented.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-18
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PHLR-CEMETERY-SEARCH
+TITLE: Search Page
+
+[REQUIREMENT]
+UID: GSSC-PHLR-95
+TITLE: Cemetery Search Page
+STATEMENT: >>>
+The Cemetery Project SHALL include a search page.
+<<<
+RATIONALE: >>>
+The project has a page for searching its burial records.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-18
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-96
+TITLE: Cemetery Search by Name
+STATEMENT: >>>
+The Cemetery Project search page SHALL search the entire project's burial records by name.
+<<<
+RATIONALE: >>>
+A name search covers the burial records of the whole project.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-18
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-97
+TITLE: Cemetery Search by Birth
+STATEMENT: >>>
+The Cemetery Project search page SHALL search the entire project's burial records by birth.
+<<<
+RATIONALE: >>>
+A birth search covers the burial records of the whole project.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-18
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-98
+TITLE: Cemetery Search by Death
+STATEMENT: >>>
+The Cemetery Project search page SHALL search the entire project's burial records by death.
+<<<
+RATIONALE: >>>
+A death search covers the burial records of the whole project.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-18
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-99
+TITLE: Cemetery Search by Burial Location
+STATEMENT: >>>
+The Cemetery Project search page SHALL search the entire project's burial records by location of burial, including cemetery, section, lot, row, and plot.
+<<<
+RATIONALE: >>>
+A location search covers the burial records of the whole project. Cemetery, section, lot, row, and plot are parts of that location.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-18
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-100
+TITLE: Cemetery Search Results
+STATEMENT: >>>
+The Cemetery Project search results SHALL show, for each plot, the name, birth, death, and location of burial, including cemetery, section, lot, row, and plot.
+<<<
+RATIONALE: >>>
+The results tabulation shows those fields for each plot.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-18
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PHLR-WAR-VETERANS-PROJECT
+TITLE: War Veterans Project
+
+[REQUIREMENT]
+UID: GSSC-PHLR-101
+TITLE: War Veterans Landing Page
+STATEMENT: >>>
+The War Veterans Project SHALL include a landing page.
+<<<
+RATIONALE: >>>
+The War Veterans of Stanislaus County publication has a landing page of its own. The publication includes Civil War veterans and veterans of other wars.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-19
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-17
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-102
+TITLE: War Veterans Common Filters
+STATEMENT: >>>
+The War Veterans Project landing page SHALL include a link for a filter of each group of veterans the publication covers, including Civil War veterans and veterans of other wars.
+<<<
+RATIONALE: >>>
+The landing page links to a filter for each group of veterans the publication covers. Those groups include Civil War veterans and veterans of other wars. This requirement does not name the wars within the other-wars group.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-19
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-103
+TITLE: War Veterans Database Page
+STATEMENT: >>>
+The War Veterans Project SHALL include a database page.
+<<<
+RATIONALE: >>>
+The project has a page for searching and viewing its burial records.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-19
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-17
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-104
+TITLE: War Veterans Search by Name
+STATEMENT: >>>
+The War Veterans Project database page SHALL search the entire project's burial records by name.
+<<<
+RATIONALE: >>>
+A name search covers the burial records of the whole project.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-19
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-105
+TITLE: War Veterans Search by Birth
+STATEMENT: >>>
+The War Veterans Project database page SHALL search the entire project's burial records by birth.
+<<<
+RATIONALE: >>>
+A birth search covers the burial records of the whole project.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-19
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-106
+TITLE: War Veterans Search by Death
+STATEMENT: >>>
+The War Veterans Project database page SHALL search the entire project's burial records by death.
+<<<
+RATIONALE: >>>
+A death search covers the burial records of the whole project.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-19
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-107
+TITLE: War Veterans Search by Cemetery
+STATEMENT: >>>
+The War Veterans Project database page SHALL search the entire project's burial records by cemetery.
+<<<
+RATIONALE: >>>
+A cemetery search covers the burial records of the whole project.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-19
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-108
+TITLE: War Veterans Search by Detail Text
+STATEMENT: >>>
+The War Veterans Project database page SHALL search the entire project's burial records by detail text.
+<<<
+RATIONALE: >>>
+A detail-text search covers the burial records of the whole project.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-19
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-109
+TITLE: War Veterans Record Data
+STATEMENT: >>>
+The War Veterans Project database page SHALL show, for each record, the name, birth, death, cemetery, and detail text.
+<<<
+RATIONALE: >>>
+Each record in the results shows those fields.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-19
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-110
+TITLE: War Veterans Grave Photo
+STATEMENT: >>>
+The War Veterans Project database page SHALL include a photo of the grave for each record.
+<<<
+RATIONALE: >>>
+Each record includes a photograph of the grave.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-19
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-111
+TITLE: War Veterans Cemetery Link
+STATEMENT: >>>
+When a record's location is part of the Cemetery Project, the War Veterans Project database page SHALL link to that cemetery's Generic Cemetery Page.
+<<<
+RATIONALE: >>>
+A record whose burial location is covered by the Cemetery Project links to that cemetery's page.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-19
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-18
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PHLR-GENERIC-RESOURCE-PUBLICATIONS
+TITLE: Generic Resource Publications
+
+[REQUIREMENT]
+UID: GSSC-PHLR-112
+TITLE: Generic Resource Publication Page
+STATEMENT: >>>
+A society publication that has a digital version, other than the Cemetery Project and the War Veterans Project, SHALL have a Generic Resource Publication page.
+<<<
+RATIONALE: >>>
+A publication with a digital version has its own Generic Resource Publication page. The Cemetery Project and the War Veterans Project have their own pages.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-7
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-17
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-113
+TITLE: Generic Resource Title
+STATEMENT: >>>
+A Generic Resource Publication page SHALL include the resource title.
+<<<
+RATIONALE: >>>
+The resource title is part of the page.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-17
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-114
+TITLE: Generic Resource Description
+STATEMENT: >>>
+A Generic Resource Publication page SHALL include a description of the resource.
+<<<
+RATIONALE: >>>
+The description is part of the page. This requirement does not set its wording.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-17
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-115
+TITLE: Generic Resource Links or Forms
+STATEMENT: >>>
+A Generic Resource Publication page SHALL include a list of related links or forms.
+<<<
+RATIONALE: >>>
+Related links or forms are part of the page. This requirement does not set that list.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-17
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-116
+TITLE: Generic Resource Content
+STATEMENT: >>>
+A Generic Resource Publication page SHALL include the resource.
+<<<
+RATIONALE: >>>
+The resource itself is part of the page. This requirement does not set how the resource is presented.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-17
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PHLR-GENERIC-INFORMATION-PAGES
+TITLE: Generic Information Pages
+
+[REQUIREMENT]
+UID: GSSC-PHLR-117
+TITLE: Generic Information Page
+STATEMENT: >>>
+A society publication that does not have a digital version SHALL have a Generic Information Page.
+<<<
+RATIONALE: >>>
+A publication without a digital version has its own Generic Information Page.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-7
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-17
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-118
+TITLE: Generic Information Title
+STATEMENT: >>>
+A Generic Information Page SHALL include the resource title.
+<<<
+RATIONALE: >>>
+The resource title is part of the page.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-17
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-119
+TITLE: Generic Information Description
+STATEMENT: >>>
+A Generic Information Page SHALL include a description of the resource.
+<<<
+RATIONALE: >>>
+The description is part of the page. This requirement does not set its wording.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-17
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-120
+TITLE: Generic Information Links or Forms
+STATEMENT: >>>
+A Generic Information Page SHALL include a list of related links or forms.
+<<<
+RATIONALE: >>>
+Related links or forms are part of the page. This requirement does not set that list.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-17
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PHLR-NEWSLETTERS-PAGE
+TITLE: Newsletters Page Requirements
+
+[REQUIREMENT]
+UID: GSSC-PHLR-121
+TITLE: Newsletter Selection Form
+STATEMENT: >>>
+The newsletters page SHALL include a form to select a newsletter.
+<<<
+RATIONALE: >>>
+The legacy newsletters page lists issues by year and month. This requirement gives the page a form for selecting an issue.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-8
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-122
+TITLE: Newsletter Volume Menu
+STATEMENT: >>>
+The Newsletter Selection Form SHALL include a menu for the Volume, which is the year of the issue.
+<<<
+RATIONALE: >>>
+The Volume menu selects the year of the newsletter. The legacy page groups issues under a year. This requirement does not set the years in the menu.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-8
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-123
+TITLE: Newsletter Number Menu
+STATEMENT: >>>
+The Newsletter Selection Form SHALL include a menu for the Number, which is the month of the issue.
+<<<
+RATIONALE: >>>
+The Number menu selects the month of the newsletter. The legacy page lists months under each year. This requirement does not set the months in the menu.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-8
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-124
+TITLE: Selected Newsletter
+STATEMENT: >>>
+The newsletters page SHALL display the newsletter selected in the Newsletter Selection Form.
+<<<
+RATIONALE: >>>
+The page shows the issue chosen by the Volume and Number menus. The legacy page links to each issue as a separate file. This requirement does not set how the issue is presented.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-8
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-125
+TITLE: Default Newsletter
+STATEMENT: >>>
+The newsletters page SHALL display the most recent newsletter by default.
+<<<
+RATIONALE: >>>
+Before a visitor selects another issue, the page shows the most recent newsletter. The legacy page also identifies the newest issue separately from the yearly lists.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-10
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-8
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
