@@ -1012,10 +1012,16 @@ RELATIONS:
 UID: GSSC-PIR-47
 TITLE: Credential Storage
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL NOT store member credentials, including passwords and other keys.
+The GSSC Website Unified Backend SHALL authenticate members with credentials held outside the Unified Backend, including passwords and other keys.
+<<<
+RATIONALE: >>>
+Member passwords and other keys are held outside the Unified Backend. The backend uses those credentials to authenticate members.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-9
+CHANGE_DRIVER: >>>
+GSSC5-9
+GSSC5-10
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
