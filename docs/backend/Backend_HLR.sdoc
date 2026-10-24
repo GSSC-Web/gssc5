@@ -1257,7 +1257,7 @@ STATEMENT: >>>
 The GSSC Website Unified Backend SHALL provide the public with a list of leaders.
 <<<
 RATIONALE: >>>
-The public can see who the leaders are. This requirement does not define which members are leaders.
+The public can see who the leaders are. Leaders are the members whose Position is populated.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
@@ -1274,7 +1274,7 @@ STATEMENT: >>>
 The GSSC Website Unified Backend SHALL provide the public with the role of each leader.
 <<<
 RATIONALE: >>>
-The public can see the role of each leader. This requirement does not name the roles.
+The public role of a leader is that leader's Position.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
@@ -1376,7 +1376,7 @@ STATEMENT: >>>
 The GSSC Website Unified Backend SHALL provide a member's Position to the public when that Position is populated.
 <<<
 RATIONALE: >>>
-A member's Position is shown to the public when it has a value. The Unified Backend PIRs provide public information about leadership and do not require every populated Position to be public.
+A populated Position is the member's public leadership role. The Unified Backend PIRs provide public information about leadership and do not name Position as that role.
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-12
@@ -1410,11 +1410,167 @@ TITLE: Modifiable Assets
 UID: GSSC-BHLR-GENERIC-SECTIONS
 TITLE: Generic Sections
 
+[REQUIREMENT]
+UID: GSSC-BHLR-135
+TITLE: Public Section List
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL provide a list of public section data entries upon request, as a list of headers.
+<<<
+RATIONALE: >>>
+A caller can request the public sections and receive each section's headers. A public section is a page data table entry for a section whose audience is public. Members-only entries are outside this list.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-BHLR-136
+TITLE: Public Section Data
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL provide a public section's data upon request, including that section's headers, bodies, and resources.
+<<<
+RATIONALE: >>>
+A caller can request one public section and receive its headers, bodies, and resources together. Members-only sections are outside this request.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-BHLR-137
+TITLE: Authenticated Section List
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL provide a list of the public and members-only section data entries upon request from a logged-in member, as a list of headers.
+<<<
+RATIONALE: >>>
+An authenticated member can request every section and receive each section's headers.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-BHLR-138
+TITLE: Authenticated Section Data
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL provide any section's data upon request from a logged-in member, including that section's headers, bodies, and resources.
+<<<
+RATIONALE: >>>
+An authenticated member can request any one section, public or members-only, and receive its headers, bodies, and resources together.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-BHLR-139
+TITLE: Section Modification
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL accept modification of a section by a logged-in member who has the necessary permissions, including that section's headers, bodies, and resources.
+<<<
+RATIONALE: >>>
+An authenticated member with the necessary permissions can change a section. The change includes that section's headers, bodies, and resources. This requirement does not name those permissions.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Changed
+
 [[/SECTION]]
 
 [[SECTION]]
 UID: GSSC-BHLR-GENERIC-ANNOUNCEMENTS
 TITLE: Generic Announcements
+
+[REQUIREMENT]
+UID: GSSC-BHLR-142
+TITLE: Public Announcement List
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL provide a list of public announcement data entries upon request, as a list of headers.
+<<<
+RATIONALE: >>>
+A caller can request the public announcements and receive each announcement's headers. A public announcement is a page data table entry for an announcement whose audience is public. Members-only entries are outside this list.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-BHLR-143
+TITLE: Public Announcement Data
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL provide a public announcement's data upon request, including that announcement's headers, bodies, and resources.
+<<<
+RATIONALE: >>>
+A caller can request one public announcement and receive its headers, bodies, and resources together. Members-only announcements are outside this request.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-BHLR-144
+TITLE: Authenticated Announcement List
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL provide a list of the public and members-only announcement data entries upon request from a logged-in member, as a list of headers.
+<<<
+RATIONALE: >>>
+An authenticated member can request every announcement and receive each announcement's headers.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-BHLR-145
+TITLE: Authenticated Announcement Data
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL provide any announcement's data upon request from a logged-in member, including that announcement's headers, bodies, and resources.
+<<<
+RATIONALE: >>>
+An authenticated member can request any one announcement, public or members-only, and receive its headers, bodies, and resources together.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-BHLR-146
+TITLE: Announcement Modification
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL accept modification of an announcement by a logged-in member who has the necessary permissions, including that announcement's headers, bodies, and resources.
+<<<
+RATIONALE: >>>
+An authenticated member with the necessary permissions can change an announcement. The change includes that announcement's headers, bodies, and resources. This requirement does not name those permissions.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-BHLR-147
+TITLE: Public Announcement Events
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL include the data for each upcoming public event that is within that event's announcement window when it provides public announcements upon request.
+<<<
+RATIONALE: >>>
+A public announcement request also returns that event's data. A public event is an event whose audience is public. The announcement window begins on the event's announcement start date. This requirement does not set when the window ends, and it does not define upcoming apart from that window. Members-only events are outside this request.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-BHLR-148
+TITLE: Authenticated Announcement Events
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL include the data for each upcoming event that is within that event's announcement window when it provides announcements upon request from a logged-in member.
+<<<
+RATIONALE: >>>
+An authenticated member's announcement request also returns that event's data, whether the event is public or members-only. The announcement window begins on the event's announcement start date. This requirement does not set when the window ends, and it does not define upcoming apart from that window.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Changed
 
 [[/SECTION]]
 
@@ -1498,11 +1654,481 @@ TITLE: Data Storage
 UID: GSSC-BHLR-ACCOUNT-DATA
 TITLE: Account Data
 
+[REQUIREMENT]
+UID: GSSC-BHLR-118
+TITLE: Member Account
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store account data for each member.
+<<<
+RATIONALE: >>>
+Each member has account data. The fields of that account are the requirements under Account Data Fields.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Changed
+
+[[SECTION]]
+UID: GSSC-BHLR-ACCOUNT-DATA-FIELDS
+TITLE: Account Data Fields
+
+[[SECTION]]
+UID: GSSC-BHLR-ACCOUNT-NAMES
+TITLE: Names
+
+[REQUIREMENT]
+UID: GSSC-BHLR-96
+TITLE: Stored First Name
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store a member's First Name.
+<<<
+RATIONALE: >>>
+The member account holds the First Name that the member can view and modify.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-BHLR-97
+TITLE: Stored Middle Name
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store a member's Middle Name.
+<<<
+RATIONALE: >>>
+The member account holds the Middle Name that the member can view and modify.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-BHLR-98
+TITLE: Optional Middle Name
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL allow a member account to omit a Middle Name.
+<<<
+RATIONALE: >>>
+A member may have no middle name. The account remains valid without one.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-BHLR-99
+TITLE: Stored Last Name
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store a member's Last Name.
+<<<
+RATIONALE: >>>
+The member account holds the Last Name that the member can view and modify.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Changed
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BHLR-ACCOUNT-CONTACT
+TITLE: Contact
+
+[REQUIREMENT]
+UID: GSSC-BHLR-100
+TITLE: Stored Primary Email
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store a member's Primary Email.
+<<<
+RATIONALE: >>>
+The member account holds the Primary Email that the member can view and modify.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-BHLR-101
+TITLE: Required Primary Email
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL require a Primary Email in a member's account.
+<<<
+RATIONALE: >>>
+A member account has to include a way to reach the member by email.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-BHLR-102
+TITLE: Stored Secondary Email
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store a member's Secondary Email.
+<<<
+RATIONALE: >>>
+The member account holds the Secondary Email that the member can view and modify.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-BHLR-115
+TITLE: Stored Secondary Email Display
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store whether a member's Secondary Email is displayed.
+<<<
+RATIONALE: >>>
+The account holds the member's choice to display the Secondary Email when one is provided.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-BHLR-103
+TITLE: Stored Primary Phone Number
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store a member's Primary Phone Number.
+<<<
+RATIONALE: >>>
+The member account holds the Primary Phone Number that the member can view and modify.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-BHLR-104
+TITLE: Required Primary Phone Number
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL require a Primary Phone Number in a member's account.
+<<<
+RATIONALE: >>>
+A member account has to include a way to reach the member by phone.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-BHLR-105
+TITLE: Stored Secondary Phone Number
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store a member's Secondary Phone Number.
+<<<
+RATIONALE: >>>
+The member account holds the Secondary Phone Number that the member can view and modify.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-BHLR-116
+TITLE: Stored Secondary Phone Number Display
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store whether a member's Secondary Phone Number is displayed.
+<<<
+RATIONALE: >>>
+The account holds the member's choice to display the Secondary Phone Number when one is provided.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-BHLR-106
+TITLE: Stored Preferred Contact Method
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store a member's Preferred Contact Method.
+<<<
+RATIONALE: >>>
+The member account holds the Preferred Contact Method that the member can view and modify. The allowed values remain Email, Phone, or None.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Changed
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BHLR-ACCOUNT-ADDRESSES
+TITLE: Addresses
+
+[REQUIREMENT]
+UID: GSSC-BHLR-107
+TITLE: Stored Home Address
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store a member's Home Address.
+<<<
+RATIONALE: >>>
+The member account holds the Home Address that the member can view and modify. This requirement does not define the parts of an address.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-BHLR-117
+TITLE: Stored Home Address Display
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store whether a member's Home Address is displayed in full or redacted.
+<<<
+RATIONALE: >>>
+The account holds the Home Address display that the member or an administrator can set. Redacted shows the city and state. This requirement does not apply to the Mailing Address.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-BHLR-108
+TITLE: Stored Mailing Address
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store a member's Mailing Address.
+<<<
+RATIONALE: >>>
+The member account holds the Mailing Address that the member can view and modify. This requirement does not define the parts of an address.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Changed
+
+[[/SECTION]]
+
+[REQUIREMENT]
+UID: GSSC-BHLR-109
+TITLE: Stored Account Photo
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store a member's Account Photo.
+<<<
+RATIONALE: >>>
+The member account holds the Account Photo that the member can view and modify. This requirement does not define the form of the photo.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-BHLR-110
+TITLE: Stored Position
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store a member's Position.
+<<<
+RATIONALE: >>>
+The member account holds the Position that the member can view and an administrator can modify. A populated Position is the member's leadership role. This requirement does not name the positions.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-BHLR-111
+TITLE: Stored Site Privileges
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store a member's Site Privileges.
+<<<
+RATIONALE: >>>
+The member account holds the Site Privileges that an administrator can modify. This requirement does not name the privileges.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Changed
+
+[[SECTION]]
+UID: GSSC-BHLR-ACCOUNT-PASSWORD
+TITLE: Password
+
+[REQUIREMENT]
+UID: GSSC-BHLR-112
+TITLE: Stored Current Password Hash
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store a member's current password hash.
+<<<
+RATIONALE: >>>
+The member account holds a hash of the current password so the password itself is not stored. This requirement does not set the hash method.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-BHLR-113
+TITLE: Stored Past Password Hashes
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store a limited number of a member's past password hashes.
+<<<
+RATIONALE: >>>
+After a password is replaced, the account keeps a limited history of earlier password hashes. This requirement does not set how many are kept, or the hash method.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Changed
+
+[[/SECTION]]
+
+[REQUIREMENT]
+UID: GSSC-BHLR-114
+TITLE: Stored Membership Status
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store a member's Membership Status.
+<<<
+RATIONALE: >>>
+The member account holds the member's Membership Status. This requirement does not define the status values.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Changed
+
+[[/SECTION]]
+
 [[/SECTION]]
 
 [[SECTION]]
 UID: GSSC-BHLR-WEBPAGE-DATA
 TITLE: Webpage Data
+
+[[SECTION]]
+UID: GSSC-BHLR-GLOBAL-WEBSITE-DATA
+TITLE: Global Website Data
+
+[REQUIREMENT]
+UID: GSSC-BHLR-119
+TITLE: Global Website Data
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store global data for the website in a key-value store.
+<<<
+RATIONALE: >>>
+This data applies to the website as a whole, rather than to one page. This requirement does not define the keys or the values.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Changed
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BHLR-GENERIC-PAGE-DATA
+TITLE: Generic Page Data
+
+[REQUIREMENT]
+UID: GSSC-BHLR-120
+TITLE: Page Data Table
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store sections, announcements, and event details as entries in the page data table.
+<<<
+RATIONALE: >>>
+Sections, announcements, and event details share this table. Each entry is one section, one announcement, or one event's details. The cemetery project and the war veterans project have their own datasets.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-BHLR-124
+TITLE: Generic Page Datatype
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store a datatype for each page data table entry.
+<<<
+RATIONALE: >>>
+The datatype records whether the entry is a section, an announcement, or event details. This requirement does not define further datatype values.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-BHLR-121
+TITLE: Generic Page Headers
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store headers for each page data table entry.
+<<<
+RATIONALE: >>>
+A page data table entry holds its headers. This requirement does not set how many headers an entry has.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-BHLR-122
+TITLE: Generic Page Bodies
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store bodies for each page data table entry.
+<<<
+RATIONALE: >>>
+A page data table entry holds its bodies. This requirement does not set how many bodies an entry has.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-BHLR-123
+TITLE: Generic Page Resources
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store resources for each page data table entry.
+<<<
+RATIONALE: >>>
+A page data table entry holds its resources. This requirement does not define what a resource contains, or how many an entry has.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-BHLR-134
+TITLE: Generic Page Audience
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store whether each page data table entry is public or members-only.
+<<<
+RATIONALE: >>>
+The flag records whether the entry is available to the public or only to members.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-BHLR-140
+TITLE: Generic Page Modification Permissions
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store the permissions that allow modification of each page data table entry.
+<<<
+RATIONALE: >>>
+The entry holds the permissions a logged-in member must have to modify it. This requirement does not name those permissions.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-BHLR-141
+TITLE: Generic Page Deletion Permissions
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store the permissions that allow deletion of each page data table entry.
+<<<
+RATIONALE: >>>
+The entry holds the permissions a logged-in member must have to delete it. These permissions are separate from the permissions that allow modification. This requirement does not name those permissions, and it does not define the deletion operation.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Changed
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BHLR-CEMETERY-PROJECT-DATA
+TITLE: Cemetery Project Data
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BHLR-WAR-VETERANS-PROJECT-DATA
+TITLE: War Veterans Project Data
+
+[[/SECTION]]
 
 [[/SECTION]]
 
@@ -1515,6 +2141,123 @@ TITLE: Contact Data
 [[SECTION]]
 UID: GSSC-BHLR-EVENT-DATA
 TITLE: Event Data
+
+[REQUIREMENT]
+UID: GSSC-BHLR-125
+TITLE: Event Table
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store events as a table of event entries.
+<<<
+RATIONALE: >>>
+Each entry is one event.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-BHLR-126
+TITLE: Event Name
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store a name for each event.
+<<<
+RATIONALE: >>>
+The event entry holds the event's name.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-BHLR-127
+TITLE: Event Date
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store a date for each event as a month, a day, and a year.
+<<<
+RATIONALE: >>>
+The event entry holds the calendar date on which the event occurs.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-BHLR-133
+TITLE: Event Announcement Start
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store a date for each event as a month, a day, and a year for the start of that event's announcement window.
+<<<
+RATIONALE: >>>
+The event entry holds the date on which announcement of the event begins. This requirement does not set when that announcement ends.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-BHLR-128
+TITLE: Event Time
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store a time of occurrence for each event.
+<<<
+RATIONALE: >>>
+The event entry holds the time at which the event occurs. This requirement does not define the precision of that time.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-BHLR-129
+TITLE: Event Duration
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store a duration for each event.
+<<<
+RATIONALE: >>>
+The event entry holds how long the event lasts. This requirement does not define the units of that duration.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-BHLR-130
+TITLE: Event Location
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store a location for each event.
+<<<
+RATIONALE: >>>
+The event entry holds where the event occurs. This requirement does not define the parts of a location.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-BHLR-131
+TITLE: Event Page Reference
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store a reference from each event to the page data table entry that holds that event's details.
+<<<
+RATIONALE: >>>
+The event's description and name are that event's details, stored in the page data table.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-BHLR-132
+TITLE: Event Audience
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store whether each event is public or members-only.
+<<<
+RATIONALE: >>>
+The flag records whether the event is available to the public or only to members.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Changed
 
 [[/SECTION]]
 
