@@ -24,7 +24,17 @@ def create_config() -> ProjectConfig:
         include_doc_paths=[
             "/docs/",
         ],
+        # Include masks filter files but do not stop the startup directory
+        # walk. These excludes prune third-party trees before they are scanned.
+        exclude_doc_paths=[
+            "node_modules/",
+            ".venv/",
+        ],
         include_source_paths=[
             "/src/**",
+        ],
+        exclude_source_paths=[
+            "node_modules/",
+            ".venv/",
         ],
     )
