@@ -78,11 +78,11 @@ STATEMENT: >>>
 The GSSC Website Unified Backend SHALL let a member log in.
 <<<
 RATIONALE: >>>
-Login is how the Unified Backend authenticates a member. The credentials used for that login are held outside the Unified Backend.
+Login is how the Unified Backend authenticates a member. The backend uses a retained hash of the member's password. Other keys used for that login are held outside the Unified Backend.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-47
@@ -99,7 +99,7 @@ A successful login has to yield a Login Token that a later challenge can test. T
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BHLR-3
@@ -112,7 +112,7 @@ The frontend uses this challenge to detect whether a member is logged in. The re
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BHLR-4
@@ -123,9 +123,13 @@ The GSSC Website Unified Backend SHALL end the member login of a Login Token whe
 RATIONALE: >>>
 A member has to be able to end a login. After logout, that Login Token no longer represents a valid login.
 <<<
-DERIVED: True
+DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
+  ROLE: Refines
 
 [REQUIREMENT]
 UID: GSSC-BHLR-5
@@ -138,7 +142,7 @@ A Login Token remains valid only for a limited time. This requirement does not s
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [[/SECTION]]
 
@@ -161,10 +165,13 @@ A member can see the First Name held for that member.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-42
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [REQUIREMENT]
@@ -178,10 +185,13 @@ A member can see the Middle Name held for that member.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-42
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [REQUIREMENT]
@@ -195,10 +205,13 @@ A member can see the Last Name held for that member.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-42
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [REQUIREMENT]
@@ -212,10 +225,13 @@ A member can see the Primary Email held for that member.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-42
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [REQUIREMENT]
@@ -229,10 +245,13 @@ A member can see the Secondary Email held for that member.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-42
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [REQUIREMENT]
@@ -246,10 +265,13 @@ A member can see the Primary Phone Number held for that member.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-42
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [REQUIREMENT]
@@ -263,10 +285,13 @@ A member can see the Secondary Phone Number held for that member.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-42
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [REQUIREMENT]
@@ -280,10 +305,13 @@ A member can see the Preferred Contact Method held for that member.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-42
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [REQUIREMENT]
@@ -297,10 +325,13 @@ A member can see the Home Address held for that member. This requirement does no
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-42
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [REQUIREMENT]
@@ -314,10 +345,13 @@ A member can see the Mailing Address held for that member. This requirement does
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-42
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [REQUIREMENT]
@@ -331,10 +365,13 @@ A member can keep that member's own First Name current.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-44
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [REQUIREMENT]
@@ -348,10 +385,13 @@ A member can keep that member's own Middle Name current.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-44
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [REQUIREMENT]
@@ -365,10 +405,13 @@ A member can keep that member's own Last Name current.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-44
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [REQUIREMENT]
@@ -382,10 +425,13 @@ A member can keep that member's own Primary Email current.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-44
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [REQUIREMENT]
@@ -399,10 +445,13 @@ A member can keep that member's own Secondary Email current.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-44
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [REQUIREMENT]
@@ -416,10 +465,13 @@ A member can keep that member's own Primary Phone Number current.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-44
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [REQUIREMENT]
@@ -433,10 +485,13 @@ A member can keep that member's own Secondary Phone Number current.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-44
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [REQUIREMENT]
@@ -450,10 +505,13 @@ A member can keep that member's own Preferred Contact Method current.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-44
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [REQUIREMENT]
@@ -467,10 +525,13 @@ A member can keep that member's own Home Address current. This requirement does 
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-44
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [REQUIREMENT]
@@ -484,10 +545,13 @@ A member can keep that member's own Mailing Address current. This requirement do
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-44
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [REQUIREMENT]
@@ -501,7 +565,7 @@ The member chooses how other members should make contact. The choices are email,
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BHLR-82
@@ -514,10 +578,13 @@ A member can see the Account Photo held for that member. This requirement does n
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-42
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [REQUIREMENT]
@@ -531,10 +598,13 @@ A member can keep that member's own Account Photo current.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-44
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [REQUIREMENT]
@@ -548,10 +618,13 @@ A member can see the Position held for that member. The member's access to Posit
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-42
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [[/SECTION]]
@@ -569,9 +642,16 @@ The GSSC Website Unified Backend SHALL let a member choose to share that member'
 RATIONALE: >>>
 The member chooses whether other members see the full Home Address or only its redacted form. This requirement does not apply to the Mailing Address.
 <<<
-DERIVED: True
+DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-44
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
+  ROLE: Refines
 
 [REQUIREMENT]
 UID: GSSC-BHLR-80
@@ -584,10 +664,13 @@ An administrator can change the same Home Address display setting that the membe
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-44
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [REQUIREMENT]
@@ -599,9 +682,16 @@ The GSSC Website Unified Backend SHALL let a member choose to share that member'
 RATIONALE: >>>
 A member who has given a Secondary Email chooses whether other members can see it.
 <<<
-DERIVED: True
+DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-44
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
+  ROLE: Refines
 
 [REQUIREMENT]
 UID: GSSC-BHLR-49
@@ -612,9 +702,16 @@ The GSSC Website Unified Backend SHALL let a member choose to share that member'
 RATIONALE: >>>
 A member who has given a Secondary Phone Number chooses whether other members can see it.
 <<<
-DERIVED: True
+DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-44
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
+  ROLE: Refines
 
 [[/SECTION]]
 
@@ -633,10 +730,13 @@ An administrator can view the First Name of every member.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-42
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [REQUIREMENT]
@@ -650,10 +750,13 @@ An administrator can view the Middle Name of every member.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-42
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [REQUIREMENT]
@@ -667,10 +770,13 @@ An administrator can view the Last Name of every member.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-42
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [REQUIREMENT]
@@ -684,10 +790,13 @@ An administrator can view the Primary Email of every member.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-42
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [REQUIREMENT]
@@ -701,10 +810,13 @@ An administrator can view the Secondary Email of every member.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-42
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [REQUIREMENT]
@@ -718,10 +830,13 @@ An administrator can view the Primary Phone Number of every member.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-42
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [REQUIREMENT]
@@ -735,10 +850,13 @@ An administrator can view the Secondary Phone Number of every member.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-42
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [REQUIREMENT]
@@ -752,10 +870,13 @@ An administrator can view the Preferred Contact Method of every member.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-42
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [REQUIREMENT]
@@ -769,10 +890,13 @@ An administrator can view the Home Address of every member.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-42
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [REQUIREMENT]
@@ -786,10 +910,13 @@ An administrator can view the Mailing Address of every member.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-42
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [REQUIREMENT]
@@ -803,10 +930,13 @@ An administrator can keep any member's First Name current.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-44
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [REQUIREMENT]
@@ -820,10 +950,13 @@ An administrator can keep any member's Middle Name current.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-44
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [REQUIREMENT]
@@ -837,10 +970,13 @@ An administrator can keep any member's Last Name current.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-44
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [REQUIREMENT]
@@ -854,10 +990,13 @@ An administrator can keep any member's Primary Email current.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-44
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [REQUIREMENT]
@@ -871,10 +1010,13 @@ An administrator can keep any member's Secondary Email current.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-44
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [REQUIREMENT]
@@ -888,10 +1030,13 @@ An administrator can keep any member's Primary Phone Number current.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-44
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [REQUIREMENT]
@@ -905,10 +1050,13 @@ An administrator can keep any member's Secondary Phone Number current.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-44
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [REQUIREMENT]
@@ -922,10 +1070,13 @@ An administrator can keep any member's Preferred Contact Method current.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-44
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [REQUIREMENT]
@@ -939,10 +1090,13 @@ An administrator can keep any member's Home Address current.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-44
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [REQUIREMENT]
@@ -956,10 +1110,13 @@ An administrator can keep any member's Mailing Address current.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-44
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [REQUIREMENT]
@@ -973,10 +1130,13 @@ An administrator can keep any member's Account Photo current.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-44
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [REQUIREMENT]
@@ -990,10 +1150,13 @@ An administrator can keep any member's Position current. This requirement does n
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-44
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [[/SECTION]]
@@ -1013,10 +1176,13 @@ A logged-in member can identify another member by First Name.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-41
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [REQUIREMENT]
@@ -1030,10 +1196,13 @@ A logged-in member can identify another member by Middle Name.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-41
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [REQUIREMENT]
@@ -1047,10 +1216,13 @@ A logged-in member can identify another member by Last Name.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-41
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [REQUIREMENT]
@@ -1064,10 +1236,13 @@ Another member sees the Primary Email when email is the Preferred Contact Method
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-41
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [REQUIREMENT]
@@ -1081,10 +1256,13 @@ Another member sees the Primary Phone Number when phone is the Preferred Contact
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-41
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [REQUIREMENT]
@@ -1098,10 +1276,13 @@ The Secondary Email stays out of this view unless that member has chosen to shar
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-41
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [REQUIREMENT]
@@ -1115,10 +1296,13 @@ The Secondary Phone Number stays out of this view unless that member has chosen 
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-41
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [REQUIREMENT]
@@ -1132,10 +1316,13 @@ The redacted Home Address is the city and state. This requirement does not show 
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-41
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [REQUIREMENT]
@@ -1149,10 +1336,13 @@ The full Home Address is shown only when that member has chosen to share it.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-41
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [REQUIREMENT]
@@ -1166,10 +1356,13 @@ Any logged-in member can see another member's Account Photo.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-41
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [[/SECTION]]
@@ -1181,11 +1374,32 @@ STATEMENT: >>>
 The GSSC Website Unified Backend SHALL let a logged-in member replace that member's password.
 <<<
 RATIONALE: >>>
-A logged-in member has to be able to replace that member's password. Passwords are held outside the Unified Backend. This requirement does not define password recovery.
+A logged-in member has to be able to replace that member's password. The backend retains a hash of the password, and the password itself is not retained. This requirement does not define password recovery.
 <<<
-DERIVED: True
+DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-161
+TITLE: Password Recovery
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL enable password recovery through secure methods.
+<<<
+RATIONALE: >>>
+A member can recover a password through secure methods. This requirement does not define those methods.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-48
+  ROLE: Refines
 
 [[SECTION]]
 UID: GSSC-BHLR-MEMBER-LIST
@@ -1202,10 +1416,13 @@ A logged-in member can retrieve the members. This requirement does not limit the
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-36
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [REQUIREMENT]
@@ -1219,10 +1436,13 @@ An administrator can view every account field, so an administrator can filter by
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-36
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [[/SECTION]]
@@ -1238,10 +1458,73 @@ An administrator can grant and remove a member's permission sets. Assignment rem
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-46
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-167
+TITLE: Own Permissions
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL let a logged-in member view that member's own permissions.
+<<<
+RATIONALE: >>>
+A member can see the permissions held for that member. This requirement does not name those permissions.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-45
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-168
+TITLE: Other Member Permissions
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL let a logged-in member with the necessary permissions view another member's permissions.
+<<<
+RATIONALE: >>>
+A member with the necessary permissions can see another member's permissions. This requirement does not name those permissions.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-45
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-169
+TITLE: Authorized Permission Modification
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL let a logged-in member with the necessary permissions modify another member's permissions.
+<<<
+RATIONALE: >>>
+A member with the necessary permissions can change another member's permissions. Assignment remains limited to permissions lower than that member's own permissions. This requirement does not name those permissions.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-46
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
   ROLE: Refines
 
 [[/SECTION]]
@@ -1261,7 +1544,7 @@ The public can see who the leaders are. Leaders are the members whose Position i
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-40
@@ -1278,7 +1561,7 @@ The public role of a leader is that leader's Position.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-40
@@ -1295,7 +1578,7 @@ The public can see the First Name of each leader.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-40
@@ -1312,7 +1595,7 @@ The public can see the Last Name of each leader.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-40
@@ -1329,7 +1612,7 @@ The public sees the Primary Email when email is the leader's Preferred Contact M
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-40
@@ -1346,7 +1629,7 @@ The public sees the Primary Phone Number when phone is the leader's Preferred Co
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-40
@@ -1363,7 +1646,7 @@ The public can see the Account Photo of a leader.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-40
@@ -1378,9 +1661,13 @@ The GSSC Website Unified Backend SHALL provide a member's Position to the public
 RATIONALE: >>>
 A populated Position is the member's public leadership role. The Unified Backend PIRs provide public information about leadership and do not name Position as that role.
 <<<
-DERIVED: True
+DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-40
+  ROLE: Refines
 
 [[/SECTION]]
 
@@ -1398,11 +1685,176 @@ TITLE: Generic Content
 UID: GSSC-BHLR-ORGANIZATION-INFO
 TITLE: Organization Info
 
+[REQUIREMENT]
+UID: GSSC-BHLR-150
+TITLE: Organization Phone
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL provide the organization's phone upon request.
+<<<
+RATIONALE: >>>
+A caller can request the organization's phone. This requirement does not set the current number.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-60
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-151
+TITLE: Organization Mailing Address
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL provide the organization's mailing address upon request.
+<<<
+RATIONALE: >>>
+A caller can request the organization's mailing address. This requirement does not define the parts of that address.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-60
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-152
+TITLE: Organization Email
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL provide the organization's email upon request.
+<<<
+RATIONALE: >>>
+A caller can request the organization's email. This requirement does not set the current address.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-60
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-153
+TITLE: Organization Social Media
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL provide the organization's social media items upon request.
+<<<
+RATIONALE: >>>
+A caller can request the organization's social media items. This requirement does not name the services, or how many items are provided.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-60
+  ROLE: Refines
+
 [[/SECTION]]
 
 [[SECTION]]
 UID: GSSC-BHLR-MODIFIABLE-ASSETS
 TITLE: Modifiable Assets
+
+[REQUIREMENT]
+UID: GSSC-BHLR-155
+TITLE: Public Artifact
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL provide the public artifacts upon request.
+<<<
+RATIONALE: >>>
+A caller can request the artifacts whose publicity status is public. Each artifact is a file stored on the server. Members-only artifacts are outside this request.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-57
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-156
+TITLE: Member Artifact
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL provide the stored artifacts upon request from a logged-in member.
+<<<
+RATIONALE: >>>
+An authenticated member can request the stored artifacts, whether an artifact is public or members-only. Each artifact is a file stored on the server.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-57
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-157
+TITLE: Artifact Insertion
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL accept insertion of an artifact by a logged-in member who has the necessary permissions.
+<<<
+RATIONALE: >>>
+An authenticated member with the necessary permissions can add an artifact. The artifact is stored as a file on the server. This requirement does not name those permissions.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-57
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-158
+TITLE: Artifact Modification
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL accept modification of an artifact by a logged-in member who has the necessary permissions.
+<<<
+RATIONALE: >>>
+An authenticated member with the necessary permissions can change an artifact. These permissions are separate from the permissions that allow deletion. This requirement does not name those permissions.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-57
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-159
+TITLE: Artifact Deletion
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL accept deletion of an artifact by a logged-in member who has the necessary permissions.
+<<<
+RATIONALE: >>>
+An authenticated member with the necessary permissions can delete an artifact. These permissions are separate from the permissions that allow modification. This requirement does not name those permissions.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-57
+  ROLE: Refines
 
 [[/SECTION]]
 
@@ -1421,7 +1873,7 @@ A caller can request the public sections and receive each section's headers. A p
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BHLR-136
@@ -1434,7 +1886,7 @@ A caller can request one public section and receive its headers, bodies, and res
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BHLR-137
@@ -1445,9 +1897,13 @@ The GSSC Website Unified Backend SHALL provide a list of the public and members-
 RATIONALE: >>>
 An authenticated member can request every section and receive each section's headers.
 <<<
-DERIVED: True
+DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
+  ROLE: Refines
 
 [REQUIREMENT]
 UID: GSSC-BHLR-138
@@ -1458,9 +1914,13 @@ The GSSC Website Unified Backend SHALL provide any section's data upon request f
 RATIONALE: >>>
 An authenticated member can request any one section, public or members-only, and receive its headers, bodies, and resources together.
 <<<
-DERIVED: True
+DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
+  ROLE: Refines
 
 [REQUIREMENT]
 UID: GSSC-BHLR-139
@@ -1469,11 +1929,32 @@ STATEMENT: >>>
 The GSSC Website Unified Backend SHALL accept modification of a section by a logged-in member who has the necessary permissions, including that section's headers, bodies, and resources.
 <<<
 RATIONALE: >>>
-An authenticated member with the necessary permissions can change a section. The change includes that section's headers, bodies, and resources. This requirement does not name those permissions.
+An authenticated member with the necessary permissions can change a section. The change includes that section's headers, bodies, and resources. These permissions are separate from the permissions that allow deletion. This requirement does not name those permissions.
 <<<
-DERIVED: True
+DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-176
+TITLE: Section Deletion
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL accept deletion of a section by a logged-in member who has the necessary permissions.
+<<<
+RATIONALE: >>>
+An authenticated member with the necessary permissions can delete a section. Those permissions are separate from the permissions that allow modification. This requirement does not name those permissions.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
+  ROLE: Refines
 
 [[/SECTION]]
 
@@ -1490,9 +1971,13 @@ The GSSC Website Unified Backend SHALL provide a list of public announcement dat
 RATIONALE: >>>
 A caller can request the public announcements and receive each announcement's headers. A public announcement is a page data table entry for an announcement whose audience is public. Members-only entries are outside this list.
 <<<
-DERIVED: True
+DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-34
+  ROLE: Refines
 
 [REQUIREMENT]
 UID: GSSC-BHLR-143
@@ -1503,9 +1988,13 @@ The GSSC Website Unified Backend SHALL provide a public announcement's data upon
 RATIONALE: >>>
 A caller can request one public announcement and receive its headers, bodies, and resources together. Members-only announcements are outside this request.
 <<<
-DERIVED: True
+DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-34
+  ROLE: Refines
 
 [REQUIREMENT]
 UID: GSSC-BHLR-144
@@ -1516,9 +2005,19 @@ The GSSC Website Unified Backend SHALL provide a list of the public and members-
 RATIONALE: >>>
 An authenticated member can request every announcement and receive each announcement's headers.
 <<<
-DERIVED: True
+DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-34
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-37
+  ROLE: Refines
 
 [REQUIREMENT]
 UID: GSSC-BHLR-145
@@ -1529,9 +2028,19 @@ The GSSC Website Unified Backend SHALL provide any announcement's data upon requ
 RATIONALE: >>>
 An authenticated member can request any one announcement, public or members-only, and receive its headers, bodies, and resources together.
 <<<
-DERIVED: True
+DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-34
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-37
+  ROLE: Refines
 
 [REQUIREMENT]
 UID: GSSC-BHLR-146
@@ -1540,11 +2049,44 @@ STATEMENT: >>>
 The GSSC Website Unified Backend SHALL accept modification of an announcement by a logged-in member who has the necessary permissions, including that announcement's headers, bodies, and resources.
 <<<
 RATIONALE: >>>
-An authenticated member with the necessary permissions can change an announcement. The change includes that announcement's headers, bodies, and resources. This requirement does not name those permissions.
+An authenticated member with the necessary permissions can change an announcement. The change includes that announcement's headers, bodies, and resources. These permissions are separate from the permissions that allow deletion. This requirement does not name those permissions.
 <<<
-DERIVED: True
+DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-34
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-37
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-177
+TITLE: Announcement Deletion
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL accept deletion of an announcement by a logged-in member who has the necessary permissions.
+<<<
+RATIONALE: >>>
+An authenticated member with the necessary permissions can delete an announcement. Those permissions are separate from the permissions that allow modification. This requirement does not name those permissions.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-34
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-37
+  ROLE: Refines
 
 [REQUIREMENT]
 UID: GSSC-BHLR-147
@@ -1555,9 +2097,13 @@ The GSSC Website Unified Backend SHALL include the data for each upcoming public
 RATIONALE: >>>
 A public announcement request also returns that event's data. A public event is an event whose audience is public. The announcement window begins on the event's announcement start date. This requirement does not set when the window ends, and it does not define upcoming apart from that window. Members-only events are outside this request.
 <<<
-DERIVED: True
+DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-58
+  ROLE: Refines
 
 [REQUIREMENT]
 UID: GSSC-BHLR-148
@@ -1568,9 +2114,16 @@ The GSSC Website Unified Backend SHALL include the data for each upcoming event 
 RATIONALE: >>>
 An authenticated member's announcement request also returns that event's data, whether the event is public or members-only. The announcement window begins on the event's announcement start date. This requirement does not set when the window ends, and it does not define upcoming apart from that window.
 <<<
-DERIVED: True
+DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-58
+  ROLE: Refines
 
 [[/SECTION]]
 
@@ -1584,17 +2137,48 @@ TITLE: Public Dedicated Content
 UID: GSSC-BHLR-PUBLIC-HOME-CONTENT
 TITLE: Public Home Content
 
-[[/SECTION]]
-
-[[SECTION]]
-UID: GSSC-BHLR-MEMBER-INFORMATION-CONTENT
-TITLE: Member Information Content
+[REQUIREMENT]
+UID: GSSC-BHLR-170
+TITLE: Featured Photos
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL provide the featured photos upon request.
+<<<
+RATIONALE: >>>
+A caller can request the featured photos for the home page. This requirement does not set how many photos are provided, or the form of a photo. Modification and deletion of these photos are the artifact modification and artifact deletion requirements.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-23
+  ROLE: Refines
 
 [[/SECTION]]
 
 [[SECTION]]
 UID: GSSC-BHLR-LEADERSHIP-CONTENT
 TITLE: Leadership Content
+
+[REQUIREMENT]
+UID: GSSC-BHLR-171
+TITLE: Leadership List
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL provide a complete list of the leadership of the GSSC upon request, including each leader's name, permissions, photo, preferred contact, and the type of that preferred contact.
+<<<
+RATIONALE: >>>
+A caller can request the leadership page's list. Leaders are the members whose Position is populated. The photo is that member's Account Photo. The type of the preferred contact is that member's Preferred Contact Method. This requirement does not name the permissions. Changes to a leader's name, permissions, photo, and preferred contact are made through account management, and this list reflects those changes.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-25
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-40
+  ROLE: Refines
 
 [[/SECTION]]
 
@@ -1619,6 +2203,40 @@ TITLE: Publications Content
 [[SECTION]]
 UID: GSSC-BHLR-NEWSLETTERS-CONTENT
 TITLE: Newsletters Content
+
+[REQUIREMENT]
+UID: GSSC-BHLR-172
+TITLE: Newsletter List for a Year
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL provide a list of newsletters for a given year upon request.
+<<<
+RATIONALE: >>>
+A caller can request the newsletters for one year. This requirement does not define the contents of a newsletter. Modification and deletion of a newsletter are the artifact modification and artifact deletion requirements.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-31
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-173
+TITLE: Newsletter
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL provide a newsletter upon request.
+<<<
+RATIONALE: >>>
+A caller can request one newsletter. This requirement does not define the contents of a newsletter. Modification and deletion of a newsletter are the artifact modification and artifact deletion requirements.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-31
+  ROLE: Refines
 
 [[/SECTION]]
 
@@ -1665,7 +2283,7 @@ Each member has account data. The fields of that account are the requirements un
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [[SECTION]]
 UID: GSSC-BHLR-ACCOUNT-DATA-FIELDS
@@ -1686,7 +2304,7 @@ The member account holds the First Name that the member can view and modify.
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BHLR-97
@@ -1699,7 +2317,7 @@ The member account holds the Middle Name that the member can view and modify.
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BHLR-98
@@ -1712,7 +2330,7 @@ A member may have no middle name. The account remains valid without one.
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BHLR-99
@@ -1725,7 +2343,7 @@ The member account holds the Last Name that the member can view and modify.
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [[/SECTION]]
 
@@ -1744,7 +2362,7 @@ The member account holds the Primary Email that the member can view and modify.
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BHLR-101
@@ -1757,7 +2375,7 @@ A member account has to include a way to reach the member by email.
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BHLR-102
@@ -1770,7 +2388,7 @@ The member account holds the Secondary Email that the member can view and modify
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BHLR-115
@@ -1783,7 +2401,7 @@ The account holds the member's choice to display the Secondary Email when one is
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BHLR-103
@@ -1796,7 +2414,7 @@ The member account holds the Primary Phone Number that the member can view and m
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BHLR-104
@@ -1809,7 +2427,7 @@ A member account has to include a way to reach the member by phone.
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BHLR-105
@@ -1822,7 +2440,7 @@ The member account holds the Secondary Phone Number that the member can view and
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BHLR-116
@@ -1835,7 +2453,7 @@ The account holds the member's choice to display the Secondary Phone Number when
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BHLR-106
@@ -1848,7 +2466,7 @@ The member account holds the Preferred Contact Method that the member can view a
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [[/SECTION]]
 
@@ -1867,7 +2485,7 @@ The member account holds the Home Address that the member can view and modify. T
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BHLR-117
@@ -1880,7 +2498,7 @@ The account holds the Home Address display that the member or an administrator c
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BHLR-108
@@ -1893,7 +2511,7 @@ The member account holds the Mailing Address that the member can view and modify
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [[/SECTION]]
 
@@ -1908,7 +2526,7 @@ The member account holds the Account Photo that the member can view and modify. 
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BHLR-110
@@ -1921,7 +2539,7 @@ The member account holds the Position that the member can view and an administra
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BHLR-111
@@ -1934,7 +2552,7 @@ The member account holds the Site Privileges that an administrator can modify. T
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [[SECTION]]
 UID: GSSC-BHLR-ACCOUNT-PASSWORD
@@ -1949,9 +2567,13 @@ The GSSC Website Unified Backend SHALL store a member's current password hash.
 RATIONALE: >>>
 The member account holds a hash of the current password so the password itself is not stored. This requirement does not set the hash method.
 <<<
-DERIVED: True
+DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-47
+  ROLE: Refines
 
 [REQUIREMENT]
 UID: GSSC-BHLR-113
@@ -1962,9 +2584,13 @@ The GSSC Website Unified Backend SHALL store a limited number of a member's past
 RATIONALE: >>>
 After a password is replaced, the account keeps a limited history of earlier password hashes. This requirement does not set how many are kept, or the hash method.
 <<<
-DERIVED: True
+DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-47
+  ROLE: Refines
 
 [[/SECTION]]
 
@@ -1979,7 +2605,7 @@ The member account holds the member's Membership Status. This requirement does n
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [[/SECTION]]
 
@@ -2004,7 +2630,75 @@ This data applies to the website as a whole, rather than to one page. This requi
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-BHLR-149
+TITLE: Artifact Files
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store artifacts on the server as files.
+<<<
+RATIONALE: >>>
+These artifacts belong to the website as a whole. They are kept as files on the server. This requirement does not define which artifacts are stored, or the form of those files.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-57
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-154
+TITLE: Artifact Publicity Status
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store the publicity status of each stored artifact as public or members-only.
+<<<
+RATIONALE: >>>
+The status records whether that artifact is available to the public or only to members. The artifact is a file stored on the server.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-57
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-160
+TITLE: Artifact Modification Permissions
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store the permissions required to modify each stored artifact.
+<<<
+RATIONALE: >>>
+The artifact holds the permissions a logged-in member must have to modify it. These permissions are separate from the permissions that allow deletion. This requirement does not name those permissions.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-57
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-178
+TITLE: Artifact Deletion Permissions
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store the permissions required to delete each stored artifact.
+<<<
+RATIONALE: >>>
+The artifact holds the permissions a logged-in member must have to delete it. These permissions are separate from the permissions that allow modification. This requirement does not name those permissions.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-57
+  ROLE: Refines
 
 [[/SECTION]]
 
@@ -2023,7 +2717,7 @@ Sections, announcements, and event details share this table. Each entry is one s
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BHLR-124
@@ -2036,7 +2730,7 @@ The datatype records whether the entry is a section, an announcement, or event d
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BHLR-121
@@ -2049,7 +2743,7 @@ A page data table entry holds its headers. This requirement does not set how man
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BHLR-122
@@ -2062,7 +2756,7 @@ A page data table entry holds its bodies. This requirement does not set how many
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BHLR-123
@@ -2075,7 +2769,7 @@ A page data table entry holds its resources. This requirement does not define wh
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BHLR-134
@@ -2088,7 +2782,7 @@ The flag records whether the entry is available to the public or only to members
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BHLR-140
@@ -2101,7 +2795,7 @@ The entry holds the permissions a logged-in member must have to modify it. This 
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BHLR-141
@@ -2114,7 +2808,7 @@ The entry holds the permissions a logged-in member must have to delete it. These
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [[/SECTION]]
 
@@ -2151,9 +2845,13 @@ The GSSC Website Unified Backend SHALL store events as a table of event entries.
 RATIONALE: >>>
 Each entry is one event.
 <<<
-DERIVED: True
+DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-59
+  ROLE: Refines
 
 [REQUIREMENT]
 UID: GSSC-BHLR-126
@@ -2164,9 +2862,13 @@ The GSSC Website Unified Backend SHALL store a name for each event.
 RATIONALE: >>>
 The event entry holds the event's name.
 <<<
-DERIVED: True
+DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-59
+  ROLE: Refines
 
 [REQUIREMENT]
 UID: GSSC-BHLR-127
@@ -2177,9 +2879,13 @@ The GSSC Website Unified Backend SHALL store a date for each event as a month, a
 RATIONALE: >>>
 The event entry holds the calendar date on which the event occurs.
 <<<
-DERIVED: True
+DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-59
+  ROLE: Refines
 
 [REQUIREMENT]
 UID: GSSC-BHLR-133
@@ -2190,9 +2896,13 @@ The GSSC Website Unified Backend SHALL store a date for each event as a month, a
 RATIONALE: >>>
 The event entry holds the date on which announcement of the event begins. This requirement does not set when that announcement ends.
 <<<
-DERIVED: True
+DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-59
+  ROLE: Refines
 
 [REQUIREMENT]
 UID: GSSC-BHLR-128
@@ -2203,9 +2913,13 @@ The GSSC Website Unified Backend SHALL store a time of occurrence for each event
 RATIONALE: >>>
 The event entry holds the time at which the event occurs. This requirement does not define the precision of that time.
 <<<
-DERIVED: True
+DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-59
+  ROLE: Refines
 
 [REQUIREMENT]
 UID: GSSC-BHLR-129
@@ -2216,9 +2930,13 @@ The GSSC Website Unified Backend SHALL store a duration for each event.
 RATIONALE: >>>
 The event entry holds how long the event lasts. This requirement does not define the units of that duration.
 <<<
-DERIVED: True
+DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-59
+  ROLE: Refines
 
 [REQUIREMENT]
 UID: GSSC-BHLR-130
@@ -2229,9 +2947,13 @@ The GSSC Website Unified Backend SHALL store a location for each event.
 RATIONALE: >>>
 The event entry holds where the event occurs. This requirement does not define the parts of a location.
 <<<
-DERIVED: True
+DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-59
+  ROLE: Refines
 
 [REQUIREMENT]
 UID: GSSC-BHLR-131
@@ -2242,9 +2964,13 @@ The GSSC Website Unified Backend SHALL store a reference from each event to the 
 RATIONALE: >>>
 The event's description and name are that event's details, stored in the page data table.
 <<<
-DERIVED: True
+DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-59
+  ROLE: Refines
 
 [REQUIREMENT]
 UID: GSSC-BHLR-132
@@ -2255,9 +2981,50 @@ The GSSC Website Unified Backend SHALL store whether each event is public or mem
 RATIONALE: >>>
 The flag records whether the event is available to the public or only to members.
 <<<
-DERIVED: True
+DERIVED: False
 CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-59
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-174
+TITLE: Public Events
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL provide the public events upon request.
+<<<
+RATIONALE: >>>
+A caller can request the public events directly. A public event is an event whose audience is public. This request is not an announcement request, and the announcement window does not limit it. Members-only events are outside this request.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-59
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-175
+TITLE: Member Events
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL provide the stored events upon request from a logged-in member.
+<<<
+RATIONALE: >>>
+An authenticated member can request the stored events directly, whether an event is public or members-only. This request is not an announcement request, and the announcement window does not limit it.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-59
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
+  ROLE: Refines
 
 [[/SECTION]]
 
@@ -2266,5 +3033,102 @@ REVIEW_STATUS: Changed
 [[SECTION]]
 UID: GSSC-BHLR-SECURITY
 TITLE: Web Security
+
+[[SECTION]]
+UID: GSSC-BHLR-ENCRYPTED-CONNECTIONS
+TITLE: Encrypted Connections
+
+[REQUIREMENT]
+UID: GSSC-BHLR-162
+TITLE: Encrypted Connection Support
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL support secure encrypted connections by default.
+<<<
+RATIONALE: >>>
+Connections to the Unified Backend can use secure encryption. This requirement does not name the protocol, and it does not define an exception to the default.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-52
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-163
+TITLE: Encrypted Connection Check
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL check that a connection is a secure encrypted connection.
+<<<
+RATIONALE: >>>
+A connection is checked for secure encryption. This requirement does not name the protocol, or the method of the check.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-52
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BHLR-CHANGE-LOG
+TITLE: Change Log
+
+[REQUIREMENT]
+UID: GSSC-BHLR-164
+TITLE: Page Change Log
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL keep a searchable log of changes made to pages.
+<<<
+RATIONALE: >>>
+Changes made to pages are kept in a log that can be searched. This requirement does not define which details of a change are stored, or how long the log is kept.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-49
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-165
+TITLE: Page Change Attribution
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL link each logged page change to the member who performed it.
+<<<
+RATIONALE: >>>
+Each change in the page change log is attributed to the member who made that change.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-49
+  ROLE: Refines
+
+[[/SECTION]]
+
+[REQUIREMENT]
+UID: GSSC-BHLR-166
+TITLE: Resource Mutex
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL maintain a mutex for modification of each resource.
+<<<
+RATIONALE: >>>
+One user at a time modifies a given resource. Single-editor behavior for a public page or section, including a publication, is this mutex. Different resources can be modified at the same time. This requirement does not define how the mutex is enforced.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-53
+  ROLE: Refines
 
 [[/SECTION]]
