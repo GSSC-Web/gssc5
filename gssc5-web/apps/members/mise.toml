@@ -1,0 +1,11 @@
+[tasks.serve]
+description = "Start the member frontend"
+run = "bun run start"
+
+[tasks.build]
+description = "Build the member frontend"
+run = "bun run build"
+
+[tasks.test]
+description = "Run the member frontend tests"
+run = "bun run test -- --watch=false"

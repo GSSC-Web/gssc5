@@ -1,0 +1,11 @@
+[tasks.serve]
+description = "Start the public frontend"
+run = "bun run start"
+
+[tasks.build]
+description = "Build the public frontend"
+run = "bun run build"
+
+[tasks.test]
+description = "Run the public frontend tests"
+run = "bun run test -- --watch=false"

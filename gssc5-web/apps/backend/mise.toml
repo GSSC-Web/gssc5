@@ -1,0 +1,16 @@
+[tasks.serve]
+description = "Start the Elysia development server"
+run = "bun run dev"
+
+[tasks.build]
+description = "Bundle the backend for production"
+run = "bun run build"
+
+[tasks.db-generate]
+description = "Generate the Prisma client"
+run = "bunx --bun prisma generate"
+
+[tasks.test]
+description = "Run the backend tests"
+depends = ["db-generate"]
+run = "bun run test"

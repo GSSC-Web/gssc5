@@ -1,0 +1,6 @@
+{
+  "name": "gssc5-web",
+  "private": true,
+  "packageManager": "bun@1.3.14",
+  "workspaces": ["apps/*"]
+}
