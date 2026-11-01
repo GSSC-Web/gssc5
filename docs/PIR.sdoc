@@ -1012,15 +1012,16 @@ RELATIONS:
 UID: GSSC-PIR-47
 TITLE: Credential Storage
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL authenticate members with credentials held outside the Unified Backend, including passwords and other keys.
+The GSSC Website Unified Backend SHALL authenticate members using retained hashes of their passwords, and SHALL hold other keys outside the Unified Backend.
 <<<
 RATIONALE: >>>
-Member passwords and other keys are held outside the Unified Backend. The backend uses those credentials to authenticate members.
+The backend retains a hash of a password and uses that hash to authenticate the member. The password itself is not retained. Other keys are held outside the Unified Backend. This requirement does not set the hash method.
 <<<
 DERIVED: False
 CHANGE_DRIVER: >>>
 GSSC5-9
 GSSC5-10
+GSSC5-12
 <<<
 REVIEW_STATUS: Approved
 RELATIONS:
@@ -1121,6 +1122,101 @@ RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-OBJ-4
   ROLE: Satisfies
+- TYPE: Parent
+  VALUE: GSSC-OBJ-3
+  ROLE: Satisfies
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PIR-BACKEND-RESOURCES
+TITLE: Resources and Artifacts
+
+[REQUIREMENT]
+UID: GSSC-PIR-57
+TITLE: Resources and Artifacts
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL serve resources and artifacts to the frontends upon request, and SHALL allow the frontends to save resources and artifacts for a member with the necessary permissions.
+<<<
+RATIONALE: >>>
+The frontends receive resources and artifacts, and a member with the necessary permissions can save them through a frontend. This requirement does not name those permissions.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-OBJ-7
+  ROLE: Satisfies
+- TYPE: Parent
+  VALUE: GSSC-OBJ-3
+  ROLE: Satisfies
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PIR-BACKEND-EVENTS
+TITLE: Events
+
+[REQUIREMENT]
+UID: GSSC-PIR-58
+TITLE: Upcoming Event Announcements
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL provide announcements for upcoming events that are within the announcement window.
+<<<
+RATIONALE: >>>
+An announcement includes an upcoming event while that event is inside its announcement window. This requirement does not set when the window ends.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-OBJ-7
+  ROLE: Satisfies
+- TYPE: Parent
+  VALUE: GSSC-OBJ-3
+  ROLE: Satisfies
+
+[REQUIREMENT]
+UID: GSSC-PIR-59
+TITLE: Events
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store events, and SHALL provide events upon request.
+<<<
+RATIONALE: >>>
+A caller can request stored events directly. This request stands on its own, and the announcement window does not limit it. This requirement does not list the parts of an event.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-OBJ-7
+  ROLE: Satisfies
+- TYPE: Parent
+  VALUE: GSSC-OBJ-3
+  ROLE: Satisfies
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PIR-BACKEND-ORGANIZATION
+TITLE: Organization Information
+
+[REQUIREMENT]
+UID: GSSC-PIR-60
+TITLE: Organization Information
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL provide general information for the organization upon request.
+<<<
+RATIONALE: >>>
+A caller can request general information about the organization. This requirement does not list the parts of that information.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Approved
+RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-OBJ-3
   ROLE: Satisfies
