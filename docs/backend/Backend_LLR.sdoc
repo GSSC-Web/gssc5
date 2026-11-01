@@ -1,2 +1,539 @@
 [DOCUMENT]
 TITLE: Backend Low Level Requirements
+UID: GSSC-BACKEND-LOW-LEVEL-REQUIREMENTS
+VERSION: 5.0.0
+
+[GRAMMAR]
+ELEMENTS:
+- TAG: TEXT
+  FIELDS:
+  - TITLE: UID
+    TYPE: String
+    REQUIRED: False
+  - TITLE: STATEMENT
+    TYPE: String
+    REQUIRED: True
+- TAG: SECTION
+  PROPERTIES:
+    IS_COMPOSITE: True
+    PREFIX: None
+    VIEW_STYLE: Narrative
+  FIELDS:
+  - TITLE: UID
+    TYPE: String
+    REQUIRED: False
+  - TITLE: TITLE
+    TYPE: String
+    REQUIRED: True
+- TAG: REQUIREMENT
+  PROPERTIES:
+    PREFIX: GSSC-BLLR-
+    VIEW_STYLE: Table
+  FIELDS:
+  - TITLE: UID
+    TYPE: String
+    REQUIRED: True
+  - TITLE: TITLE
+    TYPE: String
+    REQUIRED: True
+  - TITLE: STATEMENT
+    TYPE: String
+    REQUIRED: True
+  - TITLE: RATIONALE
+    TYPE: String
+    REQUIRED: True
+  - TITLE: COMMENT
+    TYPE: String
+    REQUIRED: False
+  - TITLE: DERIVED
+    TYPE: SingleChoice(True, False)
+    REQUIRED: True
+  - TITLE: VERIFICATION_METHOD
+    TYPE: SingleChoice(Test, Inspection)
+    REQUIRED: True
+  - TITLE: CHANGE_DRIVER
+    TYPE: String
+    REQUIRED: True
+  - TITLE: REVIEW_STATUS
+    TYPE: SingleChoice(Changed, Approved, Baselined)
+    REQUIRED: True
+  RELATIONS:
+  - TYPE: Parent
+    ROLE: Refines
+    REVERSE_ROLE: Refined By
+
+[[SECTION]]
+UID: GSSC-BLLR-SERVICE-TRANSACTIONS
+TITLE: Service Transactions
+
+[[SECTION]]
+UID: GSSC-BLLR-USER-ACCOUNTS
+TITLE: User Accounts
+
+[[SECTION]]
+UID: GSSC-BLLR-LOGIN
+TITLE: /login
+
+[REQUIREMENT]
+UID: GSSC-BLLR-1
+TITLE: Login Identifiers
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL take a member login as a password together with either a Username or a Primary Email.
+<<<
+RATIONALE: >>>
+A member logs in with a password and one account identifier. The identifier is a Username or the Primary Email.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-33
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-1
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-2
+TITLE: Both Identifiers Rejected
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL reject a member login that supplies both a Username and a Primary Email.
+<<<
+RATIONALE: >>>
+The login takes one identifier. A login that supplies both a Username and a Primary Email is rejected.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-33
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-1
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-3
+TITLE: Neither Identifier Rejected
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL reject a member login that supplies neither a Username nor a Primary Email.
+<<<
+RATIONALE: >>>
+The login takes one identifier. A login that supplies neither a Username nor a Primary Email is rejected.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-33
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-1
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-4
+TITLE: Unknown Username Rejected
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL reject a member login when the supplied Username matches no member.
+<<<
+RATIONALE: >>>
+A Username that matches no member is not a login. The login is rejected.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-33
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-1
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-5
+TITLE: Unknown Primary Email Rejected
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL reject a member login when the supplied Primary Email matches no member.
+<<<
+RATIONALE: >>>
+A Primary Email that matches no member is not a login. The login is rejected.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-33
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-1
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-6
+TITLE: Password Mismatch Rejected
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL reject a member login when the supplied Username or Primary Email matches a member and the supplied password does not match that member's stored password hash.
+<<<
+RATIONALE: >>>
+The backend compares the supplied password with the member's stored password hash. A password that does not match that hash is rejected. This requirement does not set the hash method.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-33
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-1
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-BHLR-112
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-7
+TITLE: Password Match
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL log the member in when the supplied Username or Primary Email matches a member and the supplied password matches that member's stored password hash.
+<<<
+RATIONALE: >>>
+The member login succeeds when the identifier locates the member and the password matches the stored password hash. This requirement does not set the hash method.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-33
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-1
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-BHLR-112
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-8
+TITLE: Login Token Issued
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL issue a Login Token when a member login succeeds.
+<<<
+RATIONALE: >>>
+A successful login yields a Login Token that a later challenge can test.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-33
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-2
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-11
+TITLE: Login Token Lifetime
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL take the lifetime of a Login Token from backend configuration. The lifetime defaults to seven days.
+<<<
+RATIONALE: >>>
+The time a Login Token remains valid is configuration. The configured lifetime defaults to seven days.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-33
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-5
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-LOGOUT
+TITLE: /logout
+
+[REQUIREMENT]
+UID: GSSC-BLLR-10
+TITLE: Member Logout
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL end the member login of a Login Token when that member logs out that token. A later challenge of that Login Token reports it as invalid.
+<<<
+RATIONALE: >>>
+A member ends a login by logging out that Login Token. After logout, the token no longer represents a valid login.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-33
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-4
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-CHALLENGE
+TITLE: /challenge
+
+[REQUIREMENT]
+UID: GSSC-BLLR-9
+TITLE: Login Token Challenge
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL report a challenged Login Token as valid or invalid. The report is valid for a Login Token issued for a successful member login that has not expired and has not been logged out. The report does not include the contents of the Login Token.
+<<<
+RATIONALE: >>>
+The challenge tells the caller whether the Login Token is valid. The report is only valid or invalid, and it does not return the token contents.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-33
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-3
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-12
+TITLE: Expired Login Token
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL expire a Login Token when its lifetime has elapsed since the token was issued. A later challenge of that Login Token reports it as invalid.
+<<<
+RATIONALE: >>>
+A Login Token stops being a valid login when its configured lifetime has elapsed.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-33
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-5
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-DATA-STORAGE
+TITLE: Data Storage
+
+[[SECTION]]
+UID: GSSC-BLLR-USERS
+TITLE: Users
+
+[REQUIREMENT]
+UID: GSSC-BLLR-13
+TITLE: Users Table
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store each user in a users table.
+<<<
+RATIONALE: >>>
+This story keeps each user record in a table. The columns of that table are the requirements under Users Table Fields.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-33
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-118
+  ROLE: Refines
+
+[[SECTION]]
+UID: GSSC-BLLR-USERS-TABLE-FIELDS
+TITLE: Users Table Fields
+
+[REQUIREMENT]
+UID: GSSC-BLLR-14
+TITLE: User Username
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store a Username for each user in the users table.
+<<<
+RATIONALE: >>>
+Member login accepts a Username. No high-level requirement stores a Username. Each user record holds one.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-33
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-BLLR-15
+TITLE: User Primary Email
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store a Primary Email for each user in the users table.
+<<<
+RATIONALE: >>>
+Each user record holds the Primary Email used for login. A user account includes a Primary Email.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-33
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-100
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-BHLR-101
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-16
+TITLE: User Secondary Email
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store a Secondary Email for each user in the users table.
+<<<
+RATIONALE: >>>
+Each user record holds a Secondary Email.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-33
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-102
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-17
+TITLE: User Password Hash
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store the current password hash for each user in the users table.
+<<<
+RATIONALE: >>>
+Each user record holds the hash used to check a login password. This requirement does not set the hash method.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-33
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-112
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-USERS-TABLE-CONSTRAINTS
+TITLE: Users Table Constraints
+
+[REQUIREMENT]
+UID: GSSC-BLLR-18
+TITLE: Unique Username
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL associate each Username in the users table with one user.
+<<<
+RATIONALE: >>>
+Login treats a Username as locating one user. Each stored Username belongs to one user.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-33
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-BLLR-19
+TITLE: Unique Primary Email
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL associate each Primary Email in the users table with one user.
+<<<
+RATIONALE: >>>
+Login treats a Primary Email as locating one user. Each stored Primary Email belongs to one user.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-33
+REVIEW_STATUS: Changed
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-WEB-SECURITY
+TITLE: Web Security
+
+[[SECTION]]
+UID: GSSC-BLLR-PERMANENT-ADMIN
+TITLE: Permanent Admin
+
+[REQUIREMENT]
+UID: GSSC-BLLR-20
+TITLE: Admin Username
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL read the permanent admin username from the .env file. The username defaults to admin.
+<<<
+RATIONALE: >>>
+The permanent admin account takes its username from the .env file. No high-level requirement defines this account.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-33
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-BLLR-21
+TITLE: Admin Password
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL read the permanent admin password from the .env file. The password defaults to 1234.
+<<<
+RATIONALE: >>>
+The permanent admin account takes its password from the .env file. No high-level requirement defines this account.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-33
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-BLLR-22
+TITLE: Admin Account Enabled
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL read a flag from the .env file that enables the permanent admin account. The flag defaults to false.
+<<<
+RATIONALE: >>>
+The .env file decides whether the permanent admin account is created. The flag defaults to false.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-33
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-BLLR-23
+TITLE: Permanent Admin Account
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL create a permanent admin account when the .env flag enables it. The account is a user with the configured username and a current password hash of the configured password.
+<<<
+RATIONALE: >>>
+No high-level requirement defines this account. The account is a user so the configured admin can log in. This requirement does not set the hash method, the admin Primary Email, or the admin Secondary Email.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-33
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-BLLR-24
+TITLE: Admin Account Disabled
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL leave the permanent admin account uncreated when the .env flag is disabled.
+<<<
+RATIONALE: >>>
+The flag defaults to false, so the permanent admin account is absent unless the flag enables it.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-33
+REVIEW_STATUS: Changed
+
+[[/SECTION]]
+
+[[/SECTION]]
+
