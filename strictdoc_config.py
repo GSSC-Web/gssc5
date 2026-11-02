@@ -24,7 +24,20 @@ def create_config() -> ProjectConfig:
         include_doc_paths=[
             "/docs/",
         ],
+        # Include masks filter files but do not stop the startup directory
+        # walk. These excludes prune third-party trees before they are scanned.
+        exclude_doc_paths=[
+            "node_modules/",
+            ".venv/",
+        ],
         include_source_paths=[
             "/src/**",
+            "/gssc5-web/apps/backend/src/**",
+            "/gssc5-web/apps/backend/prisma/**",
+        ],
+        exclude_source_paths=[
+            "node_modules/",
+            ".venv/",
+            "**/src/generated/",
         ],
     )

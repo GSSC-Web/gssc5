@@ -4,7 +4,16 @@ import { fileURLToPath } from "node:url";
 import { Type, type Static } from "@sinclair/typebox";
 import { Value } from "@sinclair/typebox/value";
 
-const CONFIG_KEYS = ["PORT", "NODE_ENV", "DATABASE_URL"] as const;
+const CONFIG_KEYS = [
+  "PORT",
+  "NODE_ENV",
+  "DATABASE_URL",
+  "LOGIN_TOKEN_LIFETIME_DAYS",
+  "ADMIN_USERNAME",
+  "ADMIN_PASSWORD",
+  "ADMIN_EMAIL",
+  "ADMIN_ENABLED",
+] as const;
 
 export const ConfigSchema = Type.Object({
   PORT: Type.Integer({ minimum: 1, maximum: 65535, default: 3000 }),
@@ -13,6 +22,21 @@ export const ConfigSchema = Type.Object({
     { default: "development" },
   ),
   DATABASE_URL: Type.String({ minLength: 1, default: "file:./data/dev.db" }),
+  // @relation(GSSC-BLLR-11, scope=range_start, role=Implementation)
+  LOGIN_TOKEN_LIFETIME_DAYS: Type.Number({ exclusiveMinimum: 0, default: 7 }),
+  // @relation(GSSC-BLLR-11, scope=range_end, role=Implementation)
+  // @relation(GSSC-BLLR-20, scope=range_start, role=Implementation)
+  ADMIN_USERNAME: Type.String({ minLength: 1, default: "admin" }),
+  // @relation(GSSC-BLLR-20, scope=range_end, role=Implementation)
+  // @relation(GSSC-BLLR-21, scope=range_start, role=Implementation)
+  ADMIN_PASSWORD: Type.String({ minLength: 1, default: "1234" }),
+  // @relation(GSSC-BLLR-21, scope=range_end, role=Implementation)
+  // @relation(GSSC-BLLR-15, GSSC-BLLR-23, scope=range_start, role=Implementation)
+  ADMIN_EMAIL: Type.String({ default: "" }),
+  // @relation(GSSC-BLLR-15, GSSC-BLLR-23, scope=range_end, role=Implementation)
+  // @relation(GSSC-BLLR-22, scope=range_start, role=Implementation)
+  ADMIN_ENABLED: Type.Boolean({ default: false }),
+  // @relation(GSSC-BLLR-22, scope=range_end, role=Implementation)
 });
 
 export type Config = Static<typeof ConfigSchema>;
@@ -42,12 +66,12 @@ export function loadConfig(options: LoadConfigOptions = {}): Config {
       ? processEnv[key]
       : undefined;
     if (fromShell !== undefined) {
-      input[key] = fromShell;
+      input[key] = normalizeConfigValue(key, fromShell);
       continue;
     }
     const fromFile = fileEnv[key];
     if (fromFile !== undefined && fromFile !== "") {
-      input[key] = fromFile;
+      input[key] = normalizeConfigValue(key, fromFile);
     }
   }
 
@@ -61,6 +85,12 @@ export function loadConfig(options: LoadConfigOptions = {}): Config {
     throw new ConfigError(details);
   }
   return config;
+}
+
+function normalizeConfigValue(key: string, value: string): string {
+  if (key === "ADMIN_ENABLED") return value.trim().toLowerCase();
+  if (key === "ADMIN_USERNAME" || key === "ADMIN_EMAIL") return value.trim();
+  return value;
 }
 
 function readEnvFile(envFile: string): Record<string, string> {

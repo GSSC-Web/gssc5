@@ -4,6 +4,54 @@ generator client {
   runtime  = "bun"
 }
 
+generator prismabox {
+  provider                     = "prismabox"
+  output                       = "../src/generated/prismabox"
+  typeboxImportDependencyName  = "elysia"
+  typeboxImportVariableName    = "t"
+  inputModel                   = true
+}
+
 datasource db {
   provider = "sqlite"
+}
+
+// @relation(GSSC-BLLR-13, scope=range_start, role=Implementation)
+model User {
+  id             String       @id @default(cuid())
+  // @relation(GSSC-BLLR-14, GSSC-BLLR-18, scope=range_start, role=Implementation)
+  /// @prismabox.options{ minLength: 1 }
+  username       String       @unique
+  // @relation(GSSC-BLLR-14, GSSC-BLLR-18, scope=range_end, role=Implementation)
+  // @relation(GSSC-BLLR-15, GSSC-BLLR-19, scope=range_start, role=Implementation)
+  /// @prismabox.options{ minLength: 1 }
+  primaryEmail   String?      @unique
+  // @relation(GSSC-BLLR-15, GSSC-BLLR-19, scope=range_end, role=Implementation)
+  // @relation(GSSC-BLLR-16, scope=range_start, role=Implementation)
+  /// @prismabox.options{ minLength: 1 }
+  secondaryEmail String?
+  // @relation(GSSC-BLLR-16, scope=range_end, role=Implementation)
+  // @relation(GSSC-BLLR-17, scope=range_start, role=Implementation)
+  /// @prismabox.hide
+  passwordHash   String
+  // @relation(GSSC-BLLR-17, scope=range_end, role=Implementation)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  tokens         LoginToken[]
+
+  @@map("users")
+}
+// @relation(GSSC-BLLR-13, scope=range_end, role=Implementation)
+
+model LoginToken {
+  id          String    @id @default(cuid())
+  /// @prismabox.hide
+  tokenHash   String    @unique
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  issuedAt    DateTime
+  expiresAt   DateTime
+  loggedOutAt DateTime?
+
+  @@map("login_tokens")
 }
