@@ -1,7 +1,11 @@
 import { cors } from "@elysiajs/cors";
 import { Elysia } from "elysia";
 
-export const app = new Elysia()
+import { accounts } from "./user/accounts";
+
+// A login is a union of two objects. Exact-mirror stripping would drop the
+// second identifier and accept the first object, so unknown fields stay put.
+export const app = new Elysia({ normalize: false })
   .use(
     cors({
       origin: [
@@ -12,6 +16,7 @@ export const app = new Elysia()
       ],
     }),
   )
+  .use(accounts)
   .get("/", () => "Hello Elysia");
 
 export type App = typeof app;

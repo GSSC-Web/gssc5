@@ -66,15 +66,28 @@ values stop the process before it listens.
 | `PORT` | `3000` |
 | `NODE_ENV` | `development` |
 | `DATABASE_URL` | `file:./data/dev.db` |
+| `LOGIN_TOKEN_LIFETIME_DAYS` | `7` |
+| `ADMIN_USERNAME` | `admin` |
+| `ADMIN_PASSWORD` | `1234` |
+| `ADMIN_EMAIL` | empty |
+| `ADMIN_ENABLED` | `false` |
 
 `NODE_ENV` must be `development`, `test`, or `production`. `PORT` must be an
-integer from 1 to 65535.
+integer from 1 to 65535. `LOGIN_TOKEN_LIFETIME_DAYS` must be a number greater
+than zero. `ADMIN_USERNAME` must not be empty. `ADMIN_EMAIL` defaults to empty.
+An empty admin email leaves the Primary Email unset. A provided value is stored
+as the Primary Email and is not checked as an email address. `ADMIN_ENABLED` is
+true or false. When it is true, startup creates the permanent admin user, or
+replaces that user's password hash when the username already exists. An existing
+user keeps both email values.
 
 ## Database
 
 Prisma uses SQLite through the libSQL adapter. The database file is
 `apps/backend/data/dev.db`. The schema is `apps/backend/prisma/schema.prisma`.
-There are no models yet. The generated client is
-`apps/backend/src/generated/prisma` and is not committed. `mise test` and
-`mise build` generate it. From `apps/backend`, `mise db-generate` generates it
-alone.
+The users table stores a username, primary email, secondary email, and current
+password hash. Login tokens are stored in `login_tokens`. `prisma generate`
+writes the Prisma client to `apps/backend/src/generated/prisma` and the
+Prismabox models to `apps/backend/src/generated/prismabox`. Neither is
+committed. `mise test` and `mise build` generate both. From `apps/backend`,
+`mise db-generate` generates them alone.

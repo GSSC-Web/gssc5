@@ -32,9 +32,12 @@ def create_config() -> ProjectConfig:
         ],
         include_source_paths=[
             "/src/**",
+            "/gssc5-web/apps/backend/src/**",
+            "/gssc5-web/apps/backend/prisma/**",
         ],
         exclude_source_paths=[
             "node_modules/",
             ".venv/",
+            "**/src/generated/",
         ],
     )

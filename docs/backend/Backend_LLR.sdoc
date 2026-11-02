@@ -86,7 +86,7 @@ A member logs in with a password and one account identifier. The identifier is a
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-33
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-1
@@ -94,17 +94,17 @@ RELATIONS:
 
 [REQUIREMENT]
 UID: GSSC-BLLR-2
-TITLE: Both Identifiers Rejected
+TITLE: Both Identifiers Invalidated
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL reject a member login that supplies both a Username and a Primary Email.
+The GSSC Website Unified Backend SHALL invalidate a member login that supplies both a Username and a Primary Email.
 <<<
 RATIONALE: >>>
-The login takes one identifier. A login that supplies both a Username and a Primary Email is rejected.
+The login takes one identifier. A login that supplies both a Username and a Primary Email is invalidated.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-33
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-1
@@ -112,17 +112,17 @@ RELATIONS:
 
 [REQUIREMENT]
 UID: GSSC-BLLR-3
-TITLE: Neither Identifier Rejected
+TITLE: Neither Identifier Invalidated
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL reject a member login that supplies neither a Username nor a Primary Email.
+The GSSC Website Unified Backend SHALL invalidate a member login that supplies neither a Username nor a Primary Email.
 <<<
 RATIONALE: >>>
-The login takes one identifier. A login that supplies neither a Username nor a Primary Email is rejected.
+The login takes one identifier. A login that supplies neither a Username nor a Primary Email is invalidated.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-33
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-1
@@ -130,17 +130,17 @@ RELATIONS:
 
 [REQUIREMENT]
 UID: GSSC-BLLR-4
-TITLE: Unknown Username Rejected
+TITLE: Unknown Username Forbidden
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL reject a member login when the supplied Username matches no member.
+The GSSC Website Unified Backend SHALL forbid a member login when the supplied Username matches no member.
 <<<
 RATIONALE: >>>
-A Username that matches no member is not a login. The login is rejected.
+A Username that matches no member is not a login. The login is forbidden.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-33
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-1
@@ -148,17 +148,17 @@ RELATIONS:
 
 [REQUIREMENT]
 UID: GSSC-BLLR-5
-TITLE: Unknown Primary Email Rejected
+TITLE: Unknown Primary Email Forbidden
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL reject a member login when the supplied Primary Email matches no member.
+The GSSC Website Unified Backend SHALL forbid a member login when the supplied Primary Email matches no member.
 <<<
 RATIONALE: >>>
-A Primary Email that matches no member is not a login. The login is rejected.
+A Primary Email that matches no member is not a login. The login is forbidden.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-33
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-1
@@ -166,23 +166,20 @@ RELATIONS:
 
 [REQUIREMENT]
 UID: GSSC-BLLR-6
-TITLE: Password Mismatch Rejected
+TITLE: Password Mismatch Forbidden
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL reject a member login when the supplied Username or Primary Email matches a member and the supplied password does not match that member's stored password hash.
+The GSSC Website Unified Backend SHALL forbid a member login when the supplied Username or Primary Email matches a member and the supplied password does not match that member's stored password hash.
 <<<
 RATIONALE: >>>
-The backend compares the supplied password with the member's stored password hash. A password that does not match that hash is rejected. This requirement does not set the hash method.
+The backend compares the supplied password with the member's stored password hash. A password that does not match that hash is forbidden. This requirement does not set the hash method.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-33
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-1
-  ROLE: Refines
-- TYPE: Parent
-  VALUE: GSSC-BHLR-112
   ROLE: Refines
 
 [REQUIREMENT]
@@ -197,13 +194,10 @@ The member login succeeds when the identifier locates the member and the passwor
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-33
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-1
-  ROLE: Refines
-- TYPE: Parent
-  VALUE: GSSC-BHLR-112
   ROLE: Refines
 
 [REQUIREMENT]
@@ -218,7 +212,7 @@ A successful login yields a Login Token that a later challenge can test.
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-33
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-2
@@ -228,15 +222,15 @@ RELATIONS:
 UID: GSSC-BLLR-11
 TITLE: Login Token Lifetime
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL take the lifetime of a Login Token from backend configuration. The lifetime defaults to seven days.
+The GSSC Website Unified Backend SHALL take the lifetime of a Login Token from backend configuration. The configured lifetime is a number of days greater than zero. The configured lifetime defaults to seven days.
 <<<
 RATIONALE: >>>
-The time a Login Token remains valid is configuration. The configured lifetime defaults to seven days.
+The time a Login Token remains valid is configuration. The configured lifetime is greater than zero. The configured lifetime defaults to seven days.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-33
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-5
@@ -260,7 +254,7 @@ A member ends a login by logging out that Login Token. After logout, the token n
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-33
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-4
@@ -284,7 +278,7 @@ The challenge tells the caller whether the Login Token is valid. The report is o
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-33
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-3
@@ -302,7 +296,7 @@ A Login Token stops being a valid login when its configured lifetime has elapsed
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-33
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-5
@@ -334,7 +328,7 @@ This story keeps each user record in a table. The columns of that table are the 
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-33
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-118
@@ -356,21 +350,21 @@ Member login accepts a Username. No high-level requirement stores a Username. Ea
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-33
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BLLR-15
 TITLE: User Primary Email
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL store a Primary Email for each user in the users table.
+The GSSC Website Unified Backend SHALL store a Primary Email for each user in the users table except the permanent admin account. The permanent admin account may have no Primary Email.
 <<<
 RATIONALE: >>>
-Each user record holds the Primary Email used for login. A user account includes a Primary Email.
+Each user record holds the Primary Email used for login. A user account includes a Primary Email. The permanent admin account is the builtin admin account and may have no Primary Email.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-33
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-100
@@ -383,15 +377,15 @@ RELATIONS:
 UID: GSSC-BLLR-16
 TITLE: User Secondary Email
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL store a Secondary Email for each user in the users table.
+The GSSC Website Unified Backend SHALL store a Secondary Email for a user in the users table. The Secondary Email may be absent.
 <<<
 RATIONALE: >>>
-Each user record holds a Secondary Email.
+Each user record can hold a Secondary Email. The Secondary Email may be absent.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-33
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-102
@@ -409,7 +403,7 @@ Each user record holds the hash used to check a login password. This requirement
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-33
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-112
@@ -433,7 +427,7 @@ Login treats a Username as locating one user. Each stored Username belongs to on
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-33
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BLLR-19
@@ -447,7 +441,7 @@ Login treats a Primary Email as locating one user. Each stored Primary Email bel
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-33
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [[/SECTION]]
 
@@ -475,7 +469,7 @@ The permanent admin account takes its username from the .env file. No high-level
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-33
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BLLR-21
@@ -489,7 +483,7 @@ The permanent admin account takes its password from the .env file. No high-level
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-33
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BLLR-22
@@ -503,37 +497,36 @@ The .env file decides whether the permanent admin account is created. The flag d
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-33
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BLLR-23
 TITLE: Permanent Admin Account
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL create a permanent admin account when the .env flag enables it. The account is a user with the configured username and a current password hash of the configured password.
+The GSSC Website Unified Backend SHALL create a permanent admin account when the .env flag enables it. The account is a user with the configured username, a current password hash of the configured password, and the configured admin email when that email is provided. The admin email is read from the .env file and defaults to empty. An empty admin email leaves the Primary Email unset. When the configured username already exists, the backend replaces that user's password hash and leaves the Primary Email and Secondary Email unchanged.
 <<<
 RATIONALE: >>>
-No high-level requirement defines this account. The account is a user so the configured admin can log in. This requirement does not set the hash method, the admin Primary Email, or the admin Secondary Email.
+No high-level requirement defines this account. The account is a user so the configured admin can log in. This requirement does not set the hash method. The Secondary Email is unset. The Primary Email is the configured admin email, and the permanent admin email is unset unless it is provided. An existing user keeps both email values when the password hash is replaced.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-33
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BLLR-24
 TITLE: Admin Account Disabled
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL leave the permanent admin account uncreated when the .env flag is disabled.
+The GSSC Website Unified Backend SHALL leave the permanent admin account uncreated when the .env flag is disabled. When that account already exists, the backend leaves the user and the user's password hash unchanged.
 <<<
 RATIONALE: >>>
-The flag defaults to false, so the permanent admin account is absent unless the flag enables it.
+The flag defaults to false, so the permanent admin account is not created unless the flag enables it. Disabling the flag leaves an existing permanent admin account in place and does not change its password hash.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-33
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [[/SECTION]]
 
 [[/SECTION]]
-
