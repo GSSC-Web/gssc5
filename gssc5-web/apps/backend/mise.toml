@@ -4,13 +4,19 @@ run = "bun run dev"
 
 [tasks.build]
 description = "Bundle the backend for production"
+depends = ["types"]
 run = "bun run build"
 
 [tasks.db-generate]
 description = "Generate the Prisma client"
 run = "bunx --bun prisma generate"
 
+[tasks.types]
+description = "Generate the TypeScript declarations the frontends import"
+depends = ["db-generate"]
+run = "bun run types"
+
 [tasks.test]
 description = "Run the backend tests"
-depends = ["db-generate"]
+depends = ["types"]
 run = "bun run test"

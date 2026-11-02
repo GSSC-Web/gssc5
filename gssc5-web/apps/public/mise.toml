@@ -1,11 +1,14 @@
 [tasks.serve]
 description = "Start the public frontend"
+depends = ["//apps/backend:types"]
 run = "bun run start"
 
 [tasks.build]
 description = "Build the public frontend"
+depends = ["//apps/backend:types"]
 run = "bun run build"
 
 [tasks.test]
 description = "Run the public frontend tests"
+depends = ["//apps/backend:types"]
 run = "bun run test -- --watch=false"

@@ -37,8 +37,9 @@ mise serve
 mise test
 ```
 
-The backend task generates the Prisma client, then runs `bun test`. Each
-frontend runs Vitest once through `ng test --watch=false`.
+The backend task generates the Prisma client and the TypeScript declarations,
+then runs `bun test`. Each frontend runs Vitest once through `ng test
+--watch=false`.
 
 ## Production build
 
@@ -48,7 +49,7 @@ mise build
 
 Build output is written under `dist/` at the root of this repository:
 `dist/backend`, `dist/public`, and `dist/members`. The backend build generates
-the Prisma client before bundling.
+the Prisma client and the TypeScript declarations before bundling.
 
 ## Backend configuration
 
@@ -88,6 +89,8 @@ Prisma uses SQLite through the libSQL adapter. The database file is
 The users table stores a username, primary email, secondary email, and current
 password hash. Login tokens are stored in `login_tokens`. `prisma generate`
 writes the Prisma client to `apps/backend/src/generated/prisma` and the
-Prismabox models to `apps/backend/src/generated/prismabox`. Neither is
-committed. `mise test` and `mise build` generate both. From `apps/backend`,
-`mise db-generate` generates them alone.
+Prismabox models to `apps/backend/src/generated/prismabox`. The frontend
+`App` type is written to `apps/backend/src/generated/types`. None of these
+are committed. `mise test`, `mise build`, and `mise serve` generate them.
+From `apps/backend`, `mise db-generate` generates the Prisma client and
+`mise types` generates the declarations.

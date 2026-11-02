@@ -90,6 +90,9 @@ type UserWrite = {
   primaryEmail?: string | null;
 };
 
+// Prisma update inputs may carry a plain value or a `{ set }` operation.
+type FieldWrite<T> = T | { set?: T };
+
 // @relation(GSSC-BLLR-15, scope=range_start, role=Implementation)
 function guardPrimaryEmail(data: UserWrite): void {
   const username = data.username ?? "";
@@ -105,10 +108,16 @@ function guardPrimaryEmail(data: UserWrite): void {
 async function guardPrimaryEmailUpdate(
   base: PrismaClient,
   where: unknown,
-  data: UserWrite,
+  data: {
+    username?: FieldWrite<string>;
+    primaryEmail?: FieldWrite<string | null>;
+  },
 ): Promise<void> {
   if (!Object.prototype.hasOwnProperty.call(data, "primaryEmail")) return;
-  const named = data.username ?? usernameFromWhere(where);
+  const current = writtenValue(data.primaryEmail);
+  // An update operation without a value leaves the stored email unchanged.
+  if (current === undefined && data.primaryEmail !== undefined) return;
+  const named = writtenValue(data.username) ?? usernameFromWhere(where);
   const username =
     named ??
     (
@@ -117,7 +126,14 @@ async function guardPrimaryEmailUpdate(
       })
     )?.username ??
     "";
-  data.primaryEmail = storedPrimaryEmail(username, data.primaryEmail, loadConfig().ADMIN_USERNAME);
+  data.primaryEmail = storedPrimaryEmail(username, current, loadConfig().ADMIN_USERNAME);
+}
+
+function writtenValue<T extends string | null>(
+  value: FieldWrite<T> | undefined,
+): T | undefined {
+  if (value === null || value === undefined || typeof value !== "object") return value;
+  return value.set;
 }
 
 function usernameFromWhere(where: unknown): string | undefined {

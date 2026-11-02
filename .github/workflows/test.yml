@@ -1,0 +1,39 @@
+name: Test
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+  actions: write
+
+concurrency:
+  group: test-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: gssc5-web
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      # The repo-root mise.toml is StrictDoc. Stop the search there so this job
+      # loads gssc5-web and its app tasks only.
+      MISE_CEILING_PATHS: ${{ github.workspace }}
+    defaults:
+      run:
+        working-directory: gssc5-web
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v7
+
+      - name: Install Bun and Node
+        uses: jdx/mise-action@v5
+        with:
+          working_directory: gssc5-web
+
+      - name: Install dependencies
+        run: mise exec -- bun install --frozen-lockfile
+
+      - name: Run tests
+        run: mise test
