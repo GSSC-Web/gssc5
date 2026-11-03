@@ -355,14 +355,29 @@ test("GSSC-BLLR-236 Password Recovery Message Sent", async () => {
 // @relation(GSSC-BLLR-236, scope=range_end, role=Test)
 
 // @relation(GSSC-BLLR-237, scope=range_start, role=Test)
-test("GSSC-BLLR-237 Password Recovery Request Success Response", async () => {
+test("GSSC-BLLR-237 Password Recovery Request Unknown Email Success", async () => {
   mockMail();
   const unknown = await postJsonResponse(backend, "/password/recovery-request", {
     email: "nobody@example.com",
   });
   expect(unknown.status).toBe(204);
   expect(sent.length).toBe(0);
+});
+// @relation(GSSC-BLLR-237, scope=range_end, role=Test)
 
+// @relation(GSSC-BLLR-273, scope=range_start, role=Test)
+test("GSSC-BLLR-273 Password Recovery Request Send Success", async () => {
+  mockMail();
+  const response = await postJsonResponse(backend, "/password/recovery-request", {
+    email: "regular@example.com",
+  });
+  expect(response.status).toBe(204);
+  expect(sent.length).toBe(1);
+});
+// @relation(GSSC-BLLR-273, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-274, scope=range_start, role=Test)
+test("GSSC-BLLR-274 Password Recovery Request Send Server Error", async () => {
   setMailTransporter({
     async sendMail() {
       throw new Error("smtp down");
@@ -371,9 +386,10 @@ test("GSSC-BLLR-237 Password Recovery Request Success Response", async () => {
   const failedSend = await postJsonResponse(backend, "/password/recovery-request", {
     email: "regular@example.com",
   });
-  expect(failedSend.status).toBe(204);
+  expect(failedSend.status).toBe(500);
+  expect((await recoveryRows()).length).toBe(0);
 });
-// @relation(GSSC-BLLR-237, scope=range_end, role=Test)
+// @relation(GSSC-BLLR-274, scope=range_end, role=Test)
 
 // @relation(GSSC-BLLR-238, scope=range_start, role=Test)
 test("GSSC-BLLR-238 Password Recovery Token Hash Stored", async () => {

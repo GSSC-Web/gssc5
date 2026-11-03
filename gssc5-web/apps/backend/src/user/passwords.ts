@@ -101,6 +101,19 @@ export const passwords = new Elysia({
       );
       const recoveryToken = randomBytes(32).toString("base64url");
 
+      // @relation(GSSC-BLLR-236, GSSC-BLLR-274, scope=range_start, role=Implementation)
+      try {
+        await getMailTransporter(config).sendMail({
+          to: user.primaryEmail,
+          from: config.SMTP_FROM,
+          subject: "Password recovery",
+          text: `recovery-token=${recoveryToken}`,
+        });
+      } catch (error) {
+        throw error instanceof Error ? error : new Error("SMTP send failed");
+      }
+      // @relation(GSSC-BLLR-236, GSSC-BLLR-274, scope=range_end, role=Implementation)
+
       // @relation(GSSC-BLLR-238, GSSC-BLLR-239, GSSC-BLLR-245, GSSC-BLLR-253, scope=range_start, role=Implementation)
       await prisma.passwordRecoveryToken.create({
         data: {
@@ -113,19 +126,9 @@ export const passwords = new Elysia({
       });
       // @relation(GSSC-BLLR-238, GSSC-BLLR-239, GSSC-BLLR-245, GSSC-BLLR-253, scope=range_end, role=Implementation)
 
-      // @relation(GSSC-BLLR-236, GSSC-BLLR-237, scope=range_start, role=Implementation)
-      try {
-        await getMailTransporter(config).sendMail({
-          to: user.primaryEmail,
-          from: config.SMTP_FROM,
-          subject: "Password recovery",
-          text: `recovery-token=${recoveryToken}`,
-        });
-      } catch {
-        // Sending failure still reports success.
-      }
+      // @relation(GSSC-BLLR-273, scope=range_start, role=Implementation)
       return status(204, undefined);
-      // @relation(GSSC-BLLR-236, GSSC-BLLR-237, scope=range_end, role=Implementation)
+      // @relation(GSSC-BLLR-273, scope=range_end, role=Implementation)
     },
     {
       body: RecoveryRequestBody,

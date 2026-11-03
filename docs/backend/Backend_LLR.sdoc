@@ -667,12 +667,48 @@ RELATIONS:
 
 [REQUIREMENT]
 UID: GSSC-BLLR-237
-TITLE: Password Recovery Request Success Response
+TITLE: Password Recovery Request Unknown Email Success
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL report success for a password recovery request whether or not the backend sends a recovery message.
+The GSSC Website Unified Backend SHALL report success for a password recovery request when the supplied email address matches no member Primary Email.
 <<<
 RATIONALE: >>>
-The response does not reveal whether an address is registered or whether mail was sent. This covers an unknown address, a member with no Primary Email, and a send failure.
+The response does not reveal whether an address is registered. Success here covers only an unknown address.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-35
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-161
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-273
+TITLE: Password Recovery Request Send Success
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL report success for a password recovery request when the backend sends the recovery message.
+<<<
+RATIONALE: >>>
+A completed send ends the recovery request with success.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-35
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-161
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-274
+TITLE: Password Recovery Request Send Server Error
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL report a server error for a password recovery request when sending the recovery message fails.
+<<<
+RATIONALE: >>>
+An SMTP send failure is a server-side error and is not reported as success.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
