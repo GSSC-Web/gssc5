@@ -28,6 +28,7 @@ const STRONG_FOURTH = "Abcdef4!";
 let app: InProcessApp;
 let backend: BackendFetch;
 let memberId = "";
+let moderatorId = "";
 const sent: MailMessage[] = [];
 
 beforeAll(async () => {
@@ -55,6 +56,28 @@ beforeAll(async () => {
     },
   });
   memberId = created.id;
+  const moderator = await prisma().user.create({
+    data: {
+      username: "password-moderator",
+      primaryEmail: "password-mod@example.com",
+      passwordHash: await Bun.password.hash(STRONG, "argon2id"),
+      firstName: "Pat",
+      lastName: "Moderator",
+      primaryPhone: "5551113333",
+      preferredContactMethod: "Email",
+      homeLine1: "2 Main",
+      homeCity: "Modesto",
+      homeState: "CA",
+      homeZip: "95350",
+      mailingLine1: "2 Main",
+      mailingCity: "Modesto",
+      mailingState: "CA",
+      mailingZip: "95350",
+      isAdmin: false,
+      isUserMod: true,
+    },
+  });
+  moderatorId = moderator.id;
 }, 120_000);
 
 beforeEach(async () => {
@@ -262,7 +285,7 @@ test("GSSC-BLLR-251 Password Allowed Characters", async () => {
 // @relation(GSSC-BLLR-251, scope=range_end, role=Test)
 
 // @relation(GSSC-BLLR-232, scope=range_start, role=Test)
-test("GSSC-BLLR-232 Permanent Admin Password Rule Exemption", async () => {
+test("GSSC-BLLR-232 Permanent Admin Password Replacement", async () => {
   const token = await establishedLogin(backend, {
     username: memberUsername,
     password: memberPassword,
@@ -559,17 +582,32 @@ test("GSSC-BLLR-244 Past Password Hash Rows", async () => {
 });
 // @relation(GSSC-BLLR-244, scope=range_end, role=Test)
 
+// @relation(GSSC-BLLR-262, scope=range_start, role=Test)
+test("GSSC-BLLR-262 Past Password Hash Creation Time", async () => {
+  const token = await loginRegular();
+  const beforeChange = Date.now();
+  expect((await changePassword(token, STRONG, STRONG_NEXT)).status).toBe(204);
+  const rows = await prisma().passwordHistory.findMany({ where: { userId: memberId } });
+  expect(rows.length).toBe(1);
+  expect(rows[0]?.createdAt.getTime()).toBeGreaterThanOrEqual(beforeChange - 1000);
+  expect(rows[0]?.createdAt.getTime()).toBeLessThanOrEqual(Date.now() + 1000);
+});
+// @relation(GSSC-BLLR-262, scope=range_end, role=Test)
+
 // @relation(GSSC-BLLR-261, scope=range_start, role=Test)
 test("GSSC-BLLR-261 Past Password Hash Count Limit", async () => {
   setEnv("PASSWORD_HISTORY_COUNT", "2");
   let password = STRONG;
   let token = await loginRegular(password);
+  const firstHash = await currentHash();
   for (const next of [STRONG_NEXT, STRONG_THIRD, STRONG_FOURTH]) {
     expect((await changePassword(token, password, next)).status).toBe(204);
     password = next;
     token = (await establishedLogin(backend, { username: "regular-member", password })) ?? "";
   }
-  expect((await historyHashes()).length).toBe(2);
+  const hashes = await historyHashes();
+  expect(hashes.length).toBe(2);
+  expect(hashes).not.toContain(firstHash);
 });
 // @relation(GSSC-BLLR-261, scope=range_end, role=Test)
 
@@ -582,3 +620,78 @@ test("GSSC-BLLR-245 Password Recovery Token Rows", async () => {
   }
 });
 // @relation(GSSC-BLLR-245, scope=range_end, role=Test)
+
+async function clearPasswords(
+  cuid: string,
+  token: string,
+): Promise<{ status: number; body: string }> {
+  return postJsonResponse(backend, `/users/${cuid}/clear-passwords`, { token });
+}
+
+async function loginModerator(): Promise<string> {
+  const token = await establishedLogin(backend, {
+    username: "password-moderator",
+    password: STRONG,
+  });
+  expect(token).toEqual(expect.any(String));
+  return token ?? "";
+}
+
+async function seedHistory(): Promise<string> {
+  const token = await loginRegular();
+  expect((await changePassword(token, STRONG, STRONG_NEXT)).status).toBe(204);
+  expect((await historyHashes()).length).toBe(1);
+  return await currentHash();
+}
+
+// @relation(GSSC-BLLR-263, scope=range_start, role=Test)
+test("GSSC-BLLR-263 Clear Past Passwords", async () => {
+  const current = await seedHistory();
+  const adminToken = await establishedLogin(backend, {
+    username: memberUsername,
+    password: memberPassword,
+  });
+  expect((await clearPasswords(memberId, adminToken ?? "")).status).toBe(204);
+  expect(await historyHashes()).toEqual([]);
+  expect(await currentHash()).toBe(current);
+});
+// @relation(GSSC-BLLR-263, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-264, scope=range_start, role=Test)
+test("GSSC-BLLR-264 Clear Past Passwords Login Token Required", async () => {
+  await seedHistory();
+  expect((await clearPasswords(memberId, "not-a-login-token")).status).toBe(403);
+  expect((await historyHashes()).length).toBe(1);
+});
+// @relation(GSSC-BLLR-264, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-265, scope=range_start, role=Test)
+test("GSSC-BLLR-265 Clear Past Passwords Privilege", async () => {
+  await seedHistory();
+  const modToken = await loginModerator();
+  expect(moderatorId).toEqual(expect.any(String));
+  expect((await clearPasswords(memberId, modToken)).status).toBe(204);
+  expect(await historyHashes()).toEqual([]);
+});
+// @relation(GSSC-BLLR-265, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-266, scope=range_start, role=Test)
+test("GSSC-BLLR-266 Clear Past Passwords Forbidden", async () => {
+  await seedHistory();
+  const memberToken = await loginRegular(STRONG_NEXT);
+  expect((await clearPasswords(memberId, memberToken)).status).toBe(403);
+  expect((await historyHashes()).length).toBe(1);
+});
+// @relation(GSSC-BLLR-266, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-267, scope=range_start, role=Test)
+test("GSSC-BLLR-267 Clear Past Passwords User Not Found", async () => {
+  await seedHistory();
+  const adminToken = await establishedLogin(backend, {
+    username: memberUsername,
+    password: memberPassword,
+  });
+  expect((await clearPasswords("missing-user-cuid", adminToken ?? "")).status).toBe(404);
+  expect((await historyHashes()).length).toBe(1);
+});
+// @relation(GSSC-BLLR-267, scope=range_end, role=Test)

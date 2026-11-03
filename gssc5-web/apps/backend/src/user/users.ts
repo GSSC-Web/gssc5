@@ -224,6 +224,48 @@ export const users = new Elysia({
       },
     },
   )
+  .post(
+    "/:cuid/clear-passwords",
+    async ({ params, body, status }) => {
+      // @relation(GSSC-BLLR-264, scope=range_start, role=Implementation)
+      const session = await openSession(body);
+      if ("failure" in session) {
+        if (session.failure === "malformed") return status(422, "Invalid" as const);
+        return status(403, "Forbidden" as const);
+      }
+      // @relation(GSSC-BLLR-264, scope=range_end, role=Implementation)
+
+      const { prisma } = runtime();
+      // @relation(GSSC-BLLR-267, scope=range_start, role=Implementation)
+      const target = await prisma.user.findUnique({
+        where: { id: params.cuid },
+        select: { id: true },
+      });
+      if (!target) return status(404, "Not Found" as const);
+      // @relation(GSSC-BLLR-267, scope=range_end, role=Implementation)
+
+      // @relation(GSSC-BLLR-265, GSSC-BLLR-266, scope=range_start, role=Implementation)
+      if (!session.user.isAdmin && !session.user.isUserMod) {
+        return status(403, "Forbidden" as const);
+      }
+      // @relation(GSSC-BLLR-265, GSSC-BLLR-266, scope=range_end, role=Implementation)
+
+      // @relation(GSSC-BLLR-263, GSSC-BLLR-265, scope=range_start, role=Implementation)
+      await prisma.passwordHistory.deleteMany({ where: { userId: target.id } });
+      return status(204, undefined);
+      // @relation(GSSC-BLLR-263, GSSC-BLLR-265, scope=range_end, role=Implementation)
+    },
+    {
+      params: t.Object({ cuid: t.String() }),
+      body: t.Optional(t.Unknown()),
+      response: {
+        204: t.Void(),
+        403: t.Literal("Forbidden"),
+        404: t.Literal("Not Found"),
+        422: t.Literal("Invalid"),
+      },
+    },
+  )
   .get(
     "/:cuid",
     async ({ params, request, status }) => {

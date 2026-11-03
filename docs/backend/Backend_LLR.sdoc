@@ -430,10 +430,10 @@ RELATIONS:
 UID: GSSC-BLLR-228
 TITLE: Password Change Differs From Current
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL invalidate a password change when the new password matches the member's current password hash, and the backend writes nothing.
+The GSSC Website Unified Backend SHALL invalidate a password change when the member is not the permanent admin account and the new password matches the member's current password hash, and the backend writes nothing.
 <<<
 RATIONALE: >>>
-A replacement password must differ from the current password.
+A replacement password must differ from the current password for every member other than the permanent admin account.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -448,10 +448,10 @@ RELATIONS:
 UID: GSSC-BLLR-248
 TITLE: Password Change Differs From History
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL invalidate a password change when the new password matches any of the last N retained past password hashes, and the backend writes nothing. N is the password history count from backend configuration.
+The GSSC Website Unified Backend SHALL invalidate a password change when the member is not the permanent admin account and the new password matches any of the last N retained past password hashes, and the backend writes nothing. N is the password history count from backend configuration.
 <<<
 RATIONALE: >>>
-A replacement password must differ from each retained past password.
+A replacement password must differ from each retained past password for every member other than the permanent admin account.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -505,10 +505,10 @@ RELATIONS:
 UID: GSSC-BLLR-249
 TITLE: Password Minimum Length
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL invalidate a new password that is shorter than the configured minimum length, and the backend writes nothing.
+The GSSC Website Unified Backend SHALL invalidate a new password that is shorter than the configured minimum length when the member is not the permanent admin account, and the backend writes nothing.
 <<<
 RATIONALE: >>>
-A new password must meet the configured minimum length.
+A new password must meet the configured minimum length for every member other than the permanent admin account.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -523,10 +523,10 @@ RELATIONS:
 UID: GSSC-BLLR-250
 TITLE: Password Required Character Classes
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL invalidate a new password that omits a capital letter, a lowercase letter, a number, or a special character, and the backend writes nothing.
+The GSSC Website Unified Backend SHALL invalidate a new password that omits a capital letter, a lowercase letter, a number, or a special character when the member is not the permanent admin account, and the backend writes nothing.
 <<<
 RATIONALE: >>>
-A new password must include each required character class.
+A new password must include each required character class for every member other than the permanent admin account.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -541,10 +541,10 @@ RELATIONS:
 UID: GSSC-BLLR-251
 TITLE: Password Allowed Characters
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL invalidate a new password that contains a character outside the allowed set, and the backend writes nothing. The allowed characters are letters, digits, and the special characters grave accent, tilde, exclamation mark, at sign, number sign, dollar sign, percent sign, caret, ampersand, asterisk, left parenthesis, right parenthesis, underscore, plus sign, hyphen-minus, equals sign, left curly bracket, right curly bracket, vertical line, left square bracket, right square bracket, reverse solidus, colon, quotation mark, semicolon, apostrophe, less-than sign, greater-than sign, question mark, comma, full stop, and solidus.
+The GSSC Website Unified Backend SHALL invalidate a new password that contains a character outside the allowed set when the member is not the permanent admin account, and the backend writes nothing. The allowed characters are letters, digits, and ` ~ ! @ # $ % ^ & * ( ) _ + - = { } | [ ] \ : " ; ' < > ? , . /
 <<<
 RATIONALE: >>>
-A new password may use only the allowed characters.
+A new password may use only the allowed characters for every member other than the permanent admin account.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -557,21 +557,17 @@ RELATIONS:
 
 [REQUIREMENT]
 UID: GSSC-BLLR-232
-TITLE: Permanent Admin Password Rule Exemption
+TITLE: Permanent Admin Password Replacement
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL exempt the permanent admin account from the password minimum length, character, and history rules when that account replaces its password.
+The GSSC Website Unified Backend SHALL accept a new password for the permanent admin account when that account replaces its password through password change or password recovery.
 <<<
 RATIONALE: >>>
-The permanent admin account may keep a simple configured password. Length, character, and history checks do not apply to that account.
+The permanent admin account may keep a simple configured password. The length, character, and history invalidations apply only to other members.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-35
 REVIEW_STATUS: Changed
-RELATIONS:
-- TYPE: Parent
-  VALUE: GSSC-BHLR-20
-  ROLE: Refines
 
 [REQUIREMENT]
 UID: GSSC-BLLR-233
@@ -841,10 +837,10 @@ RELATIONS:
 UID: GSSC-BLLR-242
 TITLE: Password Recovery New Password Rules
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL apply the same new-password length, character, history, and permanent-admin exemption rules to password recovery as to password change.
+The GSSC Website Unified Backend SHALL apply the same new-password length, character, and history rules to password recovery as to password change.
 <<<
 RATIONALE: >>>
-Recovery replaces a password under the same rules as a logged-in change.
+Recovery replaces a password under the same rules as a logged-in change, including the permanent admin account caveats on those rules.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -917,6 +913,82 @@ RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-161
   ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-CLEAR-PASSWORDS
+TITLE: /users/{cuid}/clear-passwords
+
+[REQUIREMENT]
+UID: GSSC-BLLR-263
+TITLE: Clear Past Passwords
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL delete the past password hashes for the user identified by cuid through the clear-passwords transaction.
+<<<
+RATIONALE: >>>
+An administrator or user moderator clears retained past password hashes for a member without changing that member's current password hash.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-35
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-BLLR-264
+TITLE: Clear Past Passwords Login Token Required
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL forbid a clear-passwords request when the request lacks a valid Login Token, and the backend writes nothing.
+<<<
+RATIONALE: >>>
+Only a logged-in caller may clear past password hashes.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-35
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-BLLR-265
+TITLE: Clear Past Passwords Privilege
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL complete a clear-passwords request when the Login Token belongs to a caller who is an administrator or a user moderator.
+<<<
+RATIONALE: >>>
+Clearing past password hashes is limited to an administrator or a user moderator.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-35
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-BLLR-266
+TITLE: Clear Past Passwords Forbidden
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL forbid a clear-passwords request when the caller is neither an administrator nor a user moderator, and the backend writes nothing.
+<<<
+RATIONALE: >>>
+A member without those privileges cannot clear past password hashes.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-35
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-BLLR-267
+TITLE: Clear Past Passwords User Not Found
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL report not found for a clear-passwords request when the cuid matches no user, and the backend writes nothing.
+<<<
+RATIONALE: >>>
+Clearing past password hashes requires a known user cuid.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-35
+REVIEW_STATUS: Changed
 
 [[/SECTION]]
 
@@ -4894,10 +4966,28 @@ TITLE: Password History
 UID: GSSC-BLLR-244
 TITLE: Past Password Hash Rows
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL store each retained past password hash for a user in a password history table. Each row holds the password hash and the user who held that password.
+The GSSC Website Unified Backend SHALL store each retained past password hash for a user in a password history table. Each row holds the password hash and links that hash to the user by the user's cuid.
 <<<
 RATIONALE: >>>
-The backend stores past password hashes separately from the current hash so it can check a limited history on replacement.
+The backend stores past password hashes separately from the current hash and identifies the owning user by cuid.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-35
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-113
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-262
+TITLE: Past Password Hash Creation Time
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store the date and time of password creation on each past password hash row.
+<<<
+RATIONALE: >>>
+The creation date and time identify which past hash is oldest when the history exceeds the configured count.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -4912,10 +5002,10 @@ RELATIONS:
 UID: GSSC-BLLR-261
 TITLE: Past Password Hash Count Limit
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL limit the password history table to at most the configured password history count of rows for each user.
+The GSSC Website Unified Backend SHALL delete the oldest past password hash rows by creation date and time when a user's password history exceeds the configured password history count.
 <<<
 RATIONALE: >>>
-The backend keeps only the configured number of past password hashes for each user.
+The backend keeps only the configured number of past password hashes for each user and drops the oldest first.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test

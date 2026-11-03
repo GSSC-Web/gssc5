@@ -227,12 +227,13 @@ async function replacePassword(
   user: User,
   newHash: string,
 ): Promise<void> {
-  // @relation(GSSC-BLLR-234, GSSC-BLLR-244, GSSC-BLLR-252, GSSC-BLLR-258, GSSC-BLLR-259, GSSC-BLLR-261, scope=range_start, role=Implementation)
+  // @relation(GSSC-BLLR-234, GSSC-BLLR-244, GSSC-BLLR-252, GSSC-BLLR-258, GSSC-BLLR-259, GSSC-BLLR-261, GSSC-BLLR-262, scope=range_start, role=Implementation)
   await prisma.$transaction(async (tx) => {
     await tx.passwordHistory.create({
       data: {
         userId: user.id,
         passwordHash: user.passwordHash,
+        createdAt: new Date(),
       },
     });
     await tx.user.update({
@@ -251,7 +252,7 @@ async function replacePassword(
       });
     }
   });
-  // @relation(GSSC-BLLR-234, GSSC-BLLR-244, GSSC-BLLR-252, GSSC-BLLR-258, GSSC-BLLR-259, GSSC-BLLR-261, scope=range_end, role=Implementation)
+  // @relation(GSSC-BLLR-234, GSSC-BLLR-244, GSSC-BLLR-252, GSSC-BLLR-258, GSSC-BLLR-259, GSSC-BLLR-261, GSSC-BLLR-262, scope=range_end, role=Implementation)
 }
 
 // @relation(GSSC-BLLR-249, GSSC-BLLR-250, GSSC-BLLR-251, scope=range_start, role=Implementation)
