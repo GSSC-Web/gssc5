@@ -18,7 +18,9 @@ datasource db {
 
 // @relation(GSSC-BLLR-13, scope=range_start, role=Implementation)
 model User {
+  // @relation(GSSC-BLLR-25, scope=range_start, role=Implementation)
   id             String       @id @default(cuid())
+  // @relation(GSSC-BLLR-25, scope=range_end, role=Implementation)
   // @relation(GSSC-BLLR-14, GSSC-BLLR-18, scope=range_start, role=Implementation)
   /// @prismabox.options{ minLength: 1 }
   username       String       @unique
@@ -35,6 +37,60 @@ model User {
   /// @prismabox.hide
   passwordHash   String
   // @relation(GSSC-BLLR-17, scope=range_end, role=Implementation)
+  // @relation(GSSC-BLLR-26, scope=range_start, role=Implementation)
+  firstName      String?
+  // @relation(GSSC-BLLR-26, scope=range_end, role=Implementation)
+  // @relation(GSSC-BLLR-27, scope=range_start, role=Implementation)
+  middleName     String?
+  // @relation(GSSC-BLLR-27, scope=range_end, role=Implementation)
+  // @relation(GSSC-BLLR-28, scope=range_start, role=Implementation)
+  lastName       String?
+  // @relation(GSSC-BLLR-28, scope=range_end, role=Implementation)
+  // @relation(GSSC-BLLR-29, scope=range_start, role=Implementation)
+  primaryPhone   String?
+  // @relation(GSSC-BLLR-29, scope=range_end, role=Implementation)
+  // @relation(GSSC-BLLR-30, scope=range_start, role=Implementation)
+  secondaryPhone String?
+  // @relation(GSSC-BLLR-30, scope=range_end, role=Implementation)
+  // @relation(GSSC-BLLR-33, scope=range_start, role=Implementation)
+  preferredContactMethod String?
+  // @relation(GSSC-BLLR-33, scope=range_end, role=Implementation)
+  // @relation(GSSC-BLLR-32, scope=range_start, role=Implementation)
+  secondaryEmailDisplay Boolean @default(false)
+  // @relation(GSSC-BLLR-32, scope=range_end, role=Implementation)
+  // @relation(GSSC-BLLR-31, scope=range_start, role=Implementation)
+  secondaryPhoneDisplay Boolean @default(false)
+  // @relation(GSSC-BLLR-31, scope=range_end, role=Implementation)
+  // @relation(GSSC-BLLR-34, scope=range_start, role=Implementation)
+  homeLine1        String?
+  homeLine2        String?
+  homeLine3        String?
+  homeCity         String?
+  homeState        String?
+  homeZip          String?
+  homeZipExtension String?
+  // @relation(GSSC-BLLR-34, scope=range_end, role=Implementation)
+  // @relation(GSSC-BLLR-35, scope=range_start, role=Implementation)
+  homeAddressDisplay String?
+  // @relation(GSSC-BLLR-35, scope=range_end, role=Implementation)
+  // @relation(GSSC-BLLR-36, scope=range_start, role=Implementation)
+  mailingLine1        String?
+  mailingLine2        String?
+  mailingLine3        String?
+  mailingCity         String?
+  mailingState        String?
+  mailingZip          String?
+  mailingZipExtension String?
+  // @relation(GSSC-BLLR-36, scope=range_end, role=Implementation)
+  // @relation(GSSC-BLLR-37, scope=range_start, role=Implementation)
+  isAdmin   Boolean @default(false)
+  // @relation(GSSC-BLLR-37, scope=range_end, role=Implementation)
+  // @relation(GSSC-BLLR-38, scope=range_start, role=Implementation)
+  isUserMod Boolean @default(false)
+  // @relation(GSSC-BLLR-38, scope=range_end, role=Implementation)
+  // @relation(GSSC-BLLR-64, scope=range_start, role=Implementation)
+  membershipStatus String?
+  // @relation(GSSC-BLLR-64, scope=range_end, role=Implementation)
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
   tokens         LoginToken[]
