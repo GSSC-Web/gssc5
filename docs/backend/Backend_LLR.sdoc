@@ -348,7 +348,7 @@ A logged-in member replaces that member's password through this transaction.
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-35
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-20
@@ -366,7 +366,7 @@ Only a logged-in member may replace that member's password. A valid Login Token 
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-35
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-20
@@ -384,7 +384,7 @@ The current password confirms the caller holds the existing credential. The new 
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-35
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-20
@@ -402,7 +402,7 @@ A password change succeeds when the current password matches the stored hash. Se
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-35
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-20
@@ -420,7 +420,7 @@ A wrong current password must not replace the stored hash.
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-35
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-20
@@ -438,7 +438,7 @@ A replacement password must differ from the current password for every member ot
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-35
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-20
@@ -456,7 +456,7 @@ A replacement password must differ from each retained past password for every me
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-35
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-20
@@ -477,7 +477,7 @@ The number of past password hashes the backend retains, and checks on replacemen
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-35
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-113
@@ -495,7 +495,7 @@ The minimum length of a new password is configuration and defaults to eight.
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-35
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-20
@@ -513,7 +513,7 @@ A new password must meet the configured minimum length for every member other th
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-35
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-20
@@ -531,7 +531,7 @@ A new password must include each required character class for every member other
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-35
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-20
@@ -549,7 +549,7 @@ A new password may use only the allowed characters for every member other than t
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-35
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-20
@@ -567,7 +567,7 @@ The permanent admin account may keep a simple configured password. The length, c
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-35
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BLLR-233
@@ -581,7 +581,7 @@ Password rules apply to replacement. The backend continues to accept a password 
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-35
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-20
@@ -599,7 +599,7 @@ A successful replacement updates the current password hash.
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-35
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-112
@@ -617,7 +617,7 @@ A successful replacement keeps the previous hash in history. A separate requirem
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-35
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-113
@@ -641,7 +641,7 @@ A recovery request identifies the member by an email address.
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-35
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-161
@@ -659,7 +659,7 @@ The backend sends recovery mail only to a member's Primary Email. Message wordin
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-35
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-161
@@ -677,7 +677,7 @@ The response does not reveal whether an address is registered. Success here cove
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-35
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-161
@@ -695,7 +695,7 @@ A completed send ends the recovery request with success.
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-35
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-161
@@ -713,7 +713,7 @@ An SMTP send failure is a server-side error and is not reported as success.
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-35
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-161
@@ -731,7 +731,7 @@ The backend retains a hash of the recovery token for later verification.
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-35
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-161
@@ -749,7 +749,7 @@ The backend stores a hash of the recovery token and does not retain the token it
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-35
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-161
@@ -767,7 +767,7 @@ The backend expires a recovery token after the configured lifetime. The configur
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-35
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-161
@@ -791,7 +791,7 @@ The backend takes the token, the Primary Email that received it, and the replace
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-35
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-161
@@ -809,7 +809,7 @@ An unknown recovery token cannot replace a password.
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-35
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-161
@@ -827,7 +827,7 @@ An expired recovery token cannot replace a password.
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-35
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-161
@@ -845,7 +845,7 @@ The Primary Email in the recovery request must match the Primary Email that rece
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-35
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-161
@@ -863,7 +863,7 @@ A recovery token may complete recovery only once.
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-35
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-161
@@ -881,7 +881,7 @@ A recovery password must differ from the current password for every member other
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-35
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-161
@@ -902,7 +902,7 @@ A recovery password must differ from each retained past password for every membe
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-35
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-161
@@ -926,7 +926,7 @@ A recovery password must meet the configured minimum length for every member oth
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-35
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-161
@@ -947,7 +947,7 @@ A recovery password must include each required character class for every member 
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-35
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-161
@@ -968,7 +968,7 @@ A recovery password may use only the allowed characters for every member other t
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-35
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-161
@@ -989,7 +989,7 @@ A successful recovery updates the current password hash.
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-35
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-112
@@ -1010,7 +1010,7 @@ A successful recovery keeps the previous hash in history. A separate requirement
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-35
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-113
@@ -1031,7 +1031,7 @@ A successful recovery consumes the recovery token.
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-35
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-161
@@ -1061,7 +1061,7 @@ An administrator or user moderator clears retained past password hashes for a me
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-35
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BLLR-264
@@ -1075,7 +1075,7 @@ Only a logged-in caller may clear past password hashes.
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-35
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BLLR-265
@@ -1089,7 +1089,7 @@ Clearing past password hashes is limited to an administrator or a user moderator
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-35
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BLLR-266
@@ -1103,7 +1103,7 @@ A member without those privileges cannot clear past password hashes.
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-35
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BLLR-267
@@ -1117,7 +1117,7 @@ Clearing past password hashes requires a known user cuid.
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-35
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [[/SECTION]]
 
@@ -4644,7 +4644,7 @@ Password replacement uses the password change and recovery transactions. A user-
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-34, GSSC5-35
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-112
@@ -5097,7 +5097,7 @@ The backend stores past password hashes separately from the current hash and ide
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-35
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-113
@@ -5115,7 +5115,7 @@ The creation date and time identify which past hash is oldest when the history e
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-35
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-113
@@ -5133,7 +5133,7 @@ The backend keeps only the configured number of past password hashes for each us
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-35
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-113
@@ -5151,7 +5151,7 @@ The backend stores recovery token hashes with the Primary Email and lifetime nee
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-35
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-161
@@ -5175,7 +5175,7 @@ Password recovery mail uses configured SMTP settings. An empty host leaves the b
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-35
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-161
