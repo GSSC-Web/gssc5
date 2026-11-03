@@ -17,21 +17,27 @@ const ALLOWED = new Set([
 
 const emailPattern = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
 
+// @relation(GSSC-BLLR-225, scope=range_start, role=Implementation)
 const ChangeBody = t.Object({
   token: t.String(),
   currentPassword: t.String(),
   newPassword: t.String(),
 });
+// @relation(GSSC-BLLR-225, scope=range_end, role=Implementation)
 
+// @relation(GSSC-BLLR-235, scope=range_start, role=Implementation)
 const RecoveryRequestBody = t.Object({
   email: t.String({ minLength: 1, pattern: emailPattern }),
 });
+// @relation(GSSC-BLLR-235, scope=range_end, role=Implementation)
 
+// @relation(GSSC-BLLR-240, scope=range_start, role=Implementation)
 const RecoverBody = t.Object({
   recoveryToken: t.String(),
   primaryEmail: t.String({ minLength: 1, pattern: emailPattern }),
   newPassword: t.String(),
 });
+// @relation(GSSC-BLLR-240, scope=range_end, role=Implementation)
 
 export const passwords = new Elysia({
   name: "passwords",
@@ -46,27 +52,27 @@ export const passwords = new Elysia({
     "/change",
     async ({ body, status }) => {
       const { prisma, config } = runtime();
+      // @relation(GSSC-BLLR-247, scope=range_start, role=Implementation)
       const session = await openLogin(prisma, body.token);
       if (!session) return status(403, "Forbidden");
+      // @relation(GSSC-BLLR-247, scope=range_end, role=Implementation)
 
-      // @relation(GSSC-BLLR-224, GSSC-BLLR-225, scope=range_start, role=Implementation)
+      // @relation(GSSC-BLLR-226, GSSC-BLLR-227, scope=range_start, role=Implementation)
       const currentMatches = await Bun.password.verify(
         body.currentPassword,
         session.passwordHash,
         "argon2id",
       );
-      // @relation(GSSC-BLLR-224, GSSC-BLLR-225, scope=range_end, role=Implementation)
-      // @relation(GSSC-BLLR-227, scope=range_start, role=Implementation)
       if (!currentMatches) return status(403, "Forbidden");
-      // @relation(GSSC-BLLR-227, scope=range_end, role=Implementation)
+      // @relation(GSSC-BLLR-226, GSSC-BLLR-227, scope=range_end, role=Implementation)
 
       const accepted = await acceptNewPassword(prisma, config, session, body.newPassword);
       if (accepted === "invalid") return status(422, "Invalid");
 
-      // @relation(GSSC-BLLR-226, GSSC-BLLR-234, scope=range_start, role=Implementation)
+      // @relation(GSSC-BLLR-224, GSSC-BLLR-226, GSSC-BLLR-234, GSSC-BLLR-252, scope=range_start, role=Implementation)
       await replacePassword(prisma, config, session, accepted);
       return status(204, undefined);
-      // @relation(GSSC-BLLR-226, GSSC-BLLR-234, scope=range_end, role=Implementation)
+      // @relation(GSSC-BLLR-224, GSSC-BLLR-226, GSSC-BLLR-234, GSSC-BLLR-252, scope=range_end, role=Implementation)
     },
     {
       body: ChangeBody,
@@ -82,12 +88,12 @@ export const passwords = new Elysia({
     async ({ body, status }) => {
       const { prisma, config } = runtime();
 
-      // @relation(GSSC-BLLR-235, GSSC-BLLR-237, scope=range_start, role=Implementation)
+      // @relation(GSSC-BLLR-237, scope=range_start, role=Implementation)
       const user = await prisma.user.findUnique({ where: { primaryEmail: body.email } });
       if (!user || user.primaryEmail === null || user.primaryEmail === "") {
         return status(204, undefined);
       }
-      // @relation(GSSC-BLLR-235, GSSC-BLLR-237, scope=range_end, role=Implementation)
+      // @relation(GSSC-BLLR-237, scope=range_end, role=Implementation)
 
       const issuedAt = new Date();
       const expiresAt = new Date(
@@ -95,7 +101,7 @@ export const passwords = new Elysia({
       );
       const recoveryToken = randomBytes(32).toString("base64url");
 
-      // @relation(GSSC-BLLR-238, GSSC-BLLR-239, scope=range_start, role=Implementation)
+      // @relation(GSSC-BLLR-238, GSSC-BLLR-239, GSSC-BLLR-245, GSSC-BLLR-253, scope=range_start, role=Implementation)
       await prisma.passwordRecoveryToken.create({
         data: {
           tokenHash: hashToken(recoveryToken),
@@ -105,7 +111,7 @@ export const passwords = new Elysia({
           expiresAt,
         },
       });
-      // @relation(GSSC-BLLR-238, GSSC-BLLR-239, scope=range_end, role=Implementation)
+      // @relation(GSSC-BLLR-238, GSSC-BLLR-239, GSSC-BLLR-245, GSSC-BLLR-253, scope=range_end, role=Implementation)
 
       // @relation(GSSC-BLLR-236, GSSC-BLLR-237, scope=range_start, role=Implementation)
       try {
@@ -131,34 +137,30 @@ export const passwords = new Elysia({
     async ({ body, status }) => {
       const { prisma, config } = runtime();
 
-      // @relation(GSSC-BLLR-240, GSSC-BLLR-241, scope=range_start, role=Implementation)
+      // @relation(GSSC-BLLR-254, GSSC-BLLR-255, GSSC-BLLR-256, GSSC-BLLR-257, scope=range_start, role=Implementation)
       const row = await prisma.passwordRecoveryToken.findUnique({
         where: { tokenHash: hashToken(body.recoveryToken) },
         include: { user: true },
       });
-      if (
-        !row ||
-        row.usedAt ||
-        row.expiresAt.getTime() <= Date.now() ||
-        row.primaryEmail !== body.primaryEmail
-      ) {
-        return status(403, "Forbidden");
-      }
-      // @relation(GSSC-BLLR-240, GSSC-BLLR-241, scope=range_end, role=Implementation)
+      if (!row) return status(403, "Forbidden");
+      if (row.usedAt) return status(403, "Forbidden");
+      if (row.expiresAt.getTime() <= Date.now()) return status(403, "Forbidden");
+      if (row.primaryEmail !== body.primaryEmail) return status(403, "Forbidden");
+      // @relation(GSSC-BLLR-254, GSSC-BLLR-255, GSSC-BLLR-256, GSSC-BLLR-257, scope=range_end, role=Implementation)
 
       // @relation(GSSC-BLLR-242, scope=range_start, role=Implementation)
       const accepted = await acceptNewPassword(prisma, config, row.user, body.newPassword);
       if (accepted === "invalid") return status(422, "Invalid");
       // @relation(GSSC-BLLR-242, scope=range_end, role=Implementation)
 
-      // @relation(GSSC-BLLR-243, scope=range_start, role=Implementation)
+      // @relation(GSSC-BLLR-258, GSSC-BLLR-259, GSSC-BLLR-260, scope=range_start, role=Implementation)
       await replacePassword(prisma, config, row.user, accepted);
       await prisma.passwordRecoveryToken.update({
         where: { id: row.id },
         data: { usedAt: new Date() },
       });
       return status(204, undefined);
-      // @relation(GSSC-BLLR-243, scope=range_end, role=Implementation)
+      // @relation(GSSC-BLLR-258, GSSC-BLLR-259, GSSC-BLLR-260, scope=range_end, role=Implementation)
     },
     {
       body: RecoverBody,
@@ -192,13 +194,13 @@ async function acceptNewPassword(
 
   // @relation(GSSC-BLLR-232, scope=range_start, role=Implementation)
   if (!permanentAdmin) {
-    // @relation(GSSC-BLLR-230, GSSC-BLLR-231, scope=range_start, role=Implementation)
+    // @relation(GSSC-BLLR-249, GSSC-BLLR-250, GSSC-BLLR-251, scope=range_start, role=Implementation)
     if (!passwordMeetsRules(newPassword, config.PASSWORD_MIN_LENGTH)) return "invalid";
-    // @relation(GSSC-BLLR-230, GSSC-BLLR-231, scope=range_end, role=Implementation)
+    // @relation(GSSC-BLLR-249, GSSC-BLLR-250, GSSC-BLLR-251, scope=range_end, role=Implementation)
   }
   // @relation(GSSC-BLLR-232, scope=range_end, role=Implementation)
 
-  // @relation(GSSC-BLLR-228, scope=range_start, role=Implementation)
+  // @relation(GSSC-BLLR-228, GSSC-BLLR-248, scope=range_start, role=Implementation)
   if (!permanentAdmin) {
     if (await Bun.password.verify(newPassword, user.passwordHash, "argon2id")) {
       return "invalid";
@@ -214,7 +216,7 @@ async function acceptNewPassword(
       }
     }
   }
-  // @relation(GSSC-BLLR-228, scope=range_end, role=Implementation)
+  // @relation(GSSC-BLLR-228, GSSC-BLLR-248, scope=range_end, role=Implementation)
 
   return Bun.password.hash(newPassword, "argon2id");
 }
@@ -225,7 +227,7 @@ async function replacePassword(
   user: User,
   newHash: string,
 ): Promise<void> {
-  // @relation(GSSC-BLLR-234, GSSC-BLLR-243, GSSC-BLLR-244, scope=range_start, role=Implementation)
+  // @relation(GSSC-BLLR-234, GSSC-BLLR-244, GSSC-BLLR-252, GSSC-BLLR-258, GSSC-BLLR-259, GSSC-BLLR-261, scope=range_start, role=Implementation)
   await prisma.$transaction(async (tx) => {
     await tx.passwordHistory.create({
       data: {
@@ -249,10 +251,10 @@ async function replacePassword(
       });
     }
   });
-  // @relation(GSSC-BLLR-234, GSSC-BLLR-243, GSSC-BLLR-244, scope=range_end, role=Implementation)
+  // @relation(GSSC-BLLR-234, GSSC-BLLR-244, GSSC-BLLR-252, GSSC-BLLR-258, GSSC-BLLR-259, GSSC-BLLR-261, scope=range_end, role=Implementation)
 }
 
-// @relation(GSSC-BLLR-231, scope=range_start, role=Implementation)
+// @relation(GSSC-BLLR-249, GSSC-BLLR-250, GSSC-BLLR-251, scope=range_start, role=Implementation)
 export function passwordMeetsRules(password: string, minimumLength: number): boolean {
   if (password.length < minimumLength) return false;
   let upper = false;
@@ -268,7 +270,7 @@ export function passwordMeetsRules(password: string, minimumLength: number): boo
   }
   return upper && lower && digit && special;
 }
-// @relation(GSSC-BLLR-231, scope=range_end, role=Implementation)
+// @relation(GSSC-BLLR-249, GSSC-BLLR-250, GSSC-BLLR-251, scope=range_end, role=Implementation)
 
 function runtime(): { prisma: PrismaClient; config: Config } {
   const config = loadConfig();

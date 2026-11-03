@@ -338,12 +338,30 @@ TITLE: /password/change
 
 [REQUIREMENT]
 UID: GSSC-BLLR-224
-TITLE: Password Change Login
+TITLE: Password Change
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL let a logged-in member replace that member's own password through the password change transaction. The request requires a valid Login Token for that member.
+The GSSC Website Unified Backend SHALL replace a logged-in member's own password through the password change transaction.
 <<<
 RATIONALE: >>>
-Password replacement is limited to the logged-in member. A valid Login Token identifies that member.
+A logged-in member replaces that member's password through this transaction.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-35
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-20
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-247
+TITLE: Password Change Login Token Required
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL forbid a password change when the request lacks a valid Login Token for that member, and the backend writes nothing.
+<<<
+RATIONALE: >>>
+Only a logged-in member may replace that member's password. A valid Login Token identifies that member.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -376,10 +394,10 @@ RELATIONS:
 UID: GSSC-BLLR-226
 TITLE: Password Change Current Match
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL replace the member's password when the supplied current password matches that member's stored password hash and the new password is accepted.
+The GSSC Website Unified Backend SHALL replace the member's password when the supplied current password matches that member's stored password hash.
 <<<
 RATIONALE: >>>
-A password change succeeds only when the current password matches the stored hash and the new password meets the replacement rules.
+A password change succeeds when the current password matches the stored hash. Separate requirements cover new-password rules.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -410,12 +428,30 @@ RELATIONS:
 
 [REQUIREMENT]
 UID: GSSC-BLLR-228
-TITLE: Password Change History Difference
+TITLE: Password Change Differs From Current
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL invalidate a password change when the new password matches the member's current password hash or matches any of the last N retained past password hashes, and the backend writes nothing. N is the password history count from backend configuration.
+The GSSC Website Unified Backend SHALL invalidate a password change when the new password matches the member's current password hash, and the backend writes nothing.
 <<<
 RATIONALE: >>>
-A replacement password must differ from the current password and from each retained past password.
+A replacement password must differ from the current password.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-35
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-20
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-248
+TITLE: Password Change Differs From History
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL invalidate a password change when the new password matches any of the last N retained past password hashes, and the backend writes nothing. N is the password history count from backend configuration.
+<<<
+RATIONALE: >>>
+A replacement password must differ from each retained past password.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -436,7 +472,7 @@ STATEMENT: >>>
 The GSSC Website Unified Backend SHALL take the password history count from backend configuration. The configured count is an integer greater than or equal to zero. The configured count defaults to three.
 <<<
 RATIONALE: >>>
-The number of past password hashes retained, and checked on replacement, is configuration and defaults to three.
+The number of past password hashes the backend retains, and checks on replacement, is configuration and defaults to three.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -466,13 +502,49 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-BLLR-231
-TITLE: Password Complexity
+UID: GSSC-BLLR-249
+TITLE: Password Minimum Length
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL invalidate a new password that is shorter than the configured minimum length, that omits a capital letter, a lowercase letter, a number, or a special character, or that contains a character outside the allowed set, and the backend writes nothing. The allowed characters are letters, digits, and the special characters grave accent, tilde, exclamation mark, at sign, number sign, dollar sign, percent sign, caret, ampersand, asterisk, left parenthesis, right parenthesis, underscore, plus sign, hyphen-minus, equals sign, left curly bracket, right curly bracket, vertical line, left square bracket, right square bracket, reverse solidus, colon, quotation mark, semicolon, apostrophe, less-than sign, greater-than sign, question mark, comma, full stop, and solidus.
+The GSSC Website Unified Backend SHALL invalidate a new password that is shorter than the configured minimum length, and the backend writes nothing.
 <<<
 RATIONALE: >>>
-A new password must meet the length and character rules. Characters outside the allowed set are rejected.
+A new password must meet the configured minimum length.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-35
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-20
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-250
+TITLE: Password Required Character Classes
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL invalidate a new password that omits a capital letter, a lowercase letter, a number, or a special character, and the backend writes nothing.
+<<<
+RATIONALE: >>>
+A new password must include each required character class.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-35
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-20
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-251
+TITLE: Password Allowed Characters
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL invalidate a new password that contains a character outside the allowed set, and the backend writes nothing. The allowed characters are letters, digits, and the special characters grave accent, tilde, exclamation mark, at sign, number sign, dollar sign, percent sign, caret, ampersand, asterisk, left parenthesis, right parenthesis, underscore, plus sign, hyphen-minus, equals sign, left curly bracket, right curly bracket, vertical line, left square bracket, right square bracket, reverse solidus, colon, quotation mark, semicolon, apostrophe, less-than sign, greater-than sign, question mark, comma, full stop, and solidus.
+<<<
+RATIONALE: >>>
+A new password may use only the allowed characters.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -508,7 +580,7 @@ STATEMENT: >>>
 The GSSC Website Unified Backend SHALL accept a stored password for member login when that password does not meet the new-password length or character rules.
 <<<
 RATIONALE: >>>
-Password rules apply to replacement. A password already stored remains valid for login.
+Password rules apply to replacement. The backend continues to accept a password already stored for login.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -521,12 +593,12 @@ RELATIONS:
 
 [REQUIREMENT]
 UID: GSSC-BLLR-234
-TITLE: Password Change Storage
+TITLE: Password Change Stores Current Hash
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL store the new password hash as the member's current password hash when a password change succeeds, and SHALL retain the previous current password hash in the past password hash history limited to the configured password history count.
+The GSSC Website Unified Backend SHALL store the new password hash as the member's current password hash when a password change succeeds.
 <<<
 RATIONALE: >>>
-A successful replacement updates the current hash and keeps a limited history of earlier hashes.
+A successful replacement updates the current password hash.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -536,6 +608,21 @@ RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-112
   ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-252
+TITLE: Password Change Retains History
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL retain the previous current password hash in the past password hash history when a password change succeeds.
+<<<
+RATIONALE: >>>
+A successful replacement keeps the previous hash in history. A separate requirement limits how many past hashes the backend keeps.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-35
+REVIEW_STATUS: Changed
+RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-113
   ROLE: Refines
@@ -571,7 +658,7 @@ STATEMENT: >>>
 The GSSC Website Unified Backend SHALL send a password recovery message to a member's Primary Email when the recovery request email address matches that Primary Email.
 <<<
 RATIONALE: >>>
-Recovery mail goes only to a member's Primary Email. Message wording and layout are out of scope.
+The backend sends recovery mail only to a member's Primary Email. Message wording and layout are out of scope.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -586,10 +673,10 @@ RELATIONS:
 UID: GSSC-BLLR-237
 TITLE: Password Recovery Request Success Response
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL report success for a password recovery request when the email address matches no member Primary Email, when the matched member has no Primary Email, and when sending the recovery message fails.
+The GSSC Website Unified Backend SHALL report success for a password recovery request whether or not the backend sends a recovery message.
 <<<
 RATIONALE: >>>
-The response does not reveal whether an address is registered or whether mail was sent.
+The response does not reveal whether an address is registered or whether mail was sent. This covers an unknown address, a member with no Primary Email, and a send failure.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -604,10 +691,28 @@ RELATIONS:
 UID: GSSC-BLLR-238
 TITLE: Password Recovery Token Hash Stored
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL store a hash of the recovery token when a recovery message is sent. The recovery token itself is not stored.
+The GSSC Website Unified Backend SHALL store a hash of the recovery token when the backend sends a recovery message.
 <<<
 RATIONALE: >>>
 The backend retains a hash of the recovery token for later verification.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-35
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-161
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-253
+TITLE: Password Recovery Token Plaintext Omitted
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL omit the recovery token plaintext from storage.
+<<<
+RATIONALE: >>>
+The backend stores a hash of the recovery token and does not retain the token itself.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -625,7 +730,7 @@ STATEMENT: >>>
 The GSSC Website Unified Backend SHALL take the lifetime of a password recovery token from backend configuration. The configured lifetime is a number of days greater than zero. The configured lifetime defaults to one day.
 <<<
 RATIONALE: >>>
-A recovery token expires after the configured lifetime. The configured lifetime defaults to one day.
+The backend expires a recovery token after the configured lifetime. The configured lifetime defaults to one day.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -649,7 +754,7 @@ STATEMENT: >>>
 The GSSC Website Unified Backend SHALL take a password recovery as a recovery token, the Primary Email paired with that token, and a new password.
 <<<
 RATIONALE: >>>
-Recovery requires the token, the Primary Email that received it, and the replacement password.
+The backend takes the token, the Primary Email that received it, and the replacement password.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -661,13 +766,67 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-BLLR-241
-TITLE: Password Recovery Token Validity
+UID: GSSC-BLLR-254
+TITLE: Unknown Recovery Token Forbidden
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL forbid a password recovery when the recovery token hash is unknown, when the token lifetime has elapsed, when the supplied Primary Email does not match the Primary Email paired with that token, or when that token has already been used, and the backend writes nothing.
+The GSSC Website Unified Backend SHALL forbid a password recovery when the recovery token hash is unknown, and the backend writes nothing.
 <<<
 RATIONALE: >>>
-Only a valid, unused, unexpired recovery token paired with its Primary Email may replace a password.
+An unknown recovery token cannot replace a password.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-35
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-161
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-255
+TITLE: Expired Recovery Token Forbidden
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL forbid a password recovery when the recovery token lifetime has elapsed, and the backend writes nothing.
+<<<
+RATIONALE: >>>
+An expired recovery token cannot replace a password.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-35
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-161
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-256
+TITLE: Recovery Email Mismatch Forbidden
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL forbid a password recovery when the supplied Primary Email does not match the Primary Email paired with that token, and the backend writes nothing.
+<<<
+RATIONALE: >>>
+The Primary Email in the recovery request must match the Primary Email that received the token.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-35
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-161
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-257
+TITLE: Used Recovery Token Forbidden
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL forbid a password recovery when the backend has already marked that recovery token as used, and the backend writes nothing.
+<<<
+RATIONALE: >>>
+A recovery token may complete recovery only once.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -700,13 +859,13 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-BLLR-243
-TITLE: Password Recovery Storage
+UID: GSSC-BLLR-258
+TITLE: Password Recovery Stores Current Hash
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL store the new password hash as the member's current password hash when a password recovery succeeds, SHALL retain the previous current password hash in the past password hash history limited to the configured password history count, and SHALL mark the recovery token as used.
+The GSSC Website Unified Backend SHALL store the new password hash as the member's current password hash when a password recovery succeeds.
 <<<
 RATIONALE: >>>
-A successful recovery updates the current hash, keeps limited history, and consumes the recovery token.
+A successful recovery updates the current password hash.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -717,8 +876,44 @@ RELATIONS:
   VALUE: GSSC-BHLR-112
   ROLE: Refines
 - TYPE: Parent
+  VALUE: GSSC-BHLR-161
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-259
+TITLE: Password Recovery Retains History
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL retain the previous current password hash in the past password hash history when a password recovery succeeds.
+<<<
+RATIONALE: >>>
+A successful recovery keeps the previous hash in history. A separate requirement limits how many past hashes the backend keeps.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-35
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
   VALUE: GSSC-BHLR-113
   ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-BHLR-161
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-260
+TITLE: Password Recovery Marks Token Used
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL mark the recovery token as used when a password recovery succeeds.
+<<<
+RATIONALE: >>>
+A successful recovery consumes the recovery token.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-35
+REVIEW_STATUS: Changed
+RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-161
   ROLE: Refines
@@ -4699,10 +4894,28 @@ TITLE: Password History
 UID: GSSC-BLLR-244
 TITLE: Past Password Hash Rows
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL store each retained past password hash for a user in a password history table. Each row holds the password hash and the user who held that password. The table retains at most the configured password history count of rows for each user.
+The GSSC Website Unified Backend SHALL store each retained past password hash for a user in a password history table. Each row holds the password hash and the user who held that password.
 <<<
 RATIONALE: >>>
-Past password hashes are stored separately from the current hash so a limited history can be checked on replacement.
+The backend stores past password hashes separately from the current hash so it can check a limited history on replacement.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-35
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-113
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-261
+TITLE: Past Password Hash Count Limit
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL limit the password history table to at most the configured password history count of rows for each user.
+<<<
+RATIONALE: >>>
+The backend keeps only the configured number of past password hashes for each user.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -4717,10 +4930,10 @@ RELATIONS:
 UID: GSSC-BLLR-245
 TITLE: Password Recovery Token Rows
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL store each password recovery token hash in a password recovery tokens table. Each row holds the token hash, the user, the Primary Email paired with that token, the issue time, the expiry time, and whether the token has been used.
+The GSSC Website Unified Backend SHALL store each password recovery token hash in a password recovery tokens table. Each row holds the token hash, the user, the Primary Email paired with that token, the issue time, the expiry time, and a used marker.
 <<<
 RATIONALE: >>>
-Recovery tokens are stored as hashes with the Primary Email and lifetime needed to complete recovery.
+The backend stores recovery token hashes with the Primary Email and lifetime needed to complete recovery.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -4744,7 +4957,7 @@ STATEMENT: >>>
 The GSSC Website Unified Backend SHALL take SMTP host, SMTP port, SMTP credentials, and SMTP from address from backend configuration. The SMTP host and credentials and from address default to empty. The SMTP port defaults to 587.
 <<<
 RATIONALE: >>>
-Password recovery mail uses configured SMTP settings. Empty host leaves sending unable to complete.
+Password recovery mail uses configured SMTP settings. An empty host leaves the backend unable to complete sending.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
