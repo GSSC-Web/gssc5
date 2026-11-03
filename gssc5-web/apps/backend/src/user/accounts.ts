@@ -165,7 +165,12 @@ async function ensurePermanentAdmin(): Promise<void> {
   if (existing) {
     await prisma.user.update({
       where: { id: existing.id },
-      data: { passwordHash },
+      data: {
+        passwordHash,
+        // @relation(GSSC-BLLR-40, scope=range_start, role=Implementation)
+        isAdmin: true,
+        // @relation(GSSC-BLLR-40, scope=range_end, role=Implementation)
+      },
     });
     return;
   }
@@ -174,6 +179,10 @@ async function ensurePermanentAdmin(): Promise<void> {
       username,
       passwordHash,
       ...(primaryEmail === "" ? {} : { primaryEmail }),
+      // @relation(GSSC-BLLR-39, GSSC-BLLR-40, scope=range_start, role=Implementation)
+      isAdmin: true,
+      isUserMod: false,
+      // @relation(GSSC-BLLR-39, GSSC-BLLR-40, scope=range_end, role=Implementation)
     },
   });
   // @relation(GSSC-BLLR-23, scope=range_end, role=Implementation)

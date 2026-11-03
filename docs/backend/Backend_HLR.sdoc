@@ -561,10 +561,10 @@ STATEMENT: >>>
 The GSSC Website Unified Backend SHALL set a member's Preferred Contact Method to Email, Phone, or None.
 <<<
 RATIONALE: >>>
-The member chooses how other members should make contact. The choices are email, phone, or neither. A Preferred Contact Method of None provides no contact method for other members or the public to view.
+The member chooses how other members should make contact. The choices are email, phone, or neither. A Preferred Contact Method of None shows another member both the Primary Email and the Primary Phone Number.
 <<<
 DERIVED: True
-CHANGE_DRIVER: GSSC5-12
+CHANGE_DRIVER: GSSC5-12, GSSC5-34
 REVIEW_STATUS: Approved
 
 [REQUIREMENT]
@@ -1229,13 +1229,13 @@ RELATIONS:
 UID: GSSC-BHLR-73
 TITLE: Other Member Primary Email
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL let a logged-in member view another member's Primary Email when that member's Preferred Contact Method is Email.
+The GSSC Website Unified Backend SHALL let a logged-in member view another member's Primary Email when that member's Preferred Contact Method is Email or None.
 <<<
 RATIONALE: >>>
-Another member sees the Primary Email when email is the Preferred Contact Method.
+Another member sees the Primary Email when the Preferred Contact Method is Email or None.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-12
+CHANGE_DRIVER: GSSC5-12, GSSC5-34
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -1249,13 +1249,13 @@ RELATIONS:
 UID: GSSC-BHLR-74
 TITLE: Other Member Primary Phone Number
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL let a logged-in member view another member's Primary Phone Number when that member's Preferred Contact Method is Phone.
+The GSSC Website Unified Backend SHALL let a logged-in member view another member's Primary Phone Number when that member's Preferred Contact Method is Phone or None.
 <<<
 RATIONALE: >>>
-Another member sees the Primary Phone Number when phone is the Preferred Contact Method.
+Another member sees the Primary Phone Number when the Preferred Contact Method is Phone or None.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-12
+CHANGE_DRIVER: GSSC5-12, GSSC5-34
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -1269,13 +1269,13 @@ RELATIONS:
 UID: GSSC-BHLR-75
 TITLE: Other Member Secondary Email
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL let a logged-in member view another member's Secondary Email when that member has chosen to share it.
+The GSSC Website Unified Backend SHALL let a logged-in member view another member's Secondary Email when that member has chosen to share it and the Preferred Contact Method is Email or None.
 <<<
 RATIONALE: >>>
-The Secondary Email stays out of this view unless that member has chosen to share it.
+The Secondary Email stays out of this view unless that member has chosen to share it and the Preferred Contact Method is Email or None.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-12
+CHANGE_DRIVER: GSSC5-12, GSSC5-34
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -1289,13 +1289,13 @@ RELATIONS:
 UID: GSSC-BHLR-76
 TITLE: Other Member Secondary Phone Number
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL let a logged-in member view another member's Secondary Phone Number when that member has chosen to share it.
+The GSSC Website Unified Backend SHALL let a logged-in member view another member's Secondary Phone Number when that member has chosen to share it and the Preferred Contact Method is Phone or None.
 <<<
 RATIONALE: >>>
-The Secondary Phone Number stays out of this view unless that member has chosen to share it.
+The Secondary Phone Number stays out of this view unless that member has chosen to share it and the Preferred Contact Method is Phone or None.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-12
+CHANGE_DRIVER: GSSC5-12, GSSC5-34
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent

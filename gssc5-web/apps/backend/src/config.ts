@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 import { Type, type Static } from "@sinclair/typebox";
 import { Value } from "@sinclair/typebox/value";
 
+// @relation(GSSC-BLLR-39, scope=range_start, role=Implementation)
 const CONFIG_KEYS = [
   "PORT",
   "NODE_ENV",
@@ -14,6 +15,7 @@ const CONFIG_KEYS = [
   "ADMIN_EMAIL",
   "ADMIN_ENABLED",
 ] as const;
+// @relation(GSSC-BLLR-39, scope=range_end, role=Implementation)
 
 export const ConfigSchema = Type.Object({
   PORT: Type.Integer({ minimum: 1, maximum: 65535, default: 3000 }),
