@@ -148,10 +148,10 @@ export const passwords = new Elysia({
       if (row.primaryEmail !== body.primaryEmail) return status(403, "Forbidden");
       // @relation(GSSC-BLLR-254, GSSC-BLLR-255, GSSC-BLLR-256, GSSC-BLLR-257, scope=range_end, role=Implementation)
 
-      // @relation(GSSC-BLLR-242, scope=range_start, role=Implementation)
+      // @relation(GSSC-BLLR-268, GSSC-BLLR-269, GSSC-BLLR-270, GSSC-BLLR-271, GSSC-BLLR-272, scope=range_start, role=Implementation)
       const accepted = await acceptNewPassword(prisma, config, row.user, body.newPassword);
       if (accepted === "invalid") return status(422, "Invalid");
-      // @relation(GSSC-BLLR-242, scope=range_end, role=Implementation)
+      // @relation(GSSC-BLLR-268, GSSC-BLLR-269, GSSC-BLLR-270, GSSC-BLLR-271, GSSC-BLLR-272, scope=range_end, role=Implementation)
 
       // @relation(GSSC-BLLR-258, GSSC-BLLR-259, GSSC-BLLR-260, scope=range_start, role=Implementation)
       await replacePassword(prisma, config, row.user, accepted);
@@ -194,13 +194,13 @@ async function acceptNewPassword(
 
   // @relation(GSSC-BLLR-232, scope=range_start, role=Implementation)
   if (!permanentAdmin) {
-    // @relation(GSSC-BLLR-249, GSSC-BLLR-250, GSSC-BLLR-251, scope=range_start, role=Implementation)
+    // @relation(GSSC-BLLR-249, GSSC-BLLR-250, GSSC-BLLR-251, GSSC-BLLR-270, GSSC-BLLR-271, GSSC-BLLR-272, scope=range_start, role=Implementation)
     if (!passwordMeetsRules(newPassword, config.PASSWORD_MIN_LENGTH)) return "invalid";
-    // @relation(GSSC-BLLR-249, GSSC-BLLR-250, GSSC-BLLR-251, scope=range_end, role=Implementation)
+    // @relation(GSSC-BLLR-249, GSSC-BLLR-250, GSSC-BLLR-251, GSSC-BLLR-270, GSSC-BLLR-271, GSSC-BLLR-272, scope=range_end, role=Implementation)
   }
   // @relation(GSSC-BLLR-232, scope=range_end, role=Implementation)
 
-  // @relation(GSSC-BLLR-228, GSSC-BLLR-248, scope=range_start, role=Implementation)
+  // @relation(GSSC-BLLR-228, GSSC-BLLR-248, GSSC-BLLR-268, GSSC-BLLR-269, scope=range_start, role=Implementation)
   if (!permanentAdmin) {
     if (await Bun.password.verify(newPassword, user.passwordHash, "argon2id")) {
       return "invalid";
@@ -216,7 +216,7 @@ async function acceptNewPassword(
       }
     }
   }
-  // @relation(GSSC-BLLR-228, GSSC-BLLR-248, scope=range_end, role=Implementation)
+  // @relation(GSSC-BLLR-228, GSSC-BLLR-248, GSSC-BLLR-268, GSSC-BLLR-269, scope=range_end, role=Implementation)
 
   return Bun.password.hash(newPassword, "argon2id");
 }
@@ -255,7 +255,7 @@ async function replacePassword(
   // @relation(GSSC-BLLR-234, GSSC-BLLR-244, GSSC-BLLR-252, GSSC-BLLR-258, GSSC-BLLR-259, GSSC-BLLR-261, GSSC-BLLR-262, scope=range_end, role=Implementation)
 }
 
-// @relation(GSSC-BLLR-249, GSSC-BLLR-250, GSSC-BLLR-251, scope=range_start, role=Implementation)
+// @relation(GSSC-BLLR-249, GSSC-BLLR-250, GSSC-BLLR-251, GSSC-BLLR-270, GSSC-BLLR-271, GSSC-BLLR-272, scope=range_start, role=Implementation)
 export function passwordMeetsRules(password: string, minimumLength: number): boolean {
   if (password.length < minimumLength) return false;
   let upper = false;
@@ -271,7 +271,7 @@ export function passwordMeetsRules(password: string, minimumLength: number): boo
   }
   return upper && lower && digit && special;
 }
-// @relation(GSSC-BLLR-249, GSSC-BLLR-250, GSSC-BLLR-251, scope=range_end, role=Implementation)
+// @relation(GSSC-BLLR-249, GSSC-BLLR-250, GSSC-BLLR-251, GSSC-BLLR-270, GSSC-BLLR-271, GSSC-BLLR-272, scope=range_end, role=Implementation)
 
 function runtime(): { prisma: PrismaClient; config: Config } {
   const config = loadConfig();

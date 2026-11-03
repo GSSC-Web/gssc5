@@ -496,29 +496,64 @@ test("GSSC-BLLR-257 Used Recovery Token Forbidden", async () => {
 });
 // @relation(GSSC-BLLR-257, scope=range_end, role=Test)
 
-// @relation(GSSC-BLLR-242, scope=range_start, role=Test)
-test("GSSC-BLLR-242 Password Recovery New Password Rules", async () => {
+async function recoverWith(
+  recoveryToken: string,
+  newPassword: string,
+): Promise<{ status: number; body: string }> {
+  return postJsonResponse(backend, "/password/recover", {
+    recoveryToken,
+    primaryEmail: "regular@example.com",
+    newPassword,
+  });
+}
+
+// @relation(GSSC-BLLR-268, scope=range_start, role=Test)
+test("GSSC-BLLR-268 Password Recovery Differs From Current", async () => {
   const recoveryToken = await requestRecovery("regular@example.com");
-  expect(
-    (
-      await postJsonResponse(backend, "/password/recover", {
-        recoveryToken,
-        primaryEmail: "regular@example.com",
-        newPassword: "weak",
-      })
-    ).status,
-  ).toBe(422);
-  expect(
-    (
-      await postJsonResponse(backend, "/password/recover", {
-        recoveryToken,
-        primaryEmail: "regular@example.com",
-        newPassword: STRONG,
-      })
-    ).status,
-  ).toBe(422);
+  const before = await currentHash();
+  expect((await recoverWith(recoveryToken, STRONG)).status).toBe(422);
+  expect(await currentHash()).toBe(before);
 });
-// @relation(GSSC-BLLR-242, scope=range_end, role=Test)
+// @relation(GSSC-BLLR-268, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-269, scope=range_start, role=Test)
+test("GSSC-BLLR-269 Password Recovery Differs From History", async () => {
+  setEnv("PASSWORD_HISTORY_COUNT", "3");
+  let password = STRONG;
+  let token = await loginRegular(password);
+  for (const next of [STRONG_NEXT, STRONG_THIRD]) {
+    expect((await changePassword(token, password, next)).status).toBe(204);
+    password = next;
+    token = (await establishedLogin(backend, { username: "regular-member", password })) ?? "";
+  }
+  const recoveryToken = await requestRecovery("regular@example.com");
+  expect((await recoverWith(recoveryToken, STRONG_NEXT)).status).toBe(422);
+});
+// @relation(GSSC-BLLR-269, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-270, scope=range_start, role=Test)
+test("GSSC-BLLR-270 Password Recovery Minimum Length", async () => {
+  const recoveryToken = await requestRecovery("regular@example.com");
+  expect((await recoverWith(recoveryToken, "Abcde1!")).status).toBe(422);
+});
+// @relation(GSSC-BLLR-270, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-271, scope=range_start, role=Test)
+test("GSSC-BLLR-271 Password Recovery Required Character Classes", async () => {
+  const recoveryToken = await requestRecovery("regular@example.com");
+  expect((await recoverWith(recoveryToken, "abcdefgh1!")).status).toBe(422);
+  expect((await recoverWith(recoveryToken, "ABCDEFGH1!")).status).toBe(422);
+  expect((await recoverWith(recoveryToken, "Abcdefgh!")).status).toBe(422);
+  expect((await recoverWith(recoveryToken, "Abcdefgh1")).status).toBe(422);
+});
+// @relation(GSSC-BLLR-271, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-272, scope=range_start, role=Test)
+test("GSSC-BLLR-272 Password Recovery Allowed Characters", async () => {
+  const recoveryToken = await requestRecovery("regular@example.com");
+  expect((await recoverWith(recoveryToken, "Abcdef1!\u00a3")).status).toBe(422);
+});
+// @relation(GSSC-BLLR-272, scope=range_end, role=Test)
 
 // @relation(GSSC-BLLR-258, scope=range_start, role=Test)
 test("GSSC-BLLR-258 Password Recovery Stores Current Hash", async () => {

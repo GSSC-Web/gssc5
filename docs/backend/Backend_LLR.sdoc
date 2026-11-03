@@ -834,13 +834,100 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-BLLR-242
-TITLE: Password Recovery New Password Rules
+UID: GSSC-BLLR-268
+TITLE: Password Recovery Differs From Current
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL apply the same new-password length, character, and history rules to password recovery as to password change.
+The GSSC Website Unified Backend SHALL invalidate a password recovery when the member is not the permanent admin account and the new password matches the member's current password hash, and the backend writes nothing.
 <<<
 RATIONALE: >>>
-Recovery replaces a password under the same rules as a logged-in change, including the permanent admin account caveats on those rules.
+A recovery password must differ from the current password for every member other than the permanent admin account.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-35
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-161
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-BHLR-20
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-269
+TITLE: Password Recovery Differs From History
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL invalidate a password recovery when the member is not the permanent admin account and the new password matches any of the last N retained past password hashes, and the backend writes nothing. N is the password history count from backend configuration.
+<<<
+RATIONALE: >>>
+A recovery password must differ from each retained past password for every member other than the permanent admin account.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-35
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-161
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-BHLR-20
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-BHLR-113
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-270
+TITLE: Password Recovery Minimum Length
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL invalidate a password recovery when the member is not the permanent admin account and the new password is shorter than the configured minimum length, and the backend writes nothing.
+<<<
+RATIONALE: >>>
+A recovery password must meet the configured minimum length for every member other than the permanent admin account.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-35
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-161
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-BHLR-20
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-271
+TITLE: Password Recovery Required Character Classes
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL invalidate a password recovery when the member is not the permanent admin account and the new password omits a capital letter, a lowercase letter, a number, or a special character, and the backend writes nothing.
+<<<
+RATIONALE: >>>
+A recovery password must include each required character class for every member other than the permanent admin account.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-35
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-161
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-BHLR-20
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-272
+TITLE: Password Recovery Allowed Characters
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL invalidate a password recovery when the member is not the permanent admin account and the new password contains a character outside the allowed set, and the backend writes nothing. The allowed characters are letters, digits, and ` ~ ! @ # $ % ^ & * ( ) _ + - = { } | [ ] \ : " ; ' < > ? , . /
+<<<
+RATIONALE: >>>
+A recovery password may use only the allowed characters for every member other than the permanent admin account.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -915,6 +1002,12 @@ RELATIONS:
   ROLE: Refines
 
 [[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-ACCOUNT-MANAGEMENT
+TITLE: Account Management
 
 [[SECTION]]
 UID: GSSC-BLLR-CLEAR-PASSWORDS
@@ -991,12 +1084,6 @@ CHANGE_DRIVER: GSSC5-35
 REVIEW_STATUS: Changed
 
 [[/SECTION]]
-
-[[/SECTION]]
-
-[[SECTION]]
-UID: GSSC-BLLR-ACCOUNT-MANAGEMENT
-TITLE: Account Management
 
 [[SECTION]]
 UID: GSSC-BLLR-USER-LIST
