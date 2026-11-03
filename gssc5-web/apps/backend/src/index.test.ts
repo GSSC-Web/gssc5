@@ -179,6 +179,127 @@ test(
 );
 // @relation(GSSC-BLLR-24, scope=range_end, role=Test)
 
+// @relation(GSSC-BLLR-39, scope=range_start, role=Test)
+test(
+  "GSSC-BLLR-39 Permanent Admin Field Exceptions",
+  async () => {
+    const database = await temporaryDatabase();
+    try {
+      const server = await startBackend(database.databaseFile, {
+        ADMIN_ENABLED: "true",
+        ADMIN_USERNAME: "omit-admin",
+        ADMIN_PASSWORD: "omit-secret",
+        ADMIN_EMAIL: "",
+        FIRST_NAME: "FromEnv",
+        LAST_NAME: "FromEnv",
+        PRIMARY_PHONE: "FromEnv",
+        PREFERRED_CONTACT_METHOD: "Email",
+        HOME_LINE1: "FromEnv",
+        HOME_CITY: "FromEnv",
+        HOME_STATE: "FromEnv",
+        HOME_ZIP: "FromEnv",
+        MAILING_LINE1: "FromEnv",
+        MAILING_CITY: "FromEnv",
+        MAILING_STATE: "FromEnv",
+        MAILING_ZIP: "FromEnv",
+      });
+      try {
+        expect(
+          await establishedLogin(server.fetch, { password: "omit-secret", username: "omit-admin" }),
+        ).not.toBeNull();
+      } finally {
+        await server.stop();
+      }
+      const stored = readUsers(database.databaseFile);
+      const username = columnFor(stored.columns, "username");
+      expect(username).toBeDefined();
+      const row = stored.rows.find((item) => cellText(item[username ?? ""]) === "omit-admin");
+      expect(row).toBeDefined();
+      for (const concept of [
+        "firstName",
+        "lastName",
+        "primaryPhone",
+        "preferredContactMethod",
+        "homeLine1",
+        "homeCity",
+        "homeState",
+        "homeZip",
+        "mailingLine1",
+        "mailingCity",
+        "mailingState",
+        "mailingZip",
+      ]) {
+        const column = columnFor(stored.columns, concept);
+        expect(column, concept).toBeDefined();
+        expect(isUnset(row?.[column ?? ""])).toBe(true);
+        expect(cellText(row?.[column ?? ""])).not.toBe("FromEnv");
+        expect(cellText(row?.[column ?? ""])).not.toBe("Email");
+      }
+    } finally {
+      await database.remove();
+    }
+  },
+  { timeout: 120_000 },
+);
+// @relation(GSSC-BLLR-39, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-40, scope=range_start, role=Test)
+test(
+  "GSSC-BLLR-40 Permanent Admin Is Admin",
+  async () => {
+    const database = await temporaryDatabase();
+    const username = "flag-admin";
+    try {
+      const created = await startBackend(database.databaseFile, {
+        ADMIN_ENABLED: "true",
+        ADMIN_USERNAME: username,
+        ADMIN_PASSWORD: "first-secret",
+        ADMIN_EMAIL: "flag@example.com",
+      });
+      await created.stop();
+      const createdRows = readUsers(database.databaseFile);
+      const usernameColumn = columnFor(createdRows.columns, "username");
+      const adminColumn = columnFor(createdRows.columns, "isAdmin");
+      const moderatorColumn = columnFor(createdRows.columns, "isUserMod");
+      expect(usernameColumn).toBeDefined();
+      expect(adminColumn).toBeDefined();
+      expect(moderatorColumn).toBeDefined();
+      const createdRow = createdRows.rows.find((row) => cellText(row[usernameColumn ?? ""]) === username);
+      expect(createdRow).toBeDefined();
+      expect(flagIsTrue(createdRow?.[adminColumn ?? ""])).toBe(true);
+      expect(flagIsTrue(createdRow?.[moderatorColumn ?? ""])).toBe(false);
+
+      updateUserColumn(database.databaseFile, moderatorColumn ?? "", "1", usernameColumn ?? "", username);
+      const restarted = await startBackend(database.databaseFile, {
+        ADMIN_ENABLED: "true",
+        ADMIN_USERNAME: username,
+        ADMIN_PASSWORD: "second-secret",
+        ADMIN_EMAIL: "other@example.com",
+      });
+      try {
+        expect(await establishedLogin(restarted.fetch, { password: "first-secret", username })).toBeNull();
+        expect(await establishedLogin(restarted.fetch, { password: "second-secret", username })).not.toBeNull();
+      } finally {
+        await restarted.stop();
+      }
+      const after = readUsers(database.databaseFile);
+      const afterRow = after.rows.find((row) => cellText(row[usernameColumn ?? ""]) === username);
+      expect(afterRow).toBeDefined();
+      expect(flagIsTrue(afterRow?.[adminColumn ?? ""])).toBe(true);
+      expect(flagIsTrue(afterRow?.[moderatorColumn ?? ""])).toBe(true);
+    } finally {
+      await database.remove();
+    }
+  },
+  { timeout: 180_000 },
+);
+// @relation(GSSC-BLLR-40, scope=range_end, role=Test)
+
+function flagIsTrue(value: unknown): boolean {
+  const text = cellText(value);
+  return text === "1" || text?.toLowerCase() === "true";
+}
+
 function storedUser(
   row: Record<string, unknown>,
   userColumns: ColumnInfo[],

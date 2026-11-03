@@ -1,7 +1,11 @@
 import { randomUUID } from "node:crypto";
+import { readFileSync } from "node:fs";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+import { Database } from "bun:sqlite";
 
 import { afterAll, beforeAll, expect, test } from "bun:test";
 
@@ -228,3 +232,321 @@ async function selectWhere(username: string): Promise<Record<string, unknown> | 
   const column = columnFor(started.columns, "username") ?? usernameColumn();
   return rows.find((row) => cellText(row[column]) === username);
 }
+
+function columnNamed(aliases: string[], label: string): string {
+  const wanted = new Set(aliases.map((alias) => alias.toLowerCase().replace(/[^a-z0-9]/g, "")));
+  const found = started.columns.filter((column) =>
+    wanted.has(column.name.toLowerCase().replace(/[^a-z0-9]/g, "")),
+  );
+  expect(found, label).toHaveLength(1);
+  return found[0]?.name ?? "";
+}
+
+function flagIsFalse(value: unknown): boolean {
+  const text = cellText(value);
+  return text === null || text === "0" || text?.toLowerCase() === "false";
+}
+
+let historicalFlags: Promise<{ isAdmin: unknown; isUserMod: unknown }> | undefined;
+
+function flagsAfterColumnAdded(): Promise<{ isAdmin: unknown; isUserMod: unknown }> {
+  historicalFlags ??= readHistoricalFlags();
+  return historicalFlags;
+}
+
+async function readHistoricalFlags(): Promise<{ isAdmin: unknown; isUserMod: unknown }> {
+  const migrations = fileURLToPath(new URL("../prisma/migrations", import.meta.url));
+  const dir = await mkdtemp(path.join(tmpdir(), "gssc-history-"));
+  const database = new Database(path.join(dir, "history.db"));
+  try {
+    database.exec(readFileSync(path.join(migrations, "20261101120000_user_access/migration.sql"), "utf8"));
+    database.exec(
+      "INSERT INTO users (id, username, primaryEmail, passwordHash, updatedAt) VALUES ('hist-user', 'hist-user', 'hist@example.com', 'hash', '2026-01-01T00:00:00.000Z')",
+    );
+    database.exec(readFileSync(path.join(migrations, "20261102140000_account_data/migration.sql"), "utf8"));
+    const row = database
+      .query("SELECT isAdmin, isUserMod FROM users WHERE username = 'hist-user'")
+      .get() as { isAdmin: unknown; isUserMod: unknown };
+    return { isAdmin: row.isAdmin, isUserMod: row.isUserMod };
+  } finally {
+    database.close();
+    await rm(dir, { recursive: true, force: true });
+  }
+}
+
+// @relation(GSSC-BLLR-26, scope=range_start, role=Test)
+test("GSSC-BLLR-26 User First Name", async () => {
+  const column = columnNamed(["firstName", "first"], "First Name");
+  const present = `gssc-bllr-26-${randomUUID()}`;
+  const omitted = `gssc-bllr-26-omit-${randomUUID()}`;
+  try {
+    await insertCopy(started.sql, started.table, started.columns, started.startupRows[0] ?? {}, {
+      ...freshIdentity(present, `${present}@example.com`, null),
+      [column]: "Ada",
+    });
+    expect(cellText((await selectWhere(present))?.[column])).toBe("Ada");
+    await insertCopy(started.sql, started.table, started.columns, started.startupRows[0] ?? {}, {
+      ...freshIdentity(omitted, `${omitted}@example.com`, null),
+      [column]: null,
+    });
+    expect(isUnset((await selectWhere(omitted))?.[column])).toBe(true);
+  } finally {
+    await deleteWhere(started.sql, started.table, usernameColumn(), present);
+    await deleteWhere(started.sql, started.table, usernameColumn(), omitted);
+  }
+});
+// @relation(GSSC-BLLR-26, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-27, scope=range_start, role=Test)
+test("GSSC-BLLR-27 User Middle Name", async () => {
+  const column = columnNamed(["middleName", "middle"], "Middle Name");
+  const absentUser = `gssc-bllr-27-absent-${randomUUID()}`;
+  const presentUser = `gssc-bllr-27-present-${randomUUID()}`;
+  try {
+    await insertCopy(started.sql, started.table, started.columns, started.startupRows[0] ?? {}, {
+      ...freshIdentity(absentUser, `${absentUser}@example.com`, null),
+      [column]: null,
+    });
+    expect(isUnset((await selectWhere(absentUser))?.[column])).toBe(true);
+    await insertCopy(started.sql, started.table, started.columns, started.startupRows[0] ?? {}, {
+      ...freshIdentity(presentUser, `${presentUser}@example.com`, null),
+      [column]: "Lee",
+    });
+    expect(cellText((await selectWhere(presentUser))?.[column])).toBe("Lee");
+  } finally {
+    await deleteWhere(started.sql, started.table, usernameColumn(), absentUser);
+    await deleteWhere(started.sql, started.table, usernameColumn(), presentUser);
+  }
+});
+// @relation(GSSC-BLLR-27, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-28, scope=range_start, role=Test)
+test("GSSC-BLLR-28 User Last Name", async () => {
+  const column = columnNamed(["lastName", "last"], "Last Name");
+  const present = `gssc-bllr-28-${randomUUID()}`;
+  const omitted = `gssc-bllr-28-omit-${randomUUID()}`;
+  try {
+    await insertCopy(started.sql, started.table, started.columns, started.startupRows[0] ?? {}, {
+      ...freshIdentity(present, `${present}@example.com`, null),
+      [column]: "Lovelace",
+    });
+    expect(cellText((await selectWhere(present))?.[column])).toBe("Lovelace");
+    await insertCopy(started.sql, started.table, started.columns, started.startupRows[0] ?? {}, {
+      ...freshIdentity(omitted, `${omitted}@example.com`, null),
+      [column]: null,
+    });
+    expect(isUnset((await selectWhere(omitted))?.[column])).toBe(true);
+  } finally {
+    await deleteWhere(started.sql, started.table, usernameColumn(), present);
+    await deleteWhere(started.sql, started.table, usernameColumn(), omitted);
+  }
+});
+// @relation(GSSC-BLLR-28, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-29, scope=range_start, role=Test)
+test("GSSC-BLLR-29 User Primary Phone Number", async () => {
+  const column = columnNamed(["primaryPhone", "primaryPhoneNumber"], "Primary Phone Number");
+  const present = `gssc-bllr-29-${randomUUID()}`;
+  const omitted = `gssc-bllr-29-omit-${randomUUID()}`;
+  try {
+    await insertCopy(started.sql, started.table, started.columns, started.startupRows[0] ?? {}, {
+      ...freshIdentity(present, `${present}@example.com`, null),
+      [column]: "2095550100",
+    });
+    expect(cellText((await selectWhere(present))?.[column])).toBe("2095550100");
+    await insertCopy(started.sql, started.table, started.columns, started.startupRows[0] ?? {}, {
+      ...freshIdentity(omitted, `${omitted}@example.com`, null),
+      [column]: null,
+    });
+    expect(isUnset((await selectWhere(omitted))?.[column])).toBe(true);
+  } finally {
+    await deleteWhere(started.sql, started.table, usernameColumn(), present);
+    await deleteWhere(started.sql, started.table, usernameColumn(), omitted);
+  }
+});
+// @relation(GSSC-BLLR-29, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-30, scope=range_start, role=Test)
+test("GSSC-BLLR-30 User Secondary Phone Number", async () => {
+  const column = columnNamed(["secondaryPhone", "secondaryPhoneNumber"], "Secondary Phone Number");
+  const absentUser = `gssc-bllr-30-absent-${randomUUID()}`;
+  const presentUser = `gssc-bllr-30-present-${randomUUID()}`;
+  try {
+    await insertCopy(started.sql, started.table, started.columns, started.startupRows[0] ?? {}, {
+      ...freshIdentity(absentUser, `${absentUser}@example.com`, null),
+      [column]: null,
+    });
+    expect(isUnset((await selectWhere(absentUser))?.[column])).toBe(true);
+    await insertCopy(started.sql, started.table, started.columns, started.startupRows[0] ?? {}, {
+      ...freshIdentity(presentUser, `${presentUser}@example.com`, null),
+      [column]: "2095550102",
+    });
+    expect(cellText((await selectWhere(presentUser))?.[column])).toBe("2095550102");
+  } finally {
+    await deleteWhere(started.sql, started.table, usernameColumn(), absentUser);
+    await deleteWhere(started.sql, started.table, usernameColumn(), presentUser);
+  }
+});
+// @relation(GSSC-BLLR-30, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-34, scope=range_start, role=Test)
+test("GSSC-BLLR-34 User Home Address", async () => {
+  const line1 = columnNamed(["homeLine1", "homeAddressLine1"], "Home Address line 1");
+  const line2 = columnNamed(["homeLine2", "homeAddressLine2"], "Home Address line 2");
+  const line3 = columnNamed(["homeLine3", "homeAddressLine3"], "Home Address line 3");
+  const city = columnNamed(["homeCity", "homeAddressCity"], "Home Address city");
+  const state = columnNamed(["homeState", "homeAddressState"], "Home Address state");
+  const zip = columnNamed(["homeZip", "homeZipCode", "homeAddressZip"], "Home Address zip code");
+  const extension = columnNamed(["homeZipExtension", "homeAddressZipExtension"], "Home Address zip extension");
+  const present = `gssc-bllr-34-${randomUUID()}`;
+  const omitted = `gssc-bllr-34-omit-${randomUUID()}`;
+  try {
+    await insertCopy(started.sql, started.table, started.columns, started.startupRows[0] ?? {}, {
+      ...freshIdentity(present, `${present}@example.com`, null),
+      [line1]: "1 Home Street",
+      [line2]: null,
+      [line3]: null,
+      [city]: "Modesto",
+      [state]: "CA",
+      [zip]: "95354",
+      [extension]: "1234",
+    });
+    const row = await selectWhere(present);
+    expect(cellText(row?.[line1])).toBe("1 Home Street");
+    expect(isUnset(row?.[line2])).toBe(true);
+    expect(isUnset(row?.[line3])).toBe(true);
+    expect(cellText(row?.[city])).toBe("Modesto");
+    expect(cellText(row?.[state])).toBe("CA");
+    expect(cellText(row?.[zip])).toBe("95354");
+    expect(cellText(row?.[extension])).toBe("1234");
+    await insertCopy(started.sql, started.table, started.columns, started.startupRows[0] ?? {}, {
+      ...freshIdentity(omitted, `${omitted}@example.com`, null),
+      [line1]: null,
+      [city]: null,
+      [state]: null,
+      [zip]: null,
+      [extension]: null,
+    });
+    const empty = await selectWhere(omitted);
+    expect(isUnset(empty?.[line1])).toBe(true);
+    expect(isUnset(empty?.[zip])).toBe(true);
+  } finally {
+    await deleteWhere(started.sql, started.table, usernameColumn(), present);
+    await deleteWhere(started.sql, started.table, usernameColumn(), omitted);
+  }
+});
+// @relation(GSSC-BLLR-34, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-36, scope=range_start, role=Test)
+test("GSSC-BLLR-36 User Mailing Address", async () => {
+  const line1 = columnNamed(["mailingLine1", "mailingAddressLine1"], "Mailing Address line 1");
+  const line2 = columnNamed(["mailingLine2", "mailingAddressLine2"], "Mailing Address line 2");
+  const line3 = columnNamed(["mailingLine3", "mailingAddressLine3"], "Mailing Address line 3");
+  const city = columnNamed(["mailingCity", "mailingAddressCity"], "Mailing Address city");
+  const state = columnNamed(["mailingState", "mailingAddressState"], "Mailing Address state");
+  const zip = columnNamed(["mailingZip", "mailingZipCode", "mailingAddressZip"], "Mailing Address zip code");
+  const extension = columnNamed(
+    ["mailingZipExtension", "mailingAddressZipExtension"],
+    "Mailing Address zip extension",
+  );
+  const display = started.columns.filter((column) =>
+    ["mailingaddressdisplay", "mailingdisplay", "maildisplay"].includes(
+      column.name.toLowerCase().replace(/[^a-z0-9]/g, ""),
+    ),
+  );
+  expect(display).toHaveLength(0);
+  const present = `gssc-bllr-36-${randomUUID()}`;
+  const omitted = `gssc-bllr-36-omit-${randomUUID()}`;
+  try {
+    await insertCopy(started.sql, started.table, started.columns, started.startupRows[0] ?? {}, {
+      ...freshIdentity(present, `${present}@example.com`, null),
+      [line1]: "PO Box 1",
+      [line2]: null,
+      [line3]: null,
+      [city]: "Modesto",
+      [state]: "CA",
+      [zip]: "95353",
+      [extension]: null,
+    });
+    const row = await selectWhere(present);
+    expect(cellText(row?.[line1])).toBe("PO Box 1");
+    expect(isUnset(row?.[line2])).toBe(true);
+    expect(cellText(row?.[zip])).toBe("95353");
+    expect(isUnset(row?.[extension])).toBe(true);
+    await insertCopy(started.sql, started.table, started.columns, started.startupRows[0] ?? {}, {
+      ...freshIdentity(omitted, `${omitted}@example.com`, null),
+      [line1]: null,
+      [city]: null,
+      [state]: null,
+      [zip]: null,
+    });
+    expect(isUnset((await selectWhere(omitted))?.[line1])).toBe(true);
+  } finally {
+    await deleteWhere(started.sql, started.table, usernameColumn(), present);
+    await deleteWhere(started.sql, started.table, usernameColumn(), omitted);
+  }
+});
+// @relation(GSSC-BLLR-36, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-37, scope=range_start, role=Test)
+test("GSSC-BLLR-37 User Is Admin", async () => {
+  const column = columnNamed(["isAdmin"], "isAdmin");
+  const flags = await flagsAfterColumnAdded();
+  expect(flagIsFalse(flags.isAdmin)).toBe(true);
+  const enabled = `gssc-bllr-37-${randomUUID()}`;
+  try {
+    await insertCopy(started.sql, started.table, started.columns, started.startupRows[0] ?? {}, {
+      ...freshIdentity(enabled, `${enabled}@example.com`, null),
+      [column]: 1,
+    });
+    const text = cellText((await selectWhere(enabled))?.[column]);
+    expect(text === "1" || text?.toLowerCase() === "true").toBe(true);
+    const admin = started.startupRows.find((row) => cellText(row[usernameColumn()]) === memberUsername);
+    const adminFlag = cellText(admin?.[column]);
+    expect(adminFlag === "1" || adminFlag?.toLowerCase() === "true").toBe(true);
+  } finally {
+    await deleteWhere(started.sql, started.table, usernameColumn(), enabled);
+  }
+});
+// @relation(GSSC-BLLR-37, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-38, scope=range_start, role=Test)
+test("GSSC-BLLR-38 User Is User Mod", async () => {
+  const column = columnNamed(["isUserMod"], "isUserMod");
+  const flags = await flagsAfterColumnAdded();
+  expect(flagIsFalse(flags.isUserMod)).toBe(true);
+  const enabled = `gssc-bllr-38-${randomUUID()}`;
+  try {
+    await insertCopy(started.sql, started.table, started.columns, started.startupRows[0] ?? {}, {
+      ...freshIdentity(enabled, `${enabled}@example.com`, null),
+      [column]: 0,
+    });
+    expect(flagIsFalse((await selectWhere(enabled))?.[column])).toBe(true);
+  } finally {
+    await deleteWhere(started.sql, started.table, usernameColumn(), enabled);
+  }
+});
+// @relation(GSSC-BLLR-38, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-64, scope=range_start, role=Test)
+test("GSSC-BLLR-64 User Membership Status", async () => {
+  const column = columnNamed(["membershipStatus"], "Membership Status");
+  const absentUser = `gssc-bllr-64-absent-${randomUUID()}`;
+  const presentUser = `gssc-bllr-64-present-${randomUUID()}`;
+  try {
+    await insertCopy(started.sql, started.table, started.columns, started.startupRows[0] ?? {}, {
+      ...freshIdentity(absentUser, `${absentUser}@example.com`, null),
+      [column]: null,
+    });
+    expect(isUnset((await selectWhere(absentUser))?.[column])).toBe(true);
+    await insertCopy(started.sql, started.table, started.columns, started.startupRows[0] ?? {}, {
+      ...freshIdentity(presentUser, `${presentUser}@example.com`, null),
+      [column]: "roster-example",
+    });
+    expect(cellText((await selectWhere(presentUser))?.[column])).toBe("roster-example");
+  } finally {
+    await deleteWhere(started.sql, started.table, usernameColumn(), absentUser);
+    await deleteWhere(started.sql, started.table, usernameColumn(), presentUser);
+  }
+});
+// @relation(GSSC-BLLR-64, scope=range_end, role=Test)
