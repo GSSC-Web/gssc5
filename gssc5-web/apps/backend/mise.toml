@@ -1,5 +1,6 @@
 [tasks.serve]
-description = "Start the Elysia development server"
+description = "Start the Elysia development server (reloads on change)"
+depends = ["types"]
 run = "bun run dev"
 
 [tasks.build]
@@ -17,6 +18,11 @@ depends = ["db-generate"]
 run = "bun run types"
 
 [tasks.test]
-description = "Run the backend tests"
+description = "Run the backend tests once"
 depends = ["types"]
 run = "bun run test"
+
+[tasks."test:watch"]
+description = "Re-run the backend tests when files change"
+depends = ["types"]
+run = "bun test --watch"

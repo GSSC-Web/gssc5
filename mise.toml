@@ -1,7 +1,23 @@
 #:schema https://mise.jdx.dev/schema/mise.json
-# GSSC5 Requirements mise config.
+# GSSC5 monorepo: StrictDoc requirements and the gssc5-web applications.
+#
+# `mise serve` starts every app from the repo root or from gssc5-web. Inside one
+# app, `mise serve`, `mise build`, and `mise test` run only that app.
+# `mise run watch` reloads the requirements browser.
+#
+# Shorter monorepo names: //backend, //public, //members.
 
-min_version = "2025.8.0"
+min_version = "2026.10.0"
+monorepo_root = true
+
+[monorepo]
+config_roots = ["gssc5-web/apps/*"]
+lockfile = true
+
+[monorepo.path_aliases]
+backend = "gssc5-web/apps/backend"
+public = "gssc5-web/apps/public"
+members = "gssc5-web/apps/members"
 
 [settings]
 experimental = true
@@ -11,10 +27,11 @@ idiomatic_version_file_enable_tools = ["python"]
 # StrictDoc requires Python >= 3.10.
 python = "3.12"
 uv = "latest"
-
 # TODO: Isolated StrictDoc CLI (uv-backed pypi backend). Pin a release instead of
 # "latest" once the project is stable, e.g. "0.30.1".
 "pypi:strictdoc" = { version = "latest", depends = ["python", "uv"] }
+bun = "1.3"
+node = "22"
 
 [env]
 # TODO: Optional local venv if you also want `pip install -e` / extra Python deps.
@@ -22,12 +39,18 @@ uv = "latest"
 _.python.venv = { path = ".venv", create = true }
 
 [tasks.install]
-description = "Install/upgrade StrictDoc in the project venv"
+description = "Install StrictDoc and the web workspace dependencies"
 alias = "i"
+depends = ["web:install"]
 run = "uv pip install --upgrade strictdoc"
 
+[tasks."web:install"]
+description = "Install web workspace dependencies"
+dir = "gssc5-web"
+run = "bun install"
+
 [tasks.export]
-description = "Export the project tree to static HTML"
+description = "Export the requirements tree to static HTML"
 alias = "e"
 run = "strictdoc export ."
 
@@ -37,7 +60,7 @@ alias = "s"
 run = "strictdoc server ."
 
 [tasks.watch]
-description = "Start the StrictDoc web server (http://127.0.0.1:5111)"
+description = "Reload the StrictDoc web server when requirements change (http://127.0.0.1:5111)"
 alias = "w"
 run = "strictdoc server . --watch"
 
@@ -46,12 +69,27 @@ description = "Assign missing requirement UIDs in-place"
 run = "strictdoc manage auto-uid ."
 
 [tasks.export-json]
-description = "Export the project tree to JSON"
+description = "Export the requirements tree to JSON"
 run = "strictdoc export . --formats=json"
 
 [tasks.version]
-description = "Print Python and StrictDoc versions"
+description = "Print Python, StrictDoc, Bun, and Node versions"
 run = [
   "python --version",
   "strictdoc --version",
+  "bun --version",
+  "node --version",
 ]
+
+[tasks.serve]
+description = "Start the backend and both frontends. Each reloads when its sources change"
+alias = "dev"
+depends = ["//backend:serve", "//public:serve", "//members:serve"]
+
+[tasks.build]
+description = "Build the backend and both frontends for production. Watch one frontend with mise run //public:build:watch or //members:build:watch"
+depends = ["//backend:build", "//public:build", "//members:build"]
+
+[tasks.test]
+description = "Run backend and frontend tests once. Watch one project with mise run //backend:test:watch, //public:test:watch, or //members:test:watch"
+depends = ["//backend:test", "//public:test", "//members:test"]

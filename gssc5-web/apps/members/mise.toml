@@ -1,14 +1,24 @@
 [tasks.serve]
-description = "Start the member frontend"
-depends = ["//apps/backend:types"]
+description = "Start the member frontend (reloads on change)"
+depends = ["//backend:types"]
 run = "bun run start"
 
 [tasks.build]
 description = "Build the member frontend"
-depends = ["//apps/backend:types"]
+depends = ["//backend:types"]
 run = "bun run build"
 
+[tasks."build:watch"]
+description = "Rebuild the member frontend when sources change"
+depends = ["//backend:types"]
+run = "bun run watch"
+
 [tasks.test]
-description = "Run the member frontend tests"
-depends = ["//apps/backend:types"]
+description = "Run the member frontend tests once"
+depends = ["//backend:types"]
 run = "bun run test -- --watch=false"
+
+[tasks."test:watch"]
+description = "Re-run the member frontend tests when files change"
+depends = ["//backend:types"]
+run = "bun run test -- --watch"
