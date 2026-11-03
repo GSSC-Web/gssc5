@@ -14,6 +14,14 @@ const CONFIG_KEYS = [
   "ADMIN_PASSWORD",
   "ADMIN_EMAIL",
   "ADMIN_ENABLED",
+  "PASSWORD_HISTORY_COUNT",
+  "PASSWORD_MIN_LENGTH",
+  "PASSWORD_RECOVERY_LIFETIME_DAYS",
+  "SMTP_HOST",
+  "SMTP_PORT",
+  "SMTP_USER",
+  "SMTP_PASSWORD",
+  "SMTP_FROM",
 ] as const;
 // @relation(GSSC-BLLR-39, scope=range_end, role=Implementation)
 
@@ -39,6 +47,22 @@ export const ConfigSchema = Type.Object({
   // @relation(GSSC-BLLR-22, scope=range_start, role=Implementation)
   ADMIN_ENABLED: Type.Boolean({ default: false }),
   // @relation(GSSC-BLLR-22, scope=range_end, role=Implementation)
+  // @relation(GSSC-BLLR-229, scope=range_start, role=Implementation)
+  PASSWORD_HISTORY_COUNT: Type.Integer({ minimum: 0, default: 3 }),
+  // @relation(GSSC-BLLR-229, scope=range_end, role=Implementation)
+  // @relation(GSSC-BLLR-230, scope=range_start, role=Implementation)
+  PASSWORD_MIN_LENGTH: Type.Integer({ exclusiveMinimum: 0, default: 8 }),
+  // @relation(GSSC-BLLR-230, scope=range_end, role=Implementation)
+  // @relation(GSSC-BLLR-239, scope=range_start, role=Implementation)
+  PASSWORD_RECOVERY_LIFETIME_DAYS: Type.Number({ exclusiveMinimum: 0, default: 1 }),
+  // @relation(GSSC-BLLR-239, scope=range_end, role=Implementation)
+  // @relation(GSSC-BLLR-246, scope=range_start, role=Implementation)
+  SMTP_HOST: Type.String({ default: "" }),
+  SMTP_PORT: Type.Integer({ minimum: 1, maximum: 65535, default: 587 }),
+  SMTP_USER: Type.String({ default: "" }),
+  SMTP_PASSWORD: Type.String({ default: "" }),
+  SMTP_FROM: Type.String({ default: "" }),
+  // @relation(GSSC-BLLR-246, scope=range_end, role=Implementation)
 });
 
 export type Config = Static<typeof ConfigSchema>;
@@ -91,7 +115,15 @@ export function loadConfig(options: LoadConfigOptions = {}): Config {
 
 function normalizeConfigValue(key: string, value: string): string {
   if (key === "ADMIN_ENABLED") return value.trim().toLowerCase();
-  if (key === "ADMIN_USERNAME" || key === "ADMIN_EMAIL") return value.trim();
+  if (
+    key === "ADMIN_USERNAME" ||
+    key === "ADMIN_EMAIL" ||
+    key === "SMTP_HOST" ||
+    key === "SMTP_USER" ||
+    key === "SMTP_FROM"
+  ) {
+    return value.trim();
+  }
   return value;
 }
 
