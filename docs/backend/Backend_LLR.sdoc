@@ -576,16 +576,12 @@ STATEMENT: >>>
 The GSSC Website Unified Backend SHALL accept a stored password for member login when that password does not meet the new-password length or character rules.
 <<<
 RATIONALE: >>>
-Password rules apply to replacement. The backend continues to accept a password already stored for login.
+Password rules apply to replacement. No high-level requirement requires accepting a non-conforming stored password for login, so this login acceptance is derived.
 <<<
-DERIVED: False
+DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-35
 REVIEW_STATUS: Approved
-RELATIONS:
-- TYPE: Parent
-  VALUE: GSSC-BHLR-20
-  ROLE: Refines
 
 [REQUIREMENT]
 UID: GSSC-BLLR-234
@@ -886,9 +882,6 @@ RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-161
   ROLE: Refines
-- TYPE: Parent
-  VALUE: GSSC-BHLR-20
-  ROLE: Refines
 
 [REQUIREMENT]
 UID: GSSC-BLLR-269
@@ -906,9 +899,6 @@ REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-161
-  ROLE: Refines
-- TYPE: Parent
-  VALUE: GSSC-BHLR-20
   ROLE: Refines
 - TYPE: Parent
   VALUE: GSSC-BHLR-113
@@ -931,9 +921,6 @@ RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-161
   ROLE: Refines
-- TYPE: Parent
-  VALUE: GSSC-BHLR-20
-  ROLE: Refines
 
 [REQUIREMENT]
 UID: GSSC-BLLR-271
@@ -952,9 +939,6 @@ RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-161
   ROLE: Refines
-- TYPE: Parent
-  VALUE: GSSC-BHLR-20
-  ROLE: Refines
 
 [REQUIREMENT]
 UID: GSSC-BLLR-272
@@ -972,9 +956,6 @@ REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-161
-  ROLE: Refines
-- TYPE: Parent
-  VALUE: GSSC-BHLR-20
   ROLE: Refines
 
 [REQUIREMENT]
@@ -4639,16 +4620,12 @@ STATEMENT: >>>
 The GSSC Website Unified Backend SHALL invalidate the user update when the request includes the password hash, and the backend writes nothing. The stored password hash remains the current hash.
 <<<
 RATIONALE: >>>
-Password replacement uses the password change and recovery transactions. A user-update request that includes the password hash is invalidated, and the backend writes nothing.
+Password replacement uses the password change and recovery transactions. No high-level requirement requires invalidating a user update that includes the password hash, so that invalidation is derived.
 <<<
-DERIVED: False
+DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-34, GSSC5-35
 REVIEW_STATUS: Approved
-RELATIONS:
-- TYPE: Parent
-  VALUE: GSSC-BHLR-112
-  ROLE: Refines
 
 [[/SECTION]]
 
@@ -5176,10 +5153,6 @@ DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-35
 REVIEW_STATUS: Approved
-RELATIONS:
-- TYPE: Parent
-  VALUE: GSSC-BHLR-161
-  ROLE: Refines
 
 [[/SECTION]]
 
