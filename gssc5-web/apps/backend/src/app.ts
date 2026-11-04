@@ -1,3 +1,4 @@
+import { openapi } from "@elysia/openapi";
 import { cors } from "@elysiajs/cors";
 import { Elysia } from "elysia";
 
@@ -17,6 +18,16 @@ export const app = new Elysia({ normalize: false })
         "http://127.0.0.1:4200",
         "http://127.0.0.1:4201",
       ],
+    }),
+  )
+  .use(
+    openapi({
+      documentation: {
+        info: {
+          title: "GSSC5 Backend",
+          version: "5.0.0",
+        },
+      },
     }),
   )
   .use(accounts)
