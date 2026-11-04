@@ -1,0 +1,6 @@
+# Tools for the web workspace. Declared here so CI (`mise-action` with
+# working_directory: gssc5-web) installs bun/node. Keep versions aligned with
+# the repo-root mise.toml.
+[tools]
+bun = "1.3"
+node = "22"
