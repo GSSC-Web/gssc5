@@ -17,8 +17,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
-      # The ceiling directory itself is not searched. Stop at the checkout's
-      # parent so repo-root mise.toml loads from gssc5-web and from the root.
+      # Ceiling directories are not searched. Stop at the checkout's parent so
+      # repo-root mise.toml still loads when a step runs under gssc5-web.
       MISE_CEILING_PATHS: ${{ github.workspace }}/..
     steps:
       - name: Check out the repository
@@ -34,8 +34,9 @@ jobs:
           install_args: bun node
 
       - name: Install dependencies
-        working-directory: gssc5-web
-        run: mise exec -- bun install --frozen-lockfile
+        # Stay at repo root so mise resolves bun from root mise.toml; bun --cwd
+        # targets the web workspace lockfile.
+        run: mise exec -- bun install --frozen-lockfile --cwd=gssc5-web
 
       - name: Run tests
         run: mise test
