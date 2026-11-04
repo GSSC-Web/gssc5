@@ -1785,7 +1785,7 @@ The user, an administrator, and a user moderator receive Position, including an 
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-36
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-84
@@ -3222,7 +3222,7 @@ The user, an administrator, and a user moderator receive Position, including an 
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-36
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-84
