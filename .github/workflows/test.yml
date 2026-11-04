@@ -17,12 +17,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
-      # The repo-root mise.toml is StrictDoc. Stop the search there so this job
-      # loads gssc5-web and its app tasks only.
+      # Do not search above the repo root for mise config.
       MISE_CEILING_PATHS: ${{ github.workspace }}
-    defaults:
-      run:
-        working-directory: gssc5-web
     steps:
       - name: Check out the repository
         uses: actions/checkout@v7
@@ -30,9 +26,14 @@ jobs:
       - name: Install Bun and Node
         uses: jdx/mise-action@v5
         with:
-          working_directory: gssc5-web
+          # Single monorepo root: repo-root mise.toml declares bun/node and
+          # [tasks.test]. experimental is required for monorepo_root.
+          working_directory: ${{ github.workspace }}
+          experimental: true
+          install_args: bun node
 
       - name: Install dependencies
+        working-directory: gssc5-web
         run: mise exec -- bun install --frozen-lockfile
 
       - name: Run tests
