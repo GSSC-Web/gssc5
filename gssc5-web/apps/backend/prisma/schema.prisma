@@ -91,6 +91,12 @@ model User {
   // @relation(GSSC-BLLR-64, scope=range_start, role=Implementation)
   membershipStatus String?
   // @relation(GSSC-BLLR-64, scope=range_end, role=Implementation)
+  // @relation(GSSC-BLLR-275, scope=range_start, role=Implementation)
+  position String?
+  // @relation(GSSC-BLLR-275, scope=range_end, role=Implementation)
+  // @relation(GSSC-BLLR-276, scope=range_start, role=Implementation)
+  accountPhoto String?
+  // @relation(GSSC-BLLR-276, scope=range_end, role=Implementation)
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
   tokens         LoginToken[]

@@ -2,6 +2,7 @@ import { cors } from "@elysiajs/cors";
 import { Elysia } from "elysia";
 
 import { accounts } from "./user/accounts";
+import { leadership } from "./user/leadership";
 import { passwords } from "./user/passwords";
 import { users } from "./user/users";
 
@@ -21,6 +22,7 @@ export const app = new Elysia({ normalize: false })
   .use(accounts)
   .use(passwords)
   .use(users)
+  .use(leadership)
   .get("/", () => "Hello Elysia");
 
 export type App = typeof app;

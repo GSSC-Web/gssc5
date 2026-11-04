@@ -1141,16 +1141,19 @@ RELATIONS:
 
 [REQUIREMENT]
 UID: GSSC-BHLR-86
-TITLE: Administrator Position Modification
+TITLE: Position Modification
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL let an administrator modify the Position of any member.
+The GSSC Website Unified Backend SHALL let an administrator modify the Position of any member and let a user moderator modify the Position of another member who is not an administrator.
 <<<
 RATIONALE: >>>
-An administrator can keep any member's Position current. This requirement does not name the positions.
+An administrator can keep any member's Position current. A user moderator can keep Position current for another member who is not an administrator. A member's own access to Position remains viewing it unless that member is an administrator. This requirement does not name the positions.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Approved
+CHANGE_DRIVER: >>>
+GSSC5-12
+GSSC5-36
+<<<
+REVIEW_STATUS: Changed
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-44
@@ -1639,14 +1642,17 @@ RELATIONS:
 UID: GSSC-BHLR-94
 TITLE: Public Leader Account Photo
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL provide the public with the Account Photo of each leader.
+The GSSC Website Unified Backend SHALL provide the public with the Account Photo of each leader when that Account Photo is stored.
 <<<
 RATIONALE: >>>
-The public can see the Account Photo of a leader.
+The public can see the Account Photo of a leader when the account holds one. The list leaves Account Photo out when none is stored.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Approved
+CHANGE_DRIVER: >>>
+GSSC5-12
+GSSC5-36
+<<<
+REVIEW_STATUS: Changed
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-40
@@ -2164,14 +2170,17 @@ TITLE: Leadership Content
 UID: GSSC-BHLR-171
 TITLE: Leadership List
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL provide a complete list of the leadership of the GSSC upon request, including each leader's name, permissions, photo, preferred contact, and the type of that preferred contact.
+The GSSC Website Unified Backend SHALL provide a complete list of the leadership of the GSSC upon request, including each leader's name, Position, preferred contact, the type of that preferred contact, and Account Photo when one is stored.
 <<<
 RATIONALE: >>>
-A caller can request the leadership page's list. Leaders are the members whose Position is populated. The photo is that member's Account Photo. The type of the preferred contact is that member's Preferred Contact Method. This requirement does not name the permissions. Changes to a leader's name, permissions, photo, and preferred contact are made through account management, and this list reflects those changes.
+A caller can request the leadership page's list. Leaders are the members whose Position is populated. The photo is that member's Account Photo when the account holds one. The type of the preferred contact is that member's Preferred Contact Method. Changes to a leader's name, Position, photo, and preferred contact are made through account management, and this list reflects those changes.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Approved
+CHANGE_DRIVER: >>>
+GSSC5-12
+GSSC5-36
+<<<
+REVIEW_STATUS: Changed
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-25
@@ -2535,11 +2544,14 @@ STATEMENT: >>>
 The GSSC Website Unified Backend SHALL store a member's Position.
 <<<
 RATIONALE: >>>
-The member account holds the Position that the member can view and an administrator can modify. A populated Position is the member's leadership role. This requirement does not name the positions.
+The member account holds the Position that the member can view. An administrator can modify any member's Position. A user moderator can modify the Position of another member who is not an administrator. Empty is the default, and a member with an empty Position is left off the leadership list. A populated Position is the member's leadership role. This requirement does not name the positions.
 <<<
 DERIVED: True
-CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Approved
+CHANGE_DRIVER: >>>
+GSSC5-12
+GSSC5-36
+<<<
+REVIEW_STATUS: Changed
 
 [REQUIREMENT]
 UID: GSSC-BHLR-111

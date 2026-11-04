@@ -1774,6 +1774,24 @@ CHANGE_DRIVER: GSSC5-34
 REVIEW_STATUS: Approved
 
 [REQUIREMENT]
+UID: GSSC-BLLR-277
+TITLE: User List Position
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL return the Position in each user list entry when the caller is the user in that entry, the caller is an administrator, or the caller is a user moderator, including when Position is empty.
+<<<
+RATIONALE: >>>
+The user, an administrator, and a user moderator receive Position, including an empty Position. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-36
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-84
+  ROLE: Refines
+
+[REQUIREMENT]
 UID: GSSC-BLLR-100
 TITLE: User List Password Hash Omitted
 STATEMENT: >>>
@@ -3193,6 +3211,24 @@ CHANGE_DRIVER: GSSC5-34
 REVIEW_STATUS: Approved
 
 [REQUIREMENT]
+UID: GSSC-BLLR-278
+TITLE: User Read Position
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL return the Position of the user identified by the cuid when the caller is that user, the caller is an administrator, or the caller is a user moderator, including when Position is empty.
+<<<
+RATIONALE: >>>
+The user, an administrator, and a user moderator receive Position, including an empty Position. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-36
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-84
+  ROLE: Refines
+
+[REQUIREMENT]
 UID: GSSC-BLLR-54
 TITLE: Password Hash Omitted
 STATEMENT: >>>
@@ -3967,6 +4003,60 @@ VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-34
 REVIEW_STATUS: Approved
 
+[REQUIREMENT]
+UID: GSSC-BLLR-279
+TITLE: Administrator Position Update
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store a posted Position when the caller is an administrator.
+<<<
+RATIONALE: >>>
+An administrator can set any member's Position, including that administrator's own Position.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-36
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-86
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-280
+TITLE: User Moderator Position Update
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store a posted Position when the caller is a user moderator and the user identified by the cuid is another member who is not an administrator.
+<<<
+RATIONALE: >>>
+A user moderator can set Position for another member who is not an administrator.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-36
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-86
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-281
+TITLE: Position Clear
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL clear the stored Position when an authorized caller posts Position as "".
+<<<
+RATIONALE: >>>
+An empty Position clears the stored value and removes that member from the leadership list.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-36
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-110
+  ROLE: Refines
+
 [[/SECTION]]
 
 [[SECTION]]
@@ -4614,6 +4704,27 @@ CHANGE_DRIVER: GSSC5-34
 REVIEW_STATUS: Approved
 
 [REQUIREMENT]
+UID: GSSC-BLLR-282
+TITLE: Own Position Update
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL invalidate the user update when the cuid is the caller's own user, the caller is not an administrator, and the request includes Position, and the backend writes nothing.
+<<<
+RATIONALE: >>>
+A member's own Position is view-only unless that member is an administrator. Including Position on that member's own update invalidates the update, and the backend writes nothing.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-36
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-84
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-BHLR-86
+  ROLE: Refines
+
+[REQUIREMENT]
 UID: GSSC-BLLR-62
 TITLE: Password Hash Unchanged
 STATEMENT: >>>
@@ -4634,6 +4745,183 @@ REVIEW_STATUS: Approved
 [[/SECTION]]
 
 [[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-LEADERSHIP
+TITLE: /leadership
+
+[REQUIREMENT]
+UID: GSSC-BLLR-283
+TITLE: Leadership List
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL let an unauthenticated caller retrieve the leadership list.
+<<<
+RATIONALE: >>>
+The public leadership list is available without a login.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-36
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-88
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-BHLR-171
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-284
+TITLE: Leadership List Populated Position
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL include in the leadership list each stored user whose Position is populated.
+<<<
+RATIONALE: >>>
+Leaders are the members whose Position is populated. A member with an empty Position is left off the list.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-36
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-88
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-BHLR-95
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-285
+TITLE: Leadership Entry Position
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL return the Position in each leadership list entry.
+<<<
+RATIONALE: >>>
+The public role of a leader is that leader's Position.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-36
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-89
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-BHLR-95
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-286
+TITLE: Leadership Entry First Name
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL return the First Name in each leadership list entry.
+<<<
+RATIONALE: >>>
+The public can see the First Name of each leader.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-36
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-90
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-287
+TITLE: Leadership Entry Last Name
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL return the Last Name in each leadership list entry.
+<<<
+RATIONALE: >>>
+The public can see the Last Name of each leader.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-36
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-91
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-288
+TITLE: Leadership Entry Account Photo
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL return the Account Photo in a leadership list entry when that Account Photo is stored.
+<<<
+RATIONALE: >>>
+The public can see the Account Photo of a leader when the account holds one.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-36
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-94
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-289
+TITLE: Leadership Entry Primary Email
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL return the Primary Email in a leadership list entry when that leader's Preferred Contact Method is Email.
+<<<
+RATIONALE: >>>
+The public receives a leader's Primary Email when Email is the preferred contact method.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-36
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-92
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-290
+TITLE: Leadership Entry Primary Phone Number
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL return the Primary Phone Number in a leadership list entry when that leader's Preferred Contact Method is Phone.
+<<<
+RATIONALE: >>>
+The public receives a leader's Primary Phone Number when Phone is the preferred contact method.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-36
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-93
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-291
+TITLE: Leadership Entry Preferred Contact Method
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL return the Preferred Contact Method in each leadership list entry.
+<<<
+RATIONALE: >>>
+The type of the preferred contact is that member's Preferred Contact Method.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-36
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-171
+  ROLE: Refines
 
 [[/SECTION]]
 
@@ -5016,6 +5304,42 @@ REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-114
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-275
+TITLE: User Position
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store a Position for a user in the users table. The Position may be absent. Empty is the default.
+<<<
+RATIONALE: >>>
+Each user record can hold a Position. Empty is the default until Position is set. A populated Position is the member's leadership role. This requirement does not name the positions.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-36
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-110
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-276
+TITLE: User Account Photo
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store an Account Photo for a user in the users table. The Account Photo may be absent.
+<<<
+RATIONALE: >>>
+Each user record can hold an Account Photo. The Account Photo may be absent. This requirement does not define the form of the photo or provide upload.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-36
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-109
   ROLE: Refines
 
 [[/SECTION]]
