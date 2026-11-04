@@ -609,16 +609,19 @@ RELATIONS:
 
 [REQUIREMENT]
 UID: GSSC-BHLR-84
-TITLE: Own Position View
+TITLE: Position View
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL let a logged-in member view that member's own Position.
+The GSSC Website Unified Backend SHALL let a logged-in member view that member's own Position, and SHALL let a user moderator view a member's Position, including when Position is empty.
 <<<
 RATIONALE: >>>
-A member can see the Position held for that member. The member's access to Position is viewing it.
+A member can see the Position held for that member. A user moderator can see Position on member accounts, including an empty Position. An administrator is a user moderator. The member's access to that member's own Position is viewing it.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Approved
+CHANGE_DRIVER: >>>
+GSSC5-12
+GSSC5-36
+<<<
+REVIEW_STATUS: Changed
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-42
