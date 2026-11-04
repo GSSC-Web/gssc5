@@ -1037,11 +1037,14 @@ STATEMENT: >>>
 The GSSC Website Unified Backend SHALL delete the past password hashes for the user identified by cuid through the clear-passwords transaction.
 <<<
 RATIONALE: >>>
-An administrator or user moderator clears retained past password hashes for a member without changing that member's current password hash.
+A user moderator clears retained past password hashes for a member without changing that member's current password hash.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-35
+CHANGE_DRIVER: >>>
+GSSC5-35
+GSSC5-36
+<<<
 REVIEW_STATUS: Approved
 
 [REQUIREMENT]
@@ -1062,28 +1065,34 @@ REVIEW_STATUS: Approved
 UID: GSSC-BLLR-265
 TITLE: Clear Past Passwords Privilege
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL complete a clear-passwords request when the Login Token belongs to a caller who is an administrator or a user moderator.
+The GSSC Website Unified Backend SHALL complete a clear-passwords request when the Login Token belongs to a caller who is a user moderator.
 <<<
 RATIONALE: >>>
-Clearing past password hashes is limited to an administrator or a user moderator.
+Clearing past password hashes is limited to a user moderator.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-35
+CHANGE_DRIVER: >>>
+GSSC5-35
+GSSC5-36
+<<<
 REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BLLR-266
 TITLE: Clear Past Passwords Forbidden
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL forbid a clear-passwords request when the caller is neither an administrator nor a user moderator, and the backend writes nothing.
+The GSSC Website Unified Backend SHALL forbid a clear-passwords request when the caller is not a user moderator, and the backend writes nothing.
 <<<
 RATIONALE: >>>
-A member without those privileges cannot clear past password hashes.
+A caller who is not a user moderator cannot clear past password hashes.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-35
+CHANGE_DRIVER: >>>
+GSSC5-35
+GSSC5-36
+<<<
 REVIEW_STATUS: Approved
 
 [REQUIREMENT]
@@ -1218,28 +1227,34 @@ RELATIONS:
 UID: GSSC-BLLR-74
 TITLE: User List Username
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return the Username in each user list entry when the caller is the user in that entry, the caller is an administrator, or the caller is a user moderator.
+The GSSC Website Unified Backend SHALL return the Username in each user list entry when the caller is the user in that entry, or the caller is a user moderator.
 <<<
 RATIONALE: >>>
-The user, an administrator, and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
+The user and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: >>>
+GSSC5-34
+GSSC5-36
+<<<
 REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BLLR-75
 TITLE: User List Primary Email
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return the Primary Email in each user list entry when the caller is the user in that entry, the caller is an administrator, or the caller is a user moderator. The user list also returns the Primary Email to another logged-in member when that user's Preferred Contact Method is Email or None.
+The GSSC Website Unified Backend SHALL return the Primary Email in each user list entry when the caller is the user in that entry, or the caller is a user moderator. The user list also returns the Primary Email to another logged-in member when that user's Preferred Contact Method is Email or None.
 <<<
 RATIONALE: >>>
-The user, an administrator, and a user moderator receive the Primary Email. Another member receives it when the Preferred Contact Method is Email or None. The moderator grant is derived.
+The user and a user moderator receive the Primary Email. Another member receives it when the Preferred Contact Method is Email or None. The moderator grant is derived.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: >>>
+GSSC5-34
+GSSC5-36
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -1256,14 +1271,17 @@ RELATIONS:
 UID: GSSC-BLLR-76
 TITLE: User List Secondary Email
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return the Secondary Email in each user list entry when the caller is the user in that entry, the caller is an administrator, or the caller is a user moderator. The user list also returns the Secondary Email to another logged-in member when that user has chosen to display it and the Preferred Contact Method is Email or None.
+The GSSC Website Unified Backend SHALL return the Secondary Email in each user list entry when the caller is the user in that entry, or the caller is a user moderator. The user list also returns the Secondary Email to another logged-in member when that user has chosen to display it and the Preferred Contact Method is Email or None.
 <<<
 RATIONALE: >>>
-The user, an administrator, and a user moderator receive the Secondary Email. Another member receives it when it is displayed and the Preferred Contact Method is Email or None. The moderator grant is derived.
+The user and a user moderator receive the Secondary Email. Another member receives it when it is displayed and the Preferred Contact Method is Email or None. The moderator grant is derived.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: >>>
+GSSC5-34
+GSSC5-36
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -1280,14 +1298,17 @@ RELATIONS:
 UID: GSSC-BLLR-77
 TITLE: User List Primary Phone Number
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return the Primary Phone Number in each user list entry when the caller is the user in that entry, the caller is an administrator, or the caller is a user moderator. The user list also returns the Primary Phone Number to another logged-in member when that user's Preferred Contact Method is Phone or None.
+The GSSC Website Unified Backend SHALL return the Primary Phone Number in each user list entry when the caller is the user in that entry, or the caller is a user moderator. The user list also returns the Primary Phone Number to another logged-in member when that user's Preferred Contact Method is Phone or None.
 <<<
 RATIONALE: >>>
-The user, an administrator, and a user moderator receive the Primary Phone Number. Another member receives it when the Preferred Contact Method is Phone or None. The moderator grant is derived.
+The user and a user moderator receive the Primary Phone Number. Another member receives it when the Preferred Contact Method is Phone or None. The moderator grant is derived.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: >>>
+GSSC5-34
+GSSC5-36
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -1304,14 +1325,17 @@ RELATIONS:
 UID: GSSC-BLLR-78
 TITLE: User List Secondary Phone Number
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return the Secondary Phone Number in each user list entry when the caller is the user in that entry, the caller is an administrator, or the caller is a user moderator. The user list also returns the Secondary Phone Number to another logged-in member when that user has chosen to display it and the Preferred Contact Method is Phone or None.
+The GSSC Website Unified Backend SHALL return the Secondary Phone Number in each user list entry when the caller is the user in that entry, or the caller is a user moderator. The user list also returns the Secondary Phone Number to another logged-in member when that user has chosen to display it and the Preferred Contact Method is Phone or None.
 <<<
 RATIONALE: >>>
-The user, an administrator, and a user moderator receive the Secondary Phone Number. Another member receives it when it is displayed and the Preferred Contact Method is Phone or None. The moderator grant is derived.
+The user and a user moderator receive the Secondary Phone Number. Another member receives it when it is displayed and the Preferred Contact Method is Phone or None. The moderator grant is derived.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: >>>
+GSSC5-34
+GSSC5-36
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -1328,14 +1352,17 @@ RELATIONS:
 UID: GSSC-BLLR-79
 TITLE: User List Preferred Contact Method
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return the Preferred Contact Method in each user list entry when the caller is the user in that entry, the caller is an administrator, or the caller is a user moderator.
+The GSSC Website Unified Backend SHALL return the Preferred Contact Method in each user list entry when the caller is the user in that entry, or the caller is a user moderator.
 <<<
 RATIONALE: >>>
-The user, an administrator, and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
+The user and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: >>>
+GSSC5-34
+GSSC5-36
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -1349,14 +1376,17 @@ RELATIONS:
 UID: GSSC-BLLR-80
 TITLE: User List Home Address line 1
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return the Home Address line 1 in each user list entry when the caller is the user in that entry, the caller is an administrator, or the caller is a user moderator. The user list also returns the Home Address line 1 to another logged-in member when that user's Home Address display is full.
+The GSSC Website Unified Backend SHALL return the Home Address line 1 in each user list entry when the caller is the user in that entry, or the caller is a user moderator. The user list also returns the Home Address line 1 to another logged-in member when that user's Home Address display is full.
 <<<
 RATIONALE: >>>
-The user, an administrator, and a user moderator receive this Home Address part. Another member receives it when the Home Address display is full. The moderator grant is derived.
+The user and a user moderator receive this Home Address part. Another member receives it when the Home Address display is full. The moderator grant is derived.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: >>>
+GSSC5-34
+GSSC5-36
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -1373,14 +1403,17 @@ RELATIONS:
 UID: GSSC-BLLR-81
 TITLE: User List Home Address line 2
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return the Home Address line 2 in each user list entry when the caller is the user in that entry, the caller is an administrator, or the caller is a user moderator. The user list also returns the Home Address line 2 to another logged-in member when that user's Home Address display is full.
+The GSSC Website Unified Backend SHALL return the Home Address line 2 in each user list entry when the caller is the user in that entry, or the caller is a user moderator. The user list also returns the Home Address line 2 to another logged-in member when that user's Home Address display is full.
 <<<
 RATIONALE: >>>
-The user, an administrator, and a user moderator receive this Home Address part. Another member receives it when the Home Address display is full. The moderator grant is derived.
+The user and a user moderator receive this Home Address part. Another member receives it when the Home Address display is full. The moderator grant is derived.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: >>>
+GSSC5-34
+GSSC5-36
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -1397,14 +1430,17 @@ RELATIONS:
 UID: GSSC-BLLR-82
 TITLE: User List Home Address line 3
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return the Home Address line 3 in each user list entry when the caller is the user in that entry, the caller is an administrator, or the caller is a user moderator. The user list also returns the Home Address line 3 to another logged-in member when that user's Home Address display is full.
+The GSSC Website Unified Backend SHALL return the Home Address line 3 in each user list entry when the caller is the user in that entry, or the caller is a user moderator. The user list also returns the Home Address line 3 to another logged-in member when that user's Home Address display is full.
 <<<
 RATIONALE: >>>
-The user, an administrator, and a user moderator receive this Home Address part. Another member receives it when the Home Address display is full. The moderator grant is derived.
+The user and a user moderator receive this Home Address part. Another member receives it when the Home Address display is full. The moderator grant is derived.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: >>>
+GSSC5-34
+GSSC5-36
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -1469,14 +1505,17 @@ RELATIONS:
 UID: GSSC-BLLR-85
 TITLE: User List Home Address zip code
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return the Home Address zip code in each user list entry when the caller is the user in that entry, the caller is an administrator, or the caller is a user moderator. The user list also returns the Home Address zip code to another logged-in member when that user's Home Address display is full.
+The GSSC Website Unified Backend SHALL return the Home Address zip code in each user list entry when the caller is the user in that entry, or the caller is a user moderator. The user list also returns the Home Address zip code to another logged-in member when that user's Home Address display is full.
 <<<
 RATIONALE: >>>
-The user, an administrator, and a user moderator receive this Home Address part. Another member receives it when the Home Address display is full. The moderator grant is derived.
+The user and a user moderator receive this Home Address part. Another member receives it when the Home Address display is full. The moderator grant is derived.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: >>>
+GSSC5-34
+GSSC5-36
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -1493,14 +1532,17 @@ RELATIONS:
 UID: GSSC-BLLR-86
 TITLE: User List Home Address zip extension
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return the Home Address zip extension in each user list entry when the caller is the user in that entry, the caller is an administrator, or the caller is a user moderator. The user list also returns the Home Address zip extension to another logged-in member when that user's Home Address display is full.
+The GSSC Website Unified Backend SHALL return the Home Address zip extension in each user list entry when the caller is the user in that entry, or the caller is a user moderator. The user list also returns the Home Address zip extension to another logged-in member when that user's Home Address display is full.
 <<<
 RATIONALE: >>>
-The user, an administrator, and a user moderator receive this Home Address part. Another member receives it when the Home Address display is full. The moderator grant is derived.
+The user and a user moderator receive this Home Address part. Another member receives it when the Home Address display is full. The moderator grant is derived.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: >>>
+GSSC5-34
+GSSC5-36
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -1517,14 +1559,17 @@ RELATIONS:
 UID: GSSC-BLLR-87
 TITLE: User List Home Address display
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return the Home Address display in each user list entry when the caller is the user in that entry, the caller is an administrator, or the caller is a user moderator.
+The GSSC Website Unified Backend SHALL return the Home Address display in each user list entry when the caller is the user in that entry, or the caller is a user moderator.
 <<<
 RATIONALE: >>>
-The user, an administrator, and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
+The user and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: >>>
+GSSC5-34
+GSSC5-36
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -1538,14 +1583,17 @@ RELATIONS:
 UID: GSSC-BLLR-88
 TITLE: User List Mailing Address line 1
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return the Mailing Address line 1 in each user list entry when the caller is the user in that entry, the caller is an administrator, or the caller is a user moderator.
+The GSSC Website Unified Backend SHALL return the Mailing Address line 1 in each user list entry when the caller is the user in that entry, or the caller is a user moderator.
 <<<
 RATIONALE: >>>
-The user, an administrator, and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
+The user and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: >>>
+GSSC5-34
+GSSC5-36
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -1559,14 +1607,17 @@ RELATIONS:
 UID: GSSC-BLLR-89
 TITLE: User List Mailing Address line 2
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return the Mailing Address line 2 in each user list entry when the caller is the user in that entry, the caller is an administrator, or the caller is a user moderator.
+The GSSC Website Unified Backend SHALL return the Mailing Address line 2 in each user list entry when the caller is the user in that entry, or the caller is a user moderator.
 <<<
 RATIONALE: >>>
-The user, an administrator, and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
+The user and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: >>>
+GSSC5-34
+GSSC5-36
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -1580,14 +1631,17 @@ RELATIONS:
 UID: GSSC-BLLR-90
 TITLE: User List Mailing Address line 3
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return the Mailing Address line 3 in each user list entry when the caller is the user in that entry, the caller is an administrator, or the caller is a user moderator.
+The GSSC Website Unified Backend SHALL return the Mailing Address line 3 in each user list entry when the caller is the user in that entry, or the caller is a user moderator.
 <<<
 RATIONALE: >>>
-The user, an administrator, and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
+The user and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: >>>
+GSSC5-34
+GSSC5-36
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -1601,14 +1655,17 @@ RELATIONS:
 UID: GSSC-BLLR-91
 TITLE: User List Mailing Address city
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return the Mailing Address city in each user list entry when the caller is the user in that entry, the caller is an administrator, or the caller is a user moderator.
+The GSSC Website Unified Backend SHALL return the Mailing Address city in each user list entry when the caller is the user in that entry, or the caller is a user moderator.
 <<<
 RATIONALE: >>>
-The user, an administrator, and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
+The user and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: >>>
+GSSC5-34
+GSSC5-36
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -1622,14 +1679,17 @@ RELATIONS:
 UID: GSSC-BLLR-92
 TITLE: User List Mailing Address state
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return the Mailing Address state in each user list entry when the caller is the user in that entry, the caller is an administrator, or the caller is a user moderator.
+The GSSC Website Unified Backend SHALL return the Mailing Address state in each user list entry when the caller is the user in that entry, or the caller is a user moderator.
 <<<
 RATIONALE: >>>
-The user, an administrator, and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
+The user and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: >>>
+GSSC5-34
+GSSC5-36
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -1643,14 +1703,17 @@ RELATIONS:
 UID: GSSC-BLLR-93
 TITLE: User List Mailing Address zip code
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return the Mailing Address zip code in each user list entry when the caller is the user in that entry, the caller is an administrator, or the caller is a user moderator.
+The GSSC Website Unified Backend SHALL return the Mailing Address zip code in each user list entry when the caller is the user in that entry, or the caller is a user moderator.
 <<<
 RATIONALE: >>>
-The user, an administrator, and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
+The user and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: >>>
+GSSC5-34
+GSSC5-36
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -1664,14 +1727,17 @@ RELATIONS:
 UID: GSSC-BLLR-94
 TITLE: User List Mailing Address zip extension
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return the Mailing Address zip extension in each user list entry when the caller is the user in that entry, the caller is an administrator, or the caller is a user moderator.
+The GSSC Website Unified Backend SHALL return the Mailing Address zip extension in each user list entry when the caller is the user in that entry, or the caller is a user moderator.
 <<<
 RATIONALE: >>>
-The user, an administrator, and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
+The user and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: >>>
+GSSC5-34
+GSSC5-36
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -1685,14 +1751,17 @@ RELATIONS:
 UID: GSSC-BLLR-95
 TITLE: User List Secondary Email display
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return the Secondary Email display in each user list entry when the caller is the user in that entry, the caller is an administrator, or the caller is a user moderator.
+The GSSC Website Unified Backend SHALL return the Secondary Email display in each user list entry when the caller is the user in that entry, or the caller is a user moderator.
 <<<
 RATIONALE: >>>
-The user, an administrator, and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
+The user and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: >>>
+GSSC5-34
+GSSC5-36
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -1703,14 +1772,17 @@ RELATIONS:
 UID: GSSC-BLLR-96
 TITLE: User List Secondary Phone Number display
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return the Secondary Phone Number display in each user list entry when the caller is the user in that entry, the caller is an administrator, or the caller is a user moderator.
+The GSSC Website Unified Backend SHALL return the Secondary Phone Number display in each user list entry when the caller is the user in that entry, or the caller is a user moderator.
 <<<
 RATIONALE: >>>
-The user, an administrator, and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
+The user and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: >>>
+GSSC5-34
+GSSC5-36
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -1721,14 +1793,17 @@ RELATIONS:
 UID: GSSC-BLLR-97
 TITLE: User List is administrator
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return the is administrator in each user list entry when the caller is the user in that entry, the caller is an administrator, or the caller is a user moderator.
+The GSSC Website Unified Backend SHALL return the is administrator in each user list entry when the caller is the user in that entry, or the caller is a user moderator.
 <<<
 RATIONALE: >>>
-The user, an administrator, and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
+The user and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: >>>
+GSSC5-34
+GSSC5-36
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -1742,14 +1817,17 @@ RELATIONS:
 UID: GSSC-BLLR-98
 TITLE: User List is user moderator
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return the is user moderator in each user list entry when the caller is the user in that entry, the caller is an administrator, or the caller is a user moderator.
+The GSSC Website Unified Backend SHALL return the is user moderator in each user list entry when the caller is the user in that entry, or the caller is a user moderator.
 <<<
 RATIONALE: >>>
-The user, an administrator, and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
+The user and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: >>>
+GSSC5-34
+GSSC5-36
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -1763,28 +1841,54 @@ RELATIONS:
 UID: GSSC-BLLR-99
 TITLE: User List Membership Status
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return the Membership Status in each user list entry when the caller is the user in that entry, the caller is an administrator, or the caller is a user moderator.
+The GSSC Website Unified Backend SHALL return the Membership Status in each user list entry when the caller is the user in that entry, or the caller is a user moderator.
 <<<
 RATIONALE: >>>
-The user, an administrator, and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
+The user and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: >>>
+GSSC5-34
+GSSC5-36
+<<<
 REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-BLLR-277
+TITLE: User List Position
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL return the Position in each user list entry when the caller is the user in that entry, or the caller is a user moderator, including when Position is empty.
+<<<
+RATIONALE: >>>
+The user and a user moderator receive Position, including an empty Position. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: >>>
+GSSC5-36
+<<<
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-84
+  ROLE: Refines
 
 [REQUIREMENT]
 UID: GSSC-BLLR-100
 TITLE: User List Password Hash Omitted
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL omit the password hash from the user list for every caller, including a caller who is an administrator or a user moderator.
+The GSSC Website Unified Backend SHALL omit the password hash from the user list for every caller, including a caller who is a user moderator.
 <<<
 RATIONALE: >>>
 The user list leaves the password hash out of every entry.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: >>>
+GSSC5-34
+GSSC5-36
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -2299,14 +2403,17 @@ RELATIONS:
 UID: GSSC-BLLR-125
 TITLE: User List Hidden Filter Match
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL treat a value omitted from that caller's view of that user as a filter match only when the caller is a user moderator or an administrator.
+The GSSC Website Unified Backend SHALL treat a value omitted from that caller's view of that user as a filter match only when the caller is a user moderator.
 <<<
 RATIONALE: >>>
-A hidden value matches a filter for a caller who is a user moderator or an administrator. For every other caller, a hidden value is not a match.
+A hidden value matches a filter for a caller who is a user moderator. For every other caller, a hidden value is not a match.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: >>>
+GSSC5-34
+GSSC5-36
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -2637,28 +2744,34 @@ RELATIONS:
 UID: GSSC-BLLR-140
 TITLE: User Read Username
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return the Username of the user identified by the cuid when the caller is that user, the caller is an administrator, or the caller is a user moderator.
+The GSSC Website Unified Backend SHALL return the Username of the user identified by the cuid when the caller is that user, or the caller is a user moderator.
 <<<
 RATIONALE: >>>
-The user, an administrator, and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
+The user and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: >>>
+GSSC5-34
+GSSC5-36
+<<<
 REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BLLR-141
 TITLE: User Read Primary Email
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return the Primary Email of the user identified by the cuid when the caller is that user, the caller is an administrator, or the caller is a user moderator. The user read also returns the Primary Email to another logged-in member when that user's Preferred Contact Method is Email or None.
+The GSSC Website Unified Backend SHALL return the Primary Email of the user identified by the cuid when the caller is that user, or the caller is a user moderator. The user read also returns the Primary Email to another logged-in member when that user's Preferred Contact Method is Email or None.
 <<<
 RATIONALE: >>>
-The user, an administrator, and a user moderator receive the Primary Email. Another member receives it when the Preferred Contact Method is Email or None. The moderator grant is derived.
+The user and a user moderator receive the Primary Email. Another member receives it when the Preferred Contact Method is Email or None. The moderator grant is derived.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: >>>
+GSSC5-34
+GSSC5-36
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -2675,14 +2788,17 @@ RELATIONS:
 UID: GSSC-BLLR-142
 TITLE: User Read Secondary Email
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return the Secondary Email of the user identified by the cuid when the caller is that user, the caller is an administrator, or the caller is a user moderator. The user read also returns the Secondary Email to another logged-in member when that user has chosen to display it and the Preferred Contact Method is Email or None.
+The GSSC Website Unified Backend SHALL return the Secondary Email of the user identified by the cuid when the caller is that user, or the caller is a user moderator. The user read also returns the Secondary Email to another logged-in member when that user has chosen to display it and the Preferred Contact Method is Email or None.
 <<<
 RATIONALE: >>>
-The user, an administrator, and a user moderator receive the Secondary Email. Another member receives it when it is displayed and the Preferred Contact Method is Email or None. The moderator grant is derived.
+The user and a user moderator receive the Secondary Email. Another member receives it when it is displayed and the Preferred Contact Method is Email or None. The moderator grant is derived.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: >>>
+GSSC5-34
+GSSC5-36
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -2699,14 +2815,17 @@ RELATIONS:
 UID: GSSC-BLLR-143
 TITLE: User Read Primary Phone Number
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return the Primary Phone Number of the user identified by the cuid when the caller is that user, the caller is an administrator, or the caller is a user moderator. The user read also returns the Primary Phone Number to another logged-in member when that user's Preferred Contact Method is Phone or None.
+The GSSC Website Unified Backend SHALL return the Primary Phone Number of the user identified by the cuid when the caller is that user, or the caller is a user moderator. The user read also returns the Primary Phone Number to another logged-in member when that user's Preferred Contact Method is Phone or None.
 <<<
 RATIONALE: >>>
-The user, an administrator, and a user moderator receive the Primary Phone Number. Another member receives it when the Preferred Contact Method is Phone or None. The moderator grant is derived.
+The user and a user moderator receive the Primary Phone Number. Another member receives it when the Preferred Contact Method is Phone or None. The moderator grant is derived.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: >>>
+GSSC5-34
+GSSC5-36
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -2723,14 +2842,17 @@ RELATIONS:
 UID: GSSC-BLLR-144
 TITLE: User Read Secondary Phone Number
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return the Secondary Phone Number of the user identified by the cuid when the caller is that user, the caller is an administrator, or the caller is a user moderator. The user read also returns the Secondary Phone Number to another logged-in member when that user has chosen to display it and the Preferred Contact Method is Phone or None.
+The GSSC Website Unified Backend SHALL return the Secondary Phone Number of the user identified by the cuid when the caller is that user, or the caller is a user moderator. The user read also returns the Secondary Phone Number to another logged-in member when that user has chosen to display it and the Preferred Contact Method is Phone or None.
 <<<
 RATIONALE: >>>
-The user, an administrator, and a user moderator receive the Secondary Phone Number. Another member receives it when it is displayed and the Preferred Contact Method is Phone or None. The moderator grant is derived.
+The user and a user moderator receive the Secondary Phone Number. Another member receives it when it is displayed and the Preferred Contact Method is Phone or None. The moderator grant is derived.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: >>>
+GSSC5-34
+GSSC5-36
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -2747,14 +2869,17 @@ RELATIONS:
 UID: GSSC-BLLR-145
 TITLE: User Read Preferred Contact Method
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return the Preferred Contact Method of the user identified by the cuid when the caller is that user, the caller is an administrator, or the caller is a user moderator.
+The GSSC Website Unified Backend SHALL return the Preferred Contact Method of the user identified by the cuid when the caller is that user, or the caller is a user moderator.
 <<<
 RATIONALE: >>>
-The user, an administrator, and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
+The user and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: >>>
+GSSC5-34
+GSSC5-36
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -2768,14 +2893,17 @@ RELATIONS:
 UID: GSSC-BLLR-146
 TITLE: User Read Home Address line 1
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return the Home Address line 1 of the user identified by the cuid when the caller is that user, the caller is an administrator, or the caller is a user moderator. The user read also returns the Home Address line 1 to another logged-in member when that user's Home Address display is full.
+The GSSC Website Unified Backend SHALL return the Home Address line 1 of the user identified by the cuid when the caller is that user, or the caller is a user moderator. The user read also returns the Home Address line 1 to another logged-in member when that user's Home Address display is full.
 <<<
 RATIONALE: >>>
-The user, an administrator, and a user moderator receive this Home Address part. Another member receives it when the Home Address display is full. The moderator grant is derived.
+The user and a user moderator receive this Home Address part. Another member receives it when the Home Address display is full. The moderator grant is derived.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: >>>
+GSSC5-34
+GSSC5-36
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -2792,14 +2920,17 @@ RELATIONS:
 UID: GSSC-BLLR-147
 TITLE: User Read Home Address line 2
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return the Home Address line 2 of the user identified by the cuid when the caller is that user, the caller is an administrator, or the caller is a user moderator. The user read also returns the Home Address line 2 to another logged-in member when that user's Home Address display is full.
+The GSSC Website Unified Backend SHALL return the Home Address line 2 of the user identified by the cuid when the caller is that user, or the caller is a user moderator. The user read also returns the Home Address line 2 to another logged-in member when that user's Home Address display is full.
 <<<
 RATIONALE: >>>
-The user, an administrator, and a user moderator receive this Home Address part. Another member receives it when the Home Address display is full. The moderator grant is derived.
+The user and a user moderator receive this Home Address part. Another member receives it when the Home Address display is full. The moderator grant is derived.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: >>>
+GSSC5-34
+GSSC5-36
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -2816,14 +2947,17 @@ RELATIONS:
 UID: GSSC-BLLR-148
 TITLE: User Read Home Address line 3
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return the Home Address line 3 of the user identified by the cuid when the caller is that user, the caller is an administrator, or the caller is a user moderator. The user read also returns the Home Address line 3 to another logged-in member when that user's Home Address display is full.
+The GSSC Website Unified Backend SHALL return the Home Address line 3 of the user identified by the cuid when the caller is that user, or the caller is a user moderator. The user read also returns the Home Address line 3 to another logged-in member when that user's Home Address display is full.
 <<<
 RATIONALE: >>>
-The user, an administrator, and a user moderator receive this Home Address part. Another member receives it when the Home Address display is full. The moderator grant is derived.
+The user and a user moderator receive this Home Address part. Another member receives it when the Home Address display is full. The moderator grant is derived.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: >>>
+GSSC5-34
+GSSC5-36
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -2888,14 +3022,17 @@ RELATIONS:
 UID: GSSC-BLLR-151
 TITLE: User Read Home Address zip code
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return the Home Address zip code of the user identified by the cuid when the caller is that user, the caller is an administrator, or the caller is a user moderator. The user read also returns the Home Address zip code to another logged-in member when that user's Home Address display is full.
+The GSSC Website Unified Backend SHALL return the Home Address zip code of the user identified by the cuid when the caller is that user, or the caller is a user moderator. The user read also returns the Home Address zip code to another logged-in member when that user's Home Address display is full.
 <<<
 RATIONALE: >>>
-The user, an administrator, and a user moderator receive this Home Address part. Another member receives it when the Home Address display is full. The moderator grant is derived.
+The user and a user moderator receive this Home Address part. Another member receives it when the Home Address display is full. The moderator grant is derived.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: >>>
+GSSC5-34
+GSSC5-36
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -2912,14 +3049,17 @@ RELATIONS:
 UID: GSSC-BLLR-152
 TITLE: User Read Home Address zip extension
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return the Home Address zip extension of the user identified by the cuid when the caller is that user, the caller is an administrator, or the caller is a user moderator. The user read also returns the Home Address zip extension to another logged-in member when that user's Home Address display is full.
+The GSSC Website Unified Backend SHALL return the Home Address zip extension of the user identified by the cuid when the caller is that user, or the caller is a user moderator. The user read also returns the Home Address zip extension to another logged-in member when that user's Home Address display is full.
 <<<
 RATIONALE: >>>
-The user, an administrator, and a user moderator receive this Home Address part. Another member receives it when the Home Address display is full. The moderator grant is derived.
+The user and a user moderator receive this Home Address part. Another member receives it when the Home Address display is full. The moderator grant is derived.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: >>>
+GSSC5-34
+GSSC5-36
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -2936,14 +3076,17 @@ RELATIONS:
 UID: GSSC-BLLR-153
 TITLE: User Read Home Address display
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return the Home Address display of the user identified by the cuid when the caller is that user, the caller is an administrator, or the caller is a user moderator.
+The GSSC Website Unified Backend SHALL return the Home Address display of the user identified by the cuid when the caller is that user, or the caller is a user moderator.
 <<<
 RATIONALE: >>>
-The user, an administrator, and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
+The user and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: >>>
+GSSC5-34
+GSSC5-36
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -2957,14 +3100,17 @@ RELATIONS:
 UID: GSSC-BLLR-154
 TITLE: User Read Mailing Address line 1
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return the Mailing Address line 1 of the user identified by the cuid when the caller is that user, the caller is an administrator, or the caller is a user moderator.
+The GSSC Website Unified Backend SHALL return the Mailing Address line 1 of the user identified by the cuid when the caller is that user, or the caller is a user moderator.
 <<<
 RATIONALE: >>>
-The user, an administrator, and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
+The user and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: >>>
+GSSC5-34
+GSSC5-36
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -2978,14 +3124,17 @@ RELATIONS:
 UID: GSSC-BLLR-155
 TITLE: User Read Mailing Address line 2
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return the Mailing Address line 2 of the user identified by the cuid when the caller is that user, the caller is an administrator, or the caller is a user moderator.
+The GSSC Website Unified Backend SHALL return the Mailing Address line 2 of the user identified by the cuid when the caller is that user, or the caller is a user moderator.
 <<<
 RATIONALE: >>>
-The user, an administrator, and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
+The user and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: >>>
+GSSC5-34
+GSSC5-36
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -2999,14 +3148,17 @@ RELATIONS:
 UID: GSSC-BLLR-156
 TITLE: User Read Mailing Address line 3
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return the Mailing Address line 3 of the user identified by the cuid when the caller is that user, the caller is an administrator, or the caller is a user moderator.
+The GSSC Website Unified Backend SHALL return the Mailing Address line 3 of the user identified by the cuid when the caller is that user, or the caller is a user moderator.
 <<<
 RATIONALE: >>>
-The user, an administrator, and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
+The user and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: >>>
+GSSC5-34
+GSSC5-36
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -3020,14 +3172,17 @@ RELATIONS:
 UID: GSSC-BLLR-157
 TITLE: User Read Mailing Address city
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return the Mailing Address city of the user identified by the cuid when the caller is that user, the caller is an administrator, or the caller is a user moderator.
+The GSSC Website Unified Backend SHALL return the Mailing Address city of the user identified by the cuid when the caller is that user, or the caller is a user moderator.
 <<<
 RATIONALE: >>>
-The user, an administrator, and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
+The user and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: >>>
+GSSC5-34
+GSSC5-36
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -3041,14 +3196,17 @@ RELATIONS:
 UID: GSSC-BLLR-158
 TITLE: User Read Mailing Address state
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return the Mailing Address state of the user identified by the cuid when the caller is that user, the caller is an administrator, or the caller is a user moderator.
+The GSSC Website Unified Backend SHALL return the Mailing Address state of the user identified by the cuid when the caller is that user, or the caller is a user moderator.
 <<<
 RATIONALE: >>>
-The user, an administrator, and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
+The user and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: >>>
+GSSC5-34
+GSSC5-36
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -3062,14 +3220,17 @@ RELATIONS:
 UID: GSSC-BLLR-159
 TITLE: User Read Mailing Address zip code
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return the Mailing Address zip code of the user identified by the cuid when the caller is that user, the caller is an administrator, or the caller is a user moderator.
+The GSSC Website Unified Backend SHALL return the Mailing Address zip code of the user identified by the cuid when the caller is that user, or the caller is a user moderator.
 <<<
 RATIONALE: >>>
-The user, an administrator, and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
+The user and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: >>>
+GSSC5-34
+GSSC5-36
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -3083,14 +3244,17 @@ RELATIONS:
 UID: GSSC-BLLR-160
 TITLE: User Read Mailing Address zip extension
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return the Mailing Address zip extension of the user identified by the cuid when the caller is that user, the caller is an administrator, or the caller is a user moderator.
+The GSSC Website Unified Backend SHALL return the Mailing Address zip extension of the user identified by the cuid when the caller is that user, or the caller is a user moderator.
 <<<
 RATIONALE: >>>
-The user, an administrator, and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
+The user and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: >>>
+GSSC5-34
+GSSC5-36
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -3104,14 +3268,17 @@ RELATIONS:
 UID: GSSC-BLLR-161
 TITLE: User Read Secondary Email display
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return the Secondary Email display of the user identified by the cuid when the caller is that user, the caller is an administrator, or the caller is a user moderator.
+The GSSC Website Unified Backend SHALL return the Secondary Email display of the user identified by the cuid when the caller is that user, or the caller is a user moderator.
 <<<
 RATIONALE: >>>
-The user, an administrator, and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
+The user and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: >>>
+GSSC5-34
+GSSC5-36
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -3122,14 +3289,17 @@ RELATIONS:
 UID: GSSC-BLLR-162
 TITLE: User Read Secondary Phone Number display
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return the Secondary Phone Number display of the user identified by the cuid when the caller is that user, the caller is an administrator, or the caller is a user moderator.
+The GSSC Website Unified Backend SHALL return the Secondary Phone Number display of the user identified by the cuid when the caller is that user, or the caller is a user moderator.
 <<<
 RATIONALE: >>>
-The user, an administrator, and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
+The user and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: >>>
+GSSC5-34
+GSSC5-36
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -3140,14 +3310,17 @@ RELATIONS:
 UID: GSSC-BLLR-163
 TITLE: User Read is administrator
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return the is administrator of the user identified by the cuid when the caller is that user, the caller is an administrator, or the caller is a user moderator.
+The GSSC Website Unified Backend SHALL return the is administrator of the user identified by the cuid when the caller is that user, or the caller is a user moderator.
 <<<
 RATIONALE: >>>
-The user, an administrator, and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
+The user and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: >>>
+GSSC5-34
+GSSC5-36
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -3161,14 +3334,17 @@ RELATIONS:
 UID: GSSC-BLLR-164
 TITLE: User Read is user moderator
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return the is user moderator of the user identified by the cuid when the caller is that user, the caller is an administrator, or the caller is a user moderator.
+The GSSC Website Unified Backend SHALL return the is user moderator of the user identified by the cuid when the caller is that user, or the caller is a user moderator.
 <<<
 RATIONALE: >>>
-The user, an administrator, and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
+The user and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: >>>
+GSSC5-34
+GSSC5-36
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -3182,28 +3358,54 @@ RELATIONS:
 UID: GSSC-BLLR-165
 TITLE: User Read Membership Status
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return the Membership Status of the user identified by the cuid when the caller is that user, the caller is an administrator, or the caller is a user moderator.
+The GSSC Website Unified Backend SHALL return the Membership Status of the user identified by the cuid when the caller is that user, or the caller is a user moderator.
 <<<
 RATIONALE: >>>
-The user, an administrator, and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
+The user and a user moderator receive this field. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: >>>
+GSSC5-34
+GSSC5-36
+<<<
 REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-BLLR-278
+TITLE: User Read Position
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL return the Position of the user identified by the cuid when the caller is that user, or the caller is a user moderator, including when Position is empty.
+<<<
+RATIONALE: >>>
+The user and a user moderator receive Position, including an empty Position. No high-level requirement grants that view to a user moderator, so the moderator grant is derived.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: >>>
+GSSC5-36
+<<<
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-84
+  ROLE: Refines
 
 [REQUIREMENT]
 UID: GSSC-BLLR-54
 TITLE: Password Hash Omitted
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL omit the password hash from the user read for every caller, including a caller who is an administrator or a user moderator.
+The GSSC Website Unified Backend SHALL omit the password hash from the user read for every caller, including a caller who is a user moderator.
 <<<
 RATIONALE: >>>
 The user read leaves the password hash out of every response.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: >>>
+GSSC5-34
+GSSC5-36
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -3967,6 +4169,60 @@ VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-34
 REVIEW_STATUS: Approved
 
+[REQUIREMENT]
+UID: GSSC-BLLR-279
+TITLE: Administrator Position Update
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store a posted Position when the caller is an administrator.
+<<<
+RATIONALE: >>>
+An administrator can set any member's Position, including that administrator's own Position.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-36
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-86
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-280
+TITLE: User Moderator Position Update
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store a posted Position when the caller is a user moderator and the user identified by the cuid is another member who is not an administrator.
+<<<
+RATIONALE: >>>
+A user moderator can set Position for another member who is not an administrator.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-36
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-86
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-281
+TITLE: Position Clear
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL clear the stored Position when an authorized caller posts Position as "".
+<<<
+RATIONALE: >>>
+An empty Position clears the stored value and removes that member from the leadership list.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-36
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-110
+  ROLE: Refines
+
 [[/SECTION]]
 
 [[SECTION]]
@@ -4081,14 +4337,17 @@ RELATIONS:
 UID: GSSC-BLLR-171
 TITLE: User Update Forbidden
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL forbid the user update when the caller is not an administrator, the cuid is not the caller's own cuid, and the caller is not a user moderator, and the backend writes nothing.
+The GSSC Website Unified Backend SHALL forbid the user update when the cuid is not the caller's own cuid and the caller is not a user moderator, and the backend writes nothing.
 <<<
 RATIONALE: >>>
-A caller who is not an administrator, not a user moderator, and not the identified user is forbidden from updating that user.
+A caller who is not a user moderator and is not the identified user is forbidden from updating that user. An administrator is a user moderator.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: >>>
+GSSC5-34
+GSSC5-36
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -4614,6 +4873,27 @@ CHANGE_DRIVER: GSSC5-34
 REVIEW_STATUS: Approved
 
 [REQUIREMENT]
+UID: GSSC-BLLR-282
+TITLE: Own Position Update
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL invalidate the user update when the cuid is the caller's own user, the caller is not an administrator, and the request includes Position, and the backend writes nothing.
+<<<
+RATIONALE: >>>
+A member's own Position is view-only unless that member is an administrator. Including Position on that member's own update invalidates the update, and the backend writes nothing.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-36
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-84
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-BHLR-86
+  ROLE: Refines
+
+[REQUIREMENT]
 UID: GSSC-BLLR-62
 TITLE: Password Hash Unchanged
 STATEMENT: >>>
@@ -4634,6 +4914,183 @@ REVIEW_STATUS: Approved
 [[/SECTION]]
 
 [[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-LEADERSHIP
+TITLE: /leadership
+
+[REQUIREMENT]
+UID: GSSC-BLLR-283
+TITLE: Leadership List
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL let an unauthenticated caller retrieve the leadership list.
+<<<
+RATIONALE: >>>
+The public leadership list is available without a login.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-36
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-88
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-BHLR-171
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-284
+TITLE: Leadership List Populated Position
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL include in the leadership list each stored user whose Position is populated.
+<<<
+RATIONALE: >>>
+Leaders are the members whose Position is populated. A member with an empty Position is left off the list.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-36
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-88
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-BHLR-95
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-285
+TITLE: Leadership Entry Position
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL return the Position in each leadership list entry.
+<<<
+RATIONALE: >>>
+The public role of a leader is that leader's Position.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-36
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-89
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-BHLR-95
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-286
+TITLE: Leadership Entry First Name
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL return the First Name in each leadership list entry.
+<<<
+RATIONALE: >>>
+The public can see the First Name of each leader.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-36
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-90
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-287
+TITLE: Leadership Entry Last Name
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL return the Last Name in each leadership list entry.
+<<<
+RATIONALE: >>>
+The public can see the Last Name of each leader.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-36
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-91
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-288
+TITLE: Leadership Entry Account Photo
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL return the Account Photo in a leadership list entry when that Account Photo is stored.
+<<<
+RATIONALE: >>>
+The public can see the Account Photo of a leader when the account holds one.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-36
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-94
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-289
+TITLE: Leadership Entry Primary Email
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL return the Primary Email in a leadership list entry when that leader's Preferred Contact Method is Email.
+<<<
+RATIONALE: >>>
+The public receives a leader's Primary Email when Email is the preferred contact method.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-36
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-92
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-290
+TITLE: Leadership Entry Primary Phone Number
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL return the Primary Phone Number in a leadership list entry when that leader's Preferred Contact Method is Phone.
+<<<
+RATIONALE: >>>
+The public receives a leader's Primary Phone Number when Phone is the preferred contact method.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-36
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-93
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-291
+TITLE: Leadership Entry Preferred Contact Method
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL return the Preferred Contact Method in each leadership list entry.
+<<<
+RATIONALE: >>>
+The type of the preferred contact is that member's Preferred Contact Method.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-36
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-171
+  ROLE: Refines
 
 [[/SECTION]]
 
@@ -5016,6 +5473,42 @@ REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-114
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-275
+TITLE: User Position
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store a Position for a user in the users table. The Position may be absent. Empty is the default.
+<<<
+RATIONALE: >>>
+Each user record can hold a Position. Empty is the default until Position is set. A populated Position is the member's leadership role. This requirement does not name the positions.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-36
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-110
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-276
+TITLE: User Account Photo
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store an Account Photo for a user in the users table. The Account Photo may be absent.
+<<<
+RATIONALE: >>>
+Each user record can hold an Account Photo. The Account Photo may be absent. This requirement does not define the form of the photo or provide upload.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-36
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-109
   ROLE: Refines
 
 [[/SECTION]]

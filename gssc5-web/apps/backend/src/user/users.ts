@@ -40,6 +40,9 @@ const userSelect = {
   isAdmin: true,
   isUserMod: true,
   membershipStatus: true,
+  // @relation(GSSC-BLLR-275, GSSC-BLLR-277, GSSC-BLLR-278, scope=range_start, role=Implementation)
+  position: true,
+  // @relation(GSSC-BLLR-275, GSSC-BLLR-277, GSSC-BLLR-278, scope=range_end, role=Implementation)
   // @relation(GSSC-BLLR-54, GSSC-BLLR-100, scope=range_end, role=Implementation)
 } as const;
 
@@ -76,6 +79,7 @@ type AccountView = {
   isAdmin?: boolean;
   isUserMod?: boolean;
   membershipStatus?: string | null;
+  position?: string | null;
 };
 
 type Session =
@@ -115,6 +119,7 @@ const PublicUser = t.Object({
   isAdmin: t.Optional(t.Boolean()),
   isUserMod: t.Optional(t.Boolean()),
   membershipStatus: t.Optional(NullableText),
+  position: t.Optional(NullableText),
 });
 
 const TEXT_FILTERS = new Set([
@@ -174,6 +179,7 @@ const CLEARABLE_TEXT = new Set([
   "mailingLine3",
   "mailingZipExtension",
   "membershipStatus",
+  "position",
 ]);
 
 const WRITABLE_TEXT = new Set<string>([
@@ -425,6 +431,9 @@ function project(user: StoredUser, caller: StoredUser): AccountView {
   if (canSee(caller, user, "isAdmin")) view.isAdmin = user.isAdmin;
   if (canSee(caller, user, "isUserMod")) view.isUserMod = user.isUserMod;
   if (canSee(caller, user, "membershipStatus")) view.membershipStatus = user.membershipStatus;
+  // @relation(GSSC-BLLR-277, GSSC-BLLR-278, scope=range_start, role=Implementation)
+  if (canSee(caller, user, "position")) view.position = user.position;
+  // @relation(GSSC-BLLR-277, GSSC-BLLR-278, scope=range_end, role=Implementation)
   return view;
 }
 
@@ -568,6 +577,14 @@ function buildPatch(
       data.membershipStatus = value === "" ? null : value;
       continue;
     }
+    // @relation(GSSC-BLLR-279, GSSC-BLLR-280, GSSC-BLLR-281, GSSC-BLLR-282, scope=range_start, role=Implementation)
+    if (key === "position") {
+      if (!caller.isAdmin && caller.id === target.id) return "invalid";
+      if (typeof value !== "string") return "invalid";
+      data.position = value === "" ? null : value;
+      continue;
+    }
+    // @relation(GSSC-BLLR-279, GSSC-BLLR-280, GSSC-BLLR-281, GSSC-BLLR-282, scope=range_end, role=Implementation)
     if (!WRITABLE_TEXT.has(key) || typeof value !== "string") return "invalid";
     const stored = storedText(key, value, permanent);
     if (stored === "invalid") return "invalid";

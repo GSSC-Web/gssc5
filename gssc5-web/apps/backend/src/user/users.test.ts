@@ -53,6 +53,7 @@ type Concept =
   | "isAdmin"
   | "isUserMod"
   | "membershipStatus"
+  | "position"
   | "passwordHash";
 
 type Value = string | boolean | null;
@@ -102,6 +103,7 @@ const ALIASES: Record<Concept, string[]> = {
   isAdmin: ["isadmin"],
   isUserMod: ["isusermod"],
   membershipStatus: ["membershipstatus"],
+  position: ["position"],
   passwordHash: ["passwordhash"],
 };
 
@@ -136,6 +138,7 @@ const DEFAULT_KEY: Record<Concept, string> = {
   isAdmin: "isAdmin",
   isUserMod: "isUserMod",
   membershipStatus: "membershipStatus",
+  position: "position",
   passwordHash: "passwordHash",
 };
 
@@ -262,6 +265,7 @@ function persona(label: string, overrides: Partial<Record<Concept, Value>>): Rec
     isAdmin: false,
     isUserMod: false,
     membershipStatus: `${label}-roster-status`,
+    position: null,
     passwordHash: null,
   };
   return { ...values, ...overrides, username: `${label}-username` };
@@ -931,6 +935,12 @@ test("GSSC-BLLR-99 User List Membership Status", async () => {
 });
 // @relation(GSSC-BLLR-99, scope=range_end, role=Test)
 
+// @relation(GSSC-BLLR-277, scope=range_start, role=Test)
+test("GSSC-BLLR-277 User List Position", async () => {
+  await expectPrivileged("position", "list");
+});
+// @relation(GSSC-BLLR-277, scope=range_end, role=Test)
+
 // @relation(GSSC-BLLR-100, scope=range_start, role=Test)
 test("GSSC-BLLR-100 User List Password Hash Omitted", async () => {
   const hashes = (await allRows()).map((row) => cell(row, "passwordHash")).filter((value): value is string => !!value);
@@ -1428,6 +1438,12 @@ test("GSSC-BLLR-165 User Read Membership Status", async () => {
 });
 // @relation(GSSC-BLLR-165, scope=range_end, role=Test)
 
+// @relation(GSSC-BLLR-278, scope=range_start, role=Test)
+test("GSSC-BLLR-278 User Read Position", async () => {
+  await expectPrivileged("position", "read");
+});
+// @relation(GSSC-BLLR-278, scope=range_end, role=Test)
+
 // @relation(GSSC-BLLR-54, scope=range_start, role=Test)
 test("GSSC-BLLR-54 Password Hash Omitted", async () => {
   const hash = cell(await rowById(emailMember.id), "passwordHash");
@@ -1727,6 +1743,38 @@ test("GSSC-BLLR-66 Membership Status Update", async () => {
 });
 // @relation(GSSC-BLLR-66, scope=range_end, role=Test)
 
+// @relation(GSSC-BLLR-279, scope=range_start, role=Test)
+test("GSSC-BLLR-279 Administrator Position Update", async () => {
+  await withRow(mutable.id, async () => {
+    await expectStored(admin, mutable, "position", "President");
+  });
+  await withRow(admin.id, async () => {
+    await expectStored(admin, admin, "position", "Admin Office");
+  });
+  await withRow(otherAdmin.id, async () => {
+    await expectStored(admin, otherAdmin, "position", "Other Admin Office");
+  });
+});
+// @relation(GSSC-BLLR-279, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-280, scope=range_start, role=Test)
+test("GSSC-BLLR-280 User Moderator Position Update", async () => {
+  await withRow(mutable.id, async () => {
+    await expectStored(moderator, mutable, "position", "Secretary");
+  });
+});
+// @relation(GSSC-BLLR-280, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-281, scope=range_start, role=Test)
+test("GSSC-BLLR-281 Position Clear", async () => {
+  await withRow(mutable.id, async () => {
+    await expectStored(admin, mutable, "position", "Treasurer");
+    await expectStored(admin, mutable, "position", "");
+    expect(storedIsUnset(logical(await rowById(mutable.id), "position"))).toBe(true);
+  });
+});
+// @relation(GSSC-BLLR-281, scope=range_end, role=Test)
+
 // @relation(GSSC-BLLR-56, scope=range_start, role=Test)
 test("GSSC-BLLR-56 User Update Missing Login Token", async () => {
   await withRow(mutable.id, async () => {
@@ -2025,6 +2073,22 @@ test("GSSC-BLLR-223 Own Membership Status Update", async () => {
 });
 // @relation(GSSC-BLLR-223, scope=range_end, role=Test)
 
+// @relation(GSSC-BLLR-282, scope=range_start, role=Test)
+test("GSSC-BLLR-282 Own Position Update", async () => {
+  for (const caller of [mutable, moderator]) {
+    await withRow(caller.id, async () => {
+      const before = await snapshot(caller.id);
+      const result = await call("POST", `/users/${encodeURIComponent(caller.id)}`, caller.token, {
+        position: "Should Not Stick",
+        firstName: "Also Should Not Stick",
+      });
+      expect(result.status).toBe(422);
+      await expectUnchanged(caller.id, before);
+    });
+  }
+});
+// @relation(GSSC-BLLR-282, scope=range_end, role=Test)
+
 // @relation(GSSC-BLLR-62, scope=range_start, role=Test)
 test("GSSC-BLLR-62 Password Hash Unchanged", async () => {
   await withRow(mutable.id, async () => {
@@ -2130,4 +2194,22 @@ test("GSSC-BLLR-35 Home Address Display", async () => {
   });
 });
 // @relation(GSSC-BLLR-35, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-275, scope=range_start, role=Test)
+test("GSSC-BLLR-275 User Position", async () => {
+  expect(columnOf.get("position")).toBeDefined();
+  const column = app.columns.find((item) => normalize(item.name) === "position");
+  expect(column?.notnull).toBe(false);
+  expect(logical(await rowById(emailMember.id), "position")).toBeNull();
+});
+// @relation(GSSC-BLLR-275, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-276, scope=range_start, role=Test)
+test("GSSC-BLLR-276 User Account Photo", async () => {
+  const column = app.columns.find((item) => normalize(item.name) === "accountphoto");
+  expect(column).toBeDefined();
+  expect(column?.notnull).toBe(false);
+  expect(cellText((await rowById(emailMember.id))[column?.name ?? ""])).toBeNull();
+});
+// @relation(GSSC-BLLR-276, scope=range_end, role=Test)
 
