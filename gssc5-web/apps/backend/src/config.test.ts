@@ -41,6 +41,14 @@ DATABASE_URL=''
     ADMIN_PASSWORD: "1234",
     ADMIN_EMAIL: "",
     ADMIN_ENABLED: false,
+    PASSWORD_HISTORY_COUNT: 3,
+    PASSWORD_MIN_LENGTH: 8,
+    PASSWORD_RECOVERY_LIFETIME_DAYS: 1,
+    SMTP_HOST: "",
+    SMTP_PORT: 587,
+    SMTP_USER: "",
+    SMTP_PASSWORD: "",
+    SMTP_FROM: "",
   });
   expect(loadConfig({ envFile: missingEnvFile, processEnv: {} })).toEqual({
     PORT: 3000,
@@ -51,6 +59,14 @@ DATABASE_URL=''
     ADMIN_PASSWORD: "1234",
     ADMIN_EMAIL: "",
     ADMIN_ENABLED: false,
+    PASSWORD_HISTORY_COUNT: 3,
+    PASSWORD_MIN_LENGTH: 8,
+    PASSWORD_RECOVERY_LIFETIME_DAYS: 1,
+    SMTP_HOST: "",
+    SMTP_PORT: 587,
+    SMTP_USER: "",
+    SMTP_PASSWORD: "",
+    SMTP_FROM: "",
   });
 });
 

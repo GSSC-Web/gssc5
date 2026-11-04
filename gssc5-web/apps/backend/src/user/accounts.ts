@@ -69,10 +69,10 @@ export const accounts = new Elysia({
       }
       // @relation(GSSC-BLLR-4, GSSC-BLLR-5, scope=range_end, role=Implementation)
 
-      // @relation(GSSC-BLLR-6, scope=range_start, role=Implementation)
+      // @relation(GSSC-BLLR-6, GSSC-BLLR-233, scope=range_start, role=Implementation)
       const passwordMatches = await Bun.password.verify(password, user.passwordHash, "argon2id");
       if (!passwordMatches) return status(403, "Forbidden");
-      // @relation(GSSC-BLLR-6, scope=range_end, role=Implementation)
+      // @relation(GSSC-BLLR-6, GSSC-BLLR-233, scope=range_end, role=Implementation)
 
       // @relation(GSSC-BLLR-7, GSSC-BLLR-8, GSSC-BLLR-11, scope=range_start, role=Implementation)
       const issuedAt = new Date();

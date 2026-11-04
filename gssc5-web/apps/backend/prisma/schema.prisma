@@ -94,6 +94,12 @@ model User {
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
   tokens         LoginToken[]
+  // @relation(GSSC-BLLR-244, scope=range_start, role=Implementation)
+  passwordHistory PasswordHistory[]
+  // @relation(GSSC-BLLR-244, scope=range_end, role=Implementation)
+  // @relation(GSSC-BLLR-245, scope=range_start, role=Implementation)
+  recoveryTokens PasswordRecoveryToken[]
+  // @relation(GSSC-BLLR-245, scope=range_end, role=Implementation)
 
   @@map("users")
 }
@@ -111,3 +117,34 @@ model LoginToken {
 
   @@map("login_tokens")
 }
+
+// @relation(GSSC-BLLR-244, GSSC-BLLR-262, scope=range_start, role=Implementation)
+model PasswordHistory {
+  id           String   @id @default(cuid())
+  /// @prismabox.hide
+  passwordHash String
+  // user cuid
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt    DateTime @default(now())
+
+  @@index([userId, createdAt])
+  @@map("password_history")
+}
+// @relation(GSSC-BLLR-244, GSSC-BLLR-262, scope=range_end, role=Implementation)
+
+// @relation(GSSC-BLLR-245, scope=range_start, role=Implementation)
+model PasswordRecoveryToken {
+  id           String    @id @default(cuid())
+  /// @prismabox.hide
+  tokenHash    String    @unique
+  userId       String
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  primaryEmail String
+  issuedAt     DateTime
+  expiresAt    DateTime
+  usedAt       DateTime?
+
+  @@map("password_recovery_tokens")
+}
+// @relation(GSSC-BLLR-245, scope=range_end, role=Implementation)

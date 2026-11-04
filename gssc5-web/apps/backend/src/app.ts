@@ -2,6 +2,7 @@ import { cors } from "@elysiajs/cors";
 import { Elysia } from "elysia";
 
 import { accounts } from "./user/accounts";
+import { passwords } from "./user/passwords";
 import { users } from "./user/users";
 
 // A login is a union of two objects. Exact-mirror stripping would drop the
@@ -18,6 +19,7 @@ export const app = new Elysia({ normalize: false })
     }),
   )
   .use(accounts)
+  .use(passwords)
   .use(users)
   .get("/", () => "Hello Elysia");
 

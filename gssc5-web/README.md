@@ -72,6 +72,14 @@ values stop the process before it listens.
 | `ADMIN_PASSWORD` | `1234` |
 | `ADMIN_EMAIL` | empty |
 | `ADMIN_ENABLED` | `false` |
+| `PASSWORD_HISTORY_COUNT` | `3` |
+| `PASSWORD_MIN_LENGTH` | `8` |
+| `PASSWORD_RECOVERY_LIFETIME_DAYS` | `1` |
+| `SMTP_HOST` | empty |
+| `SMTP_PORT` | `587` |
+| `SMTP_USER` | empty |
+| `SMTP_PASSWORD` | empty |
+| `SMTP_FROM` | empty |
 
 `NODE_ENV` must be `development`, `test`, or `production`. `PORT` must be an
 integer from 1 to 65535. `LOGIN_TOKEN_LIFETIME_DAYS` must be a number greater
@@ -80,7 +88,11 @@ An empty admin email leaves the Primary Email unset. A provided value is stored
 as the Primary Email and is not checked as an email address. `ADMIN_ENABLED` is
 true or false. When it is true, startup creates the permanent admin user, or
 replaces that user's password hash when the username already exists. An existing
-user keeps both email values.
+user keeps both email values. `PASSWORD_HISTORY_COUNT` is an integer greater
+than or equal to zero. `PASSWORD_MIN_LENGTH` is an integer greater than zero.
+`PASSWORD_RECOVERY_LIFETIME_DAYS` is a number greater than zero. Empty
+`SMTP_HOST` leaves recovery mail unable to send; the recovery-request response
+still succeeds.
 
 ## Database
 
