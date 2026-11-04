@@ -17,8 +17,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
-      # Do not search above the repo root for mise config.
-      MISE_CEILING_PATHS: ${{ github.workspace }}
+      # The ceiling directory itself is not searched. Stop at the checkout's
+      # parent so repo-root mise.toml loads from gssc5-web and from the root.
+      MISE_CEILING_PATHS: ${{ github.workspace }}/..
     steps:
       - name: Check out the repository
         uses: actions/checkout@v7
