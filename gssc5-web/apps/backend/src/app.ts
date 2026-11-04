@@ -25,7 +25,7 @@ export const app = new Elysia({ normalize: false })
       documentation: {
         info: {
           title: "GSSC5 Backend",
-          version: "0.0.0",
+          version: "5.0.0",
         },
       },
     }),
