@@ -1,12 +1,16 @@
 :host {
   display: block;
   min-height: 100dvh;
+  background-color: var(--gssc-white);
+  color: var(--gssc-black);
+  font-family: var(--font-sans);
 }
 
 .gssc-app-root {
   display: flex;
   flex-direction: column;
   min-height: 100dvh;
+  background-color: var(--gssc-white);
 }
 
 /* @relation(GSSC-PLLR-5, scope=range_start, role=Implementation) */

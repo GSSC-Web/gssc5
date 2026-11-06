@@ -28,6 +28,8 @@ Keep the App Root files beside these folders (not inside `modules/`). Put new fe
 
 `src/styles.css` imports Tailwind theme, **preflight**, and utilities as separate layers. Rely on preflight for browser defaults; do not restate those resets in component CSS.
 
+Organization palette tokens (`--gssc-light-green`, `--gssc-dark-green`, `--gssc-cream`, `--gssc-light-brown`, `--gssc-dark-brown`, `--gssc-gray`, `--gssc-white`, `--gssc-black`) are defined on `:root`. Prefer them over hard-coded hex. `html` / `body` / app shell use a white background and sans-serif by default.
+
 Symbols Nerd Font (for later UI symbols) is loaded there via `@font-face` from jsDelivr (`ryanoasis/nerd-fonts` Symbols-only) and exposed as `--font-nerd-symbols`.
 
 ## Testing harness (GSSC5-39)

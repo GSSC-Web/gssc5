@@ -18,6 +18,7 @@
 - Every requirement should be limited to a single feature (PIR), functionality (HLR), or implementation detail (LLR). A parent link does not count as coverage when the statement does not require that behavior.
 - When requirements are changed, the CHANGE_DRIVER field should be appended with the driving ALM task ID, the REVIEW_STATUS should be set to Changed.
 - When requirements are reviewed at the end of a task, and no more issues are identified, after confirmation from a human operator, the REVIEW_STATUS should be set to Approved.
+- Public/frontend displayed-element LLRs: subsection per element with three requirements titled **Semantic**, **Syntactic**, and **Lexical** (normal UIDs; no type suffixes). See `gssc5-web/AGENTS.md`.
 
 ## Do
 - Follow existing patterns in the documentation
