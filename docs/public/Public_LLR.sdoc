@@ -66,14 +66,18 @@ ELEMENTS:
 UID: GSSC-PLLR-APP-ROOT
 TITLE: Public App Root
 
+[[SECTION]]
+UID: GSSC-PLLR-APP-ROOT-ELEMENT
+TITLE: App Root
+
 [REQUIREMENT]
 UID: GSSC-PLLR-4
-TITLE: Public App Root Composition
+TITLE: Semantic
 STATEMENT: >>>
-The GSSC Website Public Frontend App Root SHALL compose a Header host, an Announcements Bar, a routed page outlet, and a Footer host.
+The GSSC Website Public Frontend App Root SHALL contain a Header host, an Announcements Bar when the App Root shows that bar, a Page Outlet, and a Footer host.
 <<<
 RATIONALE: >>>
-The App Root is the shell that hosts Header, Footer, the Announcements Bar, and the active public page. Header and Footer contents are separate requirements.
+The App Root composes those subelements so Header, Footer, announcements, and the active public page share one shell. Header and Footer contents are separate requirements. When the App Root shows the Announcements Bar is a separate requirement.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -85,13 +89,55 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-5
-TITLE: Header Host Placement
+UID: GSSC-PLLR-20
+TITLE: Syntactic
 STATEMENT: >>>
-The GSSC Website Public Frontend App Root SHALL stick the Header host to the top of the viewport while the visitor scrolls.
+The GSSC Website Public Frontend App Root SHALL fill the entire viewport.
 <<<
 RATIONALE: >>>
-Common public pages keep the Header at the top. The App Root sticks that host so it remains at the top of the viewport as the visitor scrolls. Header contents are a separate requirement.
+The App Root is the outermost shell of the public page. Filling the viewport gives Header, page content, and Footer a full-page layout that resizes with the viewport.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-38
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-128
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-21
+TITLE: Lexical
+STATEMENT: >>>
+The GSSC Website Public Frontend App Root SHALL use the white theme token for its background and the sans-serif theme font for its text.
+<<<
+RATIONALE: >>>
+The outermost site layer uses a white background and a sans-serif default. Theme tokens supply those values.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-38
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-128
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-HEADER-HOST
+TITLE: Header Host
+
+[REQUIREMENT]
+UID: GSSC-PLLR-5
+TITLE: Semantic
+STATEMENT: >>>
+The Header host SHALL hold the Public Frontend Header.
+<<<
+RATIONALE: >>>
+The App Root supplies a host so Header implementation mounts in the public shell. Header contents are separate requirements.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -103,13 +149,58 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-6
-TITLE: Footer Host Placement
+UID: GSSC-PLLR-22
+TITLE: Syntactic
 STATEMENT: >>>
-The GSSC Website Public Frontend App Root SHALL place the Footer host at the bottom of the page.
+The Header host SHALL stick to the top of the viewport while the visitor scrolls.
 <<<
 RATIONALE: >>>
-Common public pages place the Footer at the bottom. The App Root supplies that host for Footer implementation.
+Common public pages keep the Header at the top. Sticking the host keeps that top placement as the visitor scrolls.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-38
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-44
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-23
+TITLE: Lexical
+STATEMENT: >>>
+The Header host SHALL inherit the App Root font and text color theme tokens.
+<<<
+RATIONALE: >>>
+The Header host is an empty mount for Header contents. It inherits App Root type tokens so the shell stays consistent until Header paints its own presentation. Independent Header host colors are not set yet.
+<<<
+COMMENT: >>>
+Proposed for review: Lexical inherits App Root tokens only; no separate Header host palette until a color role map exists.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-38
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-44
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-FOOTER-HOST
+TITLE: Footer Host
+
+[REQUIREMENT]
+UID: GSSC-PLLR-6
+TITLE: Semantic
+STATEMENT: >>>
+The Footer host SHALL hold the Public Frontend Footer.
+<<<
+RATIONALE: >>>
+The App Root supplies a host so Footer implementation mounts in the public shell. Footer contents are separate requirements.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -121,13 +212,58 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-7
-TITLE: Routed Page Outlet
+UID: GSSC-PLLR-24
+TITLE: Syntactic
 STATEMENT: >>>
-The GSSC Website Public Frontend App Root SHALL render the active public page through a router outlet between the Header host and the Footer host.
+The Footer host SHALL sit at the bottom of the App Root.
 <<<
 RATIONALE: >>>
-Public pages mount through the App Root router outlet so each page shares the same shell.
+Common public pages place the Footer at the bottom. The host anchors that placement in the App Root.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-38
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-46
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-25
+TITLE: Lexical
+STATEMENT: >>>
+The Footer host SHALL inherit the App Root font and text color theme tokens.
+<<<
+RATIONALE: >>>
+The Footer host is an empty mount for Footer contents. It inherits App Root type tokens so the shell stays consistent until Footer paints its own presentation. Independent Footer host colors are not set yet.
+<<<
+COMMENT: >>>
+Proposed for review: Lexical inherits App Root tokens only; no separate Footer host palette until a color role map exists.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-38
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-46
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-PAGE-OUTLET
+TITLE: Page Outlet
+
+[REQUIREMENT]
+UID: GSSC-PLLR-7
+TITLE: Semantic
+STATEMENT: >>>
+The Page Outlet SHALL render the active public page.
+<<<
+RATIONALE: >>>
+Public pages mount through the Page Outlet so each page shares the App Root shell. Page contents are separate requirements.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -138,18 +274,83 @@ RELATIONS:
   VALUE: GSSC-PHLR-128
   ROLE: Refines
 
+[REQUIREMENT]
+UID: GSSC-PLLR-26
+TITLE: Syntactic
+STATEMENT: >>>
+The Page Outlet SHALL sit between the Header host and the Footer host and SHALL grow to fill the remaining App Root space.
+<<<
+RATIONALE: >>>
+Placing the outlet between the hosts and letting it grow keeps Header and Footer at the edges while page content uses the middle of the shell as the viewport resizes.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-38
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-128
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-27
+TITLE: Lexical
+STATEMENT: >>>
+The Page Outlet SHALL inherit the App Root font and text color theme tokens.
+<<<
+RATIONALE: >>>
+The Page Outlet is a mount for page contents. It inherits App Root type tokens so pages share the shell defaults until a page sets its own presentation. Independent Page Outlet colors are not set yet.
+<<<
+COMMENT: >>>
+Proposed for review: Lexical inherits App Root tokens only; no separate Page Outlet palette until a color role map exists.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-38
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-128
+  ROLE: Refines
+
+[[/SECTION]]
+
 [[SECTION]]
 UID: GSSC-PLLR-ANNOUNCEMENTS-BAR
 TITLE: Announcements Bar
 
 [REQUIREMENT]
 UID: GSSC-PLLR-15
-TITLE: Announcements Bar on Non-Home Pages
+TITLE: Semantic
 STATEMENT: >>>
-The GSSC Website Public Frontend App Root SHALL show the Announcements Bar on every public page other than the home page when there is an urgent public announcement to display.
+The Announcements Bar SHALL display the title and text of each urgent public announcement it receives, and SHALL open the home page announcements display focused on an announcement when the visitor selects that announcement.
 <<<
 RATIONALE: >>>
-The Urgent Announcement Container belongs on non-home public pages when an urgent announcement exists. The home page announcements display is separate.
+The bar presents urgent announcement contents and routes the visitor to that announcement on the home page. Title and text refine the urgent announcement contents. Selection refines urgent announcement selection.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-38
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-30
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-31
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-34
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-16
+TITLE: Syntactic
+STATEMENT: >>>
+The App Root SHALL show the Announcements Bar between the Header host and the Page Outlet on every public page other than the home page when there is an urgent public announcement to display, and SHALL omit the Announcements Bar on the home page.
+<<<
+RATIONALE: >>>
+The Urgent Announcement Container belongs on non-home public pages when an urgent announcement exists. The home page uses the Announcements Display instead. Placement under the Header host keeps the bar in the shared shell.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -164,31 +365,16 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-16
-TITLE: Announcements Bar Home Exclusion
-STATEMENT: >>>
-The GSSC Website Public Frontend App Root SHALL omit the Announcements Bar on the home page.
-<<<
-RATIONALE: >>>
-The home page uses the Announcements Display instead of the Announcements Bar.
-<<<
-DERIVED: False
-VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-38
-REVIEW_STATUS: Changed
-RELATIONS:
-- TYPE: Parent
-  VALUE: GSSC-PHLR-27
-  ROLE: Refines
-
-[REQUIREMENT]
 UID: GSSC-PLLR-17
-TITLE: Announcements Bar Title
+TITLE: Lexical
 STATEMENT: >>>
-The Announcements Bar SHALL include the title of each urgent public announcement it displays.
+The Announcements Bar SHALL use the cream theme token for its background, the gray theme token for its bottom border, the dark-green theme token for announcement titles, and the dark-brown theme token for announcement text.
 <<<
 RATIONALE: >>>
-The title is part of the urgent announcement contents shown in the bar.
+Theme tokens keep announcement presentation aligned with the organization palette. A fuller color role map for the bar is not set yet beyond these token choices.
+<<<
+COMMENT: >>>
+Proposed for review: cream / gray / dark-green / dark-brown mapping for the bar until the owner sets a full color role map.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -196,43 +382,7 @@ CHANGE_DRIVER: GSSC5-38
 REVIEW_STATUS: Changed
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-PHLR-30
-  ROLE: Refines
-
-[REQUIREMENT]
-UID: GSSC-PLLR-18
-TITLE: Announcements Bar Text
-STATEMENT: >>>
-The Announcements Bar SHALL include the text of each urgent public announcement it displays.
-<<<
-RATIONALE: >>>
-The text is part of the urgent announcement contents shown in the bar.
-<<<
-DERIVED: False
-VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-38
-REVIEW_STATUS: Changed
-RELATIONS:
-- TYPE: Parent
-  VALUE: GSSC-PHLR-31
-  ROLE: Refines
-
-[REQUIREMENT]
-UID: GSSC-PLLR-19
-TITLE: Announcements Bar Selection
-STATEMENT: >>>
-Selecting an announcement in the Announcements Bar SHALL open the home page announcements display focused on that announcement.
-<<<
-RATIONALE: >>>
-The bar is a way to reach the selected announcement on the home page announcements display.
-<<<
-DERIVED: False
-VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-38
-REVIEW_STATUS: Changed
-RELATIONS:
-- TYPE: Parent
-  VALUE: GSSC-PHLR-34
+  VALUE: GSSC-PHLR-47
   ROLE: Refines
 
 [[/SECTION]]

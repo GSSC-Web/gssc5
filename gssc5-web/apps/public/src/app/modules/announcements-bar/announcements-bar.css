@@ -1,10 +1,13 @@
+/* @relation(GSSC-PLLR-17, scope=range_start, role=Implementation) */
 .gssc-announcements-bar {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
   padding: 0.75rem 1rem;
-  background: var(--gssc-cream);
-  border-block-end: 1px solid var(--gssc-gray);
+  background-color: var(--gssc-cream);
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: var(--gssc-gray);
 }
 
 .gssc-announcements-bar__item {
@@ -21,7 +24,7 @@
 
 .gssc-announcements-bar__item:hover,
 .gssc-announcements-bar__item:focus-visible {
-  background: var(--gssc-light-green);
+  background-color: var(--gssc-light-green);
   outline: none;
 }
 
@@ -33,3 +36,4 @@
 .gssc-announcements-bar__text {
   color: var(--gssc-dark-brown);
 }
+/* @relation(GSSC-PLLR-17, scope=range_end, role=Implementation) */

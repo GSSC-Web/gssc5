@@ -29,9 +29,9 @@ export class App {
     return path === '/' || path === '';
   });
 
-  // @relation(GSSC-PLLR-15, GSSC-PLLR-16, scope=range_start, role=Implementation)
+  // @relation(GSSC-PLLR-16, scope=range_start, role=Implementation)
   protected readonly showAnnouncementsBar = computed(
     () => !this.isHome() && this.urgentAnnouncements.announcements().length > 0,
   );
-  // @relation(GSSC-PLLR-15, GSSC-PLLR-16, scope=range_end, role=Implementation)
+  // @relation(GSSC-PLLR-16, scope=range_end, role=Implementation)
 }

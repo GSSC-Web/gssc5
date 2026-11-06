@@ -14,11 +14,11 @@ export class AnnouncementsBar {
 
   protected readonly announcements = this.urgentAnnouncements.announcements;
 
-  // @relation(GSSC-PLLR-19, scope=range_start, role=Implementation)
+  // @relation(GSSC-PLLR-15, scope=range_start, role=Implementation)
   protected selectAnnouncement(announcement: UrgentAnnouncement): void {
     void this.router.navigate(['/'], {
       queryParams: { focusAnnouncement: announcement.id },
     });
   }
-  // @relation(GSSC-PLLR-19, scope=range_end, role=Implementation)
+  // @relation(GSSC-PLLR-15, scope=range_end, role=Implementation)
 }
