@@ -1,8 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
-import { routes } from '../../app/app.routes';
+import { routes } from '../../app.routes';
 import { UrgentAnnouncements } from '../../services/urgent-announcements';
-import { nativeElement, setupPublicComponent, textContent } from '../../test-harness';
+import { nativeElement, setupPublicComponent, textContent } from '../../../test-harness';
 import { AnnouncementsBar } from './announcements-bar';
 
 const sampleAnnouncement = {

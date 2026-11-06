@@ -13,14 +13,16 @@ From the repository root, `mise serve`, `mise build`, and `mise test` include th
 
 ## Source layout
 
+Under `src/app/`:
+
 | Path | Role |
 | --- | --- |
 | `src/app/` | App root bootstrap (shell host, routes, config) |
-| `src/modules/` | Feature modules; a multi-file class gets its own folder (e.g. `announcements-bar/`) |
-| `src/pages/` | Public page components (stubs until page tickets land) |
-| `src/services/` | Shared services, including `backend` (Eden Treaty) and `urgent-announcements` |
+| `src/app/modules/` | Feature modules; a multi-file class gets its own folder (e.g. `announcements-bar/`) |
+| `src/app/pages/` | Public page components (stubs until page tickets land) |
+| `src/app/services/` | Shared services, including `backend` (Eden Treaty) and `urgent-announcements` |
 
-Keep the App Root out of `modules/`. Put new feature UI under `modules/`, pages under `pages/`, and injectable services under `services/`.
+Keep the App Root files beside these folders (not inside `modules/`). Put new feature UI under `modules/`, pages under `pages/`, and injectable services under `services/`.
 
 ## Testing harness (GSSC5-39)
 

@@ -7,7 +7,7 @@ import {
   NewslettersPage,
   PublicationsPage,
   ResearchToolsPage,
-} from '../pages/page-stubs';
+} from './pages/page-stubs';
 
 // @relation(GSSC-PLLR-8, GSSC-PLLR-9, GSSC-PLLR-10, GSSC-PLLR-11, GSSC-PLLR-12, GSSC-PLLR-13, GSSC-PLLR-14, scope=range_start, role=Implementation)
 export const routes: Routes = [
