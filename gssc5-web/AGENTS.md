@@ -27,15 +27,6 @@ Prefer running single test files when iterating (faster feedback).
 - Error handling pattern: Fail-fast; check valid-invalid early, and avoid unnecessary nesting and exceptions.
 - Public FE theme tokens live on `:root` in `apps/public/src/styles.css` (`--gssc-*`); prefer them over hard-coded colors. Outermost shell background is white; default typeface is sans-serif unless a requirement says otherwise.
 
-## Frontend displayed-element LLRs
-For every frontend element shown to the user, add a **subsection named for that element** with **three** low-level requirements. Titles (not UID suffixes) are:
-
-1. **Semantic** — MHI/HMI function: what the element contains, where it gets data, what input it accepts, where outputs go.
-2. **Syntactic** — Placement, form factor, interaction with other elements, resize behavior with the element and page.
-3. **Lexical** — Font, text size, weight/style, colors, backgrounds (use theme tokens where applicable).
-
-UIDs stay normal sequential IDs (no `-SEMANTIC` / `-SYNTACTIC` / `-LEXICAL` suffixes). Distinguish the triad via the subsection and those titles.
-
 ## Do
 - Follow existing patterns in the codebase, or else conform to framework documentation recommendations. (see example files below)
 - Run relevant tests after making changes
