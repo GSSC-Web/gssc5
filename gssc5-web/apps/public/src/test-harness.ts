@@ -11,7 +11,6 @@ export type PublicComponentSetupOptions = {
   providers?: Array<Provider | EnvironmentProviders>;
 };
 
-// @relation(GSSC-PLLR-1, scope=range_start, role=Implementation)
 export async function setupPublicComponent<T>(
   component: Type<T>,
   options: PublicComponentSetupOptions = {},
@@ -34,4 +33,3 @@ export function nativeElement(fixture: ComponentFixture<unknown>): HTMLElement {
 export function textContent(root: ParentNode, selector: string): string | null {
   return root.querySelector(selector)?.textContent?.trim() ?? null;
 }
-// @relation(GSSC-PLLR-1, scope=range_end, role=Implementation)
