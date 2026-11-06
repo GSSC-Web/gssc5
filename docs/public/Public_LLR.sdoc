@@ -88,10 +88,10 @@ RELATIONS:
 UID: GSSC-PLLR-5
 TITLE: Header Host Placement
 STATEMENT: >>>
-The GSSC Website Public Frontend App Root SHALL place the Header host at the top of the page.
+The GSSC Website Public Frontend App Root SHALL stick the Header host to the top of the viewport while the visitor scrolls.
 <<<
 RATIONALE: >>>
-Common public pages place the Header at the top. The App Root supplies that host for Header implementation.
+Common public pages keep the Header at the top. The App Root sticks that host so it remains at the top of the viewport as the visitor scrolls. Header contents are a separate requirement.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test

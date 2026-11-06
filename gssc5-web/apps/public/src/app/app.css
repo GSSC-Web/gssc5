@@ -9,7 +9,16 @@
   min-height: 100dvh;
 }
 
-.gssc-header-host,
+/* @relation(GSSC-PLLR-5, scope=range_start, role=Implementation) */
+.gssc-header-host {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: block;
+  width: 100%;
+}
+/* @relation(GSSC-PLLR-5, scope=range_end, role=Implementation) */
+
 .gssc-footer-host {
   display: block;
   width: 100%;

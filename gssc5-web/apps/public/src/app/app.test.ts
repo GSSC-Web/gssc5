@@ -40,8 +40,10 @@ test('GSSC-PLLR-4 Public App Root Composition', async () => {
 // @relation(GSSC-PLLR-5, scope=range_start, role=Test)
 test('GSSC-PLLR-5 Header Host Placement', async () => {
   const { root } = await setupApp();
-  const children = [...root.querySelector('.gssc-app-root')!.children];
-  expect(children[0]?.getAttribute('data-slot')).toBe('header');
+  const header = root.querySelector<HTMLElement>('[data-slot="header"]')!;
+  const style = getComputedStyle(header);
+  expect(style.position).toBe('sticky');
+  expect(style.top).toBe('0px');
 });
 // @relation(GSSC-PLLR-5, scope=range_end, role=Test)
 
