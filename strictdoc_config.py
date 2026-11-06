@@ -34,6 +34,7 @@ def create_config() -> ProjectConfig:
             "/src/**",
             "/gssc5-web/apps/backend/src/**",
             "/gssc5-web/apps/backend/prisma/**",
+            "/gssc5-web/apps/public/src/**",
         ],
         exclude_source_paths=[
             "node_modules/",

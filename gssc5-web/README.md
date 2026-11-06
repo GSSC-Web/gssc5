@@ -39,7 +39,9 @@ mise test
 
 The backend task generates the Prisma client and the TypeScript declarations,
 then runs `bun test`. Each frontend runs Vitest once through `ng test
---watch=false`.
+--watch=false`. The public app uses the shared harness at
+`apps/public/src/test-harness.ts` (`mise run //public:test`); see
+`apps/public/README.md` for the GSSC5-38 feature-test pattern.
 
 ## Production build
 

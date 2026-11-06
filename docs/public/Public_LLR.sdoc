@@ -1,2 +1,111 @@
 [DOCUMENT]
 TITLE: Public Low Level Requirements
+UID: GSSC-PUBLIC-LOW-LEVEL-REQUIREMENTS
+VERSION: 5.0.0
+
+[GRAMMAR]
+ELEMENTS:
+- TAG: TEXT
+  FIELDS:
+  - TITLE: UID
+    TYPE: String
+    REQUIRED: False
+  - TITLE: STATEMENT
+    TYPE: String
+    REQUIRED: True
+- TAG: SECTION
+  PROPERTIES:
+    IS_COMPOSITE: True
+    PREFIX: None
+    VIEW_STYLE: Narrative
+  FIELDS:
+  - TITLE: UID
+    TYPE: String
+    REQUIRED: False
+  - TITLE: TITLE
+    TYPE: String
+    REQUIRED: True
+- TAG: REQUIREMENT
+  PROPERTIES:
+    PREFIX: GSSC-PLLR-
+    VIEW_STYLE: Table
+  FIELDS:
+  - TITLE: UID
+    TYPE: String
+    REQUIRED: True
+  - TITLE: TITLE
+    TYPE: String
+    REQUIRED: True
+  - TITLE: STATEMENT
+    TYPE: String
+    REQUIRED: True
+  - TITLE: RATIONALE
+    TYPE: String
+    REQUIRED: True
+  - TITLE: COMMENT
+    TYPE: String
+    REQUIRED: False
+  - TITLE: DERIVED
+    TYPE: SingleChoice(True, False)
+    REQUIRED: True
+  - TITLE: VERIFICATION_METHOD
+    TYPE: SingleChoice(Test, Inspection)
+    REQUIRED: True
+  - TITLE: CHANGE_DRIVER
+    TYPE: String
+    REQUIRED: True
+  - TITLE: REVIEW_STATUS
+    TYPE: SingleChoice(Changed, Approved, Baselined)
+    REQUIRED: True
+  RELATIONS:
+  - TYPE: Parent
+    ROLE: Refines
+    REVERSE_ROLE: Refined By
+
+[[SECTION]]
+UID: GSSC-PLLR-TESTING-FRAMEWORK
+TITLE: Testing Framework
+
+[REQUIREMENT]
+UID: GSSC-PLLR-1
+TITLE: Shared Test Harness
+STATEMENT: >>>
+The GSSC Website Public Frontend SHALL provide a shared unit-test harness beside the public application source for later public frontend low-level requirement tests.
+<<<
+RATIONALE: >>>
+Public frontend low-level requirements need one place for shared TestBed setup and DOM helpers. Feature tickets keep their own tests and import that harness.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-39
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-PLLR-2
+TITLE: One Test Per Low Level Requirement
+STATEMENT: >>>
+Each GSSC Website Public Frontend low-level requirement with Test verification SHALL have one dedicated unit test that checks the status that requirement's statement names.
+<<<
+RATIONALE: >>>
+One accurate test per requirement keeps traceability clear. Feature tickets add those tests; this requirement sets the convention the harness supports.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-39
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-PLLR-3
+TITLE: Public Frontend Test Runner
+STATEMENT: >>>
+The GSSC Website Public Frontend SHALL run its unit tests through the monorepo public frontend test task.
+<<<
+RATIONALE: >>>
+Root and app-local mise tasks already name the public frontend tests. The harness rides that runner so later tickets do not add a second stack.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-39
+REVIEW_STATUS: Changed
+
+[[/SECTION]]
