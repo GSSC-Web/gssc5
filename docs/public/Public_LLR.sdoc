@@ -138,6 +138,105 @@ RELATIONS:
   VALUE: GSSC-PHLR-128
   ROLE: Refines
 
+[[SECTION]]
+UID: GSSC-PLLR-ANNOUNCEMENTS-BAR
+TITLE: Announcements Bar
+
+[REQUIREMENT]
+UID: GSSC-PLLR-15
+TITLE: Announcements Bar on Non-Home Pages
+STATEMENT: >>>
+The GSSC Website Public Frontend App Root SHALL show the Announcements Bar on every public page other than the home page when there is an urgent public announcement to display.
+<<<
+RATIONALE: >>>
+The Urgent Announcement Container belongs on non-home public pages when an urgent announcement exists. The home page announcements display is separate.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-38
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-27
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-47
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-16
+TITLE: Announcements Bar Home Exclusion
+STATEMENT: >>>
+The GSSC Website Public Frontend App Root SHALL omit the Announcements Bar on the home page.
+<<<
+RATIONALE: >>>
+The home page uses the Announcements Display instead of the Announcements Bar.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-38
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-27
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-17
+TITLE: Announcements Bar Title
+STATEMENT: >>>
+The Announcements Bar SHALL include the title of each urgent public announcement it displays.
+<<<
+RATIONALE: >>>
+The title is part of the urgent announcement contents shown in the bar.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-38
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-30
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-18
+TITLE: Announcements Bar Text
+STATEMENT: >>>
+The Announcements Bar SHALL include the text of each urgent public announcement it displays.
+<<<
+RATIONALE: >>>
+The text is part of the urgent announcement contents shown in the bar.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-38
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-31
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-19
+TITLE: Announcements Bar Selection
+STATEMENT: >>>
+Selecting an announcement in the Announcements Bar SHALL open the home page announcements display focused on that announcement.
+<<<
+RATIONALE: >>>
+The bar is a way to reach the selected announcement on the home page announcements display.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-38
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-34
+  ROLE: Refines
+
+[[/SECTION]]
+
 [[/SECTION]]
 
 [[SECTION]]
@@ -268,105 +367,6 @@ REVIEW_STATUS: Changed
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-15
-  ROLE: Refines
-
-[[/SECTION]]
-
-[[SECTION]]
-UID: GSSC-PLLR-ANNOUNCEMENTS-BAR
-TITLE: Announcements Bar
-
-[REQUIREMENT]
-UID: GSSC-PLLR-15
-TITLE: Announcements Bar on Non-Home Pages
-STATEMENT: >>>
-The GSSC Website Public Frontend App Root SHALL show the Announcements Bar on every public page other than the home page when there is an urgent public announcement to display.
-<<<
-RATIONALE: >>>
-The Urgent Announcement Container belongs on non-home public pages when an urgent announcement exists. The home page announcements display is separate.
-<<<
-DERIVED: False
-VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-38
-REVIEW_STATUS: Changed
-RELATIONS:
-- TYPE: Parent
-  VALUE: GSSC-PHLR-27
-  ROLE: Refines
-- TYPE: Parent
-  VALUE: GSSC-PHLR-47
-  ROLE: Refines
-
-[REQUIREMENT]
-UID: GSSC-PLLR-16
-TITLE: Announcements Bar Home Exclusion
-STATEMENT: >>>
-The GSSC Website Public Frontend App Root SHALL omit the Announcements Bar on the home page.
-<<<
-RATIONALE: >>>
-The home page uses the Announcements Display instead of the Announcements Bar.
-<<<
-DERIVED: False
-VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-38
-REVIEW_STATUS: Changed
-RELATIONS:
-- TYPE: Parent
-  VALUE: GSSC-PHLR-27
-  ROLE: Refines
-
-[REQUIREMENT]
-UID: GSSC-PLLR-17
-TITLE: Announcements Bar Title
-STATEMENT: >>>
-The Announcements Bar SHALL include the title of each urgent public announcement it displays.
-<<<
-RATIONALE: >>>
-The title is part of the urgent announcement contents shown in the bar.
-<<<
-DERIVED: False
-VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-38
-REVIEW_STATUS: Changed
-RELATIONS:
-- TYPE: Parent
-  VALUE: GSSC-PHLR-30
-  ROLE: Refines
-
-[REQUIREMENT]
-UID: GSSC-PLLR-18
-TITLE: Announcements Bar Text
-STATEMENT: >>>
-The Announcements Bar SHALL include the text of each urgent public announcement it displays.
-<<<
-RATIONALE: >>>
-The text is part of the urgent announcement contents shown in the bar.
-<<<
-DERIVED: False
-VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-38
-REVIEW_STATUS: Changed
-RELATIONS:
-- TYPE: Parent
-  VALUE: GSSC-PHLR-31
-  ROLE: Refines
-
-[REQUIREMENT]
-UID: GSSC-PLLR-19
-TITLE: Announcements Bar Selection
-STATEMENT: >>>
-Selecting an announcement in the Announcements Bar SHALL open the home page announcements display focused on that announcement.
-<<<
-RATIONALE: >>>
-The bar is a way to reach the selected announcement on the home page announcements display.
-<<<
-DERIVED: False
-VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-38
-REVIEW_STATUS: Changed
-RELATIONS:
-- TYPE: Parent
-  VALUE: GSSC-PHLR-34
   ROLE: Refines
 
 [[/SECTION]]
