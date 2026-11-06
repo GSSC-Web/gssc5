@@ -24,6 +24,12 @@ Under `src/app/`:
 
 Keep the App Root files beside these folders (not inside `modules/`). Put new feature UI under `modules/`, pages under `pages/`, and injectable services under `services/`.
 
+## Global styles
+
+`src/styles.css` imports Tailwind theme, **preflight**, and utilities as separate layers. Rely on preflight for browser defaults; do not restate those resets in component CSS.
+
+Symbols Nerd Font (for later UI symbols) is loaded there via `@font-face` from jsDelivr (`ryanoasis/nerd-fonts` Symbols-only) and exposed as `--font-nerd-symbols`.
+
 ## Testing harness (GSSC5-39)
 
 Shared setup lives beside the app source:

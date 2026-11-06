@@ -1,3 +1,21 @@
-/* You can add global styles to this file, and also import other style files */
+@layer theme, base, components, utilities;
 
-@import 'tailwindcss';
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/preflight.css" layer(base);
+@import "tailwindcss/utilities.css" layer(utilities);
+
+/*
+ * Symbols Nerd Font — for UI symbols later.
+ * No font package in this monorepo yet; load Symbols-only from jsDelivr
+ * (ryanoasis/nerd-fonts). https://www.nerdfonts.com/
+ */
+@font-face {
+  font-family: "Symbols Nerd Font";
+  src: url("https://cdn.jsdelivr.net/gh/ryanoasis/nerd-fonts@v3.3.0/patched-fonts/NerdFontsSymbolsOnly/SymbolsNerdFont-Regular.ttf")
+    format("truetype");
+  font-display: swap;
+}
+
+@theme {
+  --font-nerd-symbols: "Symbols Nerd Font", sans-serif;
+}
