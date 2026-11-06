@@ -2,8 +2,8 @@ import { Component, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { filter, map, startWith } from 'rxjs';
-import { AnnouncementsBar } from './announcements-bar';
-import { UrgentAnnouncements } from './urgent-announcements';
+import { AnnouncementsBar } from '../modules/announcements-bar/announcements-bar';
+import { UrgentAnnouncements } from '../services/urgent-announcements';
 
 @Component({
   imports: [RouterOutlet, AnnouncementsBar],

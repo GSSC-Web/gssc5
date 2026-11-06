@@ -9,8 +9,18 @@ From this directory:
 - `mise test` runs Vitest once.
 - `mise test:watch` re-runs Vitest when files change.
 
-`src/app/backend.ts` calls the backend through Eden Treaty. From the repository
-root, `mise serve`, `mise build`, and `mise test` include this app.
+From the repository root, `mise serve`, `mise build`, and `mise test` include this app.
+
+## Source layout
+
+| Path | Role |
+| --- | --- |
+| `src/app/` | App root bootstrap (shell host, routes, config) |
+| `src/modules/` | Feature modules; a multi-file class gets its own folder (e.g. `announcements-bar/`) |
+| `src/pages/` | Public page components (stubs until page tickets land) |
+| `src/services/` | Shared services, including `backend` (Eden Treaty) and `urgent-announcements` |
+
+Keep the App Root out of `modules/`. Put new feature UI under `modules/`, pages under `pages/`, and injectable services under `services/`.
 
 ## Testing harness (GSSC5-39)
 
@@ -53,5 +63,6 @@ test("GSSC-PLLR-N Title", async () => {
 // @relation(GSSC-PLLR-N, scope=range_end, role=Test)
 ```
 
-`src/app/app.test.ts` is the smoke sample of that pattern. Feature tickets own
-their requirement tests; do not park them in the harness file.
+`src/app/app.test.ts` follows that pattern for App Root LLRs. Feature tickets own
+their requirement tests; do not park them in the harness file. Do not add tests of
+the harness itself.

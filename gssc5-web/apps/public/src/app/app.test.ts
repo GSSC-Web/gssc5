@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { App } from './app';
 import { routes } from './app.routes';
-import { UrgentAnnouncements } from './urgent-announcements';
+import { UrgentAnnouncements } from '../services/urgent-announcements';
 import { nativeElement, setupPublicComponent } from '../test-harness';
 
 const sampleAnnouncement = {
