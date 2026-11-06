@@ -1,0 +1,21 @@
+:host {
+  display: block;
+  min-height: 100dvh;
+}
+
+.gssc-app-root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+
+.gssc-header-host,
+.gssc-footer-host {
+  display: block;
+  width: 100%;
+}
+
+.gssc-page {
+  flex: 1 1 auto;
+  width: 100%;
+}

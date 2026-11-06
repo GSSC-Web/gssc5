@@ -1,0 +1,41 @@
+.gssc-announcements-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  box-sizing: border-box;
+  background: color-mix(in srgb, CanvasText 6%, Canvas);
+  border-block-end: 1px solid color-mix(in srgb, CanvasText 12%, transparent);
+}
+
+.gssc-announcements-bar__item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+  width: 100%;
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  border: 0;
+  border-radius: 0.25rem;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.gssc-announcements-bar__item:hover,
+.gssc-announcements-bar__item:focus-visible {
+  background: color-mix(in srgb, CanvasText 8%, transparent);
+  outline: none;
+}
+
+.gssc-announcements-bar__title {
+  font-weight: 600;
+}
+
+.gssc-announcements-bar__text {
+  opacity: 0.9;
+}
