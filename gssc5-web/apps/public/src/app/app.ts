@@ -4,10 +4,11 @@ import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { filter, map, startWith } from 'rxjs';
 import { AnnouncementsBar } from './modules/announcements-bar/announcements-bar';
 import { Footer } from './modules/footer/footer';
+import { Header } from './modules/header/header';
 import { UrgentAnnouncements } from './services/urgent-announcements';
 
 @Component({
-  imports: [RouterOutlet, AnnouncementsBar, Footer],
+  imports: [RouterOutlet, AnnouncementsBar, Header, Footer],
   selector: 'gssc-root',
   styleUrl: './app.css',
   templateUrl: './app.html',
