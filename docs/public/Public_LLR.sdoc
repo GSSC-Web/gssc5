@@ -900,6 +900,657 @@ RELATIONS:
 [[/SECTION]]
 
 [[SECTION]]
+UID: GSSC-PLLR-HEADER
+TITLE: Public Header
+
+[[SECTION]]
+UID: GSSC-PLLR-HEADER-ELEMENT
+TITLE: Header
+
+[REQUIREMENT]
+UID: GSSC-PLLR-28
+TITLE: Semantic
+STATEMENT: >>>
+The GSSC Website Public Frontend Header SHALL present the Header Logo, the Header Organization Name when the layout permits, the Header account-access controls, the Header Contact control, the Header Site Search control, and the Navigation Menu.
+<<<
+RATIONALE: >>>
+The Header composes those displayed elements in the Header host. Each element's behavior is a separate requirement.
+<<<
+COMMENT: >>>
+Proposed for owner review (GSSC5-22). REVIEW_STATUS stays Changed until owner approval.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-22
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-PLLR-29
+TITLE: Syntactic
+STATEMENT: >>>
+The GSSC Website Public Frontend Header SHALL fill the Header host and arrange identity, Navigation Menu, and Header actions in a horizontal bar that wraps as the viewport narrows.
+<<<
+RATIONALE: >>>
+The Header host already sticks to the top of the viewport. Filling that host and wrapping the bar keeps Header contents available as the page resizes.
+<<<
+COMMENT: >>>
+Proposed for owner review (GSSC5-22).
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-22
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-PLLR-30
+TITLE: Lexical
+STATEMENT: >>>
+The GSSC Website Public Frontend Header SHALL use the light-green theme token for its background, the gray theme token for its bottom border, and the dark-green theme token for its text.
+<<<
+RATIONALE: >>>
+Theme tokens keep Header presentation aligned with the organization palette. A fuller color role map for the Header is not set yet beyond these token choices.
+<<<
+COMMENT: >>>
+Proposed Lexical mapping for owner review until a full color role map exists.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-22
+REVIEW_STATUS: Changed
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-HEADER-LOGO
+TITLE: Logo
+
+[REQUIREMENT]
+UID: GSSC-PLLR-31
+TITLE: Semantic
+STATEMENT: >>>
+The Header Logo SHALL display the GSSC Logo.
+<<<
+RATIONALE: >>>
+The Header always includes the GSSC Logo so the visitor can identify the society.
+<<<
+COMMENT: >>>
+Proposed for owner review (GSSC5-22). Logo artwork may be an SVG mark until a brand file is supplied.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-22
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-1
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-32
+TITLE: Syntactic
+STATEMENT: >>>
+The Header Logo SHALL appear at the start of the Header in every layout.
+<<<
+RATIONALE: >>>
+Leading placement keeps the logo visible whether or not the organization name also fits.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-22
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-1
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-33
+TITLE: Lexical
+STATEMENT: >>>
+The Header Logo SHALL use the dark-green theme token for its mark color.
+<<<
+RATIONALE: >>>
+A single theme token keeps the mark readable on the Header background until a brand color role is set.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-22
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-1
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-HEADER-ORG-NAME
+TITLE: Organization Name
+
+[REQUIREMENT]
+UID: GSSC-PLLR-34
+TITLE: Semantic
+STATEMENT: >>>
+The Header Organization Name SHALL display the name Genealogical Society of Stanislaus County, or the acronym GSSC, when the layout permits.
+<<<
+RATIONALE: >>>
+The Header includes the society name when there is room. The acronym is the short form when the full name does not fit and the layout still permits a name.
+<<<
+COMMENT: >>>
+Proposed for owner review (GSSC5-22). Proposed layout bands: full name when the Header is at least 48rem wide; acronym when at least 30rem and under 48rem; omit the name under 30rem (logo remains).
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-22
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-19
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-35
+TITLE: Syntactic
+STATEMENT: >>>
+The Header Organization Name SHALL appear beside the Header Logo when the layout permits a name, and SHALL be omitted from the Header when the layout does not permit a name.
+<<<
+RATIONALE: >>>
+Placement beside the logo keeps identity together. Omitting the name on a narrow layout leaves the logo as the identity mark.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-22
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-19
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-36
+TITLE: Lexical
+STATEMENT: >>>
+The Header Organization Name SHALL use the sans-serif theme font, a medium font weight, and the dark-green theme token for its text color.
+<<<
+RATIONALE: >>>
+Those tokens keep the name aligned with Header text presentation until a fuller type role map exists.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-22
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-19
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-HEADER-LOGIN
+TITLE: Login
+
+[REQUIREMENT]
+UID: GSSC-PLLR-37
+TITLE: Semantic
+STATEMENT: >>>
+When no member is logged in, the Header Login control SHALL navigate the visitor to the members-only application.
+<<<
+RATIONALE: >>>
+Login on the public Header is navigation to the Member Frontend. Member Frontend UI is out of this requirement's scope.
+<<<
+COMMENT: >>>
+Proposed for owner review (GSSC5-22). Proposed default members origin for local development: http://localhost:4201.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-22
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-2
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-38
+TITLE: Syntactic
+STATEMENT: >>>
+The Header Login control SHALL appear in the Header account-access area when no member is logged in, and SHALL be omitted when a member is logged in.
+<<<
+RATIONALE: >>>
+Login belongs with account access. Member Access replaces Login when a member is logged in.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-22
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-2
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-39
+TITLE: Lexical
+STATEMENT: >>>
+The Header Login control SHALL use the sans-serif theme font and the dark-green theme token for its text color.
+<<<
+RATIONALE: >>>
+Account-access controls share Header text tokens until a fuller control style map exists.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-22
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-2
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-HEADER-MEMBER-ACCESS
+TITLE: Member Access
+
+[REQUIREMENT]
+UID: GSSC-PLLR-40
+TITLE: Semantic
+STATEMENT: >>>
+When a member is logged in, the Header Member Access control SHALL navigate the visitor to the members-only application.
+<<<
+RATIONALE: >>>
+A logged-in member reaches the Member Frontend through Member Access instead of Login.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-22
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-18
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-41
+TITLE: Syntactic
+STATEMENT: >>>
+The Header Member Access control SHALL appear in the Header account-access area in place of the Header Login control when a member is logged in, and SHALL be omitted when no member is logged in.
+<<<
+RATIONALE: >>>
+Member Access replaces Login rather than appearing beside it.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-22
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-18
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-42
+TITLE: Lexical
+STATEMENT: >>>
+The Header Member Access control SHALL use the sans-serif theme font and the dark-green theme token for its text color.
+<<<
+RATIONALE: >>>
+Account-access controls share Header text tokens until a fuller control style map exists.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-22
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-18
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-HEADER-GREETING
+TITLE: Greeting
+
+[REQUIREMENT]
+UID: GSSC-PLLR-43
+TITLE: Semantic
+STATEMENT: >>>
+The Header Greeting SHALL display a greeting when a member is logged in.
+<<<
+RATIONALE: >>>
+The greeting shows a logged-in member that the Header recognizes the session.
+<<<
+COMMENT: >>>
+Proposed for owner review (GSSC5-22). Proposed greeting copy is "Welcome" until a public session profile supplies a personal name.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-22
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-8
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-44
+TITLE: Syntactic
+STATEMENT: >>>
+The Header Greeting SHALL appear in the Header account-access area when a member is logged in, and SHALL be omitted when no member is logged in.
+<<<
+RATIONALE: >>>
+The greeting belongs with the logged-in account-access controls.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-22
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-8
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-45
+TITLE: Lexical
+STATEMENT: >>>
+The Header Greeting SHALL use the sans-serif theme font and the dark-brown theme token for its text color.
+<<<
+RATIONALE: >>>
+A secondary text token distinguishes the greeting from Header action controls until a fuller type role map exists.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-22
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-8
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-HEADER-LOGOUT
+TITLE: Logout
+
+[REQUIREMENT]
+UID: GSSC-PLLR-46
+TITLE: Semantic
+STATEMENT: >>>
+When a member is logged in, the Header Logout control SHALL end that member's members-only application session and leave the visitor on the public page.
+<<<
+RATIONALE: >>>
+Logout ends the Member Frontend session through the existing backend logout and keeps the visitor on the current public page.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-22
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-9
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-47
+TITLE: Syntactic
+STATEMENT: >>>
+The Header Logout control SHALL appear in the Header account-access area when a member is logged in, and SHALL be omitted when no member is logged in.
+<<<
+RATIONALE: >>>
+Logout belongs with the logged-in account-access controls.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-22
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-9
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-48
+TITLE: Lexical
+STATEMENT: >>>
+The Header Logout control SHALL use the sans-serif theme font and the dark-green theme token for its text color.
+<<<
+RATIONALE: >>>
+Account-access controls share Header text tokens until a fuller control style map exists.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-22
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-9
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-HEADER-CONTACT
+TITLE: Contact
+
+[REQUIREMENT]
+UID: GSSC-PLLR-49
+TITLE: Semantic
+STATEMENT: >>>
+The Header Contact control SHALL open the Public Contact Overlay so a visitor can draft a message to the organization.
+<<<
+RATIONALE: >>>
+Header Contact is the Header's path into the Public Contact Overlay. Overlay contents are separate requirements.
+<<<
+COMMENT: >>>
+Proposed for owner review (GSSC5-22). This ticket implements the Header open hook; Public Contact Overlay UI remains GSSC5-31.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-22
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-3
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-50
+TITLE: Syntactic
+STATEMENT: >>>
+The Header Contact control SHALL appear in the Header actions area.
+<<<
+RATIONALE: >>>
+Contact sits with other Header actions so it remains reachable from every public page that shows the Header.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-22
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-3
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-51
+TITLE: Lexical
+STATEMENT: >>>
+The Header Contact control SHALL use the sans-serif theme font and the dark-green theme token for its text color.
+<<<
+RATIONALE: >>>
+Header action controls share Header text tokens until a fuller control style map exists.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-22
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-3
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-HEADER-SITE-SEARCH
+TITLE: Site Search
+
+[REQUIREMENT]
+UID: GSSC-PLLR-52
+TITLE: Semantic
+STATEMENT: >>>
+The Header Site Search control SHALL accept a search query from the visitor for searching the site.
+<<<
+RATIONALE: >>>
+The Header provides the visitor a way to enter a site search query. Search results presentation is outside this control.
+<<<
+COMMENT: >>>
+Proposed for owner review (GSSC5-22). This ticket covers the Header query control only; no public search-results page HLR exists yet.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-22
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-4
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-53
+TITLE: Syntactic
+STATEMENT: >>>
+The Header Site Search control SHALL appear in the Header actions area.
+<<<
+RATIONALE: >>>
+Site search sits with other Header actions so it remains reachable from every public page that shows the Header.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-22
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-4
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-54
+TITLE: Lexical
+STATEMENT: >>>
+The Header Site Search control SHALL use the sans-serif theme font, the white theme token for its field background, the gray theme token for its field border, and the dark-green theme token for its text color.
+<<<
+RATIONALE: >>>
+Those tokens keep the search field readable on the Header background until a fuller form style map exists.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-22
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-4
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-HEADER-NAVIGATION-MENU
+TITLE: Navigation Menu
+
+[REQUIREMENT]
+UID: GSSC-PLLR-55
+TITLE: Semantic
+STATEMENT: >>>
+The Navigation Menu SHALL provide access to the public home page, the public membership information page, the public leadership page, the public calendar, the public publications page, the Stanislaus County Cemetery Project as a child of access to the public publications page, the War Veterans of Stanislaus County publication as a child of access to the public publications page, the public research tools page, and the public newsletters page.
+<<<
+RATIONALE: >>>
+The Navigation Menu is how the Header reaches those public pages. Entry labels are not set here. Cemetery Project and War Veterans access hang under publications access.
+<<<
+COMMENT: >>>
+Proposed for owner review (GSSC5-22). Proposed child paths under publications: /publications/cemetery and /publications/war-veterans (stub routes until those page tickets land).
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-22
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-5
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-10
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-11
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-126
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-12
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-13
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-16
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-17
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-14
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-15
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-56
+TITLE: Syntactic
+STATEMENT: >>>
+The Navigation Menu SHALL appear in the Header as a row of page-access entries that wraps with the Header bar as the viewport narrows, with Cemetery Project and War Veterans entries nested under the publications entry.
+<<<
+RATIONALE: >>>
+A wrapping row keeps main page access in the Header. Nesting the publication children under publications matches those access requirements.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-22
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-5
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-57
+TITLE: Lexical
+STATEMENT: >>>
+The Navigation Menu SHALL use the sans-serif theme font and the dark-green theme token for its entry text color.
+<<<
+RATIONALE: >>>
+Navigation entries share Header text tokens until a fuller navigation style map exists.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-22
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-5
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
 UID: GSSC-PLLR-ROUTER
 TITLE: Public Router
 
