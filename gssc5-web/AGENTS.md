@@ -25,7 +25,7 @@ Prefer running single test files when iterating (faster feedback).
 - Prefer named exports over default exports
 - Import style: `import {} from "";`
 - Error handling pattern: Fail-fast; check valid-invalid early, and avoid unnecessary nesting and exceptions.
-- (add 3–5 rules that matter most for this codebase)
+- Public FE theme tokens live on `:root` in `apps/public/src/styles.css` (`--gssc-*`); prefer them over hard-coded colors. Outermost shell background is white; default typeface is sans-serif unless a requirement says otherwise.
 
 ## Do
 - Follow existing patterns in the codebase, or else conform to framework documentation recommendations. (see example files below)

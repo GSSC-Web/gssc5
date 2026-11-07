@@ -1,0 +1,42 @@
+/* @relation(GSSC-PLLR-20, GSSC-PLLR-21, scope=range_start, role=Implementation) */
+:host {
+  display: block;
+  min-height: 100dvh;
+  background-color: var(--gssc-white);
+  color: var(--gssc-black);
+  font-family: var(--font-sans);
+}
+
+.gssc-app-root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  background-color: var(--gssc-white);
+}
+/* @relation(GSSC-PLLR-20, GSSC-PLLR-21, scope=range_end, role=Implementation) */
+
+/* @relation(GSSC-PLLR-22, GSSC-PLLR-23, scope=range_start, role=Implementation) */
+.gssc-header-host {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  color: inherit;
+  font-family: inherit;
+}
+/* @relation(GSSC-PLLR-22, GSSC-PLLR-23, scope=range_end, role=Implementation) */
+
+/* @relation(GSSC-PLLR-26, GSSC-PLLR-27, scope=range_start, role=Implementation) */
+.gssc-page {
+  flex: 1 1 auto;
+  color: inherit;
+  font-family: inherit;
+}
+/* @relation(GSSC-PLLR-26, GSSC-PLLR-27, scope=range_end, role=Implementation) */
+
+/* @relation(GSSC-PLLR-24, GSSC-PLLR-25, scope=range_start, role=Implementation) */
+.gssc-footer-host {
+  margin-block-start: auto;
+  color: inherit;
+  font-family: inherit;
+}
+/* @relation(GSSC-PLLR-24, GSSC-PLLR-25, scope=range_end, role=Implementation) */

@@ -1,3 +1,53 @@
-/* You can add global styles to this file, and also import other style files */
+@layer theme, base, components, utilities;
 
-@import 'tailwindcss';
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/preflight.css" layer(base);
+@import "tailwindcss/utilities.css" layer(utilities);
+
+/*
+ * Symbols Nerd Font — for UI symbols later.
+ * No font package in this monorepo yet; load Symbols-only from jsDelivr
+ * (ryanoasis/nerd-fonts). https://www.nerdfonts.com/
+ */
+@font-face {
+  font-family: "Symbols Nerd Font";
+  src: url("https://cdn.jsdelivr.net/gh/ryanoasis/nerd-fonts@v3.3.0/patched-fonts/NerdFontsSymbolsOnly/SymbolsNerdFont-Regular.ttf")
+    format("truetype");
+  font-display: swap;
+}
+
+/* Organization palette — prefer these over hard-coded hex in components. */
+:root {
+  --gssc-light-green: #c5cab6;
+  --gssc-dark-green: #61684d;
+  --gssc-cream: #ffffcc;
+  --gssc-light-brown: #d8ba98;
+  --gssc-dark-brown: #92745d;
+  --gssc-gray: #d4d4d4;
+  --gssc-white: #ffffff;
+  --gssc-black: #000000;
+}
+
+@theme {
+  --font-nerd-symbols: "Symbols Nerd Font", sans-serif;
+  --font-sans: ui-sans-serif, system-ui, sans-serif;
+  --color-gssc-light-green: var(--gssc-light-green);
+  --color-gssc-dark-green: var(--gssc-dark-green);
+  --color-gssc-cream: var(--gssc-cream);
+  --color-gssc-light-brown: var(--gssc-light-brown);
+  --color-gssc-dark-brown: var(--gssc-dark-brown);
+  --color-gssc-gray: var(--gssc-gray);
+  --color-gssc-white: var(--gssc-white);
+  --color-gssc-black: var(--gssc-black);
+}
+
+/*
+ * Outermost site layer: white background, sans-serif default.
+ * Preflight already zeros margins/borders; do not restate those here.
+ */
+html,
+body {
+  background-color: var(--gssc-white);
+  color: var(--gssc-black);
+  font-family: var(--font-sans);
+}

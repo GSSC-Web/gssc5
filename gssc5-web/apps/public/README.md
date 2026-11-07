@@ -9,8 +9,28 @@ From this directory:
 - `mise test` runs Vitest once.
 - `mise test:watch` re-runs Vitest when files change.
 
-`src/app/backend.ts` calls the backend through Eden Treaty. From the repository
-root, `mise serve`, `mise build`, and `mise test` include this app.
+From the repository root, `mise serve`, `mise build`, and `mise test` include this app.
+
+## Source layout
+
+Under `src/app/`:
+
+| Path | Role |
+| --- | --- |
+| `src/app/` | App root bootstrap (shell host, routes, config) |
+| `src/app/modules/` | Feature modules; a multi-file class gets its own folder (e.g. `announcements-bar/`) |
+| `src/app/pages/` | Public page components (stubs until page tickets land) |
+| `src/app/services/` | Shared services, including `backend` (Eden Treaty) and `urgent-announcements` |
+
+Keep the App Root files beside these folders (not inside `modules/`). Put new feature UI under `modules/`, pages under `pages/`, and injectable services under `services/`.
+
+## Global styles
+
+`src/styles.css` imports Tailwind theme, **preflight**, and utilities as separate layers. Rely on preflight for browser defaults; do not restate those resets in component CSS.
+
+Organization palette tokens (`--gssc-light-green`, `--gssc-dark-green`, `--gssc-cream`, `--gssc-light-brown`, `--gssc-dark-brown`, `--gssc-gray`, `--gssc-white`, `--gssc-black`) are defined on `:root`. Prefer them over hard-coded hex. `html` / `body` / app shell use a white background and sans-serif by default.
+
+Symbols Nerd Font (for later UI symbols) is loaded there via `@font-face` from jsDelivr (`ryanoasis/nerd-fonts` Symbols-only) and exposed as `--font-nerd-symbols`.
 
 ## Testing harness (GSSC5-39)
 
@@ -53,5 +73,6 @@ test("GSSC-PLLR-N Title", async () => {
 // @relation(GSSC-PLLR-N, scope=range_end, role=Test)
 ```
 
-`src/app/app.test.ts` is the smoke sample of that pattern. Feature tickets own
-their requirement tests; do not park them in the harness file.
+`src/app/app.test.ts` follows that pattern for App Root LLRs. Feature tickets own
+their requirement tests; do not park them in the harness file. Do not add tests of
+the harness itself.
