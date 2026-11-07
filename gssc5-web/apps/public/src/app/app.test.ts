@@ -213,6 +213,8 @@ test('GSSC-PLLR-14 Newsletters Page Route', async () => {
 // @relation(GSSC-PLLR-16, scope=range_start, role=Test)
 test('GSSC-PLLR-16 Syntactic', async () => {
   const { fixture, announcements, root } = await setupApp('/membership');
+  expect(root.querySelector('gssc-announcements-bar')).toBeNull();
+
   announcements.setAnnouncements([sampleAnnouncement]);
   fixture.detectChanges();
   await fixture.whenStable();

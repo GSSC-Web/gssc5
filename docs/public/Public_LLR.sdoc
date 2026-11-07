@@ -82,7 +82,7 @@ The App Root composes those subelements so Header, Footer, announcements, and th
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-38
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-128
@@ -100,7 +100,7 @@ The App Root is the outermost shell of the public page. Filling the viewport giv
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-38
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-128
@@ -118,7 +118,7 @@ The outermost site layer uses a white background and a sans-serif default. Theme
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-38
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-128
@@ -142,7 +142,7 @@ The App Root supplies a host so Header implementation mounts in the public shell
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-38
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-44
@@ -160,7 +160,7 @@ Common public pages keep the Header at the top. Sticking the host keeps that top
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-38
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-44
@@ -175,13 +175,10 @@ The Header host SHALL inherit the App Root font and text color theme tokens.
 RATIONALE: >>>
 The Header host is an empty mount for Header contents. It inherits App Root type tokens so the shell stays consistent until Header paints its own presentation. Independent Header host colors are not set yet.
 <<<
-COMMENT: >>>
-Proposed for review: Lexical inherits App Root tokens only; no separate Header host palette until a color role map exists.
-<<<
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-38
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-44
@@ -205,7 +202,7 @@ The App Root supplies a host so Footer implementation mounts in the public shell
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-38
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-46
@@ -223,7 +220,7 @@ Common public pages place the Footer at the bottom. The host anchors that placem
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-38
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-46
@@ -238,13 +235,10 @@ The Footer host SHALL inherit the App Root font and text color theme tokens.
 RATIONALE: >>>
 The Footer host is an empty mount for Footer contents. It inherits App Root type tokens so the shell stays consistent until Footer paints its own presentation. Independent Footer host colors are not set yet.
 <<<
-COMMENT: >>>
-Proposed for review: Lexical inherits App Root tokens only; no separate Footer host palette until a color role map exists.
-<<<
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-38
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-46
@@ -268,7 +262,7 @@ Public pages mount through the Page Outlet so each page shares the App Root shel
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-38
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-128
@@ -286,7 +280,7 @@ Placing the outlet between the hosts and letting it grow keeps Header and Footer
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-38
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-128
@@ -301,13 +295,10 @@ The Page Outlet SHALL inherit the App Root font and text color theme tokens.
 RATIONALE: >>>
 The Page Outlet is a mount for page contents. It inherits App Root type tokens so pages share the shell defaults until a page sets its own presentation. Independent Page Outlet colors are not set yet.
 <<<
-COMMENT: >>>
-Proposed for review: Lexical inherits App Root tokens only; no separate Page Outlet palette until a color role map exists.
-<<<
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-38
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-128
@@ -331,7 +322,7 @@ The bar presents urgent announcement contents and routes the visitor to that ann
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-38
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-30
@@ -355,7 +346,7 @@ The Urgent Announcement Container belongs on non-home public pages when an urgen
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-38
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-27
@@ -373,13 +364,10 @@ The Announcements Bar SHALL use the cream theme token for its background, the gr
 RATIONALE: >>>
 Theme tokens keep announcement presentation aligned with the organization palette. A fuller color role map for the bar is not set yet beyond these token choices.
 <<<
-COMMENT: >>>
-Proposed for review: cream / gray / dark-green / dark-brown mapping for the bar until the owner sets a full color role map.
-<<<
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-38
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-47
@@ -405,7 +393,7 @@ The Navigation Menu reaches the public home page through this route.
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-38
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-10
@@ -423,7 +411,7 @@ The Navigation Menu reaches the public membership information page through this 
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-38
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-11
@@ -441,7 +429,7 @@ The Navigation Menu reaches the public leadership page through this route.
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-38
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-126
@@ -459,7 +447,7 @@ The Navigation Menu reaches the public calendar through this route.
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-38
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-12
@@ -477,7 +465,7 @@ The Navigation Menu reaches the public publications page through this route.
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-38
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-13
@@ -495,7 +483,7 @@ The Navigation Menu reaches the public research tools page through this route.
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-38
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-14
@@ -513,7 +501,7 @@ The Navigation Menu reaches the public newsletters page through this route.
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-38
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-15

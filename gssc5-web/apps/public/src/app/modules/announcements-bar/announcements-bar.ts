@@ -12,9 +12,9 @@ export class AnnouncementsBar {
   private readonly router = inject(Router);
   private readonly urgentAnnouncements = inject(UrgentAnnouncements);
 
+  // @relation(GSSC-PLLR-15, scope=range_start, role=Implementation)
   protected readonly announcements = this.urgentAnnouncements.announcements;
 
-  // @relation(GSSC-PLLR-15, scope=range_start, role=Implementation)
   protected selectAnnouncement(announcement: UrgentAnnouncement): void {
     void this.router.navigate(['/'], {
       queryParams: { focusAnnouncement: announcement.id },
