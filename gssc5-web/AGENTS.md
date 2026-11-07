@@ -25,13 +25,13 @@ Prefer running single test files when iterating (faster feedback).
 - Prefer named exports over default exports
 - Import style: `import {} from "";`
 - Error handling pattern: Fail-fast; check valid-invalid early, and avoid unnecessary nesting and exceptions.
-- (add 3–5 rules that matter most for this codebase)
+- Public FE theme tokens live on `:root` in `apps/public/src/styles.css` (`--gssc-*`); prefer them over hard-coded colors. Outermost shell background is white; default typeface is sans-serif unless a requirement says otherwise.
 
 ## Do
 - Follow existing patterns in the codebase, or else conform to framework documentation recommendations. (see example files below)
 - Run relevant tests after making changes
 - Keep changes focused and minimal
-- Tests are permanent files, and each LLR should have a dedicated unit test. Use the shared harness at `apps/backend/src/test-harness.ts`.
+- Tests are permanent files, and each LLR should have a dedicated unit test. Backend: shared harness at `apps/backend/src/test-harness.ts` with `*.test.ts` beside sources. Public frontend: shared harness at `apps/public/src/test-harness.ts` with `*.test.ts` beside sources; run via `mise run //public:test`.
 
 ## Don't
 - Introduce new dependencies without a clear reason
@@ -41,3 +41,4 @@ Prefer running single test files when iterating (faster feedback).
 
 ## Reference Examples
 - Backend: `apps/backend/src/user/accounts.ts` and `apps/backend/src/user/accounts.test.ts`
+- Public frontend harness: `apps/public/src/test-harness.ts`, smoke `apps/public/src/app/app.test.ts`

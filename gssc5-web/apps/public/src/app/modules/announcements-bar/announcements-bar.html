@@ -1,0 +1,14 @@
+<aside class="gssc-announcements-bar" aria-label="Urgent announcements">
+  <!-- @relation(GSSC-PLLR-15, scope=range_start, role=Implementation) -->
+  @for (announcement of announcements(); track announcement.id) {
+    <button
+      type="button"
+      class="gssc-announcements-bar__item"
+      (click)="selectAnnouncement(announcement)"
+    >
+      <span class="gssc-announcements-bar__title">{{ announcement.title }}</span>
+      <span class="gssc-announcements-bar__text">{{ announcement.text }}</span>
+    </button>
+  }
+  <!-- @relation(GSSC-PLLR-15, scope=range_end, role=Implementation) -->
+</aside>
