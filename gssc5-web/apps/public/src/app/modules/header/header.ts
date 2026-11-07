@@ -26,42 +26,42 @@ export class Header {
     typeof globalThis.innerWidth === 'number' ? globalThis.innerWidth : FULL_NAME_MIN_PX,
   );
 
-  // @relation(GSSC-PLLR-34, GSSC-PLLR-35, scope=range_start, role=Implementation)
+  // @relation(GSSC-PLLR-52, GSSC-PLLR-53, scope=range_start, role=Implementation)
   readonly organizationNameMode = computed<OrganizationNameMode>(() => {
     const width = this.layoutWidthPx();
     if (width >= FULL_NAME_MIN_PX) return 'full';
     if (width >= ACRONYM_MIN_PX) return 'acronym';
     return 'omit';
   });
-  // @relation(GSSC-PLLR-34, GSSC-PLLR-35, scope=range_end, role=Implementation)
+  // @relation(GSSC-PLLR-52, GSSC-PLLR-53, scope=range_end, role=Implementation)
 
-  // @relation(GSSC-PLLR-37, GSSC-PLLR-38, GSSC-PLLR-40, GSSC-PLLR-41, GSSC-PLLR-43, GSSC-PLLR-44, GSSC-PLLR-46, GSSC-PLLR-47, scope=range_start, role=Implementation)
+  // @relation(GSSC-PLLR-55, GSSC-PLLR-56, GSSC-PLLR-58, GSSC-PLLR-59, GSSC-PLLR-61, GSSC-PLLR-62, GSSC-PLLR-64, GSSC-PLLR-65, scope=range_start, role=Implementation)
   readonly loggedIn = this.memberSession.loggedIn;
-  // @relation(GSSC-PLLR-37, GSSC-PLLR-38, GSSC-PLLR-40, GSSC-PLLR-41, GSSC-PLLR-43, GSSC-PLLR-44, GSSC-PLLR-46, GSSC-PLLR-47, scope=range_end, role=Implementation)
+  // @relation(GSSC-PLLR-55, GSSC-PLLR-56, GSSC-PLLR-58, GSSC-PLLR-59, GSSC-PLLR-61, GSSC-PLLR-62, GSSC-PLLR-64, GSSC-PLLR-65, scope=range_end, role=Implementation)
 
-  // @relation(GSSC-PLLR-52, scope=range_start, role=Implementation)
+  // @relation(GSSC-PLLR-70, scope=range_start, role=Implementation)
   readonly searchQuery = signal('');
-  // @relation(GSSC-PLLR-52, scope=range_end, role=Implementation)
+  // @relation(GSSC-PLLR-70, scope=range_end, role=Implementation)
 
-  // @relation(GSSC-PLLR-37, GSSC-PLLR-40, scope=range_start, role=Implementation)
+  // @relation(GSSC-PLLR-55, GSSC-PLLR-58, scope=range_start, role=Implementation)
   protected openMembersApp(): void {
     this.membersApp.navigate();
   }
-  // @relation(GSSC-PLLR-37, GSSC-PLLR-40, scope=range_end, role=Implementation)
+  // @relation(GSSC-PLLR-55, GSSC-PLLR-58, scope=range_end, role=Implementation)
 
-  // @relation(GSSC-PLLR-46, scope=range_start, role=Implementation)
+  // @relation(GSSC-PLLR-64, scope=range_start, role=Implementation)
   protected async logout(): Promise<void> {
     await this.memberSession.logout();
   }
-  // @relation(GSSC-PLLR-46, scope=range_end, role=Implementation)
+  // @relation(GSSC-PLLR-64, scope=range_end, role=Implementation)
 
-  // @relation(GSSC-PLLR-49, scope=range_start, role=Implementation)
+  // @relation(GSSC-PLLR-67, scope=range_start, role=Implementation)
   protected openContact(): void {
     this.contactOverlay.open();
   }
-  // @relation(GSSC-PLLR-49, scope=range_end, role=Implementation)
+  // @relation(GSSC-PLLR-67, scope=range_end, role=Implementation)
 
-  // @relation(GSSC-PLLR-52, scope=range_start, role=Implementation)
+  // @relation(GSSC-PLLR-70, scope=range_start, role=Implementation)
   protected onSearchInput(event: Event): void {
     const value = (event.target as HTMLInputElement).value;
     this.searchQuery.set(value);
@@ -70,5 +70,5 @@ export class Header {
   protected onSearchSubmit(event: Event): void {
     event.preventDefault();
   }
-  // @relation(GSSC-PLLR-52, scope=range_end, role=Implementation)
+  // @relation(GSSC-PLLR-70, scope=range_end, role=Implementation)
 }

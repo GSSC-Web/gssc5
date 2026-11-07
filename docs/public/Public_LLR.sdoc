@@ -908,7 +908,7 @@ UID: GSSC-PLLR-HEADER-ELEMENT
 TITLE: Header
 
 [REQUIREMENT]
-UID: GSSC-PLLR-28
+UID: GSSC-PLLR-46
 TITLE: Semantic
 STATEMENT: >>>
 The GSSC Website Public Frontend Header SHALL present the Header Logo, the Header Organization Name when the layout permits, the Header account-access controls, the Header Contact control, the Header Site Search control, and the Navigation Menu.
@@ -925,7 +925,7 @@ CHANGE_DRIVER: GSSC5-22
 REVIEW_STATUS: Changed
 
 [REQUIREMENT]
-UID: GSSC-PLLR-29
+UID: GSSC-PLLR-47
 TITLE: Syntactic
 STATEMENT: >>>
 The GSSC Website Public Frontend Header SHALL fill the Header host and arrange identity, Navigation Menu, and Header actions in a horizontal bar that wraps as the viewport narrows.
@@ -942,7 +942,7 @@ CHANGE_DRIVER: GSSC5-22
 REVIEW_STATUS: Changed
 
 [REQUIREMENT]
-UID: GSSC-PLLR-30
+UID: GSSC-PLLR-48
 TITLE: Lexical
 STATEMENT: >>>
 The GSSC Website Public Frontend Header SHALL use the light-green theme token for its background, the gray theme token for its bottom border, and the dark-green theme token for its text.
@@ -965,7 +965,7 @@ UID: GSSC-PLLR-HEADER-LOGO
 TITLE: Logo
 
 [REQUIREMENT]
-UID: GSSC-PLLR-31
+UID: GSSC-PLLR-49
 TITLE: Semantic
 STATEMENT: >>>
 The Header Logo SHALL display the GSSC Logo.
@@ -986,7 +986,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-32
+UID: GSSC-PLLR-50
 TITLE: Syntactic
 STATEMENT: >>>
 The Header Logo SHALL appear at the start of the Header in every layout.
@@ -1004,7 +1004,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-33
+UID: GSSC-PLLR-51
 TITLE: Lexical
 STATEMENT: >>>
 The Header Logo SHALL use the dark-green theme token for its mark color.
@@ -1028,7 +1028,7 @@ UID: GSSC-PLLR-HEADER-ORG-NAME
 TITLE: Organization Name
 
 [REQUIREMENT]
-UID: GSSC-PLLR-34
+UID: GSSC-PLLR-52
 TITLE: Semantic
 STATEMENT: >>>
 The Header Organization Name SHALL display the name Genealogical Society of Stanislaus County, or the acronym GSSC, when the layout permits.
@@ -1049,7 +1049,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-35
+UID: GSSC-PLLR-53
 TITLE: Syntactic
 STATEMENT: >>>
 The Header Organization Name SHALL appear beside the Header Logo when the layout permits a name, and SHALL be omitted from the Header when the layout does not permit a name.
@@ -1067,7 +1067,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-36
+UID: GSSC-PLLR-54
 TITLE: Lexical
 STATEMENT: >>>
 The Header Organization Name SHALL use the sans-serif theme font, a medium font weight, and the dark-green theme token for its text color.
@@ -1091,7 +1091,7 @@ UID: GSSC-PLLR-HEADER-LOGIN
 TITLE: Login
 
 [REQUIREMENT]
-UID: GSSC-PLLR-37
+UID: GSSC-PLLR-55
 TITLE: Semantic
 STATEMENT: >>>
 When no member is logged in, the Header Login control SHALL navigate the visitor to the members-only application.
@@ -1112,7 +1112,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-38
+UID: GSSC-PLLR-56
 TITLE: Syntactic
 STATEMENT: >>>
 The Header Login control SHALL appear in the Header account-access area when no member is logged in, and SHALL be omitted when a member is logged in.
@@ -1130,7 +1130,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-39
+UID: GSSC-PLLR-57
 TITLE: Lexical
 STATEMENT: >>>
 The Header Login control SHALL use the sans-serif theme font and the dark-green theme token for its text color.
@@ -1154,7 +1154,7 @@ UID: GSSC-PLLR-HEADER-MEMBER-ACCESS
 TITLE: Member Access
 
 [REQUIREMENT]
-UID: GSSC-PLLR-40
+UID: GSSC-PLLR-58
 TITLE: Semantic
 STATEMENT: >>>
 When a member is logged in, the Header Member Access control SHALL navigate the visitor to the members-only application.
@@ -1172,7 +1172,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-41
+UID: GSSC-PLLR-59
 TITLE: Syntactic
 STATEMENT: >>>
 The Header Member Access control SHALL appear in the Header account-access area in place of the Header Login control when a member is logged in, and SHALL be omitted when no member is logged in.
@@ -1190,7 +1190,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-42
+UID: GSSC-PLLR-60
 TITLE: Lexical
 STATEMENT: >>>
 The Header Member Access control SHALL use the sans-serif theme font and the dark-green theme token for its text color.
@@ -1214,7 +1214,7 @@ UID: GSSC-PLLR-HEADER-GREETING
 TITLE: Greeting
 
 [REQUIREMENT]
-UID: GSSC-PLLR-43
+UID: GSSC-PLLR-61
 TITLE: Semantic
 STATEMENT: >>>
 The Header Greeting SHALL display a greeting when a member is logged in.
@@ -1235,7 +1235,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-44
+UID: GSSC-PLLR-62
 TITLE: Syntactic
 STATEMENT: >>>
 The Header Greeting SHALL appear in the Header account-access area when a member is logged in, and SHALL be omitted when no member is logged in.
@@ -1253,7 +1253,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-45
+UID: GSSC-PLLR-63
 TITLE: Lexical
 STATEMENT: >>>
 The Header Greeting SHALL use the sans-serif theme font and the dark-brown theme token for its text color.
@@ -1277,7 +1277,7 @@ UID: GSSC-PLLR-HEADER-LOGOUT
 TITLE: Logout
 
 [REQUIREMENT]
-UID: GSSC-PLLR-46
+UID: GSSC-PLLR-64
 TITLE: Semantic
 STATEMENT: >>>
 When a member is logged in, the Header Logout control SHALL end that member's members-only application session and leave the visitor on the public page.
@@ -1295,7 +1295,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-47
+UID: GSSC-PLLR-65
 TITLE: Syntactic
 STATEMENT: >>>
 The Header Logout control SHALL appear in the Header account-access area when a member is logged in, and SHALL be omitted when no member is logged in.
@@ -1313,7 +1313,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-48
+UID: GSSC-PLLR-66
 TITLE: Lexical
 STATEMENT: >>>
 The Header Logout control SHALL use the sans-serif theme font and the dark-green theme token for its text color.
@@ -1337,7 +1337,7 @@ UID: GSSC-PLLR-HEADER-CONTACT
 TITLE: Contact
 
 [REQUIREMENT]
-UID: GSSC-PLLR-49
+UID: GSSC-PLLR-67
 TITLE: Semantic
 STATEMENT: >>>
 The Header Contact control SHALL open the Public Contact Overlay so a visitor can draft a message to the organization.
@@ -1358,7 +1358,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-50
+UID: GSSC-PLLR-68
 TITLE: Syntactic
 STATEMENT: >>>
 The Header Contact control SHALL appear in the Header actions area.
@@ -1376,7 +1376,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-51
+UID: GSSC-PLLR-69
 TITLE: Lexical
 STATEMENT: >>>
 The Header Contact control SHALL use the sans-serif theme font and the dark-green theme token for its text color.
@@ -1400,7 +1400,7 @@ UID: GSSC-PLLR-HEADER-SITE-SEARCH
 TITLE: Site Search
 
 [REQUIREMENT]
-UID: GSSC-PLLR-52
+UID: GSSC-PLLR-70
 TITLE: Semantic
 STATEMENT: >>>
 The Header Site Search control SHALL accept a search query from the visitor for searching the site.
@@ -1421,7 +1421,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-53
+UID: GSSC-PLLR-71
 TITLE: Syntactic
 STATEMENT: >>>
 The Header Site Search control SHALL appear in the Header actions area.
@@ -1439,7 +1439,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-54
+UID: GSSC-PLLR-72
 TITLE: Lexical
 STATEMENT: >>>
 The Header Site Search control SHALL use the sans-serif theme font, the white theme token for its field background, the gray theme token for its field border, and the dark-green theme token for its text color.
@@ -1463,7 +1463,7 @@ UID: GSSC-PLLR-HEADER-NAVIGATION-MENU
 TITLE: Navigation Menu
 
 [REQUIREMENT]
-UID: GSSC-PLLR-55
+UID: GSSC-PLLR-73
 TITLE: Semantic
 STATEMENT: >>>
 The Navigation Menu SHALL provide access to the public home page, the public membership information page, the public leadership page, the public calendar, the public publications page, the Stanislaus County Cemetery Project as a child of access to the public publications page, the War Veterans of Stanislaus County publication as a child of access to the public publications page, the public research tools page, and the public newsletters page.
@@ -1511,7 +1511,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-56
+UID: GSSC-PLLR-74
 TITLE: Syntactic
 STATEMENT: >>>
 The Navigation Menu SHALL appear in the Header as a row of page-access entries that wraps with the Header bar as the viewport narrows, with Cemetery Project and War Veterans entries nested under the publications entry.
@@ -1529,7 +1529,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-57
+UID: GSSC-PLLR-75
 TITLE: Lexical
 STATEMENT: >>>
 The Navigation Menu SHALL use the sans-serif theme font and the dark-green theme token for its entry text color.

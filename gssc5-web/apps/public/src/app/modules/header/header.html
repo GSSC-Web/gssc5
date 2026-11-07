@@ -1,7 +1,7 @@
-<!-- @relation(GSSC-PLLR-28, GSSC-PLLR-29, scope=range_start, role=Implementation) -->
+<!-- @relation(GSSC-PLLR-46, GSSC-PLLR-47, scope=range_start, role=Implementation) -->
 <header class="gssc-header">
   <div class="gssc-header__identity">
-    <!-- @relation(GSSC-PLLR-31, GSSC-PLLR-32, scope=range_start, role=Implementation) -->
+    <!-- @relation(GSSC-PLLR-49, GSSC-PLLR-50, scope=range_start, role=Implementation) -->
     <a class="gssc-header__logo" routerLink="/" aria-label="GSSC Logo">
       <svg
         class="gssc-header__logo-mark"
@@ -24,18 +24,18 @@
         </text>
       </svg>
     </a>
-    <!-- @relation(GSSC-PLLR-31, GSSC-PLLR-32, scope=range_end, role=Implementation) -->
+    <!-- @relation(GSSC-PLLR-49, GSSC-PLLR-50, scope=range_end, role=Implementation) -->
 
-    <!-- @relation(GSSC-PLLR-34, GSSC-PLLR-35, scope=range_start, role=Implementation) -->
+    <!-- @relation(GSSC-PLLR-52, GSSC-PLLR-53, scope=range_start, role=Implementation) -->
     @if (organizationNameMode() === 'full') {
       <span class="gssc-header__org-name">Genealogical Society of Stanislaus County</span>
     } @else if (organizationNameMode() === 'acronym') {
       <span class="gssc-header__org-name">GSSC</span>
     }
-    <!-- @relation(GSSC-PLLR-34, GSSC-PLLR-35, scope=range_end, role=Implementation) -->
+    <!-- @relation(GSSC-PLLR-52, GSSC-PLLR-53, scope=range_end, role=Implementation) -->
   </div>
 
-  <!-- @relation(GSSC-PLLR-55, GSSC-PLLR-56, scope=range_start, role=Implementation) -->
+  <!-- @relation(GSSC-PLLR-73, GSSC-PLLR-74, scope=range_start, role=Implementation) -->
   <nav class="gssc-header__nav" aria-label="Site">
     <a class="gssc-header__nav-link" routerLink="/">Home</a>
     <a class="gssc-header__nav-link" routerLink="/membership">Membership</a>
@@ -57,10 +57,10 @@
     <a class="gssc-header__nav-link" routerLink="/research-tools">Research Tools</a>
     <a class="gssc-header__nav-link" routerLink="/newsletters">Newsletters</a>
   </nav>
-  <!-- @relation(GSSC-PLLR-55, GSSC-PLLR-56, scope=range_end, role=Implementation) -->
+  <!-- @relation(GSSC-PLLR-73, GSSC-PLLR-74, scope=range_end, role=Implementation) -->
 
   <div class="gssc-header__actions">
-    <!-- @relation(GSSC-PLLR-52, GSSC-PLLR-53, scope=range_start, role=Implementation) -->
+    <!-- @relation(GSSC-PLLR-70, GSSC-PLLR-71, scope=range_start, role=Implementation) -->
     <form class="gssc-header__search" (submit)="onSearchSubmit($event)" role="search">
       <label class="gssc-header__search-label" for="gssc-header-search">Site search</label>
       <input
@@ -72,33 +72,33 @@
         (input)="onSearchInput($event)"
       />
     </form>
-    <!-- @relation(GSSC-PLLR-52, GSSC-PLLR-53, scope=range_end, role=Implementation) -->
+    <!-- @relation(GSSC-PLLR-70, GSSC-PLLR-71, scope=range_end, role=Implementation) -->
 
-    <!-- @relation(GSSC-PLLR-49, GSSC-PLLR-50, scope=range_start, role=Implementation) -->
+    <!-- @relation(GSSC-PLLR-67, GSSC-PLLR-68, scope=range_start, role=Implementation) -->
     <button type="button" class="gssc-header__contact" (click)="openContact()">Contact</button>
-    <!-- @relation(GSSC-PLLR-49, GSSC-PLLR-50, scope=range_end, role=Implementation) -->
+    <!-- @relation(GSSC-PLLR-67, GSSC-PLLR-68, scope=range_end, role=Implementation) -->
 
     <div class="gssc-header__account">
       @if (loggedIn()) {
-        <!-- @relation(GSSC-PLLR-43, GSSC-PLLR-44, scope=range_start, role=Implementation) -->
+        <!-- @relation(GSSC-PLLR-61, GSSC-PLLR-62, scope=range_start, role=Implementation) -->
         <span class="gssc-header__greeting">Welcome</span>
-        <!-- @relation(GSSC-PLLR-43, GSSC-PLLR-44, scope=range_end, role=Implementation) -->
+        <!-- @relation(GSSC-PLLR-61, GSSC-PLLR-62, scope=range_end, role=Implementation) -->
 
-        <!-- @relation(GSSC-PLLR-40, GSSC-PLLR-41, scope=range_start, role=Implementation) -->
+        <!-- @relation(GSSC-PLLR-58, GSSC-PLLR-59, scope=range_start, role=Implementation) -->
         <button type="button" class="gssc-header__member-access" (click)="openMembersApp()">
           Members
         </button>
-        <!-- @relation(GSSC-PLLR-40, GSSC-PLLR-41, scope=range_end, role=Implementation) -->
+        <!-- @relation(GSSC-PLLR-58, GSSC-PLLR-59, scope=range_end, role=Implementation) -->
 
-        <!-- @relation(GSSC-PLLR-46, GSSC-PLLR-47, scope=range_start, role=Implementation) -->
+        <!-- @relation(GSSC-PLLR-64, GSSC-PLLR-65, scope=range_start, role=Implementation) -->
         <button type="button" class="gssc-header__logout" (click)="logout()">Logout</button>
-        <!-- @relation(GSSC-PLLR-46, GSSC-PLLR-47, scope=range_end, role=Implementation) -->
+        <!-- @relation(GSSC-PLLR-64, GSSC-PLLR-65, scope=range_end, role=Implementation) -->
       } @else {
-        <!-- @relation(GSSC-PLLR-37, GSSC-PLLR-38, scope=range_start, role=Implementation) -->
+        <!-- @relation(GSSC-PLLR-55, GSSC-PLLR-56, scope=range_start, role=Implementation) -->
         <button type="button" class="gssc-header__login" (click)="openMembersApp()">Login</button>
-        <!-- @relation(GSSC-PLLR-37, GSSC-PLLR-38, scope=range_end, role=Implementation) -->
+        <!-- @relation(GSSC-PLLR-55, GSSC-PLLR-56, scope=range_end, role=Implementation) -->
       }
     </div>
   </div>
 </header>
-<!-- @relation(GSSC-PLLR-28, GSSC-PLLR-29, scope=range_end, role=Implementation) -->
+<!-- @relation(GSSC-PLLR-46, GSSC-PLLR-47, scope=range_end, role=Implementation) -->
