@@ -5,8 +5,8 @@
   gap: 0.75rem;
   width: 100%;
   padding: 1rem 1.25rem;
-  background-color: var(--gssc-dark-green);
-  color: var(--gssc-cream);
+  background-color: var(--gssc-black);
+  color: var(--gssc-white);
   font-family: var(--font-sans);
 }
 /* @relation(GSSC-PLLR-30, scope=range_end, role=Implementation) */
@@ -22,7 +22,7 @@
 .gssc-footer__organization-name {
   margin: 0;
   font-weight: 600;
-  color: var(--gssc-cream);
+  color: var(--gssc-white);
 }
 /* @relation(GSSC-PLLR-33, scope=range_end, role=Implementation) */
 
@@ -30,7 +30,8 @@
 .gssc-footer__phone {
   margin: 0;
   font-weight: 400;
-  color: var(--gssc-cream);
+  color: var(--gssc-white);
+  text-decoration: none;
 }
 /* @relation(GSSC-PLLR-36, scope=range_end, role=Implementation) */
 
@@ -38,7 +39,8 @@
 .gssc-footer__email {
   margin: 0;
   font-weight: 400;
-  color: var(--gssc-cream);
+  color: var(--gssc-white);
+  text-decoration: none;
 }
 /* @relation(GSSC-PLLR-39, scope=range_end, role=Implementation) */
 
@@ -46,7 +48,7 @@
 .gssc-footer__postal {
   margin: 0;
   font-weight: 400;
-  color: var(--gssc-cream);
+  color: var(--gssc-white);
 }
 /* @relation(GSSC-PLLR-42, scope=range_end, role=Implementation) */
 

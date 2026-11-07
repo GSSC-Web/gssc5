@@ -437,10 +437,10 @@ RELATIONS:
 UID: GSSC-PLLR-30
 TITLE: Lexical
 STATEMENT: >>>
-The Footer SHALL use the dark-green theme token for its background and the cream theme token for its default text color.
+The Footer SHALL use the black theme token for its background and the white theme token for its default text color.
 <<<
 RATIONALE: >>>
-Theme tokens keep Footer presentation aligned with the organization palette. A fuller color role map for the Footer is not set yet beyond these token choices.
+Black and white theme tokens set a high-contrast Footer chrome. A fuller color role map for the Footer is not set yet beyond these token choices.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -497,10 +497,10 @@ RELATIONS:
 UID: GSSC-PLLR-33
 TITLE: Lexical
 STATEMENT: >>>
-The Footer Organization Name SHALL use a semibold weight and the cream theme token for its text color.
+The Footer Organization Name SHALL use a semibold weight and the white theme token for its text color.
 <<<
 RATIONALE: >>>
-Semibold cream text distinguishes the organization name within the Footer. A fuller type scale is not set yet beyond this weight and token choice.
+Semibold white text distinguishes the organization name within the Footer. A fuller type scale is not set yet beyond this weight and token choice.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -521,10 +521,10 @@ TITLE: Phone Number
 UID: GSSC-PLLR-34
 TITLE: Semantic
 STATEMENT: >>>
-The Footer Phone Number SHALL display the society's phone number from the public society's contact data.
+The Footer Phone Number SHALL display the society's phone number from the public society's contact data and SHALL dial that number when the visitor selects it.
 <<<
 RATIONALE: >>>
-The Footer shows the phone number separately from the Contact overlay. The public society's contact data supplies the number. This requirement does not set the current number.
+The Footer shows the phone number separately from the Contact overlay and lets the visitor dial it. The public society's contact data supplies the number. This requirement does not set the current number.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -539,10 +539,10 @@ RELATIONS:
 UID: GSSC-PLLR-35
 TITLE: Syntactic
 STATEMENT: >>>
-The Footer Phone Number SHALL appear with the other society contact details in the Footer.
+The Footer Phone Number SHALL appear as a telephone link with the other society contact details in the Footer.
 <<<
 RATIONALE: >>>
-Grouping the phone number with the email address and postal address keeps society contact details together in the Footer.
+A telephone link groups the phone number with the other contact details and gives selection a dial target.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -557,10 +557,10 @@ RELATIONS:
 UID: GSSC-PLLR-36
 TITLE: Lexical
 STATEMENT: >>>
-The Footer Phone Number SHALL use a normal weight and the cream theme token for its text color.
+The Footer Phone Number SHALL use a normal weight and the white theme token for its text color, without an underline.
 <<<
 RATIONALE: >>>
-Normal-weight cream text keeps contact details readable on the Footer background. A fuller type scale is not set yet beyond this weight and token choice.
+Normal-weight white text without an underline keeps the telephone link readable on the Footer background. A fuller type scale is not set yet beyond this weight and token choice.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -581,10 +581,10 @@ TITLE: Email Address
 UID: GSSC-PLLR-37
 TITLE: Semantic
 STATEMENT: >>>
-The Footer Email Address SHALL display the society's email address from the public society's contact data.
+The Footer Email Address SHALL display the society's email address from the public society's contact data and SHALL open a draft message to that address when the visitor selects it.
 <<<
 RATIONALE: >>>
-The Footer shows the email address separately from the Contact overlay. The public society's contact data supplies the address. This requirement does not set the current address.
+The Footer shows the email address separately from the Contact overlay and lets the visitor open a draft to that address. The public society's contact data supplies the address. This requirement does not set the current address.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -599,10 +599,10 @@ RELATIONS:
 UID: GSSC-PLLR-38
 TITLE: Syntactic
 STATEMENT: >>>
-The Footer Email Address SHALL appear with the other society contact details in the Footer.
+The Footer Email Address SHALL appear as a mail link with the other society contact details in the Footer.
 <<<
 RATIONALE: >>>
-Grouping the email address with the phone number and postal address keeps society contact details together in the Footer.
+A mail link groups the email address with the other contact details and gives selection a draft-message target.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -617,10 +617,10 @@ RELATIONS:
 UID: GSSC-PLLR-39
 TITLE: Lexical
 STATEMENT: >>>
-The Footer Email Address SHALL use a normal weight and the cream theme token for its text color.
+The Footer Email Address SHALL use a normal weight and the white theme token for its text color, without an underline.
 <<<
 RATIONALE: >>>
-Normal-weight cream text keeps contact details readable on the Footer background. A fuller type scale is not set yet beyond this weight and token choice.
+Normal-weight white text without an underline keeps the mail link readable on the Footer background. A fuller type scale is not set yet beyond this weight and token choice.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -677,10 +677,10 @@ RELATIONS:
 UID: GSSC-PLLR-42
 TITLE: Lexical
 STATEMENT: >>>
-The Footer Postal Address SHALL use a normal weight and the cream theme token for its text color.
+The Footer Postal Address SHALL use a normal weight and the white theme token for its text color.
 <<<
 RATIONALE: >>>
-Normal-weight cream text keeps contact details readable on the Footer background. A fuller type scale is not set yet beyond this weight and token choice.
+Normal-weight white text keeps contact details readable on the Footer background. A fuller type scale is not set yet beyond this weight and token choice.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
