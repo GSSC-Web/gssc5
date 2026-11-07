@@ -100,7 +100,9 @@ test('GSSC-PLLR-23 Lexical', async () => {
 // @relation(GSSC-PLLR-6, scope=range_start, role=Test)
 test('GSSC-PLLR-6 Semantic', async () => {
   const { root } = await setupApp();
-  expect(root.querySelector('[data-slot="footer"]')).not.toBeNull();
+  const host = root.querySelector('[data-slot="footer"]');
+  expect(host).not.toBeNull();
+  expect(host!.querySelector('gssc-footer')).not.toBeNull();
 });
 // @relation(GSSC-PLLR-6, scope=range_end, role=Test)
 
@@ -111,6 +113,17 @@ test('GSSC-PLLR-24 Syntactic', async () => {
   expect(children.at(-1)?.getAttribute('data-slot')).toBe('footer');
 });
 // @relation(GSSC-PLLR-24, scope=range_end, role=Test)
+
+// @relation(GSSC-PLLR-29, scope=range_start, role=Test)
+test('GSSC-PLLR-29 Syntactic', async () => {
+  const { root } = await setupApp();
+  const host = root.querySelector<HTMLElement>('[data-slot="footer"]')!;
+  const footer = host.querySelector<HTMLElement>('.gssc-footer')!;
+  expect(footer).not.toBeNull();
+  expect(getComputedStyle(host).width).not.toBe('0px');
+  expect(getComputedStyle(footer).width).toBe(getComputedStyle(host).width);
+});
+// @relation(GSSC-PLLR-29, scope=range_end, role=Test)
 
 // @relation(GSSC-PLLR-25, scope=range_start, role=Test)
 test('GSSC-PLLR-25 Lexical', async () => {

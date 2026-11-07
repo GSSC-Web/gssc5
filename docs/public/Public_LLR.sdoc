@@ -378,6 +378,384 @@ RELATIONS:
 [[/SECTION]]
 
 [[SECTION]]
+UID: GSSC-PLLR-FOOTER
+TITLE: Public Footer
+
+[[SECTION]]
+UID: GSSC-PLLR-FOOTER-ELEMENT
+TITLE: Footer
+
+[REQUIREMENT]
+UID: GSSC-PLLR-28
+TITLE: Semantic
+STATEMENT: >>>
+The Public Frontend Footer SHALL contain the Organization Name, Phone Number, Email Address, Postal Address, and Contact control.
+<<<
+RATIONALE: >>>
+The Footer presents those society identity and contact elements together in the public shell. Each element's behavior is a separate requirement. Contact overlay contents are a separate feature.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-23
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-20
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-21
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-24
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-25
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-26
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-29
+TITLE: Syntactic
+STATEMENT: >>>
+The Footer SHALL fill the Footer host across the full width of the App Root.
+<<<
+RATIONALE: >>>
+Common public pages place the Footer at the bottom of the page. Filling the Footer host keeps that Footer edge-to-edge as the viewport resizes.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-23
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-46
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-30
+TITLE: Lexical
+STATEMENT: >>>
+The Footer SHALL use the dark-green theme token for its background and the cream theme token for its default text color.
+<<<
+RATIONALE: >>>
+Theme tokens keep Footer presentation aligned with the organization palette. A fuller color role map for the Footer is not set yet beyond these token choices.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-23
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-46
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-FOOTER-ORGANIZATION-NAME
+TITLE: Organization Name
+
+[REQUIREMENT]
+UID: GSSC-PLLR-31
+TITLE: Semantic
+STATEMENT: >>>
+The Footer Organization Name SHALL display the text Genealogical Society of Stanislaus County.
+<<<
+RATIONALE: >>>
+The Footer keeps the society's full name. The acronym does not replace that full name.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-23
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-21
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-32
+TITLE: Syntactic
+STATEMENT: >>>
+The Footer Organization Name SHALL appear at the start of the Footer content.
+<<<
+RATIONALE: >>>
+Leading with the organization name identifies the Footer before the contact details.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-23
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-21
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-33
+TITLE: Lexical
+STATEMENT: >>>
+The Footer Organization Name SHALL use a semibold weight and the cream theme token for its text color.
+<<<
+RATIONALE: >>>
+Semibold cream text distinguishes the organization name within the Footer. A fuller type scale is not set yet beyond this weight and token choice.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-23
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-21
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-FOOTER-PHONE-NUMBER
+TITLE: Phone Number
+
+[REQUIREMENT]
+UID: GSSC-PLLR-34
+TITLE: Semantic
+STATEMENT: >>>
+The Footer Phone Number SHALL display the society's phone number from the public society's contact data.
+<<<
+RATIONALE: >>>
+The Footer shows the phone number separately from the Contact overlay. The public society's contact data supplies the number. This requirement does not set the current number.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-23
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-24
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-35
+TITLE: Syntactic
+STATEMENT: >>>
+The Footer Phone Number SHALL appear with the other society contact details in the Footer.
+<<<
+RATIONALE: >>>
+Grouping the phone number with the email address and postal address keeps society contact details together in the Footer.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-23
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-24
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-36
+TITLE: Lexical
+STATEMENT: >>>
+The Footer Phone Number SHALL use a normal weight and the cream theme token for its text color.
+<<<
+RATIONALE: >>>
+Normal-weight cream text keeps contact details readable on the Footer background. A fuller type scale is not set yet beyond this weight and token choice.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-23
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-24
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-FOOTER-EMAIL-ADDRESS
+TITLE: Email Address
+
+[REQUIREMENT]
+UID: GSSC-PLLR-37
+TITLE: Semantic
+STATEMENT: >>>
+The Footer Email Address SHALL display the society's email address from the public society's contact data.
+<<<
+RATIONALE: >>>
+The Footer shows the email address separately from the Contact overlay. The public society's contact data supplies the address. This requirement does not set the current address.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-23
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-25
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-38
+TITLE: Syntactic
+STATEMENT: >>>
+The Footer Email Address SHALL appear with the other society contact details in the Footer.
+<<<
+RATIONALE: >>>
+Grouping the email address with the phone number and postal address keeps society contact details together in the Footer.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-23
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-25
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-39
+TITLE: Lexical
+STATEMENT: >>>
+The Footer Email Address SHALL use a normal weight and the cream theme token for its text color.
+<<<
+RATIONALE: >>>
+Normal-weight cream text keeps contact details readable on the Footer background. A fuller type scale is not set yet beyond this weight and token choice.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-23
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-25
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-FOOTER-POSTAL-ADDRESS
+TITLE: Postal Address
+
+[REQUIREMENT]
+UID: GSSC-PLLR-40
+TITLE: Semantic
+STATEMENT: >>>
+The Footer Postal Address SHALL display the society's postal address from the public society's contact data.
+<<<
+RATIONALE: >>>
+The Footer shows the postal address separately from the Contact overlay. The public society's contact data supplies the address. This requirement does not set the current address.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-23
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-26
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-41
+TITLE: Syntactic
+STATEMENT: >>>
+The Footer Postal Address SHALL appear with the other society contact details in the Footer.
+<<<
+RATIONALE: >>>
+Grouping the postal address with the phone number and email address keeps society contact details together in the Footer.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-23
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-26
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-42
+TITLE: Lexical
+STATEMENT: >>>
+The Footer Postal Address SHALL use a normal weight and the cream theme token for its text color.
+<<<
+RATIONALE: >>>
+Normal-weight cream text keeps contact details readable on the Footer background. A fuller type scale is not set yet beyond this weight and token choice.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-23
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-26
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-FOOTER-CONTACT
+TITLE: Contact
+
+[REQUIREMENT]
+UID: GSSC-PLLR-43
+TITLE: Semantic
+STATEMENT: >>>
+The Footer Contact control SHALL open the Public Contact Overlay when the visitor activates it.
+<<<
+RATIONALE: >>>
+Footer Contact opens an overlay for drafting a message to the organization. Overlay contents and layout are a separate feature.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-23
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-20
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-44
+TITLE: Syntactic
+STATEMENT: >>>
+The Footer Contact control SHALL appear as an activatable control with the society contact details in the Footer.
+<<<
+RATIONALE: >>>
+Placing Contact with the phone number, email address, and postal address keeps every Footer contact path in one group.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-23
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-20
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-45
+TITLE: Lexical
+STATEMENT: >>>
+The Footer Contact control SHALL use the light-brown theme token for its text color.
+<<<
+RATIONALE: >>>
+The light-brown token marks Contact as an activatable control against the Footer background. A fuller color role map for controls is not set yet beyond this token choice.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-23
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-20
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
 UID: GSSC-PLLR-ROUTER
 TITLE: Public Router
 
