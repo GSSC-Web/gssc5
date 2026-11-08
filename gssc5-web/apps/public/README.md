@@ -4,10 +4,12 @@ Angular application `@gssc/public`. It listens on port 4200.
 
 From this directory:
 
-- `mise serve` starts the development server.
+- `mise serve` runs `//backend:db:prepare` (migrate + idempotent website KVS seed), then starts the development server.
 - `mise build` writes `../../dist/public`.
 - `mise test` runs Vitest once.
 - `mise test:watch` re-runs Vitest when files change.
+
+Prepare the database alone with `mise run //backend:db:prepare` (or from the repo root, `mise run db:prepare`).
 
 From the repository root, `mise serve`, `mise build`, and `mise test` include this app.
 

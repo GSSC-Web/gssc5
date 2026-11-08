@@ -1,6 +1,6 @@
 [tasks.serve]
-description = "Start the public frontend (reloads on change)"
-depends = ["//backend:types"]
+description = "Prepare the backend database (migrate + idempotent website KVS seed), then start the public frontend (reloads on change)"
+depends = ["//backend:types", "//backend:db:prepare"]
 run = "bun run start"
 
 [tasks.build]

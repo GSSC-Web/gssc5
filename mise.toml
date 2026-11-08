@@ -81,8 +81,13 @@ run = [
   "node --version",
 ]
 
+[tasks."db:prepare"]
+description = "Migrate the local backend database and upsert website KVS values the public site expects (idempotent)"
+alias = "seed"
+depends = ["//backend:db:prepare"]
+
 [tasks.serve]
-description = "Start the backend and both frontends. Each reloads when its sources change"
+description = "Start the backend and both frontends. Each reloads when its sources change. Public serve runs db:prepare first"
 alias = "dev"
 depends = ["//backend:serve", "//public:serve", "//members:serve"]
 
