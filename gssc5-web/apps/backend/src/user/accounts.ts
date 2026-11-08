@@ -1,4 +1,4 @@
-import { createHash, randomBytes } from "node:crypto";
+import { randomBytes } from "node:crypto";
 
 import { Elysia, t } from "elysia";
 
@@ -6,11 +6,15 @@ import { loadConfig, type Config } from "../config";
 import { getPrisma } from "../db";
 import type { PrismaClient } from "../generated/prisma/client";
 import { UserPlain } from "../generated/prismabox/User";
+import {
+  classifyLoginTokenRow,
+  clearLoginTokenCookie,
+  hashLoginToken,
+  loginTokenFromCookie,
+  setLoginTokenCookie,
+} from "./login-session";
 
 const SECONDS_PER_DAY = 24 * 60 * 60;
-
-/** HTTP cookie that carries the Login Token for browser sessions. */
-export const LOGIN_TOKEN_COOKIE = "gssc_login_token";
 
 const emailPattern = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
 
@@ -29,11 +33,6 @@ const LoginBody = t.Union(
   { error: "A login accepts a username or a primary email." },
 );
 // @relation(GSSC-BLLR-1, GSSC-BLLR-2, GSSC-BLLR-3, scope=range_end, role=Implementation)
-
-// Body token remains accepted for API/moderator flows; browser sessions use the cookie.
-const OptionalTokenBody = t.Object({
-  token: t.Optional(t.String()),
-});
 
 const LoginOk = t.Object({
   status: t.Literal("ok"),
@@ -84,21 +83,14 @@ export const accounts = new Elysia({
       const token = randomBytes(32).toString("base64url");
       await prisma.loginToken.create({
         data: {
-          tokenHash: hashToken(token),
+          tokenHash: hashLoginToken(token),
           userId: user.id,
           issuedAt,
           expiresAt,
         },
       });
-      cookie[LOGIN_TOKEN_COOKIE].set({
-        value: token,
-        httpOnly: true,
-        secure: true,
-        sameSite: "lax",
-        path: "/",
-        maxAge: maxAgeSeconds,
-        expires: expiresAt,
-      });
+      setLoginTokenCookie(cookie, token, maxAgeSeconds, expiresAt);
+      // Login Token is delivered only in the HTTP cookie — never in the response body.
       return status(200, { status: "ok" as const });
       // @relation(GSSC-BLLR-7, GSSC-BLLR-8, GSSC-BLLR-11, GSSC-BLLR-292, scope=range_end, role=Implementation)
     },
@@ -112,14 +104,14 @@ export const accounts = new Elysia({
   )
   .post(
     "/logout",
-    async ({ body, cookie, status }) => {
+    async ({ cookie, status }) => {
       const { prisma } = runtime();
-      const token = resolveLoginToken(body, cookie);
+      const token = loginTokenFromCookie(cookie);
 
       // @relation(GSSC-BLLR-10, scope=range_start, role=Implementation)
       if (token) {
         const row = await prisma.loginToken.findUnique({
-          where: { tokenHash: hashToken(token) },
+          where: { tokenHash: hashLoginToken(token) },
         });
         if (row && !row.loggedOutAt) {
           await prisma.loginToken.update({
@@ -133,27 +125,24 @@ export const accounts = new Elysia({
       // @relation(GSSC-BLLR-10, scope=range_end, role=Implementation)
     },
     {
-      body: OptionalTokenBody,
       response: { 204: t.Void() },
     },
   )
   .post(
     "/challenge",
-    async ({ body, cookie }) => {
+    async ({ cookie }) => {
       const { prisma } = runtime();
-      const token = resolveLoginToken(body, cookie);
+      const token = loginTokenFromCookie(cookie);
 
       // @relation(GSSC-BLLR-9, GSSC-BLLR-12, scope=range_start, role=Implementation)
       if (!token) return "invalid";
       const row = await prisma.loginToken.findUnique({
-        where: { tokenHash: hashToken(token) },
+        where: { tokenHash: hashLoginToken(token) },
       });
-      if (!row || row.loggedOutAt || row.expiresAt.getTime() <= Date.now()) return "invalid";
-      return "valid";
+      return classifyLoginTokenRow(row) === "ok" ? "valid" : "invalid";
       // @relation(GSSC-BLLR-9, GSSC-BLLR-12, scope=range_end, role=Implementation)
     },
     {
-      body: OptionalTokenBody,
       response: { 200: ChallengeResult },
     },
   )
@@ -219,45 +208,4 @@ function trimStrings(value: unknown): void {
     const item = (value as Record<string, unknown>)[key];
     if (typeof item === "string") (value as Record<string, unknown>)[key] = item.trim();
   }
-}
-
-function hashToken(token: string): string {
-  return createHash("sha256").update(token).digest("hex");
-}
-
-type CookieJar = Record<
-  string,
-  {
-    value?: unknown;
-    set: (config: Record<string, unknown>) => unknown;
-    remove?: () => unknown;
-  }
->;
-
-function resolveLoginToken(
-  body: { token?: string } | null | undefined,
-  cookie: CookieJar,
-): string | null {
-  const fromBody = typeof body?.token === "string" ? body.token.trim() : "";
-  if (fromBody !== "") return fromBody;
-  const fromCookie = cookie[LOGIN_TOKEN_COOKIE]?.value;
-  if (typeof fromCookie === "string" && fromCookie.trim() !== "") return fromCookie.trim();
-  return null;
-}
-
-function clearLoginTokenCookie(cookie: CookieJar): void {
-  const entry = cookie[LOGIN_TOKEN_COOKIE];
-  if (!entry) return;
-  if (typeof entry.remove === "function") {
-    entry.remove();
-    return;
-  }
-  entry.set({
-    value: "",
-    httpOnly: true,
-    secure: true,
-    sameSite: "lax",
-    path: "/",
-    maxAge: 0,
-  });
 }

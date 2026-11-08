@@ -87,7 +87,9 @@ test("GSSC-BLLR-8 Login Token Issued", async () => {
   const token = loginTokenFromSetCookie(response.headers);
   expect(token).toEqual(expect.any(String));
   expect(token?.length).toBeGreaterThan(0);
-  expect((await challenge(backend, token ?? "", { viaCookie: true })).trim()).toBe("valid");
+  expect((await challenge(backend, token ?? "")).trim()).toBe("valid");
+  expect(JSON.parse(response.body)).toEqual({ status: "ok" });
+  expect(Object.prototype.hasOwnProperty.call(JSON.parse(response.body), "token")).toBe(false);
 });
 // @relation(GSSC-BLLR-8, scope=range_end, role=Test)
 
@@ -122,12 +124,12 @@ test("GSSC-BLLR-9 Login Token Challenge", async () => {
   });
   expect(token).toEqual(expect.any(String));
   const issued = token ?? "";
-  const valid = await challenge(backend, issued, { viaCookie: true });
+  const valid = await challenge(backend, issued);
   expect(valid.trim()).toBe("valid");
   expect(valid.includes(issued)).toBe(false);
 
   const unknown = `unknown-${randomUUID()}`;
-  const invalid = await challenge(backend, unknown, { viaCookie: true });
+  const invalid = await challenge(backend, unknown);
   expect(invalid.trim()).toBe("invalid");
   expect(invalid.includes(unknown)).toBe(false);
 });
@@ -141,7 +143,7 @@ test("GSSC-BLLR-10 Member Logout", async () => {
   });
   expect(token).toEqual(expect.any(String));
   const issued = token ?? "";
-  const response = await logout(backend, issued, { viaCookie: true });
+  const response = await logout(backend, issued);
   expect(response.status).toBe(204);
   const cleared = loginTokenSetCookieHeader(response.headers)?.toLowerCase() ?? "";
   expect(
@@ -149,7 +151,7 @@ test("GSSC-BLLR-10 Member Logout", async () => {
       cleared.includes(`${cookieHeaderForToken("").toLowerCase()}`) ||
       cleared.includes("expires="),
   ).toBe(true);
-  expect((await challenge(backend, issued, { viaCookie: true })).trim()).toBe("invalid");
+  expect((await challenge(backend, issued)).trim()).toBe("invalid");
 });
 // @relation(GSSC-BLLR-10, scope=range_end, role=Test)
 

@@ -1,12 +1,15 @@
-import { createHash } from "node:crypto";
-
 import { Elysia, t } from "elysia";
 
 import { loadConfig, type Config } from "../config";
 import { getPrisma } from "../db";
 import type { Prisma, PrismaClient } from "../generated/prisma/client";
-
-const MALFORMED_BODY = Symbol("malformed-body");
+import {
+  classifyLoginTokenRow,
+  hashLoginToken,
+  loginTokenFromCookie,
+  type CookieJar,
+  type LoginSessionFailure,
+} from "./login-session";
 
 const userSelect = {
   // @relation(GSSC-BLLR-54, GSSC-BLLR-100, scope=range_start, role=Implementation)
@@ -82,9 +85,7 @@ type AccountView = {
   position?: string | null;
 };
 
-type Session =
-  | { failure: "missing" | "unknown" | "logged-out" | "expired" | "malformed" }
-  | { user: StoredUser };
+type Session = { failure: LoginSessionFailure } | { user: StoredUser };
 
 const NullableText = t.Nullable(t.String());
 
@@ -203,10 +204,9 @@ export const users = new Elysia({
   })
   .get(
     "/",
-    async ({ query, request, status }) => {
-      const session = await openSession(await incomingBody(request, undefined));
+    async ({ query, cookie, status }) => {
+      const session = await openSession(cookie);
       if ("failure" in session) {
-        if (session.failure === "malformed") return status(422, "Invalid" as const);
         return status(403, "Forbidden" as const);
       }
       const filters = readFilters(query);
@@ -232,11 +232,10 @@ export const users = new Elysia({
   )
   .post(
     "/:cuid/clear-passwords",
-    async ({ params, body, status }) => {
+    async ({ params, cookie, status }) => {
       // @relation(GSSC-BLLR-264, scope=range_start, role=Implementation)
-      const session = await openSession(body);
+      const session = await openSession(cookie);
       if ("failure" in session) {
-        if (session.failure === "malformed") return status(422, "Invalid" as const);
         return status(403, "Forbidden" as const);
       }
       // @relation(GSSC-BLLR-264, scope=range_end, role=Implementation)
@@ -263,7 +262,6 @@ export const users = new Elysia({
     },
     {
       params: t.Object({ cuid: t.String() }),
-      body: t.Optional(t.Unknown()),
       response: {
         204: t.Void(),
         403: t.Literal("Forbidden"),
@@ -274,10 +272,9 @@ export const users = new Elysia({
   )
   .get(
     "/:cuid",
-    async ({ params, request, status }) => {
-      const session = await openSession(await incomingBody(request, undefined));
+    async ({ params, cookie, status }) => {
+      const session = await openSession(cookie);
       if ("failure" in session) {
-        if (session.failure === "malformed") return status(422, "Invalid" as const);
         return status(403, "Forbidden" as const);
       }
 
@@ -303,10 +300,9 @@ export const users = new Elysia({
   )
   .post(
     "/:cuid",
-    async ({ params, body, status }) => {
-      const session = await openSession(body);
+    async ({ params, body, cookie, status }) => {
+      const session = await openSession(cookie);
       if ("failure" in session) {
-        if (session.failure === "malformed") return status(422, "Invalid" as const);
         return status(403, "Forbidden" as const);
       }
 
@@ -357,27 +353,21 @@ function runtime(): { prisma: PrismaClient; config: Config } {
   return { config, prisma: getPrisma(config.DATABASE_URL) };
 }
 
-// @relation(GSSC-BLLR-42, GSSC-BLLR-48, GSSC-BLLR-56, GSSC-BLLR-67, GSSC-BLLR-68, GSSC-BLLR-69, GSSC-BLLR-133, GSSC-BLLR-134, GSSC-BLLR-135, GSSC-BLLR-166, GSSC-BLLR-167, GSSC-BLLR-168, scope=range_start, role=Implementation)
-async function openSession(body: unknown): Promise<Session> {
-  const record = bodyRecord(body);
-  if (record === "malformed") return { failure: "malformed" };
-  if (record === "missing" || !Object.prototype.hasOwnProperty.call(record, "token")) {
-    return { failure: "missing" };
-  }
-  const token = record.token;
-  if (typeof token !== "string") return { failure: "unknown" };
+// @relation(GSSC-BLLR-42, GSSC-BLLR-48, GSSC-BLLR-56, GSSC-BLLR-67, GSSC-BLLR-68, GSSC-BLLR-69, GSSC-BLLR-133, GSSC-BLLR-134, GSSC-BLLR-135, GSSC-BLLR-166, GSSC-BLLR-167, GSSC-BLLR-168, GSSC-BLLR-264, scope=range_start, role=Implementation)
+async function openSession(cookie: CookieJar): Promise<Session> {
+  const token = loginTokenFromCookie(cookie);
+  if (!token) return { failure: "missing" };
 
   const { prisma } = runtime();
   const row = await prisma.loginToken.findUnique({
-    where: { tokenHash: createHash("sha256").update(token.trim()).digest("hex") },
+    where: { tokenHash: hashLoginToken(token) },
     include: { user: { select: userSelect } },
   });
-  if (!row) return { failure: "unknown" };
-  if (row.loggedOutAt) return { failure: "logged-out" };
-  if (row.expiresAt.getTime() <= Date.now()) return { failure: "expired" };
-  return { user: row.user };
+  const classified = classifyLoginTokenRow(row);
+  if (classified === "ok" && row) return { user: row.user };
+  return { failure: classified === "ok" ? "unknown" : classified };
 }
-// @relation(GSSC-BLLR-42, GSSC-BLLR-48, GSSC-BLLR-56, GSSC-BLLR-67, GSSC-BLLR-68, GSSC-BLLR-69, GSSC-BLLR-133, GSSC-BLLR-134, GSSC-BLLR-135, GSSC-BLLR-166, GSSC-BLLR-167, GSSC-BLLR-168, scope=range_end, role=Implementation)
+// @relation(GSSC-BLLR-42, GSSC-BLLR-48, GSSC-BLLR-56, GSSC-BLLR-67, GSSC-BLLR-68, GSSC-BLLR-69, GSSC-BLLR-133, GSSC-BLLR-134, GSSC-BLLR-135, GSSC-BLLR-166, GSSC-BLLR-167, GSSC-BLLR-168, GSSC-BLLR-264, scope=range_end, role=Implementation)
 
 // @relation(GSSC-BLLR-58, GSSC-BLLR-59, GSSC-BLLR-169, GSSC-BLLR-170, GSSC-BLLR-171, scope=range_start, role=Implementation)
 function authorize(caller: StoredUser, target: StoredUser): "ok" | "forbidden" {
@@ -776,27 +766,9 @@ function booleanMatch(stored: boolean, needle: string): boolean {
   return stored === (text === "true");
 }
 
-async function incomingBody(request: Request, parsed: unknown): Promise<unknown> {
-  if (request.method !== "GET" && request.method !== "HEAD") return parsed;
-  let text = "";
-  try {
-    text = await request.text();
-  } catch {
-    return undefined;
-  }
-  if (text.trim() === "") return undefined;
-  try {
-    const parsedBody: unknown = JSON.parse(text);
-    trimStrings(parsedBody);
-    return parsedBody;
-  } catch {
-    return MALFORMED_BODY;
-  }
-}
-
 function bodyRecord(value: unknown): Record<string, unknown> | "missing" | "malformed" {
   if (value === undefined) return "missing";
-  if (value === MALFORMED_BODY || value === null || typeof value !== "object" || Array.isArray(value)) {
+  if (value === null || typeof value !== "object" || Array.isArray(value)) {
     return "malformed";
   }
   return value as Record<string, unknown>;

@@ -6,6 +6,12 @@ import { loadConfig, type Config } from "../config";
 import { getPrisma } from "../db";
 import type { PrismaClient, User } from "../generated/prisma/client";
 import { getMailTransporter } from "../mail";
+import {
+  classifyLoginTokenRow,
+  hashLoginToken,
+  loginTokenFromCookie,
+  type CookieJar,
+} from "./login-session";
 
 const MILLISECONDS_PER_DAY = 24 * 60 * 60 * 1000;
 
@@ -19,7 +25,6 @@ const emailPattern = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
 
 // @relation(GSSC-BLLR-225, scope=range_start, role=Implementation)
 const ChangeBody = t.Object({
-  token: t.String(),
   currentPassword: t.String(),
   newPassword: t.String(),
 });
@@ -50,10 +55,10 @@ export const passwords = new Elysia({
   })
   .post(
     "/change",
-    async ({ body, status }) => {
+    async ({ body, cookie, status }) => {
       const { prisma, config } = runtime();
       // @relation(GSSC-BLLR-247, scope=range_start, role=Implementation)
-      const session = await openLogin(prisma, body.token);
+      const session = await openLoginFromCookie(prisma, cookie);
       if (!session) return status(403, "Forbidden");
       // @relation(GSSC-BLLR-247, scope=range_end, role=Implementation)
 
@@ -175,15 +180,17 @@ export const passwords = new Elysia({
     },
   );
 
-async function openLogin(
+async function openLoginFromCookie(
   prisma: PrismaClient,
-  token: string,
+  cookie: CookieJar,
 ): Promise<User | null> {
+  const token = loginTokenFromCookie(cookie);
+  if (!token) return null;
   const row = await prisma.loginToken.findUnique({
-    where: { tokenHash: hashToken(token) },
+    where: { tokenHash: hashLoginToken(token) },
     include: { user: true },
   });
-  if (!row || row.loggedOutAt || row.expiresAt.getTime() <= Date.now()) return null;
+  if (classifyLoginTokenRow(row) !== "ok" || !row) return null;
   return row.user;
 }
 

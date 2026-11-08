@@ -9,6 +9,7 @@ import { setMailTransporter, type MailMessage } from "../mail";
 import {
   DAY_MS,
   bootInProcess,
+  cookieHeaderForToken,
   establishedLogin,
   memberEmail,
   memberPassword,
@@ -120,15 +121,19 @@ async function loginRegular(password = STRONG): Promise<string> {
 }
 
 async function changePassword(
-  token: string,
+  token: string | null,
   currentPassword: string,
   newPassword: string,
 ): Promise<{ status: number; body: string }> {
-  return postJsonResponse(backend, "/password/change", {
-    token,
-    currentPassword,
-    newPassword,
-  });
+  return postJsonResponse(
+    backend,
+    "/password/change",
+    {
+      currentPassword,
+      newPassword,
+    },
+    token === null ? undefined : { cookie: cookieHeaderForToken(token) },
+  );
 }
 
 async function requestRecovery(email: string): Promise<string> {
@@ -179,15 +184,20 @@ test("GSSC-BLLR-247 Password Change Login Token Required", async () => {
 // @relation(GSSC-BLLR-225, scope=range_start, role=Test)
 test("GSSC-BLLR-225 Password Change Inputs", async () => {
   const token = await loginRegular();
-  const missingCurrent = await postJsonResponse(backend, "/password/change", {
-    token,
-    newPassword: STRONG_NEXT,
-  });
+  const cookie = { cookie: cookieHeaderForToken(token) };
+  const missingCurrent = await postJsonResponse(
+    backend,
+    "/password/change",
+    { newPassword: STRONG_NEXT },
+    cookie,
+  );
   expect(missingCurrent.status).toBeGreaterThanOrEqual(400);
-  const missingNew = await postJsonResponse(backend, "/password/change", {
-    token,
-    currentPassword: STRONG,
-  });
+  const missingNew = await postJsonResponse(
+    backend,
+    "/password/change",
+    { currentPassword: STRONG },
+    cookie,
+  );
   expect(missingNew.status).toBeGreaterThanOrEqual(400);
   expect((await changePassword(token, STRONG, STRONG_NEXT)).status).toBe(204);
 });
@@ -676,7 +686,9 @@ async function clearPasswords(
   cuid: string,
   token: string,
 ): Promise<{ status: number; body: string }> {
-  return postJsonResponse(backend, `/users/${cuid}/clear-passwords`, { token });
+  return postJsonResponse(backend, `/users/${cuid}/clear-passwords`, {}, {
+    cookie: cookieHeaderForToken(token),
+  });
 }
 
 async function loginModerator(): Promise<string> {

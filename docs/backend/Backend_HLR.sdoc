@@ -92,10 +92,10 @@ RELATIONS:
 UID: GSSC-BHLR-2
 TITLE: Login Token
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL issue a Login Token when a member login succeeds, and SHALL deliver that Login Token for a browser session in an HTTP cookie.
+The GSSC Website Unified Backend SHALL issue a Login Token when a member login succeeds, SHALL deliver that Login Token only in an HTTP cookie, and SHALL omit the Login Token from the login response body and from later request bodies.
 <<<
 RATIONALE: >>>
-A successful login has to yield a Login Token that a later challenge can test. Delivering the Login Token in an HTTP cookie keeps it out of script-readable browser storage for browser sessions. The Unified Backend PIRs require member authentication and do not require a token.
+A successful login has to yield a Login Token that a later challenge can test. Carrying the Login Token only in an HTTP cookie keeps it out of script-readable storage and out of JSON bodies. The Unified Backend PIRs require member authentication and do not require a token.
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-12, GSSC5-48
@@ -105,10 +105,10 @@ REVIEW_STATUS: Changed
 UID: GSSC-BHLR-3
 TITLE: Token Challenge
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL report a challenged Login Token as valid or invalid. For a browser session, the challenge SHALL use the Login Token from the HTTP cookie.
+The GSSC Website Unified Backend SHALL report a challenged Login Token as valid or invalid. The challenge SHALL use the Login Token from the HTTP cookie only.
 <<<
 RATIONALE: >>>
-The frontend uses this challenge to detect whether a member is logged in. The report is only valid or invalid. This requirement does not return the contents of the Login Token. A browser session presents the Login Token through the cookie rather than script-readable storage.
+The frontend uses this challenge to detect whether a member is logged in. The report is only valid or invalid. This requirement does not return the contents of the Login Token. The Login Token is never taken from a request body.
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-12, GSSC5-48
@@ -118,10 +118,10 @@ REVIEW_STATUS: Changed
 UID: GSSC-BHLR-4
 TITLE: Member Logout
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL end the member login of a Login Token when that member logs out. For a browser session, logout SHALL use the Login Token from the HTTP cookie and SHALL clear that cookie.
+The GSSC Website Unified Backend SHALL end the member login of a Login Token when that member logs out. Logout SHALL use the Login Token from the HTTP cookie only and SHALL clear that cookie.
 <<<
 RATIONALE: >>>
-A member has to be able to end a login. After logout, that Login Token no longer represents a valid login. Clearing the cookie ends the browser session transport for that Login Token.
+A member has to be able to end a login. After logout, that Login Token no longer represents a valid login. Clearing the cookie ends the session transport for that Login Token. The Login Token is never taken from a request body.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12, GSSC5-48
@@ -148,10 +148,10 @@ REVIEW_STATUS: Approved
 UID: GSSC-BHLR-179
 TITLE: Login Token Cookie Attributes
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL deliver the Login Token HTTP cookie so that client script cannot read the cookie value, the cookie is marked for secure transport only, the cookie uses a lax same-site policy, the cookie applies to the whole site path, and the cookie lifetime matches the Login Token lifetime.
+The GSSC Website Unified Backend SHALL deliver the Login Token HTTP cookie so that client script cannot read the cookie value, the cookie is marked for secure transport only, the cookie uses a lax same-site policy, the cookie applies to the whole site path, and the cookie lifetime matches the Login Token lifetime. The Login Token SHALL not appear in login response bodies or in authenticated request bodies.
 <<<
 RATIONALE: >>>
-HttpOnly keeps the Login Token out of script-readable storage. Secure limits the cookie to secure transport. SameSite=Lax limits cross-site sending while allowing normal same-site browser use. Path and lifetime keep the cookie aligned with the Login Token session.
+HttpOnly keeps the Login Token out of script-readable storage. Secure limits the cookie to secure transport. SameSite=Lax limits cross-site sending while allowing normal same-site browser use. Path and lifetime keep the cookie aligned with the Login Token session. Omitting the Login Token from JSON bodies prevents script-readable copies alongside the cookie.
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-48

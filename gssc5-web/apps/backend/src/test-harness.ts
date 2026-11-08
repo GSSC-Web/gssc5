@@ -477,44 +477,15 @@ export function cookieHeaderForToken(token: string): string {
   return `${LOGIN_TOKEN_COOKIE}=${token}`;
 }
 
-function responseStrings(body: string): string[] {
-  const found: string[] = [];
-  const walk = (value: unknown): void => {
-    if (typeof value === "string") found.push(value);
-    else if (Array.isArray(value)) value.forEach(walk);
-    else if (value && typeof value === "object") Object.values(value).forEach(walk);
-  };
-  try {
-    walk(JSON.parse(body));
-  } catch {
-    if (body.trim()) found.push(body.trim());
-  }
-  return found;
-}
-
-// A response establishes a login when a cookie or body string challenges as valid.
+/** A login is established when Set-Cookie yields a Login Token that challenges as valid. */
 export async function establishedToken(
   backend: BackendFetch,
-  body: string,
-  headers?: Headers,
+  headers: Headers,
 ): Promise<string | null> {
-  const candidates: string[] = [];
-  if (headers) {
-    const fromCookie = loginTokenFromSetCookie(headers);
-    if (fromCookie) candidates.push(fromCookie);
-  }
-  for (const candidate of responseStrings(body)) {
-    if (candidate === "" || NOT_A_TOKEN.has(candidate.toLowerCase())) continue;
-    candidates.push(candidate);
-  }
-  const seen = new Set<string>();
-  for (const candidate of candidates) {
-    if (seen.has(candidate)) continue;
-    seen.add(candidate);
-    const report = await postJson(backend, "/challenge", { token: candidate });
-    if (classifyReport(report) === "valid") return candidate;
-  }
-  return null;
+  const candidate = loginTokenFromSetCookie(headers);
+  if (!candidate || NOT_A_TOKEN.has(candidate.toLowerCase())) return null;
+  const report = await challenge(backend, candidate);
+  return classifyReport(report) === "valid" ? candidate : null;
 }
 
 export async function establishedLogin(
@@ -522,27 +493,20 @@ export async function establishedLogin(
   json: Record<string, unknown>,
 ): Promise<string | null> {
   const response = await postJsonResponse(backend, "/login", json);
-  return establishedToken(backend, response.body, response.headers);
+  // Login Token must appear only in Set-Cookie, never in the JSON body.
+  try {
+    const parsed = JSON.parse(response.body) as Record<string, unknown>;
+    if (parsed && typeof parsed === "object" && "token" in parsed) return null;
+  } catch {
+    // Non-JSON bodies are not a successful cookie login.
+  }
+  return establishedToken(backend, response.headers);
 }
 
-export async function challenge(
-  backend: BackendFetch,
-  token: string,
-  options?: { viaCookie?: boolean },
-): Promise<string> {
-  if (options?.viaCookie) {
-    return postJson(backend, "/challenge", {}, { cookie: cookieHeaderForToken(token) });
-  }
-  return postJson(backend, "/challenge", { token });
+export async function challenge(backend: BackendFetch, token: string): Promise<string> {
+  return postJson(backend, "/challenge", {}, { cookie: cookieHeaderForToken(token) });
 }
 
-export async function logout(
-  backend: BackendFetch,
-  token: string,
-  options?: { viaCookie?: boolean },
-): Promise<JsonResponse> {
-  if (options?.viaCookie) {
-    return postJsonResponse(backend, "/logout", {}, { cookie: cookieHeaderForToken(token) });
-  }
-  return postJsonResponse(backend, "/logout", { token });
+export async function logout(backend: BackendFetch, token: string): Promise<JsonResponse> {
+  return postJsonResponse(backend, "/logout", {}, { cookie: cookieHeaderForToken(token) });
 }
