@@ -161,6 +161,23 @@ RELATIONS:
   VALUE: GSSC-BHLR-2
   ROLE: Refines
 
+[REQUIREMENT]
+UID: GSSC-BHLR-182
+TITLE: Login Token Retention
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL retain each Login Token across Unified Backend restarts.
+<<<
+RATIONALE: >>>
+A member remains logged in after the Unified Backend restarts until that Login Token expires or the member logs out. Retention is durable storage, not process memory.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-33, GSSC5-48
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-2
+  ROLE: Refines
+
 [[/SECTION]]
 
 [[SECTION]]

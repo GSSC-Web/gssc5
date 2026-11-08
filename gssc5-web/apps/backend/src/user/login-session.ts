@@ -22,6 +22,7 @@ export type CookieJar = Record<string, Cookie<unknown>>;
 
 export type LoginSessionFailure = "missing" | "unknown" | "logged-out" | "expired";
 
+/** Hash used when storing a Login Token in durable login_tokens rows. */
 export function hashLoginToken(token: string): string {
   return createHash("sha256").update(token).digest("hex");
 }

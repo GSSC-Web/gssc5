@@ -268,6 +268,90 @@ RELATIONS:
 [[/SECTION]]
 
 [[SECTION]]
+UID: GSSC-BLLR-LOGIN-PERSISTENCE
+TITLE: Login Token Persistence
+
+[REQUIREMENT]
+UID: GSSC-BLLR-315
+TITLE: Login Token Hash Stored
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store a hash of the Login Token when a member login succeeds.
+<<<
+RATIONALE: >>>
+The backend retains a hash of the Login Token for later challenge and logout.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-33, GSSC5-48
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-182
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-316
+TITLE: Login Token Logout Stored
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store the logout time on the Login Token row when that member logs out that token.
+<<<
+RATIONALE: >>>
+Logout is retained with the Login Token so a later challenge after a restart still reports the token as invalid.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-33, GSSC5-48
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-182
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-BHLR-4
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-317
+TITLE: Login Token Rows
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store each Login Token hash in a login tokens table. Each row holds the token hash, the user, the issue time, the expiry time, and a logout time.
+<<<
+RATIONALE: >>>
+The login tokens table is the durable store for Login Token retention across Unified Backend restarts.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-33, GSSC5-48
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-182
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-318
+TITLE: Login Token Available After Start
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL make each retained Login Token available for challenge after the Unified Backend starts.
+<<<
+RATIONALE: >>>
+After a restart, the backend challenges Login Tokens from durable storage. A process-memory-only Login Token would be lost on restart.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-33, GSSC5-48
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-182
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-BHLR-3
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
 UID: GSSC-BLLR-LOGIN-FAILURES
 TITLE: Failure Cases
 
