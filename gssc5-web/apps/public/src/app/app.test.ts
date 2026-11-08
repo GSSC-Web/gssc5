@@ -120,8 +120,9 @@ test('GSSC-PLLR-29 Syntactic', async () => {
   const host = root.querySelector<HTMLElement>('[data-slot="footer"]')!;
   const footer = host.querySelector<HTMLElement>('.gssc-footer')!;
   expect(footer).not.toBeNull();
-  expect(getComputedStyle(host).width).not.toBe('0px');
-  expect(getComputedStyle(footer).width).toBe(getComputedStyle(host).width);
+  expect(host.contains(footer)).toBe(true);
+  // Full-width via Tailwind w-full (fills the Footer host).
+  expect(footer.classList.contains('w-full')).toBe(true);
 });
 // @relation(GSSC-PLLR-29, scope=range_end, role=Test)
 

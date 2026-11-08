@@ -61,8 +61,8 @@ test('GSSC-PLLR-28 Semantic', async () => {
 test('GSSC-PLLR-30 Lexical', async () => {
   const { root } = await setupFooter();
   const footer = root.querySelector<HTMLElement>('.gssc-footer')!;
-  expect(getComputedStyle(footer).backgroundColor).toBe('var(--gssc-black)');
-  expect(getComputedStyle(footer).color).toBe('var(--gssc-white)');
+  expect(footer.classList.contains('bg-gssc-black')).toBe(true);
+  expect(footer.classList.contains('text-gssc-white')).toBe(true);
 });
 // @relation(GSSC-PLLR-30, scope=range_end, role=Test)
 
@@ -71,13 +71,11 @@ test('GSSC-PLLR-31 Semantic', async () => {
   const { root, societyContact } = await setupFooter();
   const full = root.querySelector<HTMLElement>('.gssc-footer__organization-name--full')!;
   const short = root.querySelector<HTMLElement>('.gssc-footer__organization-name--short')!;
-  const visible = getComputedStyle(full).display === 'none' ? short : full;
-  const label = visible.textContent?.trim() ?? '';
-  expect([societyContact.organizationName(), societyContact.organizationAcronym()]).toContain(
-    label,
-  );
-  // Default / wide viewport shows the organization name from Society Contact.
-  expect(label).toBe(societyContact.organizationName());
+  expect(full.textContent?.trim()).toBe(societyContact.organizationName());
+  expect(short.textContent?.trim()).toBe(societyContact.organizationAcronym());
+  // One form is shown at a time (Lexical); both values come from Society Contact.
+  expect(societyContact.organizationName().length).toBeGreaterThan(0);
+  expect(societyContact.organizationAcronym().length).toBeGreaterThan(0);
 });
 // @relation(GSSC-PLLR-31, scope=range_end, role=Test)
 
@@ -96,18 +94,13 @@ test('GSSC-PLLR-33 Lexical', async () => {
   const name = root.querySelector<HTMLElement>('.gssc-footer__organization-name')!;
   const full = root.querySelector<HTMLElement>('.gssc-footer__organization-name--full')!;
   const short = root.querySelector<HTMLElement>('.gssc-footer__organization-name--short')!;
-  expect(getComputedStyle(name).fontWeight).toBe('600');
-  expect(getComputedStyle(name).color).toBe('var(--gssc-white)');
-  // Default / wide: full name visible, acronym hidden.
-  expect(getComputedStyle(full).display).toBe('inline');
-  expect(getComputedStyle(short).display).toBe('none');
-  const cssText = [...name.ownerDocument.querySelectorAll('style')]
-    .map((el) => el.textContent ?? '')
-    .join('\n');
-  expect(cssText).toContain('max-width: 39.999rem');
-  expect(cssText).toMatch(
-    /organization-name--full[^}]*display:\s*none|max-width:\s*39\.999rem[\s\S]*organization-name--full[\s\S]*display:\s*none/,
-  );
+  expect(name.classList.contains('font-semibold')).toBe(true);
+  expect(name.classList.contains('text-gssc-white')).toBe(true);
+  // Tailwind sm: full name from sm up; acronym below sm (mobile-first utilities).
+  expect(full.classList.contains('hidden')).toBe(true);
+  expect(full.classList.contains('sm:inline')).toBe(true);
+  expect(short.classList.contains('inline')).toBe(true);
+  expect(short.classList.contains('sm:hidden')).toBe(true);
 });
 // @relation(GSSC-PLLR-33, scope=range_end, role=Test)
 
@@ -137,9 +130,10 @@ test('GSSC-PLLR-35 Syntactic', async () => {
 test('GSSC-PLLR-36 Lexical', async () => {
   const { root } = await setupFooter();
   const phone = root.querySelector<HTMLElement>('.gssc-footer__phone')!;
-  expect(getComputedStyle(phone).fontWeight).toBe('400');
-  expect(getComputedStyle(phone).color).toBe('var(--gssc-white)');
-  expect(getComputedStyle(phone).textDecorationLine).toBe('none');
+  expect(phone.classList.contains('font-normal')).toBe(true);
+  expect(phone.classList.contains('text-gssc-white')).toBe(true);
+  expect(phone.classList.contains('no-underline')).toBe(true);
+  expect(phone.classList.contains('hover:underline')).toBe(true);
 });
 // @relation(GSSC-PLLR-36, scope=range_end, role=Test)
 
@@ -167,9 +161,10 @@ test('GSSC-PLLR-38 Syntactic', async () => {
 test('GSSC-PLLR-39 Lexical', async () => {
   const { root } = await setupFooter();
   const email = root.querySelector<HTMLElement>('.gssc-footer__email')!;
-  expect(getComputedStyle(email).fontWeight).toBe('400');
-  expect(getComputedStyle(email).color).toBe('var(--gssc-white)');
-  expect(getComputedStyle(email).textDecorationLine).toBe('none');
+  expect(email.classList.contains('font-normal')).toBe(true);
+  expect(email.classList.contains('text-gssc-white')).toBe(true);
+  expect(email.classList.contains('no-underline')).toBe(true);
+  expect(email.classList.contains('hover:underline')).toBe(true);
 });
 // @relation(GSSC-PLLR-39, scope=range_end, role=Test)
 
@@ -192,8 +187,8 @@ test('GSSC-PLLR-41 Syntactic', async () => {
 test('GSSC-PLLR-42 Lexical', async () => {
   const { root } = await setupFooter();
   const postal = root.querySelector<HTMLElement>('.gssc-footer__postal')!;
-  expect(getComputedStyle(postal).fontWeight).toBe('400');
-  expect(getComputedStyle(postal).color).toBe('var(--gssc-white)');
+  expect(postal.classList.contains('font-normal')).toBe(true);
+  expect(postal.classList.contains('text-gssc-white')).toBe(true);
 });
 // @relation(GSSC-PLLR-42, scope=range_end, role=Test)
 
@@ -221,7 +216,8 @@ test('GSSC-PLLR-44 Syntactic', async () => {
 test('GSSC-PLLR-45 Lexical', async () => {
   const { root } = await setupFooter();
   const contact = root.querySelector<HTMLElement>('.gssc-footer__contact')!;
-  expect(getComputedStyle(contact).color).toBe('var(--gssc-white)');
-  expect(getComputedStyle(contact).textDecorationLine).toBe('none');
+  expect(contact.classList.contains('text-gssc-white')).toBe(true);
+  expect(contact.classList.contains('no-underline')).toBe(true);
+  expect(contact.classList.contains('hover:underline')).toBe(true);
 });
 // @relation(GSSC-PLLR-45, scope=range_end, role=Test)

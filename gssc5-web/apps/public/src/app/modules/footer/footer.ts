@@ -5,7 +5,6 @@ import { SocietyContact } from '../../services/society-contact/society-contact';
 @Component({
   selector: 'gssc-footer',
   templateUrl: './footer.html',
-  styleUrl: './footer.css',
 })
 export class Footer implements OnInit {
   private readonly contactOverlay = inject(ContactOverlay);

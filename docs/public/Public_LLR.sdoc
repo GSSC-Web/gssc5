@@ -495,15 +495,15 @@ RELATIONS:
 UID: GSSC-PLLR-33
 TITLE: Lexical
 STATEMENT: >>>
-The Footer Organization Name SHALL use a semibold weight and the white theme token for its text color, SHALL show the organization name at site widths of 40rem and above, and SHALL show the organization acronym below 40rem.
+The Footer Organization Name SHALL use a semibold weight and the white theme token for its text color, SHALL show the organization name at the Tailwind sm breakpoint and above, and SHALL show the organization acronym below the Tailwind sm breakpoint.
 <<<
 RATIONALE: >>>
-Semibold white text distinguishes the organization name within the Footer. The 40rem breakpoint matches the public site's small-width breakpoint so the acronym fits narrow viewports while the full name remains visible on wider layouts.
+Semibold white text distinguishes the organization name within the Footer. The Tailwind sm breakpoint keeps the acronym on narrow viewports and the full name on wider layouts without bespoke media rules.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-23
-REVIEW_STATUS: Approved
+REVIEW_STATUS: Changed
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-21
