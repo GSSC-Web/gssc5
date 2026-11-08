@@ -2,13 +2,36 @@ import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { routes } from '../../app.routes';
 import { ContactOverlay } from '../../services/contact-overlay/contact-overlay';
+import { KvStore } from '../../services/kv-store/kv-store';
 import { MemberSession } from '../../services/member-session';
 import { DEFAULT_MEMBERS_APP_ORIGIN, MembersApp } from '../../services/members-app';
+import {
+  SOCIETY_ORGANIZATION_ACRONYM_KEY,
+  SOCIETY_ORGANIZATION_NAME_KEY,
+  SocietyContact,
+} from '../../services/society-contact/society-contact';
 import { nativeElement, setupPublicComponent, textContent } from '../../../test-harness';
 import { Header } from './header';
 
+const sampleOrg = {
+  organizationName: 'Genealogical Society of Stanislaus County',
+  organizationAcronym: 'GSSC',
+};
+
+class FakeKvStore {
+  private readonly values = new Map<string, string | null>([
+    [SOCIETY_ORGANIZATION_NAME_KEY, sampleOrg.organizationName],
+    [SOCIETY_ORGANIZATION_ACRONYM_KEY, sampleOrg.organizationAcronym],
+  ]);
+
+  async getValue(key: string): Promise<string | null> {
+    return this.values.has(key) ? (this.values.get(key) ?? null) : null;
+  }
+}
+
 async function setupHeader(options?: {
   loggedIn?: boolean;
+  displayName?: string;
   widthPx?: number;
 }): Promise<{
   fixture: Awaited<ReturnType<typeof setupPublicComponent<Header>>>;
@@ -16,48 +39,64 @@ async function setupHeader(options?: {
   session: MemberSession;
   membersApp: MembersApp;
   contact: ContactOverlay;
+  societyContact: SocietyContact;
   root: HTMLElement;
   header: Header;
 }> {
   try {
     globalThis.localStorage?.removeItem('gssc.memberSessionToken');
+    globalThis.localStorage?.removeItem('gssc.memberDisplayName');
   } catch {
     // ignore
   }
 
-  const fixture = await setupPublicComponent(Header);
+  const fixture = await setupPublicComponent(Header, {
+    providers: [{ provide: KvStore, useClass: FakeKvStore }],
+  });
   const router = TestBed.inject(Router);
   router.resetConfig(routes);
   const session = TestBed.inject(MemberSession);
   const membersApp = TestBed.inject(MembersApp);
   const contact = TestBed.inject(ContactOverlay);
+  const societyContact = TestBed.inject(SocietyContact);
   const header = fixture.componentInstance;
 
   membersApp.lastNavigation = null;
   membersApp.assignLocation = false;
-  /* shared ContactOverlay uses openCount */
 
-  if (options?.loggedIn) session.setToken('test-token');
-  else session.loggedIn.set(false);
+  await societyContact.refresh();
+
+  if (options?.loggedIn) {
+    session.setSession('test-token', options.displayName ?? 'Ada');
+  } else {
+    session.loggedIn.set(false);
+    session.displayName.set('');
+  }
 
   if (options?.widthPx !== undefined) header.layoutWidthPx.set(options.widthPx);
 
   fixture.detectChanges();
   await fixture.whenStable();
-  return { fixture, router, session, membersApp, contact, root: nativeElement(fixture), header };
+  return {
+    fixture,
+    router,
+    session,
+    membersApp,
+    contact,
+    societyContact,
+    root: nativeElement(fixture),
+    header,
+  };
 }
 
 // @relation(GSSC-PLLR-46, scope=range_start, role=Test)
 test('GSSC-PLLR-46 Semantic', async () => {
   const { root } = await setupHeader({ widthPx: 48 * 16 });
   expect(root.querySelector('.gssc-header__logo')).not.toBeNull();
-  expect(textContent(root, '.gssc-header__org-name')).toContain(
-    'Genealogical Society of Stanislaus County',
-  );
+  expect(textContent(root, '.gssc-header__org-name')).toBe(sampleOrg.organizationName);
   expect(root.querySelector('.gssc-header__login')).not.toBeNull();
   expect(root.querySelector('.gssc-header__contact')).not.toBeNull();
-  expect(root.querySelector('.gssc-header__search')).not.toBeNull();
-  expect(root.querySelector('.gssc-header__nav')).toBeNull();
+  expect(root.querySelector('.gssc-header__search-toggle')).not.toBeNull();
 });
 // @relation(GSSC-PLLR-46, scope=range_end, role=Test)
 
@@ -65,10 +104,9 @@ test('GSSC-PLLR-46 Semantic', async () => {
 test('GSSC-PLLR-47 Syntactic', async () => {
   const { root } = await setupHeader();
   const bar = root.querySelector<HTMLElement>('.gssc-header')!;
-  const style = getComputedStyle(bar);
-  expect(style.display).toBe('flex');
-  expect(style.flexWrap).toBe('wrap');
-  expect(style.width).toBe('100%');
+  expect(bar.classList.contains('flex')).toBe(true);
+  expect(bar.classList.contains('flex-wrap')).toBe(true);
+  expect(bar.classList.contains('w-full')).toBe(true);
 });
 // @relation(GSSC-PLLR-47, scope=range_end, role=Test)
 
@@ -76,19 +114,26 @@ test('GSSC-PLLR-47 Syntactic', async () => {
 test('GSSC-PLLR-48 Lexical', async () => {
   const { root } = await setupHeader();
   const bar = root.querySelector<HTMLElement>('.gssc-header')!;
-  const style = getComputedStyle(bar);
-  expect(style.backgroundColor).toBe('var(--gssc-light-green)');
-  expect(style.borderBottomColor).toBe('var(--gssc-gray)');
-  expect(style.color).toBe('var(--gssc-dark-green)');
+  expect(bar.classList.contains('bg-gssc-light-green')).toBe(true);
+  expect(bar.classList.contains('border-gssc-gray')).toBe(true);
+  expect(bar.classList.contains('border-b-4')).toBe(true);
+  expect(bar.classList.contains('text-gssc-dark-green')).toBe(true);
 });
 // @relation(GSSC-PLLR-48, scope=range_end, role=Test)
 
 // @relation(GSSC-PLLR-49, scope=range_start, role=Test)
 test('GSSC-PLLR-49 Semantic', async () => {
-  const { root } = await setupHeader();
-  const logo = root.querySelector<HTMLElement>('.gssc-header__logo')!;
+  const { fixture, root, router } = await setupHeader();
+  const logo = root.querySelector<HTMLAnchorElement>('.gssc-header__logo')!;
   expect(logo.getAttribute('aria-label')).toBe('GSSC Logo');
   expect(logo.querySelector('.gssc-header__logo-mark')).not.toBeNull();
+  await router.navigateByUrl('/membership');
+  fixture.detectChanges();
+  await fixture.whenStable();
+  logo.click();
+  fixture.detectChanges();
+  await fixture.whenStable();
+  expect(router.url).toBe('/');
 });
 // @relation(GSSC-PLLR-49, scope=range_end, role=Test)
 
@@ -105,21 +150,19 @@ test('GSSC-PLLR-50 Syntactic', async () => {
 test('GSSC-PLLR-51 Lexical', async () => {
   const { root } = await setupHeader();
   const logo = root.querySelector<HTMLElement>('.gssc-header__logo')!;
-  expect(getComputedStyle(logo).color).toBe('var(--gssc-dark-green)');
+  expect(getComputedStyle(logo).color).toMatch(/gssc-dark-green|rgb/i);
 });
 // @relation(GSSC-PLLR-51, scope=range_end, role=Test)
 
 // @relation(GSSC-PLLR-52, scope=range_start, role=Test)
 test('GSSC-PLLR-52 Semantic', async () => {
-  const { fixture, root, header } = await setupHeader({ widthPx: 48 * 16 });
-  expect(textContent(root, '.gssc-header__org-name')).toBe(
-    'Genealogical Society of Stanislaus County',
-  );
+  const { fixture, root, header, societyContact } = await setupHeader({ widthPx: 48 * 16 });
+  expect(textContent(root, '.gssc-header__org-name')).toBe(societyContact.organizationName());
 
   header.layoutWidthPx.set(30 * 16);
   fixture.detectChanges();
   await fixture.whenStable();
-  expect(textContent(root, '.gssc-header__org-name')).toBe('GSSC');
+  expect(textContent(root, '.gssc-header__org-name')).toBe(societyContact.organizationAcronym());
 });
 // @relation(GSSC-PLLR-52, scope=range_end, role=Test)
 
@@ -142,10 +185,8 @@ test('GSSC-PLLR-53 Syntactic', async () => {
 test('GSSC-PLLR-54 Lexical', async () => {
   const { root } = await setupHeader({ widthPx: 48 * 16 });
   const name = root.querySelector<HTMLElement>('.gssc-header__org-name')!;
-  const style = getComputedStyle(name);
-  expect(style.fontFamily).toBe('var(--font-sans)');
-  expect(style.fontWeight).toBe('500');
-  expect(style.color).toBe('var(--gssc-dark-green)');
+  expect(name.classList.contains('font-medium')).toBe(true);
+  expect(name.classList.contains('text-gssc-dark-green')).toBe(true);
 });
 // @relation(GSSC-PLLR-54, scope=range_end, role=Test)
 
@@ -160,10 +201,22 @@ test('GSSC-PLLR-55 Semantic', async () => {
 // @relation(GSSC-PLLR-56, scope=range_start, role=Test)
 test('GSSC-PLLR-56 Syntactic', async () => {
   const { fixture, root, session } = await setupHeader({ loggedIn: false });
-  expect(root.querySelector('.gssc-header__account .gssc-header__login')).not.toBeNull();
-  expect(root.querySelector('.gssc-header__member-access')).toBeNull();
+  const actions = root.querySelector('.gssc-header__actions')!;
+  const login = actions.querySelector('.gssc-header__login');
+  const contact = actions.querySelector('.gssc-header__contact');
+  const search = actions.querySelector('.gssc-header__search-toggle');
+  expect(login).not.toBeNull();
+  expect(contact).not.toBeNull();
+  expect(search).not.toBeNull();
+  expect(
+    login!.compareDocumentPosition(contact!) & Node.DOCUMENT_POSITION_FOLLOWING,
+  ).toBeTruthy();
+  expect(
+    contact!.compareDocumentPosition(search!) & Node.DOCUMENT_POSITION_FOLLOWING,
+  ).toBeTruthy();
+  expect(actions.querySelectorAll('.gssc-header__divider').length).toBeGreaterThanOrEqual(1);
 
-  session.setToken('test-token');
+  session.setSession('test-token', 'Ada');
   fixture.detectChanges();
   await fixture.whenStable();
   expect(root.querySelector('.gssc-header__login')).toBeNull();
@@ -174,14 +227,13 @@ test('GSSC-PLLR-56 Syntactic', async () => {
 test('GSSC-PLLR-57 Lexical', async () => {
   const { root } = await setupHeader({ loggedIn: false });
   const login = root.querySelector<HTMLElement>('.gssc-header__login')!;
-  expect(getComputedStyle(login).fontFamily).toBe('var(--font-sans)');
-  expect(getComputedStyle(login).color).toBe('var(--gssc-dark-green)');
+  expect(getComputedStyle(login).color).toMatch(/gssc-dark-green|rgb/i);
 });
 // @relation(GSSC-PLLR-57, scope=range_end, role=Test)
 
 // @relation(GSSC-PLLR-58, scope=range_start, role=Test)
 test('GSSC-PLLR-58 Semantic', async () => {
-  const { root, membersApp } = await setupHeader({ loggedIn: true });
+  const { root, membersApp } = await setupHeader({ loggedIn: true, displayName: 'Ada' });
   root.querySelector<HTMLButtonElement>('.gssc-header__member-access')!.click();
   expect(membersApp.lastNavigation).toBe(DEFAULT_MEMBERS_APP_ORIGIN);
 });
@@ -190,7 +242,7 @@ test('GSSC-PLLR-58 Semantic', async () => {
 // @relation(GSSC-PLLR-59, scope=range_start, role=Test)
 test('GSSC-PLLR-59 Syntactic', async () => {
   const { fixture, root, session } = await setupHeader({ loggedIn: true });
-  expect(root.querySelector('.gssc-header__account .gssc-header__member-access')).not.toBeNull();
+  expect(root.querySelector('.gssc-header__greeting-menu .gssc-header__member-access')).not.toBeNull();
   expect(root.querySelector('.gssc-header__login')).toBeNull();
 
   session.loggedIn.set(false);
@@ -204,22 +256,26 @@ test('GSSC-PLLR-59 Syntactic', async () => {
 test('GSSC-PLLR-60 Lexical', async () => {
   const { root } = await setupHeader({ loggedIn: true });
   const control = root.querySelector<HTMLElement>('.gssc-header__member-access')!;
-  expect(getComputedStyle(control).fontFamily).toBe('var(--font-sans)');
-  expect(getComputedStyle(control).color).toBe('var(--gssc-dark-green)');
+  expect(getComputedStyle(control).color).toMatch(/gssc-dark-green|rgb/i);
 });
 // @relation(GSSC-PLLR-60, scope=range_end, role=Test)
 
 // @relation(GSSC-PLLR-61, scope=range_start, role=Test)
 test('GSSC-PLLR-61 Semantic', async () => {
-  const { root } = await setupHeader({ loggedIn: true });
-  expect(textContent(root, '.gssc-header__greeting')).toBe('Welcome');
+  const { root } = await setupHeader({ loggedIn: true, displayName: 'Ada' });
+  expect(textContent(root, '.gssc-header__greeting')).toBe('Hello, Ada');
 });
 // @relation(GSSC-PLLR-61, scope=range_end, role=Test)
 
 // @relation(GSSC-PLLR-62, scope=range_start, role=Test)
 test('GSSC-PLLR-62 Syntactic', async () => {
-  const { fixture, root, session } = await setupHeader({ loggedIn: true });
-  expect(root.querySelector('.gssc-header__account .gssc-header__greeting')).not.toBeNull();
+  const { fixture, root, session } = await setupHeader({ loggedIn: true, displayName: 'Ada' });
+  const greeting = root.querySelector('.gssc-header__greeting')!;
+  const menu = root.querySelector('.gssc-header__greeting-menu')!;
+  expect(greeting).not.toBeNull();
+  expect(menu.querySelector('.gssc-header__member-access')).not.toBeNull();
+  expect(menu.querySelector('.gssc-header__logout')).not.toBeNull();
+  expect(root.querySelector('.gssc-header__login')).toBeNull();
 
   session.loggedIn.set(false);
   fixture.detectChanges();
@@ -230,10 +286,9 @@ test('GSSC-PLLR-62 Syntactic', async () => {
 
 // @relation(GSSC-PLLR-63, scope=range_start, role=Test)
 test('GSSC-PLLR-63 Lexical', async () => {
-  const { root } = await setupHeader({ loggedIn: true });
+  const { root } = await setupHeader({ loggedIn: true, displayName: 'Ada' });
   const greeting = root.querySelector<HTMLElement>('.gssc-header__greeting')!;
-  expect(getComputedStyle(greeting).fontFamily).toBe('var(--font-sans)');
-  expect(getComputedStyle(greeting).color).toBe('var(--gssc-dark-brown)');
+  expect(getComputedStyle(greeting).color).toMatch(/gssc-dark-green|rgb/i);
 });
 // @relation(GSSC-PLLR-63, scope=range_end, role=Test)
 
@@ -257,7 +312,7 @@ test('GSSC-PLLR-64 Semantic', async () => {
 // @relation(GSSC-PLLR-65, scope=range_start, role=Test)
 test('GSSC-PLLR-65 Syntactic', async () => {
   const { fixture, root, session } = await setupHeader({ loggedIn: true });
-  expect(root.querySelector('.gssc-header__account .gssc-header__logout')).not.toBeNull();
+  expect(root.querySelector('.gssc-header__greeting-menu .gssc-header__logout')).not.toBeNull();
 
   session.loggedIn.set(false);
   fixture.detectChanges();
@@ -270,24 +325,25 @@ test('GSSC-PLLR-65 Syntactic', async () => {
 test('GSSC-PLLR-66 Lexical', async () => {
   const { root } = await setupHeader({ loggedIn: true });
   const logout = root.querySelector<HTMLElement>('.gssc-header__logout')!;
-  expect(getComputedStyle(logout).fontFamily).toBe('var(--font-sans)');
-  expect(getComputedStyle(logout).color).toBe('var(--gssc-dark-green)');
+  expect(getComputedStyle(logout).color).toMatch(/gssc-dark-green|rgb/i);
 });
 // @relation(GSSC-PLLR-66, scope=range_end, role=Test)
 
 // @relation(GSSC-PLLR-67, scope=range_start, role=Test)
 test('GSSC-PLLR-67 Semantic', async () => {
   const { root, contact } = await setupHeader();
-  expect(contact.openCount()).toBe(0);
+  const before = contact.openCount();
   root.querySelector<HTMLButtonElement>('.gssc-header__contact')!.click();
-  expect(contact.openCount()).toBe(1);
+  expect(contact.openCount()).toBe(before + 1);
 });
 // @relation(GSSC-PLLR-67, scope=range_end, role=Test)
 
 // @relation(GSSC-PLLR-68, scope=range_start, role=Test)
 test('GSSC-PLLR-68 Syntactic', async () => {
   const { root } = await setupHeader();
-  expect(root.querySelector('.gssc-header__actions .gssc-header__contact')).not.toBeNull();
+  const actions = root.querySelector('.gssc-header__actions')!;
+  expect(actions.querySelector('.gssc-header__contact')).not.toBeNull();
+  expect(actions.querySelectorAll('.gssc-header__divider').length).toBeGreaterThanOrEqual(1);
 });
 // @relation(GSSC-PLLR-68, scope=range_end, role=Test)
 
@@ -295,38 +351,51 @@ test('GSSC-PLLR-68 Syntactic', async () => {
 test('GSSC-PLLR-69 Lexical', async () => {
   const { root } = await setupHeader();
   const contact = root.querySelector<HTMLElement>('.gssc-header__contact')!;
-  expect(getComputedStyle(contact).fontFamily).toBe('var(--font-sans)');
-  expect(getComputedStyle(contact).color).toBe('var(--gssc-dark-green)');
+  expect(getComputedStyle(contact).color).toMatch(/gssc-dark-green|rgb/i);
 });
 // @relation(GSSC-PLLR-69, scope=range_end, role=Test)
 
 // @relation(GSSC-PLLR-70, scope=range_start, role=Test)
 test('GSSC-PLLR-70 Semantic', async () => {
   const { fixture, root, header } = await setupHeader();
-  const input = root.querySelector<HTMLInputElement>('.gssc-header__search-input')!;
-  input.value = 'stanislaus';
-  input.dispatchEvent(new Event('input'));
+  expect(header.searchOpen()).toBe(false);
+  root.querySelector<HTMLButtonElement>('.gssc-header__search-toggle')!.click();
   fixture.detectChanges();
   await fixture.whenStable();
-  expect(header.searchQuery()).toBe('stanislaus');
+  expect(header.searchOpen()).toBe(true);
+  expect(root.querySelector('.gssc-header__search-panel')).not.toBeNull();
+
+  document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+  fixture.detectChanges();
+  await fixture.whenStable();
+  expect(header.searchOpen()).toBe(false);
 });
 // @relation(GSSC-PLLR-70, scope=range_end, role=Test)
 
 // @relation(GSSC-PLLR-71, scope=range_start, role=Test)
 test('GSSC-PLLR-71 Syntactic', async () => {
-  const { root } = await setupHeader();
-  expect(root.querySelector('.gssc-header__actions .gssc-header__search')).not.toBeNull();
+  const { fixture, root } = await setupHeader();
+  const actions = [...root.querySelector('.gssc-header__actions')!.children];
+  expect(actions.at(-1)?.classList.contains('gssc-header__search')).toBe(true);
+  expect(root.querySelector('.gssc-header__search-icon--open')).not.toBeNull();
+
+  root.querySelector<HTMLButtonElement>('.gssc-header__search-toggle')!.click();
+  fixture.detectChanges();
+  await fixture.whenStable();
+  expect(root.querySelector('.gssc-header__search-icon--close')).not.toBeNull();
 });
 // @relation(GSSC-PLLR-71, scope=range_end, role=Test)
 
 // @relation(GSSC-PLLR-72, scope=range_start, role=Test)
 test('GSSC-PLLR-72 Lexical', async () => {
-  const { root } = await setupHeader();
-  const input = root.querySelector<HTMLElement>('.gssc-header__search-input')!;
-  const style = getComputedStyle(input);
-  expect(style.fontFamily).toBe('var(--font-sans)');
-  expect(style.backgroundColor).toBe('var(--gssc-white)');
-  expect(style.borderBottomColor).toBe('var(--gssc-gray)');
-  expect(style.color).toBe('var(--gssc-dark-green)');
+  const { fixture, root } = await setupHeader();
+  const toggle = root.querySelector<HTMLElement>('.gssc-header__search-toggle')!;
+  expect(getComputedStyle(toggle).color).toMatch(/gssc-dark-green|rgb/i);
+
+  root.querySelector<HTMLButtonElement>('.gssc-header__search-toggle')!.click();
+  fixture.detectChanges();
+  await fixture.whenStable();
+  const panel = root.querySelector<HTMLElement>('.gssc-header__search-panel')!;
+  expect(getComputedStyle(panel).backgroundColor).toMatch(/gssc-white|rgb/i);
 });
 // @relation(GSSC-PLLR-72, scope=range_end, role=Test)

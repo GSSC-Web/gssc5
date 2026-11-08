@@ -427,13 +427,13 @@ REVIEW_STATUS: Changed
 UID: GSSC-PLLR-48
 TITLE: Lexical
 STATEMENT: >>>
-The GSSC Website Public Frontend Header SHALL use the light-green theme token for its background, the gray theme token for its bottom border, and the dark-green theme token for its text.
+The GSSC Website Public Frontend Header SHALL use the light-green theme token for its background, the gray theme token for a thicker bottom border, and the dark-green theme token for its text.
 <<<
 RATIONALE: >>>
 Theme tokens keep Header presentation aligned with the organization palette. A fuller color role map for the Header is not set yet beyond these token choices.
 <<<
 COMMENT: >>>
-Proposed Lexical mapping for owner review until a full color role map exists.
+Thicker bottom border approved for GSSC5-22. Color tokens remain provisional until a full color role map exists.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
@@ -450,13 +450,13 @@ TITLE: Logo
 UID: GSSC-PLLR-49
 TITLE: Semantic
 STATEMENT: >>>
-The Header Logo SHALL display the GSSC Logo.
+The Header Logo SHALL display the GSSC Logo, and selection of the Header Logo SHALL open the public home page.
 <<<
 RATIONALE: >>>
-The Header always includes the GSSC Logo so the visitor can identify the society.
+The Header always includes the GSSC Logo so the visitor can identify the society. Selecting the logo returns the visitor to the public home page.
 <<<
 COMMENT: >>>
-Proposed for owner review (GSSC5-22). Logo artwork may be an SVG mark until a brand file is supplied.
+Placeholder SVG mark is acceptable until brand artwork lands in GSSC5-46 (logo branding across favicon, Header, and Footer).
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -513,13 +513,13 @@ TITLE: Organization Name
 UID: GSSC-PLLR-52
 TITLE: Semantic
 STATEMENT: >>>
-The Header Organization Name SHALL display the name Genealogical Society of Stanislaus County, or the acronym GSSC, when the layout permits.
+The Header Organization Name SHALL display the society's organization name or organization acronym from the Society Contact service when the layout permits.
 <<<
 RATIONALE: >>>
-The Header includes the society name when there is room. The acronym is the short form when the full name does not fit and the layout still permits a name.
+The Header shows one organization-name form at a time from the Society Contact service. Which form is visible by Header width is a separate Lexical requirement.
 <<<
 COMMENT: >>>
-Proposed for owner review (GSSC5-22). Proposed layout bands: full name when the Header is at least 48rem wide; acronym when at least 30rem and under 48rem; omit the name under 30rem (logo remains).
+Owner-approved layout bands (GSSC5-22): full name at 48 rem and above; acronym from 30 rem up to under 48 rem; omit under 30 rem (logo remains).
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -552,10 +552,10 @@ RELATIONS:
 UID: GSSC-PLLR-54
 TITLE: Lexical
 STATEMENT: >>>
-The Header Organization Name SHALL use the sans-serif theme font, a medium font weight, and the dark-green theme token for its text color.
+The Header Organization Name SHALL use the sans-serif theme font, a medium font weight, and the dark-green theme token for its text color, SHALL show the organization name when the Header is at least 48 rem wide, SHALL show the organization acronym when the Header is at least 30 rem wide and under 48 rem wide, and SHALL omit the name when the Header is under 30 rem wide.
 <<<
 RATIONALE: >>>
-Those tokens keep the name aligned with Header text presentation until a fuller type role map exists.
+Those tokens keep the name aligned with Header text. The width bands keep a readable identity mark as the Header narrows or widens.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -597,10 +597,10 @@ RELATIONS:
 UID: GSSC-PLLR-56
 TITLE: Syntactic
 STATEMENT: >>>
-The Header Login control SHALL appear in the Header account-access area when no member is logged in, and SHALL be omitted when a member is logged in.
+The Header Login control SHALL appear first among the Header right-side action controls when no member is logged in, SHALL be omitted when a member is logged in, and SHALL be separated from the following right-side text control by a vertical divider.
 <<<
 RATIONALE: >>>
-Login belongs with account access. Member Access replaces Login when a member is logged in.
+Owner-approved right-side order is Login, then Contact, then Site Search. Vertical dividers separate right-side text items. The Greeting replaces Login when a member is logged in.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -657,10 +657,10 @@ RELATIONS:
 UID: GSSC-PLLR-59
 TITLE: Syntactic
 STATEMENT: >>>
-The Header Member Access control SHALL appear in the Header account-access area in place of the Header Login control when a member is logged in, and SHALL be omitted when no member is logged in.
+The Header Member Access control SHALL appear in the Header Greeting dropdown when a member is logged in, and SHALL be omitted when no member is logged in.
 <<<
 RATIONALE: >>>
-Member Access replaces Login rather than appearing beside it.
+Member Access is reached from the Greeting dropdown rather than replacing Login as a top-level control.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -699,13 +699,13 @@ TITLE: Greeting
 UID: GSSC-PLLR-61
 TITLE: Semantic
 STATEMENT: >>>
-The Header Greeting SHALL display a greeting when a member is logged in.
+When a member is logged in with a valid members-only application session, the Header Greeting SHALL display a greeting that includes that member's name.
 <<<
 RATIONALE: >>>
-The greeting shows a logged-in member that the Header recognizes the session.
+The greeting shows a logged-in member that the Header recognizes the session and identifies the member by name.
 <<<
 COMMENT: >>>
-Proposed for owner review (GSSC5-22). Proposed greeting copy is "Welcome" until a public session profile supplies a personal name.
+Greeting form is Hello, followed by the member name (GSSC5-22).
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -720,10 +720,10 @@ RELATIONS:
 UID: GSSC-PLLR-62
 TITLE: Syntactic
 STATEMENT: >>>
-The Header Greeting SHALL appear in the Header account-access area when a member is logged in, and SHALL be omitted when no member is logged in.
+The Header Greeting SHALL appear first among the Header right-side action controls in place of the Header Login control when a member is logged in, SHALL be omitted when no member is logged in, SHALL open a dropdown on hover that contains the Header Member Access and Header Logout controls, and SHALL be separated from the following right-side text control by a vertical divider.
 <<<
 RATIONALE: >>>
-The greeting belongs with the logged-in account-access controls.
+The Greeting replaces Login in the right-side order. Hover reveals Members site access and Logout without crowding the Header bar.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -738,10 +738,10 @@ RELATIONS:
 UID: GSSC-PLLR-63
 TITLE: Lexical
 STATEMENT: >>>
-The Header Greeting SHALL use the sans-serif theme font and the dark-brown theme token for its text color.
+The Header Greeting SHALL use the sans-serif theme font and the dark-green theme token for its text color.
 <<<
 RATIONALE: >>>
-A secondary text token distinguishes the greeting from Header action controls until a fuller type role map exists.
+The Greeting shares Header action text tokens so it reads with Login, Contact, and related controls.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -780,10 +780,10 @@ RELATIONS:
 UID: GSSC-PLLR-65
 TITLE: Syntactic
 STATEMENT: >>>
-The Header Logout control SHALL appear in the Header account-access area when a member is logged in, and SHALL be omitted when no member is logged in.
+The Header Logout control SHALL appear in the Header Greeting dropdown when a member is logged in, and SHALL be omitted when no member is logged in.
 <<<
 RATIONALE: >>>
-Logout belongs with the logged-in account-access controls.
+Logout sits with Member Access in the Greeting dropdown for logged-in visitors.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -843,10 +843,10 @@ RELATIONS:
 UID: GSSC-PLLR-68
 TITLE: Syntactic
 STATEMENT: >>>
-The Header Contact control SHALL appear in the Header actions area.
+The Header Contact control SHALL appear in the Header right-side action controls after the Header Login control or Header Greeting and before the Header Site Search control, and SHALL be separated from adjacent right-side text controls by vertical dividers.
 <<<
 RATIONALE: >>>
-Contact sits with other Header actions so it remains reachable from every public page that shows the Header.
+Owner-approved right-side order is Login or Greeting, then Contact, then Site Search. Dividers separate right-side text items.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -885,13 +885,13 @@ TITLE: Site Search
 UID: GSSC-PLLR-70
 TITLE: Semantic
 STATEMENT: >>>
-The Header Site Search control SHALL accept a search query from the visitor for searching the site.
+The Header Site Search control SHALL toggle a Header search presentation open and closed. While the search presentation is open, the control SHALL provide a way for the visitor to dismiss it, including by choosing the control again or by pressing Escape.
 <<<
 RATIONALE: >>>
-The Header provides the visitor a way to enter a site search query. Search results presentation is outside this control.
+The Header search control opens and closes search from the Header. The full search widget contents are a separate feature.
 <<<
 COMMENT: >>>
-Proposed for owner review (GSSC5-22). This ticket covers the Header query control only; no public search-results page HLR exists yet.
+Placeholder open presentation is acceptable in GSSC5-22. Search widget UI is deferred to GSSC5-47.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -906,10 +906,10 @@ RELATIONS:
 UID: GSSC-PLLR-71
 TITLE: Syntactic
 STATEMENT: >>>
-The Header Site Search control SHALL appear in the Header actions area.
+The Header Site Search control SHALL appear last among the Header right-side action controls, SHALL present a search icon when the search presentation is closed, and SHALL present a close icon when the search presentation is open.
 <<<
 RATIONALE: >>>
-Site search sits with other Header actions so it remains reachable from every public page that shows the Header.
+Owner-approved right-side order ends with Site Search. Icon state shows whether search is open.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -924,10 +924,10 @@ RELATIONS:
 UID: GSSC-PLLR-72
 TITLE: Lexical
 STATEMENT: >>>
-The Header Site Search control SHALL use the sans-serif theme font, the white theme token for its field background, the gray theme token for its field border, and the dark-green theme token for its text color.
+The Header Site Search control SHALL use the dark-green theme token for its icon color. When the search presentation is open, that presentation SHALL use the white theme token for its background and the gray theme token for its border.
 <<<
 RATIONALE: >>>
-Those tokens keep the search field readable on the Header background until a fuller form style map exists.
+Icon and placeholder panel tokens keep search readable on the Header until the search widget defines its own presentation in GSSC5-47.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test

@@ -2,11 +2,13 @@ import { Injectable, signal } from '@angular/core';
 import { backend } from './backend';
 
 const TOKEN_KEY = 'gssc.memberSessionToken';
+const NAME_KEY = 'gssc.memberDisplayName';
 
 @Injectable({ providedIn: 'root' })
 export class MemberSession {
-  private readonly token = signal<string | null>(readStoredToken());
+  private readonly token = signal<string | null>(readStored(TOKEN_KEY));
   readonly loggedIn = signal(false);
+  readonly displayName = signal(readStored(NAME_KEY) ?? '');
 
   constructor() {
     void this.refresh();
@@ -32,15 +34,21 @@ export class MemberSession {
     }
   }
 
-  setToken(token: string): void {
+  setSession(token: string, displayName: string): void {
     this.token.set(token);
-    writeStoredToken(token);
+    writeStored(TOKEN_KEY, token);
+    this.displayName.set(displayName);
+    writeStored(NAME_KEY, displayName);
     this.loggedIn.set(true);
+  }
+
+  /** @deprecated Prefer setSession(token, displayName). */
+  setToken(token: string, displayName = 'Member'): void {
+    this.setSession(token, displayName);
   }
 
   async logout(): Promise<void> {
     const current = this.token();
-    // End the public session immediately so the visitor stays on the page as logged out.
     this.clearLocal();
     if (!current) return;
     try {
@@ -52,24 +60,26 @@ export class MemberSession {
 
   private clearLocal(): void {
     this.token.set(null);
-    writeStoredToken(null);
+    writeStored(TOKEN_KEY, null);
+    this.displayName.set('');
+    writeStored(NAME_KEY, null);
     this.loggedIn.set(false);
   }
 }
 
-function readStoredToken(): string | null {
+function readStored(key: string): string | null {
   try {
-    return globalThis.localStorage?.getItem(TOKEN_KEY) ?? null;
+    return globalThis.localStorage?.getItem(key) ?? null;
   } catch {
     return null;
   }
 }
 
-function writeStoredToken(token: string | null): void {
+function writeStored(key: string, value: string | null): void {
   try {
     if (!globalThis.localStorage) return;
-    if (token === null) globalThis.localStorage.removeItem(TOKEN_KEY);
-    else globalThis.localStorage.setItem(TOKEN_KEY, token);
+    if (value === null) globalThis.localStorage.removeItem(key);
+    else globalThis.localStorage.setItem(key, value);
   } catch {
     // Storage may be unavailable in some test environments.
   }
