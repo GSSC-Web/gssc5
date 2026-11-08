@@ -43,42 +43,6 @@
 }
 /* @relation(GSSC-PLLR-54, scope=range_end, role=Implementation) */
 
-/* @relation(GSSC-PLLR-74, GSSC-PLLR-75, scope=range_start, role=Implementation) */
-.gssc-header__nav {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.5rem 1rem;
-  flex: 1 1 12rem;
-  min-width: 0;
-}
-
-.gssc-header__nav-group {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.5rem 0.75rem;
-}
-
-.gssc-header__nav-children {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem 0.75rem;
-  padding-inline-start: 0.5rem;
-  border-inline-start: 1px solid var(--gssc-gray);
-}
-
-.gssc-header__nav-link {
-  font-family: var(--font-sans);
-  color: var(--gssc-dark-green);
-  text-decoration: none;
-}
-
-.gssc-header__nav-link--child {
-  font-size: 0.95em;
-}
-/* @relation(GSSC-PLLR-74, GSSC-PLLR-75, scope=range_end, role=Implementation) */
-
 .gssc-header__actions {
   display: flex;
   flex-wrap: wrap;

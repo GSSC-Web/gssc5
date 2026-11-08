@@ -42,20 +42,6 @@ export class CalendarPage {}
 export class PublicationsPage {}
 // @relation(GSSC-PLLR-12, scope=range_end, role=Implementation)
 
-/** Stub until Cemetery Project page tickets land; supports Header Navigation Menu access. */
-@Component({
-  selector: 'gssc-cemetery-project-page',
-  template: '',
-})
-export class CemeteryProjectPage {}
-
-/** Stub until War Veterans page tickets land; supports Header Navigation Menu access. */
-@Component({
-  selector: 'gssc-war-veterans-page',
-  template: '',
-})
-export class WarVeteransPage {}
-
 // @relation(GSSC-PLLR-13, scope=range_start, role=Implementation)
 @Component({
   selector: 'gssc-research-tools-page',

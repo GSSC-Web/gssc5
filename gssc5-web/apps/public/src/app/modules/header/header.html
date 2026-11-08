@@ -35,30 +35,6 @@
     <!-- @relation(GSSC-PLLR-52, GSSC-PLLR-53, scope=range_end, role=Implementation) -->
   </div>
 
-  <!-- @relation(GSSC-PLLR-73, GSSC-PLLR-74, scope=range_start, role=Implementation) -->
-  <nav class="gssc-header__nav" aria-label="Site">
-    <a class="gssc-header__nav-link" routerLink="/">Home</a>
-    <a class="gssc-header__nav-link" routerLink="/membership">Membership</a>
-    <a class="gssc-header__nav-link" routerLink="/leadership">Leadership</a>
-    <a class="gssc-header__nav-link" routerLink="/calendar">Calendar</a>
-    <div class="gssc-header__nav-group">
-      <a class="gssc-header__nav-link" routerLink="/publications">Publications</a>
-      <div class="gssc-header__nav-children">
-        <a class="gssc-header__nav-link gssc-header__nav-link--child" routerLink="/publications/cemetery"
-          >Cemetery Project</a
-        >
-        <a
-          class="gssc-header__nav-link gssc-header__nav-link--child"
-          routerLink="/publications/war-veterans"
-          >War Veterans</a
-        >
-      </div>
-    </div>
-    <a class="gssc-header__nav-link" routerLink="/research-tools">Research Tools</a>
-    <a class="gssc-header__nav-link" routerLink="/newsletters">Newsletters</a>
-  </nav>
-  <!-- @relation(GSSC-PLLR-73, GSSC-PLLR-74, scope=range_end, role=Implementation) -->
-
   <div class="gssc-header__actions">
     <!-- @relation(GSSC-PLLR-70, GSSC-PLLR-71, scope=range_start, role=Implementation) -->
     <form class="gssc-header__search" (submit)="onSearchSubmit($event)" role="search">

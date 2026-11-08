@@ -57,7 +57,7 @@ test('GSSC-PLLR-46 Semantic', async () => {
   expect(root.querySelector('.gssc-header__login')).not.toBeNull();
   expect(root.querySelector('.gssc-header__contact')).not.toBeNull();
   expect(root.querySelector('.gssc-header__search')).not.toBeNull();
-  expect(root.querySelector('.gssc-header__nav')).not.toBeNull();
+  expect(root.querySelector('.gssc-header__nav')).toBeNull();
 });
 // @relation(GSSC-PLLR-46, scope=range_end, role=Test)
 
@@ -330,61 +330,3 @@ test('GSSC-PLLR-72 Lexical', async () => {
   expect(style.color).toBe('var(--gssc-dark-green)');
 });
 // @relation(GSSC-PLLR-72, scope=range_end, role=Test)
-
-// @relation(GSSC-PLLR-73, scope=range_start, role=Test)
-test('GSSC-PLLR-73 Semantic', async () => {
-  const { fixture, root, router } = await setupHeader();
-  const paths = [
-    ['/', 'a.gssc-header__nav-link[href="/"]'],
-    ['/membership', 'a.gssc-header__nav-link[href="/membership"]'],
-    ['/leadership', 'a.gssc-header__nav-link[href="/leadership"]'],
-    ['/calendar', 'a.gssc-header__nav-link[href="/calendar"]'],
-    ['/publications', 'a.gssc-header__nav-link[href="/publications"]'],
-    ['/publications/cemetery', 'a.gssc-header__nav-link[href="/publications/cemetery"]'],
-    ['/publications/war-veterans', 'a.gssc-header__nav-link[href="/publications/war-veterans"]'],
-    ['/research-tools', 'a.gssc-header__nav-link[href="/research-tools"]'],
-    ['/newsletters', 'a.gssc-header__nav-link[href="/newsletters"]'],
-  ] as const;
-
-  for (const [path, selector] of paths) {
-    const link = root.querySelector<HTMLAnchorElement>(selector);
-    expect(link).not.toBeNull();
-    link!.click();
-    fixture.detectChanges();
-    await fixture.whenStable();
-    expect(router.url).toBe(path);
-  }
-
-  const publicationsGroup = root.querySelector('.gssc-header__nav-group')!;
-  expect(
-    publicationsGroup.querySelector('a.gssc-header__nav-link[href="/publications"]'),
-  ).not.toBeNull();
-  expect(
-    publicationsGroup.querySelector('.gssc-header__nav-children a[href="/publications/cemetery"]'),
-  ).not.toBeNull();
-  expect(
-    publicationsGroup.querySelector(
-      '.gssc-header__nav-children a[href="/publications/war-veterans"]',
-    ),
-  ).not.toBeNull();
-});
-// @relation(GSSC-PLLR-73, scope=range_end, role=Test)
-
-// @relation(GSSC-PLLR-74, scope=range_start, role=Test)
-test('GSSC-PLLR-74 Syntactic', async () => {
-  const { root } = await setupHeader();
-  const nav = root.querySelector<HTMLElement>('.gssc-header__nav')!;
-  expect(getComputedStyle(nav).display).toBe('flex');
-  expect(getComputedStyle(nav).flexWrap).toBe('wrap');
-  expect(root.querySelector('.gssc-header__nav-group .gssc-header__nav-children')).not.toBeNull();
-});
-// @relation(GSSC-PLLR-74, scope=range_end, role=Test)
-
-// @relation(GSSC-PLLR-75, scope=range_start, role=Test)
-test('GSSC-PLLR-75 Lexical', async () => {
-  const { root } = await setupHeader();
-  const link = root.querySelector<HTMLElement>('.gssc-header__nav-link')!;
-  expect(getComputedStyle(link).fontFamily).toBe('var(--font-sans)');
-  expect(getComputedStyle(link).color).toBe('var(--gssc-dark-green)');
-});
-// @relation(GSSC-PLLR-75, scope=range_end, role=Test)
