@@ -5,14 +5,24 @@ import { Elysia, t } from "elysia";
 import { loadConfig } from "./config";
 import { getPrisma } from "./db";
 
+/** HTTP cookie that carries the Login Token (matches GSSC5-48 name). */
+export const LOGIN_TOKEN_COOKIE = "gssc_login_token";
+
 const KeyValueEntry = t.Object({
   key: t.String(),
   value: t.String(),
 });
 
 type Session =
-  | { failure: "missing" | "unknown" | "logged-out" | "expired" | "malformed" }
+  | { failure: "missing" | "unknown" | "logged-out" | "expired" }
   | { user: { isAdmin: boolean } };
+
+type CookieJar = Record<
+  string,
+  {
+    value?: unknown;
+  }
+>;
 
 /** Global website key-value store (GSSC-BHLR-119 / GSSC5-43). */
 export const kvs = new Elysia({
@@ -46,13 +56,10 @@ export const kvs = new Elysia({
   )
   .post(
     "/:key",
-    async ({ params, body, status }) => {
+    async ({ params, body, cookie, request, status }) => {
       // @relation(GSSC-BLLR-297, scope=range_start, role=Implementation)
-      const session = await openSession(body);
-      if ("failure" in session) {
-        if (session.failure === "malformed") return status(422, "Invalid" as const);
-        return status(403, "Forbidden" as const);
-      }
+      const session = await openSession(loginTokenFromCookie(cookie, request));
+      if ("failure" in session) return status(403, "Forbidden" as const);
       // @relation(GSSC-BLLR-297, scope=range_end, role=Implementation)
 
       // @relation(GSSC-BLLR-298, GSSC-BLLR-299, scope=range_start, role=Implementation)
@@ -94,14 +101,8 @@ export const kvs = new Elysia({
     },
   );
 
-async function openSession(body: unknown): Promise<Session> {
-  const record = bodyRecord(body);
-  if (record === "malformed") return { failure: "malformed" };
-  if (record === "missing" || !Object.prototype.hasOwnProperty.call(record, "token")) {
-    return { failure: "missing" };
-  }
-  const token = record.token;
-  if (typeof token !== "string") return { failure: "unknown" };
+async function openSession(token: string | null): Promise<Session> {
+  if (token === null || token === "") return { failure: "missing" };
 
   const prisma = getPrisma(loadConfig().DATABASE_URL);
   const row = await prisma.loginToken.findUnique({
@@ -112,6 +113,24 @@ async function openSession(body: unknown): Promise<Session> {
   if (row.loggedOutAt) return { failure: "logged-out" };
   if (row.expiresAt.getTime() <= Date.now()) return { failure: "expired" };
   return { user: row.user };
+}
+
+function loginTokenFromCookie(cookie: CookieJar, request: Request): string | null {
+  const fromJar = cookie[LOGIN_TOKEN_COOKIE]?.value;
+  if (typeof fromJar === "string" && fromJar.trim() !== "") return fromJar.trim();
+
+  const header = request.headers.get("cookie");
+  if (!header) return null;
+  for (const part of header.split(";")) {
+    const trimmed = part.trim();
+    const eq = trimmed.indexOf("=");
+    if (eq <= 0) continue;
+    const name = trimmed.slice(0, eq).trim();
+    if (name !== LOGIN_TOKEN_COOKIE) continue;
+    const value = trimmed.slice(eq + 1).trim();
+    return value === "" ? null : value;
+  }
+  return null;
 }
 
 function bodyRecord(body: unknown): Record<string, unknown> | "missing" | "malformed" {

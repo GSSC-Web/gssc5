@@ -2664,10 +2664,10 @@ REVIEW_STATUS: Changed
 UID: GSSC-BHLR-181
 TITLE: Key-Value Entry Modification
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL accept creation or replacement of a key-value entry by an administrator.
+The GSSC Website Unified Backend SHALL accept creation or replacement of a key-value entry by an administrator identified by the Login Token HTTP cookie.
 <<<
 RATIONALE: >>>
-An administrator keeps global website data current. Creation stores a new key. Replacement updates the value for an existing key.
+An administrator keeps global website data current. Creation stores a new key. Replacement updates the value for an existing key. The Login Token is delivered in the HTTP cookie, not in the request body.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-43

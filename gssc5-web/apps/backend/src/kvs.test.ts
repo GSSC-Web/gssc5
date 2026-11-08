@@ -5,6 +5,7 @@ import { loadConfig } from "./config";
 import { getPrisma } from "./db";
 import {
   bootInProcess,
+  cookieHeaderForToken,
   establishedLogin,
   memberPassword,
   memberUsername,
@@ -127,8 +128,14 @@ async function getEntry(key: string): Promise<{ status: number; body: string; en
 async function upsert(
   key: string,
   payload: unknown,
+  token?: string,
 ): Promise<{ status: number; body: string }> {
-  return postJsonResponse(backend, `/kvs/${encodeURIComponent(key)}`, payload);
+  return postJsonResponse(
+    backend,
+    `/kvs/${encodeURIComponent(key)}`,
+    payload,
+    token === undefined ? undefined : { cookie: cookieHeaderForToken(token) },
+  );
 }
 
 async function storedValue(key: string): Promise<string | null> {
@@ -174,9 +181,9 @@ test("GSSC-BLLR-296 Key-Value Entry Upsert", async () => {
   const token = await adminToken();
   const key = "test.upsert.create";
   await db().keyValue.deleteMany({ where: { key } });
-  expect((await upsert(key, { token, value: "created" })).status).toBe(204);
+  expect((await upsert(key, { value: "created" }, token)).status).toBe(204);
   expect(await storedValue(key)).toBe("created");
-  expect((await upsert(key, { token, value: "replaced" })).status).toBe(204);
+  expect((await upsert(key, { value: "replaced" }, token)).status).toBe(204);
   expect(await storedValue(key)).toBe("replaced");
 });
 // @relation(GSSC-BLLR-296, scope=range_end, role=Test)
@@ -189,8 +196,10 @@ test("GSSC-BLLR-297 Key-Value Upsert Login Token Required", async () => {
     create: { key, value: "before" },
     update: { value: "before" },
   });
-  expect((await upsert(key, { token: "not-a-login-token", value: "after" })).status).toBe(403);
+  expect((await upsert(key, { value: "after" }, "not-a-login-token")).status).toBe(403);
   expect((await upsert(key, { value: "after" })).status).toBe(403);
+  // Body token must not authenticate.
+  expect((await upsert(key, { token: await adminToken(), value: "after" })).status).toBe(403);
   expect(await storedValue(key)).toBe("before");
 });
 // @relation(GSSC-BLLR-297, scope=range_end, role=Test)
@@ -199,7 +208,7 @@ test("GSSC-BLLR-297 Key-Value Upsert Login Token Required", async () => {
 test("GSSC-BLLR-298 Key-Value Upsert Privilege", async () => {
   const token = await adminToken();
   const key = "test.upsert.admin";
-  expect((await upsert(key, { token, value: "admin-ok" })).status).toBe(204);
+  expect((await upsert(key, { value: "admin-ok" }, token)).status).toBe(204);
   expect(await storedValue(key)).toBe("admin-ok");
 });
 // @relation(GSSC-BLLR-298, scope=range_end, role=Test)
@@ -212,8 +221,8 @@ test("GSSC-BLLR-299 Key-Value Upsert Forbidden", async () => {
     create: { key, value: "before" },
     update: { value: "before" },
   });
-  expect((await upsert(key, { token: moderatorToken, value: "after" })).status).toBe(403);
-  expect((await upsert(key, { token: memberToken, value: "after" })).status).toBe(403);
+  expect((await upsert(key, { value: "after" }, moderatorToken)).status).toBe(403);
+  expect((await upsert(key, { value: "after" }, memberToken)).status).toBe(403);
   expect(await storedValue(key)).toBe("before");
 });
 // @relation(GSSC-BLLR-299, scope=range_end, role=Test)
@@ -227,8 +236,8 @@ test("GSSC-BLLR-300 Key-Value Upsert Value Required", async () => {
     create: { key, value: "before" },
     update: { value: "before" },
   });
-  expect((await upsert(key, { token })).status).toBe(422);
-  expect((await upsert(key, { token, value: 12 })).status).toBe(422);
+  expect((await upsert(key, {}, token)).status).toBe(422);
+  expect((await upsert(key, { value: 12 }, token)).status).toBe(422);
   expect(await storedValue(key)).toBe("before");
 });
 // @relation(GSSC-BLLR-300, scope=range_end, role=Test)
@@ -237,7 +246,7 @@ test("GSSC-BLLR-300 Key-Value Upsert Value Required", async () => {
 test("GSSC-BLLR-301 Society Organization Name Key", async () => {
   const token = await adminToken();
   expect(
-    (await upsert("society.organizationName", { token, value: "Genealogical Society of Stanislaus County" }))
+    (await upsert("society.organizationName", { value: "Genealogical Society of Stanislaus County" }, token))
       .status,
   ).toBe(204);
   const result = await getEntry("society.organizationName");
@@ -249,7 +258,7 @@ test("GSSC-BLLR-301 Society Organization Name Key", async () => {
 // @relation(GSSC-BLLR-302, scope=range_start, role=Test)
 test("GSSC-BLLR-302 Society Organization Acronym Key", async () => {
   const token = await adminToken();
-  expect((await upsert("society.organizationAcronym", { token, value: "GSSC" })).status).toBe(204);
+  expect((await upsert("society.organizationAcronym", { value: "GSSC" }, token)).status).toBe(204);
   const result = await getEntry("society.organizationAcronym");
   expect(result.status).toBe(200);
   expect(result.entry?.value).toBe("GSSC");
@@ -259,7 +268,7 @@ test("GSSC-BLLR-302 Society Organization Acronym Key", async () => {
 // @relation(GSSC-BLLR-303, scope=range_start, role=Test)
 test("GSSC-BLLR-303 Society Phone Number Key", async () => {
   const token = await adminToken();
-  expect((await upsert("society.phoneNumber", { token, value: "(209) 529-9430" })).status).toBe(204);
+  expect((await upsert("society.phoneNumber", { value: "(209) 529-9430" }, token)).status).toBe(204);
   const result = await getEntry("society.phoneNumber");
   expect(result.status).toBe(200);
   expect(result.entry?.value).toBe("(209) 529-9430");
@@ -270,7 +279,7 @@ test("GSSC-BLLR-303 Society Phone Number Key", async () => {
 test("GSSC-BLLR-304 Society Email Address Key", async () => {
   const token = await adminToken();
   expect(
-    (await upsert("society.emailAddress", { token, value: "gsscfounded1968@gmail.com" })).status,
+    (await upsert("society.emailAddress", { value: "gsscfounded1968@gmail.com" }, token)).status,
   ).toBe(204);
   const result = await getEntry("society.emailAddress");
   expect(result.status).toBe(200);
@@ -282,7 +291,7 @@ test("GSSC-BLLR-304 Society Email Address Key", async () => {
 test("GSSC-BLLR-305 Society Postal Address Key", async () => {
   const token = await adminToken();
   expect(
-    (await upsert("society.postalAddress", { token, value: "P.O. Box 1352 Modesto, CA 95353-1352" }))
+    (await upsert("society.postalAddress", { value: "P.O. Box 1352 Modesto, CA 95353-1352" }, token))
       .status,
   ).toBe(204);
   const result = await getEntry("society.postalAddress");
@@ -303,7 +312,7 @@ test("GSSC-BLLR-306 Key-Value Table", async () => {
 // @relation(GSSC-BLLR-307, scope=range_start, role=Test)
 test("GSSC-BLLR-307 Key-Value Key", async () => {
   const token = await adminToken();
-  expect((await upsert("test.field.key", { token, value: "v" })).status).toBe(204);
+  expect((await upsert("test.field.key", { value: "v" }, token)).status).toBe(204);
   const rows = await app.sql.query(
     "SELECT key FROM key_value WHERE key='test.field.key'",
   );
@@ -315,7 +324,7 @@ test("GSSC-BLLR-307 Key-Value Key", async () => {
 // @relation(GSSC-BLLR-308, scope=range_start, role=Test)
 test("GSSC-BLLR-308 Key-Value Value", async () => {
   const token = await adminToken();
-  expect((await upsert("test.field.value", { token, value: "stored-value" })).status).toBe(204);
+  expect((await upsert("test.field.value", { value: "stored-value" }, token)).status).toBe(204);
   const rows = await app.sql.query(
     "SELECT value FROM key_value WHERE key='test.field.value'",
   );

@@ -5167,10 +5167,10 @@ TITLE: POST /{key}
 UID: GSSC-BLLR-296
 TITLE: Key-Value Entry Upsert
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL create or replace the key-value entry for the key in the path when an administrator supplies a value.
+The GSSC Website Unified Backend SHALL create or replace the key-value entry for the key in the path when an administrator authenticated by the Login Token HTTP cookie supplies a value in the request body.
 <<<
 RATIONALE: >>>
-An administrator creates a new entry or replaces the value of an existing entry.
+An administrator creates a new entry or replaces the value of an existing entry. The Login Token is taken from the HTTP cookie, not from the request body.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -5185,10 +5185,10 @@ RELATIONS:
 UID: GSSC-BLLR-297
 TITLE: Key-Value Upsert Login Token Required
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL forbid a key-value upsert when the request lacks a valid Login Token, and the backend writes nothing.
+The GSSC Website Unified Backend SHALL forbid a key-value upsert when the Login Token HTTP cookie is missing or is not a valid Login Token, and the backend writes nothing.
 <<<
 RATIONALE: >>>
-Only a logged-in administrator may create or replace a key-value entry.
+Only a logged-in administrator may create or replace a key-value entry. The Login Token is taken from the HTTP cookie, not from the request body.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -5203,10 +5203,10 @@ RELATIONS:
 UID: GSSC-BLLR-298
 TITLE: Key-Value Upsert Privilege
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL complete a key-value upsert when the Login Token belongs to a caller who is an administrator.
+The GSSC Website Unified Backend SHALL complete a key-value upsert when the Login Token from the HTTP cookie belongs to a caller who is an administrator.
 <<<
 RATIONALE: >>>
-Creating or replacing a key-value entry is limited to an administrator.
+Creating or replacing a key-value entry is limited to an administrator. The Login Token is taken from the HTTP cookie, not from the request body.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test

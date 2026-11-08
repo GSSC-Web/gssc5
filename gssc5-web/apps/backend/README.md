@@ -27,10 +27,11 @@ match the stored hash is forbidden, and that body does not say which check
 failed. A match returns a token. Logout returns 204.
 A challenge returns `valid` or `invalid`.
 `src/kvs.ts` serves `GET /kvs/:key` for public reads of global website data and
-`POST /kvs/:key` for administrator create-or-replace with a Login Token and
-string `value` in the body. A missing key on GET is 404. A missing or invalid
-Login Token, or a non-administrator caller, is forbidden on POST and writes
-nothing. A missing or non-string `value` is invalidated.
+`POST /kvs/:key` for administrator create-or-replace with string `value` in the
+body. The Login Token is taken from the `gssc_login_token` HTTP cookie, not from
+the body. A missing key on GET is 404. A missing or invalid Login Token cookie,
+or a non-administrator caller, is forbidden on POST and writes nothing. A
+missing or non-string `value` is invalidated.
 `src/index.ts` loads configuration, applies database migrations, and listens.
 The accounts plugin creates or updates the permanent admin account when the
 server starts. `ADMIN_EMAIL` defaults to empty. An empty value leaves the admin
