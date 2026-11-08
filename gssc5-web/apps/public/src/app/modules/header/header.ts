@@ -17,14 +17,9 @@ export class Header implements OnInit {
   private readonly contactOverlay = inject(ContactOverlay);
   protected readonly societyContact = inject(SocietyContact);
 
-  // @relation(GSSC-PLLR-55, GSSC-PLLR-56, GSSC-PLLR-58, GSSC-PLLR-59, GSSC-PLLR-61, GSSC-PLLR-62, GSSC-PLLR-64, GSSC-PLLR-65, scope=range_start, role=Implementation)
   readonly loggedIn = this.memberSession.loggedIn;
   readonly displayName = this.memberSession.displayName;
-  // @relation(GSSC-PLLR-55, GSSC-PLLR-56, GSSC-PLLR-58, GSSC-PLLR-59, GSSC-PLLR-61, GSSC-PLLR-62, GSSC-PLLR-64, GSSC-PLLR-65, scope=range_end, role=Implementation)
-
-  // @relation(GSSC-PLLR-70, GSSC-PLLR-71, scope=range_start, role=Implementation)
   readonly searchOpen = signal(false);
-  // @relation(GSSC-PLLR-70, GSSC-PLLR-71, scope=range_end, role=Implementation)
 
   async ngOnInit(): Promise<void> {
     await this.societyContact.refresh();

@@ -148,7 +148,7 @@ test('GSSC-PLLR-50 Syntactic', async () => {
 test('GSSC-PLLR-51 Lexical', async () => {
   const { root } = await setupHeader();
   const logo = root.querySelector<HTMLElement>('.gssc-header__logo')!;
-  expect(getComputedStyle(logo).color).toMatch(/gssc-dark-green|rgb/i);
+  expect(logo.classList.contains('text-gssc-dark-green')).toBe(true);
 });
 // @relation(GSSC-PLLR-51, scope=range_end, role=Test)
 
@@ -169,11 +169,13 @@ test('GSSC-PLLR-52 Semantic', async () => {
 test('GSSC-PLLR-53 Syntactic', async () => {
   const { root } = await setupHeader();
   const identity = root.querySelector('.gssc-header__identity')!;
-  expect(identity.querySelector('.gssc-header__logo')).not.toBeNull();
-  expect(identity.querySelector('.gssc-header__org-name')).not.toBeNull();
-  // Name forms stay beside the logo; Lexical utilities omit both below small.
   expect(identity.children[0]?.classList.contains('gssc-header__logo')).toBe(true);
   expect(identity.children[1]?.classList.contains('gssc-header__org-name')).toBe(true);
+  // Below small both forms stay hidden (omit); Lexical covers breakpoint reveals.
+  const full = root.querySelector<HTMLElement>('.gssc-header__org-name--full')!;
+  const short = root.querySelector<HTMLElement>('.gssc-header__org-name--short')!;
+  expect(full.classList.contains('hidden')).toBe(true);
+  expect(short.classList.contains('hidden')).toBe(true);
 });
 // @relation(GSSC-PLLR-53, scope=range_end, role=Test)
 
@@ -231,7 +233,8 @@ test('GSSC-PLLR-56 Syntactic', async () => {
 test('GSSC-PLLR-57 Lexical', async () => {
   const { root } = await setupHeader({ loggedIn: false });
   const login = root.querySelector<HTMLElement>('.gssc-header__login')!;
-  expect(getComputedStyle(login).color).toMatch(/gssc-dark-green|rgb/i);
+  expect(login.classList.contains('font-sans')).toBe(true);
+  expect(login.classList.contains('text-gssc-dark-green')).toBe(true);
 });
 // @relation(GSSC-PLLR-57, scope=range_end, role=Test)
 
@@ -260,7 +263,8 @@ test('GSSC-PLLR-59 Syntactic', async () => {
 test('GSSC-PLLR-60 Lexical', async () => {
   const { root } = await setupHeader({ loggedIn: true });
   const control = root.querySelector<HTMLElement>('.gssc-header__member-access')!;
-  expect(getComputedStyle(control).color).toMatch(/gssc-dark-green|rgb/i);
+  expect(control.classList.contains('font-sans')).toBe(true);
+  expect(control.classList.contains('text-gssc-dark-green')).toBe(true);
 });
 // @relation(GSSC-PLLR-60, scope=range_end, role=Test)
 
@@ -274,12 +278,18 @@ test('GSSC-PLLR-61 Semantic', async () => {
 // @relation(GSSC-PLLR-62, scope=range_start, role=Test)
 test('GSSC-PLLR-62 Syntactic', async () => {
   const { fixture, root, session } = await setupHeader({ loggedIn: true, displayName: 'Ada' });
+  const actions = root.querySelector('.gssc-header__actions')!;
+  const account = actions.querySelector('.gssc-header__account')!;
   const greeting = root.querySelector('.gssc-header__greeting')!;
-  const menu = root.querySelector('.gssc-header__greeting-menu')!;
+  const menu = root.querySelector<HTMLElement>('.gssc-header__greeting-menu')!;
+  expect(actions.firstElementChild).toBe(account);
   expect(greeting).not.toBeNull();
   expect(menu.querySelector('.gssc-header__member-access')).not.toBeNull();
   expect(menu.querySelector('.gssc-header__logout')).not.toBeNull();
+  expect(menu.classList.contains('group-hover:visible')).toBe(true);
+  expect(menu.classList.contains('group-hover:flex')).toBe(true);
   expect(root.querySelector('.gssc-header__login')).toBeNull();
+  expect(actions.querySelectorAll('.gssc-header__divider').length).toBeGreaterThanOrEqual(1);
 
   session.loggedIn.set(false);
   fixture.detectChanges();
@@ -292,7 +302,8 @@ test('GSSC-PLLR-62 Syntactic', async () => {
 test('GSSC-PLLR-63 Lexical', async () => {
   const { root } = await setupHeader({ loggedIn: true, displayName: 'Ada' });
   const greeting = root.querySelector<HTMLElement>('.gssc-header__greeting')!;
-  expect(getComputedStyle(greeting).color).toMatch(/gssc-dark-green|rgb/i);
+  expect(greeting.classList.contains('font-sans')).toBe(true);
+  expect(greeting.classList.contains('text-gssc-dark-green')).toBe(true);
 });
 // @relation(GSSC-PLLR-63, scope=range_end, role=Test)
 
@@ -329,7 +340,8 @@ test('GSSC-PLLR-65 Syntactic', async () => {
 test('GSSC-PLLR-66 Lexical', async () => {
   const { root } = await setupHeader({ loggedIn: true });
   const logout = root.querySelector<HTMLElement>('.gssc-header__logout')!;
-  expect(getComputedStyle(logout).color).toMatch(/gssc-dark-green|rgb/i);
+  expect(logout.classList.contains('font-sans')).toBe(true);
+  expect(logout.classList.contains('text-gssc-dark-green')).toBe(true);
 });
 // @relation(GSSC-PLLR-66, scope=range_end, role=Test)
 
@@ -355,7 +367,8 @@ test('GSSC-PLLR-68 Syntactic', async () => {
 test('GSSC-PLLR-69 Lexical', async () => {
   const { root } = await setupHeader();
   const contact = root.querySelector<HTMLElement>('.gssc-header__contact')!;
-  expect(getComputedStyle(contact).color).toMatch(/gssc-dark-green|rgb/i);
+  expect(contact.classList.contains('font-sans')).toBe(true);
+  expect(contact.classList.contains('text-gssc-dark-green')).toBe(true);
 });
 // @relation(GSSC-PLLR-69, scope=range_end, role=Test)
 

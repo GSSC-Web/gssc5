@@ -404,7 +404,7 @@ Proposed for owner review (GSSC5-22). REVIEW_STATUS stays Changed until owner ap
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-22
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-PLLR-47
@@ -421,7 +421,7 @@ Proposed for owner review (GSSC5-22).
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-22
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-PLLR-48
@@ -438,7 +438,7 @@ Thicker bottom border approved for GSSC5-22. Color tokens remain provisional unt
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-22
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [[/SECTION]]
 
@@ -461,7 +461,7 @@ Placeholder SVG mark is acceptable until brand artwork lands in GSSC5-46 (logo b
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-22
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-1
@@ -479,7 +479,7 @@ Leading placement keeps the logo visible whether or not the organization name al
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-22
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-1
@@ -497,7 +497,7 @@ A single theme token keeps the mark readable on the Header background until a br
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-22
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-1
@@ -524,7 +524,7 @@ Owner-approved layout bands (GSSC5-22): full name at medium and above; acronym f
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-22
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-19
@@ -542,7 +542,7 @@ Placement beside the logo keeps identity together. Omitting the name on a narrow
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-22
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-19
@@ -560,7 +560,7 @@ Those tokens keep the name aligned with Header text. The width bands keep a read
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-22
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-19
@@ -587,7 +587,7 @@ Proposed for owner review (GSSC5-22). Proposed default members origin for local 
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-22
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-2
@@ -605,7 +605,7 @@ Owner-approved right-side order is Login, then Contact, then Site Search. Vertic
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-22
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-2
@@ -623,7 +623,7 @@ Account-access controls share Header text tokens until a fuller control style ma
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-22
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-2
@@ -647,7 +647,7 @@ A logged-in member reaches the Member Frontend through Member Access instead of 
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-22
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-18
@@ -665,7 +665,7 @@ Member Access is reached from the Greeting dropdown rather than replacing Login 
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-22
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-18
@@ -683,7 +683,7 @@ Account-access controls share Header text tokens until a fuller control style ma
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-22
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-18
@@ -710,7 +710,7 @@ Greeting form is Hello, followed by the member name (GSSC5-22).
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-22
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-8
@@ -728,7 +728,7 @@ The Greeting replaces Login in the right-side order. Hover reveals Members site 
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-22
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-8
@@ -746,7 +746,7 @@ The Greeting shares Header action text tokens so it reads with Login, Contact, a
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-22
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-8
@@ -770,7 +770,7 @@ Logout ends the Member Frontend session through the existing backend logout and 
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-22
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-9
@@ -788,7 +788,7 @@ Logout sits with Member Access in the Greeting dropdown for logged-in visitors.
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-22
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-9
@@ -806,7 +806,7 @@ Account-access controls share Header text tokens until a fuller control style ma
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-22
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-9
@@ -833,7 +833,7 @@ Proposed for owner review (GSSC5-22). This ticket implements the Header open hoo
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-22
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-3
@@ -851,7 +851,7 @@ Owner-approved right-side order is Login or Greeting, then Contact, then Site Se
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-22
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-3
@@ -869,7 +869,7 @@ Header action controls share Header text tokens until a fuller control style map
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-22
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-3
@@ -896,7 +896,7 @@ Placeholder open presentation is acceptable in GSSC5-22. Search widget UI is def
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-22
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-4
@@ -914,7 +914,7 @@ Owner-approved right-side order ends with Site Search. Icon state shows whether 
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-22
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-4
@@ -932,7 +932,7 @@ Icon and placeholder panel tokens keep search readable on the Header until the s
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-22
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-4
