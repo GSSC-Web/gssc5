@@ -33,6 +33,10 @@
   color: var(--gssc-white);
   text-decoration: none;
 }
+
+.gssc-footer__phone:hover {
+  text-decoration: underline;
+}
 /* @relation(GSSC-PLLR-36, scope=range_end, role=Implementation) */
 
 /* @relation(GSSC-PLLR-39, scope=range_start, role=Implementation) */
@@ -41,6 +45,10 @@
   font-weight: 400;
   color: var(--gssc-white);
   text-decoration: none;
+}
+
+.gssc-footer__email:hover {
+  text-decoration: underline;
 }
 /* @relation(GSSC-PLLR-39, scope=range_end, role=Implementation) */
 
@@ -59,8 +67,12 @@
   background: transparent;
   font: inherit;
   font-weight: 400;
-  color: var(--gssc-light-brown);
+  color: var(--gssc-white);
   cursor: pointer;
+  text-decoration: none;
+}
+
+.gssc-footer__contact:hover {
   text-decoration: underline;
 }
 /* @relation(GSSC-PLLR-45, scope=range_end, role=Implementation) */

@@ -6,19 +6,19 @@
 
   <div class="gssc-footer__contact-details">
     <!-- @relation(GSSC-PLLR-34, GSSC-PLLR-35, scope=range_start, role=Implementation) -->
-    <a class="gssc-footer__phone" [href]="societyContact.phoneDialHref">{{
-      societyContact.phoneNumber
+    <a class="gssc-footer__phone" [href]="societyContact.phoneDialHref()">{{
+      societyContact.phoneNumber()
     }}</a>
     <!-- @relation(GSSC-PLLR-34, GSSC-PLLR-35, scope=range_end, role=Implementation) -->
 
     <!-- @relation(GSSC-PLLR-37, GSSC-PLLR-38, scope=range_start, role=Implementation) -->
-    <a class="gssc-footer__email" [href]="societyContact.emailMailtoHref">{{
-      societyContact.emailAddress
+    <a class="gssc-footer__email" [href]="societyContact.emailMailtoHref()">{{
+      societyContact.emailAddress()
     }}</a>
     <!-- @relation(GSSC-PLLR-37, GSSC-PLLR-38, scope=range_end, role=Implementation) -->
 
     <!-- @relation(GSSC-PLLR-40, GSSC-PLLR-41, scope=range_start, role=Implementation) -->
-    <p class="gssc-footer__postal">{{ societyContact.postalAddress }}</p>
+    <p class="gssc-footer__postal">{{ societyContact.postalAddress() }}</p>
     <!-- @relation(GSSC-PLLR-40, GSSC-PLLR-41, scope=range_end, role=Implementation) -->
 
     <!-- @relation(GSSC-PLLR-44, scope=range_start, role=Implementation) -->

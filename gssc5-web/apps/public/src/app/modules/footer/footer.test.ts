@@ -1,11 +1,39 @@
 import { TestBed } from '@angular/core/testing';
 import { ContactOverlay } from '../../services/contact-overlay';
-import { SocietyContact } from '../../services/society-contact';
+import {
+  SOCIETY_EMAIL_KEY,
+  SOCIETY_PHONE_KEY,
+  SOCIETY_POSTAL_KEY,
+  SocietyContact,
+} from '../../services/society-contact';
+import { WebsiteKv } from '../../services/website-kv';
 import { nativeElement, setupPublicComponent, textContent } from '../../../test-harness';
 import { Footer } from './footer';
 
+const sampleContact = {
+  phoneNumber: '(209) 529-9430',
+  emailAddress: 'gsscfounded1968@gmail.com',
+  postalAddress: 'P.O. Box 1352 Modesto, CA 95353-1352',
+};
+
+class FakeWebsiteKv {
+  private readonly values = new Map<string, string>([
+    [SOCIETY_PHONE_KEY, sampleContact.phoneNumber],
+    [SOCIETY_EMAIL_KEY, sampleContact.emailAddress],
+    [SOCIETY_POSTAL_KEY, sampleContact.postalAddress],
+  ]);
+
+  async getValue(key: string): Promise<string | null> {
+    return this.values.get(key) ?? null;
+  }
+}
+
 async function setupFooter() {
-  const fixture = await setupPublicComponent(Footer);
+  const fixture = await setupPublicComponent(Footer, {
+    providers: [{ provide: WebsiteKv, useClass: FakeWebsiteKv }],
+  });
+  await fixture.whenStable();
+  fixture.detectChanges();
   const societyContact = TestBed.inject(SocietyContact);
   const contactOverlay = TestBed.inject(ContactOverlay);
   const root = nativeElement(fixture);
@@ -63,9 +91,10 @@ test('GSSC-PLLR-33 Lexical', async () => {
 test('GSSC-PLLR-34 Semantic', async () => {
   const { root, societyContact } = await setupFooter();
   const phone = root.querySelector<HTMLAnchorElement>('.gssc-footer__phone')!;
-  expect(phone.textContent?.trim()).toBe(societyContact.phoneNumber);
-  expect(phone.getAttribute('href')).toBe(societyContact.phoneDialHref);
-  expect(societyContact.phoneDialHref.startsWith('tel:')).toBe(true);
+  expect(phone.textContent?.trim()).toBe(sampleContact.phoneNumber);
+  expect(phone.textContent?.trim()).toBe(societyContact.phoneNumber());
+  expect(phone.getAttribute('href')).toBe(societyContact.phoneDialHref());
+  expect(societyContact.phoneDialHref().startsWith('tel:')).toBe(true);
 });
 // @relation(GSSC-PLLR-34, scope=range_end, role=Test)
 
@@ -95,9 +124,10 @@ test('GSSC-PLLR-36 Lexical', async () => {
 test('GSSC-PLLR-37 Semantic', async () => {
   const { root, societyContact } = await setupFooter();
   const email = root.querySelector<HTMLAnchorElement>('.gssc-footer__email')!;
-  expect(email.textContent?.trim()).toBe(societyContact.emailAddress);
-  expect(email.getAttribute('href')).toBe(societyContact.emailMailtoHref);
-  expect(societyContact.emailMailtoHref.startsWith('mailto:')).toBe(true);
+  expect(email.textContent?.trim()).toBe(sampleContact.emailAddress);
+  expect(email.textContent?.trim()).toBe(societyContact.emailAddress());
+  expect(email.getAttribute('href')).toBe(societyContact.emailMailtoHref());
+  expect(societyContact.emailMailtoHref().startsWith('mailto:')).toBe(true);
 });
 // @relation(GSSC-PLLR-37, scope=range_end, role=Test)
 
@@ -124,7 +154,8 @@ test('GSSC-PLLR-39 Lexical', async () => {
 // @relation(GSSC-PLLR-40, scope=range_start, role=Test)
 test('GSSC-PLLR-40 Semantic', async () => {
   const { root, societyContact } = await setupFooter();
-  expect(textContent(root, '.gssc-footer__postal')).toBe(societyContact.postalAddress);
+  expect(textContent(root, '.gssc-footer__postal')).toBe(sampleContact.postalAddress);
+  expect(textContent(root, '.gssc-footer__postal')).toBe(societyContact.postalAddress());
 });
 // @relation(GSSC-PLLR-40, scope=range_end, role=Test)
 
@@ -169,6 +200,7 @@ test('GSSC-PLLR-44 Syntactic', async () => {
 test('GSSC-PLLR-45 Lexical', async () => {
   const { root } = await setupFooter();
   const contact = root.querySelector<HTMLElement>('.gssc-footer__contact')!;
-  expect(getComputedStyle(contact).color).toBe('var(--gssc-light-brown)');
+  expect(getComputedStyle(contact).color).toBe('var(--gssc-white)');
+  expect(getComputedStyle(contact).textDecorationLine).toBe('none');
 });
 // @relation(GSSC-PLLR-45, scope=range_end, role=Test)

@@ -375,8 +375,6 @@ RELATIONS:
 
 [[/SECTION]]
 
-[[/SECTION]]
-
 [[SECTION]]
 UID: GSSC-PLLR-FOOTER
 TITLE: Public Footer
@@ -521,10 +519,10 @@ TITLE: Phone Number
 UID: GSSC-PLLR-34
 TITLE: Semantic
 STATEMENT: >>>
-The Footer Phone Number SHALL display the society's phone number from the public society's contact data and SHALL dial that number when the visitor selects it.
+The Footer Phone Number SHALL display the society's phone number retrieved from the Unified Backend key-value store under the key society.phoneNumber and SHALL dial that number when the visitor selects it.
 <<<
 RATIONALE: >>>
-The Footer shows the phone number separately from the Contact overlay and lets the visitor dial it. The public society's contact data supplies the number. This requirement does not set the current number.
+The Footer shows the phone number separately from the Contact overlay and lets the visitor dial it. The Unified Backend key-value store supplies the number under society.phoneNumber. This requirement does not set the current number.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -557,10 +555,10 @@ RELATIONS:
 UID: GSSC-PLLR-36
 TITLE: Lexical
 STATEMENT: >>>
-The Footer Phone Number SHALL use a normal weight and the white theme token for its text color, without an underline.
+The Footer Phone Number SHALL use a normal weight and the white theme token for its text color, with no underline except on hover.
 <<<
 RATIONALE: >>>
-Normal-weight white text without an underline keeps the telephone link readable on the Footer background. A fuller type scale is not set yet beyond this weight and token choice.
+Normal-weight white text keeps the telephone link readable on the Footer background. Underline on hover marks it as activatable without a default underline. A fuller type scale is not set yet beyond this weight and token choice.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -581,10 +579,10 @@ TITLE: Email Address
 UID: GSSC-PLLR-37
 TITLE: Semantic
 STATEMENT: >>>
-The Footer Email Address SHALL display the society's email address from the public society's contact data and SHALL open a draft message to that address when the visitor selects it.
+The Footer Email Address SHALL display the society's email address retrieved from the Unified Backend key-value store under the key society.emailAddress and SHALL open a draft message to that address when the visitor selects it.
 <<<
 RATIONALE: >>>
-The Footer shows the email address separately from the Contact overlay and lets the visitor open a draft to that address. The public society's contact data supplies the address. This requirement does not set the current address.
+The Footer shows the email address separately from the Contact overlay and lets the visitor open a draft to that address. The Unified Backend key-value store supplies the address under society.emailAddress. This requirement does not set the current address.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -617,10 +615,10 @@ RELATIONS:
 UID: GSSC-PLLR-39
 TITLE: Lexical
 STATEMENT: >>>
-The Footer Email Address SHALL use a normal weight and the white theme token for its text color, without an underline.
+The Footer Email Address SHALL use a normal weight and the white theme token for its text color, with no underline except on hover.
 <<<
 RATIONALE: >>>
-Normal-weight white text without an underline keeps the mail link readable on the Footer background. A fuller type scale is not set yet beyond this weight and token choice.
+Normal-weight white text keeps the mail link readable on the Footer background. Underline on hover marks it as activatable without a default underline. A fuller type scale is not set yet beyond this weight and token choice.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -641,10 +639,10 @@ TITLE: Postal Address
 UID: GSSC-PLLR-40
 TITLE: Semantic
 STATEMENT: >>>
-The Footer Postal Address SHALL display the society's postal address from the public society's contact data.
+The Footer Postal Address SHALL display the society's postal address retrieved from the Unified Backend key-value store under the key society.postalAddress.
 <<<
 RATIONALE: >>>
-The Footer shows the postal address separately from the Contact overlay. The public society's contact data supplies the address. This requirement does not set the current address.
+The Footer shows the postal address separately from the Contact overlay. The Unified Backend key-value store supplies the address under society.postalAddress. This requirement does not set the current address.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -737,10 +735,10 @@ RELATIONS:
 UID: GSSC-PLLR-45
 TITLE: Lexical
 STATEMENT: >>>
-The Footer Contact control SHALL use the light-brown theme token for its text color.
+The Footer Contact control SHALL use the white theme token for its text color, with no underline except on hover.
 <<<
 RATIONALE: >>>
-The light-brown token marks Contact as an activatable control against the Footer background. A fuller color role map for controls is not set yet beyond this token choice.
+White text keeps Contact aligned with other Footer text on the black Footer background. Underline on hover marks it as activatable without a default underline. A fuller color role map for controls is not set yet beyond this token choice.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -750,6 +748,8 @@ RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-20
   ROLE: Refines
+
+[[/SECTION]]
 
 [[/SECTION]]
 
