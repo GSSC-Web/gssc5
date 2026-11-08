@@ -43,6 +43,7 @@ async function setupHeader(options?: {
   header: Header;
 }> {
   try {
+    // Clear legacy Login Token key and display name between header setups.
     globalThis.localStorage?.removeItem('gssc.memberSessionToken');
     globalThis.localStorage?.removeItem('gssc.memberDisplayName');
   } catch {
@@ -66,7 +67,7 @@ async function setupHeader(options?: {
   await societyContact.refresh();
 
   if (options?.loggedIn) {
-    session.setSession('test-token', options.displayName ?? 'Ada');
+    session.setSession(options.displayName ?? 'Ada');
   } else {
     session.loggedIn.set(false);
     session.displayName.set('');
@@ -222,7 +223,7 @@ test('GSSC-PLLR-56 Syntactic', async () => {
   ).toBeTruthy();
   expect(actions.querySelectorAll('.gssc-header__divider').length).toBeGreaterThanOrEqual(1);
 
-  session.setSession('test-token', 'Ada');
+  session.setSession('Ada');
   fixture.detectChanges();
   await fixture.whenStable();
   expect(root.querySelector('.gssc-header__login')).toBeNull();

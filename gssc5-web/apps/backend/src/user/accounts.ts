@@ -7,7 +7,10 @@ import { getPrisma } from "../db";
 import type { PrismaClient } from "../generated/prisma/client";
 import { UserPlain } from "../generated/prismabox/User";
 
-const MILLISECONDS_PER_DAY = 24 * 60 * 60 * 1000;
+const SECONDS_PER_DAY = 24 * 60 * 60;
+
+/** HTTP cookie that carries the Login Token for browser sessions. */
+export const LOGIN_TOKEN_COOKIE = "gssc_login_token";
 
 const emailPattern = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
 
@@ -27,13 +30,13 @@ const LoginBody = t.Union(
 );
 // @relation(GSSC-BLLR-1, GSSC-BLLR-2, GSSC-BLLR-3, scope=range_end, role=Implementation)
 
-const TokenBody = t.Object({
-  token: t.String(),
+// Body token remains accepted for API/moderator flows; browser sessions use the cookie.
+const OptionalTokenBody = t.Object({
+  token: t.Optional(t.String()),
 });
 
 const LoginOk = t.Object({
   status: t.Literal("ok"),
-  token: t.String(),
 });
 
 const ChallengeResult = t.Union([t.Literal("valid"), t.Literal("invalid")]);
@@ -53,7 +56,7 @@ export const accounts = new Elysia({
   })
   .post(
     "/login",
-    async ({ body, status }) => {
+    async ({ body, cookie, status }) => {
       const { prisma, config } = runtime();
 
       const password = body.password;
@@ -74,11 +77,10 @@ export const accounts = new Elysia({
       if (!passwordMatches) return status(403, "Forbidden");
       // @relation(GSSC-BLLR-6, GSSC-BLLR-233, scope=range_end, role=Implementation)
 
-      // @relation(GSSC-BLLR-7, GSSC-BLLR-8, GSSC-BLLR-11, scope=range_start, role=Implementation)
+      // @relation(GSSC-BLLR-7, GSSC-BLLR-8, GSSC-BLLR-11, GSSC-BLLR-292, scope=range_start, role=Implementation)
       const issuedAt = new Date();
-      const expiresAt = new Date(
-        issuedAt.getTime() + config.LOGIN_TOKEN_LIFETIME_DAYS * MILLISECONDS_PER_DAY,
-      );
+      const maxAgeSeconds = Math.floor(config.LOGIN_TOKEN_LIFETIME_DAYS * SECONDS_PER_DAY);
+      const expiresAt = new Date(issuedAt.getTime() + maxAgeSeconds * 1000);
       const token = randomBytes(32).toString("base64url");
       await prisma.loginToken.create({
         data: {
@@ -88,8 +90,17 @@ export const accounts = new Elysia({
           expiresAt,
         },
       });
-      return status(200, { status: "ok" as const, token });
-      // @relation(GSSC-BLLR-7, GSSC-BLLR-8, GSSC-BLLR-11, scope=range_end, role=Implementation)
+      cookie[LOGIN_TOKEN_COOKIE].set({
+        value: token,
+        httpOnly: true,
+        secure: true,
+        sameSite: "lax",
+        path: "/",
+        maxAge: maxAgeSeconds,
+        expires: expiresAt,
+      });
+      return status(200, { status: "ok" as const });
+      // @relation(GSSC-BLLR-7, GSSC-BLLR-8, GSSC-BLLR-11, GSSC-BLLR-292, scope=range_end, role=Implementation)
     },
     {
       body: LoginBody,
@@ -99,43 +110,52 @@ export const accounts = new Elysia({
       },
     },
   )
-  .guard({ body: TokenBody }, (app) =>
-    app
-      .post(
-        "/logout",
-        async ({ body, status }) => {
-          const { prisma } = runtime();
+  .post(
+    "/logout",
+    async ({ body, cookie, status }) => {
+      const { prisma } = runtime();
+      const token = resolveLoginToken(body, cookie);
 
-          // @relation(GSSC-BLLR-10, scope=range_start, role=Implementation)
-          const row = await prisma.loginToken.findUnique({
-            where: { tokenHash: hashToken(body.token) },
+      // @relation(GSSC-BLLR-10, scope=range_start, role=Implementation)
+      if (token) {
+        const row = await prisma.loginToken.findUnique({
+          where: { tokenHash: hashToken(token) },
+        });
+        if (row && !row.loggedOutAt) {
+          await prisma.loginToken.update({
+            where: { id: row.id },
+            data: { loggedOutAt: new Date() },
           });
-          if (row && !row.loggedOutAt) {
-            await prisma.loginToken.update({
-              where: { id: row.id },
-              data: { loggedOutAt: new Date() },
-            });
-          }
-          return status(204, undefined);
-          // @relation(GSSC-BLLR-10, scope=range_end, role=Implementation)
-        },
-        { response: { 204: t.Void() } },
-      )
-      .post(
-        "/challenge",
-        async ({ body }) => {
-          const { prisma } = runtime();
+        }
+      }
+      clearLoginTokenCookie(cookie);
+      return status(204, undefined);
+      // @relation(GSSC-BLLR-10, scope=range_end, role=Implementation)
+    },
+    {
+      body: OptionalTokenBody,
+      response: { 204: t.Void() },
+    },
+  )
+  .post(
+    "/challenge",
+    async ({ body, cookie }) => {
+      const { prisma } = runtime();
+      const token = resolveLoginToken(body, cookie);
 
-          // @relation(GSSC-BLLR-9, GSSC-BLLR-12, scope=range_start, role=Implementation)
-          const row = await prisma.loginToken.findUnique({
-            where: { tokenHash: hashToken(body.token) },
-          });
-          if (!row || row.loggedOutAt || row.expiresAt.getTime() <= Date.now()) return "invalid";
-          return "valid";
-          // @relation(GSSC-BLLR-9, GSSC-BLLR-12, scope=range_end, role=Implementation)
-        },
-        { response: { 200: ChallengeResult } },
-      ),
+      // @relation(GSSC-BLLR-9, GSSC-BLLR-12, scope=range_start, role=Implementation)
+      if (!token) return "invalid";
+      const row = await prisma.loginToken.findUnique({
+        where: { tokenHash: hashToken(token) },
+      });
+      if (!row || row.loggedOutAt || row.expiresAt.getTime() <= Date.now()) return "invalid";
+      return "valid";
+      // @relation(GSSC-BLLR-9, GSSC-BLLR-12, scope=range_end, role=Implementation)
+    },
+    {
+      body: OptionalTokenBody,
+      response: { 200: ChallengeResult },
+    },
   )
   .onStart(() => startPermanentAdmin());
 
@@ -203,4 +223,41 @@ function trimStrings(value: unknown): void {
 
 function hashToken(token: string): string {
   return createHash("sha256").update(token).digest("hex");
+}
+
+type CookieJar = Record<
+  string,
+  {
+    value?: unknown;
+    set: (config: Record<string, unknown>) => unknown;
+    remove?: () => unknown;
+  }
+>;
+
+function resolveLoginToken(
+  body: { token?: string } | null | undefined,
+  cookie: CookieJar,
+): string | null {
+  const fromBody = typeof body?.token === "string" ? body.token.trim() : "";
+  if (fromBody !== "") return fromBody;
+  const fromCookie = cookie[LOGIN_TOKEN_COOKIE]?.value;
+  if (typeof fromCookie === "string" && fromCookie.trim() !== "") return fromCookie.trim();
+  return null;
+}
+
+function clearLoginTokenCookie(cookie: CookieJar): void {
+  const entry = cookie[LOGIN_TOKEN_COOKIE];
+  if (!entry) return;
+  if (typeof entry.remove === "function") {
+    entry.remove();
+    return;
+  }
+  entry.set({
+    value: "",
+    httpOnly: true,
+    secure: true,
+    sameSite: "lax",
+    path: "/",
+    maxAge: 0,
+  });
 }

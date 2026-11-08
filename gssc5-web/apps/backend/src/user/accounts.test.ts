@@ -7,7 +7,10 @@ import {
   DAY_MS,
   bootInProcess,
   challenge,
+  cookieHeaderForToken,
   establishedLogin,
+  loginTokenFromSetCookie,
+  loginTokenSetCookieHeader,
   logout,
   memberEmail,
   memberPassword,
@@ -76,14 +79,40 @@ test("GSSC-BLLR-7 Password Match", async () => {
 
 // @relation(GSSC-BLLR-8, scope=range_start, role=Test)
 test("GSSC-BLLR-8 Login Token Issued", async () => {
-  const token = await establishedLogin(backend, {
+  const response = await postJsonResponse(backend, "/login", {
     password: memberPassword,
     username: memberUsername,
   });
+  expect(response.status).toBe(200);
+  const token = loginTokenFromSetCookie(response.headers);
   expect(token).toEqual(expect.any(String));
   expect(token?.length).toBeGreaterThan(0);
+  expect((await challenge(backend, token ?? "", { viaCookie: true })).trim()).toBe("valid");
 });
 // @relation(GSSC-BLLR-8, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-292, scope=range_start, role=Test)
+test("GSSC-BLLR-292 Login Token Cookie Attributes", async () => {
+  try {
+    setEnv("LOGIN_TOKEN_LIFETIME_DAYS", "3");
+    const response = await postJsonResponse(backend, "/login", {
+      password: memberPassword,
+      username: memberUsername,
+    });
+    const header = loginTokenSetCookieHeader(response.headers);
+    expect(header).toEqual(expect.any(String));
+    const cookie = header ?? "";
+    const lower = cookie.toLowerCase();
+    expect(lower.includes("httponly")).toBe(true);
+    expect(lower.includes("secure")).toBe(true);
+    expect(lower.includes("samesite=lax")).toBe(true);
+    expect(lower.includes("path=/")).toBe(true);
+    expect(lower.includes(`max-age=${3 * 24 * 60 * 60}`)).toBe(true);
+  } finally {
+    setEnv("LOGIN_TOKEN_LIFETIME_DAYS", undefined);
+  }
+});
+// @relation(GSSC-BLLR-292, scope=range_end, role=Test)
 
 // @relation(GSSC-BLLR-9, scope=range_start, role=Test)
 test("GSSC-BLLR-9 Login Token Challenge", async () => {
@@ -93,12 +122,12 @@ test("GSSC-BLLR-9 Login Token Challenge", async () => {
   });
   expect(token).toEqual(expect.any(String));
   const issued = token ?? "";
-  const valid = await challenge(backend, issued);
+  const valid = await challenge(backend, issued, { viaCookie: true });
   expect(valid.trim()).toBe("valid");
   expect(valid.includes(issued)).toBe(false);
 
   const unknown = `unknown-${randomUUID()}`;
-  const invalid = await challenge(backend, unknown);
+  const invalid = await challenge(backend, unknown, { viaCookie: true });
   expect(invalid.trim()).toBe("invalid");
   expect(invalid.includes(unknown)).toBe(false);
 });
@@ -112,8 +141,15 @@ test("GSSC-BLLR-10 Member Logout", async () => {
   });
   expect(token).toEqual(expect.any(String));
   const issued = token ?? "";
-  await logout(backend, issued);
-  expect((await challenge(backend, issued)).trim()).toBe("invalid");
+  const response = await logout(backend, issued, { viaCookie: true });
+  expect(response.status).toBe(204);
+  const cleared = loginTokenSetCookieHeader(response.headers)?.toLowerCase() ?? "";
+  expect(
+    cleared.includes("max-age=0") ||
+      cleared.includes(`${cookieHeaderForToken("").toLowerCase()}`) ||
+      cleared.includes("expires="),
+  ).toBe(true);
+  expect((await challenge(backend, issued, { viaCookie: true })).trim()).toBe("invalid");
 });
 // @relation(GSSC-BLLR-10, scope=range_end, role=Test)
 

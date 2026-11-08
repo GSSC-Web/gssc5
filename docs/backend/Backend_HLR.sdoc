@@ -92,40 +92,40 @@ RELATIONS:
 UID: GSSC-BHLR-2
 TITLE: Login Token
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL issue a Login Token when a member login succeeds.
+The GSSC Website Unified Backend SHALL issue a Login Token when a member login succeeds, and SHALL deliver that Login Token for a browser session in an HTTP cookie.
 <<<
 RATIONALE: >>>
-A successful login has to yield a Login Token that a later challenge can test. The Unified Backend PIRs require member authentication and do not require a token.
+A successful login has to yield a Login Token that a later challenge can test. Delivering the Login Token in an HTTP cookie keeps it out of script-readable browser storage for browser sessions. The Unified Backend PIRs require member authentication and do not require a token.
 <<<
 DERIVED: True
-CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Approved
+CHANGE_DRIVER: GSSC5-12, GSSC5-48
+REVIEW_STATUS: Changed
 
 [REQUIREMENT]
 UID: GSSC-BHLR-3
 TITLE: Token Challenge
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL report a challenged Login Token as valid or invalid.
+The GSSC Website Unified Backend SHALL report a challenged Login Token as valid or invalid. For a browser session, the challenge SHALL use the Login Token from the HTTP cookie.
 <<<
 RATIONALE: >>>
-The frontend uses this challenge to detect whether a member is logged in. The report is only valid or invalid. This requirement does not return the contents of the Login Token.
+The frontend uses this challenge to detect whether a member is logged in. The report is only valid or invalid. This requirement does not return the contents of the Login Token. A browser session presents the Login Token through the cookie rather than script-readable storage.
 <<<
 DERIVED: True
-CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Approved
+CHANGE_DRIVER: GSSC5-12, GSSC5-48
+REVIEW_STATUS: Changed
 
 [REQUIREMENT]
 UID: GSSC-BHLR-4
 TITLE: Member Logout
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL end the member login of a Login Token when that member logs out.
+The GSSC Website Unified Backend SHALL end the member login of a Login Token when that member logs out. For a browser session, logout SHALL use the Login Token from the HTTP cookie and SHALL clear that cookie.
 <<<
 RATIONALE: >>>
-A member has to be able to end a login. After logout, that Login Token no longer represents a valid login.
+A member has to be able to end a login. After logout, that Login Token no longer represents a valid login. Clearing the cookie ends the browser session transport for that Login Token.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-12
-REVIEW_STATUS: Approved
+CHANGE_DRIVER: GSSC5-12, GSSC5-48
+REVIEW_STATUS: Changed
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-50
@@ -143,6 +143,23 @@ A Login Token remains valid only for a limited time. This requirement does not s
 DERIVED: True
 CHANGE_DRIVER: GSSC5-12
 REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-BHLR-179
+TITLE: Login Token Cookie Attributes
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL deliver the Login Token HTTP cookie so that client script cannot read the cookie value, the cookie is marked for secure transport only, the cookie uses a lax same-site policy, the cookie applies to the whole site path, and the cookie lifetime matches the Login Token lifetime.
+<<<
+RATIONALE: >>>
+HttpOnly keeps the Login Token out of script-readable storage. Secure limits the cookie to secure transport. SameSite=Lax limits cross-site sending while allowing normal same-site browser use. Path and lifetime keep the cookie aligned with the Login Token session.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-48
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-2
+  ROLE: Refines
 
 [[/SECTION]]
 

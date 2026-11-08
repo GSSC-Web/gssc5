@@ -140,18 +140,36 @@ TITLE: Data Returned
 UID: GSSC-BLLR-8
 TITLE: Login Token Issued
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL issue a Login Token when a member login succeeds.
+The GSSC Website Unified Backend SHALL issue a Login Token when a member login succeeds, and SHALL deliver that Login Token in an HTTP cookie on the successful login response.
 <<<
 RATIONALE: >>>
-A successful login yields a Login Token that a later challenge can test.
+A successful login yields a Login Token that a later challenge can test. The cookie is the browser-session delivery of that Login Token.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-33
-REVIEW_STATUS: Approved
+CHANGE_DRIVER: GSSC5-33, GSSC5-48
+REVIEW_STATUS: Changed
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-2
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-292
+TITLE: Login Token Cookie Attributes
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL set the Login Token HTTP cookie so that client script cannot read the cookie value, the cookie is marked for secure transport only, the cookie uses a lax same-site policy, the cookie path is the site root, and the cookie Max-Age matches the configured Login Token lifetime in seconds.
+<<<
+RATIONALE: >>>
+These cookie attributes keep the Login Token out of script-readable storage, limit it to secure transport, apply a lax same-site policy, cover the whole site path, and expire with the Login Token.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-48
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-179
   ROLE: Refines
 
 [[/SECTION]]
@@ -262,15 +280,15 @@ TITLE: /logout
 UID: GSSC-BLLR-10
 TITLE: Member Logout
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL end the member login of a Login Token when that member logs out that token. A later challenge of that Login Token reports it as invalid.
+The GSSC Website Unified Backend SHALL end the member login of a Login Token when that member logs out that token. A later challenge of that Login Token reports it as invalid. When the logout request includes the Login Token HTTP cookie and does not supply a Login Token in the request body, the backend SHALL use the cookie Login Token and SHALL clear that cookie on the logout response.
 <<<
 RATIONALE: >>>
-A member ends a login by logging out that Login Token. After logout, the token no longer represents a valid login.
+A member ends a login by logging out that Login Token. After logout, the token no longer represents a valid login. Browser sessions present the Login Token through the cookie; clearing the cookie ends that browser session transport.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-33
-REVIEW_STATUS: Approved
+CHANGE_DRIVER: GSSC5-33, GSSC5-48
+REVIEW_STATUS: Changed
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-4
@@ -290,15 +308,15 @@ TITLE: Data Returned
 UID: GSSC-BLLR-9
 TITLE: Login Token Challenge
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL report a challenged Login Token as valid or invalid. The report is valid for a Login Token issued for a successful member login that has not expired and has not been logged out. The report does not include the contents of the Login Token.
+The GSSC Website Unified Backend SHALL report a challenged Login Token as valid or invalid. The report is valid for a Login Token issued for a successful member login that has not expired and has not been logged out. The report does not include the contents of the Login Token. When the challenge request includes the Login Token HTTP cookie and does not supply a Login Token in the request body, the backend SHALL challenge the cookie Login Token.
 <<<
 RATIONALE: >>>
-The challenge tells the caller whether the Login Token is valid. The report is only valid or invalid, and it does not return the token contents.
+The challenge tells the caller whether the Login Token is valid. The report is only valid or invalid, and it does not return the token contents. Browser sessions present the Login Token through the cookie.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-33
-REVIEW_STATUS: Approved
+CHANGE_DRIVER: GSSC5-33, GSSC5-48
+REVIEW_STATUS: Changed
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-3

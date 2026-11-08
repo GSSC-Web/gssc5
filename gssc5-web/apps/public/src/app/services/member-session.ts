@@ -1,12 +1,12 @@
 import { Injectable, signal } from '@angular/core';
 import { backend } from './backend';
 
-const TOKEN_KEY = 'gssc.memberSessionToken';
+/** Legacy key cleared on logout so older sessions do not leave a Login Token behind. */
+const LEGACY_TOKEN_KEY = 'gssc.memberSessionToken';
 const NAME_KEY = 'gssc.memberDisplayName';
 
 @Injectable({ providedIn: 'root' })
 export class MemberSession {
-  private readonly token = signal<string | null>(readStored(TOKEN_KEY));
   readonly loggedIn = signal(false);
   readonly displayName = signal(readStored(NAME_KEY) ?? '');
 
@@ -15,54 +15,52 @@ export class MemberSession {
   }
 
   async refresh(): Promise<void> {
-    const current = this.token();
-    if (!current) {
-      this.loggedIn.set(false);
-      return;
-    }
     try {
-      const { data, error } = await backend.challenge.post({ token: current });
-      if (this.token() !== current) return;
+      // Login Token arrives via HttpOnly cookie; credentialed challenge reads it.
+      const { data, error } = await backend.challenge.post({});
       if (error || data !== 'valid') {
         this.clearLocal();
         return;
       }
       this.loggedIn.set(true);
     } catch {
-      if (this.token() !== current) return;
       this.clearLocal();
     }
   }
 
-  setSession(token: string, displayName: string): void {
-    this.token.set(token);
-    writeStored(TOKEN_KEY, token);
-    this.displayName.set(displayName);
-    writeStored(NAME_KEY, displayName);
+  /**
+   * Record a successful members session for UI (greeting). The Login Token itself
+   * lives only in the HttpOnly cookie set by the backend.
+   */
+  setSession(displayName: string): void;
+  /** @deprecated Prefer setSession(displayName). Token argument is ignored. */
+  setSession(token: string, displayName: string): void;
+  setSession(tokenOrName: string, displayName?: string): void {
+    const name = displayName ?? tokenOrName;
+    this.displayName.set(name);
+    writeStored(NAME_KEY, name);
+    writeStored(LEGACY_TOKEN_KEY, null);
     this.loggedIn.set(true);
   }
 
-  /** @deprecated Prefer setSession(token, displayName). */
+  /** @deprecated Prefer setSession(displayName). */
   setToken(token: string, displayName = 'Member'): void {
     this.setSession(token, displayName);
   }
 
   async logout(): Promise<void> {
-    const current = this.token();
     this.clearLocal();
-    if (!current) return;
     try {
-      await backend.logout.post({ token: current });
+      await backend.logout.post({});
     } catch {
       // Backend logout is best-effort once the public session is cleared.
     }
   }
 
   private clearLocal(): void {
-    this.token.set(null);
-    writeStored(TOKEN_KEY, null);
     this.displayName.set('');
     writeStored(NAME_KEY, null);
+    writeStored(LEGACY_TOKEN_KEY, null);
     this.loggedIn.set(false);
   }
 }
