@@ -78,7 +78,7 @@ export const kvs = new Elysia({
       if (typeof value !== "string") return status(422, "Invalid" as const);
       // @relation(GSSC-BLLR-300, scope=range_end, role=Implementation)
 
-      // @relation(GSSC-BLLR-296, GSSC-BLLR-301, GSSC-BLLR-302, GSSC-BLLR-303, GSSC-BLLR-304, GSSC-BLLR-305, scope=range_start, role=Implementation)
+      // @relation(GSSC-BLLR-296, scope=range_start, role=Implementation)
       const prisma = getPrisma(loadConfig().DATABASE_URL);
       await prisma.keyValue.upsert({
         where: { key: params.key },
@@ -86,7 +86,7 @@ export const kvs = new Elysia({
         update: { value },
       });
       return status(204, undefined);
-      // @relation(GSSC-BLLR-296, GSSC-BLLR-301, GSSC-BLLR-302, GSSC-BLLR-303, GSSC-BLLR-304, GSSC-BLLR-305, scope=range_end, role=Implementation)
+      // @relation(GSSC-BLLR-296, scope=range_end, role=Implementation)
     },
     {
       params: t.Object({

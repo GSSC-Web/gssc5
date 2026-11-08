@@ -5094,14 +5094,13 @@ RELATIONS:
 
 [[/SECTION]]
 
-
 [[SECTION]]
 UID: GSSC-BLLR-KVS
 TITLE: /kvs
 
 [[SECTION]]
 UID: GSSC-BLLR-KVS-GET
-TITLE: GET /{key}
+TITLE: GET Key
 
 [REQUIREMENT]
 UID: GSSC-BLLR-293
@@ -5161,7 +5160,7 @@ RELATIONS:
 
 [[SECTION]]
 UID: GSSC-BLLR-KVS-POST
-TITLE: POST /{key}
+TITLE: POST Key
 
 [REQUIREMENT]
 UID: GSSC-BLLR-296
@@ -5248,111 +5247,6 @@ DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-43
 REVIEW_STATUS: Changed
-
-[[/SECTION]]
-
-[[SECTION]]
-UID: GSSC-BLLR-KVS-SOCIETY-KEYS
-TITLE: Society Keys
-
-[REQUIREMENT]
-UID: GSSC-BLLR-301
-TITLE: Society Organization Name Key
-STATEMENT: >>>
-The GSSC Website Unified Backend SHALL store the society's organization name in the key-value store under the key society.organizationName.
-<<<
-RATIONALE: >>>
-The public site reads the organization name from this society key.
-<<<
-DERIVED: False
-VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-43
-REVIEW_STATUS: Changed
-RELATIONS:
-- TYPE: Parent
-  VALUE: GSSC-BHLR-182
-  ROLE: Refines
-
-[REQUIREMENT]
-UID: GSSC-BLLR-302
-TITLE: Society Organization Acronym Key
-STATEMENT: >>>
-The GSSC Website Unified Backend SHALL store the society's organization acronym in the key-value store under the key society.organizationAcronym.
-<<<
-RATIONALE: >>>
-The public site reads the organization acronym from this society key.
-<<<
-DERIVED: False
-VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-43
-REVIEW_STATUS: Changed
-RELATIONS:
-- TYPE: Parent
-  VALUE: GSSC-BHLR-182
-  ROLE: Refines
-
-[REQUIREMENT]
-UID: GSSC-BLLR-303
-TITLE: Society Phone Number Key
-STATEMENT: >>>
-The GSSC Website Unified Backend SHALL store the society's phone number in the key-value store under the key society.phoneNumber.
-<<<
-RATIONALE: >>>
-The public site reads the organization's phone from this society key.
-<<<
-DERIVED: False
-VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-43
-REVIEW_STATUS: Changed
-RELATIONS:
-- TYPE: Parent
-  VALUE: GSSC-BHLR-182
-  ROLE: Refines
-- TYPE: Parent
-  VALUE: GSSC-BHLR-150
-  ROLE: Refines
-
-[REQUIREMENT]
-UID: GSSC-BLLR-304
-TITLE: Society Email Address Key
-STATEMENT: >>>
-The GSSC Website Unified Backend SHALL store the society's email address in the key-value store under the key society.emailAddress.
-<<<
-RATIONALE: >>>
-The public site reads the organization's email from this society key.
-<<<
-DERIVED: False
-VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-43
-REVIEW_STATUS: Changed
-RELATIONS:
-- TYPE: Parent
-  VALUE: GSSC-BHLR-182
-  ROLE: Refines
-- TYPE: Parent
-  VALUE: GSSC-BHLR-152
-  ROLE: Refines
-
-[REQUIREMENT]
-UID: GSSC-BLLR-305
-TITLE: Society Postal Address Key
-STATEMENT: >>>
-The GSSC Website Unified Backend SHALL store the society's postal address in the key-value store under the key society.postalAddress.
-<<<
-RATIONALE: >>>
-The public site reads the organization's mailing address from this society key.
-<<<
-DERIVED: False
-VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-43
-REVIEW_STATUS: Changed
-RELATIONS:
-- TYPE: Parent
-  VALUE: GSSC-BHLR-182
-  ROLE: Refines
-- TYPE: Parent
-  VALUE: GSSC-BHLR-151
-  ROLE: Refines
 
 [[/SECTION]]
 
@@ -5892,7 +5786,6 @@ RELATIONS:
   ROLE: Refines
 
 [[/SECTION]]
-
 
 [[SECTION]]
 UID: GSSC-BLLR-KEY-VALUE-STORE

@@ -2664,10 +2664,10 @@ REVIEW_STATUS: Changed
 UID: GSSC-BHLR-181
 TITLE: Key-Value Entry Modification
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL accept creation or replacement of a key-value entry by an administrator identified by the Login Token HTTP cookie.
+The GSSC Website Unified Backend SHALL accept creation or replacement of a key-value entry by an administrator.
 <<<
 RATIONALE: >>>
-An administrator keeps global website data current. Creation stores a new key. Replacement updates the value for an existing key. The Login Token is delivered in the HTTP cookie, not in the request body.
+An administrator keeps global website data current. Creation stores a new key. Replacement updates the value for an existing key. How the administrator is authenticated is low-level.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-43
@@ -2675,32 +2675,6 @@ REVIEW_STATUS: Changed
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-50
-  ROLE: Refines
-
-[REQUIREMENT]
-UID: GSSC-BHLR-182
-TITLE: Society Contact Keys
-STATEMENT: >>>
-The GSSC Website Unified Backend SHALL store the society's organization name, organization acronym, phone number, email address, and postal address under society keys in the key-value store.
-<<<
-RATIONALE: >>>
-The public site reads these contact fields from dedicated society keys in the key-value store. Exact key names are low-level. The organization's phone, email, and mailing address are already high-level organization information.
-<<<
-DERIVED: False
-CHANGE_DRIVER: GSSC5-43
-REVIEW_STATUS: Changed
-RELATIONS:
-- TYPE: Parent
-  VALUE: GSSC-PIR-60
-  ROLE: Refines
-- TYPE: Parent
-  VALUE: GSSC-BHLR-150
-  ROLE: Refines
-- TYPE: Parent
-  VALUE: GSSC-BHLR-151
-  ROLE: Refines
-- TYPE: Parent
-  VALUE: GSSC-BHLR-152
   ROLE: Refines
 
 [REQUIREMENT]

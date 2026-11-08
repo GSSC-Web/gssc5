@@ -242,64 +242,6 @@ test("GSSC-BLLR-300 Key-Value Upsert Value Required", async () => {
 });
 // @relation(GSSC-BLLR-300, scope=range_end, role=Test)
 
-// @relation(GSSC-BLLR-301, scope=range_start, role=Test)
-test("GSSC-BLLR-301 Society Organization Name Key", async () => {
-  const token = await adminToken();
-  expect(
-    (await upsert("society.organizationName", { value: "Genealogical Society of Stanislaus County" }, token))
-      .status,
-  ).toBe(204);
-  const result = await getEntry("society.organizationName");
-  expect(result.status).toBe(200);
-  expect(result.entry?.value).toBe("Genealogical Society of Stanislaus County");
-});
-// @relation(GSSC-BLLR-301, scope=range_end, role=Test)
-
-// @relation(GSSC-BLLR-302, scope=range_start, role=Test)
-test("GSSC-BLLR-302 Society Organization Acronym Key", async () => {
-  const token = await adminToken();
-  expect((await upsert("society.organizationAcronym", { value: "GSSC" }, token)).status).toBe(204);
-  const result = await getEntry("society.organizationAcronym");
-  expect(result.status).toBe(200);
-  expect(result.entry?.value).toBe("GSSC");
-});
-// @relation(GSSC-BLLR-302, scope=range_end, role=Test)
-
-// @relation(GSSC-BLLR-303, scope=range_start, role=Test)
-test("GSSC-BLLR-303 Society Phone Number Key", async () => {
-  const token = await adminToken();
-  expect((await upsert("society.phoneNumber", { value: "(209) 529-9430" }, token)).status).toBe(204);
-  const result = await getEntry("society.phoneNumber");
-  expect(result.status).toBe(200);
-  expect(result.entry?.value).toBe("(209) 529-9430");
-});
-// @relation(GSSC-BLLR-303, scope=range_end, role=Test)
-
-// @relation(GSSC-BLLR-304, scope=range_start, role=Test)
-test("GSSC-BLLR-304 Society Email Address Key", async () => {
-  const token = await adminToken();
-  expect(
-    (await upsert("society.emailAddress", { value: "gsscfounded1968@gmail.com" }, token)).status,
-  ).toBe(204);
-  const result = await getEntry("society.emailAddress");
-  expect(result.status).toBe(200);
-  expect(result.entry?.value).toBe("gsscfounded1968@gmail.com");
-});
-// @relation(GSSC-BLLR-304, scope=range_end, role=Test)
-
-// @relation(GSSC-BLLR-305, scope=range_start, role=Test)
-test("GSSC-BLLR-305 Society Postal Address Key", async () => {
-  const token = await adminToken();
-  expect(
-    (await upsert("society.postalAddress", { value: "P.O. Box 1352 Modesto, CA 95353-1352" }, token))
-      .status,
-  ).toBe(204);
-  const result = await getEntry("society.postalAddress");
-  expect(result.status).toBe(200);
-  expect(result.entry?.value).toBe("P.O. Box 1352 Modesto, CA 95353-1352");
-});
-// @relation(GSSC-BLLR-305, scope=range_end, role=Test)
-
 // @relation(GSSC-BLLR-306, scope=range_start, role=Test)
 test("GSSC-BLLR-306 Key-Value Table", async () => {
   const rows = await app.sql.query(
