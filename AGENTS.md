@@ -16,6 +16,6 @@ Tests should not conform to software, and software should not conform to tests. 
 Prefer optimal use of adopted third parties (e.g. Tailwind utilities) over custom reinventing; see `gssc5-web/AGENTS.md`.
 
 ## Agent skills
-Project skills live under `.cursor/skills/` (read `SKILL.md` when relevant):
+Project skills live under `.agents/skills/` (read `SKILL.md` when relevant):
 - `llr-closeout-audit` — LLR Closeout Audit before merge
 - `backlog-grooming` — Kaneo/ALM backlog refinement and wave prep
