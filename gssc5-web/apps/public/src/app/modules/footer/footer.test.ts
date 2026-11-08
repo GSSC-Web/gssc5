@@ -96,7 +96,7 @@ test('GSSC-PLLR-33 Lexical', async () => {
   const short = root.querySelector<HTMLElement>('.gssc-footer__organization-name--short')!;
   expect(name.classList.contains('font-semibold')).toBe(true);
   expect(name.classList.contains('text-gssc-white')).toBe(true);
-  // Tailwind sm: full name from sm up; acronym below sm (mobile-first utilities).
+  // Small and above: full name; below small: acronym (SW: Tailwind sm utilities).
   expect(full.classList.contains('hidden')).toBe(true);
   expect(full.classList.contains('sm:inline')).toBe(true);
   expect(short.classList.contains('inline')).toBe(true);
