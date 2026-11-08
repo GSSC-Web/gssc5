@@ -55,10 +55,9 @@ export function clearLoginTokenCookie(cookie: CookieJar): void {
 }
 
 export function classifyLoginTokenRow(
-  row: { loggedOutAt: Date | null; expiresAt: Date } | null | undefined,
-): Exclude<LoginSessionFailure, "missing"> | "ok" {
+  row: { expiresAt: Date } | null | undefined,
+): Exclude<LoginSessionFailure, "missing" | "logged-out"> | "ok" {
   if (!row) return "unknown";
-  if (row.loggedOutAt) return "logged-out";
   if (row.expiresAt.getTime() <= Date.now()) return "expired";
   return "ok";
 }

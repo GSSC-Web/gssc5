@@ -111,15 +111,9 @@ export const accounts = new Elysia({
 
       // @relation(GSSC-BLLR-10, GSSC-BLLR-314, GSSC-BLLR-316, scope=range_start, role=Implementation)
       if (token) {
-        const row = await prisma.loginToken.findUnique({
+        await prisma.loginToken.deleteMany({
           where: { tokenHash: hashLoginToken(token) },
         });
-        if (row && !row.loggedOutAt) {
-          await prisma.loginToken.update({
-            where: { id: row.id },
-            data: { loggedOutAt: new Date() },
-          });
-        }
       }
       clearLoginTokenCookie(cookie);
       return status(204, undefined);
@@ -149,17 +143,30 @@ export const accounts = new Elysia({
       response: { 200: ChallengeResult },
     },
   )
-  .onStart(() => startPermanentAdmin());
+  .onStart(() => startAccounts());
 
-let adminReady: Promise<void> | undefined;
+let accountsReady: Promise<void> | undefined;
 
-function startPermanentAdmin(): Promise<void> {
-  adminReady ??= ensurePermanentAdmin().catch((error: unknown) => {
-    adminReady = undefined;
+function startAccounts(): Promise<void> {
+  accountsReady ??= (async () => {
+    await scrubExpiredLoginTokens();
+    await ensurePermanentAdmin();
+  })().catch((error: unknown) => {
+    accountsReady = undefined;
     throw error;
   });
-  return adminReady;
+  return accountsReady;
 }
+
+// @relation(GSSC-BLLR-319, scope=range_start, role=Implementation)
+export async function scrubExpiredLoginTokens(
+  prisma: PrismaClient = runtime().prisma,
+): Promise<void> {
+  await prisma.loginToken.deleteMany({
+    where: { expiresAt: { lte: new Date() } },
+  });
+}
+// @relation(GSSC-BLLR-319, scope=range_end, role=Implementation)
 
 async function ensurePermanentAdmin(): Promise<void> {
   const { prisma, config } = runtime();

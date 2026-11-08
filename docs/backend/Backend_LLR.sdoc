@@ -291,12 +291,12 @@ RELATIONS:
 
 [REQUIREMENT]
 UID: GSSC-BLLR-316
-TITLE: Login Token Logout Stored
+TITLE: Login Token Row Removed On Logout
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL store the logout time on the Login Token row when that member logs out that token.
+The GSSC Website Unified Backend SHALL remove the Login Token row when that member logs out that token.
 <<<
 RATIONALE: >>>
-Logout is retained with the Login Token so a later challenge after a restart still reports the token as invalid.
+After logout the Login Token is ended. Keeping the row has no further use.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -314,7 +314,7 @@ RELATIONS:
 UID: GSSC-BLLR-317
 TITLE: Login Token Rows
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL store each Login Token hash in a login tokens table. Each row holds the token hash, the user, the issue time, the expiry time, and a logout time.
+The GSSC Website Unified Backend SHALL store each Login Token hash in a login tokens table. Each row holds the token hash, the user, the issue time, and the expiry time.
 <<<
 RATIONALE: >>>
 The login tokens table is the durable store for Login Token retention across Unified Backend restarts.
@@ -347,6 +347,27 @@ RELATIONS:
   ROLE: Refines
 - TYPE: Parent
   VALUE: GSSC-BHLR-3
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-319
+TITLE: Expired Login Token Rows Removed
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL remove each Login Token row whose expiry time has elapsed.
+<<<
+RATIONALE: >>>
+An expired Login Token is no longer a current login. Removing the row clears ended sessions from durable storage.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-33, GSSC5-48
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-182
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-BHLR-5
   ROLE: Refines
 
 [[/SECTION]]

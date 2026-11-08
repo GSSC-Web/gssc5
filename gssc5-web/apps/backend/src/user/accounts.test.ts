@@ -22,6 +22,7 @@ import {
   type BackendFetch,
   type InProcessApp,
 } from "../test-harness";
+import { scrubExpiredLoginTokens } from "./accounts";
 import { hashLoginToken } from "./login-session";
 
 let app: InProcessApp;
@@ -244,7 +245,7 @@ test("GSSC-BLLR-315 Login Token Hash Stored", async () => {
 // @relation(GSSC-BLLR-315, scope=range_end, role=Test)
 
 // @relation(GSSC-BLLR-316, scope=range_start, role=Test)
-test("GSSC-BLLR-316 Login Token Logout Stored", async () => {
+test("GSSC-BLLR-316 Login Token Row Removed On Logout", async () => {
   const token = await establishedLogin(backend, {
     password: memberPassword,
     username: memberUsername,
@@ -255,7 +256,7 @@ test("GSSC-BLLR-316 Login Token Logout Stored", async () => {
   const row = await prisma().loginToken.findUnique({
     where: { tokenHash: hashLoginToken(issued) },
   });
-  expect(row?.loggedOutAt).toEqual(expect.any(Date));
+  expect(row).toBeNull();
 });
 // @relation(GSSC-BLLR-316, scope=range_end, role=Test)
 
@@ -263,9 +264,10 @@ test("GSSC-BLLR-316 Login Token Logout Stored", async () => {
 test("GSSC-BLLR-317 Login Token Rows", async () => {
   const rows = await app.sql.query(`PRAGMA table_info("login_tokens")`);
   const names = new Set(rows.map((row) => String(row.name)));
-  for (const column of ["tokenHash", "userId", "issuedAt", "expiresAt", "loggedOutAt"]) {
+  for (const column of ["tokenHash", "userId", "issuedAt", "expiresAt"]) {
     expect(names.has(column)).toBe(true);
   }
+  expect(names.has("loggedOutAt")).toBe(false);
 });
 // @relation(GSSC-BLLR-317, scope=range_end, role=Test)
 
@@ -287,6 +289,32 @@ test("GSSC-BLLR-318 Login Token Available After Start", async () => {
   expect((await challenge(backend, token)).trim()).toBe("valid");
 });
 // @relation(GSSC-BLLR-318, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-319, scope=range_start, role=Test)
+test("GSSC-BLLR-319 Expired Login Token Rows Removed", async () => {
+  const user = await prisma().user.findUnique({ where: { username: memberUsername } });
+  expect(user).not.toBeNull();
+  const token = randomBytes(32).toString("base64url");
+  const issuedAt = new Date("2020-01-01T00:00:00.000Z");
+  const expiresAt = new Date("2020-01-08T00:00:00.000Z");
+  await prisma().loginToken.create({
+    data: {
+      tokenHash: hashLoginToken(token),
+      userId: user!.id,
+      issuedAt,
+      expiresAt,
+    },
+  });
+  expect(
+    await prisma().loginToken.findUnique({ where: { tokenHash: hashLoginToken(token) } }),
+  ).not.toBeNull();
+
+  await scrubExpiredLoginTokens(prisma());
+  expect(
+    await prisma().loginToken.findUnique({ where: { tokenHash: hashLoginToken(token) } }),
+  ).toBeNull();
+});
+// @relation(GSSC-BLLR-319, scope=range_end, role=Test)
 
 // @relation(GSSC-BLLR-11, scope=range_start, role=Test)
 test("GSSC-BLLR-11 Login Token Lifetime", async () => {
