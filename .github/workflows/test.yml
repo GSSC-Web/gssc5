@@ -5,15 +5,69 @@ on:
 
 permissions:
   contents: read
-  actions: write
+  pull-requests: read
 
 concurrency:
   group: test-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
+# Path → job mapping (also encoded in `changes` filters below):
+# - StrictDoc  ← docs/**, strictdoc_config.py, grammer_template.sdoc, root mise.toml, this workflow
+# - backend    ← gssc5-web/apps/backend/**, gssc5-web/{package.json,bun.lock}, root mise.toml, this workflow
+# - public     ← gssc5-web/apps/public/** + backend (types/API dep) + shared lock/mise/workflow
+# - members    ← gssc5-web/apps/members/** + backend (types/API dep) + shared lock/mise/workflow
+# Shared lockfiles / mise / CI YAML force the broader web (or docs) runs; .agents-only PRs skip all test jobs.
+
 jobs:
+  changes:
+    name: Detect changes
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      docs: ${{ steps.filter.outputs.docs }}
+      backend: ${{ steps.filter.outputs.backend }}
+      public: ${{ steps.filter.outputs.public }}
+      members: ${{ steps.filter.outputs.members }}
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v7
+
+      - name: Filter paths
+        uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            docs:
+              - 'docs/**'
+              - 'strictdoc_config.py'
+              - 'grammer_template.sdoc'
+              - 'mise.toml'
+              - '.github/workflows/test.yml'
+            backend:
+              - 'gssc5-web/apps/backend/**'
+              - 'gssc5-web/package.json'
+              - 'gssc5-web/bun.lock'
+              - 'mise.toml'
+              - '.github/workflows/test.yml'
+            public:
+              - 'gssc5-web/apps/public/**'
+              - 'gssc5-web/apps/backend/**'
+              - 'gssc5-web/package.json'
+              - 'gssc5-web/bun.lock'
+              - 'mise.toml'
+              - '.github/workflows/test.yml'
+            members:
+              - 'gssc5-web/apps/members/**'
+              - 'gssc5-web/apps/backend/**'
+              - 'gssc5-web/package.json'
+              - 'gssc5-web/bun.lock'
+              - 'mise.toml'
+              - '.github/workflows/test.yml'
+
   strictdoc:
     name: StrictDoc
+    needs: changes
+    if: needs.changes.outputs.docs == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
@@ -33,17 +87,17 @@ jobs:
           install_args: python uv "pypi:strictdoc"
 
       - name: Confirm StrictDoc compiles
-        # Fails the PR when any .sdoc has TextX/grammar errors (extra blank
+        # Fails the PR when any .sdoc has TEXTX/grammar errors (extra blank
         # lines between composite [[SECTION]] nodes are a common cause).
         run: mise run export
 
-  test:
-    name: gssc5-web
+  backend:
+    name: backend
+    needs: changes
+    if: needs.changes.outputs.backend == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
-      # Ceiling directories are not searched. Stop at the checkout's parent so
-      # repo-root mise.toml still loads when a step runs under gssc5-web.
       MISE_CEILING_PATHS: ${{ github.workspace }}/..
     steps:
       - name: Check out the repository
@@ -52,16 +106,64 @@ jobs:
       - name: Install Bun and Node
         uses: jdx/mise-action@v5
         with:
-          # Single monorepo root: repo-root mise.toml declares bun/node and
-          # [tasks.test]. experimental is required for monorepo_root.
           working_directory: ${{ github.workspace }}
           experimental: true
           install_args: bun node
 
       - name: Install dependencies
-        # Stay at repo root so mise resolves bun from root mise.toml; bun --cwd
-        # targets the web workspace lockfile.
         run: mise exec -- bun install --frozen-lockfile --cwd=gssc5-web
 
-      - name: Run tests
-        run: mise test
+      - name: Run backend tests
+        run: mise run //backend:test
+
+  public:
+    name: public
+    needs: changes
+    if: needs.changes.outputs.public == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      MISE_CEILING_PATHS: ${{ github.workspace }}/..
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v7
+
+      - name: Install Bun and Node
+        uses: jdx/mise-action@v5
+        with:
+          working_directory: ${{ github.workspace }}
+          experimental: true
+          install_args: bun node
+
+      - name: Install dependencies
+        run: mise exec -- bun install --frozen-lockfile --cwd=gssc5-web
+
+      - name: Run public tests
+        # //public:test depends on //backend:types (Eden Treaty / workspace types).
+        run: mise run //public:test
+
+  members:
+    name: members
+    needs: changes
+    if: needs.changes.outputs.members == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      MISE_CEILING_PATHS: ${{ github.workspace }}/..
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v7
+
+      - name: Install Bun and Node
+        uses: jdx/mise-action@v5
+        with:
+          working_directory: ${{ github.workspace }}
+          experimental: true
+          install_args: bun node
+
+      - name: Install dependencies
+        run: mise exec -- bun install --frozen-lockfile --cwd=gssc5-web
+
+      - name: Run members tests
+        # //members:test depends on //backend:types (Eden Treaty / workspace types).
+        run: mise run //members:test
