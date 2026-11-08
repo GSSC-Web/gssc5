@@ -519,10 +519,10 @@ TITLE: Phone Number
 UID: GSSC-PLLR-34
 TITLE: Semantic
 STATEMENT: >>>
-The Footer Phone Number SHALL display the society's phone number retrieved from the Unified Backend key-value store under the key society.phoneNumber and SHALL dial that number when the visitor selects it.
+The Footer Phone Number SHALL display the society's phone number from the Society Contact service and SHALL dial that number when the visitor selects it.
 <<<
 RATIONALE: >>>
-The Footer shows the phone number separately from the Contact overlay and lets the visitor dial it. The Unified Backend key-value store supplies the number under society.phoneNumber. This requirement does not set the current number.
+The Footer shows the phone number separately from the Contact overlay and lets the visitor dial it. The Society Contact service supplies the number. This requirement does not set the current number.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -579,10 +579,10 @@ TITLE: Email Address
 UID: GSSC-PLLR-37
 TITLE: Semantic
 STATEMENT: >>>
-The Footer Email Address SHALL display the society's email address retrieved from the Unified Backend key-value store under the key society.emailAddress and SHALL open a draft message to that address when the visitor selects it.
+The Footer Email Address SHALL display the society's email address from the Society Contact service and SHALL open a draft message to that address when the visitor selects it.
 <<<
 RATIONALE: >>>
-The Footer shows the email address separately from the Contact overlay and lets the visitor open a draft to that address. The Unified Backend key-value store supplies the address under society.emailAddress. This requirement does not set the current address.
+The Footer shows the email address separately from the Contact overlay and lets the visitor open a draft to that address. The Society Contact service supplies the address. This requirement does not set the current address.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -639,10 +639,10 @@ TITLE: Postal Address
 UID: GSSC-PLLR-40
 TITLE: Semantic
 STATEMENT: >>>
-The Footer Postal Address SHALL display the society's postal address retrieved from the Unified Backend key-value store under the key society.postalAddress.
+The Footer Postal Address SHALL display the society's postal address from the Society Contact service.
 <<<
 RATIONALE: >>>
-The Footer shows the postal address separately from the Contact overlay. The Unified Backend key-value store supplies the address under society.postalAddress. This requirement does not set the current address.
+The Footer shows the postal address separately from the Contact overlay. The Society Contact service supplies the address. This requirement does not set the current address.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -750,6 +750,114 @@ RELATIONS:
   ROLE: Refines
 
 [[/SECTION]]
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-SERVICES
+TITLE: Public Services
+
+[[SECTION]]
+UID: GSSC-PLLR-KV-STORE
+TITLE: Key-Value Store
+
+[REQUIREMENT]
+UID: GSSC-PLLR-46
+TITLE: Key-Value Retrieval
+STATEMENT: >>>
+The Public Frontend Key-Value Store SHALL retrieve the value for a requested key from the Unified Backend key-value store.
+<<<
+RATIONALE: >>>
+Global website data lives in the Unified Backend key-value store. The Public Frontend Key-Value Store fetches that value so other Public Frontend services can use it.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-23
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-119
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-47
+TITLE: Key-Value Absence
+STATEMENT: >>>
+When the Unified Backend key-value store has no entry for the requested key, the Public Frontend Key-Value Store SHALL provide no value.
+<<<
+RATIONALE: >>>
+A missing key is not an error for the public shell. Callers treat the absent value as empty until the store has an entry.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-23
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-119
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-SOCIETY-CONTACT
+TITLE: Society Contact
+
+[REQUIREMENT]
+UID: GSSC-PLLR-48
+TITLE: Society Phone Number
+STATEMENT: >>>
+The Public Frontend Society Contact service SHALL provide the society's phone number from the Key-Value Store under the key society.phoneNumber.
+<<<
+RATIONALE: >>>
+Footer Phone Number reads the number from this service. The Key-Value Store key society.phoneNumber holds that number. This requirement does not set the current number.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-23
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-24
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-49
+TITLE: Society Email Address
+STATEMENT: >>>
+The Public Frontend Society Contact service SHALL provide the society's email address from the Key-Value Store under the key society.emailAddress.
+<<<
+RATIONALE: >>>
+Footer Email Address reads the address from this service. The Key-Value Store key society.emailAddress holds that address. This requirement does not set the current address.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-23
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-25
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-50
+TITLE: Society Postal Address
+STATEMENT: >>>
+The Public Frontend Society Contact service SHALL provide the society's postal address from the Key-Value Store under the key society.postalAddress.
+<<<
+RATIONALE: >>>
+Footer Postal Address reads the address from this service. The Key-Value Store key society.postalAddress holds that address. This requirement does not set the current address.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-23
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-26
+  ROLE: Refines
 
 [[/SECTION]]
 

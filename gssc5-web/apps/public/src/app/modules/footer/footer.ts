@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { ContactOverlay } from '../../services/contact-overlay';
-import { SocietyContact } from '../../services/society-contact';
+import { ContactOverlay } from '../../services/contact-overlay/contact-overlay';
+import { SocietyContact } from '../../services/society-contact/society-contact';
 
 @Component({
   selector: 'gssc-footer',
