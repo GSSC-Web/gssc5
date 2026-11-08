@@ -1,7 +1,10 @@
 <!-- @relation(GSSC-PLLR-28, GSSC-PLLR-29, scope=range_start, role=Implementation) -->
 <footer class="gssc-footer">
   <!-- @relation(GSSC-PLLR-31, GSSC-PLLR-32, scope=range_start, role=Implementation) -->
-  <p class="gssc-footer__organization-name">{{ societyContact.organizationName }}</p>
+  <p class="gssc-footer__organization-name">
+    <span class="gssc-footer__organization-name--full">{{ societyContact.organizationName }}</span>
+    <span class="gssc-footer__organization-name--short">GSSC</span>
+  </p>
   <!-- @relation(GSSC-PLLR-31, GSSC-PLLR-32, scope=range_end, role=Implementation) -->
 
   <div class="gssc-footer__contact-details">

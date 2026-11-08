@@ -24,6 +24,24 @@
   font-weight: 600;
   color: var(--gssc-white);
 }
+
+.gssc-footer__organization-name--full {
+  display: inline;
+}
+
+.gssc-footer__organization-name--short {
+  display: none;
+}
+
+@media (max-width: 39.999rem) {
+  .gssc-footer__organization-name--full {
+    display: none;
+  }
+
+  .gssc-footer__organization-name--short {
+    display: inline;
+  }
+}
 /* @relation(GSSC-PLLR-33, scope=range_end, role=Implementation) */
 
 /* @relation(GSSC-PLLR-36, scope=range_start, role=Implementation) */

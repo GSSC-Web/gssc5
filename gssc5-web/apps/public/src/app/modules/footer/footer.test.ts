@@ -63,9 +63,10 @@ test('GSSC-PLLR-30 Lexical', async () => {
 // @relation(GSSC-PLLR-31, scope=range_start, role=Test)
 test('GSSC-PLLR-31 Semantic', async () => {
   const { root } = await setupFooter();
-  expect(textContent(root, '.gssc-footer__organization-name')).toBe(
+  expect(textContent(root, '.gssc-footer__organization-name--full')).toBe(
     'Genealogical Society of Stanislaus County',
   );
+  expect(textContent(root, '.gssc-footer__organization-name--short')).toBe('GSSC');
 });
 // @relation(GSSC-PLLR-31, scope=range_end, role=Test)
 
@@ -82,8 +83,20 @@ test('GSSC-PLLR-32 Syntactic', async () => {
 test('GSSC-PLLR-33 Lexical', async () => {
   const { root } = await setupFooter();
   const name = root.querySelector<HTMLElement>('.gssc-footer__organization-name')!;
+  const full = root.querySelector<HTMLElement>('.gssc-footer__organization-name--full')!;
+  const short = root.querySelector<HTMLElement>('.gssc-footer__organization-name--short')!;
   expect(getComputedStyle(name).fontWeight).toBe('600');
   expect(getComputedStyle(name).color).toBe('var(--gssc-white)');
+  // Default / wide: full name visible, acronym hidden.
+  expect(getComputedStyle(full).display).toBe('inline');
+  expect(getComputedStyle(short).display).toBe('none');
+  const cssText = [...name.ownerDocument.querySelectorAll('style')]
+    .map((el) => el.textContent ?? '')
+    .join('\n');
+  expect(cssText).toContain('max-width: 39.999rem');
+  expect(cssText).toMatch(
+    /organization-name--full[^}]*display:\s*none|max-width:\s*39\.999rem[\s\S]*organization-name--full[\s\S]*display:\s*none/,
+  );
 });
 // @relation(GSSC-PLLR-33, scope=range_end, role=Test)
 
