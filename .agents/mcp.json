@@ -1,0 +1,23 @@
+{
+  "$schema": "https://dotagentsprotocol.com/schemas/mcp.json",
+  "mcpServers": {
+    "kaneo": {
+      "description": "Kaneo ALM for project GSSC5: tasks, relations, labels, custom fields, comments, columns.",
+      "url": "${KANEO_MCP_URL}",
+      "headers": {
+        "Authorization": "Bearer ${KANEO_API_TOKEN}"
+      },
+      "env": {
+        "KANEO_MCP_URL": "${KANEO_MCP_URL}",
+        "KANEO_API_TOKEN": "${KANEO_API_TOKEN}",
+        "KANEO_WORKSPACE_ID": "${KANEO_WORKSPACE_ID}",
+        "KANEO_PROJECT_ID": "${KANEO_PROJECT_ID}"
+      },
+      "notes": [
+        "Placeholders only — never commit real tokens.",
+        "Board project key: GSSC5.",
+        "Tool intent: list/get/create/update tasks; move status by column slug; task relations (blocks/subtask/related); labels; custom fields (Issue Type, Work Type, DoR/DoD, Fix Version, Implementation); comments."
+      ]
+    }
+  }
+}
