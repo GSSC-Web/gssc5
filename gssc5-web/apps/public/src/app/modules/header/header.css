@@ -1,0 +1,8 @@
+/*
+ * Header presentation prefers Tailwind utilities in the template (GSSC5-22).
+ * Keep this file for any host-only hooks; avoid duplicating utility styles here.
+ */
+
+:host {
+  display: block;
+}

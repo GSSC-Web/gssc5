@@ -1,0 +1,150 @@
+<!-- @relation(GSSC-PLLR-46, GSSC-PLLR-47, scope=range_start, role=Implementation) -->
+<!-- @relation(GSSC-PLLR-48, scope=range_start, role=Implementation) -->
+<header
+  class="gssc-header flex w-full flex-wrap items-center gap-x-5 gap-y-3 border-b-4 border-gssc-gray bg-gssc-light-green px-4 py-3 font-sans text-gssc-dark-green"
+>
+  <!-- @relation(GSSC-PLLR-48, scope=range_end, role=Implementation) -->
+
+  <div class="gssc-header__identity flex min-w-0 items-center gap-3">
+    <!-- @relation(GSSC-PLLR-49, GSSC-PLLR-50, GSSC-PLLR-51, scope=range_start, role=Implementation) -->
+    <a
+      class="gssc-header__logo inline-flex shrink-0 text-gssc-dark-green"
+      routerLink="/"
+      aria-label="GSSC Logo"
+    >
+      <!-- Placeholder mark until GSSC5-46 brand artwork. -->
+      <svg
+        class="gssc-header__logo-mark block"
+        viewBox="0 0 48 48"
+        width="40"
+        height="40"
+        role="img"
+        aria-hidden="true"
+      >
+        <rect x="4" y="4" width="40" height="40" rx="6" fill="currentColor" opacity="0.15" />
+        <text
+          x="24"
+          y="30"
+          text-anchor="middle"
+          font-size="14"
+          font-weight="700"
+          fill="currentColor"
+        >
+          GSSC
+        </text>
+      </svg>
+    </a>
+    <!-- @relation(GSSC-PLLR-49, GSSC-PLLR-50, GSSC-PLLR-51, scope=range_end, role=Implementation) -->
+
+    <!-- @relation(GSSC-PLLR-52, GSSC-PLLR-53, GSSC-PLLR-54, scope=range_start, role=Implementation) -->
+    <p class="gssc-header__org-name m-0 font-medium text-gssc-dark-green">
+      <span class="gssc-header__org-name--full hidden md:inline">{{
+        societyContact.organizationName()
+      }}</span>
+      <span class="gssc-header__org-name--short hidden sm:inline md:hidden">{{
+        societyContact.organizationAcronym()
+      }}</span>
+    </p>
+    <!-- @relation(GSSC-PLLR-52, GSSC-PLLR-53, GSSC-PLLR-54, scope=range_end, role=Implementation) -->
+  </div>
+
+  <div class="gssc-header__actions ml-auto flex flex-wrap items-center gap-0">
+    <!-- Right-side order: Login|Greeting → Contact → Search -->
+    <div class="gssc-header__account relative flex items-center">
+      @if (loggedIn()) {
+        <!-- @relation(GSSC-PLLR-61, GSSC-PLLR-62, GSSC-PLLR-63, scope=range_start, role=Implementation) -->
+        <div class="gssc-header__greeting-wrap group relative">
+          <button
+            type="button"
+            class="gssc-header__greeting cursor-pointer border-0 bg-transparent p-0 font-sans text-gssc-dark-green"
+          >
+            Hello, {{ displayName() }}
+          </button>
+          <div
+            class="gssc-header__greeting-menu invisible absolute end-0 top-full z-10 min-w-36 flex-col gap-1 border border-gssc-gray bg-gssc-white py-2 opacity-0 shadow-sm group-hover:visible group-hover:flex group-hover:opacity-100 group-focus-within:visible group-focus-within:flex group-focus-within:opacity-100"
+          >
+            <!-- @relation(GSSC-PLLR-59, GSSC-PLLR-60, scope=range_start, role=Implementation) -->
+            <button
+              type="button"
+              class="gssc-header__member-access cursor-pointer border-0 bg-transparent px-3 py-1 text-start font-sans text-gssc-dark-green"
+              (click)="openMembersApp()"
+            >
+              Members
+            </button>
+            <!-- @relation(GSSC-PLLR-59, GSSC-PLLR-60, scope=range_end, role=Implementation) -->
+
+            <!-- @relation(GSSC-PLLR-65, GSSC-PLLR-66, scope=range_start, role=Implementation) -->
+            <button
+              type="button"
+              class="gssc-header__logout cursor-pointer border-0 bg-transparent px-3 py-1 text-start font-sans text-gssc-dark-green"
+              (click)="logout()"
+            >
+              Logout
+            </button>
+            <!-- @relation(GSSC-PLLR-65, GSSC-PLLR-66, scope=range_end, role=Implementation) -->
+          </div>
+        </div>
+        <!-- @relation(GSSC-PLLR-61, GSSC-PLLR-62, GSSC-PLLR-63, scope=range_end, role=Implementation) -->
+      } @else {
+        <!-- @relation(GSSC-PLLR-56, GSSC-PLLR-57, scope=range_start, role=Implementation) -->
+        <button
+          type="button"
+          class="gssc-header__login cursor-pointer border-0 bg-transparent p-0 font-sans text-gssc-dark-green"
+          (click)="openMembersApp()"
+        >
+          Login
+        </button>
+        <!-- @relation(GSSC-PLLR-56, GSSC-PLLR-57, scope=range_end, role=Implementation) -->
+      }
+    </div>
+
+    <span class="gssc-header__divider mx-3 inline-block h-4 w-px bg-gssc-dark-green/40" aria-hidden="true"></span>
+
+    <!-- @relation(GSSC-PLLR-68, GSSC-PLLR-69, scope=range_start, role=Implementation) -->
+    <button
+      type="button"
+      class="gssc-header__contact cursor-pointer border-0 bg-transparent p-0 font-sans text-gssc-dark-green"
+      (click)="openContact()"
+    >
+      Contact
+    </button>
+    <!-- @relation(GSSC-PLLR-68, GSSC-PLLR-69, scope=range_end, role=Implementation) -->
+
+    <span class="gssc-header__divider mx-3 inline-block h-4 w-px bg-gssc-dark-green/40" aria-hidden="true"></span>
+
+    <!-- @relation(GSSC-PLLR-71, GSSC-PLLR-72, scope=range_start, role=Implementation) -->
+    <div class="gssc-header__search relative flex items-center">
+      <button
+        type="button"
+        class="gssc-header__search-toggle inline-flex size-6 shrink-0 cursor-pointer items-center justify-center border-0 bg-transparent p-0 text-gssc-dark-green"
+        [attr.aria-expanded]="searchOpen()"
+        [attr.aria-label]="searchOpen() ? 'Close search' : 'Open search'"
+        (click)="toggleSearch()"
+      >
+        @if (searchOpen()) {
+          <i
+            class="nf nf-md-close gssc-header__search-icon gssc-header__search-icon--close text-base leading-none"
+            aria-hidden="true"
+          ></i>
+        } @else {
+          <!-- Nerd Font glyphs; full search widget is GSSC5-47. -->
+          <i
+            class="nf nf-fa-search gssc-header__search-icon gssc-header__search-icon--open text-base leading-none"
+            aria-hidden="true"
+          ></i>
+        }
+      </button>
+      @if (searchOpen()) {
+        <div
+          class="gssc-header__search-panel absolute end-0 top-full z-10 mt-2 min-w-48 border border-gssc-gray bg-gssc-white p-3 font-sans text-gssc-dark-green"
+          role="search"
+        >
+          <!-- Placeholder until GSSC5-47 search widget. -->
+          <p class="gssc-header__search-placeholder m-0 text-sm">Search</p>
+        </div>
+      }
+    </div>
+    <!-- @relation(GSSC-PLLR-71, GSSC-PLLR-72, scope=range_end, role=Implementation) -->
+  </div>
+</header>
+<!-- @relation(GSSC-PLLR-46, GSSC-PLLR-47, scope=range_end, role=Implementation) -->
