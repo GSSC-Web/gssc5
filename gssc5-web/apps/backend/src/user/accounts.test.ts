@@ -88,33 +88,82 @@ test("GSSC-BLLR-8 Login Token Issued", async () => {
   expect(token).toEqual(expect.any(String));
   expect(token?.length).toBeGreaterThan(0);
   expect((await challenge(backend, token ?? "")).trim()).toBe("valid");
-  expect(JSON.parse(response.body)).toEqual({ status: "ok" });
-  expect(Object.prototype.hasOwnProperty.call(JSON.parse(response.body), "token")).toBe(false);
 });
 // @relation(GSSC-BLLR-8, scope=range_end, role=Test)
 
+// @relation(GSSC-BLLR-309, scope=range_start, role=Test)
+test("GSSC-BLLR-309 Login Token Cookie Storage", async () => {
+  const response = await postJsonResponse(backend, "/login", {
+    password: memberPassword,
+    username: memberUsername,
+  });
+  expect(response.status).toBe(200);
+  const token = loginTokenFromSetCookie(response.headers);
+  expect(token).toEqual(expect.any(String));
+  expect(JSON.parse(response.body)).toEqual({ status: "ok" });
+  expect(Object.prototype.hasOwnProperty.call(JSON.parse(response.body), "token")).toBe(false);
+});
+// @relation(GSSC-BLLR-309, scope=range_end, role=Test)
+
 // @relation(GSSC-BLLR-292, scope=range_start, role=Test)
-test("GSSC-BLLR-292 Login Token Cookie Attributes", async () => {
+test("GSSC-BLLR-292 Login Token Cookie HttpOnly", async () => {
+  const response = await postJsonResponse(backend, "/login", {
+    password: memberPassword,
+    username: memberUsername,
+  });
+  const header = loginTokenSetCookieHeader(response.headers)?.toLowerCase() ?? "";
+  expect(header.includes("httponly")).toBe(true);
+});
+// @relation(GSSC-BLLR-292, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-310, scope=range_start, role=Test)
+test("GSSC-BLLR-310 Login Token Cookie Secure", async () => {
+  const response = await postJsonResponse(backend, "/login", {
+    password: memberPassword,
+    username: memberUsername,
+  });
+  const header = loginTokenSetCookieHeader(response.headers)?.toLowerCase() ?? "";
+  expect(header.includes("secure")).toBe(true);
+});
+// @relation(GSSC-BLLR-310, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-311, scope=range_start, role=Test)
+test("GSSC-BLLR-311 Login Token Cookie SameSite", async () => {
+  const response = await postJsonResponse(backend, "/login", {
+    password: memberPassword,
+    username: memberUsername,
+  });
+  const header = loginTokenSetCookieHeader(response.headers)?.toLowerCase() ?? "";
+  expect(header.includes("samesite=lax")).toBe(true);
+});
+// @relation(GSSC-BLLR-311, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-312, scope=range_start, role=Test)
+test("GSSC-BLLR-312 Login Token Cookie Path", async () => {
+  const response = await postJsonResponse(backend, "/login", {
+    password: memberPassword,
+    username: memberUsername,
+  });
+  const header = loginTokenSetCookieHeader(response.headers)?.toLowerCase() ?? "";
+  expect(header.includes("path=/")).toBe(true);
+});
+// @relation(GSSC-BLLR-312, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-313, scope=range_start, role=Test)
+test("GSSC-BLLR-313 Login Token Cookie Max-Age", async () => {
   try {
     setEnv("LOGIN_TOKEN_LIFETIME_DAYS", "3");
     const response = await postJsonResponse(backend, "/login", {
       password: memberPassword,
       username: memberUsername,
     });
-    const header = loginTokenSetCookieHeader(response.headers);
-    expect(header).toEqual(expect.any(String));
-    const cookie = header ?? "";
-    const lower = cookie.toLowerCase();
-    expect(lower.includes("httponly")).toBe(true);
-    expect(lower.includes("secure")).toBe(true);
-    expect(lower.includes("samesite=lax")).toBe(true);
-    expect(lower.includes("path=/")).toBe(true);
-    expect(lower.includes(`max-age=${3 * 24 * 60 * 60}`)).toBe(true);
+    const header = loginTokenSetCookieHeader(response.headers)?.toLowerCase() ?? "";
+    expect(header.includes(`max-age=${3 * 24 * 60 * 60}`)).toBe(true);
   } finally {
     setEnv("LOGIN_TOKEN_LIFETIME_DAYS", undefined);
   }
 });
-// @relation(GSSC-BLLR-292, scope=range_end, role=Test)
+// @relation(GSSC-BLLR-313, scope=range_end, role=Test)
 
 // @relation(GSSC-BLLR-9, scope=range_start, role=Test)
 test("GSSC-BLLR-9 Login Token Challenge", async () => {
@@ -145,15 +194,27 @@ test("GSSC-BLLR-10 Member Logout", async () => {
   const issued = token ?? "";
   const response = await logout(backend, issued);
   expect(response.status).toBe(204);
+  expect((await challenge(backend, issued)).trim()).toBe("invalid");
+});
+// @relation(GSSC-BLLR-10, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-314, scope=range_start, role=Test)
+test("GSSC-BLLR-314 Logout Clears Login Token Cookie", async () => {
+  const token = await establishedLogin(backend, {
+    password: memberPassword,
+    username: memberUsername,
+  });
+  expect(token).toEqual(expect.any(String));
+  const response = await logout(backend, token ?? "");
+  expect(response.status).toBe(204);
   const cleared = loginTokenSetCookieHeader(response.headers)?.toLowerCase() ?? "";
   expect(
     cleared.includes("max-age=0") ||
       cleared.includes(`${cookieHeaderForToken("").toLowerCase()}`) ||
       cleared.includes("expires="),
   ).toBe(true);
-  expect((await challenge(backend, issued)).trim()).toBe("invalid");
 });
-// @relation(GSSC-BLLR-10, scope=range_end, role=Test)
+// @relation(GSSC-BLLR-314, scope=range_end, role=Test)
 
 // @relation(GSSC-BLLR-11, scope=range_start, role=Test)
 test("GSSC-BLLR-11 Login Token Lifetime", async () => {

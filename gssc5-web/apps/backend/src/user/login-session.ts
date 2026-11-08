@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 
-/** HTTP cookie that carries the Login Token. Never place the Login Token in a request or response body. */
+/** HTTP cookie that carries the Login Token for the client. */
 export const LOGIN_TOKEN_COOKIE = "gssc_login_token";
 
 export type CookieJar = Record<
@@ -18,7 +18,7 @@ export function hashLoginToken(token: string): string {
   return createHash("sha256").update(token).digest("hex");
 }
 
-/** Resolve the Login Token solely from the HTTP cookie. */
+/** Resolve the Login Token from the HTTP cookie. */
 export function loginTokenFromCookie(cookie: CookieJar): string | null {
   const value = cookie[LOGIN_TOKEN_COOKIE]?.value;
   if (typeof value !== "string") return null;

@@ -76,7 +76,7 @@ export const accounts = new Elysia({
       if (!passwordMatches) return status(403, "Forbidden");
       // @relation(GSSC-BLLR-6, GSSC-BLLR-233, scope=range_end, role=Implementation)
 
-      // @relation(GSSC-BLLR-7, GSSC-BLLR-8, GSSC-BLLR-11, GSSC-BLLR-292, scope=range_start, role=Implementation)
+      // @relation(GSSC-BLLR-7, GSSC-BLLR-8, GSSC-BLLR-11, GSSC-BLLR-292, GSSC-BLLR-309, GSSC-BLLR-310, GSSC-BLLR-311, GSSC-BLLR-312, GSSC-BLLR-313, scope=range_start, role=Implementation)
       const issuedAt = new Date();
       const maxAgeSeconds = Math.floor(config.LOGIN_TOKEN_LIFETIME_DAYS * SECONDS_PER_DAY);
       const expiresAt = new Date(issuedAt.getTime() + maxAgeSeconds * 1000);
@@ -90,9 +90,8 @@ export const accounts = new Elysia({
         },
       });
       setLoginTokenCookie(cookie, token, maxAgeSeconds, expiresAt);
-      // Login Token is delivered only in the HTTP cookie — never in the response body.
       return status(200, { status: "ok" as const });
-      // @relation(GSSC-BLLR-7, GSSC-BLLR-8, GSSC-BLLR-11, GSSC-BLLR-292, scope=range_end, role=Implementation)
+      // @relation(GSSC-BLLR-7, GSSC-BLLR-8, GSSC-BLLR-11, GSSC-BLLR-292, GSSC-BLLR-309, GSSC-BLLR-310, GSSC-BLLR-311, GSSC-BLLR-312, GSSC-BLLR-313, scope=range_end, role=Implementation)
     },
     {
       body: LoginBody,
@@ -108,7 +107,7 @@ export const accounts = new Elysia({
       const { prisma } = runtime();
       const token = loginTokenFromCookie(cookie);
 
-      // @relation(GSSC-BLLR-10, scope=range_start, role=Implementation)
+      // @relation(GSSC-BLLR-10, GSSC-BLLR-314, scope=range_start, role=Implementation)
       if (token) {
         const row = await prisma.loginToken.findUnique({
           where: { tokenHash: hashLoginToken(token) },
@@ -122,7 +121,7 @@ export const accounts = new Elysia({
       }
       clearLoginTokenCookie(cookie);
       return status(204, undefined);
-      // @relation(GSSC-BLLR-10, scope=range_end, role=Implementation)
+      // @relation(GSSC-BLLR-10, GSSC-BLLR-314, scope=range_end, role=Implementation)
     },
     {
       response: { 204: t.Void() },
