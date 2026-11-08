@@ -156,9 +156,11 @@ model PasswordRecoveryToken {
 // @relation(GSSC-BLLR-245, scope=range_end, role=Implementation)
 
 // Global website data (GSSC-BHLR-119). Public Footer reads society contact keys.
+// @relation(GSSC-BLLR-306, GSSC-BLLR-307, GSSC-BLLR-308, scope=range_start, role=Implementation)
 model KeyValue {
   key   String @id
   value String
 
   @@map("key_value")
 }
+// @relation(GSSC-BLLR-306, GSSC-BLLR-307, GSSC-BLLR-308, scope=range_end, role=Implementation)
