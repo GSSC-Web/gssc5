@@ -35,6 +35,8 @@
 
 /* @relation(GSSC-PLLR-24, GSSC-PLLR-25, scope=range_start, role=Implementation) */
 .gssc-footer-host {
+  display: block;
+  width: 100%;
   margin-block-start: auto;
   color: inherit;
   font-family: inherit;

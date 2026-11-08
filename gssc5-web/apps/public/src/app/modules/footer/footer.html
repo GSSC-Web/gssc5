@@ -1,0 +1,53 @@
+<!-- @relation(GSSC-PLLR-28, GSSC-PLLR-29, scope=range_start, role=Implementation) -->
+<!-- @relation(GSSC-PLLR-30, scope=range_start, role=Implementation) -->
+<footer
+  class="gssc-footer flex w-full flex-col gap-3 bg-gssc-black px-5 py-4 font-sans text-gssc-white"
+>
+  <!-- @relation(GSSC-PLLR-30, scope=range_end, role=Implementation) -->
+
+  <!-- @relation(GSSC-PLLR-31, GSSC-PLLR-32, GSSC-PLLR-33, scope=range_start, role=Implementation) -->
+  <p class="gssc-footer__organization-name m-0 font-semibold text-gssc-white">
+    <span class="gssc-footer__organization-name--full hidden sm:inline">{{
+      societyContact.organizationName()
+    }}</span>
+    <span class="gssc-footer__organization-name--short inline sm:hidden">{{
+      societyContact.organizationAcronym()
+    }}</span>
+  </p>
+  <!-- @relation(GSSC-PLLR-31, GSSC-PLLR-32, GSSC-PLLR-33, scope=range_end, role=Implementation) -->
+
+  <div class="gssc-footer__contact-details flex flex-col items-start gap-1.5">
+    <!-- @relation(GSSC-PLLR-34, GSSC-PLLR-35, GSSC-PLLR-36, scope=range_start, role=Implementation) -->
+    <a
+      class="gssc-footer__phone m-0 font-normal text-gssc-white no-underline hover:underline"
+      [href]="societyContact.phoneDialHref()"
+      >{{ societyContact.phoneNumber() }}</a
+    >
+    <!-- @relation(GSSC-PLLR-34, GSSC-PLLR-35, GSSC-PLLR-36, scope=range_end, role=Implementation) -->
+
+    <!-- @relation(GSSC-PLLR-37, GSSC-PLLR-38, GSSC-PLLR-39, scope=range_start, role=Implementation) -->
+    <a
+      class="gssc-footer__email m-0 font-normal text-gssc-white no-underline hover:underline"
+      [href]="societyContact.emailMailtoHref()"
+      >{{ societyContact.emailAddress() }}</a
+    >
+    <!-- @relation(GSSC-PLLR-37, GSSC-PLLR-38, GSSC-PLLR-39, scope=range_end, role=Implementation) -->
+
+    <!-- @relation(GSSC-PLLR-40, GSSC-PLLR-41, GSSC-PLLR-42, scope=range_start, role=Implementation) -->
+    <p class="gssc-footer__postal m-0 font-normal text-gssc-white">
+      {{ societyContact.postalAddress() }}
+    </p>
+    <!-- @relation(GSSC-PLLR-40, GSSC-PLLR-41, GSSC-PLLR-42, scope=range_end, role=Implementation) -->
+
+    <!-- @relation(GSSC-PLLR-44, GSSC-PLLR-45, scope=range_start, role=Implementation) -->
+    <button
+      type="button"
+      class="gssc-footer__contact cursor-pointer font-normal text-gssc-white no-underline hover:underline"
+      (click)="openContact()"
+    >
+      Contact
+    </button>
+    <!-- @relation(GSSC-PLLR-44, GSSC-PLLR-45, scope=range_end, role=Implementation) -->
+  </div>
+</footer>
+<!-- @relation(GSSC-PLLR-28, GSSC-PLLR-29, scope=range_end, role=Implementation) -->

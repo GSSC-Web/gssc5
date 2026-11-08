@@ -12,6 +12,12 @@ run = "bun run build"
 description = "Generate the Prisma client"
 run = "bunx --bun prisma generate"
 
+[tasks."db:prepare"]
+description = "Migrate the local backend database and upsert website KVS values the public site expects (idempotent)"
+alias = "seed"
+depends = ["db-generate"]
+run = "bun run src/dev-seed.ts"
+
 [tasks.types]
 description = "Generate the TypeScript declarations the frontends import"
 depends = ["db-generate"]

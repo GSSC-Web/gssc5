@@ -16,6 +16,7 @@
 ## Requirements Style & Conventions
 - Prefer parent requirement links over derived requirements.
 - Every requirement should be limited to a single feature (PIR), functionality (HLR), or implementation detail (LLR). A parent link does not count as coverage when the statement does not require that behavior.
+- LLRs stay implementation-agnostic (describe required behavior and presentation, not libraries or APIs such as Tailwind class names or breakpoints). Software may use adopted third parties to satisfy them.
 - When requirements are changed, the CHANGE_DRIVER field should be appended with the driving ALM task ID, the REVIEW_STATUS should be set to Changed.
 - When requirements are reviewed at the end of a task, and no more issues are identified, after confirmation from a human operator, the REVIEW_STATUS should be set to Approved.
 

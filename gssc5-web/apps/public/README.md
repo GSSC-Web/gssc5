@@ -4,10 +4,12 @@ Angular application `@gssc/public`. It listens on port 4200.
 
 From this directory:
 
-- `mise serve` starts the development server.
+- `mise serve` runs `//backend:db:prepare` (migrate + idempotent website KVS seed), then starts the development server.
 - `mise build` writes `../../dist/public`.
 - `mise test` runs Vitest once.
 - `mise test:watch` re-runs Vitest when files change.
+
+Prepare the database alone with `mise run //backend:db:prepare` (or from the repo root, `mise run db:prepare`).
 
 From the repository root, `mise serve`, `mise build`, and `mise test` include this app.
 
@@ -20,9 +22,9 @@ Under `src/app/`:
 | `src/app/` | App root bootstrap (shell host, routes, config) |
 | `src/app/modules/` | Feature modules; a multi-file class gets its own folder (e.g. `announcements-bar/`) |
 | `src/app/pages/` | Public page components (stubs until page tickets land) |
-| `src/app/services/` | Shared services, including `backend` (Eden Treaty) and `urgent-announcements` |
+| `src/app/services/` | Shared services; a multi-file service gets its own folder (e.g. `kv-store/`, `society-contact/`) |
 
-Keep the App Root files beside these folders (not inside `modules/`). Put new feature UI under `modules/`, pages under `pages/`, and injectable services under `services/`.
+Keep the App Root files beside these folders (not inside `modules/`). Put new feature UI under `modules/`, pages under `pages/`, and injectable services under `services/` (single-file helpers such as `backend.ts` may sit directly under `services/`).
 
 ## Global styles
 

@@ -3,10 +3,11 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { filter, map, startWith } from 'rxjs';
 import { AnnouncementsBar } from './modules/announcements-bar/announcements-bar';
+import { Footer } from './modules/footer/footer';
 import { UrgentAnnouncements } from './services/urgent-announcements';
 
 @Component({
-  imports: [RouterOutlet, AnnouncementsBar],
+  imports: [RouterOutlet, AnnouncementsBar, Footer],
   selector: 'gssc-root',
   styleUrl: './app.css',
   templateUrl: './app.html',

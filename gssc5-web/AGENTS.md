@@ -26,6 +26,7 @@ Prefer running single test files when iterating (faster feedback).
 - Import style: `import {} from "";`
 - Error handling pattern: Fail-fast; check valid-invalid early, and avoid unnecessary nesting and exceptions.
 - Public FE theme tokens live on `:root` in `apps/public/src/styles.css` (`--gssc-*`); prefer them over hard-coded colors. Outermost shell background is white; default typeface is sans-serif unless a requirement says otherwise.
+- Prefer optimal use of adopted third parties (Tailwind utilities, Eden Treaty, Prismabox, framework APIs) over bespoke reinventing. Example: responsive show/hide via `sm:` / `hidden` / `block` rather than custom `@media` CSS when Tailwind covers it.
 
 ## Do
 - Follow existing patterns in the codebase, or else conform to framework documentation recommendations. (see example files below)
