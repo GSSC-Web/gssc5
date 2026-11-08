@@ -5113,6 +5113,164 @@ RELATIONS:
 
 [[/SECTION]]
 
+[[SECTION]]
+UID: GSSC-BLLR-KVS
+TITLE: /kvs
+
+[[SECTION]]
+UID: GSSC-BLLR-KVS-GET
+TITLE: GET Key
+
+[REQUIREMENT]
+UID: GSSC-BLLR-293
+TITLE: Key-Value Public Read
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL let an unauthenticated caller retrieve a stored key-value entry by key.
+<<<
+RATIONALE: >>>
+The public reads global website data from the key-value store without a login.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-43
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-180
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-294
+TITLE: Key-Value Entry Contents
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL return the key and the value of the stored key-value entry.
+<<<
+RATIONALE: >>>
+The caller receives the requested key with its stored value.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-43
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-180
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-295
+TITLE: Key-Value Entry Not Found
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL report not found when the key-value store has no entry for the requested key.
+<<<
+RATIONALE: >>>
+A missing key is a missing record. The test binds this report to HTTP 404.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-43
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-180
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-KVS-POST
+TITLE: POST Key
+
+[REQUIREMENT]
+UID: GSSC-BLLR-296
+TITLE: Key-Value Entry Upsert
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL create or replace the key-value entry for the key in the path when an administrator authenticated by the Login Token HTTP cookie supplies a value in the request body.
+<<<
+RATIONALE: >>>
+An administrator creates a new entry or replaces the value of an existing entry. The Login Token is taken from the HTTP cookie, not from the request body.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-43
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-181
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-297
+TITLE: Key-Value Upsert Login Token Required
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL forbid a key-value upsert when the Login Token HTTP cookie is missing or is not a valid Login Token, and the backend writes nothing.
+<<<
+RATIONALE: >>>
+Only a logged-in administrator may create or replace a key-value entry. The Login Token is taken from the HTTP cookie, not from the request body.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-43
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-181
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-298
+TITLE: Key-Value Upsert Privilege
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL complete a key-value upsert when the Login Token from the HTTP cookie belongs to a caller who is an administrator.
+<<<
+RATIONALE: >>>
+Creating or replacing a key-value entry is limited to an administrator. The Login Token is taken from the HTTP cookie, not from the request body.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-43
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-181
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-299
+TITLE: Key-Value Upsert Forbidden
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL forbid a key-value upsert when the caller is not an administrator, and the backend writes nothing.
+<<<
+RATIONALE: >>>
+A caller who is not an administrator cannot create or replace a key-value entry.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-43
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-181
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-300
+TITLE: Key-Value Upsert Value Required
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL invalidate a key-value upsert when the request omits a string value, and the backend writes nothing.
+<<<
+RATIONALE: >>>
+A key-value upsert requires a string value for that key.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-43
+REVIEW_STATUS: Approved
+
+[[/SECTION]]
+
+[[/SECTION]]
+
 [[/SECTION]]
 
 [[SECTION]]
@@ -5644,6 +5802,66 @@ REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-161
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-KEY-VALUE-STORE
+TITLE: Key-Value Store
+
+[REQUIREMENT]
+UID: GSSC-BLLR-306
+TITLE: Key-Value Table
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store each key-value entry in a key-value table.
+<<<
+RATIONALE: >>>
+Global website data lives in a key-value table. The columns of that table are the requirements under Key-Value Store.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-43
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-119
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-307
+TITLE: Key-Value Key
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store a key for each key-value entry in the key-value table.
+<<<
+RATIONALE: >>>
+Each entry is identified by its key.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-43
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-119
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-308
+TITLE: Key-Value Value
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store a value for each key-value entry in the key-value table.
+<<<
+RATIONALE: >>>
+Each entry holds the value for its key.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-43
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-119
   ROLE: Refines
 
 [[/SECTION]]

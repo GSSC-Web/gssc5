@@ -2665,6 +2665,36 @@ CHANGE_DRIVER: GSSC5-12
 REVIEW_STATUS: Approved
 
 [REQUIREMENT]
+UID: GSSC-BHLR-180
+TITLE: Public Key-Value Entry
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL provide the public with a stored key-value entry upon request by key.
+<<<
+RATIONALE: >>>
+A caller without a login can request one entry from the key-value store by key and receive that entry when it is stored. This requirement does not define the keys.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-43
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-BHLR-181
+TITLE: Key-Value Entry Modification
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL accept creation or replacement of a key-value entry by an administrator.
+<<<
+RATIONALE: >>>
+An administrator keeps global website data current. Creation stores a new key. Replacement updates the value for an existing key. How the administrator is authenticated is low-level.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-43
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
+  ROLE: Refines
+
+[REQUIREMENT]
 UID: GSSC-BHLR-149
 TITLE: Artifact Files
 STATEMENT: >>>

@@ -408,6 +408,7 @@ export type JsonResponse = {
   headers: Headers;
 };
 
+/** HTTP cookie that carries the Login Token (matches GSSC5-48 name). */
 export const LOGIN_TOKEN_COOKIE = "gssc_login_token";
 
 export async function postJsonResponse(
