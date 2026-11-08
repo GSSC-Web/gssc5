@@ -2658,7 +2658,7 @@ A caller without a login can request one entry from the key-value store by key a
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-43
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BHLR-181
@@ -2671,7 +2671,7 @@ An administrator keeps global website data current. Creation stores a new key. R
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-43
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-50
