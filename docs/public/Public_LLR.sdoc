@@ -459,10 +459,10 @@ TITLE: Organization Name
 UID: GSSC-PLLR-31
 TITLE: Semantic
 STATEMENT: >>>
-The Footer Organization Name SHALL include the text Genealogical Society of Stanislaus County and the acronym GSSC.
+The Footer Organization Name SHALL display the text Genealogical Society of Stanislaus County or the acronym GSSC.
 <<<
 RATIONALE: >>>
-The Footer keeps the society's full name in the organization name. The acronym GSSC is available for narrow presentations. Which form is visible is a separate Lexical requirement.
+The Footer shows one organization-name form at a time. Which form is visible by site width is a separate Lexical requirement.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test

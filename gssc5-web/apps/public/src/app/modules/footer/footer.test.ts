@@ -63,10 +63,14 @@ test('GSSC-PLLR-30 Lexical', async () => {
 // @relation(GSSC-PLLR-31, scope=range_start, role=Test)
 test('GSSC-PLLR-31 Semantic', async () => {
   const { root } = await setupFooter();
-  expect(textContent(root, '.gssc-footer__organization-name--full')).toBe(
-    'Genealogical Society of Stanislaus County',
-  );
-  expect(textContent(root, '.gssc-footer__organization-name--short')).toBe('GSSC');
+  const full = root.querySelector<HTMLElement>('.gssc-footer__organization-name--full')!;
+  const short = root.querySelector<HTMLElement>('.gssc-footer__organization-name--short')!;
+  const visible =
+    getComputedStyle(full).display === 'none' ? short : full;
+  const label = visible.textContent?.trim() ?? '';
+  expect(['Genealogical Society of Stanislaus County', 'GSSC']).toContain(label);
+  // Default / wide viewport shows the full name (acronym is the narrow alternative).
+  expect(label).toBe('Genealogical Society of Stanislaus County');
 });
 // @relation(GSSC-PLLR-31, scope=range_end, role=Test)
 
