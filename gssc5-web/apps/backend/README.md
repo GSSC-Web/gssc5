@@ -8,6 +8,7 @@ From this directory:
 - `mise build` generates the Prisma client and writes `../../dist/backend`.
 - `mise test` generates the Prisma client and runs the Bun tests.
 - `mise db-generate` generates the Prisma client.
+- `mise run db:prepare` (alias `seed`) applies migrations and upserts local website KVS values the public site expects (`society.phoneNumber`, `society.emailAddress`, `society.postalAddress`). Safe to re-run.
 
 Copy `.env.example` to `.env` for local configuration. The repository README
 lists the variables and their defaults. A missing `.env` still starts.
