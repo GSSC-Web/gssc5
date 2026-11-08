@@ -111,18 +111,19 @@ model User {
 }
 // @relation(GSSC-BLLR-13, scope=range_end, role=Implementation)
 
+// @relation(GSSC-BLLR-317, scope=range_start, role=Implementation)
 model LoginToken {
-  id          String    @id @default(cuid())
+  id        String   @id @default(cuid())
   /// @prismabox.hide
-  tokenHash   String    @unique
-  userId      String
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  issuedAt    DateTime
-  expiresAt   DateTime
-  loggedOutAt DateTime?
+  tokenHash String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  issuedAt  DateTime
+  expiresAt DateTime
 
   @@map("login_tokens")
 }
+// @relation(GSSC-BLLR-317, scope=range_end, role=Implementation)
 
 // @relation(GSSC-BLLR-244, GSSC-BLLR-262, scope=range_start, role=Implementation)
 model PasswordHistory {

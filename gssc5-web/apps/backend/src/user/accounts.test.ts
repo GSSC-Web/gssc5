@@ -1,13 +1,18 @@
 // Account service checks. Each assertion is limited to that requirement's statement.
-import { randomUUID } from "node:crypto";
+import { randomBytes, randomUUID } from "node:crypto";
 
 import { beforeAll, expect, setSystemTime, test } from "bun:test";
 
+import { loadConfig } from "../config";
+import { getPrisma } from "../db";
 import {
   DAY_MS,
   bootInProcess,
   challenge,
+  cookieHeaderForToken,
   establishedLogin,
+  loginTokenFromSetCookie,
+  loginTokenSetCookieHeader,
   logout,
   memberEmail,
   memberPassword,
@@ -15,13 +20,26 @@ import {
   postJsonResponse,
   setEnv,
   type BackendFetch,
+  type InProcessApp,
 } from "../test-harness";
+import { scrubExpiredLoginTokens } from "./accounts";
+import { hashLoginToken } from "./login-session";
 
+let app: InProcessApp;
 let backend: BackendFetch;
 
 beforeAll(async () => {
-  backend = (await bootInProcess()).backend;
+  app = await bootInProcess();
+  backend = app.backend;
 }, 120_000);
+
+function prisma() {
+  return getPrisma(loadConfig().DATABASE_URL);
+}
+
+async function loginTokenRows() {
+  return prisma().loginToken.findMany({ orderBy: { issuedAt: "desc" } });
+}
 
 async function expectForbidden(json: Record<string, unknown>): Promise<void> {
   const response = await postJsonResponse(backend, "/login", json);
@@ -76,14 +94,91 @@ test("GSSC-BLLR-7 Password Match", async () => {
 
 // @relation(GSSC-BLLR-8, scope=range_start, role=Test)
 test("GSSC-BLLR-8 Login Token Issued", async () => {
-  const token = await establishedLogin(backend, {
+  const response = await postJsonResponse(backend, "/login", {
     password: memberPassword,
     username: memberUsername,
   });
+  expect(response.status).toBe(200);
+  const token = loginTokenFromSetCookie(response.headers);
   expect(token).toEqual(expect.any(String));
   expect(token?.length).toBeGreaterThan(0);
+  expect((await challenge(backend, token ?? "")).trim()).toBe("valid");
 });
 // @relation(GSSC-BLLR-8, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-309, scope=range_start, role=Test)
+test("GSSC-BLLR-309 Login Token Cookie Storage", async () => {
+  const response = await postJsonResponse(backend, "/login", {
+    password: memberPassword,
+    username: memberUsername,
+  });
+  expect(response.status).toBe(200);
+  const token = loginTokenFromSetCookie(response.headers);
+  expect(token).toEqual(expect.any(String));
+  expect(JSON.parse(response.body)).toEqual({ status: "ok" });
+  expect(Object.prototype.hasOwnProperty.call(JSON.parse(response.body), "token")).toBe(false);
+});
+// @relation(GSSC-BLLR-309, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-292, scope=range_start, role=Test)
+test("GSSC-BLLR-292 Login Token Cookie HttpOnly", async () => {
+  const response = await postJsonResponse(backend, "/login", {
+    password: memberPassword,
+    username: memberUsername,
+  });
+  const header = loginTokenSetCookieHeader(response.headers)?.toLowerCase() ?? "";
+  expect(header.includes("httponly")).toBe(true);
+});
+// @relation(GSSC-BLLR-292, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-310, scope=range_start, role=Test)
+test("GSSC-BLLR-310 Login Token Cookie Secure", async () => {
+  const response = await postJsonResponse(backend, "/login", {
+    password: memberPassword,
+    username: memberUsername,
+  });
+  const header = loginTokenSetCookieHeader(response.headers)?.toLowerCase() ?? "";
+  expect(header.includes("secure")).toBe(true);
+});
+// @relation(GSSC-BLLR-310, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-311, scope=range_start, role=Test)
+test("GSSC-BLLR-311 Login Token Cookie SameSite", async () => {
+  const response = await postJsonResponse(backend, "/login", {
+    password: memberPassword,
+    username: memberUsername,
+  });
+  const header = loginTokenSetCookieHeader(response.headers)?.toLowerCase() ?? "";
+  expect(header.includes("samesite=lax")).toBe(true);
+});
+// @relation(GSSC-BLLR-311, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-312, scope=range_start, role=Test)
+test("GSSC-BLLR-312 Login Token Cookie Path", async () => {
+  const response = await postJsonResponse(backend, "/login", {
+    password: memberPassword,
+    username: memberUsername,
+  });
+  const header = loginTokenSetCookieHeader(response.headers)?.toLowerCase() ?? "";
+  expect(header.includes("path=/")).toBe(true);
+});
+// @relation(GSSC-BLLR-312, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-313, scope=range_start, role=Test)
+test("GSSC-BLLR-313 Login Token Cookie Max-Age", async () => {
+  try {
+    setEnv("LOGIN_TOKEN_LIFETIME_DAYS", "3");
+    const response = await postJsonResponse(backend, "/login", {
+      password: memberPassword,
+      username: memberUsername,
+    });
+    const header = loginTokenSetCookieHeader(response.headers)?.toLowerCase() ?? "";
+    expect(header.includes(`max-age=${3 * 24 * 60 * 60}`)).toBe(true);
+  } finally {
+    setEnv("LOGIN_TOKEN_LIFETIME_DAYS", undefined);
+  }
+});
+// @relation(GSSC-BLLR-313, scope=range_end, role=Test)
 
 // @relation(GSSC-BLLR-9, scope=range_start, role=Test)
 test("GSSC-BLLR-9 Login Token Challenge", async () => {
@@ -112,10 +207,114 @@ test("GSSC-BLLR-10 Member Logout", async () => {
   });
   expect(token).toEqual(expect.any(String));
   const issued = token ?? "";
-  await logout(backend, issued);
+  const response = await logout(backend, issued);
+  expect(response.status).toBe(204);
   expect((await challenge(backend, issued)).trim()).toBe("invalid");
 });
 // @relation(GSSC-BLLR-10, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-314, scope=range_start, role=Test)
+test("GSSC-BLLR-314 Logout Clears Login Token Cookie", async () => {
+  const token = await establishedLogin(backend, {
+    password: memberPassword,
+    username: memberUsername,
+  });
+  expect(token).toEqual(expect.any(String));
+  const response = await logout(backend, token ?? "");
+  expect(response.status).toBe(204);
+  const cleared = loginTokenSetCookieHeader(response.headers)?.toLowerCase() ?? "";
+  expect(
+    cleared.includes("max-age=0") ||
+      cleared.includes(`${cookieHeaderForToken("").toLowerCase()}`) ||
+      cleared.includes("expires="),
+  ).toBe(true);
+});
+// @relation(GSSC-BLLR-314, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-315, scope=range_start, role=Test)
+test("GSSC-BLLR-315 Login Token Hash Stored", async () => {
+  const response = await postJsonResponse(backend, "/login", {
+    password: memberPassword,
+    username: memberUsername,
+  });
+  const token = loginTokenFromSetCookie(response.headers);
+  expect(token).toEqual(expect.any(String));
+  const rows = await loginTokenRows();
+  expect(rows.some((row) => row.tokenHash === hashLoginToken(token ?? ""))).toBe(true);
+});
+// @relation(GSSC-BLLR-315, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-316, scope=range_start, role=Test)
+test("GSSC-BLLR-316 Login Token Row Removed On Logout", async () => {
+  const token = await establishedLogin(backend, {
+    password: memberPassword,
+    username: memberUsername,
+  });
+  expect(token).toEqual(expect.any(String));
+  const issued = token ?? "";
+  expect((await logout(backend, issued)).status).toBe(204);
+  const row = await prisma().loginToken.findUnique({
+    where: { tokenHash: hashLoginToken(issued) },
+  });
+  expect(row).toBeNull();
+});
+// @relation(GSSC-BLLR-316, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-317, scope=range_start, role=Test)
+test("GSSC-BLLR-317 Login Token Rows", async () => {
+  const rows = await app.sql.query(`PRAGMA table_info("login_tokens")`);
+  const names = new Set(rows.map((row) => String(row.name)));
+  for (const column of ["tokenHash", "userId", "issuedAt", "expiresAt"]) {
+    expect(names.has(column)).toBe(true);
+  }
+  expect(names.has("loggedOutAt")).toBe(false);
+});
+// @relation(GSSC-BLLR-317, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-318, scope=range_start, role=Test)
+test("GSSC-BLLR-318 Login Token Available After Start", async () => {
+  const user = await prisma().user.findUnique({ where: { username: memberUsername } });
+  expect(user).not.toBeNull();
+  const token = randomBytes(32).toString("base64url");
+  const issuedAt = new Date();
+  const expiresAt = new Date(issuedAt.getTime() + DAY_MS);
+  await prisma().loginToken.create({
+    data: {
+      tokenHash: hashLoginToken(token),
+      userId: user!.id,
+      issuedAt,
+      expiresAt,
+    },
+  });
+  expect((await challenge(backend, token)).trim()).toBe("valid");
+});
+// @relation(GSSC-BLLR-318, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-319, scope=range_start, role=Test)
+test("GSSC-BLLR-319 Expired Login Token Rows Removed", async () => {
+  const user = await prisma().user.findUnique({ where: { username: memberUsername } });
+  expect(user).not.toBeNull();
+  const token = randomBytes(32).toString("base64url");
+  const issuedAt = new Date("2020-01-01T00:00:00.000Z");
+  const expiresAt = new Date("2020-01-08T00:00:00.000Z");
+  await prisma().loginToken.create({
+    data: {
+      tokenHash: hashLoginToken(token),
+      userId: user!.id,
+      issuedAt,
+      expiresAt,
+    },
+  });
+  expect(
+    await prisma().loginToken.findUnique({ where: { tokenHash: hashLoginToken(token) } }),
+  ).not.toBeNull();
+
+  await scrubExpiredLoginTokens(prisma());
+  expect(
+    await prisma().loginToken.findUnique({ where: { tokenHash: hashLoginToken(token) } }),
+  ).toBeNull();
+});
+// @relation(GSSC-BLLR-319, scope=range_end, role=Test)
 
 // @relation(GSSC-BLLR-11, scope=range_start, role=Test)
 test("GSSC-BLLR-11 Login Token Lifetime", async () => {

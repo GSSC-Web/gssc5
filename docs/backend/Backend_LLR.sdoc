@@ -140,18 +140,234 @@ TITLE: Data Returned
 UID: GSSC-BLLR-8
 TITLE: Login Token Issued
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL issue a Login Token when a member login succeeds.
+The GSSC Website Unified Backend SHALL issue a Login Token in an HTTP cookie on the successful login response when a member login succeeds.
 <<<
 RATIONALE: >>>
-A successful login yields a Login Token that a later challenge can test.
+A successful login yields a Login Token that a later challenge can test. The Login Token is delivered in an HTTP cookie on that response.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-33
+CHANGE_DRIVER: GSSC5-33, GSSC5-48
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-2
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-BHLR-179
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-309
+TITLE: Login Token Cookie Storage
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store each Login Token for the client as an HTTP cookie.
+<<<
+RATIONALE: >>>
+The HTTP cookie is the Login Token held by the client. Challenge, logout, and authenticated requests use that cookie.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-48
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-179
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-292
+TITLE: Login Token Cookie HttpOnly
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL set the Login Token HTTP cookie so that client script cannot read the cookie value.
+<<<
+RATIONALE: >>>
+HttpOnly keeps the Login Token out of script-readable storage.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-48
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-179
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-310
+TITLE: Login Token Cookie Secure
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL mark the Login Token HTTP cookie for secure transport only.
+<<<
+RATIONALE: >>>
+Secure limits the cookie to secure transport.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-48
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-179
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-311
+TITLE: Login Token Cookie SameSite
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL set the Login Token HTTP cookie to a lax same-site policy.
+<<<
+RATIONALE: >>>
+SameSite=Lax limits cross-site sending while allowing normal same-site browser use.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-48
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-179
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-312
+TITLE: Login Token Cookie Path
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL set the Login Token HTTP cookie path to the site root.
+<<<
+RATIONALE: >>>
+Path=/ applies the cookie to the whole site.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-48
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-179
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-313
+TITLE: Login Token Cookie Max-Age
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL set the Login Token HTTP cookie Max-Age to the configured Login Token lifetime in seconds.
+<<<
+RATIONALE: >>>
+Max-Age keeps the cookie lifetime aligned with the Login Token lifetime.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-48
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-179
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-LOGIN-PERSISTENCE
+TITLE: Login Token Persistence
+
+[REQUIREMENT]
+UID: GSSC-BLLR-315
+TITLE: Login Token Hash Stored
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store a hash of the Login Token when a member login succeeds.
+<<<
+RATIONALE: >>>
+The backend retains a hash of the Login Token for later challenge and logout.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-33, GSSC5-48
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-182
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-316
+TITLE: Login Token Row Removed On Logout
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL remove the Login Token row when that member logs out that token.
+<<<
+RATIONALE: >>>
+After logout the Login Token is ended. Keeping the row has no further use.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-33, GSSC5-48
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-182
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-BHLR-4
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-317
+TITLE: Login Token Rows
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store each Login Token hash in a login tokens table. Each row holds the token hash, the user, the issue time, and the expiry time.
+<<<
+RATIONALE: >>>
+The login tokens table is the durable store for Login Token retention across Unified Backend restarts.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-33, GSSC5-48
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-182
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-318
+TITLE: Login Token Available After Start
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL make each retained Login Token available for challenge after the Unified Backend starts.
+<<<
+RATIONALE: >>>
+After a restart, the backend challenges Login Tokens from durable storage. A process-memory-only Login Token would be lost on restart.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-33, GSSC5-48
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-182
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-BHLR-3
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-319
+TITLE: Expired Login Token Rows Removed
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL remove each Login Token row whose expiry time has elapsed.
+<<<
+RATIONALE: >>>
+An expired Login Token is no longer a current login. Removing the row clears ended sessions from durable storage.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-33, GSSC5-48
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-182
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-BHLR-5
   ROLE: Refines
 
 [[/SECTION]]
@@ -274,6 +490,27 @@ REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-4
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-314
+TITLE: Logout Clears Login Token Cookie
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL clear the Login Token HTTP cookie on the logout response.
+<<<
+RATIONALE: >>>
+Clearing the cookie ends the session transport for that Login Token.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-48
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-4
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-BHLR-179
   ROLE: Refines
 
 [[/SECTION]]
@@ -1051,21 +1288,21 @@ REVIEW_STATUS: Approved
 UID: GSSC-BLLR-264
 TITLE: Clear Past Passwords Login Token Required
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL forbid a clear-passwords request when the request lacks a valid Login Token, and the backend writes nothing.
+The GSSC Website Unified Backend SHALL forbid a clear-passwords request when the request lacks a valid Login Token in the HTTP cookie, and the backend writes nothing.
 <<<
 RATIONALE: >>>
 Only a logged-in caller may clear past password hashes.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-35
+CHANGE_DRIVER: GSSC5-35, GSSC5-48
 REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BLLR-265
 TITLE: Clear Past Passwords Privilege
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL complete a clear-passwords request when the Login Token belongs to a caller who is a user moderator.
+The GSSC Website Unified Backend SHALL complete a clear-passwords request when the Login Token in the HTTP cookie belongs to a caller who is a user moderator.
 <<<
 RATIONALE: >>>
 Clearing past password hashes is limited to a user moderator.
@@ -1075,6 +1312,7 @@ VERIFICATION_METHOD: Test
 CHANGE_DRIVER: >>>
 GSSC5-35
 GSSC5-36
+GSSC5-48
 <<<
 REVIEW_STATUS: Approved
 
@@ -2430,14 +2668,14 @@ TITLE: Failure Cases
 UID: GSSC-BLLR-42
 TITLE: User List Missing Login Token
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL forbid the user list when the Login Token is missing.
+The GSSC Website Unified Backend SHALL forbid the user list when the Login Token in the HTTP cookie is missing.
 <<<
 RATIONALE: >>>
 A missing Login Token is not a current login. The failure does not say which check failed.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: GSSC5-34, GSSC5-48
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -2448,14 +2686,14 @@ RELATIONS:
 UID: GSSC-BLLR-67
 TITLE: User List Unknown Login Token
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL forbid the user list when the Login Token is unknown.
+The GSSC Website Unified Backend SHALL forbid the user list when the Login Token in the HTTP cookie is unknown.
 <<<
 RATIONALE: >>>
 An unknown Login Token is not a current login. The failure does not say which check failed.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: GSSC5-34, GSSC5-48
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -2466,14 +2704,14 @@ RELATIONS:
 UID: GSSC-BLLR-68
 TITLE: User List Logged-Out Login Token
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL forbid the user list when the Login Token has been logged out.
+The GSSC Website Unified Backend SHALL forbid the user list when the Login Token in the HTTP cookie has been logged out.
 <<<
 RATIONALE: >>>
 A logged-out Login Token is not a current login. The failure does not say which check failed.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: GSSC5-34, GSSC5-48
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -2484,14 +2722,14 @@ RELATIONS:
 UID: GSSC-BLLR-69
 TITLE: User List Expired Login Token
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL forbid the user list when the Login Token has expired.
+The GSSC Website Unified Backend SHALL forbid the user list when the Login Token in the HTTP cookie has expired.
 <<<
 RATIONALE: >>>
 An expired Login Token is not a current login. The failure does not say which check failed.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: GSSC5-34, GSSC5-48
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -3422,14 +3660,14 @@ TITLE: Failure Cases
 UID: GSSC-BLLR-48
 TITLE: User Read Missing Login Token
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL forbid the user read when the Login Token is missing.
+The GSSC Website Unified Backend SHALL forbid the user read when the Login Token in the HTTP cookie is missing.
 <<<
 RATIONALE: >>>
 A missing Login Token is not a current login. The failure does not say which check failed.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: GSSC5-34, GSSC5-48
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -3440,14 +3678,14 @@ RELATIONS:
 UID: GSSC-BLLR-133
 TITLE: User Read Unknown Login Token
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL forbid the user read when the Login Token is unknown.
+The GSSC Website Unified Backend SHALL forbid the user read when the Login Token in the HTTP cookie is unknown.
 <<<
 RATIONALE: >>>
 An unknown Login Token is not a current login. The failure does not say which check failed.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: GSSC5-34, GSSC5-48
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -3458,14 +3696,14 @@ RELATIONS:
 UID: GSSC-BLLR-134
 TITLE: User Read Logged-Out Login Token
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL forbid the user read when the Login Token has been logged out.
+The GSSC Website Unified Backend SHALL forbid the user read when the Login Token in the HTTP cookie has been logged out.
 <<<
 RATIONALE: >>>
 A logged-out Login Token is not a current login. The failure does not say which check failed.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: GSSC5-34, GSSC5-48
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -3476,14 +3714,14 @@ RELATIONS:
 UID: GSSC-BLLR-135
 TITLE: User Read Expired Login Token
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL forbid the user read when the Login Token has expired.
+The GSSC Website Unified Backend SHALL forbid the user read when the Login Token in the HTTP cookie has expired.
 <<<
 RATIONALE: >>>
 An expired Login Token is not a current login. The failure does not say which check failed.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: GSSC5-34, GSSC5-48
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -4233,14 +4471,14 @@ TITLE: Failure Cases
 UID: GSSC-BLLR-56
 TITLE: User Update Missing Login Token
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL forbid the user update when the Login Token is missing.
+The GSSC Website Unified Backend SHALL forbid the user update when the Login Token in the HTTP cookie is missing.
 <<<
 RATIONALE: >>>
 A missing Login Token is not a current login. The failure does not say which check failed.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: GSSC5-34, GSSC5-48
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -4251,14 +4489,14 @@ RELATIONS:
 UID: GSSC-BLLR-166
 TITLE: User Update Unknown Login Token
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL forbid the user update when the Login Token is unknown.
+The GSSC Website Unified Backend SHALL forbid the user update when the Login Token in the HTTP cookie is unknown.
 <<<
 RATIONALE: >>>
 An unknown Login Token is not a current login. The failure does not say which check failed.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: GSSC5-34, GSSC5-48
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -4269,14 +4507,14 @@ RELATIONS:
 UID: GSSC-BLLR-167
 TITLE: User Update Logged-Out Login Token
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL forbid the user update when the Login Token has been logged out.
+The GSSC Website Unified Backend SHALL forbid the user update when the Login Token in the HTTP cookie has been logged out.
 <<<
 RATIONALE: >>>
 A logged-out Login Token is not a current login. The failure does not say which check failed.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: GSSC5-34, GSSC5-48
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -4287,14 +4525,14 @@ RELATIONS:
 UID: GSSC-BLLR-168
 TITLE: User Update Expired Login Token
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL forbid the user update when the Login Token has expired.
+The GSSC Website Unified Backend SHALL forbid the user update when the Login Token in the HTTP cookie has expired.
 <<<
 RATIONALE: >>>
 An expired Login Token is not a current login. The failure does not say which check failed.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: GSSC5-34, GSSC5-48
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -5169,7 +5407,7 @@ STATEMENT: >>>
 The GSSC Website Unified Backend SHALL create or replace the key-value entry for the key in the path when an administrator authenticated by the Login Token HTTP cookie supplies a value in the request body.
 <<<
 RATIONALE: >>>
-An administrator creates a new entry or replaces the value of an existing entry. The Login Token is taken from the HTTP cookie, not from the request body.
+An administrator creates a new entry or replaces the value of an existing entry. The Login Token is taken from the HTTP cookie.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -5187,7 +5425,7 @@ STATEMENT: >>>
 The GSSC Website Unified Backend SHALL forbid a key-value upsert when the Login Token HTTP cookie is missing or is not a valid Login Token, and the backend writes nothing.
 <<<
 RATIONALE: >>>
-Only a logged-in administrator may create or replace a key-value entry. The Login Token is taken from the HTTP cookie, not from the request body.
+Only a logged-in administrator may create or replace a key-value entry. The Login Token is taken from the HTTP cookie.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -5205,7 +5443,7 @@ STATEMENT: >>>
 The GSSC Website Unified Backend SHALL complete a key-value upsert when the Login Token from the HTTP cookie belongs to a caller who is an administrator.
 <<<
 RATIONALE: >>>
-Creating or replacing a key-value entry is limited to an administrator. The Login Token is taken from the HTTP cookie, not from the request body.
+Creating or replacing a key-value entry is limited to an administrator. The Login Token is taken from the HTTP cookie.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test

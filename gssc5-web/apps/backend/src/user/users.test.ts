@@ -494,12 +494,14 @@ async function call(
   const url = new URL(`http://127.0.0.1${pathname}`);
   for (const [key, value] of Object.entries(query ?? {})) url.searchParams.set(key, value);
   const payload = fieldsBody(fields ?? {});
-  if (token !== undefined) payload.token = token;
-  const sendBody = token !== undefined || (fields !== undefined && Object.keys(fields).length > 0);
+  const sendBody = fields !== undefined && Object.keys(fields).length > 0;
+  const headers: Record<string, string> = {};
+  if (sendBody) headers["content-type"] = "application/json";
+  if (token !== undefined) headers.cookie = `gssc_login_token=${token}`;
   const response = await app.backend(
     new Request(url, {
       method,
-      headers: sendBody ? { "content-type": "application/json" } : undefined,
+      headers: Object.keys(headers).length > 0 ? headers : undefined,
       body: sendBody ? JSON.stringify(payload) : undefined,
     }),
   );

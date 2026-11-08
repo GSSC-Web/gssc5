@@ -1,4 +1,4 @@
-import { createHash, randomBytes } from "node:crypto";
+import { randomBytes } from "node:crypto";
 
 import { Elysia, t } from "elysia";
 
@@ -6,8 +6,16 @@ import { loadConfig, type Config } from "../config";
 import { getPrisma } from "../db";
 import type { PrismaClient } from "../generated/prisma/client";
 import { UserPlain } from "../generated/prismabox/User";
+import {
+  classifyLoginTokenRow,
+  clearLoginTokenCookie,
+  hashLoginToken,
+  loginTokenCookie,
+  loginTokenFromCookie,
+  setLoginTokenCookie,
+} from "./login-session";
 
-const MILLISECONDS_PER_DAY = 24 * 60 * 60 * 1000;
+const SECONDS_PER_DAY = 24 * 60 * 60;
 
 const emailPattern = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
 
@@ -27,13 +35,8 @@ const LoginBody = t.Union(
 );
 // @relation(GSSC-BLLR-1, GSSC-BLLR-2, GSSC-BLLR-3, scope=range_end, role=Implementation)
 
-const TokenBody = t.Object({
-  token: t.String(),
-});
-
 const LoginOk = t.Object({
   status: t.Literal("ok"),
-  token: t.String(),
 });
 
 const ChallengeResult = t.Union([t.Literal("valid"), t.Literal("invalid")]);
@@ -53,7 +56,7 @@ export const accounts = new Elysia({
   })
   .post(
     "/login",
-    async ({ body, status }) => {
+    async ({ body, cookie, status }) => {
       const { prisma, config } = runtime();
 
       const password = body.password;
@@ -74,80 +77,96 @@ export const accounts = new Elysia({
       if (!passwordMatches) return status(403, "Forbidden");
       // @relation(GSSC-BLLR-6, GSSC-BLLR-233, scope=range_end, role=Implementation)
 
-      // @relation(GSSC-BLLR-7, GSSC-BLLR-8, GSSC-BLLR-11, scope=range_start, role=Implementation)
+      // @relation(GSSC-BLLR-7, GSSC-BLLR-8, GSSC-BLLR-11, GSSC-BLLR-292, GSSC-BLLR-309, GSSC-BLLR-310, GSSC-BLLR-311, GSSC-BLLR-312, GSSC-BLLR-313, GSSC-BLLR-315, scope=range_start, role=Implementation)
       const issuedAt = new Date();
-      const expiresAt = new Date(
-        issuedAt.getTime() + config.LOGIN_TOKEN_LIFETIME_DAYS * MILLISECONDS_PER_DAY,
-      );
+      const maxAgeSeconds = Math.floor(config.LOGIN_TOKEN_LIFETIME_DAYS * SECONDS_PER_DAY);
+      const expiresAt = new Date(issuedAt.getTime() + maxAgeSeconds * 1000);
       const token = randomBytes(32).toString("base64url");
       await prisma.loginToken.create({
         data: {
-          tokenHash: hashToken(token),
+          tokenHash: hashLoginToken(token),
           userId: user.id,
           issuedAt,
           expiresAt,
         },
       });
-      return status(200, { status: "ok" as const, token });
-      // @relation(GSSC-BLLR-7, GSSC-BLLR-8, GSSC-BLLR-11, scope=range_end, role=Implementation)
+      setLoginTokenCookie(cookie, token, maxAgeSeconds, expiresAt);
+      return status(200, { status: "ok" as const });
+      // @relation(GSSC-BLLR-7, GSSC-BLLR-8, GSSC-BLLR-11, GSSC-BLLR-292, GSSC-BLLR-309, GSSC-BLLR-310, GSSC-BLLR-311, GSSC-BLLR-312, GSSC-BLLR-313, GSSC-BLLR-315, scope=range_end, role=Implementation)
     },
     {
       body: LoginBody,
+      cookie: loginTokenCookie,
       response: {
         200: LoginOk,
         403: t.Literal("Forbidden"),
       },
     },
   )
-  .guard({ body: TokenBody }, (app) =>
-    app
-      .post(
-        "/logout",
-        async ({ body, status }) => {
-          const { prisma } = runtime();
+  .post(
+    "/logout",
+    async ({ cookie, status }) => {
+      const { prisma } = runtime();
+      const token = loginTokenFromCookie(cookie);
 
-          // @relation(GSSC-BLLR-10, scope=range_start, role=Implementation)
-          const row = await prisma.loginToken.findUnique({
-            where: { tokenHash: hashToken(body.token) },
-          });
-          if (row && !row.loggedOutAt) {
-            await prisma.loginToken.update({
-              where: { id: row.id },
-              data: { loggedOutAt: new Date() },
-            });
-          }
-          return status(204, undefined);
-          // @relation(GSSC-BLLR-10, scope=range_end, role=Implementation)
-        },
-        { response: { 204: t.Void() } },
-      )
-      .post(
-        "/challenge",
-        async ({ body }) => {
-          const { prisma } = runtime();
-
-          // @relation(GSSC-BLLR-9, GSSC-BLLR-12, scope=range_start, role=Implementation)
-          const row = await prisma.loginToken.findUnique({
-            where: { tokenHash: hashToken(body.token) },
-          });
-          if (!row || row.loggedOutAt || row.expiresAt.getTime() <= Date.now()) return "invalid";
-          return "valid";
-          // @relation(GSSC-BLLR-9, GSSC-BLLR-12, scope=range_end, role=Implementation)
-        },
-        { response: { 200: ChallengeResult } },
-      ),
+      // @relation(GSSC-BLLR-10, GSSC-BLLR-314, GSSC-BLLR-316, scope=range_start, role=Implementation)
+      if (token) {
+        await prisma.loginToken.deleteMany({
+          where: { tokenHash: hashLoginToken(token) },
+        });
+      }
+      clearLoginTokenCookie(cookie);
+      return status(204, undefined);
+      // @relation(GSSC-BLLR-10, GSSC-BLLR-314, GSSC-BLLR-316, scope=range_end, role=Implementation)
+    },
+    {
+      cookie: loginTokenCookie,
+      response: { 204: t.Void() },
+    },
   )
-  .onStart(() => startPermanentAdmin());
+  .post(
+    "/challenge",
+    async ({ cookie }) => {
+      const { prisma } = runtime();
+      const token = loginTokenFromCookie(cookie);
 
-let adminReady: Promise<void> | undefined;
+      // @relation(GSSC-BLLR-9, GSSC-BLLR-12, GSSC-BLLR-318, scope=range_start, role=Implementation)
+      if (!token) return "invalid";
+      const row = await prisma.loginToken.findUnique({
+        where: { tokenHash: hashLoginToken(token) },
+      });
+      return classifyLoginTokenRow(row) === "ok" ? "valid" : "invalid";
+      // @relation(GSSC-BLLR-9, GSSC-BLLR-12, GSSC-BLLR-318, scope=range_end, role=Implementation)
+    },
+    {
+      cookie: loginTokenCookie,
+      response: { 200: ChallengeResult },
+    },
+  )
+  .onStart(() => startAccounts());
 
-function startPermanentAdmin(): Promise<void> {
-  adminReady ??= ensurePermanentAdmin().catch((error: unknown) => {
-    adminReady = undefined;
+let accountsReady: Promise<void> | undefined;
+
+function startAccounts(): Promise<void> {
+  accountsReady ??= (async () => {
+    await scrubExpiredLoginTokens();
+    await ensurePermanentAdmin();
+  })().catch((error: unknown) => {
+    accountsReady = undefined;
     throw error;
   });
-  return adminReady;
+  return accountsReady;
 }
+
+// @relation(GSSC-BLLR-319, scope=range_start, role=Implementation)
+export async function scrubExpiredLoginTokens(
+  prisma: PrismaClient = runtime().prisma,
+): Promise<void> {
+  await prisma.loginToken.deleteMany({
+    where: { expiresAt: { lte: new Date() } },
+  });
+}
+// @relation(GSSC-BLLR-319, scope=range_end, role=Implementation)
 
 async function ensurePermanentAdmin(): Promise<void> {
   const { prisma, config } = runtime();
@@ -199,8 +218,4 @@ function trimStrings(value: unknown): void {
     const item = (value as Record<string, unknown>)[key];
     if (typeof item === "string") (value as Record<string, unknown>)[key] = item.trim();
   }
-}
-
-function hashToken(token: string): string {
-  return createHash("sha256").update(token).digest("hex");
 }

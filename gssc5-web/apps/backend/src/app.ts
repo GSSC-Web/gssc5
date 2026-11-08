@@ -19,6 +19,8 @@ export const app = new Elysia({ normalize: false })
         "http://127.0.0.1:4200",
         "http://127.0.0.1:4201",
       ],
+      // Browser frontends send the Login Token cookie with credentialed requests.
+      credentials: true,
     }),
   )
   .use(
