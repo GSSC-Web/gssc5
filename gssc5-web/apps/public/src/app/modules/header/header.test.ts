@@ -381,12 +381,15 @@ test('GSSC-PLLR-71 Syntactic', async () => {
   const { fixture, root } = await setupHeader();
   const actions = [...root.querySelector('.gssc-header__actions')!.children];
   expect(actions.at(-1)?.classList.contains('gssc-header__search')).toBe(true);
-  expect(root.querySelector('.gssc-header__search-icon--open')).not.toBeNull();
+  const toggle = root.querySelector<HTMLElement>('.gssc-header__search-toggle')!;
+  expect(toggle.classList.contains('size-6')).toBe(true);
+  expect(toggle.classList.contains('shrink-0')).toBe(true);
+  expect(root.querySelector('.gssc-header__search-icon--open.nf.nf-fa-search')).not.toBeNull();
 
-  root.querySelector<HTMLButtonElement>('.gssc-header__search-toggle')!.click();
+  toggle.click();
   fixture.detectChanges();
   await fixture.whenStable();
-  expect(root.querySelector('.gssc-header__search-icon--close')).not.toBeNull();
+  expect(root.querySelector('.gssc-header__search-icon--close.nf.nf-md-close')).not.toBeNull();
 });
 // @relation(GSSC-PLLR-71, scope=range_end, role=Test)
 
@@ -394,12 +397,13 @@ test('GSSC-PLLR-71 Syntactic', async () => {
 test('GSSC-PLLR-72 Lexical', async () => {
   const { fixture, root } = await setupHeader();
   const toggle = root.querySelector<HTMLElement>('.gssc-header__search-toggle')!;
-  expect(getComputedStyle(toggle).color).toMatch(/gssc-dark-green|rgb/i);
+  expect(toggle.classList.contains('text-gssc-dark-green')).toBe(true);
 
-  root.querySelector<HTMLButtonElement>('.gssc-header__search-toggle')!.click();
+  toggle.click();
   fixture.detectChanges();
   await fixture.whenStable();
   const panel = root.querySelector<HTMLElement>('.gssc-header__search-panel')!;
-  expect(getComputedStyle(panel).backgroundColor).toMatch(/gssc-white|rgb/i);
+  expect(panel.classList.contains('bg-gssc-white')).toBe(true);
+  expect(panel.classList.contains('border-gssc-gray')).toBe(true);
 });
 // @relation(GSSC-PLLR-72, scope=range_end, role=Test)

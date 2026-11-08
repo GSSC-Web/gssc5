@@ -41,6 +41,26 @@
   --color-gssc-black: var(--gssc-black);
 }
 
+/* Nerd Fonts icon classes (subset). Glyphs from nerd-fonts v3.3.0 cheat sheet. */
+.nf {
+  font-family: var(--font-nerd-symbols);
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.nf-fa-search:before {
+  content: "\f002";
+}
+
+.nf-md-close:before {
+  content: "\f0156";
+}
+
 /*
  * Outermost site layer: white background, sans-serif default.
  * Preflight already zeros margins/borders; do not restate those here.

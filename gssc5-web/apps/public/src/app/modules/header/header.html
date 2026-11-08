@@ -116,20 +116,22 @@
     <div class="gssc-header__search relative flex items-center">
       <button
         type="button"
-        class="gssc-header__search-toggle inline-flex cursor-pointer items-center justify-center border-0 bg-transparent p-0 text-gssc-dark-green"
+        class="gssc-header__search-toggle inline-flex size-6 shrink-0 cursor-pointer items-center justify-center border-0 bg-transparent p-0 text-gssc-dark-green"
         [attr.aria-expanded]="searchOpen()"
         [attr.aria-label]="searchOpen() ? 'Close search' : 'Open search'"
         (click)="toggleSearch()"
       >
         @if (searchOpen()) {
-          <span class="gssc-header__search-icon gssc-header__search-icon--close text-lg leading-none" aria-hidden="true"
-            >×</span
-          >
+          <i
+            class="nf nf-md-close gssc-header__search-icon gssc-header__search-icon--close text-base leading-none"
+            aria-hidden="true"
+          ></i>
         } @else {
-          <!-- Nerd Font / unicode search placeholder; brand search widget is GSSC5-47. -->
-          <span class="gssc-header__search-icon gssc-header__search-icon--open text-lg leading-none" aria-hidden="true"
-            >⌕</span
-          >
+          <!-- Nerd Font glyphs; full search widget is GSSC5-47. -->
+          <i
+            class="nf nf-fa-search gssc-header__search-icon gssc-header__search-icon--open text-base leading-none"
+            aria-hidden="true"
+          ></i>
         }
       </button>
       @if (searchOpen()) {
