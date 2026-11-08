@@ -42,3 +42,10 @@
   font-family: inherit;
 }
 /* @relation(GSSC-PLLR-24, GSSC-PLLR-25, scope=range_end, role=Implementation) */
+
+/* @relation(GSSC-PLLR-105, GSSC-PLLR-106, scope=range_start, role=Implementation) */
+.gssc-prompt-overlay-host {
+  color: inherit;
+  font-family: inherit;
+}
+/* @relation(GSSC-PLLR-105, GSSC-PLLR-106, scope=range_end, role=Implementation) */

@@ -74,15 +74,18 @@ TITLE: App Root
 UID: GSSC-PLLR-4
 TITLE: Semantic
 STATEMENT: >>>
-The GSSC Website Public Frontend App Root SHALL contain a Header host, an Announcements Bar when the App Root shows that bar, a Page Outlet, and a Footer host.
+The GSSC Website Public Frontend App Root SHALL contain a Header host, an Announcements Bar when the App Root shows that bar, a Page Outlet, a Footer host, and a Prompt Overlay host.
 <<<
 RATIONALE: >>>
-The App Root composes those subelements so Header, Footer, announcements, and the active public page share one shell. Header and Footer contents are separate requirements. When the App Root shows the Announcements Bar is a separate requirement.
+The App Root composes those subelements so Header, Footer, announcements, the active public page, and the Prompt Overlay share one shell. Header and Footer contents are separate requirements. When the App Root shows the Announcements Bar is a separate requirement. When the Prompt Overlay host shows the overlay is a separate requirement.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-38
-REVIEW_STATUS: Approved
+CHANGE_DRIVER: >>>
+GSSC5-38
+GSSC5-27
+<<<
+REVIEW_STATUS: Changed
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-128
@@ -243,6 +246,63 @@ RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-46
   ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-PROMPT-OVERLAY-HOST
+TITLE: Prompt Overlay Host
+
+[REQUIREMENT]
+UID: GSSC-PLLR-104
+TITLE: Semantic
+STATEMENT: >>>
+The Prompt Overlay host SHALL hold the Public Prompt Overlay when that overlay is open.
+<<<
+RATIONALE: >>>
+No Public Frontend PIR defines a prompt overlay. The App Root supplies a host so the Prompt Overlay mounts in the public shell when open. Overlay Contents are separate requirements. Derived because PIRs do not define this host.
+<<<
+COMMENT: >>>
+Proposed for owner review (GSSC5-27). REVIEW_STATUS stays Changed until owner approval.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-27
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-PLLR-105
+TITLE: Syntactic
+STATEMENT: >>>
+The Prompt Overlay host SHALL cover the viewport above the rest of the App Root when the Public Prompt Overlay is open, and SHALL not displace Header, Page Outlet, or Footer layout when the overlay is closed.
+<<<
+RATIONALE: >>>
+Covering the viewport keeps the Prompt Overlay above page content while open. Leaving layout undisturbed when closed keeps the public shell stable.
+<<<
+COMMENT: >>>
+Proposed for owner review (GSSC5-27).
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-27
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-PLLR-106
+TITLE: Lexical
+STATEMENT: >>>
+The Prompt Overlay host SHALL inherit the App Root font and text color theme tokens.
+<<<
+RATIONALE: >>>
+The Prompt Overlay host is a mount for the Prompt Overlay. It inherits App Root type tokens so the shell stays consistent until the overlay paints its own presentation. Independent host colors are not set yet.
+<<<
+COMMENT: >>>
+Proposed for owner review (GSSC5-27).
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-27
+REVIEW_STATUS: Changed
 
 [[/SECTION]]
 
@@ -1315,6 +1375,126 @@ RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-20
   ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-PROMPT-OVERLAY
+TITLE: Public Prompt Overlay
+
+[[SECTION]]
+UID: GSSC-PLLR-PROMPT-OVERLAY-ELEMENT
+TITLE: Prompt Overlay
+
+[REQUIREMENT]
+UID: GSSC-PLLR-107
+TITLE: Semantic
+STATEMENT: >>>
+The Public Prompt Overlay SHALL present the Prompt Contents it is given over the current public page while open, SHALL omit its presentation when closed, and SHALL close when the visitor dismisses it.
+<<<
+RATIONALE: >>>
+No Public Frontend PIR defines a prompt overlay. Contents are the prompt data; the overlay is the Container that presents those Contents over a public page. Callers supply existing Prompt Contents shapes; this requirement does not invent Contents fields or backend endpoints. Contact Overlay Contents remain a separate feature. Derived because PIRs do not define this overlay.
+<<<
+COMMENT: >>>
+Proposed for owner review (GSSC5-27). Shell only; Contact Overlay UI remains GSSC5-31.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-27
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-PLLR-108
+TITLE: Syntactic
+STATEMENT: >>>
+The Public Prompt Overlay SHALL cover the viewport while open, place a contents panel over a dimmed page backdrop, and keep that panel within the viewport as the page resizes.
+<<<
+RATIONALE: >>>
+Covering the viewport and dimming the page focuses the visitor on the Prompt Contents. Keeping the panel within the viewport preserves that focus as the page resizes.
+<<<
+COMMENT: >>>
+Proposed for owner review (GSSC5-27).
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-27
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-PLLR-109
+TITLE: Lexical
+STATEMENT: >>>
+The Public Prompt Overlay SHALL use the black theme token at reduced opacity for its backdrop, the white theme token for the contents panel background, the gray theme token for the panel border, the dark-green theme token for panel text, and the sans-serif theme font.
+<<<
+RATIONALE: >>>
+Theme tokens keep overlay presentation aligned with the organization palette. A fuller color role map for overlays is not set yet beyond these token choices.
+<<<
+COMMENT: >>>
+Proposed for owner review (GSSC5-27). Color tokens remain provisional until a full color role map exists.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-27
+REVIEW_STATUS: Changed
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-PROMPT-OVERLAY-DISMISS
+TITLE: Dismiss
+
+[REQUIREMENT]
+UID: GSSC-PLLR-110
+TITLE: Semantic
+STATEMENT: >>>
+The Prompt Overlay Dismiss control SHALL close the Public Prompt Overlay when the visitor activates it.
+<<<
+RATIONALE: >>>
+The shell provides a dismiss path so the visitor can return to the public page. Overlay Contents are separate requirements.
+<<<
+COMMENT: >>>
+Proposed for owner review (GSSC5-27).
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-27
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-PLLR-111
+TITLE: Syntactic
+STATEMENT: >>>
+The Prompt Overlay Dismiss control SHALL appear at the trailing end of the contents panel header area.
+<<<
+RATIONALE: >>>
+Placing Dismiss at the trailing end of the panel header keeps the close path visible without covering the Prompt Contents.
+<<<
+COMMENT: >>>
+Proposed for owner review (GSSC5-27).
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-27
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-PLLR-112
+TITLE: Lexical
+STATEMENT: >>>
+The Prompt Overlay Dismiss control SHALL use the dark-green theme token for its symbol color on a transparent background, with the sans-serif theme font.
+<<<
+RATIONALE: >>>
+Dark-green on a transparent control keeps Dismiss aligned with panel text without adding a separate control fill. A fuller color role map for overlay controls is not set yet beyond this token choice.
+<<<
+COMMENT: >>>
+Proposed for owner review (GSSC5-27).
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-27
+REVIEW_STATUS: Changed
 
 [[/SECTION]]
 

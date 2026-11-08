@@ -1,0 +1,35 @@
+@if (promptOverlay.isOpen()) {
+  <!-- @relation(GSSC-PLLR-107, GSSC-PLLR-108, scope=range_start, role=Implementation) -->
+  <!-- @relation(GSSC-PLLR-109, scope=range_start, role=Implementation) -->
+  <div
+    class="gssc-prompt-overlay fixed inset-0 z-50 flex items-center justify-center bg-gssc-black/50 font-sans text-gssc-dark-green"
+    role="presentation"
+    (click)="onBackdropClick()"
+  >
+    <!-- @relation(GSSC-PLLR-109, scope=range_end, role=Implementation) -->
+    <div
+      class="gssc-prompt-overlay__panel relative mx-4 flex max-h-[min(100dvh,40rem)] w-full max-w-lg flex-col overflow-auto border border-gssc-gray bg-gssc-white text-gssc-dark-green"
+      role="dialog"
+      aria-modal="true"
+      (click)="$event.stopPropagation()"
+    >
+      <!-- @relation(GSSC-PLLR-111, GSSC-PLLR-112, scope=range_start, role=Implementation) -->
+      <div class="gssc-prompt-overlay__header flex items-center justify-end px-3 pt-3">
+        <button
+          type="button"
+          class="gssc-prompt-overlay__dismiss inline-flex size-8 cursor-pointer items-center justify-center border-0 bg-transparent p-0 font-sans text-gssc-dark-green"
+          aria-label="Close"
+          (click)="dismiss()"
+        >
+          <i class="nf nf-md-close text-base leading-none" aria-hidden="true"></i>
+        </button>
+      </div>
+      <!-- @relation(GSSC-PLLR-111, GSSC-PLLR-112, scope=range_end, role=Implementation) -->
+
+      <div class="gssc-prompt-overlay__contents px-4 pb-4 pt-1">
+        <ng-content />
+      </div>
+    </div>
+  </div>
+  <!-- @relation(GSSC-PLLR-107, GSSC-PLLR-108, scope=range_end, role=Implementation) -->
+}

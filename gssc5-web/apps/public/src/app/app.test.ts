@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { App } from './app';
 import { routes } from './app.routes';
+import { PromptOverlay } from './services/prompt-overlay/prompt-overlay';
 import { UrgentAnnouncements } from './services/urgent-announcements';
 import { nativeElement, setupPublicComponent } from '../test-harness';
 
@@ -15,16 +16,19 @@ async function setupApp(url = '/'): Promise<{
   fixture: Awaited<ReturnType<typeof setupPublicComponent<App>>>;
   router: Router;
   announcements: UrgentAnnouncements;
+  promptOverlay: PromptOverlay;
   root: HTMLElement;
 }> {
   const fixture = await setupPublicComponent(App);
   const router = TestBed.inject(Router);
   router.resetConfig(routes);
   const announcements = TestBed.inject(UrgentAnnouncements);
+  const promptOverlay = TestBed.inject(PromptOverlay);
+  promptOverlay.close();
   await router.navigateByUrl(url);
   fixture.detectChanges();
   await fixture.whenStable();
-  return { fixture, router, announcements, root: nativeElement(fixture) };
+  return { fixture, router, announcements, promptOverlay, root: nativeElement(fixture) };
 }
 
 function hostOf(root: HTMLElement): HTMLElement {
@@ -37,6 +41,7 @@ test('GSSC-PLLR-4 Semantic', async () => {
   expect(root.querySelector('[data-slot="header"]')).not.toBeNull();
   expect(root.querySelector('router-outlet')).not.toBeNull();
   expect(root.querySelector('[data-slot="footer"]')).not.toBeNull();
+  expect(root.querySelector('[data-slot="prompt-overlay"]')).not.toBeNull();
   expect(root.querySelector('gssc-announcements-bar')).toBeNull();
 
   announcements.setAnnouncements([sampleAnnouncement]);
@@ -135,6 +140,54 @@ test('GSSC-PLLR-25 Lexical', async () => {
   expect(getComputedStyle(footer).color).toBe(getComputedStyle(host).color);
 });
 // @relation(GSSC-PLLR-25, scope=range_end, role=Test)
+
+// @relation(GSSC-PLLR-104, scope=range_start, role=Test)
+test('GSSC-PLLR-104 Semantic', async () => {
+  const { fixture, promptOverlay, root } = await setupApp();
+  const host = root.querySelector('[data-slot="prompt-overlay"]');
+  expect(host).not.toBeNull();
+  expect(host!.querySelector('gssc-prompt-overlay')).not.toBeNull();
+  expect(root.querySelector('.gssc-prompt-overlay')).toBeNull();
+
+  promptOverlay.open();
+  fixture.detectChanges();
+  await fixture.whenStable();
+  expect(root.querySelector('.gssc-prompt-overlay')).not.toBeNull();
+});
+// @relation(GSSC-PLLR-104, scope=range_end, role=Test)
+
+// @relation(GSSC-PLLR-105, scope=range_start, role=Test)
+test('GSSC-PLLR-105 Syntactic', async () => {
+  const { fixture, promptOverlay, root } = await setupApp();
+  const host = root.querySelector<HTMLElement>('[data-slot="prompt-overlay"]')!;
+  expect(root.querySelector('.gssc-prompt-overlay')).toBeNull();
+
+  const header = root.querySelector('[data-slot="header"]')!;
+  const footer = root.querySelector('[data-slot="footer"]')!;
+  const page = root.querySelector('.gssc-page')!;
+  expect(header.compareDocumentPosition(page) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  expect(page.compareDocumentPosition(footer) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+
+  promptOverlay.open();
+  fixture.detectChanges();
+  await fixture.whenStable();
+  const shell = root.querySelector<HTMLElement>('.gssc-prompt-overlay')!;
+  expect(host.contains(shell)).toBe(true);
+  expect(shell.classList.contains('fixed')).toBe(true);
+  expect(shell.classList.contains('inset-0')).toBe(true);
+  expect(shell.classList.contains('z-50')).toBe(true);
+});
+// @relation(GSSC-PLLR-105, scope=range_end, role=Test)
+
+// @relation(GSSC-PLLR-106, scope=range_start, role=Test)
+test('GSSC-PLLR-106 Lexical', async () => {
+  const { root } = await setupApp();
+  const host = hostOf(root);
+  const promptHost = root.querySelector<HTMLElement>('[data-slot="prompt-overlay"]')!;
+  expect(getComputedStyle(promptHost).fontFamily).toBe(getComputedStyle(host).fontFamily);
+  expect(getComputedStyle(promptHost).color).toBe(getComputedStyle(host).color);
+});
+// @relation(GSSC-PLLR-106, scope=range_end, role=Test)
 
 // @relation(GSSC-PLLR-7, scope=range_start, role=Test)
 test('GSSC-PLLR-7 Semantic', async () => {
