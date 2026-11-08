@@ -148,7 +148,7 @@ A successful login yields a Login Token that a later challenge can test. The Log
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-33, GSSC5-48
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-2
@@ -169,7 +169,7 @@ The HTTP cookie is the Login Token held by the client. Challenge, logout, and au
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-48
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-179
@@ -187,7 +187,7 @@ HttpOnly keeps the Login Token out of script-readable storage.
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-48
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-179
@@ -205,7 +205,7 @@ Secure limits the cookie to secure transport.
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-48
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-179
@@ -223,7 +223,7 @@ SameSite=Lax limits cross-site sending while allowing normal same-site browser u
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-48
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-179
@@ -241,7 +241,7 @@ Path=/ applies the cookie to the whole site.
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-48
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-179
@@ -259,7 +259,7 @@ Max-Age keeps the cookie lifetime aligned with the Login Token lifetime.
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-48
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-179
@@ -283,7 +283,7 @@ The backend retains a hash of the Login Token for later challenge and logout.
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-33, GSSC5-48
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-182
@@ -301,7 +301,7 @@ After logout the Login Token is ended. Keeping the row has no further use.
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-33, GSSC5-48
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-182
@@ -322,7 +322,7 @@ The login tokens table is the durable store for Login Token retention across Uni
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-33, GSSC5-48
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-182
@@ -340,7 +340,7 @@ After a restart, the backend challenges Login Tokens from durable storage. A pro
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-33, GSSC5-48
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-182
@@ -361,7 +361,7 @@ An expired Login Token is no longer a current login. Removing the row clears end
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-33, GSSC5-48
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-182
@@ -504,7 +504,7 @@ Clearing the cookie ends the session transport for that Login Token.
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-48
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-4
@@ -1296,7 +1296,7 @@ Only a logged-in caller may clear past password hashes.
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-35, GSSC5-48
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BLLR-265
@@ -1314,7 +1314,7 @@ GSSC5-35
 GSSC5-36
 GSSC5-48
 <<<
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BLLR-266
@@ -2676,7 +2676,7 @@ A missing Login Token is not a current login. The failure does not say which che
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-34, GSSC5-48
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-21
@@ -2694,7 +2694,7 @@ An unknown Login Token is not a current login. The failure does not say which ch
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-34, GSSC5-48
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-21
@@ -2712,7 +2712,7 @@ A logged-out Login Token is not a current login. The failure does not say which 
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-34, GSSC5-48
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-21
@@ -2730,7 +2730,7 @@ An expired Login Token is not a current login. The failure does not say which ch
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-34, GSSC5-48
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-21
@@ -3668,7 +3668,7 @@ A missing Login Token is not a current login. The failure does not say which che
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-34, GSSC5-48
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-26
@@ -3686,7 +3686,7 @@ An unknown Login Token is not a current login. The failure does not say which ch
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-34, GSSC5-48
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-26
@@ -3704,7 +3704,7 @@ A logged-out Login Token is not a current login. The failure does not say which 
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-34, GSSC5-48
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-26
@@ -3722,7 +3722,7 @@ An expired Login Token is not a current login. The failure does not say which ch
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-34, GSSC5-48
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-26
@@ -4479,7 +4479,7 @@ A missing Login Token is not a current login. The failure does not say which che
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-34, GSSC5-48
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-36
@@ -4497,7 +4497,7 @@ An unknown Login Token is not a current login. The failure does not say which ch
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-34, GSSC5-48
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-36
@@ -4515,7 +4515,7 @@ A logged-out Login Token is not a current login. The failure does not say which 
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-34, GSSC5-48
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-36
@@ -4533,7 +4533,7 @@ An expired Login Token is not a current login. The failure does not say which ch
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-34, GSSC5-48
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-36

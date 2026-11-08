@@ -257,10 +257,10 @@ export const users = new Elysia({
       }
       // @relation(GSSC-BLLR-265, GSSC-BLLR-266, scope=range_end, role=Implementation)
 
-      // @relation(GSSC-BLLR-263, GSSC-BLLR-265, scope=range_start, role=Implementation)
+      // @relation(GSSC-BLLR-263, scope=range_start, role=Implementation)
       await prisma.passwordHistory.deleteMany({ where: { userId: target.id } });
       return status(204, undefined);
-      // @relation(GSSC-BLLR-263, GSSC-BLLR-265, scope=range_end, role=Implementation)
+      // @relation(GSSC-BLLR-263, scope=range_end, role=Implementation)
     },
     {
       params: t.Object({ cuid: t.String() }),
@@ -358,7 +358,7 @@ function runtime(): { prisma: PrismaClient; config: Config } {
   return { config, prisma: getPrisma(config.DATABASE_URL) };
 }
 
-// @relation(GSSC-BLLR-42, GSSC-BLLR-48, GSSC-BLLR-56, GSSC-BLLR-67, GSSC-BLLR-68, GSSC-BLLR-69, GSSC-BLLR-133, GSSC-BLLR-134, GSSC-BLLR-135, GSSC-BLLR-166, GSSC-BLLR-167, GSSC-BLLR-168, GSSC-BLLR-264, scope=range_start, role=Implementation)
+// @relation(GSSC-BLLR-42, GSSC-BLLR-48, GSSC-BLLR-56, GSSC-BLLR-67, GSSC-BLLR-68, GSSC-BLLR-69, GSSC-BLLR-133, GSSC-BLLR-134, GSSC-BLLR-135, GSSC-BLLR-166, GSSC-BLLR-167, GSSC-BLLR-168, scope=range_start, role=Implementation)
 async function openSession(cookie: CookieJar): Promise<Session> {
   const token = loginTokenFromCookie(cookie);
   if (!token) return { failure: "missing" };
@@ -372,7 +372,7 @@ async function openSession(cookie: CookieJar): Promise<Session> {
   if (classified === "ok" && row) return { user: row.user };
   return { failure: classified === "ok" ? "unknown" : classified };
 }
-// @relation(GSSC-BLLR-42, GSSC-BLLR-48, GSSC-BLLR-56, GSSC-BLLR-67, GSSC-BLLR-68, GSSC-BLLR-69, GSSC-BLLR-133, GSSC-BLLR-134, GSSC-BLLR-135, GSSC-BLLR-166, GSSC-BLLR-167, GSSC-BLLR-168, GSSC-BLLR-264, scope=range_end, role=Implementation)
+// @relation(GSSC-BLLR-42, GSSC-BLLR-48, GSSC-BLLR-56, GSSC-BLLR-67, GSSC-BLLR-68, GSSC-BLLR-69, GSSC-BLLR-133, GSSC-BLLR-134, GSSC-BLLR-135, GSSC-BLLR-166, GSSC-BLLR-167, GSSC-BLLR-168, scope=range_end, role=Implementation)
 
 // @relation(GSSC-BLLR-58, GSSC-BLLR-59, GSSC-BLLR-169, GSSC-BLLR-170, GSSC-BLLR-171, scope=range_start, role=Implementation)
 function authorize(caller: StoredUser, target: StoredUser): "ok" | "forbidden" {

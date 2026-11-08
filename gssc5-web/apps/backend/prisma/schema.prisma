@@ -111,7 +111,7 @@ model User {
 }
 // @relation(GSSC-BLLR-13, scope=range_end, role=Implementation)
 
-// @relation(GSSC-BLLR-315, GSSC-BLLR-316, GSSC-BLLR-317, GSSC-BLLR-318, GSSC-BLLR-319, scope=range_start, role=Implementation)
+// @relation(GSSC-BLLR-317, scope=range_start, role=Implementation)
 model LoginToken {
   id        String   @id @default(cuid())
   /// @prismabox.hide
@@ -123,7 +123,7 @@ model LoginToken {
 
   @@map("login_tokens")
 }
-// @relation(GSSC-BLLR-315, GSSC-BLLR-316, GSSC-BLLR-317, GSSC-BLLR-318, GSSC-BLLR-319, scope=range_end, role=Implementation)
+// @relation(GSSC-BLLR-317, scope=range_end, role=Implementation)
 
 // @relation(GSSC-BLLR-244, GSSC-BLLR-262, scope=range_start, role=Implementation)
 model PasswordHistory {
