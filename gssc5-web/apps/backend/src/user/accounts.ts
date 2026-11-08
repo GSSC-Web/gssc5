@@ -10,6 +10,7 @@ import {
   classifyLoginTokenRow,
   clearLoginTokenCookie,
   hashLoginToken,
+  loginTokenCookie,
   loginTokenFromCookie,
   setLoginTokenCookie,
 } from "./login-session";
@@ -95,6 +96,7 @@ export const accounts = new Elysia({
     },
     {
       body: LoginBody,
+      cookie: loginTokenCookie,
       response: {
         200: LoginOk,
         403: t.Literal("Forbidden"),
@@ -124,6 +126,7 @@ export const accounts = new Elysia({
       // @relation(GSSC-BLLR-10, GSSC-BLLR-314, scope=range_end, role=Implementation)
     },
     {
+      cookie: loginTokenCookie,
       response: { 204: t.Void() },
     },
   )
@@ -142,6 +145,7 @@ export const accounts = new Elysia({
       // @relation(GSSC-BLLR-9, GSSC-BLLR-12, scope=range_end, role=Implementation)
     },
     {
+      cookie: loginTokenCookie,
       response: { 200: ChallengeResult },
     },
   )

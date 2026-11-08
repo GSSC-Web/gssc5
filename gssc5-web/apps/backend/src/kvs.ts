@@ -1,12 +1,14 @@
-import { createHash } from "node:crypto";
-
 import { Elysia, t } from "elysia";
 
 import { loadConfig } from "./config";
 import { getPrisma } from "./db";
-
-/** HTTP cookie that carries the Login Token (matches GSSC5-48 name). */
-export const LOGIN_TOKEN_COOKIE = "gssc_login_token";
+import {
+  classifyLoginTokenRow,
+  hashLoginToken,
+  loginTokenCookie,
+  loginTokenFromCookie,
+  type CookieJar,
+} from "./user/login-session";
 
 const KeyValueEntry = t.Object({
   key: t.String(),
@@ -16,13 +18,6 @@ const KeyValueEntry = t.Object({
 type Session =
   | { failure: "missing" | "unknown" | "logged-out" | "expired" }
   | { user: { isAdmin: boolean } };
-
-type CookieJar = Record<
-  string,
-  {
-    value?: unknown;
-  }
->;
 
 /** Global website key-value store (GSSC-BHLR-119 / GSSC5-43). */
 export const kvs = new Elysia({
@@ -56,9 +51,9 @@ export const kvs = new Elysia({
   )
   .post(
     "/:key",
-    async ({ params, body, cookie, request, status }) => {
+    async ({ params, body, cookie, status }) => {
       // @relation(GSSC-BLLR-297, scope=range_start, role=Implementation)
-      const session = await openSession(loginTokenFromCookie(cookie, request));
+      const session = await openSession(cookie);
       if ("failure" in session) return status(403, "Forbidden" as const);
       // @relation(GSSC-BLLR-297, scope=range_end, role=Implementation)
 
@@ -93,6 +88,7 @@ export const kvs = new Elysia({
         key: t.String({ minLength: 1 }),
       }),
       body: t.Optional(t.Unknown()),
+      cookie: loginTokenCookie,
       response: {
         204: t.Void(),
         403: t.Literal("Forbidden"),
@@ -101,36 +97,18 @@ export const kvs = new Elysia({
     },
   );
 
-async function openSession(token: string | null): Promise<Session> {
-  if (token === null || token === "") return { failure: "missing" };
+async function openSession(cookie: CookieJar): Promise<Session> {
+  const token = loginTokenFromCookie(cookie);
+  if (token === null) return { failure: "missing" };
 
   const prisma = getPrisma(loadConfig().DATABASE_URL);
   const row = await prisma.loginToken.findUnique({
-    where: { tokenHash: hashToken(token) },
+    where: { tokenHash: hashLoginToken(token) },
     include: { user: { select: { isAdmin: true } } },
   });
-  if (!row) return { failure: "unknown" };
-  if (row.loggedOutAt) return { failure: "logged-out" };
-  if (row.expiresAt.getTime() <= Date.now()) return { failure: "expired" };
-  return { user: row.user };
-}
-
-function loginTokenFromCookie(cookie: CookieJar, request: Request): string | null {
-  const fromJar = cookie[LOGIN_TOKEN_COOKIE]?.value;
-  if (typeof fromJar === "string" && fromJar.trim() !== "") return fromJar.trim();
-
-  const header = request.headers.get("cookie");
-  if (!header) return null;
-  for (const part of header.split(";")) {
-    const trimmed = part.trim();
-    const eq = trimmed.indexOf("=");
-    if (eq <= 0) continue;
-    const name = trimmed.slice(0, eq).trim();
-    if (name !== LOGIN_TOKEN_COOKIE) continue;
-    const value = trimmed.slice(eq + 1).trim();
-    return value === "" ? null : value;
-  }
-  return null;
+  const classified = classifyLoginTokenRow(row);
+  if (classified === "ok" && row) return { user: row.user };
+  return { failure: classified === "ok" ? "unknown" : classified };
 }
 
 function bodyRecord(body: unknown): Record<string, unknown> | "missing" | "malformed" {
@@ -145,8 +123,4 @@ function trimStrings(value: unknown): void {
     const item = (value as Record<string, unknown>)[key];
     if (typeof item === "string") (value as Record<string, unknown>)[key] = item.trim();
   }
-}
-
-function hashToken(token: string): string {
-  return createHash("sha256").update(token.trim()).digest("hex");
 }

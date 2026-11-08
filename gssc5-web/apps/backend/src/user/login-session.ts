@@ -1,16 +1,24 @@
 import { createHash } from "node:crypto";
 
-/** HTTP cookie that carries the Login Token for the client. */
-export const LOGIN_TOKEN_COOKIE = "gssc_login_token";
+import { Cookie, t } from "elysia";
 
-export type CookieJar = Record<
-  string,
+/** HTTP cookie that carries the Login Token for the client. */
+export const LOGIN_TOKEN_COOKIE = "gssc_login_token" as const;
+
+/** Elysia cookie schema: Login Token attributes applied by the framework. */
+export const loginTokenCookie = t.Cookie(
   {
-    value?: unknown;
-    set: (config: Record<string, unknown>) => unknown;
-    remove?: () => unknown;
-  }
->;
+    [LOGIN_TOKEN_COOKIE]: t.Optional(t.String()),
+  },
+  {
+    httpOnly: true,
+    secure: true,
+    sameSite: "lax",
+    path: "/",
+  },
+);
+
+export type CookieJar = Record<string, Cookie<unknown>>;
 
 export type LoginSessionFailure = "missing" | "unknown" | "logged-out" | "expired";
 
@@ -18,7 +26,7 @@ export function hashLoginToken(token: string): string {
   return createHash("sha256").update(token).digest("hex");
 }
 
-/** Resolve the Login Token from the HTTP cookie. */
+/** Resolve the Login Token from Elysia's cookie jar. */
 export function loginTokenFromCookie(cookie: CookieJar): string | null {
   const value = cookie[LOGIN_TOKEN_COOKIE]?.value;
   if (typeof value !== "string") return null;
@@ -26,17 +34,7 @@ export function loginTokenFromCookie(cookie: CookieJar): string | null {
   return trimmed === "" ? null : trimmed;
 }
 
-export function loginTokenCookieOptions(maxAgeSeconds: number, expiresAt?: Date): Record<string, unknown> {
-  return {
-    httpOnly: true,
-    secure: true,
-    sameSite: "lax" as const,
-    path: "/",
-    maxAge: maxAgeSeconds,
-    ...(expiresAt ? { expires: expiresAt } : {}),
-  };
-}
-
+/** Issue the Login Token through Elysia's Cookie.set. */
 export function setLoginTokenCookie(
   cookie: CookieJar,
   token: string,
@@ -45,21 +43,14 @@ export function setLoginTokenCookie(
 ): void {
   cookie[LOGIN_TOKEN_COOKIE].set({
     value: token,
-    ...loginTokenCookieOptions(maxAgeSeconds, expiresAt),
+    maxAge: maxAgeSeconds,
+    expires: expiresAt,
   });
 }
 
+/** Clear the Login Token through Elysia's Cookie.remove. */
 export function clearLoginTokenCookie(cookie: CookieJar): void {
-  const entry = cookie[LOGIN_TOKEN_COOKIE];
-  if (!entry) return;
-  if (typeof entry.remove === "function") {
-    entry.remove();
-    return;
-  }
-  entry.set({
-    value: "",
-    ...loginTokenCookieOptions(0),
-  });
+  cookie[LOGIN_TOKEN_COOKIE]?.remove();
 }
 
 export function classifyLoginTokenRow(

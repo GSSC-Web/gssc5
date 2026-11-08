@@ -9,6 +9,7 @@ import { getMailTransporter } from "../mail";
 import {
   classifyLoginTokenRow,
   hashLoginToken,
+  loginTokenCookie,
   loginTokenFromCookie,
   type CookieJar,
 } from "./login-session";
@@ -81,6 +82,7 @@ export const passwords = new Elysia({
     },
     {
       body: ChangeBody,
+      cookie: loginTokenCookie,
       response: {
         204: t.Void(),
         403: t.Literal("Forbidden"),

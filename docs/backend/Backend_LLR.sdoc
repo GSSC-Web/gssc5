@@ -1186,7 +1186,7 @@ STATEMENT: >>>
 The GSSC Website Unified Backend SHALL forbid a clear-passwords request when the request lacks a valid Login Token in the HTTP cookie, and the backend writes nothing.
 <<<
 RATIONALE: >>>
-Only a logged-in caller may clear past password hashes. The Login Token is never taken from the request body.
+Only a logged-in caller may clear past password hashes.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
@@ -1200,7 +1200,7 @@ STATEMENT: >>>
 The GSSC Website Unified Backend SHALL complete a clear-passwords request when the Login Token in the HTTP cookie belongs to a caller who is a user moderator.
 <<<
 RATIONALE: >>>
-Clearing past password hashes is limited to a user moderator. The Login Token is never taken from the request body.
+Clearing past password hashes is limited to a user moderator.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
@@ -2566,7 +2566,7 @@ STATEMENT: >>>
 The GSSC Website Unified Backend SHALL forbid the user list when the Login Token in the HTTP cookie is missing.
 <<<
 RATIONALE: >>>
-A missing Login Token is not a current login. The Login Token is never taken from a request body. The failure does not say which check failed.
+A missing Login Token is not a current login. The failure does not say which check failed.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -2584,7 +2584,7 @@ STATEMENT: >>>
 The GSSC Website Unified Backend SHALL forbid the user list when the Login Token in the HTTP cookie is unknown.
 <<<
 RATIONALE: >>>
-An unknown Login Token is not a current login. The Login Token is never taken from a request body. The failure does not say which check failed.
+An unknown Login Token is not a current login. The failure does not say which check failed.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -2602,7 +2602,7 @@ STATEMENT: >>>
 The GSSC Website Unified Backend SHALL forbid the user list when the Login Token in the HTTP cookie has been logged out.
 <<<
 RATIONALE: >>>
-A logged-out Login Token is not a current login. The Login Token is never taken from a request body. The failure does not say which check failed.
+A logged-out Login Token is not a current login. The failure does not say which check failed.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -2620,7 +2620,7 @@ STATEMENT: >>>
 The GSSC Website Unified Backend SHALL forbid the user list when the Login Token in the HTTP cookie has expired.
 <<<
 RATIONALE: >>>
-An expired Login Token is not a current login. The Login Token is never taken from a request body. The failure does not say which check failed.
+An expired Login Token is not a current login. The failure does not say which check failed.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -3558,7 +3558,7 @@ STATEMENT: >>>
 The GSSC Website Unified Backend SHALL forbid the user read when the Login Token in the HTTP cookie is missing.
 <<<
 RATIONALE: >>>
-A missing Login Token is not a current login. The Login Token is never taken from a request body. The failure does not say which check failed.
+A missing Login Token is not a current login. The failure does not say which check failed.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -3576,7 +3576,7 @@ STATEMENT: >>>
 The GSSC Website Unified Backend SHALL forbid the user read when the Login Token in the HTTP cookie is unknown.
 <<<
 RATIONALE: >>>
-An unknown Login Token is not a current login. The Login Token is never taken from a request body. The failure does not say which check failed.
+An unknown Login Token is not a current login. The failure does not say which check failed.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -3594,7 +3594,7 @@ STATEMENT: >>>
 The GSSC Website Unified Backend SHALL forbid the user read when the Login Token in the HTTP cookie has been logged out.
 <<<
 RATIONALE: >>>
-A logged-out Login Token is not a current login. The Login Token is never taken from a request body. The failure does not say which check failed.
+A logged-out Login Token is not a current login. The failure does not say which check failed.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -3612,7 +3612,7 @@ STATEMENT: >>>
 The GSSC Website Unified Backend SHALL forbid the user read when the Login Token in the HTTP cookie has expired.
 <<<
 RATIONALE: >>>
-An expired Login Token is not a current login. The Login Token is never taken from a request body. The failure does not say which check failed.
+An expired Login Token is not a current login. The failure does not say which check failed.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -4369,7 +4369,7 @@ STATEMENT: >>>
 The GSSC Website Unified Backend SHALL forbid the user update when the Login Token in the HTTP cookie is missing.
 <<<
 RATIONALE: >>>
-A missing Login Token is not a current login. The Login Token is never taken from a request body. The failure does not say which check failed.
+A missing Login Token is not a current login. The failure does not say which check failed.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -4387,7 +4387,7 @@ STATEMENT: >>>
 The GSSC Website Unified Backend SHALL forbid the user update when the Login Token in the HTTP cookie is unknown.
 <<<
 RATIONALE: >>>
-An unknown Login Token is not a current login. The Login Token is never taken from a request body. The failure does not say which check failed.
+An unknown Login Token is not a current login. The failure does not say which check failed.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -4405,7 +4405,7 @@ STATEMENT: >>>
 The GSSC Website Unified Backend SHALL forbid the user update when the Login Token in the HTTP cookie has been logged out.
 <<<
 RATIONALE: >>>
-A logged-out Login Token is not a current login. The Login Token is never taken from a request body. The failure does not say which check failed.
+A logged-out Login Token is not a current login. The failure does not say which check failed.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -4423,7 +4423,7 @@ STATEMENT: >>>
 The GSSC Website Unified Backend SHALL forbid the user update when the Login Token in the HTTP cookie has expired.
 <<<
 RATIONALE: >>>
-An expired Login Token is not a current login. The Login Token is never taken from a request body. The failure does not say which check failed.
+An expired Login Token is not a current login. The failure does not say which check failed.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -5302,7 +5302,7 @@ STATEMENT: >>>
 The GSSC Website Unified Backend SHALL create or replace the key-value entry for the key in the path when an administrator authenticated by the Login Token HTTP cookie supplies a value in the request body.
 <<<
 RATIONALE: >>>
-An administrator creates a new entry or replaces the value of an existing entry. The Login Token is taken from the HTTP cookie, not from the request body.
+An administrator creates a new entry or replaces the value of an existing entry. The Login Token is taken from the HTTP cookie.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -5320,7 +5320,7 @@ STATEMENT: >>>
 The GSSC Website Unified Backend SHALL forbid a key-value upsert when the Login Token HTTP cookie is missing or is not a valid Login Token, and the backend writes nothing.
 <<<
 RATIONALE: >>>
-Only a logged-in administrator may create or replace a key-value entry. The Login Token is taken from the HTTP cookie, not from the request body.
+Only a logged-in administrator may create or replace a key-value entry. The Login Token is taken from the HTTP cookie.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -5338,7 +5338,7 @@ STATEMENT: >>>
 The GSSC Website Unified Backend SHALL complete a key-value upsert when the Login Token from the HTTP cookie belongs to a caller who is an administrator.
 <<<
 RATIONALE: >>>
-Creating or replacing a key-value entry is limited to an administrator. The Login Token is taken from the HTTP cookie, not from the request body.
+Creating or replacing a key-value entry is limited to an administrator. The Login Token is taken from the HTTP cookie.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test

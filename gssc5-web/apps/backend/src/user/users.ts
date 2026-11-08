@@ -6,6 +6,7 @@ import type { Prisma, PrismaClient } from "../generated/prisma/client";
 import {
   classifyLoginTokenRow,
   hashLoginToken,
+  loginTokenCookie,
   loginTokenFromCookie,
   type CookieJar,
   type LoginSessionFailure,
@@ -223,6 +224,7 @@ export const users = new Elysia({
     },
     {
       query: t.Record(t.String(), t.String()),
+      cookie: loginTokenCookie,
       response: {
         200: t.Array(PublicUser),
         403: t.Literal("Forbidden"),
@@ -262,6 +264,7 @@ export const users = new Elysia({
     },
     {
       params: t.Object({ cuid: t.String() }),
+      cookie: loginTokenCookie,
       response: {
         204: t.Void(),
         403: t.Literal("Forbidden"),
@@ -290,6 +293,7 @@ export const users = new Elysia({
     },
     {
       params: t.Object({ cuid: t.String() }),
+      cookie: loginTokenCookie,
       response: {
         200: PublicUser,
         403: t.Literal("Forbidden"),
@@ -339,6 +343,7 @@ export const users = new Elysia({
     {
       params: t.Object({ cuid: t.String() }),
       body: t.Optional(t.Unknown()),
+      cookie: loginTokenCookie,
       response: {
         204: t.Void(),
         403: t.Literal("Forbidden"),
