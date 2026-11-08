@@ -50,12 +50,9 @@ dir = "gssc5-web"
 run = "bun install"
 
 [tasks.export]
-description = "Export the requirements tree to static HTML (also the StrictDoc compile check)"
-alias = "e"
-run = "strictdoc export ."
-
-[tasks."docs:check"]
-description = "Confirm StrictDoc .sdoc files parse/export without errors"
+# CI StrictDoc job runs this task as the compile check (parse/export must succeed).
+description = "Export the requirements tree to static HTML"
+alias = ["e", "docs:check"]
 run = "strictdoc export ."
 
 [tasks.server]
