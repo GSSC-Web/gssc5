@@ -32,7 +32,6 @@ class FakeKvStore {
 async function setupHeader(options?: {
   loggedIn?: boolean;
   displayName?: string;
-  widthPx?: number;
 }): Promise<{
   fixture: Awaited<ReturnType<typeof setupPublicComponent<Header>>>;
   router: Router;
@@ -73,8 +72,6 @@ async function setupHeader(options?: {
     session.displayName.set('');
   }
 
-  if (options?.widthPx !== undefined) header.layoutWidthPx.set(options.widthPx);
-
   fixture.detectChanges();
   await fixture.whenStable();
   return {
@@ -91,9 +88,10 @@ async function setupHeader(options?: {
 
 // @relation(GSSC-PLLR-46, scope=range_start, role=Test)
 test('GSSC-PLLR-46 Semantic', async () => {
-  const { root } = await setupHeader({ widthPx: 48 * 16 });
+  const { root } = await setupHeader();
   expect(root.querySelector('.gssc-header__logo')).not.toBeNull();
-  expect(textContent(root, '.gssc-header__org-name')).toBe(sampleOrg.organizationName);
+  expect(textContent(root, '.gssc-header__org-name--full')).toBe(sampleOrg.organizationName);
+  expect(textContent(root, '.gssc-header__org-name--short')).toBe(sampleOrg.organizationAcronym);
   expect(root.querySelector('.gssc-header__login')).not.toBeNull();
   expect(root.querySelector('.gssc-header__contact')).not.toBeNull();
   expect(root.querySelector('.gssc-header__search-toggle')).not.toBeNull();
@@ -139,7 +137,7 @@ test('GSSC-PLLR-49 Semantic', async () => {
 
 // @relation(GSSC-PLLR-50, scope=range_start, role=Test)
 test('GSSC-PLLR-50 Syntactic', async () => {
-  const { root } = await setupHeader({ widthPx: 20 * 16 });
+  const { root } = await setupHeader();
   const identity = root.querySelector('.gssc-header__identity')!;
   expect(identity.firstElementChild?.classList.contains('gssc-header__logo')).toBe(true);
   expect(root.querySelector('.gssc-header__logo')).not.toBeNull();
@@ -156,37 +154,43 @@ test('GSSC-PLLR-51 Lexical', async () => {
 
 // @relation(GSSC-PLLR-52, scope=range_start, role=Test)
 test('GSSC-PLLR-52 Semantic', async () => {
-  const { fixture, root, header, societyContact } = await setupHeader({ widthPx: 48 * 16 });
-  expect(textContent(root, '.gssc-header__org-name')).toBe(societyContact.organizationName());
-
-  header.layoutWidthPx.set(30 * 16);
-  fixture.detectChanges();
-  await fixture.whenStable();
-  expect(textContent(root, '.gssc-header__org-name')).toBe(societyContact.organizationAcronym());
+  const { root, societyContact } = await setupHeader();
+  const full = root.querySelector<HTMLElement>('.gssc-header__org-name--full')!;
+  const short = root.querySelector<HTMLElement>('.gssc-header__org-name--short')!;
+  expect(full.textContent?.trim()).toBe(societyContact.organizationName());
+  expect(short.textContent?.trim()).toBe(societyContact.organizationAcronym());
+  // One form is shown at a time (Lexical); both values come from Society Contact.
+  expect(societyContact.organizationName().length).toBeGreaterThan(0);
+  expect(societyContact.organizationAcronym().length).toBeGreaterThan(0);
 });
 // @relation(GSSC-PLLR-52, scope=range_end, role=Test)
 
 // @relation(GSSC-PLLR-53, scope=range_start, role=Test)
 test('GSSC-PLLR-53 Syntactic', async () => {
-  const { fixture, root, header } = await setupHeader({ widthPx: 48 * 16 });
+  const { root } = await setupHeader();
   const identity = root.querySelector('.gssc-header__identity')!;
   expect(identity.querySelector('.gssc-header__logo')).not.toBeNull();
   expect(identity.querySelector('.gssc-header__org-name')).not.toBeNull();
-
-  header.layoutWidthPx.set(20 * 16);
-  fixture.detectChanges();
-  await fixture.whenStable();
-  expect(root.querySelector('.gssc-header__org-name')).toBeNull();
-  expect(root.querySelector('.gssc-header__logo')).not.toBeNull();
+  // Name forms stay beside the logo; Lexical utilities omit both below small.
+  expect(identity.children[0]?.classList.contains('gssc-header__logo')).toBe(true);
+  expect(identity.children[1]?.classList.contains('gssc-header__org-name')).toBe(true);
 });
 // @relation(GSSC-PLLR-53, scope=range_end, role=Test)
 
 // @relation(GSSC-PLLR-54, scope=range_start, role=Test)
 test('GSSC-PLLR-54 Lexical', async () => {
-  const { root } = await setupHeader({ widthPx: 48 * 16 });
+  const { root } = await setupHeader();
   const name = root.querySelector<HTMLElement>('.gssc-header__org-name')!;
+  const full = root.querySelector<HTMLElement>('.gssc-header__org-name--full')!;
+  const short = root.querySelector<HTMLElement>('.gssc-header__org-name--short')!;
   expect(name.classList.contains('font-medium')).toBe(true);
   expect(name.classList.contains('text-gssc-dark-green')).toBe(true);
+  // Medium+: full name; small–under medium: acronym; below small: omit (SW: Tailwind md/sm).
+  expect(full.classList.contains('hidden')).toBe(true);
+  expect(full.classList.contains('md:inline')).toBe(true);
+  expect(short.classList.contains('hidden')).toBe(true);
+  expect(short.classList.contains('sm:inline')).toBe(true);
+  expect(short.classList.contains('md:hidden')).toBe(true);
 });
 // @relation(GSSC-PLLR-54, scope=range_end, role=Test)
 

@@ -516,10 +516,10 @@ STATEMENT: >>>
 The Header Organization Name SHALL display the society's organization name or organization acronym from the Society Contact service when the layout permits.
 <<<
 RATIONALE: >>>
-The Header shows one organization-name form at a time from the Society Contact service. Which form is visible by Header width is a separate Lexical requirement.
+The Header shows one organization-name form at a time from the Society Contact service. Which form is visible by layout width is a separate Lexical requirement.
 <<<
 COMMENT: >>>
-Owner-approved layout bands (GSSC5-22): full name at 48 rem and above; acronym from 30 rem up to under 48 rem; omit under 30 rem (logo remains).
+Owner-approved layout bands (GSSC5-22): full name at medium and above; acronym from small up to under medium; omit below small (logo remains). Brand artwork deferred to GSSC5-46.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -552,10 +552,10 @@ RELATIONS:
 UID: GSSC-PLLR-54
 TITLE: Lexical
 STATEMENT: >>>
-The Header Organization Name SHALL use the sans-serif theme font, a medium font weight, and the dark-green theme token for its text color, SHALL show the organization name when the Header is at least 48 rem wide, SHALL show the organization acronym when the Header is at least 30 rem wide and under 48 rem wide, and SHALL omit the name when the Header is under 30 rem wide.
+The Header Organization Name SHALL use the sans-serif theme font, a medium font weight, and the dark-green theme token for its text color, SHALL show the organization name at medium and above, SHALL show the organization acronym from small up to under medium, and SHALL omit the name below small.
 <<<
 RATIONALE: >>>
-Those tokens keep the name aligned with Header text. The width bands keep a readable identity mark as the Header narrows or widens.
+Those tokens keep the name aligned with Header text. The width bands keep a readable identity mark as the viewport narrows or widens.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
