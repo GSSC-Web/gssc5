@@ -9,7 +9,7 @@ tags: [frontend, public, angular, theme]
 
 - App: `gssc5-web/apps/public` (Angular + Tailwind + Eden Treaty).
 - Layout under `src/app/`: `modules/`, `pages/`, `services/`; multi-file classes get a folder. Bootstrap stays in `src/app/`.
-- Modules include `header`, `footer`, `announcements-bar`, `prompt-overlay` (Prompt Overlay shell + child field modules: `text-field`, `select-field`, `options-field`, `button-field`, `file-field`, `options-list-field`, `prompt-form`).
+- Modules include `header`, `footer`, `announcements-bar`, `section` (Section Container places Contents), `prompt-overlay` (Prompt Overlay shell + child field modules: `text-field`, `select-field`, `options-field`, `button-field`, `file-field`, `options-list-field`, `prompt-form`).
 - Services include `backend` (credentialed `fetch`), `member-session`, `urgent-announcements`, `prompt-overlay` (queued prompt forms), `contact-overlay` (Header/Footer open hook; currently enqueues a SW-only contact PoC on the prompt queue), contact/KV helpers.
 - Prompt Overlay: service queue of form configs; overlay chrome (gray/25% backdrop, fullscreen below `sm`, ≤¾ viewport at `sm+`); dismiss via top-right control or Escape only (no backdrop dismiss). Temporary contact form PoC is SW-only under GSSC5-27 (no PoC LLRs/tests); real Contact Overlay remains GSSC5-31.
 - Theme tokens on `:root` in `src/styles.css`: `--gssc-light-green` `#C5CAB6`, `--gssc-dark-green` `#61684D`, `--gssc-cream` `#FFFFCC`, `--gssc-light-brown` `#D8BA98`, `--gssc-dark-brown` `#92745D`, `--gssc-gray` `#D4D4D4`, white/black. Outermost shell background white; default typeface sans-serif.

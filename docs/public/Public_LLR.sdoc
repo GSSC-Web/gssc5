@@ -1387,6 +1387,207 @@ RELATIONS:
 [[/SECTION]]
 
 [[SECTION]]
+UID: GSSC-PLLR-SECTION
+TITLE: Public Section
+
+[[SECTION]]
+UID: GSSC-PLLR-SECTION-CONTAINER
+TITLE: Section Container
+
+[REQUIREMENT]
+UID: GSSC-PLLR-83
+TITLE: Semantic
+STATEMENT: >>>
+The GSSC Website Public Frontend Section Container SHALL place the Section Contents it receives: the Section Header when those Contents include a header, the Section Body, and the Section Resources when those Contents include resources.
+<<<
+RATIONALE: >>>
+The Section Container is the placement shell for section data on public pages. Contents are the section data; the Container places them. Each placed element's behavior is a separate requirement. Page assembly and Contents APIs are separate features.
+<<<
+COMMENT: >>>
+Derived for GSSC5-25. PIRs do not define the section Container. REVIEW_STATUS stays Changed until owner approval.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-25
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-PLLR-84
+TITLE: Syntactic
+STATEMENT: >>>
+The Section Container SHALL fill the width of its page content area and SHALL stack the Section Contents it places in a vertical order.
+<<<
+RATIONALE: >>>
+Full-width stacking keeps section Contents readable within the page content area as the viewport resizes. Page assembly chooses where Containers appear on a page.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-25
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-PLLR-85
+TITLE: Lexical
+STATEMENT: >>>
+The Section Container SHALL use the cream theme token for its background, the gray theme token for its border, and the dark-green theme token for its default text, with a sans-serif typeface.
+<<<
+RATIONALE: >>>
+Theme tokens keep section presentation aligned with the organization palette on the white outermost shell. A fuller color role map for sections is not set yet beyond these token choices.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-25
+REVIEW_STATUS: Changed
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-SECTION-HEADER
+TITLE: Section Header
+
+[REQUIREMENT]
+UID: GSSC-PLLR-86
+TITLE: Semantic
+STATEMENT: >>>
+The Section Header SHALL display the header from the Section Contents when those Contents include a header.
+<<<
+RATIONALE: >>>
+A section header identifies the section when the Contents supply one. Absent headers are omitted. This requirement does not set header wording.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-25
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-PLLR-87
+TITLE: Syntactic
+STATEMENT: >>>
+The Section Header SHALL appear above the Section Body inside the Section Container when the Section Contents include a header.
+<<<
+RATIONALE: >>>
+Leading with the header keeps the section title before the body text.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-25
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-PLLR-88
+TITLE: Lexical
+STATEMENT: >>>
+The Section Header SHALL use a semibold weight and the dark-green theme token for its text color, at a size larger than the Section Body text.
+<<<
+RATIONALE: >>>
+Semibold dark-green text larger than the body distinguishes the header within the Container. A fuller type scale is not set yet beyond this relative size and token choice.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-25
+REVIEW_STATUS: Changed
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-SECTION-BODY
+TITLE: Section Body
+
+[REQUIREMENT]
+UID: GSSC-PLLR-89
+TITLE: Semantic
+STATEMENT: >>>
+The Section Body SHALL display the body from the Section Contents.
+<<<
+RATIONALE: >>>
+Every section's Contents include a body. The Body presents that text in the Container. This requirement does not set body wording.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-25
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-PLLR-90
+TITLE: Syntactic
+STATEMENT: >>>
+The Section Body SHALL appear below the Section Header when a Section Header is present, and otherwise at the start of the Section Contents inside the Section Container.
+<<<
+RATIONALE: >>>
+The body follows the header when a header exists, and starts the Contents when it does not, so reading order stays consistent.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-25
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-PLLR-91
+TITLE: Lexical
+STATEMENT: >>>
+The Section Body SHALL use a normal weight and the dark-brown theme token for its text color.
+<<<
+RATIONALE: >>>
+Normal-weight dark-brown text keeps body copy readable on the cream Container background and distinct from the dark-green header. A fuller type scale is not set yet beyond this weight and token choice.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-25
+REVIEW_STATUS: Changed
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-SECTION-RESOURCES
+TITLE: Section Resources
+
+[REQUIREMENT]
+UID: GSSC-PLLR-92
+TITLE: Semantic
+STATEMENT: >>>
+The Section Resources SHALL display the name of each resource from the Section Contents when those Contents include resources, and selection of a resource SHALL open that resource.
+<<<
+RATIONALE: >>>
+Resources accompany some sections. Showing each resource name and opening the selected resource lets the visitor reach related material. This requirement does not set the resource catalog.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-25
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-PLLR-93
+TITLE: Syntactic
+STATEMENT: >>>
+The Section Resources SHALL appear below the Section Body inside the Section Container as a list when the Section Contents include resources.
+<<<
+RATIONALE: >>>
+A list below the body keeps resources grouped after the section text without interrupting the body.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-25
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-PLLR-94
+TITLE: Lexical
+STATEMENT: >>>
+The Section Resources SHALL use a normal weight and the dark-green theme token for their text color, with no underline except on hover.
+<<<
+RATIONALE: >>>
+Normal-weight dark-green text marks resources as activatable links on the cream Container background. Underline on hover marks selection without a default underline. A fuller color role map for links is not set yet beyond this token choice.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-25
+REVIEW_STATUS: Changed
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
 UID: GSSC-PLLR-PROMPT-OVERLAY
 TITLE: Public Prompt Overlay
 

@@ -1,0 +1,38 @@
+<!-- @relation(GSSC-PLLR-83, GSSC-PLLR-84, scope=range_start, role=Implementation) -->
+<!-- @relation(GSSC-PLLR-85, scope=range_start, role=Implementation) -->
+<section
+  class="gssc-section flex w-full flex-col gap-3 border border-gssc-gray bg-gssc-cream px-4 py-3 font-sans text-gssc-dark-green"
+>
+  <!-- @relation(GSSC-PLLR-85, scope=range_end, role=Implementation) -->
+
+  @if (hasHeader(contents())) {
+    <!-- @relation(GSSC-PLLR-86, GSSC-PLLR-87, GSSC-PLLR-88, scope=range_start, role=Implementation) -->
+    <h2 class="gssc-section__header m-0 text-xl font-semibold text-gssc-dark-green">
+      {{ contents().header }}
+    </h2>
+    <!-- @relation(GSSC-PLLR-86, GSSC-PLLR-87, GSSC-PLLR-88, scope=range_end, role=Implementation) -->
+  }
+
+  <!-- @relation(GSSC-PLLR-89, GSSC-PLLR-90, GSSC-PLLR-91, scope=range_start, role=Implementation) -->
+  <div class="gssc-section__body m-0 font-normal text-gssc-dark-brown">
+    {{ contents().body }}
+  </div>
+  <!-- @relation(GSSC-PLLR-89, GSSC-PLLR-90, GSSC-PLLR-91, scope=range_end, role=Implementation) -->
+
+  @if (hasResources(contents())) {
+    <!-- @relation(GSSC-PLLR-92, GSSC-PLLR-93, GSSC-PLLR-94, scope=range_start, role=Implementation) -->
+    <ul class="gssc-section__resources m-0 flex list-none flex-col gap-1.5 p-0">
+      @for (resource of contents().resources!; track resource.href + resource.name) {
+        <li>
+          <a
+            class="gssc-section__resource font-normal text-gssc-dark-green no-underline hover:underline"
+            [href]="resource.href"
+            >{{ resource.name }}</a
+          >
+        </li>
+      }
+    </ul>
+    <!-- @relation(GSSC-PLLR-92, GSSC-PLLR-93, GSSC-PLLR-94, scope=range_end, role=Implementation) -->
+  }
+</section>
+<!-- @relation(GSSC-PLLR-83, GSSC-PLLR-84, scope=range_end, role=Implementation) -->
