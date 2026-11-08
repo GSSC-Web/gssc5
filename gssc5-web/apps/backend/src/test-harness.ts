@@ -407,23 +407,38 @@ export type JsonResponse = {
   body: string;
 };
 
+/** HTTP cookie that carries the Login Token (matches GSSC5-48 name). */
+export const LOGIN_TOKEN_COOKIE = "gssc_login_token";
+
+export function cookieHeaderForToken(token: string): string {
+  return `${LOGIN_TOKEN_COOKIE}=${token}`;
+}
+
 export async function postJsonResponse(
   backend: BackendFetch,
   pathname: string,
   json: unknown,
+  options?: { cookie?: string },
 ): Promise<JsonResponse> {
+  const headers: Record<string, string> = { "content-type": "application/json" };
+  if (options?.cookie) headers.cookie = options.cookie;
   const response = await backend(
     new Request(`http://127.0.0.1${pathname}`, {
       method: "POST",
-      headers: { "content-type": "application/json" },
+      headers,
       body: JSON.stringify(json),
     }),
   );
   return { status: response.status, body: await response.text() };
 }
 
-export async function postJson(backend: BackendFetch, pathname: string, json: unknown): Promise<string> {
-  return (await postJsonResponse(backend, pathname, json)).body;
+export async function postJson(
+  backend: BackendFetch,
+  pathname: string,
+  json: unknown,
+  options?: { cookie?: string },
+): Promise<string> {
+  return (await postJsonResponse(backend, pathname, json, options)).body;
 }
 
 export function classifyReport(body: string): "valid" | "invalid" | "other" {

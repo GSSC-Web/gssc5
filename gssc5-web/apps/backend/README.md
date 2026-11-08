@@ -8,7 +8,7 @@ From this directory:
 - `mise build` generates the Prisma client and writes `../../dist/backend`.
 - `mise test` generates the Prisma client and runs the Bun tests.
 - `mise db-generate` generates the Prisma client.
-- `mise run db:prepare` (alias `seed`) applies migrations and upserts local website KVS values the public site expects (`society.phoneNumber`, `society.emailAddress`, `society.postalAddress`). Safe to re-run.
+- `mise run db:prepare` (alias `seed`) applies migrations and upserts local website KVS values the public site currently reads (society contact keys). Safe to re-run. Key names are a frontend/dev convenience, not backend requirements.
 
 Copy `.env.example` to `.env` for local configuration. The repository README
 lists the variables and their defaults. A missing `.env` still starts.
@@ -26,6 +26,12 @@ pattern are invalidated. An unknown identifier or a password that does not
 match the stored hash is forbidden, and that body does not say which check
 failed. A match returns a token. Logout returns 204.
 A challenge returns `valid` or `invalid`.
+`src/kvs.ts` serves `GET /kvs/:key` for public reads of global website data and
+`POST /kvs/:key` for administrator create-or-replace with string `value` in the
+body. The Login Token is taken from the `gssc_login_token` HTTP cookie, not from
+the body. A missing key on GET is 404. A missing or invalid Login Token cookie,
+or a non-administrator caller, is forbidden on POST and writes nothing. A
+missing or non-string `value` is invalidated.
 `src/index.ts` loads configuration, applies database migrations, and listens.
 The accounts plugin creates or updates the permanent admin account when the
 server starts. `ADMIN_EMAIL` defaults to empty. An empty value leaves the admin

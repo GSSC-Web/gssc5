@@ -12,6 +12,31 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  strictdoc:
+    name: StrictDoc
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      # Ceiling directories are not searched. Stop at the checkout's parent so
+      # repo-root mise.toml still loads when a step runs under gssc5-web.
+      MISE_CEILING_PATHS: ${{ github.workspace }}/..
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v7
+
+      - name: Install StrictDoc
+        uses: jdx/mise-action@v5
+        with:
+          working_directory: ${{ github.workspace }}
+          experimental: true
+          # pypi:strictdoc provides the CLI used by `mise run export`.
+          install_args: python uv "pypi:strictdoc"
+
+      - name: Confirm StrictDoc compiles
+        # Fails the PR when any .sdoc has TextX/grammar errors (extra blank
+        # lines between composite [[SECTION]] nodes are a common cause).
+        run: mise run export
+
   test:
     name: gssc5-web
     runs-on: ubuntu-latest
