@@ -2,6 +2,8 @@ import { TestBed } from '@angular/core/testing';
 import { ContactOverlay } from '../../services/contact-overlay/contact-overlay';
 import {
   SOCIETY_EMAIL_KEY,
+  SOCIETY_ORGANIZATION_ACRONYM_KEY,
+  SOCIETY_ORGANIZATION_NAME_KEY,
   SOCIETY_PHONE_KEY,
   SOCIETY_POSTAL_KEY,
   SocietyContact,
@@ -11,6 +13,8 @@ import { nativeElement, setupPublicComponent, textContent } from '../../../test-
 import { Footer } from './footer';
 
 const sampleContact = {
+  organizationName: 'Genealogical Society of Stanislaus County',
+  organizationAcronym: 'GSSC',
   phoneNumber: '(209) 529-9430',
   emailAddress: 'gsscfounded1968@gmail.com',
   postalAddress: 'P.O. Box 1352 Modesto, CA 95353-1352',
@@ -18,6 +22,8 @@ const sampleContact = {
 
 class FakeKvStore {
   private readonly values = new Map<string, string>([
+    [SOCIETY_ORGANIZATION_NAME_KEY, sampleContact.organizationName],
+    [SOCIETY_ORGANIZATION_ACRONYM_KEY, sampleContact.organizationAcronym],
     [SOCIETY_PHONE_KEY, sampleContact.phoneNumber],
     [SOCIETY_EMAIL_KEY, sampleContact.emailAddress],
     [SOCIETY_POSTAL_KEY, sampleContact.postalAddress],
@@ -62,15 +68,16 @@ test('GSSC-PLLR-30 Lexical', async () => {
 
 // @relation(GSSC-PLLR-31, scope=range_start, role=Test)
 test('GSSC-PLLR-31 Semantic', async () => {
-  const { root } = await setupFooter();
+  const { root, societyContact } = await setupFooter();
   const full = root.querySelector<HTMLElement>('.gssc-footer__organization-name--full')!;
   const short = root.querySelector<HTMLElement>('.gssc-footer__organization-name--short')!;
-  const visible =
-    getComputedStyle(full).display === 'none' ? short : full;
+  const visible = getComputedStyle(full).display === 'none' ? short : full;
   const label = visible.textContent?.trim() ?? '';
-  expect(['Genealogical Society of Stanislaus County', 'GSSC']).toContain(label);
-  // Default / wide viewport shows the full name (acronym is the narrow alternative).
-  expect(label).toBe('Genealogical Society of Stanislaus County');
+  expect([societyContact.organizationName(), societyContact.organizationAcronym()]).toContain(
+    label,
+  );
+  // Default / wide viewport shows the organization name from Society Contact.
+  expect(label).toBe(societyContact.organizationName());
 });
 // @relation(GSSC-PLLR-31, scope=range_end, role=Test)
 

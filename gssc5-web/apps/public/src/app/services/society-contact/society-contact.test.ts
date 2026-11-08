@@ -2,6 +2,8 @@ import { TestBed } from '@angular/core/testing';
 import { KvStore } from '../kv-store/kv-store';
 import {
   SOCIETY_EMAIL_KEY,
+  SOCIETY_ORGANIZATION_ACRONYM_KEY,
+  SOCIETY_ORGANIZATION_NAME_KEY,
   SOCIETY_PHONE_KEY,
   SOCIETY_POSTAL_KEY,
   SocietyContact,
@@ -52,3 +54,23 @@ test('GSSC-PLLR-80 Society Postal Address', async () => {
   expect(societyContact.postalAddress()).toBe('P.O. Box 1352 Modesto, CA 95353-1352');
 });
 // @relation(GSSC-PLLR-80, scope=range_end, role=Test)
+
+// @relation(GSSC-PLLR-81, scope=range_start, role=Test)
+test('GSSC-PLLR-81 Society Organization Name', async () => {
+  const societyContact = await setupSocietyContact({
+    [SOCIETY_ORGANIZATION_NAME_KEY]: 'Genealogical Society of Stanislaus County',
+  });
+  expect(societyContact.organizationName()).toBe(
+    'Genealogical Society of Stanislaus County',
+  );
+});
+// @relation(GSSC-PLLR-81, scope=range_end, role=Test)
+
+// @relation(GSSC-PLLR-82, scope=range_start, role=Test)
+test('GSSC-PLLR-82 Society Organization Acronym', async () => {
+  const societyContact = await setupSocietyContact({
+    [SOCIETY_ORGANIZATION_ACRONYM_KEY]: 'GSSC',
+  });
+  expect(societyContact.organizationAcronym()).toBe('GSSC');
+});
+// @relation(GSSC-PLLR-82, scope=range_end, role=Test)

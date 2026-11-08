@@ -10,6 +10,11 @@ const backendRoot = fileURLToPath(new URL("..", import.meta.url));
 
 /** Local website KVS rows the public shell expects (Footer society contact). */
 export const SOCIETY_DEV_KVS = [
+  {
+    key: "society.organizationName",
+    value: "Genealogical Society of Stanislaus County",
+  },
+  { key: "society.organizationAcronym", value: "GSSC" },
   { key: "society.phoneNumber", value: "(209) 529-9430" },
   { key: "society.emailAddress", value: "gsscfounded1968@gmail.com" },
   { key: "society.postalAddress", value: "P.O. Box 1352 Modesto, CA 95353-1352" },

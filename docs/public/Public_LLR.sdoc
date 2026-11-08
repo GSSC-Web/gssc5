@@ -459,10 +459,10 @@ TITLE: Organization Name
 UID: GSSC-PLLR-31
 TITLE: Semantic
 STATEMENT: >>>
-The Footer Organization Name SHALL display the text Genealogical Society of Stanislaus County or the acronym GSSC.
+The Footer Organization Name SHALL display the society's organization name or organization acronym from the Society Contact service.
 <<<
 RATIONALE: >>>
-The Footer shows one organization-name form at a time. Which form is visible by site width is a separate Lexical requirement.
+The Footer shows one organization-name form at a time from the Society Contact service. Which form is visible by site width is a separate Lexical requirement.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -495,7 +495,7 @@ RELATIONS:
 UID: GSSC-PLLR-33
 TITLE: Lexical
 STATEMENT: >>>
-The Footer Organization Name SHALL use a semibold weight and the white theme token for its text color, SHALL show Genealogical Society of Stanislaus County at site widths of 40rem and above, and SHALL show GSSC below 40rem.
+The Footer Organization Name SHALL use a semibold weight and the white theme token for its text color, SHALL show the organization name at site widths of 40rem and above, and SHALL show the organization acronym below 40rem.
 <<<
 RATIONALE: >>>
 Semibold white text distinguishes the organization name within the Footer. The 40rem breakpoint matches the public site's small-width breakpoint so the acronym fits narrow viewports while the full name remains visible on wider layouts.
@@ -857,6 +857,42 @@ REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-26
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-81
+TITLE: Society Organization Name
+STATEMENT: >>>
+The Public Frontend Society Contact service SHALL provide the society's organization name from the Key-Value Store under the key society.organizationName.
+<<<
+RATIONALE: >>>
+Footer Organization Name reads the full name from this service. The Key-Value Store key society.organizationName holds that name. This requirement does not set the current name.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-23
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-21
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-82
+TITLE: Society Organization Acronym
+STATEMENT: >>>
+The Public Frontend Society Contact service SHALL provide the society's organization acronym from the Key-Value Store under the key society.organizationAcronym.
+<<<
+RATIONALE: >>>
+Footer Organization Name reads the acronym from this service for narrow presentations. The Key-Value Store key society.organizationAcronym holds that acronym. This requirement does not set the current acronym.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-23
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-21
   ROLE: Refines
 
 [[/SECTION]]
