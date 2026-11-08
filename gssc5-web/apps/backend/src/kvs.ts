@@ -30,7 +30,7 @@ export const kvs = new Elysia({
       // @relation(GSSC-BLLR-293, GSSC-BLLR-294, GSSC-BLLR-295, scope=range_start, role=Implementation)
       const prisma = getPrisma(loadConfig().DATABASE_URL);
       const row = await prisma.keyValue.findUnique({ where: { key: params.key } });
-      if (!row) return status(404, undefined);
+      if (!row) return status(404, "Not Found" as const);
       return status(200, { key: row.key, value: row.value });
       // @relation(GSSC-BLLR-293, GSSC-BLLR-294, GSSC-BLLR-295, scope=range_end, role=Implementation)
     },
@@ -40,7 +40,7 @@ export const kvs = new Elysia({
       }),
       response: {
         200: KeyValueEntry,
-        404: t.Void(),
+        404: t.Literal("Not Found"),
       },
     },
   )
