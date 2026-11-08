@@ -26,9 +26,9 @@ async function defaultKvBackendGet(key: string): Promise<string | null> {
 export class KvStore {
   private readonly backendGet = inject(KV_BACKEND_GET);
 
-  // @relation(GSSC-PLLR-46, GSSC-PLLR-47, scope=range_start, role=Implementation)
+  // @relation(GSSC-PLLR-76, GSSC-PLLR-77, scope=range_start, role=Implementation)
   async getValue(key: string): Promise<string | null> {
     return this.backendGet(key);
   }
-  // @relation(GSSC-PLLR-46, GSSC-PLLR-47, scope=range_end, role=Implementation)
+  // @relation(GSSC-PLLR-76, GSSC-PLLR-77, scope=range_end, role=Implementation)
 }

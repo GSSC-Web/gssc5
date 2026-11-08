@@ -8,8 +8,8 @@ async function setupKvStore(backendGet: (key: string) => Promise<string | null>)
   return TestBed.inject(KvStore);
 }
 
-// @relation(GSSC-PLLR-46, scope=range_start, role=Test)
-test('GSSC-PLLR-46 Key-Value Retrieval', async () => {
+// @relation(GSSC-PLLR-76, scope=range_start, role=Test)
+test('GSSC-PLLR-76 Key-Value Retrieval', async () => {
   const calls: string[] = [];
   const store = await setupKvStore(async (key) => {
     calls.push(key);
@@ -20,11 +20,11 @@ test('GSSC-PLLR-46 Key-Value Retrieval', async () => {
   );
   expect(calls).toEqual(['society.phoneNumber']);
 });
-// @relation(GSSC-PLLR-46, scope=range_end, role=Test)
+// @relation(GSSC-PLLR-76, scope=range_end, role=Test)
 
-// @relation(GSSC-PLLR-47, scope=range_start, role=Test)
-test('GSSC-PLLR-47 Key-Value Absence', async () => {
+// @relation(GSSC-PLLR-77, scope=range_start, role=Test)
+test('GSSC-PLLR-77 Key-Value Absence', async () => {
   const store = await setupKvStore(async () => null);
   await expect(store.getValue('missing.key')).resolves.toBeNull();
 });
-// @relation(GSSC-PLLR-47, scope=range_end, role=Test)
+// @relation(GSSC-PLLR-77, scope=range_end, role=Test)

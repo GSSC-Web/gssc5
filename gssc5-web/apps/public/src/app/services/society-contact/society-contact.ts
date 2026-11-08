@@ -23,17 +23,17 @@ export class SocietyContact {
   });
 
   async refresh(): Promise<void> {
-    // @relation(GSSC-PLLR-48, scope=range_start, role=Implementation)
+    // @relation(GSSC-PLLR-78, scope=range_start, role=Implementation)
     this.phoneNumber.set((await this.kvStore.getValue(SOCIETY_PHONE_KEY)) ?? '');
-    // @relation(GSSC-PLLR-48, scope=range_end, role=Implementation)
+    // @relation(GSSC-PLLR-78, scope=range_end, role=Implementation)
 
-    // @relation(GSSC-PLLR-49, scope=range_start, role=Implementation)
+    // @relation(GSSC-PLLR-79, scope=range_start, role=Implementation)
     this.emailAddress.set((await this.kvStore.getValue(SOCIETY_EMAIL_KEY)) ?? '');
-    // @relation(GSSC-PLLR-49, scope=range_end, role=Implementation)
+    // @relation(GSSC-PLLR-79, scope=range_end, role=Implementation)
 
-    // @relation(GSSC-PLLR-50, scope=range_start, role=Implementation)
+    // @relation(GSSC-PLLR-80, scope=range_start, role=Implementation)
     this.postalAddress.set((await this.kvStore.getValue(SOCIETY_POSTAL_KEY)) ?? '');
-    // @relation(GSSC-PLLR-50, scope=range_end, role=Implementation)
+    // @relation(GSSC-PLLR-80, scope=range_end, role=Implementation)
   }
 }
 

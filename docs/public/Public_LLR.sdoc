@@ -764,7 +764,7 @@ UID: GSSC-PLLR-KV-STORE
 TITLE: Key-Value Store
 
 [REQUIREMENT]
-UID: GSSC-PLLR-46
+UID: GSSC-PLLR-76
 TITLE: Key-Value Retrieval
 STATEMENT: >>>
 The Public Frontend Key-Value Store SHALL retrieve the value for a requested key from the Unified Backend key-value store.
@@ -782,7 +782,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-47
+UID: GSSC-PLLR-77
 TITLE: Key-Value Absence
 STATEMENT: >>>
 When the Unified Backend key-value store has no entry for the requested key, the Public Frontend Key-Value Store SHALL provide no value.
@@ -806,7 +806,7 @@ UID: GSSC-PLLR-SOCIETY-CONTACT
 TITLE: Society Contact
 
 [REQUIREMENT]
-UID: GSSC-PLLR-48
+UID: GSSC-PLLR-78
 TITLE: Society Phone Number
 STATEMENT: >>>
 The Public Frontend Society Contact service SHALL provide the society's phone number from the Key-Value Store under the key society.phoneNumber.
@@ -824,7 +824,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-49
+UID: GSSC-PLLR-79
 TITLE: Society Email Address
 STATEMENT: >>>
 The Public Frontend Society Contact service SHALL provide the society's email address from the Key-Value Store under the key society.emailAddress.
@@ -842,7 +842,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-50
+UID: GSSC-PLLR-80
 TITLE: Society Postal Address
 STATEMENT: >>>
 The Public Frontend Society Contact service SHALL provide the society's postal address from the Key-Value Store under the key society.postalAddress.
