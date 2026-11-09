@@ -412,7 +412,8 @@ test('GSSC-PLLR-72 Lexical', async () => {
   const { fixture, root } = await setupHeader();
   const toggle = root.querySelector<HTMLElement>('.gssc-header__search-toggle')!;
   expect(toggle.classList.contains('text-gssc-dark-green')).toBe(true);
-  expect(toggle.classList.contains('hover:bg-gssc-white')).toBe(true);
+  expect(toggle.classList.contains('rounded')).toBe(true);
+  expect(toggle.classList.contains('hover:bg-gssc-gray')).toBe(true);
 
   toggle.click();
   fixture.detectChanges();

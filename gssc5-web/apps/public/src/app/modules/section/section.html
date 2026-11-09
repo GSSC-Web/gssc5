@@ -30,21 +30,21 @@
         <!-- @relation(GSSC-PLLR-141, GSSC-PLLR-142, scope=range_start, role=Implementation) -->
         <button
           type="button"
-          class="gssc-section__resources-prev shrink-0 cursor-pointer border border-gssc-dark-green bg-gssc-white px-2 py-1 font-sans text-gssc-dark-green"
+          class="gssc-section__resources-prev inline-flex size-8 shrink-0 cursor-pointer items-center justify-center rounded border-0 bg-transparent p-0 text-gssc-dark-green hover:bg-gssc-gray"
           aria-label="Previous resources"
           (click)="stepPrev()"
         >
-          Prev
+          <i class="nf nf-md-chevron_left text-base leading-none" aria-hidden="true"></i>
         </button>
         <!-- @relation(GSSC-PLLR-141, GSSC-PLLR-142, scope=range_end, role=Implementation) -->
       }
 
       <div class="gssc-section__viewport min-w-0 flex-1 overflow-hidden">
-        <div class="gssc-section__track flex items-stretch justify-start gap-2">
+        <div class="gssc-section__track flex w-full items-stretch justify-start gap-2">
           @for (resource of visibleResources(); track $index + ':' + resource.href + resource.name) {
             <!-- @relation(GSSC-PLLR-137, GSSC-PLLR-138, GSSC-PLLR-139, scope=range_start, role=Implementation) -->
             <a
-              class="gssc-section__resource inline-flex shrink-0 items-center justify-center border border-gssc-dark-green bg-gssc-white px-2 text-center font-normal text-gssc-dark-green no-underline"
+              class="gssc-section__resource inline-flex items-center justify-center border border-gssc-dark-green bg-gssc-white px-2 text-center font-normal text-gssc-dark-green no-underline hover:bg-gssc-gray"
               [href]="resource.href"
               >{{ resource.name }}</a
             >
@@ -57,11 +57,11 @@
         <!-- @relation(GSSC-PLLR-144, GSSC-PLLR-145, scope=range_start, role=Implementation) -->
         <button
           type="button"
-          class="gssc-section__resources-next shrink-0 cursor-pointer border border-gssc-dark-green bg-gssc-white px-2 py-1 font-sans text-gssc-dark-green"
+          class="gssc-section__resources-next inline-flex size-8 shrink-0 cursor-pointer items-center justify-center rounded border-0 bg-transparent p-0 text-gssc-dark-green hover:bg-gssc-gray"
           aria-label="Next resources"
           (click)="stepNext()"
         >
-          Next
+          <i class="nf nf-md-chevron_right text-base leading-none" aria-hidden="true"></i>
         </button>
         <!-- @relation(GSSC-PLLR-144, GSSC-PLLR-145, scope=range_end, role=Implementation) -->
       }

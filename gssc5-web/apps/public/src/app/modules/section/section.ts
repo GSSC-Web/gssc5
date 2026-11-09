@@ -32,7 +32,8 @@ export const RESOURCE_BUTTON_GAP_PX = 0.5 * 16;
  * Reserved width for Prev + Next + gaps so enabling carousel chrome does not
  * oscillate overflow detection.
  */
-export const RESOURCE_ARROW_CHROME_RESERVE_PX = 120;
+/** Prev + Next icon controls (size-8 each) plus gaps. */
+export const RESOURCE_ARROW_CHROME_RESERVE_PX = 80;
 
 @Component({
   selector: 'gssc-section',

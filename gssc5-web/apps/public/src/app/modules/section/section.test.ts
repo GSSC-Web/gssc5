@@ -222,6 +222,12 @@ test('GSSC-PLLR-93 Syntactic', async () => {
   expect(resourceNames(root).length).toBe(section.visibleSlotCount());
   expect(section.visibleSlotCount()).toBeGreaterThan(0);
   expect(section.visibleSlotCount()).toBeLessThan(manyResources.resources!.length);
+  // Carousel fill: visible buttons flex equally across the strip between arrows.
+  const filled = [...root.querySelectorAll<HTMLElement>('.gssc-section__resource')];
+  expect(filled.length).toBeGreaterThan(0);
+  for (const btn of filled) {
+    expect(getComputedStyle(btn).flexGrow).toBe('1');
+  }
 
   // Width change re-measures: widen → fit, no arrows.
   section.containerWidthOverride.set(WIDE_FIT_PX);
@@ -261,12 +267,13 @@ test('GSSC-PLLR-93 Syntactic', async () => {
 
 // @relation(GSSC-PLLR-94, scope=range_start, role=Test)
 test('GSSC-PLLR-94 Lexical', async () => {
-  const { root } = await setupSection(sampleWithAll);
+  const { root } = await setupSection(sampleWithAll, { containerWidthPx: WIDE_FIT_PX });
   const link = root.querySelector<HTMLElement>('.gssc-section__resource')!;
   expect(link.classList.contains('border-gssc-dark-green')).toBe(true);
   expect(link.classList.contains('text-gssc-dark-green')).toBe(true);
   expect(link.classList.contains('bg-gssc-white')).toBe(true);
-  // Shared fixed button size from section.css (8.5rem × 2.75rem).
+  expect(link.classList.contains('hover:bg-gssc-gray')).toBe(true);
+  // Fit mode keeps fixed equal width/height from section.css.
   expect(Number.parseFloat(getComputedStyle(link).width)).toBeCloseTo(8.5 * 16, 0);
   expect(Number.parseFloat(getComputedStyle(link).height)).toBeCloseTo(2.75 * 16, 0);
 });
@@ -298,7 +305,7 @@ test('GSSC-PLLR-138 Syntactic', async () => {
 
 // @relation(GSSC-PLLR-139, scope=range_start, role=Test)
 test('GSSC-PLLR-139 Lexical', async () => {
-  const { root } = await setupSection(sampleWithAll);
+  const { root } = await setupSection(sampleWithAll, { containerWidthPx: WIDE_FIT_PX });
   const buttons = [...root.querySelectorAll<HTMLElement>('.gssc-section__resource')];
   expect(buttons.length).toBeGreaterThan(1);
   const widths = buttons.map((btn) => getComputedStyle(btn).width);
@@ -309,6 +316,7 @@ test('GSSC-PLLR-139 Lexical', async () => {
   expect(buttons[0]!.classList.contains('text-gssc-dark-green')).toBe(true);
   expect(buttons[0]!.classList.contains('border-gssc-dark-green')).toBe(true);
   expect(buttons[0]!.classList.contains('bg-gssc-white')).toBe(true);
+  expect(buttons[0]!.classList.contains('hover:bg-gssc-gray')).toBe(true);
 });
 // @relation(GSSC-PLLR-139, scope=range_end, role=Test)
 
@@ -346,7 +354,11 @@ test('GSSC-PLLR-142 Lexical', async () => {
   const { root } = await setupSection(manyResources, { containerWidthPx: NARROW_OVERFLOW_PX });
   const prev = root.querySelector<HTMLElement>('.gssc-section__resources-prev')!;
   expect(prev.classList.contains('text-gssc-dark-green')).toBe(true);
-  expect(prev.classList.contains('border-gssc-dark-green')).toBe(true);
+  expect(prev.classList.contains('border-0')).toBe(true);
+  expect(prev.classList.contains('rounded')).toBe(true);
+  expect(prev.classList.contains('bg-transparent')).toBe(true);
+  expect(prev.classList.contains('hover:bg-gssc-gray')).toBe(true);
+  expect(prev.querySelector('.nf.nf-md-chevron_left')).not.toBeNull();
 });
 // @relation(GSSC-PLLR-142, scope=range_end, role=Test)
 
@@ -385,6 +397,10 @@ test('GSSC-PLLR-145 Lexical', async () => {
   const { root } = await setupSection(manyResources, { containerWidthPx: NARROW_OVERFLOW_PX });
   const next = root.querySelector<HTMLElement>('.gssc-section__resources-next')!;
   expect(next.classList.contains('text-gssc-dark-green')).toBe(true);
-  expect(next.classList.contains('border-gssc-dark-green')).toBe(true);
+  expect(next.classList.contains('border-0')).toBe(true);
+  expect(next.classList.contains('rounded')).toBe(true);
+  expect(next.classList.contains('bg-transparent')).toBe(true);
+  expect(next.classList.contains('hover:bg-gssc-gray')).toBe(true);
+  expect(next.querySelector('.nf.nf-md-chevron_right')).not.toBeNull();
 });
 // @relation(GSSC-PLLR-145, scope=range_end, role=Test)

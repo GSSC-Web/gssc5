@@ -8,6 +8,17 @@
 }
 
 .gssc-section__resource {
-  width: 8.5rem;
   height: 2.75rem;
+}
+
+/* Fit mode: fixed equal width. Carousel mode: flex-fill between arrows. */
+.gssc-section__resources[data-carousel='false'] .gssc-section__resource {
+  width: 8.5rem;
+  flex: 0 0 auto;
+}
+
+.gssc-section__resources[data-carousel='true'] .gssc-section__resource {
+  width: auto;
+  flex: 1 1 0;
+  min-width: 0;
 }
