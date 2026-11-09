@@ -9,6 +9,8 @@ export type PromptFieldConfig =
       label: string;
       required?: boolean;
       enabled?: boolean;
+      /** Initial value when the prompt opens. */
+      default?: string;
       inputType?: 'text' | 'email' | 'password';
       multiline?: boolean;
       peek?: boolean;
@@ -19,6 +21,8 @@ export type PromptFieldConfig =
       label: string;
       required?: boolean;
       enabled?: boolean;
+      /** Initial checked state when the prompt opens. */
+      default?: boolean;
     }
   | {
       kind: 'options';
@@ -27,6 +31,8 @@ export type PromptFieldConfig =
       choices: PromptChoice[];
       required?: boolean;
       enabled?: boolean;
+      /** Initial choice value when the prompt opens. */
+      default?: string;
     }
   | {
       kind: 'button';
@@ -42,6 +48,8 @@ export type PromptFieldConfig =
       required?: boolean;
       enabled?: boolean;
       accept?: string;
+      /** Initial file when the prompt opens. */
+      default?: File | null;
     }
   | {
       kind: 'options-list';
@@ -50,6 +58,8 @@ export type PromptFieldConfig =
       choices: PromptChoice[];
       required?: boolean;
       enabled?: boolean;
+      /** Initial choice value when the prompt opens. */
+      default?: string;
     };
 
 export type PromptValues = Record<string, unknown>;

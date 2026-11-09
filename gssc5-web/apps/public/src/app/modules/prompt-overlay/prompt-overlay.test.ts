@@ -165,7 +165,7 @@ test('GSSC-PLLR-112 Lexical', async () => {
   const dismiss = root.querySelector<HTMLElement>('.gssc-prompt-overlay__dismiss')!;
   expect(dismiss.classList.contains('bg-transparent')).toBe(true);
   expect(dismiss.classList.contains('text-gssc-dark-green')).toBe(true);
-  expect(dismiss.classList.contains('hover:text-gssc-gray')).toBe(true);
+  expect(dismiss.classList.contains('hover:bg-gssc-gray')).toBe(true);
   expect(dismiss.classList.contains('font-sans')).toBe(true);
 });
 // @relation(GSSC-PLLR-112, scope=range_end, role=Test)
@@ -176,8 +176,15 @@ test('GSSC-PLLR-113 Semantic', async () => {
   const root = await openWith(fixture, promptOverlay, {
     title: 'Configured title',
     fields: [
-      { kind: 'text', id: 'a', label: 'A' },
-      { kind: 'options-list', id: 'b', label: 'B', choices: [{ value: '1', label: 'One' }] },
+      { kind: 'text', id: 'a', label: 'A', default: 'Prefill' },
+      {
+        kind: 'options-list',
+        id: 'b',
+        label: 'B',
+        choices: [{ value: '1', label: 'One' }],
+        default: '1',
+      },
+      { kind: 'select', id: 's', label: 'S', default: true },
       { kind: 'button', id: 'c', label: 'Go', role: 'submit' },
     ],
   });
@@ -185,6 +192,13 @@ test('GSSC-PLLR-113 Semantic', async () => {
   expect(form.querySelector('gssc-prompt-text-field')).not.toBeNull();
   expect(form.querySelector('gssc-prompt-options-list-field')).not.toBeNull();
   expect(form.querySelector('gssc-prompt-button-field')).not.toBeNull();
+  expect(root.querySelector<HTMLInputElement>('.gssc-prompt-text-field__control')!.value).toBe(
+    'Prefill',
+  );
+  expect(
+    root.querySelector<HTMLSelectElement>('.gssc-prompt-options-list-field__control')!.value,
+  ).toBe('1');
+  expect(root.querySelector('.gssc-prompt-select-field')!.getAttribute('aria-pressed')).toBe('true');
 });
 // @relation(GSSC-PLLR-113, scope=range_end, role=Test)
 

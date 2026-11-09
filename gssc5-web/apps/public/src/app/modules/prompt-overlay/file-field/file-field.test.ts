@@ -30,6 +30,12 @@ test('GSSC-PLLR-128 Semantic', async () => {
   const { fixture, host, root } = await setup();
   expect(root.querySelector('input[type="file"]')).not.toBeNull();
   expect(root.querySelector('.gssc-prompt-file-field__label')?.textContent).toContain('Attachment');
+
+  const preset = new File(['hello'], 'note.txt', { type: 'text/plain' });
+  host.value.set(preset);
+  fixture.detectChanges();
+  expect(root.querySelector('.gssc-prompt-file-field__name')?.textContent?.trim()).toBe('note.txt');
+
   host.enabled.set(false);
   fixture.detectChanges();
   expect(root.querySelector<HTMLInputElement>('input[type="file"]')!.disabled).toBe(true);

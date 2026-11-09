@@ -38,6 +38,13 @@ test('GSSC-PLLR-131 Semantic', async () => {
   expect(root.querySelector('.gssc-prompt-options-list-field__label')?.textContent).toContain(
     'Reason',
   );
+
+  host.value.set('a');
+  fixture.detectChanges();
+  expect(
+    root.querySelector<HTMLSelectElement>('.gssc-prompt-options-list-field__control')!.value,
+  ).toBe('a');
+
   select.value = 'b';
   select.dispatchEvent(new Event('change'));
   fixture.detectChanges();

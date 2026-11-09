@@ -30,5 +30,10 @@
     (keydown.enter)="fieldSubmit.emit()"
     (keydown.escape)="fieldEscape.emit()"
   />
+  @if (value(); as file) {
+    <p class="gssc-prompt-file-field__name m-0 px-2 text-xs" [class.text-gssc-dark-green]="!invalid()" [class.text-red-500]="invalid()">
+      {{ file.name }}
+    </p>
+  }
 </div>
 <!-- @relation(GSSC-PLLR-129, GSSC-PLLR-130, scope=range_end, role=Implementation) -->

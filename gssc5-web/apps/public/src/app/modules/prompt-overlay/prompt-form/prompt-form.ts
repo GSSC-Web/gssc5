@@ -48,9 +48,13 @@ export class PromptForm {
       const next: PromptValues = {};
       for (const field of configs) {
         if (field.kind === 'button') continue;
-        if (field.kind === 'select') next[field.id] = false;
-        else if (field.kind === 'file') next[field.id] = null;
-        else next[field.id] = '';
+        if (field.kind === 'select') {
+          next[field.id] = field.default ?? false;
+        } else if (field.kind === 'file') {
+          next[field.id] = field.default ?? null;
+        } else {
+          next[field.id] = field.default ?? '';
+        }
       }
       this.values.set(next);
       this.invalidIds.set(new Set());

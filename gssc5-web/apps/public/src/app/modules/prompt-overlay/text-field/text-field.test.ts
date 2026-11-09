@@ -38,6 +38,10 @@ test('GSSC-PLLR-116 Semantic', async () => {
   expect(input.type).toBe('text');
   expect(root.querySelector('.gssc-prompt-text-field__label')?.textContent).toContain('Name');
 
+  host.value.set('Ada');
+  fixture.detectChanges();
+  expect(root.querySelector<HTMLInputElement>('.gssc-prompt-text-field__control')!.value).toBe('Ada');
+
   host.inputType.set('email');
   fixture.detectChanges();
   expect(root.querySelector<HTMLInputElement>('.gssc-prompt-text-field__control')!.type).toBe('email');
@@ -52,6 +56,9 @@ test('GSSC-PLLR-116 Semantic', async () => {
   host.multiline.set(true);
   fixture.detectChanges();
   expect(root.querySelector('textarea.gssc-prompt-text-field__control')).not.toBeNull();
+  expect(root.querySelector<HTMLTextAreaElement>('.gssc-prompt-text-field__control')!.value).toBe(
+    'Ada',
+  );
 
   host.enabled.set(false);
   fixture.detectChanges();

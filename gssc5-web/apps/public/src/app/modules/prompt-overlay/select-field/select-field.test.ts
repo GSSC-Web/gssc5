@@ -30,9 +30,14 @@ test('GSSC-PLLR-119 Semantic', async () => {
   const { fixture, host, root } = await setup();
   const control = root.querySelector<HTMLButtonElement>('.gssc-prompt-select-field')!;
   expect(control.getAttribute('aria-pressed')).toBe('false');
+
+  host.value.set(true);
+  fixture.detectChanges();
+  expect(root.querySelector('.gssc-prompt-select-field')!.getAttribute('aria-pressed')).toBe('true');
+
   control.click();
   fixture.detectChanges();
-  expect(host.value()).toBe(true);
+  expect(host.value()).toBe(false);
   expect(root.querySelector('.gssc-prompt-select-field__label')?.textContent).toContain('Notify');
   host.enabled.set(false);
   fixture.detectChanges();

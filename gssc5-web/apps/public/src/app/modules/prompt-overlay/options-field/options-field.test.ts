@@ -35,6 +35,11 @@ test('GSSC-PLLR-122 Semantic', async () => {
   const { fixture, host, root } = await setup();
   expect(root.querySelectorAll('input[type="radio"]').length).toBe(2);
   expect(root.querySelector('.gssc-prompt-options-field__label')?.textContent).toContain('Color');
+
+  host.value.set('red');
+  fixture.detectChanges();
+  expect(root.querySelectorAll<HTMLInputElement>('input[type="radio"]')[0]!.checked).toBe(true);
+
   root.querySelectorAll<HTMLInputElement>('input[type="radio"]')[1]!.click();
   fixture.detectChanges();
   expect(host.value()).toBe('blue');

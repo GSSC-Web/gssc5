@@ -984,13 +984,13 @@ RELATIONS:
 UID: GSSC-PLLR-72
 TITLE: Lexical
 STATEMENT: >>>
-The Header Site Search control SHALL use the dark-green theme token for its icon color, the white theme token for that icon color on hover, the white theme token for the open search presentation background, and the gray theme token for that presentation's border.
+The Header Site Search control SHALL use the dark-green theme token for its icon color, the white theme token for its background on hover, the white theme token for the open search presentation background, and the gray theme token for that presentation's border.
 <<<
 RATIONALE: >>>
-Icon and placeholder panel tokens keep search readable on the Header until the search widget defines its own presentation in GSSC5-47. White on hover marks the icon button as activatable.
+Icon and placeholder panel tokens keep search readable on the Header until the search widget defines its own presentation in GSSC5-47. White background on hover marks the icon button as activatable without changing the icon color.
 <<<
 COMMENT: >>>
-Hover color updated for GSSC5-27 icon-button hover rule.
+Hover uses background fill for GSSC5-27 icon-button hover rule.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -1489,13 +1489,13 @@ REVIEW_STATUS: Approved
 UID: GSSC-PLLR-112
 TITLE: Lexical
 STATEMENT: >>>
-The Prompt Overlay Dismiss control SHALL use the dark-green theme token for its symbol color on a transparent background, the gray theme token for its symbol color on hover, and the sans-serif theme font.
+The Prompt Overlay Dismiss control SHALL use the dark-green theme token for its symbol color on a transparent background, the gray theme token for its background on hover, and the sans-serif theme font.
 <<<
 RATIONALE: >>>
-Dark-green on a transparent control keeps Dismiss aligned with panel text. Gray on hover marks the icon button as activatable. A fuller color role map for overlay controls is not set yet beyond these token choices.
+Dark-green on a transparent control keeps Dismiss aligned with panel text. Gray background on hover marks the icon button as activatable without changing the symbol color. A fuller color role map for overlay controls is not set yet beyond these token choices.
 <<<
 COMMENT: >>>
-Proposed for owner review (GSSC5-27).
+Hover uses background fill for GSSC5-27 icon-button hover rule.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
@@ -1626,13 +1626,13 @@ TITLE: Text
 UID: GSSC-PLLR-116
 TITLE: Semantic
 STATEMENT: >>>
-The Prompt Overlay Text field SHALL accept visitor text entry with the input type checking the Prompt Overlay service configured for that field, including email checking when configured as email; obscure entered text when configured as a password; present a multiline entry when configured for long content; show its label; and honor enable and disable from that configuration.
+The Prompt Overlay Text field SHALL accept visitor text entry with the input type checking the Prompt Overlay service configured for that field, including email checking when configured as email; obscure entered text when configured as a password; present a multiline entry when configured for long content; show its label; start from the default text value when the Prompt Overlay service configures one; and honor enable and disable from that configuration.
 <<<
 RATIONALE: >>>
-Text is the entry field module for free-form and typed values in a prompt form. Type checking, password obscuring, and multiline layout are configuration of that module. Enable and disable gate interaction without removing the field.
+Text is the entry field module for free-form and typed values in a prompt form. Type checking, password obscuring, multiline layout, and an optional default value are configuration of that module. Enable and disable gate interaction without removing the field.
 <<<
 COMMENT: >>>
-Proposed for owner review (GSSC5-27).
+Default value support added for GSSC5-27.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
@@ -1683,13 +1683,13 @@ TITLE: Select
 UID: GSSC-PLLR-119
 TITLE: Semantic
 STATEMENT: >>>
-The Prompt Overlay Select field SHALL present a switch that toggles a checked or unchecked choice, show its label, and honor enable and disable from the Prompt Overlay service configuration.
+The Prompt Overlay Select field SHALL present a switch that toggles a checked or unchecked choice, show its label, start from the default checked state when the Prompt Overlay service configures one, and honor enable and disable from the Prompt Overlay service configuration.
 <<<
 RATIONALE: >>>
-Select is the switch-styled checkbox module for a prompt form. Enable and disable gate interaction without removing the field.
+Select is the switch-styled checkbox module for a prompt form. An optional default checked state seeds the switch when the prompt opens. Enable and disable gate interaction without removing the field.
 <<<
 COMMENT: >>>
-Proposed for owner review (GSSC5-27). Title Select; behavior is checkbox with switch appearance.
+Default value support added for GSSC5-27.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
@@ -1740,13 +1740,13 @@ TITLE: Options
 UID: GSSC-PLLR-122
 TITLE: Semantic
 STATEMENT: >>>
-The Prompt Overlay Options field SHALL present mutually exclusive choices as radio options, show a label for the field and for each choice, and honor enable and disable from the Prompt Overlay service configuration.
+The Prompt Overlay Options field SHALL present mutually exclusive choices as radio options, show a label for the field and for each choice, start from the default choice when the Prompt Overlay service configures one, and honor enable and disable from the Prompt Overlay service configuration.
 <<<
 RATIONALE: >>>
-Options is the radio-group module for a prompt form. Mutually exclusive choices keep a single selection. Enable and disable gate interaction without removing the field.
+Options is the radio-group module for a prompt form. Mutually exclusive choices keep a single selection. An optional default choice seeds the group when the prompt opens. Enable and disable gate interaction without removing the field.
 <<<
 COMMENT: >>>
-Proposed for owner review (GSSC5-27).
+Default value support added for GSSC5-27.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
@@ -1854,13 +1854,13 @@ TITLE: File
 UID: GSSC-PLLR-128
 TITLE: Semantic
 STATEMENT: >>>
-The Prompt Overlay File field SHALL let the visitor pick a file, show its label, and honor enable and disable from the Prompt Overlay service configuration.
+The Prompt Overlay File field SHALL let the visitor pick a file, show its label, start from the default file when the Prompt Overlay service configures one, and honor enable and disable from the Prompt Overlay service configuration.
 <<<
 RATIONALE: >>>
-File is the file-pick module for a prompt form. Enable and disable gate interaction without removing the field.
+File is the file-pick module for a prompt form. An optional default file seeds the field when the prompt opens. Enable and disable gate interaction without removing the field.
 <<<
 COMMENT: >>>
-Proposed for owner review (GSSC5-27).
+Default value support added for GSSC5-27.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
@@ -1911,13 +1911,13 @@ TITLE: Options List
 UID: GSSC-PLLR-131
 TITLE: Semantic
 STATEMENT: >>>
-The Prompt Overlay Options List field SHALL let the visitor choose one value from a configured list, show its label, and honor enable and disable from the Prompt Overlay service configuration.
+The Prompt Overlay Options List field SHALL let the visitor choose one value from a configured list, show its label, start from the default choice when the Prompt Overlay service configures one, and honor enable and disable from the Prompt Overlay service configuration.
 <<<
 RATIONALE: >>>
-Options List is the dropdown choose-one module for a prompt form. Enable and disable gate interaction without removing the field.
+Options List is the dropdown choose-one module for a prompt form. An optional default choice seeds the list when the prompt opens. Enable and disable gate interaction without removing the field.
 <<<
 COMMENT: >>>
-Proposed for owner review (GSSC5-27).
+Default value support added for GSSC5-27.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
