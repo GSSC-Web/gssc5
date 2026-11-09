@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { App } from './app';
 import { routes } from './app.routes';
 import { PromptOverlay } from './services/prompt-overlay/prompt-overlay';
+import { PublicError } from './services/public-error/public-error';
 import { UrgentAnnouncements } from './services/urgent-announcements';
 import { nativeElement, setupPublicComponent } from '../test-harness';
 
@@ -220,6 +221,31 @@ test('GSSC-PLLR-27 Lexical', async () => {
   expect(getComputedStyle(page).color).toBe(getComputedStyle(host).color);
 });
 // @relation(GSSC-PLLR-27, scope=range_end, role=Test)
+
+// @relation(GSSC-PLLR-96, scope=range_start, role=Test)
+test('GSSC-PLLR-96 Syntactic', async () => {
+  const { fixture, root } = await setupApp('/membership');
+  const page = root.querySelector('.gssc-page')!;
+  const host = page.querySelector('gssc-error');
+  expect(host).not.toBeNull();
+  expect(page.contains(host)).toBe(true);
+
+  const publicError = TestBed.inject(PublicError);
+  publicError.setContents({
+    kind: 'application',
+    name: 'Sample',
+    description: 'Sample description',
+    referenceNumber: 'GSSC-ERR-1',
+  });
+  fixture.detectChanges();
+  await fixture.whenStable();
+
+  const container = root.querySelector<HTMLElement>('.gssc-error')!;
+  expect(page.contains(container)).toBe(true);
+  expect(container.classList.contains('w-full')).toBe(true);
+});
+// @relation(GSSC-PLLR-96, scope=range_end, role=Test)
+
 
 // @relation(GSSC-PLLR-8, scope=range_start, role=Test)
 test('GSSC-PLLR-8 Home Page Route', async () => {

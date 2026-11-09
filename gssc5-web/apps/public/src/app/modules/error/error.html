@@ -1,0 +1,74 @@
+<!-- @relation(GSSC-PLLR-95, scope=range_start, role=Implementation) -->
+@if (contents(); as _error) {
+  <!-- @relation(GSSC-PLLR-96, scope=range_start, role=Implementation) -->
+  <!-- @relation(GSSC-PLLR-97, scope=range_start, role=Implementation) -->
+  <section
+    class="gssc-error w-full border border-gssc-gray bg-gssc-cream px-5 py-4 font-sans"
+    aria-label="Error"
+  >
+    <!-- @relation(GSSC-PLLR-97, scope=range_end, role=Implementation) -->
+    <!-- @relation(GSSC-PLLR-96, scope=range_end, role=Implementation) -->
+
+    @if (applicationContents(); as application) {
+      <!-- @relation(GSSC-PLLR-98, GSSC-PLLR-99, scope=range_start, role=Implementation) -->
+      <!-- @relation(GSSC-PLLR-100, scope=range_start, role=Implementation) -->
+      <div class="gssc-error__application flex w-full flex-col gap-2">
+        <p
+          class="gssc-error__application-name m-0 font-semibold text-gssc-dark-green"
+        >
+          {{ application.name }}
+        </p>
+        <p
+          class="gssc-error__application-description m-0 font-normal text-gssc-dark-brown"
+        >
+          {{ application.description }}
+        </p>
+        <p
+          class="gssc-error__application-reference m-0 font-normal text-gssc-dark-brown"
+        >
+          {{ application.referenceNumber }}
+        </p>
+        @if (showApplicationDebugging(application)) {
+          <pre
+            class="gssc-error__application-debugging m-0 overflow-x-auto whitespace-pre-wrap font-normal text-gssc-dark-brown"
+          >{{ application.debuggingInformation }}</pre>
+        }
+      </div>
+      <!-- @relation(GSSC-PLLR-100, scope=range_end, role=Implementation) -->
+      <!-- @relation(GSSC-PLLR-98, GSSC-PLLR-99, scope=range_end, role=Implementation) -->
+    }
+
+    @if (httpContents(); as http) {
+      <!-- @relation(GSSC-PLLR-101, GSSC-PLLR-102, scope=range_start, role=Implementation) -->
+      <!-- @relation(GSSC-PLLR-103, scope=range_start, role=Implementation) -->
+      <div class="gssc-error__http flex w-full flex-col gap-2">
+        <p class="gssc-error__http-code m-0 font-semibold text-gssc-dark-green">
+          {{ http.code }}
+        </p>
+        <p class="gssc-error__http-name m-0 font-semibold text-gssc-dark-green">
+          {{ http.name }}
+        </p>
+        <p
+          class="gssc-error__http-description m-0 font-normal text-gssc-dark-brown"
+        >
+          {{ http.description }}
+        </p>
+        @if (showHttpAdministratorDetails(http)) {
+          @if (http.requestInformation) {
+            <pre
+              class="gssc-error__http-request m-0 overflow-x-auto whitespace-pre-wrap font-normal text-gssc-dark-brown"
+            >{{ http.requestInformation }}</pre>
+          }
+          @if (http.responseInformation) {
+            <pre
+              class="gssc-error__http-response m-0 overflow-x-auto whitespace-pre-wrap font-normal text-gssc-dark-brown"
+            >{{ http.responseInformation }}</pre>
+          }
+        }
+      </div>
+      <!-- @relation(GSSC-PLLR-103, scope=range_end, role=Implementation) -->
+      <!-- @relation(GSSC-PLLR-101, GSSC-PLLR-102, scope=range_end, role=Implementation) -->
+    }
+  </section>
+}
+<!-- @relation(GSSC-PLLR-95, scope=range_end, role=Implementation) -->

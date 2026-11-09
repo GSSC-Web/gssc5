@@ -9,6 +9,8 @@ const NAME_KEY = 'gssc.memberDisplayName';
 export class MemberSession {
   readonly loggedIn = signal(false);
   readonly displayName = signal(readStored(NAME_KEY) ?? '');
+  /** Administrator visitor flag for public UI gates; backend role wiring is separate. */
+  readonly isAdministrator = signal(false);
 
   constructor() {
     void this.refresh();
@@ -62,6 +64,7 @@ export class MemberSession {
     writeStored(NAME_KEY, null);
     writeStored(LEGACY_TOKEN_KEY, null);
     this.loggedIn.set(false);
+    this.isAdministrator.set(false);
   }
 }
 

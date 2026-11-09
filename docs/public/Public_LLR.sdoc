@@ -1733,6 +1733,255 @@ REVIEW_STATUS: Approved
 [[/SECTION]]
 
 [[SECTION]]
+UID: GSSC-PLLR-ERROR
+TITLE: Public Error Container
+
+[[SECTION]]
+UID: GSSC-PLLR-ERROR-ELEMENT
+TITLE: Error Container
+
+[REQUIREMENT]
+UID: GSSC-PLLR-95
+TITLE: Semantic
+STATEMENT: >>>
+The Public Frontend Error Container SHALL present Application Error Contents or HTTP Error Contents for the current public error, and SHALL present neither when there is no public error.
+<<<
+RATIONALE: >>>
+The Error Container places error Contents on public pages when an error occurs. Application Error Contents and HTTP Error Contents are separate requirements. This requirement does not invent page-specific error copy beyond that container contract.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-24
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-48
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-96
+TITLE: Syntactic
+STATEMENT: >>>
+The Error Container SHALL appear inside the Page Outlet region of the App Root across the full width of that region when it presents error Contents.
+<<<
+RATIONALE: >>>
+Common public pages display error Contents in the page area. Filling the Page Outlet width keeps the Error Container edge-to-edge with that region as the viewport resizes.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-24
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-48
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-97
+TITLE: Lexical
+STATEMENT: >>>
+The Error Container SHALL use the cream theme token for its background and the gray theme token for its border.
+<<<
+RATIONALE: >>>
+Cream and gray theme tokens mark the Error Container against the white App Root without competing with Header or Footer chrome. A fuller color role map for errors is not set yet beyond these token choices.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-24
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-48
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-ERROR-APPLICATION-CONTENTS
+TITLE: Application Error Contents
+
+[REQUIREMENT]
+UID: GSSC-PLLR-98
+TITLE: Semantic
+STATEMENT: >>>
+When the Error Container presents Application Error Contents, those Contents SHALL display the error name, the error description, and the error reference number, and SHALL display debugging information when the visitor is a logged-in administrator and that debugging information is available.
+<<<
+RATIONALE: >>>
+Application Error Contents tell the visitor which application error occurred and how to refer to it. Debugging information helps a logged-in administrator diagnose the instance. This requirement does not set the name, description, reference format, or debugging payload.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-24
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-35
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-36
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-37
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-38
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-99
+TITLE: Syntactic
+STATEMENT: >>>
+When the Error Container presents Application Error Contents, the error name, error description, and error reference number SHALL appear in that order inside the Error Container, and debugging information SHALL appear after those fields when it is displayed.
+<<<
+RATIONALE: >>>
+Ordering name, description, and reference first keeps the visitor-facing summary readable before optional administrator debugging detail.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-24
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-35
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-36
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-37
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-38
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-100
+TITLE: Lexical
+STATEMENT: >>>
+When the Error Container presents Application Error Contents, the error name SHALL use a semibold weight and the dark-green theme token for its text color, and the error description, error reference number, and debugging information SHALL use a normal weight and the dark-brown theme token for their text color.
+<<<
+RATIONALE: >>>
+Semibold dark-green distinguishes the error name. Normal-weight dark-brown keeps supporting Application Error fields readable on the cream Error Container background. A fuller type scale is not set yet beyond these weight and token choices.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-24
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-35
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-36
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-37
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-38
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-ERROR-HTTP-CONTENTS
+TITLE: HTTP Error Contents
+
+[REQUIREMENT]
+UID: GSSC-PLLR-101
+TITLE: Semantic
+STATEMENT: >>>
+When the Error Container presents HTTP Error Contents, those Contents SHALL display the error code, the error name, and the error description, and SHALL display the request packet information and the response packet information when the visitor is a logged-in administrator and those packet details are available.
+<<<
+RATIONALE: >>>
+HTTP Error Contents tell the visitor which HTTP failure occurred. Request and response packet information help a logged-in administrator diagnose the failed exchange. This requirement does not set the code, name, description, or packet payloads.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-24
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-39
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-40
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-41
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-42
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-43
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-102
+TITLE: Syntactic
+STATEMENT: >>>
+When the Error Container presents HTTP Error Contents, the error code, error name, and error description SHALL appear in that order inside the Error Container, and the request packet information and response packet information SHALL appear after those fields when they are displayed.
+<<<
+RATIONALE: >>>
+Ordering code, name, and description first keeps the visitor-facing HTTP summary readable before optional administrator packet detail.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-24
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-39
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-40
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-41
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-42
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-43
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-103
+TITLE: Lexical
+STATEMENT: >>>
+When the Error Container presents HTTP Error Contents, the error code and error name SHALL use a semibold weight and the dark-green theme token for their text color, and the error description, request packet information, and response packet information SHALL use a normal weight and the dark-brown theme token for their text color.
+<<<
+RATIONALE: >>>
+Semibold dark-green distinguishes the HTTP status summary. Normal-weight dark-brown keeps supporting HTTP Error fields readable on the cream Error Container background. A fuller type scale is not set yet beyond these weight and token choices.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-24
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-39
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-40
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-41
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-42
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-43
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
 UID: GSSC-PLLR-PROMPT-OVERLAY
 TITLE: Public Prompt Overlay
 
