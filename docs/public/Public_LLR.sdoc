@@ -1415,10 +1415,10 @@ REVIEW_STATUS: Changed
 UID: GSSC-PLLR-84
 TITLE: Syntactic
 STATEMENT: >>>
-The Section Container SHALL fill the width of its page content area and SHALL stack the Section Contents it places in a vertical order.
+The Section Container SHALL fill the width of its page content area, stack the Section Contents it places in a vertical order, apply vertical padding on the Container, and keep internal spacing between the Section Header, Section Body, and Section Resources.
 <<<
 RATIONALE: >>>
-Full-width stacking keeps section Contents readable within the page content area as the viewport resizes. Page assembly chooses where Containers appear on a page.
+Full-width stacking keeps section Contents readable within the page content area as the viewport resizes. Vertical padding and spacing between Header, Body, and Resources separate those elements without crowding. Page assembly chooses where Containers appear on a page.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
@@ -1429,10 +1429,10 @@ REVIEW_STATUS: Changed
 UID: GSSC-PLLR-85
 TITLE: Lexical
 STATEMENT: >>>
-The Section Container SHALL use the cream theme token for its background, the gray theme token for its border, and the dark-green theme token for its default text, with a sans-serif typeface.
+The Section Container SHALL use the white theme token for its background, the gray theme token for its border, and the dark-green theme token for its default text, with a sans-serif typeface.
 <<<
 RATIONALE: >>>
-Theme tokens keep section presentation aligned with the organization palette on the white outermost shell. A fuller color role map for sections is not set yet beyond these token choices.
+White background keeps the section aligned with the outermost shell. Theme tokens keep presentation in the organization palette. A fuller color role map for sections is not set yet beyond these token choices.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
@@ -1477,10 +1477,10 @@ REVIEW_STATUS: Changed
 UID: GSSC-PLLR-88
 TITLE: Lexical
 STATEMENT: >>>
-The Section Header SHALL use a semibold weight and the dark-green theme token for its text color, at a size larger than the Section Body text.
+The Section Header SHALL use a semibold weight and the dark-green theme token for its text color, at a size two and one-half times the Section Body text size.
 <<<
 RATIONALE: >>>
-Semibold dark-green text larger than the body distinguishes the header within the Container. A fuller type scale is not set yet beyond this relative size and token choice.
+Semibold dark-green text at two and one-half times the body size distinguishes the header within the Container. A fuller type scale is not set yet beyond this relative size and token choice.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
@@ -1525,10 +1525,10 @@ REVIEW_STATUS: Changed
 UID: GSSC-PLLR-91
 TITLE: Lexical
 STATEMENT: >>>
-The Section Body SHALL use a normal weight and the dark-brown theme token for its text color.
+The Section Body SHALL use a normal weight and the black theme token for its text color.
 <<<
 RATIONALE: >>>
-Normal-weight dark-brown text keeps body copy readable on the cream Container background and distinct from the dark-green header. A fuller type scale is not set yet beyond this weight and token choice.
+Normal-weight black text keeps body copy readable on the white Container background and distinct from the dark-green header. A fuller type scale is not set yet beyond this weight and token choice.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
@@ -1545,10 +1545,10 @@ TITLE: Section Resources
 UID: GSSC-PLLR-92
 TITLE: Semantic
 STATEMENT: >>>
-The Section Resources SHALL display the name of each resource from the Section Contents when those Contents include resources, and selection of a resource SHALL open that resource.
+The Section Resources SHALL present each resource from the Section Contents as a Resource Button when those Contents include resources; selection of a Resource Button SHALL open that resource.
 <<<
 RATIONALE: >>>
-Resources accompany some sections. Showing each resource name and opening the selected resource lets the visitor reach related material. This requirement does not set the resource catalog.
+Resources accompany some sections. Equal Resource Buttons that open their targets let the visitor reach related material. This requirement does not set the resource catalog.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
@@ -1559,10 +1559,10 @@ REVIEW_STATUS: Changed
 UID: GSSC-PLLR-93
 TITLE: Syntactic
 STATEMENT: >>>
-The Section Resources SHALL appear below the Section Body inside the Section Container as a list when the Section Contents include resources.
+The Section Resources SHALL appear below the Section Body inside the Section Container when the Section Contents include resources; SHALL arrange equal-size Resource Buttons in a horizontal strip starting from the left; SHALL show four Resource Buttons on medium and larger viewports, three from extra-small up to below medium, and two below extra-small; and, when more resources exist than those visible slots, SHALL present a looping carousel with Resources Prev and Resources Next controls at the ends of the strip, slide animation when the strip moves, and movement of the carousel by Left Arrow, Right Arrow, H, and L while a Resource Button is focused.
 <<<
 RATIONALE: >>>
-A list below the body keeps resources grouped after the section text without interrupting the body.
+A horizontal strip below the body keeps resources grouped after the section text. Viewport slot counts keep buttons readable as the page resizes. Overflow uses a looping carousel with end controls and keyboard movement so every resource stays reachable without naming a layout framework.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
@@ -1573,15 +1573,159 @@ REVIEW_STATUS: Changed
 UID: GSSC-PLLR-94
 TITLE: Lexical
 STATEMENT: >>>
-The Section Resources SHALL use a normal weight and the dark-green theme token for their text color, with no underline except on hover.
+The Section Resources strip SHALL present Resource Buttons with shared width and height using the dark-green theme token for button text and border chrome on the white Container background.
 <<<
 RATIONALE: >>>
-Normal-weight dark-green text marks resources as activatable links on the cream Container background. Underline on hover marks selection without a default underline. A fuller color role map for links is not set yet beyond this token choice.
+Shared button chrome marks resources as equal controls rather than underline-only links. Dark-green tokens keep the strip aligned with the organization palette. A fuller button color role map is not set yet beyond these token choices.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-25
 REVIEW_STATUS: Changed
+
+[[SECTION]]
+UID: GSSC-PLLR-SECTION-RESOURCE-BUTTON
+TITLE: Resource Button
+
+[REQUIREMENT]
+UID: GSSC-PLLR-137
+TITLE: Semantic
+STATEMENT: >>>
+The Resource Button SHALL display the resource name from the Section Contents and SHALL open that resource's target when the visitor activates the button.
+<<<
+RATIONALE: >>>
+The button label identifies the resource; activation opens the related material. This requirement does not set the resource catalog.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-25
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-PLLR-138
+TITLE: Syntactic
+STATEMENT: >>>
+The Resource Button SHALL occupy one equal-size slot in the Section Resources horizontal strip and SHALL participate in carousel movement when the strip is a carousel.
+<<<
+RATIONALE: >>>
+Equal slots keep buttons aligned in the strip. Carousel participation keeps overflowing resources reachable.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-25
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-PLLR-139
+TITLE: Lexical
+STATEMENT: >>>
+The Resource Button SHALL use a shared width and height with the other Resource Buttons, a normal weight, the dark-green theme token for its text and border, and the white theme token for its background.
+<<<
+RATIONALE: >>>
+Shared size and dark-green chrome mark each resource as an equal hyperlink button on the white strip. A fuller button type scale is not set yet beyond these choices.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-25
+REVIEW_STATUS: Changed
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-SECTION-RESOURCES-PREV
+TITLE: Resources Prev
+
+[REQUIREMENT]
+UID: GSSC-PLLR-140
+TITLE: Semantic
+STATEMENT: >>>
+The Resources Prev control SHALL move the Section Resources carousel one step toward earlier resources when activated, wrapping from the first resource to the last.
+<<<
+RATIONALE: >>>
+Prev steps the looping strip backward so every resource stays reachable from the ends of the strip.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-25
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-PLLR-141
+TITLE: Syntactic
+STATEMENT: >>>
+The Resources Prev control SHALL appear at the start of the Section Resources strip when the strip is a carousel.
+<<<
+RATIONALE: >>>
+Placing Prev at the start of the strip marks the backward end of the carousel.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-25
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-PLLR-142
+TITLE: Lexical
+STATEMENT: >>>
+The Resources Prev control SHALL use the dark-green theme token for its text and border chrome.
+<<<
+RATIONALE: >>>
+Dark-green chrome keeps Prev aligned with Resource Buttons. A fuller control color map is not set yet beyond this token choice.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-25
+REVIEW_STATUS: Changed
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-SECTION-RESOURCES-NEXT
+TITLE: Resources Next
+
+[REQUIREMENT]
+UID: GSSC-PLLR-143
+TITLE: Semantic
+STATEMENT: >>>
+The Resources Next control SHALL move the Section Resources carousel one step toward later resources when activated, wrapping from the last resource to the first.
+<<<
+RATIONALE: >>>
+Next steps the looping strip forward so every resource stays reachable from the ends of the strip.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-25
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-PLLR-144
+TITLE: Syntactic
+STATEMENT: >>>
+The Resources Next control SHALL appear at the end of the Section Resources strip when the strip is a carousel.
+<<<
+RATIONALE: >>>
+Placing Next at the end of the strip marks the forward end of the carousel.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-25
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-PLLR-145
+TITLE: Lexical
+STATEMENT: >>>
+The Resources Next control SHALL use the dark-green theme token for its text and border chrome.
+<<<
+RATIONALE: >>>
+Dark-green chrome keeps Next aligned with Resource Buttons. A fuller control color map is not set yet beyond this token choice.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-25
+REVIEW_STATUS: Changed
+
+[[/SECTION]]
 
 [[/SECTION]]
 

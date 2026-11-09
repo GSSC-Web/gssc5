@@ -1,14 +1,9 @@
 import { Component } from '@angular/core';
 
 // Page contents belong to GSSC5-14–20/30. These stubs only resolve routes for the App Root.
+// HomePage lives in ./home/ (GSSC5-25 demo Section).
 
-// @relation(GSSC-PLLR-8, scope=range_start, role=Implementation)
-@Component({
-  selector: 'gssc-home-page',
-  template: '',
-})
-export class HomePage {}
-// @relation(GSSC-PLLR-8, scope=range_end, role=Implementation)
+export { HomePage } from './home/home';
 
 // @relation(GSSC-PLLR-9, scope=range_start, role=Implementation)
 @Component({

@@ -1,37 +1,71 @@
 <!-- @relation(GSSC-PLLR-83, GSSC-PLLR-84, scope=range_start, role=Implementation) -->
 <!-- @relation(GSSC-PLLR-85, scope=range_start, role=Implementation) -->
 <section
-  class="gssc-section flex w-full flex-col gap-3 border border-gssc-gray bg-gssc-cream px-4 py-3 font-sans text-gssc-dark-green"
+  class="gssc-section flex w-full flex-col gap-4 border border-gssc-gray bg-gssc-white px-4 py-5 font-sans text-gssc-dark-green"
 >
   <!-- @relation(GSSC-PLLR-85, scope=range_end, role=Implementation) -->
 
   @if (hasHeader(contents())) {
     <!-- @relation(GSSC-PLLR-86, GSSC-PLLR-87, GSSC-PLLR-88, scope=range_start, role=Implementation) -->
-    <h2 class="gssc-section__header m-0 text-xl font-semibold text-gssc-dark-green">
+    <h2 class="gssc-section__header m-0 font-semibold text-gssc-dark-green">
       {{ contents().header }}
     </h2>
     <!-- @relation(GSSC-PLLR-86, GSSC-PLLR-87, GSSC-PLLR-88, scope=range_end, role=Implementation) -->
   }
 
   <!-- @relation(GSSC-PLLR-89, GSSC-PLLR-90, GSSC-PLLR-91, scope=range_start, role=Implementation) -->
-  <div class="gssc-section__body m-0 font-normal text-gssc-dark-brown">
+  <div class="gssc-section__body m-0 text-base font-normal text-gssc-black">
     {{ contents().body }}
   </div>
   <!-- @relation(GSSC-PLLR-89, GSSC-PLLR-90, GSSC-PLLR-91, scope=range_end, role=Implementation) -->
 
   @if (hasResources(contents())) {
     <!-- @relation(GSSC-PLLR-92, GSSC-PLLR-93, GSSC-PLLR-94, scope=range_start, role=Implementation) -->
-    <ul class="gssc-section__resources m-0 flex list-none flex-col gap-1.5 p-0">
-      @for (resource of contents().resources!; track resource.href + resource.name) {
-        <li>
-          <a
-            class="gssc-section__resource font-normal text-gssc-dark-green no-underline hover:underline"
-            [href]="resource.href"
-            >{{ resource.name }}</a
-          >
-        </li>
+    <div
+      class="gssc-section__resources flex w-full items-center gap-2"
+      [attr.data-slot-band]="slotBand()"
+      [attr.data-carousel]="isCarousel() ? 'true' : 'false'"
+    >
+      @if (isCarousel()) {
+        <!-- @relation(GSSC-PLLR-141, GSSC-PLLR-142, scope=range_start, role=Implementation) -->
+        <button
+          type="button"
+          class="gssc-section__resources-prev shrink-0 cursor-pointer border border-gssc-dark-green bg-gssc-white px-2 py-1 font-sans text-gssc-dark-green"
+          aria-label="Previous resources"
+          (click)="stepPrev()"
+        >
+          Prev
+        </button>
+        <!-- @relation(GSSC-PLLR-141, GSSC-PLLR-142, scope=range_end, role=Implementation) -->
       }
-    </ul>
+
+      <div class="gssc-section__viewport min-w-0 flex-1 overflow-hidden">
+        <div class="gssc-section__track flex items-stretch justify-start gap-2">
+          @for (resource of visibleResources(); track $index + ':' + resource.href + resource.name) {
+            <!-- @relation(GSSC-PLLR-137, GSSC-PLLR-138, GSSC-PLLR-139, scope=range_start, role=Implementation) -->
+            <a
+              class="gssc-section__resource inline-flex shrink-0 items-center justify-center border border-gssc-dark-green bg-gssc-white px-2 text-center font-normal text-gssc-dark-green no-underline"
+              [href]="resource.href"
+              >{{ resource.name }}</a
+            >
+            <!-- @relation(GSSC-PLLR-137, GSSC-PLLR-138, GSSC-PLLR-139, scope=range_end, role=Implementation) -->
+          }
+        </div>
+      </div>
+
+      @if (isCarousel()) {
+        <!-- @relation(GSSC-PLLR-144, GSSC-PLLR-145, scope=range_start, role=Implementation) -->
+        <button
+          type="button"
+          class="gssc-section__resources-next shrink-0 cursor-pointer border border-gssc-dark-green bg-gssc-white px-2 py-1 font-sans text-gssc-dark-green"
+          aria-label="Next resources"
+          (click)="stepNext()"
+        >
+          Next
+        </button>
+        <!-- @relation(GSSC-PLLR-144, GSSC-PLLR-145, scope=range_end, role=Implementation) -->
+      }
+    </div>
     <!-- @relation(GSSC-PLLR-92, GSSC-PLLR-93, GSSC-PLLR-94, scope=range_end, role=Implementation) -->
   }
 </section>

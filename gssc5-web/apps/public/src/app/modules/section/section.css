@@ -1,0 +1,13 @@
+/* Header is 2.5× the Section Body text size (GSSC-PLLR-88). */
+.gssc-section__header {
+  font-size: 2.5em;
+}
+
+.gssc-section__track {
+  transition: transform 200ms ease;
+}
+
+.gssc-section__resource {
+  width: 8.5rem;
+  height: 2.75rem;
+}
