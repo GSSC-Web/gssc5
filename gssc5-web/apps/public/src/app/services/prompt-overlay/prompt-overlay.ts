@@ -59,6 +59,7 @@ export type PromptValues = Record<string, unknown>;
  * prompt open after a successful validation (software PoC no-op path).
  */
 export type PromptRequest = {
+  title: string;
   fields: PromptFieldConfig[];
   onSubmit?: (values: PromptValues) => boolean | void;
   onCancel?: () => void;
@@ -106,7 +107,7 @@ export class PromptOverlay {
   /** @deprecated Prefer enqueue / cancel; kept for transitional call sites. */
   open(): void {
     if (!this.isOpen()) {
-      this.enqueue({ fields: [] });
+      this.enqueue({ title: '', fields: [] });
     }
   }
 
@@ -119,6 +120,7 @@ export class PromptOverlay {
 /** Software-only contact form PoC (no LLR / no tests). Submit is a no-op. */
 export function contactPromptRequest(): PromptRequest {
   return {
+    title: 'Contact',
     fields: [
       { kind: 'text', id: 'name', label: 'Name', required: true },
       {

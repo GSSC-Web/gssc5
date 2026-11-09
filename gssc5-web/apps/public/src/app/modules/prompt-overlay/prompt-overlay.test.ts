@@ -13,7 +13,7 @@ const sampleFields: PromptFieldConfig[] = [
 ];
 
 function request(overrides: Partial<PromptRequest> = {}): PromptRequest {
-  return { fields: sampleFields, ...overrides };
+  return { title: 'Sample prompt', fields: sampleFields, ...overrides };
 }
 
 async function setupOverlay(): Promise<{
@@ -47,6 +47,7 @@ test('GSSC-PLLR-107 Semantic', async () => {
 
   let submitted: Record<string, unknown> | null = null;
   const openRoot = await openWith(fixture, promptOverlay, {
+    title: 'Sample prompt',
     fields: sampleFields,
     onSubmit: (values) => {
       submitted = values;
@@ -71,7 +72,9 @@ test('GSSC-PLLR-107 Semantic', async () => {
 
   await openWith(fixture, promptOverlay, request());
   expect(promptOverlay.isOpen()).toBe(true);
-  promptOverlay.enqueue(request({ fields: [{ kind: 'text', id: 'b', label: 'B' }] }));
+  promptOverlay.enqueue(
+    request({ title: 'Next', fields: [{ kind: 'text', id: 'b', label: 'B' }] }),
+  );
   nativeElement(fixture).querySelector<HTMLButtonElement>('.gssc-prompt-overlay__dismiss')!.click();
   fixture.detectChanges();
   await fixture.whenStable();
@@ -119,6 +122,7 @@ test('GSSC-PLLR-110 Semantic', async () => {
   const { fixture, promptOverlay } = await setupOverlay();
   let cancelled = false;
   const root = await openWith(fixture, promptOverlay, {
+    title: 'Cancel me',
     fields: sampleFields,
     onCancel: () => {
       cancelled = true;
@@ -146,10 +150,11 @@ test('GSSC-PLLR-110 Semantic', async () => {
 test('GSSC-PLLR-111 Syntactic', async () => {
   const { fixture, promptOverlay } = await setupOverlay();
   const root = await openWith(fixture, promptOverlay);
+  const header = root.querySelector<HTMLElement>('.gssc-prompt-overlay__header')!;
   const dismiss = root.querySelector<HTMLElement>('.gssc-prompt-overlay__dismiss')!;
-  expect(dismiss.classList.contains('absolute')).toBe(true);
-  expect(dismiss.classList.contains('end-3')).toBe(true);
-  expect(dismiss.classList.contains('top-3')).toBe(true);
+  expect(header.classList.contains('justify-between')).toBe(true);
+  expect(header.contains(dismiss)).toBe(true);
+  expect(dismiss.classList.contains('shrink-0')).toBe(true);
 });
 // @relation(GSSC-PLLR-111, scope=range_end, role=Test)
 
@@ -160,6 +165,7 @@ test('GSSC-PLLR-112 Lexical', async () => {
   const dismiss = root.querySelector<HTMLElement>('.gssc-prompt-overlay__dismiss')!;
   expect(dismiss.classList.contains('bg-transparent')).toBe(true);
   expect(dismiss.classList.contains('text-gssc-dark-green')).toBe(true);
+  expect(dismiss.classList.contains('hover:text-gssc-gray')).toBe(true);
   expect(dismiss.classList.contains('font-sans')).toBe(true);
 });
 // @relation(GSSC-PLLR-112, scope=range_end, role=Test)
@@ -168,12 +174,16 @@ test('GSSC-PLLR-112 Lexical', async () => {
 test('GSSC-PLLR-113 Semantic', async () => {
   const { fixture, promptOverlay } = await setupOverlay();
   const root = await openWith(fixture, promptOverlay, {
+    title: 'Configured title',
     fields: [
       { kind: 'text', id: 'a', label: 'A' },
       { kind: 'options-list', id: 'b', label: 'B', choices: [{ value: '1', label: 'One' }] },
       { kind: 'button', id: 'c', label: 'Go', role: 'submit' },
     ],
   });
+  expect(root.querySelector('.gssc-prompt-form__title')?.textContent?.trim()).toBe(
+    'Configured title',
+  );
   const form = root.querySelector('gssc-prompt-form')!;
   expect(form.querySelector('gssc-prompt-text-field')).not.toBeNull();
   expect(form.querySelector('gssc-prompt-options-list-field')).not.toBeNull();
@@ -203,3 +213,37 @@ test('GSSC-PLLR-115 Lexical', async () => {
   expect(panel.classList.contains('font-sans') || form.classList.contains('font-sans')).toBe(true);
 });
 // @relation(GSSC-PLLR-115, scope=range_end, role=Test)
+
+// @relation(GSSC-PLLR-134, scope=range_start, role=Test)
+test('GSSC-PLLR-134 Semantic', async () => {
+  const { fixture, promptOverlay } = await setupOverlay();
+  const root = await openWith(fixture, promptOverlay, request({ title: 'Ask the society' }));
+  expect(root.querySelector('.gssc-prompt-form__title')?.textContent?.trim()).toBe(
+    'Ask the society',
+  );
+});
+// @relation(GSSC-PLLR-134, scope=range_end, role=Test)
+
+// @relation(GSSC-PLLR-135, scope=range_start, role=Test)
+test('GSSC-PLLR-135 Syntactic', async () => {
+  const { fixture, promptOverlay } = await setupOverlay();
+  const root = await openWith(fixture, promptOverlay);
+  const header = root.querySelector<HTMLElement>('.gssc-prompt-overlay__header')!;
+  const title = root.querySelector<HTMLElement>('.gssc-prompt-form__title')!;
+  const dismiss = root.querySelector<HTMLElement>('.gssc-prompt-overlay__dismiss')!;
+  expect(header.contains(title)).toBe(true);
+  expect(header.contains(dismiss)).toBe(true);
+  expect(title.compareDocumentPosition(dismiss) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+});
+// @relation(GSSC-PLLR-135, scope=range_end, role=Test)
+
+// @relation(GSSC-PLLR-136, scope=range_start, role=Test)
+test('GSSC-PLLR-136 Lexical', async () => {
+  const { fixture, promptOverlay } = await setupOverlay();
+  const root = await openWith(fixture, promptOverlay);
+  const title = root.querySelector<HTMLElement>('.gssc-prompt-form__title')!;
+  expect(title.classList.contains('font-sans')).toBe(true);
+  expect(title.classList.contains('font-medium')).toBe(true);
+  expect(title.classList.contains('text-gssc-dark-green')).toBe(true);
+});
+// @relation(GSSC-PLLR-136, scope=range_end, role=Test)

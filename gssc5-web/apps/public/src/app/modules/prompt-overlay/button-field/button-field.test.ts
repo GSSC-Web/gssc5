@@ -55,6 +55,7 @@ test('GSSC-PLLR-127 Lexical', async () => {
   const button = root.querySelector<HTMLElement>('.gssc-prompt-button-field')!;
   expect(button.classList.contains('border-gssc-dark-green')).toBe(true);
   expect(button.classList.contains('bg-gssc-white')).toBe(true);
+  expect(button.classList.contains('hover:bg-gssc-gray')).toBe(true);
   expect(button.classList.contains('font-normal')).toBe(true);
   host.invalid.set(true);
   fixture.detectChanges();

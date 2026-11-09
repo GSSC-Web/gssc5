@@ -274,10 +274,10 @@ REVIEW_STATUS: Changed
 UID: GSSC-PLLR-105
 TITLE: Syntactic
 STATEMENT: >>>
-The Prompt Overlay host SHALL cover the viewport above the rest of the App Root when the Public Prompt Overlay is open, and SHALL not displace Header, Page Outlet, or Footer layout when the overlay is closed.
+The Prompt Overlay host SHALL overlay the Public Prompt Overlay on the App Root above the Header, Page Outlet, and Footer while leaving those App Root elements in place.
 <<<
 RATIONALE: >>>
-Covering the viewport keeps the Prompt Overlay above page content while open. Leaving layout undisturbed when closed keeps the public shell stable.
+Overlaying the prompt on the App Root keeps the prompt above page content without shifting Header, Page Outlet, or Footer layout.
 <<<
 COMMENT: >>>
 Proposed for owner review (GSSC5-27).
@@ -984,15 +984,24 @@ RELATIONS:
 UID: GSSC-PLLR-72
 TITLE: Lexical
 STATEMENT: >>>
-The Header Site Search control SHALL use the dark-green theme token for its icon color. When the search presentation is open, that presentation SHALL use the white theme token for its background and the gray theme token for its border.
+The Header Site Search control SHALL:
+- Use the dark-green theme token for its icon color.
+- Use the white theme token for that icon color on hover.
+- Use the white theme token for the open search presentation background and the gray theme token for that presentation's border.
 <<<
 RATIONALE: >>>
-Icon and placeholder panel tokens keep search readable on the Header until the search widget defines its own presentation in GSSC5-47.
+Icon and placeholder panel tokens keep search readable on the Header until the search widget defines its own presentation in GSSC5-47. White on hover marks the icon button as activatable.
+<<<
+COMMENT: >>>
+Hover color updated for GSSC5-27 icon-button hover rule.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-22
-REVIEW_STATUS: Approved
+CHANGE_DRIVER: >>>
+GSSC5-22
+GSSC5-27
+<<<
+REVIEW_STATUS: Changed
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-4
@@ -1392,7 +1401,13 @@ TITLE: Prompt Overlay
 UID: GSSC-PLLR-107
 TITLE: Semantic
 STATEMENT: >>>
-The Public Prompt Overlay SHALL present the current queued form from the Public Frontend Prompt Overlay service while open, SHALL omit its presentation when that queue is empty, SHALL advance to the next queued form when the current form completes or submits successfully, SHALL cancel the current form when the visitor dismisses it, SHALL move focus to the first form control when a form opens, and SHALL submit the current form when the visitor presses Enter in a field or activates a form submit control.
+The Public Prompt Overlay SHALL:
+- Present the current queued form from the Public Frontend Prompt Overlay service while open.
+- Omit its presentation when that queue is empty.
+- Advance to the next queued form when the current form completes or submits successfully.
+- Cancel the current form when the visitor dismisses it.
+- Move focus to the first form control when a form opens.
+- Submit the current form when the visitor presses Enter in a field or activates a form submit control.
 <<<
 RATIONALE: >>>
 No Public Frontend PIR defines a prompt overlay. The overlay is the Container for prompt forms whose Contents the Prompt Overlay service queues. Completing or submitting advances the queue until empty. Dismiss cancels only the current prompt. Focus and Enter submit keep interaction on the form. Contact Overlay remains a separate feature that reuses this overlay. Derived because PIRs do not define this overlay.
@@ -1409,7 +1424,12 @@ REVIEW_STATUS: Changed
 UID: GSSC-PLLR-108
 TITLE: Syntactic
 STATEMENT: >>>
-The Public Prompt Overlay SHALL cover the viewport with a backdrop while open, center a contents panel over that backdrop, scroll the panel independently of the page, size that panel to the full viewport below the small breakpoint and to at most three-quarters of the viewport width and height at the small breakpoint and above, and keep that panel within the viewport as the page resizes.
+The Public Prompt Overlay SHALL:
+- Cover the viewport with a backdrop while open.
+- Center a contents panel over that backdrop.
+- Scroll the panel independently of the page.
+- Size that panel to the full viewport below the small breakpoint and to at most three-quarters of the viewport width and height at the small breakpoint and above.
+- Keep that panel within the viewport as the page resizes.
 <<<
 RATIONALE: >>>
 Covering and centering focus the visitor on the prompt form. Independent panel scroll keeps the page behind still. Full-screen below small and a three-quarter cap at small and above fit narrow and wide viewports without naming a layout framework.
@@ -1449,7 +1469,9 @@ TITLE: Dismiss
 UID: GSSC-PLLR-110
 TITLE: Semantic
 STATEMENT: >>>
-The Prompt Overlay Dismiss control SHALL cancel the current prompt when the visitor activates it, and the Public Prompt Overlay SHALL cancel the current prompt when the visitor presses Escape.
+The Prompt Overlay Dismiss control and Escape key SHALL:
+- Cancel the current prompt when the visitor activates the Dismiss control.
+- Cancel the current prompt when the visitor presses Escape.
 <<<
 RATIONALE: >>>
 Dismiss and Escape are the cancel paths for the current queued form. Backdrop activation does not cancel. Overlay Contents and field behavior are separate requirements.
@@ -1483,10 +1505,10 @@ REVIEW_STATUS: Changed
 UID: GSSC-PLLR-112
 TITLE: Lexical
 STATEMENT: >>>
-The Prompt Overlay Dismiss control SHALL use the dark-green theme token for its symbol color on a transparent background, with the sans-serif theme font.
+The Prompt Overlay Dismiss control SHALL use the dark-green theme token for its symbol color on a transparent background, the gray theme token for its symbol color on hover, and the sans-serif theme font.
 <<<
 RATIONALE: >>>
-Dark-green on a transparent control keeps Dismiss aligned with panel text without adding a separate control fill. A fuller color role map for overlay controls is not set yet beyond this token choice.
+Dark-green on a transparent control keeps Dismiss aligned with panel text. Gray on hover marks the icon button as activatable. A fuller color role map for overlay controls is not set yet beyond these token choices.
 <<<
 COMMENT: >>>
 Proposed for owner review (GSSC5-27).
@@ -1506,10 +1528,12 @@ TITLE: Prompt Form
 UID: GSSC-PLLR-113
 TITLE: Semantic
 STATEMENT: >>>
-The Prompt Form SHALL hold the Prompt Overlay field modules the Prompt Overlay service configured for the current prompt.
+The Prompt Form SHALL:
+- Present the title the Prompt Overlay service configured for the current prompt.
+- Hold the Prompt Overlay field modules the Prompt Overlay service configured for the current prompt.
 <<<
 RATIONALE: >>>
-The form is the Container for the field modules of the current queued prompt. Each field module's behavior is a separate requirement.
+The form presents the configured title and field modules of the current queued prompt. Each field module's behavior is a separate requirement.
 <<<
 COMMENT: >>>
 Proposed for owner review (GSSC5-27).
@@ -1556,6 +1580,63 @@ REVIEW_STATUS: Changed
 [[/SECTION]]
 
 [[SECTION]]
+UID: GSSC-PLLR-PROMPT-FORM-TITLE
+TITLE: Title
+
+[REQUIREMENT]
+UID: GSSC-PLLR-134
+TITLE: Semantic
+STATEMENT: >>>
+The Prompt Form Title SHALL display the title text the Prompt Overlay service configured for the current prompt.
+<<<
+RATIONALE: >>>
+A configured title names the current prompt so the visitor knows which form is open. The Prompt Overlay service supplies that title with the form Contents.
+<<<
+COMMENT: >>>
+Proposed for owner review (GSSC5-27).
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-27
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-PLLR-135
+TITLE: Syntactic
+STATEMENT: >>>
+The Prompt Form Title SHALL appear at the start of the prompt container header, opposite the Prompt Overlay Dismiss control.
+<<<
+RATIONALE: >>>
+Placing the title in the header opposite Dismiss gives the title room and keeps Dismiss clear of the form fields.
+<<<
+COMMENT: >>>
+Proposed for owner review (GSSC5-27).
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-27
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-PLLR-136
+TITLE: Lexical
+STATEMENT: >>>
+The Prompt Form Title SHALL use the sans-serif theme font, a medium font weight, and the dark-green theme token for its text color.
+<<<
+RATIONALE: >>>
+Medium dark-green title text marks the prompt heading without competing with field labels.
+<<<
+COMMENT: >>>
+Proposed for owner review (GSSC5-27).
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-27
+REVIEW_STATUS: Changed
+
+[[/SECTION]]
+
+[[SECTION]]
 UID: GSSC-PLLR-PROMPT-TEXT-FIELD
 TITLE: Text
 
@@ -1563,7 +1644,12 @@ TITLE: Text
 UID: GSSC-PLLR-116
 TITLE: Semantic
 STATEMENT: >>>
-The Prompt Overlay Text field SHALL accept visitor text entry with the input type checking the Prompt Overlay service configured for that field, including email checking when configured as email, SHALL obscure entered text when configured as a password, SHALL present a multiline entry when configured for long content, SHALL show its label, and SHALL honor enable and disable from that configuration.
+The Prompt Overlay Text field SHALL:
+- Accept visitor text entry with the input type checking the Prompt Overlay service configured for that field, including email checking when configured as email.
+- Obscure entered text when configured as a password.
+- Present a multiline entry when configured for long content.
+- Show its label.
+- Honor enable and disable from that configuration.
 <<<
 RATIONALE: >>>
 Text is the entry field module for free-form and typed values in a prompt form. Type checking, password obscuring, and multiline layout are configuration of that module. Enable and disable gate interaction without removing the field.
@@ -1580,7 +1666,9 @@ REVIEW_STATUS: Changed
 UID: GSSC-PLLR-117
 TITLE: Syntactic
 STATEMENT: >>>
-The Prompt Overlay Text field SHALL place its label on the top border to the left of the entry, and SHALL participate in the Prompt Form grid.
+The Prompt Overlay Text field SHALL:
+- Place its label on the top border to the left of the entry.
+- Participate in the Prompt Form grid.
 <<<
 RATIONALE: >>>
 Entry-style labels sit on the top border so the field remains compact in the form grid.
@@ -1620,7 +1708,10 @@ TITLE: Select
 UID: GSSC-PLLR-119
 TITLE: Semantic
 STATEMENT: >>>
-The Prompt Overlay Select field SHALL present a switch that toggles a checked or unchecked choice, SHALL show its label, and SHALL honor enable and disable from the Prompt Overlay service configuration.
+The Prompt Overlay Select field SHALL:
+- Present a switch that toggles a checked or unchecked choice.
+- Show its label.
+- Honor enable and disable from the Prompt Overlay service configuration.
 <<<
 RATIONALE: >>>
 Select is the switch-styled checkbox module for a prompt form. Enable and disable gate interaction without removing the field.
@@ -1637,7 +1728,9 @@ REVIEW_STATUS: Changed
 UID: GSSC-PLLR-120
 TITLE: Syntactic
 STATEMENT: >>>
-The Prompt Overlay Select field SHALL place its label inside the field border and SHALL participate in the Prompt Form grid.
+The Prompt Overlay Select field SHALL:
+- Place its label inside the field border.
+- Participate in the Prompt Form grid.
 <<<
 RATIONALE: >>>
 Switch-style labels sit inside the border so the control reads as one unit in the form grid.
@@ -1677,7 +1770,10 @@ TITLE: Options
 UID: GSSC-PLLR-122
 TITLE: Semantic
 STATEMENT: >>>
-The Prompt Overlay Options field SHALL present mutually exclusive choices as radio options, SHALL show a label for the field and for each choice, and SHALL honor enable and disable from the Prompt Overlay service configuration.
+The Prompt Overlay Options field SHALL:
+- Present mutually exclusive choices as radio options.
+- Show a label for the field and for each choice.
+- Honor enable and disable from the Prompt Overlay service configuration.
 <<<
 RATIONALE: >>>
 Options is the radio-group module for a prompt form. Mutually exclusive choices keep a single selection. Enable and disable gate interaction without removing the field.
@@ -1694,7 +1790,10 @@ REVIEW_STATUS: Changed
 UID: GSSC-PLLR-123
 TITLE: Syntactic
 STATEMENT: >>>
-The Prompt Overlay Options field SHALL place its field label on the top border to the left, arrange choice labels with their radio controls, and SHALL participate in the Prompt Form grid.
+The Prompt Overlay Options field SHALL:
+- Place its field label on the top border to the left.
+- Arrange choice labels with their radio controls.
+- Participate in the Prompt Form grid.
 <<<
 RATIONALE: >>>
 Entry-style field labels and inline choice labels keep Options readable in the form grid.
@@ -1734,7 +1833,11 @@ TITLE: Button
 UID: GSSC-PLLR-125
 TITLE: Semantic
 STATEMENT: >>>
-The Prompt Overlay Button field SHALL present an activatable control within the Prompt Form, SHALL perform the submit role when the Prompt Overlay service configures it as a submit control, SHALL show its label, and SHALL honor enable and disable from that configuration.
+The Prompt Overlay Button field SHALL:
+- Present an activatable control within the Prompt Form.
+- Perform the submit role when the Prompt Overlay service configures it as a submit control.
+- Show its label.
+- Honor enable and disable from that configuration.
 <<<
 RATIONALE: >>>
 Button is the activatable control module for a prompt form, including submit when configured. Enable and disable gate interaction without removing the control.
@@ -1751,7 +1854,9 @@ REVIEW_STATUS: Changed
 UID: GSSC-PLLR-126
 TITLE: Syntactic
 STATEMENT: >>>
-The Prompt Overlay Button field SHALL place its label inside the control and SHALL participate in the Prompt Form grid.
+The Prompt Overlay Button field SHALL:
+- Place its label inside the control.
+- Participate in the Prompt Form grid.
 <<<
 RATIONALE: >>>
 An in-control label keeps the Button a single activatable unit in the form grid.
@@ -1768,10 +1873,10 @@ REVIEW_STATUS: Changed
 UID: GSSC-PLLR-127
 TITLE: Lexical
 STATEMENT: >>>
-The Prompt Overlay Button field SHALL use the dark-green theme token for its border and for a normal-weight label, the white theme token for its fill when enabled and the gray theme token for its fill when disabled, the sans-serif theme font, and the red theme presentation for border, label, and content after failed form validation until the visitor modifies the field.
+The Prompt Overlay Button field SHALL use the dark-green theme token for its border and for a normal-weight label, the white theme token for its fill when enabled and the gray theme token for its fill when disabled or hovered, the sans-serif theme font, and the red theme presentation for border, label, and content after failed form validation until the visitor modifies the field.
 <<<
 RATIONALE: >>>
-Shared control chrome keeps Button aligned with other prompt fields. Red after failed validation marks the control until the visitor interacts again when validation applies.
+Shared control chrome keeps Button aligned with other prompt fields. Gray on hover marks the control as activatable. Red after failed validation marks the control until the visitor interacts again when validation applies.
 <<<
 COMMENT: >>>
 Proposed for owner review (GSSC5-27).
@@ -1791,7 +1896,10 @@ TITLE: File
 UID: GSSC-PLLR-128
 TITLE: Semantic
 STATEMENT: >>>
-The Prompt Overlay File field SHALL let the visitor pick a file, SHALL show its label, and SHALL honor enable and disable from the Prompt Overlay service configuration.
+The Prompt Overlay File field SHALL:
+- Let the visitor pick a file.
+- Show its label.
+- Honor enable and disable from the Prompt Overlay service configuration.
 <<<
 RATIONALE: >>>
 File is the file-pick module for a prompt form. Enable and disable gate interaction without removing the field.
@@ -1808,7 +1916,9 @@ REVIEW_STATUS: Changed
 UID: GSSC-PLLR-129
 TITLE: Syntactic
 STATEMENT: >>>
-The Prompt Overlay File field SHALL place its label on the top border to the left of the file control, and SHALL participate in the Prompt Form grid.
+The Prompt Overlay File field SHALL:
+- Place its label on the top border to the left of the file control.
+- Participate in the Prompt Form grid.
 <<<
 RATIONALE: >>>
 Entry-style labels sit on the top border so the File field remains compact in the form grid.
@@ -1848,7 +1958,10 @@ TITLE: Options List
 UID: GSSC-PLLR-131
 TITLE: Semantic
 STATEMENT: >>>
-The Prompt Overlay Options List field SHALL let the visitor choose one value from a configured list, SHALL show its label, and SHALL honor enable and disable from the Prompt Overlay service configuration.
+The Prompt Overlay Options List field SHALL:
+- Let the visitor choose one value from a configured list.
+- Show its label.
+- Honor enable and disable from the Prompt Overlay service configuration.
 <<<
 RATIONALE: >>>
 Options List is the dropdown choose-one module for a prompt form. Enable and disable gate interaction without removing the field.
@@ -1865,7 +1978,9 @@ REVIEW_STATUS: Changed
 UID: GSSC-PLLR-132
 TITLE: Syntactic
 STATEMENT: >>>
-The Prompt Overlay Options List field SHALL place its label on the top border to the left of the list control, and SHALL participate in the Prompt Form grid.
+The Prompt Overlay Options List field SHALL:
+- Place its label on the top border to the left of the list control.
+- Participate in the Prompt Form grid.
 <<<
 RATIONALE: >>>
 Entry-style labels sit on the top border so the Options List field remains compact in the form grid.
