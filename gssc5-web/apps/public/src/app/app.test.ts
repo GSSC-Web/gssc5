@@ -225,10 +225,11 @@ test('GSSC-PLLR-27 Lexical', async () => {
 // @relation(GSSC-PLLR-96, scope=range_start, role=Test)
 test('GSSC-PLLR-96 Syntactic', async () => {
   const { fixture, root } = await setupApp('/membership');
-  const page = root.querySelector('.gssc-page')!;
+  const page = root.querySelector<HTMLElement>('.gssc-page')!;
   const host = page.querySelector('gssc-error');
   expect(host).not.toBeNull();
   expect(page.contains(host)).toBe(true);
+  expect(getComputedStyle(page).position).toBe('relative');
 
   const publicError = TestBed.inject(PublicError);
   publicError.setContents({
@@ -242,7 +243,14 @@ test('GSSC-PLLR-96 Syntactic', async () => {
 
   const container = root.querySelector<HTMLElement>('.gssc-error')!;
   expect(page.contains(container)).toBe(true);
+  expect(container.classList.contains('absolute')).toBe(true);
+  expect(container.classList.contains('bottom-0')).toBe(true);
+  expect(container.classList.contains('right-0')).toBe(true);
   expect(container.classList.contains('w-full')).toBe(true);
+  expect(container.classList.contains('max-h-[33.333vh]')).toBe(true);
+  expect(container.classList.contains('overflow-y-auto')).toBe(true);
+  expect(container.classList.contains('sm:w-max')).toBe(true);
+  expect(container.classList.contains('sm:max-w-[25vw]')).toBe(true);
 });
 // @relation(GSSC-PLLR-96, scope=range_end, role=Test)
 

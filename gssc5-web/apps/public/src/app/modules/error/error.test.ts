@@ -99,8 +99,9 @@ test('GSSC-PLLR-95 Semantic', async () => {
 test('GSSC-PLLR-97 Lexical', async () => {
   const { root } = await renderApplication();
   const container = root.querySelector<HTMLElement>('.gssc-error')!;
-  expect(container.classList.contains('bg-gssc-cream')).toBe(true);
-  expect(container.classList.contains('border-gssc-gray')).toBe(true);
+  expect(container.classList.contains('bg-gssc-light-red')).toBe(true);
+  expect(container.classList.contains('border-gssc-dark-red')).toBe(true);
+  expect(container.classList.contains('text-gssc-dark-red')).toBe(true);
 });
 // @relation(GSSC-PLLR-97, scope=range_end, role=Test)
 
@@ -122,7 +123,10 @@ test('GSSC-PLLR-98 Semantic', async () => {
   memberSession.isAdministrator.set(true);
   fixture.detectChanges();
   await fixture.whenStable();
-  expect(root.querySelector('.gssc-error__application-debugging')!.textContent?.trim()).toBe(
+  const debugging = root.querySelector<HTMLDetailsElement>('.gssc-error__application-debugging')!;
+  expect(debugging).not.toBeNull();
+  expect(debugging.open).toBe(false);
+  expect(debugging.querySelector('pre')!.textContent?.trim()).toBe(
     sampleApplication.debuggingInformation,
   );
 });
@@ -148,10 +152,10 @@ test('GSSC-PLLR-100 Lexical', async () => {
   const reference = root.querySelector<HTMLElement>('.gssc-error__application-reference')!;
   const debugging = root.querySelector<HTMLElement>('.gssc-error__application-debugging')!;
   expect(name.classList.contains('font-semibold')).toBe(true);
-  expect(name.classList.contains('text-gssc-dark-green')).toBe(true);
+  expect(name.classList.contains('text-gssc-dark-red')).toBe(true);
   for (const field of [description, reference, debugging]) {
     expect(field.classList.contains('font-normal')).toBe(true);
-    expect(field.classList.contains('text-gssc-dark-brown')).toBe(true);
+    expect(field.classList.contains('text-gssc-dark-red')).toBe(true);
   }
 });
 // @relation(GSSC-PLLR-100, scope=range_end, role=Test)
@@ -171,12 +175,12 @@ test('GSSC-PLLR-101 Semantic', async () => {
   memberSession.isAdministrator.set(true);
   fixture.detectChanges();
   await fixture.whenStable();
-  expect(root.querySelector('.gssc-error__http-request')!.textContent?.trim()).toBe(
-    sampleHttp.requestInformation,
-  );
-  expect(root.querySelector('.gssc-error__http-response')!.textContent?.trim()).toBe(
-    sampleHttp.responseInformation,
-  );
+  const request = root.querySelector<HTMLDetailsElement>('.gssc-error__http-request')!;
+  const response = root.querySelector<HTMLDetailsElement>('.gssc-error__http-response')!;
+  expect(request.open).toBe(false);
+  expect(response.open).toBe(false);
+  expect(request.querySelector('pre')!.textContent?.trim()).toBe(sampleHttp.requestInformation);
+  expect(response.querySelector('pre')!.textContent?.trim()).toBe(sampleHttp.responseInformation);
 });
 // @relation(GSSC-PLLR-101, scope=range_end, role=Test)
 
@@ -203,11 +207,110 @@ test('GSSC-PLLR-103 Lexical', async () => {
   const response = root.querySelector<HTMLElement>('.gssc-error__http-response')!;
   for (const field of [code, name]) {
     expect(field.classList.contains('font-semibold')).toBe(true);
-    expect(field.classList.contains('text-gssc-dark-green')).toBe(true);
+    expect(field.classList.contains('text-gssc-dark-red')).toBe(true);
   }
   for (const field of [description, request, response]) {
     expect(field.classList.contains('font-normal')).toBe(true);
-    expect(field.classList.contains('text-gssc-dark-brown')).toBe(true);
+    expect(field.classList.contains('text-gssc-dark-red')).toBe(true);
   }
 });
 // @relation(GSSC-PLLR-103, scope=range_end, role=Test)
+
+// @relation(GSSC-PLLR-146, scope=range_start, role=Test)
+test('GSSC-PLLR-146 Semantic', async () => {
+  const { fixture, publicError, root } = await renderApplication();
+  expect(root.querySelector('.gssc-error')).not.toBeNull();
+  root.querySelector<HTMLButtonElement>('.gssc-error__dismiss')!.click();
+  fixture.detectChanges();
+  await fixture.whenStable();
+  expect(root.querySelector('.gssc-error')).toBeNull();
+  expect(publicError.contents()).toBeNull();
+});
+// @relation(GSSC-PLLR-146, scope=range_end, role=Test)
+
+// @relation(GSSC-PLLR-147, scope=range_start, role=Test)
+test('GSSC-PLLR-147 Syntactic', async () => {
+  const prior = document.createElement('button');
+  prior.type = 'button';
+  prior.textContent = 'Prior';
+  document.body.appendChild(prior);
+  prior.focus();
+  expect(document.activeElement).toBe(prior);
+
+  const { fixture, root } = await renderApplication();
+  const chrome = root.querySelector('.gssc-error__chrome')!;
+  const dismiss = root.querySelector('.gssc-error__dismiss')!;
+  expect(chrome.contains(dismiss)).toBe(true);
+  expect(
+    [...chrome.children].at(-1)?.classList.contains('gssc-error__dismiss'),
+  ).toBe(true);
+
+  const panel = root.querySelector<HTMLElement>('.gssc-error')!;
+  await fixture.whenStable();
+  expect(document.activeElement).toBe(panel);
+
+  panel.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+  fixture.detectChanges();
+  await fixture.whenStable();
+  expect(root.querySelector('.gssc-error')).toBeNull();
+  await Promise.resolve();
+  expect(document.activeElement).toBe(prior);
+  prior.remove();
+});
+// @relation(GSSC-PLLR-147, scope=range_end, role=Test)
+
+// @relation(GSSC-PLLR-148, scope=range_start, role=Test)
+test('GSSC-PLLR-148 Lexical', async () => {
+  const { root } = await renderApplication();
+  const dismiss = root.querySelector<HTMLElement>('.gssc-error__dismiss')!;
+  expect(dismiss.querySelector('.nf-md-close')).not.toBeNull();
+  expect(dismiss.classList.contains('bg-transparent')).toBe(true);
+  expect(dismiss.classList.contains('rounded')).toBe(true);
+  expect(dismiss.classList.contains('text-gssc-gray')).toBe(true);
+  expect(dismiss.classList.contains('hover:bg-gssc-dark-red')).toBe(true);
+  expect(dismiss.classList.contains('hover:text-gssc-white')).toBe(true);
+});
+// @relation(GSSC-PLLR-148, scope=range_end, role=Test)
+
+// @relation(GSSC-PLLR-149, scope=range_start, role=Test)
+test('GSSC-PLLR-149 Semantic', async () => {
+  const { fixture, publicError, root } = await renderApplication();
+  root.querySelector<HTMLButtonElement>('.gssc-error__report')!.click();
+  fixture.detectChanges();
+  await fixture.whenStable();
+  expect(root.querySelector('.gssc-error')).toBeNull();
+  expect(publicError.contents()).toBeNull();
+});
+// @relation(GSSC-PLLR-149, scope=range_end, role=Test)
+
+// @relation(GSSC-PLLR-150, scope=range_start, role=Test)
+test('GSSC-PLLR-150 Syntactic', async () => {
+  const { root } = await renderApplication();
+  const chrome = root.querySelector('.gssc-error__chrome')!;
+  const report = root.querySelector('.gssc-error__report')!;
+  const dismiss = root.querySelector('.gssc-error__dismiss')!;
+  expect(chrome.contains(report)).toBe(true);
+  expect([...chrome.children][0]?.classList.contains('gssc-error__report')).toBe(true);
+  expect(
+    report.compareDocumentPosition(dismiss) & Node.DOCUMENT_POSITION_FOLLOWING,
+  ).toBeTruthy();
+});
+// @relation(GSSC-PLLR-150, scope=range_end, role=Test)
+
+// @relation(GSSC-PLLR-151, scope=range_start, role=Test)
+test('GSSC-PLLR-151 Lexical', async () => {
+  const { root } = await renderApplication();
+  const report = root.querySelector<HTMLElement>('.gssc-error__report')!;
+  const dismiss = root.querySelector<HTMLElement>('.gssc-error__dismiss')!;
+  for (const cls of [
+    'bg-transparent',
+    'rounded',
+    'text-gssc-gray',
+    'hover:bg-gssc-dark-red',
+    'hover:text-gssc-white',
+  ]) {
+    expect(report.classList.contains(cls)).toBe(true);
+    expect(dismiss.classList.contains(cls)).toBe(true);
+  }
+});
+// @relation(GSSC-PLLR-151, scope=range_end, role=Test)
