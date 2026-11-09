@@ -13,18 +13,18 @@ import { PromptForm } from './prompt-form/prompt-form';
 export class PromptOverlayView {
   protected readonly promptOverlay = inject(PromptOverlayState);
 
-  // @relation(GSSC-PLLR-107, GSSC-PLLR-110, scope=range_start, role=Implementation)
-  protected dismiss(): void {
-    this.promptOverlay.cancel();
-  }
-
   protected onSubmitted(values: PromptValues): void {
     this.promptOverlay.submit(values);
+  }
+
+  // @relation(GSSC-PLLR-110, scope=range_start, role=Implementation)
+  protected dismiss(): void {
+    this.promptOverlay.cancel();
   }
 
   @HostListener('document:keydown.escape')
   protected onEscape(): void {
     if (this.promptOverlay.isOpen()) this.dismiss();
   }
-  // @relation(GSSC-PLLR-107, GSSC-PLLR-110, scope=range_end, role=Implementation)
+  // @relation(GSSC-PLLR-110, scope=range_end, role=Implementation)
 }

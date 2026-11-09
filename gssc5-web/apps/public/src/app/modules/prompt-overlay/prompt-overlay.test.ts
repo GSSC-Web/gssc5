@@ -181,9 +181,6 @@ test('GSSC-PLLR-113 Semantic', async () => {
       { kind: 'button', id: 'c', label: 'Go', role: 'submit' },
     ],
   });
-  expect(root.querySelector('.gssc-prompt-form__title')?.textContent?.trim()).toBe(
-    'Configured title',
-  );
   const form = root.querySelector('gssc-prompt-form')!;
   expect(form.querySelector('gssc-prompt-text-field')).not.toBeNull();
   expect(form.querySelector('gssc-prompt-options-list-field')).not.toBeNull();

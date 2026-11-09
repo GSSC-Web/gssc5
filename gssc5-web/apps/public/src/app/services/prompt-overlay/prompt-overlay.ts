@@ -54,14 +54,11 @@ export type PromptFieldConfig =
 
 export type PromptValues = Record<string, unknown>;
 
-/**
- * A queued prompt form. `onSubmit` may return `false` to keep the current
- * prompt open after a successful validation (software PoC no-op path).
- */
+/** A queued prompt form. Successful submit always advances the queue. */
 export type PromptRequest = {
   title: string;
   fields: PromptFieldConfig[];
-  onSubmit?: (values: PromptValues) => boolean | void;
+  onSubmit?: (values: PromptValues) => void;
   onCancel?: () => void;
 };
 
@@ -72,6 +69,7 @@ export type PromptRequest = {
 export class PromptOverlay {
   private readonly queue = signal<PromptRequest[]>([]);
 
+  // @relation(GSSC-PLLR-107, scope=range_start, role=Implementation)
   readonly current = computed(() => this.queue()[0] ?? null);
   readonly isOpen = computed(() => this.current() !== null);
 
@@ -84,15 +82,11 @@ export class PromptOverlay {
     this.queue.update((items) => items.slice(1));
   }
 
-  /**
-   * After the form validates, invoke `onSubmit`. Advance the queue unless
-   * `onSubmit` returns `false`.
-   */
+  /** After the form validates, invoke `onSubmit` and advance the queue. */
   submit(values: PromptValues): void {
     const current = this.current();
     if (!current) return;
-    const result = current.onSubmit?.(values);
-    if (result === false) return;
+    current.onSubmit?.(values);
     this.complete();
   }
 
@@ -103,6 +97,7 @@ export class PromptOverlay {
     current.onCancel?.();
     this.complete();
   }
+  // @relation(GSSC-PLLR-107, scope=range_end, role=Implementation)
 
   /** @deprecated Prefer enqueue / cancel; kept for transitional call sites. */
   open(): void {
@@ -117,7 +112,7 @@ export class PromptOverlay {
   }
 }
 
-/** Software-only contact form PoC (no LLR / no tests). Submit is a no-op. */
+/** Software-only contact form PoC (no LLR / no tests). Submit closes with no backend. */
 export function contactPromptRequest(): PromptRequest {
   return {
     title: 'Contact',
@@ -151,6 +146,5 @@ export function contactPromptRequest(): PromptRequest {
       },
       { kind: 'button', id: 'submit', label: 'Submit', role: 'submit' },
     ],
-    onSubmit: () => false,
   };
 }

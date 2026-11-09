@@ -58,7 +58,6 @@ export class PromptForm {
     });
   }
 
-  // @relation(GSSC-PLLR-113, scope=range_start, role=Implementation)
   protected setValue(id: string, value: unknown): void {
     this.values.update((current) => ({ ...current, [id]: value }));
     if (this.invalidIds().has(id)) {
@@ -139,5 +138,4 @@ export class PromptForm {
     ) as HTMLElement | null;
     control?.focus();
   }
-  // @relation(GSSC-PLLR-113, scope=range_end, role=Implementation)
 }
