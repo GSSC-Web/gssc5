@@ -1,6 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 import { nativeElement, textContent } from '../../../test-harness';
-import { Section, type SectionContents, type ResourceSlotBand } from './section';
+import {
+  RESOURCE_ARROW_CHROME_RESERVE_PX,
+  RESOURCE_BUTTON_GAP_PX,
+  RESOURCE_BUTTON_WIDTH_PX,
+  Section,
+  type SectionContents,
+} from './section';
 
 const sampleWithAll: SectionContents = {
   header: 'Society Purpose',
@@ -27,9 +33,16 @@ const manyResources: SectionContents = {
   ],
 };
 
+/** Wide enough for five equal buttons without overflow. */
+const WIDE_FIT_PX =
+  5 * RESOURCE_BUTTON_WIDTH_PX + 4 * RESOURCE_BUTTON_GAP_PX + RESOURCE_ARROW_CHROME_RESERVE_PX;
+/** Narrow enough that five buttons overflow and only two carousel slots fit. */
+const NARROW_OVERFLOW_PX =
+  2 * RESOURCE_BUTTON_WIDTH_PX + RESOURCE_BUTTON_GAP_PX + RESOURCE_ARROW_CHROME_RESERVE_PX - 1;
+
 async function setupSection(
   contents: SectionContents,
-  options?: { slotBand?: ResourceSlotBand },
+  options?: { containerWidthPx?: number },
 ) {
   TestBed.resetTestingModule();
   await TestBed.configureTestingModule({
@@ -38,8 +51,9 @@ async function setupSection(
   const fixture = TestBed.createComponent(Section);
   fixture.componentRef.setInput('contents', contents);
   fixture.detectChanges();
-  if (options?.slotBand) {
-    fixture.componentInstance.slotBand.set(options.slotBand);
+  if (options?.containerWidthPx != null) {
+    fixture.componentInstance.containerWidthOverride.set(options.containerWidthPx);
+    fixture.componentInstance.remeasureFromLayout();
     fixture.detectChanges();
   }
   await fixture.whenStable();
@@ -178,29 +192,55 @@ test('GSSC-PLLR-92 Semantic', async () => {
 
 // @relation(GSSC-PLLR-93, scope=range_start, role=Test)
 test('GSSC-PLLR-93 Syntactic', async () => {
+  // Fit: strip within Section width → all buttons, no carousel chrome.
+  const { root: fitRoot } = await setupSection(sampleWithAll, {
+    containerWidthPx: WIDE_FIT_PX,
+  });
+  expect(fitRoot.querySelector('.gssc-section__resources')?.classList.contains('flex')).toBe(
+    true,
+  );
+  expect(fitRoot.querySelector('.gssc-section__resources')?.getAttribute('data-carousel')).toBe(
+    'false',
+  );
+  expect(fitRoot.querySelector('.gssc-section__resources-prev')).toBeNull();
+  expect(fitRoot.querySelector('.gssc-section__resources-next')).toBeNull();
+  expect(resourceNames(fitRoot)).toEqual(sampleWithAll.resources!.map((r) => r.name));
+
+  // Overflow: narrow container + many resources → carousel + keyboard.
   const { root, section, fixture } = await setupSection(manyResources, {
-    slotBand: 'below-extra-small',
+    containerWidthPx: NARROW_OVERFLOW_PX,
   });
   const children = [...root.querySelector('.gssc-section')!.children].filter(
     (child) => child instanceof HTMLElement,
   );
   expect(children.at(-1)?.classList.contains('gssc-section__resources')).toBe(true);
-  const strip = root.querySelector<HTMLElement>('.gssc-section__resources')!;
-  expect(strip.classList.contains('flex')).toBe(true);
-  expect(resourceNames(root).length).toBe(2);
-  expect(strip.getAttribute('data-carousel')).toBe('true');
+  expect(root.querySelector('.gssc-section__resources')?.getAttribute('data-carousel')).toBe(
+    'true',
+  );
   expect(root.querySelector('.gssc-section__resources-prev')).not.toBeNull();
   expect(root.querySelector('.gssc-section__resources-next')).not.toBeNull();
+  expect(resourceNames(root).length).toBe(section.visibleSlotCount());
+  expect(section.visibleSlotCount()).toBeGreaterThan(0);
+  expect(section.visibleSlotCount()).toBeLessThan(manyResources.resources!.length);
 
-  section.slotBand.set('extra-small-to-medium');
+  // Width change re-measures: widen → fit, no arrows.
+  section.containerWidthOverride.set(WIDE_FIT_PX);
+  section.remeasureFromLayout();
   fixture.detectChanges();
-  expect(resourceNames(root).length).toBe(3);
+  expect(root.querySelector('.gssc-section__resources')?.getAttribute('data-carousel')).toBe(
+    'false',
+  );
+  expect(root.querySelector('.gssc-section__resources-prev')).toBeNull();
+  expect(resourceNames(root).length).toBe(manyResources.resources!.length);
 
-  section.slotBand.set('medium-and-up');
+  // Narrow again for keyboard coverage.
+  section.containerWidthOverride.set(NARROW_OVERFLOW_PX);
+  section.remeasureFromLayout();
   fixture.detectChanges();
-  expect(resourceNames(root).length).toBe(4);
+  expect(root.querySelector('.gssc-section__resources')?.getAttribute('data-carousel')).toBe(
+    'true',
+  );
 
-  // Keyboard: focused resource + ArrowRight advances carousel; H steps back.
   const first = root.querySelector<HTMLAnchorElement>('.gssc-section__resource')!;
   first.focus();
   first.dispatchEvent(
@@ -244,12 +284,15 @@ test('GSSC-PLLR-137 Semantic', async () => {
 // @relation(GSSC-PLLR-138, scope=range_start, role=Test)
 test('GSSC-PLLR-138 Syntactic', async () => {
   const { root, section, fixture } = await setupSection(manyResources, {
-    slotBand: 'below-extra-small',
+    containerWidthPx: NARROW_OVERFLOW_PX,
   });
   expect(resourceNames(root).length).toBe(section.visibleSlotCount());
+  const before = resourceNames(root);
   section.stepNext();
   fixture.detectChanges();
-  expect(resourceNames(root)).toEqual(['R2', 'R3']);
+  const after = resourceNames(root);
+  expect(after.length).toBe(before.length);
+  expect(after[0]).toBe('R2');
 });
 // @relation(GSSC-PLLR-138, scope=range_end, role=Test)
 
@@ -272,7 +315,7 @@ test('GSSC-PLLR-139 Lexical', async () => {
 // @relation(GSSC-PLLR-140, scope=range_start, role=Test)
 test('GSSC-PLLR-140 Semantic', async () => {
   const { root, section, fixture } = await setupSection(manyResources, {
-    slotBand: 'below-extra-small',
+    containerWidthPx: NARROW_OVERFLOW_PX,
   });
   expect(resourceNames(root)[0]).toBe('R1');
   section.stepPrev();
@@ -286,19 +329,21 @@ test('GSSC-PLLR-140 Semantic', async () => {
 
 // @relation(GSSC-PLLR-141, scope=range_start, role=Test)
 test('GSSC-PLLR-141 Syntactic', async () => {
-  const { root } = await setupSection(manyResources, { slotBand: 'below-extra-small' });
+  const { root } = await setupSection(manyResources, { containerWidthPx: NARROW_OVERFLOW_PX });
   const strip = root.querySelector('.gssc-section__resources')!;
   const firstControl = [...strip.children].find((child) => child instanceof HTMLElement);
   expect(firstControl?.classList.contains('gssc-section__resources-prev')).toBe(true);
 
-  const { root: noCarousel } = await setupSection(sampleWithAll);
+  const { root: noCarousel } = await setupSection(sampleWithAll, {
+    containerWidthPx: WIDE_FIT_PX,
+  });
   expect(noCarousel.querySelector('.gssc-section__resources-prev')).toBeNull();
 });
 // @relation(GSSC-PLLR-141, scope=range_end, role=Test)
 
 // @relation(GSSC-PLLR-142, scope=range_start, role=Test)
 test('GSSC-PLLR-142 Lexical', async () => {
-  const { root } = await setupSection(manyResources, { slotBand: 'below-extra-small' });
+  const { root } = await setupSection(manyResources, { containerWidthPx: NARROW_OVERFLOW_PX });
   const prev = root.querySelector<HTMLElement>('.gssc-section__resources-prev')!;
   expect(prev.classList.contains('text-gssc-dark-green')).toBe(true);
   expect(prev.classList.contains('border-gssc-dark-green')).toBe(true);
@@ -308,7 +353,7 @@ test('GSSC-PLLR-142 Lexical', async () => {
 // @relation(GSSC-PLLR-143, scope=range_start, role=Test)
 test('GSSC-PLLR-143 Semantic', async () => {
   const { root, section, fixture } = await setupSection(manyResources, {
-    slotBand: 'below-extra-small',
+    containerWidthPx: NARROW_OVERFLOW_PX,
   });
   expect(resourceNames(root)[0]).toBe('R1');
   section.stepNext();
@@ -326,7 +371,7 @@ test('GSSC-PLLR-143 Semantic', async () => {
 
 // @relation(GSSC-PLLR-144, scope=range_start, role=Test)
 test('GSSC-PLLR-144 Syntactic', async () => {
-  const { root } = await setupSection(manyResources, { slotBand: 'below-extra-small' });
+  const { root } = await setupSection(manyResources, { containerWidthPx: NARROW_OVERFLOW_PX });
   const strip = root.querySelector('.gssc-section__resources')!;
   const lastControl = [...strip.children]
     .filter((child) => child instanceof HTMLElement)
@@ -337,7 +382,7 @@ test('GSSC-PLLR-144 Syntactic', async () => {
 
 // @relation(GSSC-PLLR-145, scope=range_start, role=Test)
 test('GSSC-PLLR-145 Lexical', async () => {
-  const { root } = await setupSection(manyResources, { slotBand: 'below-extra-small' });
+  const { root } = await setupSection(manyResources, { containerWidthPx: NARROW_OVERFLOW_PX });
   const next = root.querySelector<HTMLElement>('.gssc-section__resources-next')!;
   expect(next.classList.contains('text-gssc-dark-green')).toBe(true);
   expect(next.classList.contains('border-gssc-dark-green')).toBe(true);

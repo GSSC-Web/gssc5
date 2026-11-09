@@ -1,12 +1,14 @@
 import {
+  afterRenderEffect,
   Component,
   computed,
   DestroyRef,
-  effect,
+  ElementRef,
   HostListener,
   inject,
   input,
   signal,
+  viewChild,
 } from '@angular/core';
 
 /** One resource linked from Section Contents (FE presentation; no Contents API). */
@@ -22,14 +24,15 @@ export type SectionContents = {
   resources?: readonly SectionResource[] | null;
 };
 
-/** Visible Resource Button slots by viewport band (implementation uses Tailwind sm/md). */
-export type ResourceSlotBand = 'below-extra-small' | 'extra-small-to-medium' | 'medium-and-up';
-
-const SLOT_COUNTS: Record<ResourceSlotBand, number> = {
-  'below-extra-small': 2,
-  'extra-small-to-medium': 3,
-  'medium-and-up': 4,
-};
+/** Matches `.gssc-section__resource` width in section.css (8.5rem at 16px root). */
+export const RESOURCE_BUTTON_WIDTH_PX = 8.5 * 16;
+/** Matches Tailwind `gap-2` between Resource Buttons. */
+export const RESOURCE_BUTTON_GAP_PX = 0.5 * 16;
+/**
+ * Reserved width for Prev + Next + gaps so enabling carousel chrome does not
+ * oscillate overflow detection.
+ */
+export const RESOURCE_ARROW_CHROME_RESERVE_PX = 120;
 
 @Component({
   selector: 'gssc-section',
@@ -38,59 +41,58 @@ const SLOT_COUNTS: Record<ResourceSlotBand, number> = {
 })
 export class Section {
   private readonly destroyRef = inject(DestroyRef);
+  private readonly resourcesHost = viewChild<ElementRef<HTMLElement>>('resourcesHost');
+  private resizeObserver: ResizeObserver | null = null;
+  private observedHost: HTMLElement | null = null;
 
   /** Section Contents supplied by the page (no Contents API in this task). */
   readonly contents = input.required<SectionContents>();
 
-  /** Viewport band for Resource Button slot counts. */
-  readonly slotBand = signal<ResourceSlotBand>('below-extra-small');
-
   /** Index of the first visible resource in the carousel strip. */
   readonly carouselOffset = signal(0);
 
+  /** True when the resource strip overflows the Section width. */
+  readonly isCarousel = signal(false);
+
+  /** How many Resource Buttons fit in the carousel viewport (all of them when not carousel). */
+  readonly visibleSlotCount = signal(0);
+
+  /**
+   * Test/harness override for the resources container width in CSS pixels.
+   * `null` uses the live element `clientWidth`.
+   */
+  readonly containerWidthOverride = signal<number | null>(null);
+
   readonly resources = computed(() => this.contents().resources ?? []);
-
-  readonly visibleSlotCount = computed(() => SLOT_COUNTS[this.slotBand()]);
-
-  readonly isCarousel = computed(() => this.resources().length > this.visibleSlotCount());
 
   readonly visibleResources = computed(() => {
     const all = this.resources();
-    const slots = this.visibleSlotCount();
     if (all.length === 0) return [];
     if (!this.isCarousel()) return [...all];
+    const slots = Math.max(1, this.visibleSlotCount());
     const start = ((this.carouselOffset() % all.length) + all.length) % all.length;
     const visible: SectionResource[] = [];
-    for (let i = 0; i < slots; i += 1) {
+    for (let i = 0; i < Math.min(slots, all.length); i += 1) {
       visible.push(all[(start + i) % all.length]!);
     }
     return visible;
   });
 
   constructor() {
-    effect(() => {
-      // Reset offset when Contents or slot band change so the strip stays in range.
-      this.resources();
-      this.visibleSlotCount();
-      this.carouselOffset.set(0);
+    this.destroyRef.onDestroy(() => {
+      this.resizeObserver?.disconnect();
+      this.resizeObserver = null;
+      this.observedHost = null;
     });
 
-    if (typeof globalThis.matchMedia === 'function') {
-      const mdQuery = globalThis.matchMedia('(min-width: 768px)');
-      const smQuery = globalThis.matchMedia('(min-width: 640px)');
-      const syncBand = () => {
-        if (mdQuery.matches) this.slotBand.set('medium-and-up');
-        else if (smQuery.matches) this.slotBand.set('extra-small-to-medium');
-        else this.slotBand.set('below-extra-small');
-      };
-      syncBand();
-      mdQuery.addEventListener('change', syncBand);
-      smQuery.addEventListener('change', syncBand);
-      this.destroyRef.onDestroy(() => {
-        mdQuery.removeEventListener('change', syncBand);
-        smQuery.removeEventListener('change', syncBand);
-      });
-    }
+    afterRenderEffect(() => {
+      // Re-bind observer and re-measure whenever the host exists or Contents / width override change.
+      const host = this.resourcesHost()?.nativeElement ?? null;
+      this.resources();
+      this.containerWidthOverride();
+      this.bindResizeObserver(host);
+      this.remeasureFromLayout();
+    });
   }
 
   protected hasHeader(contents: SectionContents): boolean {
@@ -99,6 +101,53 @@ export class Section {
 
   protected hasResources(contents: SectionContents): boolean {
     return (contents.resources?.length ?? 0) > 0;
+  }
+
+  /** Recompute overflow carousel state from container width and equal button sizes. */
+  remeasureFromLayout(): void {
+    const all = this.resources();
+    const n = all.length;
+    if (n === 0) {
+      this.isCarousel.set(false);
+      this.visibleSlotCount.set(0);
+      this.carouselOffset.set(0);
+      return;
+    }
+
+    const buttonW = RESOURCE_BUTTON_WIDTH_PX;
+    const gap = RESOURCE_BUTTON_GAP_PX;
+    const contentW = n * buttonW + (n - 1) * gap;
+    const host = this.resourcesHost()?.nativeElement;
+    const width = this.containerWidthOverride() ?? host?.clientWidth ?? 0;
+
+    if (width <= 0) {
+      // Not laid out yet (or jsdom without override): show the full strip.
+      this.isCarousel.set(false);
+      this.visibleSlotCount.set(n);
+      this.carouselOffset.set(0);
+      return;
+    }
+
+    if (contentW <= width) {
+      this.isCarousel.set(false);
+      this.visibleSlotCount.set(n);
+      this.carouselOffset.set(0);
+      return;
+    }
+
+    const viewportW = Math.max(buttonW, width - RESOURCE_ARROW_CHROME_RESERVE_PX);
+    const slots = Math.max(1, Math.floor((viewportW + gap) / (buttonW + gap)));
+    if (slots >= n) {
+      this.isCarousel.set(false);
+      this.visibleSlotCount.set(n);
+      this.carouselOffset.set(0);
+      return;
+    }
+
+    this.isCarousel.set(true);
+    this.visibleSlotCount.set(slots);
+    const maxOffset = n;
+    if (this.carouselOffset() >= maxOffset) this.carouselOffset.set(0);
   }
 
   // @relation(GSSC-PLLR-140, scope=range_start, role=Implementation)
@@ -132,5 +181,18 @@ export class Section {
       event.preventDefault();
       this.stepNext();
     }
+  }
+
+  private bindResizeObserver(host: HTMLElement | null): void {
+    if (host === this.observedHost) return;
+    this.resizeObserver?.disconnect();
+    this.resizeObserver = null;
+    this.observedHost = host;
+    if (!host || typeof ResizeObserver === 'undefined') return;
+
+    this.resizeObserver = new ResizeObserver(() => {
+      this.remeasureFromLayout();
+    });
+    this.resizeObserver.observe(host);
   }
 }

@@ -22,8 +22,8 @@
   @if (hasResources(contents())) {
     <!-- @relation(GSSC-PLLR-92, GSSC-PLLR-93, GSSC-PLLR-94, scope=range_start, role=Implementation) -->
     <div
+      #resourcesHost
       class="gssc-section__resources flex w-full items-center gap-2"
-      [attr.data-slot-band]="slotBand()"
       [attr.data-carousel]="isCarousel() ? 'true' : 'false'"
     >
       @if (isCarousel()) {

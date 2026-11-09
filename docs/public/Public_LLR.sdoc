@@ -1559,10 +1559,10 @@ REVIEW_STATUS: Changed
 UID: GSSC-PLLR-93
 TITLE: Syntactic
 STATEMENT: >>>
-The Section Resources SHALL appear below the Section Body inside the Section Container when the Section Contents include resources; SHALL arrange equal-size Resource Buttons in a horizontal strip starting from the left; SHALL show four Resource Buttons on medium and larger viewports, three from extra-small up to below medium, and two below extra-small; and, when more resources exist than those visible slots, SHALL present a looping carousel with Resources Prev and Resources Next controls at the ends of the strip, slide animation when the strip moves, and movement of the carousel by Left Arrow, Right Arrow, H, and L while a Resource Button is focused.
+The Section Resources SHALL appear below the Section Body inside the Section Container when the Section Contents include resources; SHALL arrange equal-size Resource Buttons in a horizontal strip starting from the left; when that strip overflows the Section width, SHALL present a looping carousel with Resources Prev and Resources Next controls at the ends of the strip, slide animation when the strip moves, and movement of the carousel by Left Arrow, Right Arrow, H, and L while a Resource Button is focused; and when that strip fits within the Section width, SHALL show every Resource Button without carousel controls.
 <<<
 RATIONALE: >>>
-A horizontal strip below the body keeps resources grouped after the section text. Viewport slot counts keep buttons readable as the page resizes. Overflow uses a looping carousel with end controls and keyboard movement so every resource stays reachable without naming a layout framework.
+A horizontal strip below the body keeps resources grouped after the section text. Overflow uses a looping carousel with end controls and keyboard movement so every resource stays reachable as the Section width changes, without naming a layout framework or fixed viewport slot counts.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
@@ -1653,10 +1653,10 @@ REVIEW_STATUS: Changed
 UID: GSSC-PLLR-141
 TITLE: Syntactic
 STATEMENT: >>>
-The Resources Prev control SHALL appear at the start of the Section Resources strip when the strip is a carousel.
+The Resources Prev control SHALL appear at the start of the Section Resources strip when that strip overflows the Section width and is presented as a carousel.
 <<<
 RATIONALE: >>>
-Placing Prev at the start of the strip marks the backward end of the carousel.
+Placing Prev at the start of the strip marks the backward end of the carousel; when the strip fits, Prev is omitted.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
@@ -1701,10 +1701,10 @@ REVIEW_STATUS: Changed
 UID: GSSC-PLLR-144
 TITLE: Syntactic
 STATEMENT: >>>
-The Resources Next control SHALL appear at the end of the Section Resources strip when the strip is a carousel.
+The Resources Next control SHALL appear at the end of the Section Resources strip when that strip overflows the Section width and is presented as a carousel.
 <<<
 RATIONALE: >>>
-Placing Next at the end of the strip marks the forward end of the carousel.
+Placing Next at the end of the strip marks the forward end of the carousel; when the strip fits, Next is omitted.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
