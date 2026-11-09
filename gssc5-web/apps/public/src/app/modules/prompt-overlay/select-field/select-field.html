@@ -1,0 +1,38 @@
+<!-- @relation(GSSC-PLLR-120, GSSC-PLLR-121, scope=range_start, role=Implementation) -->
+<button
+  type="button"
+  class="gssc-prompt-select-field mt-2 flex min-w-0 w-full items-center gap-3 rounded-md border px-3 py-2 font-sans font-normal"
+  [class.border-gssc-dark-green]="!invalid()"
+  [class.border-red-500]="invalid()"
+  [class.bg-gssc-white]="enabled() && !invalid()"
+  [class.bg-gssc-gray]="!enabled()"
+  [class.bg-red-50]="invalid()"
+  [class.text-gssc-dark-green]="!invalid()"
+  [class.text-red-500]="invalid()"
+  [id]="controlId()"
+  [disabled]="!enabled()"
+  [attr.aria-pressed]="value()"
+  [attr.aria-invalid]="invalid()"
+  (click)="toggle()"
+  (keydown.enter)="fieldSubmit.emit()"
+  (keydown.escape)="fieldEscape.emit()"
+>
+  <span
+    class="gssc-prompt-select-field__switch relative inline-flex h-5 w-9 shrink-0 rounded-full border border-current"
+    [class.bg-gssc-light-green]="value()"
+    aria-hidden="true"
+  >
+    <span
+      class="absolute top-0.5 size-3.5 rounded-full bg-current transition-transform"
+      [class.start-0.5]="!value()"
+      [class.end-0.5]="value()"
+      [class.translate-x-0]="!value()"
+    ></span>
+  </span>
+  <span class="gssc-prompt-select-field__label text-sm font-normal">
+    {{ label() }}@if (required()) {
+      <span aria-hidden="true">&nbsp;*</span>
+    }
+  </span>
+</button>
+<!-- @relation(GSSC-PLLR-120, GSSC-PLLR-121, scope=range_end, role=Implementation) -->

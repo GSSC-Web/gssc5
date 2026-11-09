@@ -1,0 +1,66 @@
+<!-- @relation(GSSC-PLLR-117, GSSC-PLLR-118, scope=range_start, role=Implementation) -->
+<div
+  class="gssc-prompt-text-field relative mt-2 flex min-w-0 flex-col rounded-md border font-sans"
+  [class.border-gssc-dark-green]="!invalid()"
+  [class.border-red-500]="invalid()"
+  [class.bg-gssc-white]="enabled() && !invalid()"
+  [class.bg-gssc-gray]="!enabled()"
+  [class.bg-red-50]="invalid()"
+>
+  <label
+    class="gssc-prompt-text-field__label absolute -top-2 start-2 bg-inherit px-1 text-xs font-extralight italic"
+    [class.text-gssc-dark-green]="!invalid()"
+    [class.text-red-500]="invalid()"
+    [attr.for]="controlId()"
+  >
+    {{ label() }}@if (required()) {
+      <span aria-hidden="true">&nbsp;*</span>
+    }
+  </label>
+  <div class="flex flex-row items-stretch px-1">
+    @if (multiline()) {
+      <textarea
+        class="gssc-prompt-text-field__control min-h-24 min-w-0 flex-1 resize-y border-0 bg-transparent py-2 font-sans outline-none"
+        [class.text-gssc-dark-green]="!invalid()"
+        [class.text-red-500]="invalid()"
+        [id]="controlId()"
+        [disabled]="!enabled()"
+        [attr.aria-invalid]="invalid()"
+        [value]="value()"
+        (input)="onInput($any($event.target).value)"
+        (keydown.escape)="fieldEscape.emit()"
+      ></textarea>
+    } @else {
+      <input
+        class="gssc-prompt-text-field__control min-w-0 flex-1 border-0 bg-transparent py-2 font-sans outline-none"
+        [class.text-gssc-dark-green]="!invalid()"
+        [class.text-red-500]="invalid()"
+        [id]="controlId()"
+        [type]="resolvedType()"
+        [disabled]="!enabled()"
+        [attr.aria-invalid]="invalid()"
+        [value]="value()"
+        (input)="onInput($any($event.target).value)"
+        (keydown.enter)="onEnter($event)"
+        (keydown.escape)="fieldEscape.emit()"
+      />
+    }
+    @if (peekable() && inputType() === 'password') {
+      <button
+        type="button"
+        class="gssc-prompt-text-field__peek my-1 ms-1 inline-flex aspect-square cursor-pointer items-center justify-center rounded-sm border-0 bg-transparent px-1 hover:bg-gssc-light-green"
+        [disabled]="!enabled()"
+        [attr.aria-label]="peek() ? 'Hide password' : 'Show password'"
+        (click)="peek.update((open) => !open)"
+      >
+        <i
+          class="nf text-sm leading-none"
+          [class.nf-md-eye_off]="peek()"
+          [class.nf-md-eye]="!peek()"
+          aria-hidden="true"
+        ></i>
+      </button>
+    }
+  </div>
+</div>
+<!-- @relation(GSSC-PLLR-117, GSSC-PLLR-118, scope=range_end, role=Implementation) -->
