@@ -1,0 +1,97 @@
+<!-- @relation(GSSC-PLLR-113, GSSC-PLLR-114, scope=range_start, role=Implementation) -->
+<!-- @relation(GSSC-PLLR-115, scope=range_start, role=Implementation) -->
+<form
+  #formEl
+  class="gssc-prompt-form grid grid-cols-1 gap-x-3 gap-y-2 font-sans text-gssc-dark-green sm:grid-cols-2"
+  (submit)="$event.preventDefault(); onSubmit()"
+>
+  <!-- @relation(GSSC-PLLR-115, scope=range_end, role=Implementation) -->
+  @for (field of fields(); track field.id) {
+    @switch (field.kind) {
+      @case ('text') {
+        <gssc-prompt-text-field
+          class="min-w-0"
+          [class.sm:col-span-2]="!!field.multiline"
+          [label]="field.label"
+          [required]="!!field.required"
+          [enabled]="enabled(field)"
+          [invalid]="isInvalid(field.id)"
+          [inputType]="field.inputType ?? 'text'"
+          [multiline]="!!field.multiline"
+          [peekable]="!!field.peek"
+          [value]="stringValue(field.id)"
+          (valueChange)="setValue(field.id, $event)"
+          (fieldSubmit)="onSubmit()"
+          (fieldEscape)="onCancel()"
+        />
+      }
+      @case ('select') {
+        <gssc-prompt-select-field
+          class="min-w-0"
+          [label]="field.label"
+          [required]="!!field.required"
+          [enabled]="enabled(field)"
+          [invalid]="isInvalid(field.id)"
+          [value]="boolValue(field.id)"
+          (valueChange)="setValue(field.id, $event)"
+          (fieldSubmit)="onSubmit()"
+          (fieldEscape)="onCancel()"
+        />
+      }
+      @case ('options') {
+        <gssc-prompt-options-field
+          class="min-w-0 sm:col-span-2"
+          [label]="field.label"
+          [choices]="field.choices"
+          [required]="!!field.required"
+          [enabled]="enabled(field)"
+          [invalid]="isInvalid(field.id)"
+          [value]="stringValue(field.id)"
+          (valueChange)="setValue(field.id, $event)"
+          (fieldSubmit)="onSubmit()"
+          (fieldEscape)="onCancel()"
+        />
+      }
+      @case ('button') {
+        <gssc-prompt-button-field
+          class="min-w-0"
+          [label]="field.label"
+          [role]="field.role ?? 'action'"
+          [enabled]="enabled(field)"
+          [invalid]="false"
+          (activate)="onButton(field.role)"
+          (fieldEscape)="onCancel()"
+        />
+      }
+      @case ('file') {
+        <gssc-prompt-file-field
+          class="min-w-0"
+          [label]="field.label"
+          [required]="!!field.required"
+          [enabled]="enabled(field)"
+          [invalid]="isInvalid(field.id)"
+          [accept]="field.accept"
+          [value]="fileValue(field.id)"
+          (valueChange)="setValue(field.id, $event)"
+          (fieldSubmit)="onSubmit()"
+          (fieldEscape)="onCancel()"
+        />
+      }
+      @case ('options-list') {
+        <gssc-prompt-options-list-field
+          class="min-w-0"
+          [label]="field.label"
+          [choices]="field.choices"
+          [required]="!!field.required"
+          [enabled]="enabled(field)"
+          [invalid]="isInvalid(field.id)"
+          [value]="stringValue(field.id)"
+          (valueChange)="setValue(field.id, $event)"
+          (fieldSubmit)="onSubmit()"
+          (fieldEscape)="onCancel()"
+        />
+      }
+    }
+  }
+</form>
+<!-- @relation(GSSC-PLLR-113, GSSC-PLLR-114, scope=range_end, role=Implementation) -->
