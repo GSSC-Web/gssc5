@@ -132,11 +132,11 @@ test('GSSC-PLLR-88 Lexical', async () => {
   expect(header.classList.contains('font-semibold')).toBe(true);
   expect(header.classList.contains('text-gssc-dark-green')).toBe(true);
   expect(body.classList.contains('text-base')).toBe(true);
-  // 2.5× body: header font-size is 2.5em of the body text size.
+  // 1.5× body: header font-size is 1.5em of the body text size.
   const headerPx = Number.parseFloat(getComputedStyle(header).fontSize);
   const bodyPx = Number.parseFloat(getComputedStyle(body).fontSize);
   expect(bodyPx).toBeGreaterThan(0);
-  expect(headerPx / bodyPx).toBeCloseTo(2.5, 5);
+  expect(headerPx / bodyPx).toBeCloseTo(1.5, 5);
 });
 // @relation(GSSC-PLLR-88, scope=range_end, role=Test)
 

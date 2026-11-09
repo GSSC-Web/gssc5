@@ -1,6 +1,6 @@
-/* Header is 2.5× the Section Body text size (GSSC-PLLR-88). */
+/* Header is 1.5× the Section Body text size (GSSC-PLLR-88). */
 .gssc-section__header {
-  font-size: 2.5em;
+  font-size: 1.5em;
 }
 
 .gssc-section__track {

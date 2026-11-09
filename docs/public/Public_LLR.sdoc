@@ -999,7 +999,7 @@ GSSC5-22
 GSSC5-27
 GSSC5-25
 <<<
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-4
@@ -1410,7 +1410,7 @@ Derived for GSSC5-25. PIRs do not define the section Container. REVIEW_STATUS st
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-25
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-PLLR-84
@@ -1424,7 +1424,7 @@ Full-width stacking keeps section Contents readable within the page content area
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-25
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-PLLR-85
@@ -1438,7 +1438,7 @@ White background keeps the section aligned with the outermost shell. Theme token
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-25
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [[/SECTION]]
 
@@ -1458,7 +1458,7 @@ A section header identifies the section when the Contents supply one. Absent hea
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-25
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-PLLR-87
@@ -1472,21 +1472,21 @@ Leading with the header keeps the section title before the body text.
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-25
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-PLLR-88
 TITLE: Lexical
 STATEMENT: >>>
-The Section Header SHALL use a semibold weight and the dark-green theme token for its text color, at a size two and one-half times the Section Body text size.
+The Section Header SHALL use a semibold weight and the dark-green theme token for its text color, at a size one and one-half times the Section Body text size.
 <<<
 RATIONALE: >>>
-Semibold dark-green text at two and one-half times the body size distinguishes the header within the Container. A fuller type scale is not set yet beyond this relative size and token choice.
+Semibold dark-green text at one and one-half times the body size distinguishes the header within the Container. A fuller type scale is not set yet beyond this relative size and token choice.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-25
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [[/SECTION]]
 
@@ -1506,7 +1506,7 @@ Every section's Contents include a body. The Body presents that text in the Cont
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-25
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-PLLR-90
@@ -1520,7 +1520,7 @@ The body follows the header when a header exists, and starts the Contents when i
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-25
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-PLLR-91
@@ -1534,7 +1534,7 @@ Normal-weight black text keeps body copy readable on the white Container backgro
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-25
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [[/SECTION]]
 
@@ -1554,7 +1554,7 @@ Resources accompany some sections. Equal Resource Buttons that open their target
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-25
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-PLLR-93
@@ -1568,7 +1568,7 @@ A horizontal strip below the body keeps resources grouped after the section text
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-25
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-PLLR-94
@@ -1582,7 +1582,7 @@ Shared button chrome marks resources as equal controls rather than underline-onl
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-25
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [[SECTION]]
 UID: GSSC-PLLR-SECTION-RESOURCE-BUTTON
@@ -1600,7 +1600,7 @@ The button label identifies the resource; activation opens the related material.
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-25
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-PLLR-138
@@ -1614,7 +1614,7 @@ Equal slots keep buttons aligned in the strip. Carousel participation keeps over
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-25
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-PLLR-139
@@ -1628,7 +1628,7 @@ Shared height and dark-green chrome mark each resource as an equal hyperlink but
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-25
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [[/SECTION]]
 
@@ -1648,7 +1648,7 @@ Prev steps the looping strip backward so every resource stays reachable from the
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-25
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-PLLR-141
@@ -1662,7 +1662,7 @@ Placing Prev at the start of the strip marks the backward end of the carousel; w
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-25
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-PLLR-142
@@ -1676,7 +1676,7 @@ A borderless rounded icon control matches other public icon buttons. Gray hover 
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-25
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [[/SECTION]]
 
@@ -1696,7 +1696,7 @@ Next steps the looping strip forward so every resource stays reachable from the 
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-25
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-PLLR-144
@@ -1710,7 +1710,7 @@ Placing Next at the end of the strip marks the forward end of the carousel; when
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-25
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-PLLR-145
@@ -1724,7 +1724,7 @@ A borderless rounded icon control matches other public icon buttons. Gray hover 
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-25
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [[/SECTION]]
 
@@ -1849,7 +1849,7 @@ CHANGE_DRIVER: >>>
 GSSC5-27
 GSSC5-25
 <<<
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [[/SECTION]]
 
