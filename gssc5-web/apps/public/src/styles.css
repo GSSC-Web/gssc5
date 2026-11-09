@@ -61,6 +61,14 @@
   content: "\f0156";
 }
 
+.nf-md-chevron_left:before {
+  content: "\f0141";
+}
+
+.nf-md-chevron_right:before {
+  content: "\f0142";
+}
+
 /*
  * Outermost site layer: white background, sans-serif default.
  * Preflight already zeros margins/borders; do not restate those here.

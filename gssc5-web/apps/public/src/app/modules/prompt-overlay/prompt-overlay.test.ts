@@ -165,6 +165,7 @@ test('GSSC-PLLR-112 Lexical', async () => {
   const dismiss = root.querySelector<HTMLElement>('.gssc-prompt-overlay__dismiss')!;
   expect(dismiss.classList.contains('bg-transparent')).toBe(true);
   expect(dismiss.classList.contains('text-gssc-dark-green')).toBe(true);
+  expect(dismiss.classList.contains('rounded')).toBe(true);
   expect(dismiss.classList.contains('hover:bg-gssc-gray')).toBe(true);
   expect(dismiss.classList.contains('font-sans')).toBe(true);
 });

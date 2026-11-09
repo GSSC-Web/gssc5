@@ -984,19 +984,20 @@ RELATIONS:
 UID: GSSC-PLLR-72
 TITLE: Lexical
 STATEMENT: >>>
-The Header Site Search control SHALL use the dark-green theme token for its icon color, the white theme token for its background on hover, the white theme token for the open search presentation background, and the gray theme token for that presentation's border.
+The Header Site Search control SHALL use the dark-green theme token for its icon color, rounded corners, the gray theme token for its background on hover, the white theme token for the open search presentation background, and the gray theme token for that presentation's border.
 <<<
 RATIONALE: >>>
-Icon and placeholder panel tokens keep search readable on the Header until the search widget defines its own presentation in GSSC5-47. White background on hover marks the icon button as activatable without changing the icon color.
+Icon and placeholder panel tokens keep search readable on the Header until the search widget defines its own presentation in GSSC5-47. Rounded corners and gray background on hover match other public icon buttons and mark the control as activatable without changing the icon color.
 <<<
 COMMENT: >>>
-Hover uses background fill for GSSC5-27 icon-button hover rule.
+Shared icon-button chrome (rounded corners; gray hover) aligned under GSSC5-25.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: >>>
 GSSC5-22
 GSSC5-27
+GSSC5-25
 <<<
 REVIEW_STATUS: Approved
 RELATIONS:
@@ -1387,6 +1388,351 @@ RELATIONS:
 [[/SECTION]]
 
 [[SECTION]]
+UID: GSSC-PLLR-SECTION
+TITLE: Public Section
+
+[[SECTION]]
+UID: GSSC-PLLR-SECTION-CONTAINER
+TITLE: Section Container
+
+[REQUIREMENT]
+UID: GSSC-PLLR-83
+TITLE: Semantic
+STATEMENT: >>>
+The GSSC Website Public Frontend Section Container SHALL place the Section Contents it receives: the Section Header when those Contents include a header, the Section Body, and the Section Resources when those Contents include resources.
+<<<
+RATIONALE: >>>
+The Section Container is the placement shell for section data on public pages. Contents are the section data; the Container places them. Each placed element's behavior is a separate requirement. Page assembly and Contents APIs are separate features.
+<<<
+COMMENT: >>>
+Derived for GSSC5-25. PIRs do not define the section Container. REVIEW_STATUS stays Changed until owner approval.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-25
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-PLLR-84
+TITLE: Syntactic
+STATEMENT: >>>
+The Section Container SHALL fill the width of its page content area, stack the Section Contents it places in a vertical order, apply vertical padding on the Container, and keep internal spacing between the Section Header, Section Body, and Section Resources.
+<<<
+RATIONALE: >>>
+Full-width stacking keeps section Contents readable within the page content area as the viewport resizes. Vertical padding and spacing between Header, Body, and Resources separate those elements without crowding. Page assembly chooses where Containers appear on a page.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-25
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-PLLR-85
+TITLE: Lexical
+STATEMENT: >>>
+The Section Container SHALL use the white theme token for its background, the gray theme token for its border, and the dark-green theme token for its default text, with a sans-serif typeface.
+<<<
+RATIONALE: >>>
+White background keeps the section aligned with the outermost shell. Theme tokens keep presentation in the organization palette. A fuller color role map for sections is not set yet beyond these token choices.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-25
+REVIEW_STATUS: Approved
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-SECTION-HEADER
+TITLE: Section Header
+
+[REQUIREMENT]
+UID: GSSC-PLLR-86
+TITLE: Semantic
+STATEMENT: >>>
+The Section Header SHALL display the header from the Section Contents when those Contents include a header.
+<<<
+RATIONALE: >>>
+A section header identifies the section when the Contents supply one. Absent headers are omitted. This requirement does not set header wording.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-25
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-PLLR-87
+TITLE: Syntactic
+STATEMENT: >>>
+The Section Header SHALL appear above the Section Body inside the Section Container when the Section Contents include a header.
+<<<
+RATIONALE: >>>
+Leading with the header keeps the section title before the body text.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-25
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-PLLR-88
+TITLE: Lexical
+STATEMENT: >>>
+The Section Header SHALL use a semibold weight and the dark-green theme token for its text color, at a size one and one-half times the Section Body text size.
+<<<
+RATIONALE: >>>
+Semibold dark-green text at one and one-half times the body size distinguishes the header within the Container. A fuller type scale is not set yet beyond this relative size and token choice.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-25
+REVIEW_STATUS: Approved
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-SECTION-BODY
+TITLE: Section Body
+
+[REQUIREMENT]
+UID: GSSC-PLLR-89
+TITLE: Semantic
+STATEMENT: >>>
+The Section Body SHALL display the body from the Section Contents.
+<<<
+RATIONALE: >>>
+Every section's Contents include a body. The Body presents that text in the Container. This requirement does not set body wording.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-25
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-PLLR-90
+TITLE: Syntactic
+STATEMENT: >>>
+The Section Body SHALL appear below the Section Header when a Section Header is present, and otherwise at the start of the Section Contents inside the Section Container.
+<<<
+RATIONALE: >>>
+The body follows the header when a header exists, and starts the Contents when it does not, so reading order stays consistent.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-25
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-PLLR-91
+TITLE: Lexical
+STATEMENT: >>>
+The Section Body SHALL use a normal weight and the black theme token for its text color.
+<<<
+RATIONALE: >>>
+Normal-weight black text keeps body copy readable on the white Container background and distinct from the dark-green header. A fuller type scale is not set yet beyond this weight and token choice.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-25
+REVIEW_STATUS: Approved
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-SECTION-RESOURCES
+TITLE: Section Resources
+
+[REQUIREMENT]
+UID: GSSC-PLLR-92
+TITLE: Semantic
+STATEMENT: >>>
+The Section Resources SHALL present each resource from the Section Contents as a Resource Button when those Contents include resources; selection of a Resource Button SHALL open that resource.
+<<<
+RATIONALE: >>>
+Resources accompany some sections. Equal Resource Buttons that open their targets let the visitor reach related material. This requirement does not set the resource catalog.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-25
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-PLLR-93
+TITLE: Syntactic
+STATEMENT: >>>
+The Section Resources SHALL appear below the Section Body inside the Section Container when the Section Contents include resources; SHALL arrange equal-size Resource Buttons in a horizontal strip starting from the left; when that strip overflows the Section width, SHALL present a looping carousel with Resources Prev and Resources Next controls at the ends of the strip, expand the visible Resource Buttons equally to fill the strip width between those controls, slide animation when the strip moves, and movement of the carousel by Left Arrow, Right Arrow, H, and L while a Resource Button is focused; and when that strip fits within the Section width, SHALL show every Resource Button without carousel controls.
+<<<
+RATIONALE: >>>
+A horizontal strip below the body keeps resources grouped after the section text. Overflow uses a looping carousel with end controls and keyboard movement so every resource stays reachable as the Section width changes. Filling the strip between the controls avoids empty space at the end of the visible row without naming a layout framework.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-25
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-PLLR-94
+TITLE: Lexical
+STATEMENT: >>>
+The Section Resources strip SHALL present Resource Buttons with shared height using the dark-green theme token for button text and border chrome on the white Container background, and SHALL use the gray theme token for each Resource Button background on hover.
+<<<
+RATIONALE: >>>
+Shared button chrome marks resources as equal controls rather than underline-only links. Gray hover marks each button as activatable. Dark-green tokens keep the strip aligned with the organization palette. A fuller button color role map is not set yet beyond these token choices.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-25
+REVIEW_STATUS: Approved
+
+[[SECTION]]
+UID: GSSC-PLLR-SECTION-RESOURCE-BUTTON
+TITLE: Resource Button
+
+[REQUIREMENT]
+UID: GSSC-PLLR-137
+TITLE: Semantic
+STATEMENT: >>>
+The Resource Button SHALL display the resource name from the Section Contents and SHALL open that resource's target when the visitor activates the button.
+<<<
+RATIONALE: >>>
+The button label identifies the resource; activation opens the related material. This requirement does not set the resource catalog.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-25
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-PLLR-138
+TITLE: Syntactic
+STATEMENT: >>>
+The Resource Button SHALL occupy one equal-size slot in the Section Resources horizontal strip and SHALL participate in carousel movement when the strip is a carousel.
+<<<
+RATIONALE: >>>
+Equal slots keep buttons aligned in the strip. Carousel participation keeps overflowing resources reachable.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-25
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-PLLR-139
+TITLE: Lexical
+STATEMENT: >>>
+The Resource Button SHALL use a shared height with the other Resource Buttons, a normal weight, the dark-green theme token for its text and border, the white theme token for its background, and the gray theme token for its background on hover.
+<<<
+RATIONALE: >>>
+Shared height and dark-green chrome mark each resource as an equal hyperlink button on the white strip. Gray hover marks the control as activatable. A fuller button type scale is not set yet beyond these choices.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-25
+REVIEW_STATUS: Approved
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-SECTION-RESOURCES-PREV
+TITLE: Resources Prev
+
+[REQUIREMENT]
+UID: GSSC-PLLR-140
+TITLE: Semantic
+STATEMENT: >>>
+The Resources Prev control SHALL move the Section Resources carousel one step toward earlier resources when activated, wrapping from the first resource to the last.
+<<<
+RATIONALE: >>>
+Prev steps the looping strip backward so every resource stays reachable from the ends of the strip.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-25
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-PLLR-141
+TITLE: Syntactic
+STATEMENT: >>>
+The Resources Prev control SHALL appear at the start of the Section Resources strip when that strip overflows the Section width and is presented as a carousel.
+<<<
+RATIONALE: >>>
+Placing Prev at the start of the strip marks the backward end of the carousel; when the strip fits, Prev is omitted.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-25
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-PLLR-142
+TITLE: Lexical
+STATEMENT: >>>
+The Resources Prev control SHALL present a tailless previous-direction arrow icon with no border, rounded corners, the dark-green theme token for its icon color, a transparent background, and the gray theme token for its background on hover.
+<<<
+RATIONALE: >>>
+A borderless rounded icon control matches other public icon buttons. Gray hover marks Prev as activatable without changing the icon color. A fuller control color map is not set yet beyond these token choices.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-25
+REVIEW_STATUS: Approved
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-SECTION-RESOURCES-NEXT
+TITLE: Resources Next
+
+[REQUIREMENT]
+UID: GSSC-PLLR-143
+TITLE: Semantic
+STATEMENT: >>>
+The Resources Next control SHALL move the Section Resources carousel one step toward later resources when activated, wrapping from the last resource to the first.
+<<<
+RATIONALE: >>>
+Next steps the looping strip forward so every resource stays reachable from the ends of the strip.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-25
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-PLLR-144
+TITLE: Syntactic
+STATEMENT: >>>
+The Resources Next control SHALL appear at the end of the Section Resources strip when that strip overflows the Section width and is presented as a carousel.
+<<<
+RATIONALE: >>>
+Placing Next at the end of the strip marks the forward end of the carousel; when the strip fits, Next is omitted.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-25
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-PLLR-145
+TITLE: Lexical
+STATEMENT: >>>
+The Resources Next control SHALL present a tailless next-direction arrow icon with no border, rounded corners, the dark-green theme token for its icon color, a transparent background, and the gray theme token for its background on hover.
+<<<
+RATIONALE: >>>
+A borderless rounded icon control matches other public icon buttons. Gray hover marks Next as activatable without changing the icon color. A fuller control color map is not set yet beyond these token choices.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-25
+REVIEW_STATUS: Approved
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
 UID: GSSC-PLLR-PROMPT-OVERLAY
 TITLE: Public Prompt Overlay
 
@@ -1489,17 +1835,20 @@ REVIEW_STATUS: Approved
 UID: GSSC-PLLR-112
 TITLE: Lexical
 STATEMENT: >>>
-The Prompt Overlay Dismiss control SHALL use the dark-green theme token for its symbol color on a transparent background, the gray theme token for its background on hover, and the sans-serif theme font.
+The Prompt Overlay Dismiss control SHALL use the dark-green theme token for its symbol color on a transparent background, rounded corners, the gray theme token for its background on hover, and the sans-serif theme font.
 <<<
 RATIONALE: >>>
-Dark-green on a transparent control keeps Dismiss aligned with panel text. Gray background on hover marks the icon button as activatable without changing the symbol color. A fuller color role map for overlay controls is not set yet beyond these token choices.
+Dark-green on a transparent control keeps Dismiss aligned with panel text. Rounded corners and gray background on hover match other public icon buttons and mark the control as activatable without changing the symbol color. A fuller color role map for overlay controls is not set yet beyond these token choices.
 <<<
 COMMENT: >>>
-Hover uses background fill for GSSC5-27 icon-button hover rule.
+Shared icon-button chrome (rounded corners; gray hover) aligned under GSSC5-25.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-27
+CHANGE_DRIVER: >>>
+GSSC5-27
+GSSC5-25
+<<<
 REVIEW_STATUS: Approved
 
 [[/SECTION]]
