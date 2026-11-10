@@ -3,6 +3,7 @@ import { cors } from "@elysiajs/cors";
 import { Elysia } from "elysia";
 
 import { kvs } from "./kvs";
+import { pageData } from "./page-data";
 import { accounts } from "./user/accounts";
 import { leadership } from "./user/leadership";
 import { passwords } from "./user/passwords";
@@ -38,6 +39,7 @@ export const app = new Elysia({ normalize: false })
   .use(users)
   .use(leadership)
   .use(kvs)
+  .use(pageData)
   .get("/", () => "Hello Elysia");
 
 export type App = typeof app;
