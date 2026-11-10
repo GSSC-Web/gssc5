@@ -3,13 +3,14 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { filter, map, startWith } from 'rxjs';
 import { AnnouncementsBar } from './modules/announcements-bar/announcements-bar';
+import { ErrorContainer } from './modules/error/error';
 import { Footer } from './modules/footer/footer';
 import { Header } from './modules/header/header';
 import { PromptOverlayView } from './modules/prompt-overlay/prompt-overlay';
 import { UrgentAnnouncements } from './services/urgent-announcements';
 
 @Component({
-  imports: [RouterOutlet, AnnouncementsBar, Header, Footer, PromptOverlayView],
+  imports: [RouterOutlet, AnnouncementsBar, ErrorContainer, Header, Footer, PromptOverlayView],
   selector: 'gssc-root',
   styleUrl: './app.css',
   templateUrl: './app.html',

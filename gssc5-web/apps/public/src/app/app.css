@@ -27,6 +27,7 @@
 
 /* @relation(GSSC-PLLR-26, GSSC-PLLR-27, scope=range_start, role=Implementation) */
 .gssc-page {
+  position: relative;
   flex: 1 1 auto;
   color: inherit;
   font-family: inherit;

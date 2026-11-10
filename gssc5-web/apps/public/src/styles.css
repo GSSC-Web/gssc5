@@ -26,6 +26,9 @@
   --gssc-gray: #d4d4d4;
   --gssc-white: #ffffff;
   --gssc-black: #000000;
+  /* Match Prompt field failure chrome (Tailwind red-50 / red-500). */
+  --gssc-light-red: #fef2f2;
+  --gssc-dark-red: #ef4444;
 }
 
 @theme {
@@ -39,6 +42,8 @@
   --color-gssc-gray: var(--gssc-gray);
   --color-gssc-white: var(--gssc-white);
   --color-gssc-black: var(--gssc-black);
+  --color-gssc-light-red: var(--gssc-light-red);
+  --color-gssc-dark-red: var(--gssc-dark-red);
 }
 
 /* Nerd Fonts icon classes (subset). Glyphs from nerd-fonts v3.3.0 cheat sheet. */
