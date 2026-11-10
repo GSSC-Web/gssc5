@@ -1907,8 +1907,11 @@ RATIONALE: >>>
 A caller can browse public sections without a login. Members-only sections are outside this list. Which fields appear in each list entry and how entries are ordered are low-level. List filters are a separate requirement.
 <<<
 DERIVED: True
-CHANGE_DRIVER: GSSC5-37
-REVIEW_STATUS: Changed
+CHANGE_DRIVER: >>>
+GSSC5-12
+GSSC5-37
+<<<
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BHLR-136
@@ -1920,8 +1923,11 @@ RATIONALE: >>>
 Path cuid identifies one public section. Members-only sections are outside this request. Which fields the response includes is low-level.
 <<<
 DERIVED: True
-CHANGE_DRIVER: GSSC5-37
-REVIEW_STATUS: Changed
+CHANGE_DRIVER: >>>
+GSSC5-12
+GSSC5-37
+<<<
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BHLR-137
@@ -1933,8 +1939,11 @@ RATIONALE: >>>
 An authenticated member can browse every section. Which fields appear in each list entry and how entries are ordered are low-level. List filters are a separate requirement.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-37
-REVIEW_STATUS: Changed
+CHANGE_DRIVER: >>>
+GSSC5-12
+GSSC5-37
+<<<
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-50
@@ -1950,8 +1959,11 @@ RATIONALE: >>>
 An authenticated member can load any one section, public or members-only, by path cuid. Which fields the response includes is low-level.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-37
-REVIEW_STATUS: Changed
+CHANGE_DRIVER: >>>
+GSSC5-12
+GSSC5-37
+<<<
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-50
@@ -1968,7 +1980,7 @@ Filters let callers narrow the catalog without requiring a full scan in every ca
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-37
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BHLR-184
@@ -1981,7 +1993,7 @@ New sections are created from a template. Which request fields are required or o
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-37
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BHLR-139
@@ -1993,8 +2005,11 @@ RATIONALE: >>>
 An authenticated member with the necessary permissions can change a section. These permissions are separate from the permissions that allow deletion. Which fields may change and any further permission rules are low-level. This requirement does not name those permissions.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-37
-REVIEW_STATUS: Changed
+CHANGE_DRIVER: >>>
+GSSC5-12
+GSSC5-37
+<<<
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-50
@@ -2010,38 +2025,12 @@ RATIONALE: >>>
 An authenticated member with the necessary permissions can delete a section. Those permissions are separate from the permissions that allow modification. This requirement does not name those permissions.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-37
-REVIEW_STATUS: Changed
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-50
   ROLE: Refines
-
-[REQUIREMENT]
-UID: GSSC-BHLR-185
-TITLE: Section Content and Metadata Storage
-STATEMENT: >>>
-The GSSC Website Unified Backend SHALL store each section's content and metadata, including tags and permission-related metadata needed for create, modify, and delete.
-<<<
-RATIONALE: >>>
-Sections persist content and the metadata that governs access and grouping. Page ownership for future page assembly is expressed with tags. Order among page data entries that share a page uses the unified page-data index requirement. Exact field shapes are low-level.
-<<<
-DERIVED: True
-CHANGE_DRIVER: GSSC5-37
-REVIEW_STATUS: Changed
-
-[REQUIREMENT]
-UID: GSSC-BHLR-186
-TITLE: Section Template Capability
-STATEMENT: >>>
-The GSSC Website Unified Backend SHALL provide section templates that administrators manage and that logged-in members use when creating sections.
-<<<
-RATIONALE: >>>
-Templates supply the category and defaults used at section creation. Get, list, create, modify, and delete of templates, and which attributes a template holds, are low-level.
-<<<
-DERIVED: True
-CHANGE_DRIVER: GSSC5-37
-REVIEW_STATUS: Changed
 
 [[/SECTION]]
 
@@ -2908,6 +2897,32 @@ CHANGE_DRIVER: GSSC5-12
 REVIEW_STATUS: Approved
 
 [REQUIREMENT]
+UID: GSSC-BHLR-185
+TITLE: Page Entry Content and Metadata Storage
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store content and metadata for each section, announcement, and event-details page data table entry, including tags and permission-related metadata needed for create, modify, and delete, and template-related metadata when that entry uses a template.
+<<<
+RATIONALE: >>>
+Sections, announcements, and event details share content and metadata storage. Tags support grouping and future page ownership. Templates may apply beyond sections when an entry uses one. Order among entries that share a page uses the unified page-data index requirement. Exact field shapes are low-level.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-37
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-BHLR-186
+TITLE: Page Entry Template Capability
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL provide templates that administrators manage and that logged-in members use when creating page data entries that use templates, including sections and announcements or event details when those entries use templates.
+<<<
+RATIONALE: >>>
+Templates supply category and defaults at creation for entries that use them. Get, list, create, modify, and delete of templates, and which attributes a template holds, are low-level.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-37
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
 UID: GSSC-BHLR-187
 TITLE: Generic Page Index
 STATEMENT: >>>
@@ -2918,7 +2933,7 @@ Index is shared by sections, announcements, and event details in the page data t
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-37
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BHLR-140
