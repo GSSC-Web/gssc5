@@ -1,8 +1,8 @@
-// Page data /sections and /templates. Each assertion is limited to that requirement's statement.
+// Content module checks. Each assertion is limited to that requirement's statement.
 import { beforeAll, expect, test } from "bun:test";
 
-import { loadConfig } from "./config";
-import { getPrisma } from "./db";
+import { loadConfig } from "../config";
+import { getPrisma } from "../db";
 import {
   bootInProcess,
   cookieHeaderForToken,
@@ -12,10 +12,11 @@ import {
   postJsonResponse,
   type BackendFetch,
   type InProcessApp,
-} from "./test-harness";
+} from "../test-harness";
+import { PERM_MEMBER, PERM_USER_MOD } from "./helpers";
 
-const MEMBER_PERM = 0o1;
-const MOD_PERM = 0o2;
+const MEMBER_PERM = PERM_MEMBER;
+const MOD_PERM = PERM_USER_MOD;
 
 let app: InProcessApp;
 let backend: BackendFetch;
@@ -34,8 +35,8 @@ beforeAll(async () => {
 
   await prisma.user.create({
     data: {
-      username: "pd-member",
-      primaryEmail: "pd.member@example.com",
+      username: "sec-member",
+      primaryEmail: "sec.member@example.com",
       passwordHash,
       isAdmin: false,
       isUserMod: false,
@@ -56,8 +57,8 @@ beforeAll(async () => {
 
   await prisma.user.create({
     data: {
-      username: "pd-moderator",
-      primaryEmail: "pd.moderator@example.com",
+      username: "sec-moderator",
+      primaryEmail: "sec.moderator@example.com",
       passwordHash,
       isAdmin: false,
       isUserMod: true,
@@ -85,21 +86,21 @@ beforeAll(async () => {
 
   memberTok =
     (await establishedLogin(backend, {
-      username: "pd-member",
+      username: "sec-member",
       password: "page-data-secret",
     })) ?? "";
   expect(memberTok.length).toBeGreaterThan(0);
 
   moderatorTok =
     (await establishedLogin(backend, {
-      username: "pd-moderator",
+      username: "sec-moderator",
       password: "page-data-secret",
     })) ?? "";
   expect(moderatorTok.length).toBeGreaterThan(0);
 
-  const publicTemplate = await prisma.pageTemplate.create({
+  const publicTemplate = await prisma.contentTemplate.create({
     data: {
-      name: "Public About",
+      name: "Sec Public About",
       isPublic: true,
       tags: JSON.stringify(["about"]),
       createPerm: MEMBER_PERM,
@@ -109,9 +110,9 @@ beforeAll(async () => {
   });
   publicTemplateId = publicTemplate.id;
 
-  const memberCreate = await prisma.pageTemplate.create({
+  const memberCreate = await prisma.contentTemplate.create({
     data: {
-      name: "Member Create",
+      name: "Sec Member Create",
       isPublic: false,
       tags: JSON.stringify(["members"]),
       createPerm: MEMBER_PERM,
@@ -121,9 +122,9 @@ beforeAll(async () => {
   });
   memberCreateTemplateId = memberCreate.id;
 
-  const locked = await prisma.pageTemplate.create({
+  const locked = await prisma.contentTemplate.create({
     data: {
-      name: "Admin Only Create",
+      name: "Sec Admin Only Create",
       isPublic: true,
       tags: JSON.stringify(["locked"]),
       createPerm: 0,
@@ -493,97 +494,8 @@ test("GSSC-BLLR-332 Administrator Section Permissions", async () => {
   expect(patched.status).toBe(200);
 });
 
-test("GSSC-BLLR-333 Template List", async () => {
-  const { status, body } = await getJson("/templates", memberTok);
-  expect(status).toBe(200);
-  const list = body as Array<{ cuid: string; name: string }>;
-  expect(list.some((entry) => entry.cuid === publicTemplateId && entry.name === "Public About")).toBe(
-    true,
-  );
-  for (const entry of list) {
-    expect(Object.keys(entry).sort()).toEqual(["cuid", "name"]);
-  }
-});
-
-test("GSSC-BLLR-334 Template Get", async () => {
-  const { status, body } = await getJson(`/templates/${publicTemplateId}`, adminTok);
-  expect(status).toBe(200);
-  expect(body).toEqual({
-    cuid: publicTemplateId,
-    name: "Public About",
-    isPublic: true,
-    tags: ["about"],
-    createPerm: MEMBER_PERM,
-    modifyPerm: MEMBER_PERM,
-    deletePerm: MEMBER_PERM,
-  });
-});
-
-test("GSSC-BLLR-335 Template Create", async () => {
-  const { status, body } = await sendJson(
-    "POST",
-    "/templates",
-    { name: "New Template", isPublic: false, tags: ["n"] },
-    adminTok,
-  );
-  expect(status).toBe(201);
-  expect(body).toEqual({
-    cuid: expect.any(String),
-    name: "New Template",
-    isPublic: false,
-    tags: ["n"],
-    createPerm: 0,
-    modifyPerm: 0,
-    deletePerm: 0,
-  });
-});
-
-test("GSSC-BLLR-336 Template Modify", async () => {
-  const created = await db().pageTemplate.create({
-    data: {
-      name: "Mutable",
-      isPublic: true,
-      tags: JSON.stringify(["keep"]),
-      createPerm: 0,
-      modifyPerm: 0,
-      deletePerm: 0,
-    },
-  });
-
-  const { status, body } = await sendJson(
-    "PATCH",
-    `/templates/${created.id}`,
-    { isPublic: false, createPerm: MOD_PERM, modifyPerm: MEMBER_PERM },
-    adminTok,
-  );
-  expect(status).toBe(200);
-  expect(body).toEqual({
-    cuid: created.id,
-    name: "Mutable",
-    isPublic: false,
-    tags: ["keep"],
-    createPerm: MOD_PERM,
-    modifyPerm: MEMBER_PERM,
-    deletePerm: 0,
-  });
-});
-
-test("GSSC-BLLR-337 Template Delete", async () => {
-  const created = await db().pageTemplate.create({
-    data: { name: "Disposable", isPublic: true, tags: "[]" },
-  });
-  const response = await backend(
-    new Request(`http://127.0.0.1/templates/${created.id}`, {
-      method: "DELETE",
-      headers: { cookie: cookieHeaderForToken(adminTok) },
-    }),
-  );
-  expect(response.status).toBe(204);
-  expect(await db().pageTemplate.findUnique({ where: { id: created.id } })).toBeNull();
-});
-
 test("GSSC-BLLR-338 Page Entry Table", async () => {
-  const template = await db().pageTemplate.findUnique({ where: { id: memberCreateTemplateId } });
+  const template = await db().contentTemplate.findUnique({ where: { id: memberCreateTemplateId } });
   expect(template).toBeTruthy();
 
   const section = await db().pageDataEntry.create({
@@ -653,24 +565,51 @@ test("GSSC-BLLR-339 Page Entry Index", async () => {
   expect((await db().pageDataEntry.findUnique({ where: { id: s.id } }))?.index).toBe(17);
 });
 
-test("GSSC-BLLR-340 Template Table", async () => {
-  const row = await db().pageTemplate.create({
-    data: {
-      name: "Stored",
-      isPublic: false,
-      tags: JSON.stringify(["x"]),
-      createPerm: 1,
-      modifyPerm: 2,
-      deletePerm: 3,
-    },
+test("GSSC-BLLR-341 Section Deletion", async () => {
+  const allowed = await seedSection({
+    body: "delete-me",
+    isPublic: true,
+    deletePerm: MEMBER_PERM,
   });
-  const stored = await db().pageTemplate.findUnique({ where: { id: row.id } });
-  expect(stored).toMatchObject({
-    name: "Stored",
-    isPublic: false,
-    tags: JSON.stringify(["x"]),
-    createPerm: 1,
-    modifyPerm: 2,
-    deletePerm: 3,
+  const denied = await seedSection({
+    body: "keep-me",
+    isPublic: true,
+    deletePerm: 0,
   });
+
+  const ok = await backend(
+    new Request(`http://127.0.0.1/sections/${allowed.id}`, {
+      method: "DELETE",
+      headers: { cookie: cookieHeaderForToken(memberTok) },
+    }),
+  );
+  expect(ok.status).toBe(204);
+  expect(await db().pageDataEntry.findUnique({ where: { id: allowed.id } })).toBeNull();
+
+  const bad = await backend(
+    new Request(`http://127.0.0.1/sections/${denied.id}`, {
+      method: "DELETE",
+      headers: { cookie: cookieHeaderForToken(memberTok) },
+    }),
+  );
+  expect(bad.status).toBe(403);
+  expect(await db().pageDataEntry.findUnique({ where: { id: denied.id } })).not.toBeNull();
+});
+
+test("GSSC-BLLR-342 Content Permission Bit Fields", async () => {
+  // Bit 0 = member, bit 1 = user moderator.
+  const memberOnly = await seedSection({
+    body: "member-bit",
+    isPublic: true,
+    modifyPerm: MEMBER_PERM,
+  });
+  const modOnly = await seedSection({
+    body: "mod-bit",
+    isPublic: true,
+    modifyPerm: MOD_PERM,
+  });
+
+  expect((await sendJson("PATCH", `/sections/${memberOnly.id}`, { body: "m1" }, memberTok)).status).toBe(200);
+  expect((await sendJson("PATCH", `/sections/${modOnly.id}`, { body: "m2" }, memberTok)).status).toBe(403);
+  expect((await sendJson("PATCH", `/sections/${modOnly.id}`, { body: "m3" }, moderatorTok)).status).toBe(200);
 });

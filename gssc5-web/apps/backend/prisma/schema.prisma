@@ -166,9 +166,9 @@ model KeyValue {
 }
 // @relation(GSSC-BLLR-306, GSSC-BLLR-307, GSSC-BLLR-308, scope=range_end, role=Implementation)
 
-// Page data templates (GSSC-BHLR-186).
+// Content templates (GSSC-BHLR-186).
 // @relation(GSSC-BLLR-340, scope=range_start, role=Implementation)
-model PageTemplate {
+model ContentTemplate {
   id         String          @id @default(cuid())
   name       String
   isPublic   Boolean
@@ -184,26 +184,26 @@ model PageTemplate {
 // @relation(GSSC-BLLR-340, scope=range_end, role=Implementation)
 
 // Sections, announcements, and event details share one table (GSSC-BHLR-185 / 187).
-// @relation(GSSC-BLLR-338, GSSC-BLLR-339, scope=range_start, role=Implementation)
+// @relation(GSSC-BLLR-338, GSSC-BLLR-339, GSSC-BLLR-342, scope=range_start, role=Implementation)
 model PageDataEntry {
-  id         String        @id @default(cuid())
+  id         String           @id @default(cuid())
   /// "section" | "announcement" | "event"
   datatype   String
   header     String?
   body       String
   /// JSON string array of resource identifiers
-  resources  String        @default("[]")
+  resources  String           @default("[]")
   /// JSON string array of tag strings
-  tags       String        @default("[]")
-  index      Int           @default(0)
+  tags       String           @default("[]")
+  index      Int              @default(0)
   isPublic   Boolean
-  createPerm Int           @default(0)
-  modifyPerm Int           @default(0)
-  deletePerm Int           @default(0)
+  createPerm Int              @default(0)
+  modifyPerm Int              @default(0)
+  deletePerm Int              @default(0)
   templateId String?
-  template   PageTemplate? @relation(fields: [templateId], references: [id], onDelete: SetNull)
+  template   ContentTemplate? @relation(fields: [templateId], references: [id], onDelete: SetNull)
 
   @@index([datatype, index])
   @@map("page_data")
 }
-// @relation(GSSC-BLLR-338, GSSC-BLLR-339, scope=range_end, role=Implementation)
+// @relation(GSSC-BLLR-338, GSSC-BLLR-339, GSSC-BLLR-342, scope=range_end, role=Implementation)
