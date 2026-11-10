@@ -239,8 +239,11 @@ test('GSSC-PLLR-147 Syntactic', async () => {
 
   const { fixture, root } = await renderApplication();
   const chrome = root.querySelector('.gssc-error__chrome')!;
+  const body = root.querySelector('.gssc-error__body')!;
   const dismiss = root.querySelector('.gssc-error__dismiss')!;
   expect(chrome.contains(dismiss)).toBe(true);
+  expect(body.contains(chrome)).toBe(false);
+  expect(body.classList.contains('overflow-y-auto')).toBe(true);
   expect(
     [...chrome.children].at(-1)?.classList.contains('gssc-error__dismiss'),
   ).toBe(true);
@@ -287,9 +290,12 @@ test('GSSC-PLLR-149 Semantic', async () => {
 test('GSSC-PLLR-150 Syntactic', async () => {
   const { root } = await renderApplication();
   const chrome = root.querySelector('.gssc-error__chrome')!;
+  const body = root.querySelector('.gssc-error__body')!;
   const report = root.querySelector('.gssc-error__report')!;
   const dismiss = root.querySelector('.gssc-error__dismiss')!;
   expect(chrome.contains(report)).toBe(true);
+  expect(body.contains(chrome)).toBe(false);
+  expect(body.classList.contains('overflow-y-auto')).toBe(true);
   expect([...chrome.children][0]?.classList.contains('gssc-error__report')).toBe(true);
   expect(
     report.compareDocumentPosition(dismiss) & Node.DOCUMENT_POSITION_FOLLOWING,

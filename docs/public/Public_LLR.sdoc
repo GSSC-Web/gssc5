@@ -1762,15 +1762,15 @@ RELATIONS:
 UID: GSSC-PLLR-96
 TITLE: Syntactic
 STATEMENT: >>>
-The Error Container SHALL appear inside the Page Outlet region of the App Root when it presents error Contents, sit at the bottom-right of that region and size to its Contents up to one quarter of the viewport width and one third of the viewport height at small and above, span the full width of the Page Outlet and limit its height to one third of the viewport below small, and scroll its Contents vertically when those Contents exceed those size limits.
+The Error Container SHALL appear inside the Page Outlet region of the App Root when it presents error Contents, sit at the bottom-right of that region and size to its Contents up to one quarter of the viewport width and one third of the viewport height at small and above, span the full width of the Page Outlet and limit its height to one third of the viewport below small, keep Report and Dismiss on a chrome banner outside the scrollable Contents region, and scroll only that Contents region vertically when those Contents exceed those size limits.
 <<<
 RATIONALE: >>>
-A compact bottom-right placement keeps the error visible without covering the full page. Width and height caps leave most of the page usable as the viewport resizes; vertical scrolling keeps long Contents reachable inside those caps.
+A compact bottom-right placement keeps the error visible without covering the full page. Width and height caps leave most of the page usable as the viewport resizes. Keeping Report and Dismiss on a non-scrolling banner leaves those actions reachable while long Contents scroll inside the caps.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-24
-REVIEW_STATUS: Approved
+REVIEW_STATUS: Changed
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-48
@@ -2005,15 +2005,15 @@ RELATIONS:
 UID: GSSC-PLLR-147
 TITLE: Syntactic
 STATEMENT: >>>
-The Error Container Dismiss control SHALL appear at the top-right of the Error Container, with Escape dismissing the Error Container when the Error Container is focused, and with dismiss restoring the focus that was active before the Error Container was presented.
+The Error Container Dismiss control SHALL appear at the top-right of the Error Container chrome banner outside the scrollable Contents region, with Escape dismissing the Error Container when the Error Container is focused, and with dismiss restoring the focus that was active before the Error Container was presented.
 <<<
 RATIONALE: >>>
-Top-right placement matches a standard dismiss corner. Escape when focused and focus restore keep keyboard use predictable without stealing focus from unrelated page controls when the Container is not focused.
+Top-right placement on the non-scrolling chrome banner matches a standard dismiss corner and keeps Dismiss reachable while Contents scroll. Escape when focused and focus restore keep keyboard use predictable without stealing focus from unrelated page controls when the Container is not focused.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-24
-REVIEW_STATUS: Approved
+REVIEW_STATUS: Changed
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-48
@@ -2065,15 +2065,15 @@ RELATIONS:
 UID: GSSC-PLLR-150
 TITLE: Syntactic
 STATEMENT: >>>
-The Error Container Report control SHALL appear at the top-left of the Error Container opposite the Dismiss control.
+The Error Container Report control SHALL appear at the top-left of the Error Container chrome banner outside the scrollable Contents region, opposite the Dismiss control.
 <<<
 RATIONALE: >>>
-Opposite corners keep Report and Dismiss reachable without overlapping the error summary.
+Opposite corners on the non-scrolling chrome banner keep Report and Dismiss reachable without overlapping or scrolling away from the error summary.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-24
-REVIEW_STATUS: Approved
+REVIEW_STATUS: Changed
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-48

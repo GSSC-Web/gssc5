@@ -4,16 +4,15 @@
   <!-- @relation(GSSC-PLLR-97, scope=range_start, role=Implementation) -->
   <section
     #errorPanel
-    class="gssc-error absolute bottom-0 right-0 z-10 flex w-full max-h-[33.333vh] flex-col overflow-y-auto border border-gssc-dark-red bg-gssc-light-red px-4 py-3 font-sans text-gssc-dark-red sm:w-max sm:max-w-[25vw]"
+    class="gssc-error absolute bottom-0 right-0 z-10 flex w-full max-h-[33.333vh] flex-col overflow-hidden border border-gssc-dark-red bg-gssc-light-red px-4 py-3 font-sans text-gssc-dark-red sm:w-max sm:max-w-[25vw]"
     aria-label="Error"
     tabindex="-1"
     (keydown.escape)="onPanelEscape($event)"
   >
     <!-- @relation(GSSC-PLLR-97, scope=range_end, role=Implementation) -->
-    <!-- @relation(GSSC-PLLR-96, scope=range_end, role=Implementation) -->
 
-    <div class="gssc-error__chrome mb-2 flex items-start justify-between gap-2">
-      <!-- @relation(GSSC-PLLR-150, scope=range_start, role=Implementation) -->
+    <!-- @relation(GSSC-PLLR-147, GSSC-PLLR-150, scope=range_start, role=Implementation) -->
+    <div class="gssc-error__chrome mb-2 flex shrink-0 items-start justify-between gap-2">
       <!-- @relation(GSSC-PLLR-151, scope=range_start, role=Implementation) -->
       <button
         type="button"
@@ -23,7 +22,6 @@
         Report
       </button>
       <!-- @relation(GSSC-PLLR-151, scope=range_end, role=Implementation) -->
-      <!-- @relation(GSSC-PLLR-150, scope=range_end, role=Implementation) -->
 
       <!-- @relation(GSSC-PLLR-148, scope=range_start, role=Implementation) -->
       <button
@@ -36,70 +34,74 @@
       </button>
       <!-- @relation(GSSC-PLLR-148, scope=range_end, role=Implementation) -->
     </div>
+    <!-- @relation(GSSC-PLLR-147, GSSC-PLLR-150, scope=range_end, role=Implementation) -->
 
-    @if (applicationContents(); as application) {
-      <!-- @relation(GSSC-PLLR-98, GSSC-PLLR-99, scope=range_start, role=Implementation) -->
-      <!-- @relation(GSSC-PLLR-100, scope=range_start, role=Implementation) -->
-      <div class="gssc-error__application flex w-full flex-col gap-2">
-        <p class="gssc-error__application-name m-0 font-semibold text-gssc-dark-red">
-          {{ application.name }}
-        </p>
-        <p
-          class="gssc-error__application-description m-0 font-normal text-gssc-dark-red"
-        >
-          {{ application.description }}
-        </p>
-        <p
-          class="gssc-error__application-reference m-0 font-normal text-gssc-dark-red"
-        >
-          {{ application.referenceNumber }}
-        </p>
-        @if (showApplicationDebugging(application)) {
-          <details class="gssc-error__application-debugging font-normal text-gssc-dark-red">
-            <summary class="cursor-pointer">Debugging</summary>
-            <pre
-              class="m-0 overflow-x-auto whitespace-pre-wrap font-normal text-gssc-dark-red"
-            >{{ application.debuggingInformation }}</pre>
-          </details>
-        }
-      </div>
-      <!-- @relation(GSSC-PLLR-100, scope=range_end, role=Implementation) -->
-      <!-- @relation(GSSC-PLLR-98, GSSC-PLLR-99, scope=range_end, role=Implementation) -->
-    }
+    <div class="gssc-error__body min-h-0 flex-1 overflow-y-auto">
+      @if (applicationContents(); as application) {
+        <!-- @relation(GSSC-PLLR-98, GSSC-PLLR-99, scope=range_start, role=Implementation) -->
+        <!-- @relation(GSSC-PLLR-100, scope=range_start, role=Implementation) -->
+        <div class="gssc-error__application flex w-full flex-col gap-2">
+          <p class="gssc-error__application-name m-0 font-semibold text-gssc-dark-red">
+            {{ application.name }}
+          </p>
+          <p
+            class="gssc-error__application-description m-0 font-normal text-gssc-dark-red"
+          >
+            {{ application.description }}
+          </p>
+          <p
+            class="gssc-error__application-reference m-0 font-normal text-gssc-dark-red"
+          >
+            {{ application.referenceNumber }}
+          </p>
+          @if (showApplicationDebugging(application)) {
+            <details class="gssc-error__application-debugging font-normal text-gssc-dark-red">
+              <summary class="cursor-pointer">Debugging</summary>
+              <pre
+                class="m-0 overflow-x-auto whitespace-pre-wrap font-normal text-gssc-dark-red"
+              >{{ application.debuggingInformation }}</pre>
+            </details>
+          }
+        </div>
+        <!-- @relation(GSSC-PLLR-100, scope=range_end, role=Implementation) -->
+        <!-- @relation(GSSC-PLLR-98, GSSC-PLLR-99, scope=range_end, role=Implementation) -->
+      }
 
-    @if (httpContents(); as http) {
-      <!-- @relation(GSSC-PLLR-101, GSSC-PLLR-102, scope=range_start, role=Implementation) -->
-      <!-- @relation(GSSC-PLLR-103, scope=range_start, role=Implementation) -->
-      <div class="gssc-error__http flex w-full flex-col gap-2">
-        <p class="gssc-error__http-code m-0 font-semibold text-gssc-dark-red">
-          {{ http.code }}
-        </p>
-        <p class="gssc-error__http-name m-0 font-semibold text-gssc-dark-red">
-          {{ http.name }}
-        </p>
-        <p class="gssc-error__http-description m-0 font-normal text-gssc-dark-red">
-          {{ http.description }}
-        </p>
-        @if (showHttpRequest(http)) {
-          <details class="gssc-error__http-request font-normal text-gssc-dark-red">
-            <summary class="cursor-pointer">Request</summary>
-            <pre
-              class="m-0 overflow-x-auto whitespace-pre-wrap font-normal text-gssc-dark-red"
-            >{{ http.requestInformation }}</pre>
-          </details>
-        }
-        @if (showHttpResponse(http)) {
-          <details class="gssc-error__http-response font-normal text-gssc-dark-red">
-            <summary class="cursor-pointer">Response</summary>
-            <pre
-              class="m-0 overflow-x-auto whitespace-pre-wrap font-normal text-gssc-dark-red"
-            >{{ http.responseInformation }}</pre>
-          </details>
-        }
-      </div>
-      <!-- @relation(GSSC-PLLR-103, scope=range_end, role=Implementation) -->
-      <!-- @relation(GSSC-PLLR-101, GSSC-PLLR-102, scope=range_end, role=Implementation) -->
-    }
+      @if (httpContents(); as http) {
+        <!-- @relation(GSSC-PLLR-101, GSSC-PLLR-102, scope=range_start, role=Implementation) -->
+        <!-- @relation(GSSC-PLLR-103, scope=range_start, role=Implementation) -->
+        <div class="gssc-error__http flex w-full flex-col gap-2">
+          <p class="gssc-error__http-code m-0 font-semibold text-gssc-dark-red">
+            {{ http.code }}
+          </p>
+          <p class="gssc-error__http-name m-0 font-semibold text-gssc-dark-red">
+            {{ http.name }}
+          </p>
+          <p class="gssc-error__http-description m-0 font-normal text-gssc-dark-red">
+            {{ http.description }}
+          </p>
+          @if (showHttpRequest(http)) {
+            <details class="gssc-error__http-request font-normal text-gssc-dark-red">
+              <summary class="cursor-pointer">Request</summary>
+              <pre
+                class="m-0 overflow-x-auto whitespace-pre-wrap font-normal text-gssc-dark-red"
+              >{{ http.requestInformation }}</pre>
+            </details>
+          }
+          @if (showHttpResponse(http)) {
+            <details class="gssc-error__http-response font-normal text-gssc-dark-red">
+              <summary class="cursor-pointer">Response</summary>
+              <pre
+                class="m-0 overflow-x-auto whitespace-pre-wrap font-normal text-gssc-dark-red"
+              >{{ http.responseInformation }}</pre>
+            </details>
+          }
+        </div>
+        <!-- @relation(GSSC-PLLR-103, scope=range_end, role=Implementation) -->
+        <!-- @relation(GSSC-PLLR-101, GSSC-PLLR-102, scope=range_end, role=Implementation) -->
+      }
+    </div>
+    <!-- @relation(GSSC-PLLR-96, scope=range_end, role=Implementation) -->
   </section>
 }
 <!-- @relation(GSSC-PLLR-95, scope=range_end, role=Implementation) -->

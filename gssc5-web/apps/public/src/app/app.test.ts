@@ -242,15 +242,24 @@ test('GSSC-PLLR-96 Syntactic', async () => {
   await fixture.whenStable();
 
   const container = root.querySelector<HTMLElement>('.gssc-error')!;
+  const chrome = root.querySelector<HTMLElement>('.gssc-error__chrome')!;
+  const body = root.querySelector<HTMLElement>('.gssc-error__body')!;
   expect(page.contains(container)).toBe(true);
   expect(container.classList.contains('absolute')).toBe(true);
   expect(container.classList.contains('bottom-0')).toBe(true);
   expect(container.classList.contains('right-0')).toBe(true);
   expect(container.classList.contains('w-full')).toBe(true);
   expect(container.classList.contains('max-h-[33.333vh]')).toBe(true);
-  expect(container.classList.contains('overflow-y-auto')).toBe(true);
+  expect(container.classList.contains('overflow-hidden')).toBe(true);
   expect(container.classList.contains('sm:w-max')).toBe(true);
   expect(container.classList.contains('sm:max-w-[25vw]')).toBe(true);
+  expect(container.contains(chrome)).toBe(true);
+  expect(container.contains(body)).toBe(true);
+  expect(body.contains(chrome)).toBe(false);
+  expect(chrome.classList.contains('shrink-0')).toBe(true);
+  expect(body.classList.contains('overflow-y-auto')).toBe(true);
+  expect(body.classList.contains('min-h-0')).toBe(true);
+  expect(body.classList.contains('flex-1')).toBe(true);
 });
 // @relation(GSSC-PLLR-96, scope=range_end, role=Test)
 
