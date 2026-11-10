@@ -12,7 +12,7 @@ enabled: true
 ## Operation loop
 
 1. Scope the Kaneo task (UIDs, CHANGE_DRIVER, deferrals).
-2. Draft or edit HLR and LLR to match owner scope; one behavior per requirement.
+2. Draft or edit HLR and LLR to match owner scope; one behavior and exactly one `SHALL` per requirement (comma/semicolon clauses, or split UIDs).
 3. Parent checks: LLRs parent only HLRs; HLRs parent only PIRs (or `DERIVED` with rationale and no parent). Prefer parents over derived.
 4. On text change: append CHANGE_DRIVER task id; set `REVIEW_STATUS: Changed`.
 5. Appearance: for each displayed FE element, Semantic / Syntactic / Lexical triad under a named subsection (`docs/AGENTS.md`).

@@ -24,6 +24,7 @@ Scoped routers (domain detail only): `docs/AGENTS.md`, `gssc5-web/AGENTS.md`.
 
 - Kaneo ALM owns task scope, board columns, and Fix Version.
 - Software and tests flow from requirements. Tests must not conform to software; software must not conform to tests.
+- Requirements: exactly one `SHALL` per statement (see `docs/AGENTS.md`, requirements profile).
 - Fix a failing test when the test is wrong. If software or requirements are the cause, ask before changing them.
 - Prefer optimal use of adopted third parties (Elysia, Angular, Tailwind, Eden Treaty, Bun/mise, Prismabox) over custom reinvention.
 - Never commit secrets. Keep skills out of app build artifacts.

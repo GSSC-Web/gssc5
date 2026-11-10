@@ -1744,7 +1744,7 @@ TITLE: Error Container
 UID: GSSC-PLLR-95
 TITLE: Semantic
 STATEMENT: >>>
-The Public Frontend Error Container SHALL present Application Error Contents or HTTP Error Contents for the current public error, and SHALL present neither when there is no public error.
+The Public Frontend Error Container SHALL present Application Error Contents or HTTP Error Contents for the current public error, and present neither when there is no public error.
 <<<
 RATIONALE: >>>
 The Error Container places error Contents on public pages when an error occurs. Application Error Contents and HTTP Error Contents are separate requirements. This requirement does not invent page-specific error copy beyond that container contract.
@@ -1752,7 +1752,7 @@ The Error Container places error Contents on public pages when an error occurs. 
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-24
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-48
@@ -1762,7 +1762,7 @@ RELATIONS:
 UID: GSSC-PLLR-96
 TITLE: Syntactic
 STATEMENT: >>>
-The Error Container SHALL appear inside the Page Outlet region of the App Root when it presents error Contents; at small and above, SHALL sit at the bottom-right of that region and size to its Contents up to one quarter of the viewport width and one third of the viewport height; below small, SHALL span the full width of the Page Outlet and limit its height to one third of the viewport; and SHALL scroll its Contents vertically when those Contents exceed those size limits.
+The Error Container SHALL appear inside the Page Outlet region of the App Root when it presents error Contents, sit at the bottom-right of that region and size to its Contents up to one quarter of the viewport width and one third of the viewport height at small and above, span the full width of the Page Outlet and limit its height to one third of the viewport below small, and scroll its Contents vertically when those Contents exceed those size limits.
 <<<
 RATIONALE: >>>
 A compact bottom-right placement keeps the error visible without covering the full page. Width and height caps leave most of the page usable as the viewport resizes; vertical scrolling keeps long Contents reachable inside those caps.
@@ -1770,7 +1770,7 @@ A compact bottom-right placement keeps the error visible without covering the fu
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-24
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-48
@@ -1788,7 +1788,7 @@ Light-red and dark-red theme tokens mark the Error Container as an error surface
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-24
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-48
@@ -1804,7 +1804,7 @@ TITLE: Application Error Contents
 UID: GSSC-PLLR-98
 TITLE: Semantic
 STATEMENT: >>>
-When the Error Container presents Application Error Contents, those Contents SHALL display the error name, the error description, and the error reference number; when the visitor is a logged-in administrator and debugging information is available, those Contents SHALL also provide that debugging information in a collapsible presentation that starts collapsed.
+When the Error Container presents Application Error Contents, those Contents SHALL display the error name, the error description, and the error reference number, and, when the visitor is a logged-in administrator and debugging information is available, provide that debugging information in a collapsible presentation that starts collapsed.
 <<<
 RATIONALE: >>>
 Application Error Contents tell the visitor which application error occurred and how to refer to it. Collapsed-by-default debugging keeps administrator detail available without crowding the summary. This requirement does not set the name, description, reference format, or debugging payload.
@@ -1812,7 +1812,7 @@ Application Error Contents tell the visitor which application error occurred and
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-24
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-35
@@ -1831,7 +1831,7 @@ RELATIONS:
 UID: GSSC-PLLR-99
 TITLE: Syntactic
 STATEMENT: >>>
-When the Error Container presents Application Error Contents, the error name, error description, and error reference number SHALL appear in that order inside the Error Container, and the debugging collapsible SHALL appear after those fields when it is available.
+When the Error Container presents Application Error Contents, the error name, error description, and error reference number SHALL appear in that order inside the Error Container, with the debugging collapsible after those fields when it is available.
 <<<
 RATIONALE: >>>
 Ordering name, description, and reference first keeps the visitor-facing summary readable before optional administrator debugging detail.
@@ -1839,7 +1839,7 @@ Ordering name, description, and reference first keeps the visitor-facing summary
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-24
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-35
@@ -1858,7 +1858,7 @@ RELATIONS:
 UID: GSSC-PLLR-100
 TITLE: Lexical
 STATEMENT: >>>
-When the Error Container presents Application Error Contents, the error name SHALL use a semibold weight and the dark-red theme token for its text color, and the error description, error reference number, and debugging information SHALL use a normal weight and the dark-red theme token for their text color.
+When the Error Container presents Application Error Contents, the error name, error description, error reference number, and debugging information SHALL use the dark-red theme token for their text color, with the error name at a semibold weight and the remaining fields at a normal weight.
 <<<
 RATIONALE: >>>
 Semibold dark-red distinguishes the error name on the light-red Error Container. Normal-weight dark-red keeps supporting Application Error fields aligned with the error chrome. A fuller type scale is not set yet beyond these weight and token choices.
@@ -1866,7 +1866,7 @@ Semibold dark-red distinguishes the error name on the light-red Error Container.
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-24
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-35
@@ -1891,7 +1891,7 @@ TITLE: HTTP Error Contents
 UID: GSSC-PLLR-101
 TITLE: Semantic
 STATEMENT: >>>
-When the Error Container presents HTTP Error Contents, those Contents SHALL display the error code, the error name, and the error description; when the visitor is a logged-in administrator and request or response packet information is available, those Contents SHALL also provide each available packet detail in its own collapsible presentation that starts collapsed.
+When the Error Container presents HTTP Error Contents, those Contents SHALL display the error code, the error name, and the error description, and, when the visitor is a logged-in administrator and request or response packet information is available, provide each available packet detail in its own collapsible presentation that starts collapsed.
 <<<
 RATIONALE: >>>
 HTTP Error Contents tell the visitor which HTTP failure occurred. Separate collapsed-by-default request and response collapsibles keep administrator packet detail available without crowding the summary. This requirement does not set the code, name, description, or packet payloads.
@@ -1899,7 +1899,7 @@ HTTP Error Contents tell the visitor which HTTP failure occurred. Separate colla
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-24
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-39
@@ -1921,7 +1921,7 @@ RELATIONS:
 UID: GSSC-PLLR-102
 TITLE: Syntactic
 STATEMENT: >>>
-When the Error Container presents HTTP Error Contents, the error code, error name, and error description SHALL appear in that order inside the Error Container, and the request and response collapsibles SHALL appear after those fields when they are available.
+When the Error Container presents HTTP Error Contents, the error code, error name, and error description SHALL appear in that order inside the Error Container, with the request and response collapsibles after those fields when they are available.
 <<<
 RATIONALE: >>>
 Ordering code, name, and description first keeps the visitor-facing HTTP summary readable before optional administrator packet detail.
@@ -1929,7 +1929,7 @@ Ordering code, name, and description first keeps the visitor-facing HTTP summary
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-24
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-39
@@ -1951,7 +1951,7 @@ RELATIONS:
 UID: GSSC-PLLR-103
 TITLE: Lexical
 STATEMENT: >>>
-When the Error Container presents HTTP Error Contents, the error code and error name SHALL use a semibold weight and the dark-red theme token for their text color, and the error description, request packet information, and response packet information SHALL use a normal weight and the dark-red theme token for their text color.
+When the Error Container presents HTTP Error Contents, the error code, error name, error description, request packet information, and response packet information SHALL use the dark-red theme token for their text color, with the error code and error name at a semibold weight and the remaining fields at a normal weight.
 <<<
 RATIONALE: >>>
 Semibold dark-red distinguishes the HTTP status summary on the light-red Error Container. Normal-weight dark-red keeps supporting HTTP Error fields aligned with the error chrome. A fuller type scale is not set yet beyond these weight and token choices.
@@ -1959,7 +1959,7 @@ Semibold dark-red distinguishes the HTTP status summary on the light-red Error C
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-24
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-39
@@ -1995,7 +1995,7 @@ Dismiss removes the current error presentation so the visitor can continue with 
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-24
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-48
@@ -2005,7 +2005,7 @@ RELATIONS:
 UID: GSSC-PLLR-147
 TITLE: Syntactic
 STATEMENT: >>>
-The Error Container Dismiss control SHALL appear at the top-right of the Error Container; Escape SHALL dismiss the Error Container when the Error Container is focused; and dismissing the Error Container SHALL restore the focus that was active before the Error Container was presented.
+The Error Container Dismiss control SHALL appear at the top-right of the Error Container, with Escape dismissing the Error Container when the Error Container is focused, and with dismiss restoring the focus that was active before the Error Container was presented.
 <<<
 RATIONALE: >>>
 Top-right placement matches a standard dismiss corner. Escape when focused and focus restore keep keyboard use predictable without stealing focus from unrelated page controls when the Container is not focused.
@@ -2013,7 +2013,7 @@ Top-right placement matches a standard dismiss corner. Escape when focused and f
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-24
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-48
@@ -2023,7 +2023,7 @@ RELATIONS:
 UID: GSSC-PLLR-148
 TITLE: Lexical
 STATEMENT: >>>
-The Error Container Dismiss control SHALL present an X mark, SHALL use a transparent background that becomes the dark-red theme token on hover, SHALL use rounded corners, and SHALL use the gray theme token for the X that becomes the white theme token on hover.
+The Error Container Dismiss control SHALL present an X mark with a transparent background that becomes the dark-red theme token on hover, rounded corners, and the gray theme token for the X that becomes the white theme token on hover.
 <<<
 RATIONALE: >>>
 Transparent-to-red hover and gray-to-white X mark the control as activatable while staying aligned with the Error Container chrome. A fuller control color map is not set yet beyond these token choices.
@@ -2031,7 +2031,7 @@ Transparent-to-red hover and gray-to-white X mark the control as activatable whi
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-24
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-48
@@ -2055,7 +2055,7 @@ Report ends the current error presentation from the visitor side. Sending the er
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-24
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-48
@@ -2073,7 +2073,7 @@ Opposite corners keep Report and Dismiss reachable without overlapping the error
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-24
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-48
@@ -2091,7 +2091,7 @@ Matching Dismiss chrome keeps the two chrome controls visually paired as Error C
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-24
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-48
