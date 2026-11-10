@@ -1901,39 +1901,48 @@ TITLE: Generic Sections
 UID: GSSC-BHLR-135
 TITLE: Public Section List
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL provide a list of public section data entries upon request, as a list of headers.
+The GSSC Website Unified Backend SHALL provide a list of public sections upon request.
 <<<
 RATIONALE: >>>
-A caller can request the public sections and receive each section's headers. A public section is a page data table entry for a section whose audience is public. Members-only entries are outside this list.
+A caller can browse public sections without a login. Members-only sections are outside this list. Which fields appear in each list entry and how entries are ordered are low-level. List filters are a separate requirement.
 <<<
 DERIVED: True
-CHANGE_DRIVER: GSSC5-12
+CHANGE_DRIVER: >>>
+GSSC5-12
+GSSC5-37
+<<<
 REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BHLR-136
 TITLE: Public Section Data
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL provide a public section's data upon request, including that section's headers, bodies, and resources.
+The GSSC Website Unified Backend SHALL provide a public section's data upon request by section cuid in the path.
 <<<
 RATIONALE: >>>
-A caller can request one public section and receive its headers, bodies, and resources together. Members-only sections are outside this request.
+Path cuid identifies one public section. Members-only sections are outside this request. Which fields the response includes is low-level.
 <<<
 DERIVED: True
-CHANGE_DRIVER: GSSC5-12
+CHANGE_DRIVER: >>>
+GSSC5-12
+GSSC5-37
+<<<
 REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BHLR-137
 TITLE: Authenticated Section List
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL provide a list of the public and members-only section data entries upon request from a logged-in member, as a list of headers.
+The GSSC Website Unified Backend SHALL provide a list of public and members-only sections upon request from a logged-in member.
 <<<
 RATIONALE: >>>
-An authenticated member can request every section and receive each section's headers.
+An authenticated member can browse every section. Which fields appear in each list entry and how entries are ordered are low-level. List filters are a separate requirement.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-12
+CHANGE_DRIVER: >>>
+GSSC5-12
+GSSC5-37
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -1944,13 +1953,16 @@ RELATIONS:
 UID: GSSC-BHLR-138
 TITLE: Authenticated Section Data
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL provide any section's data upon request from a logged-in member, including that section's headers, bodies, and resources.
+The GSSC Website Unified Backend SHALL provide any section's data upon request from a logged-in member by section cuid in the path.
 <<<
 RATIONALE: >>>
-An authenticated member can request any one section, public or members-only, and receive its headers, bodies, and resources together.
+An authenticated member can load any one section, public or members-only, by path cuid. Which fields the response includes is low-level.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-12
+CHANGE_DRIVER: >>>
+GSSC5-12
+GSSC5-37
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -1958,16 +1970,45 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
+UID: GSSC-BHLR-183
+TITLE: Section List Filters
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL accept filtering of section lists.
+<<<
+RATIONALE: >>>
+Filters let callers narrow the catalog without requiring a full scan in every case. Which filter keys and match rules apply are low-level.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-37
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-BHLR-184
+TITLE: Section Creation
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL accept creation of a section by a logged-in member who has the necessary create permission, using a section template.
+<<<
+RATIONALE: >>>
+New sections are created from a template. Which request fields are required or optional, and which values the template supplies, are low-level.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-37
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
 UID: GSSC-BHLR-139
 TITLE: Section Modification
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL accept modification of a section by a logged-in member who has the necessary permissions, including that section's headers, bodies, and resources.
+The GSSC Website Unified Backend SHALL accept modification of a section by a logged-in member who has the necessary permissions.
 <<<
 RATIONALE: >>>
-An authenticated member with the necessary permissions can change a section. The change includes that section's headers, bodies, and resources. These permissions are separate from the permissions that allow deletion. This requirement does not name those permissions.
+An authenticated member with the necessary permissions can change a section. These permissions are separate from the permissions that allow deletion. Which fields may change and any further permission rules are low-level. This requirement does not name those permissions.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-12
+CHANGE_DRIVER: >>>
+GSSC5-12
+GSSC5-37
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -2853,6 +2894,45 @@ The flag records whether the entry is available to the public or only to members
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-BHLR-185
+TITLE: Page Entry Content and Metadata Storage
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store content and metadata for each section, announcement, and event-details page data table entry, including tags and permission-related metadata needed for create, modify, and delete, and template-related metadata when that entry uses a template.
+<<<
+RATIONALE: >>>
+Sections, announcements, and event details share content and metadata storage. Tags support grouping and future page ownership. Templates may apply beyond sections when an entry uses one. Order among entries that share a page uses the unified page-data index requirement. Exact field shapes are low-level.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-37
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-BHLR-186
+TITLE: Page Entry Template Capability
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL provide templates that administrators manage and that logged-in members use when creating page data entries that use templates, including sections and announcements or event details when those entries use templates.
+<<<
+RATIONALE: >>>
+Templates supply category and defaults at creation for entries that use them. Get, list, create, modify, and delete of templates, and which attributes a template holds, are low-level.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-37
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-BHLR-187
+TITLE: Generic Page Index
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store an index for each page data table entry that determines that entry's order among entries that share a page.
+<<<
+RATIONALE: >>>
+Index is shared by sections, announcements, and event details in the page data table. How page sharing is determined and the exact index type are low-level.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-37
 REVIEW_STATUS: Approved
 
 [REQUIREMENT]
