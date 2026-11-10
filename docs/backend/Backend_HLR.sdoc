@@ -1901,10 +1901,10 @@ TITLE: Generic Sections
 UID: GSSC-BHLR-135
 TITLE: Public Section List
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL provide a list of public sections upon request, each entry including that section's header, body, tags, cuid, and index, ordered by index ascending among sections that share page-ownership tags.
+The GSSC Website Unified Backend SHALL provide a list of public sections upon request.
 <<<
 RATIONALE: >>>
-A caller can browse public sections without a login. Index orders sections that belong to the same page via tags. Members-only sections are outside this list. List filters are a separate requirement.
+A caller can browse public sections without a login. Members-only sections are outside this list. Which fields appear in each list entry and how entries are ordered are low-level. List filters are a separate requirement.
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-37
@@ -1914,10 +1914,10 @@ REVIEW_STATUS: Changed
 UID: GSSC-BHLR-136
 TITLE: Public Section Data
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL provide a public section upon request by section cuid in the path, including that section's header, body, resources, tags, and index.
+The GSSC Website Unified Backend SHALL provide a public section's data upon request by section cuid in the path.
 <<<
 RATIONALE: >>>
-Path cuid identifies one public section for page assembly. A section with isPublic false fails for a logged-out caller. Members-only sections are outside this request.
+Path cuid identifies one public section. Members-only sections are outside this request. Which fields the response includes is low-level.
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-37
@@ -1927,10 +1927,10 @@ REVIEW_STATUS: Changed
 UID: GSSC-BHLR-137
 TITLE: Authenticated Section List
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL provide a list of public and members-only sections upon request from a logged-in member, each entry including that section's header, body, tags, cuid, and index, ordered by index ascending among sections that share page-ownership tags.
+The GSSC Website Unified Backend SHALL provide a list of public and members-only sections upon request from a logged-in member.
 <<<
 RATIONALE: >>>
-An authenticated member can browse every section. Index still orders sections that share a page via tags. List filters are a separate requirement.
+An authenticated member can browse every section. Which fields appear in each list entry and how entries are ordered are low-level. List filters are a separate requirement.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-37
@@ -1944,10 +1944,10 @@ RELATIONS:
 UID: GSSC-BHLR-138
 TITLE: Authenticated Section Data
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL provide any section upon request from a logged-in member by section cuid in the path, including that section's header, body, resources, tags, and index.
+The GSSC Website Unified Backend SHALL provide any section's data upon request from a logged-in member by section cuid in the path.
 <<<
 RATIONALE: >>>
-An authenticated member can load any one section, public or members-only, by path cuid for editing or page assembly.
+An authenticated member can load any one section, public or members-only, by path cuid. Which fields the response includes is low-level.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-37
@@ -1961,10 +1961,10 @@ RELATIONS:
 UID: GSSC-BHLR-183
 TITLE: Section List Filters
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL accept section-list filters for header, body, tag, cuid, and content, where header, body, tag, and content match as a case-insensitive substring, content matches the header or the body, and cuid matches that section.
+The GSSC Website Unified Backend SHALL accept filtering of section lists.
 <<<
 RATIONALE: >>>
-Filters let callers find sections without returning the full catalog. Ordering by index among page-ownership tags remains the list default when filters do not specify otherwise.
+Filters let callers narrow the catalog without requiring a full scan in every case. Which filter keys and match rules apply are low-level.
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-37
@@ -1974,10 +1974,10 @@ REVIEW_STATUS: Changed
 UID: GSSC-BHLR-184
 TITLE: Section Creation
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL accept creation of a section by a logged-in member who has create permission for the requested template category, requiring a body and a template category, and accepting an optional header, resources, tags, and index.
+The GSSC Website Unified Backend SHALL accept creation of a section by a logged-in member who has the necessary create permission, using a section template.
 <<<
 RATIONALE: >>>
-Creation stores the requested header, body, resources, and index. isPublic and permission values come from the template. Tags are the template tags plus the requested tags. Page ownership is expressed through tags; index orders sections on a page.
+New sections are created from a template. Which request fields are required or optional, and which values the template supplies, are low-level.
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-37
@@ -1987,10 +1987,10 @@ REVIEW_STATUS: Changed
 UID: GSSC-BHLR-139
 TITLE: Section Modification
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL accept modification of a section by a logged-in member who has modify permission for that section, accepting an optional header, body, resources, tags, and index, and accepting isPublic only when that member also has create, modify, and delete permission for that section.
+The GSSC Website Unified Backend SHALL accept modification of a section by a logged-in member who has the necessary permissions.
 <<<
 RATIONALE: >>>
-An authenticated member with modify permission can change section contents and order. Changing isPublic requires full create, modify, and delete permission on that section. Administrator create, modify, and delete on every section is a separate storage rule.
+An authenticated member with the necessary permissions can change a section. These permissions are separate from the permissions that allow deletion. Which fields may change and any further permission rules are low-level. This requirement does not name those permissions.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-37
@@ -2004,10 +2004,10 @@ RELATIONS:
 UID: GSSC-BHLR-176
 TITLE: Section Deletion
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL accept deletion of a section by a logged-in member who has delete permission for that section.
+The GSSC Website Unified Backend SHALL accept deletion of a section by a logged-in member who has the necessary permissions.
 <<<
 RATIONALE: >>>
-An authenticated member with delete permission can remove a section. Those permissions are separate from modify. This requirement does not name the permission encoding.
+An authenticated member with the necessary permissions can delete a section. Those permissions are separate from the permissions that allow modification. This requirement does not name those permissions.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-37
@@ -2019,12 +2019,12 @@ RELATIONS:
 
 [REQUIREMENT]
 UID: GSSC-BHLR-185
-TITLE: Section Header Storage
+TITLE: Section Content and Metadata Storage
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL store an optional header string for each section.
+The GSSC Website Unified Backend SHALL store each section's content and metadata, including tags and permission-related metadata needed for create, modify, and delete.
 <<<
 RATIONALE: >>>
-A section may omit a header. Announcement and event-detail header storage stays under Generic Page Data.
+Sections persist content and the metadata that governs access and grouping. Page ownership for future page assembly is expressed with tags. Order among page data entries that share a page uses the unified page-data index requirement. Exact field shapes are low-level.
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-37
@@ -2032,142 +2032,12 @@ REVIEW_STATUS: Changed
 
 [REQUIREMENT]
 UID: GSSC-BHLR-186
-TITLE: Section Body Storage
+TITLE: Section Template Capability
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL store a required body for each section.
+The GSSC Website Unified Backend SHALL provide section templates that administrators manage and that logged-in members use when creating sections.
 <<<
 RATIONALE: >>>
-Every section has a body. Announcement and event-detail body storage stays under Generic Page Data.
-<<<
-DERIVED: True
-CHANGE_DRIVER: GSSC5-37
-REVIEW_STATUS: Changed
-
-[REQUIREMENT]
-UID: GSSC-BHLR-187
-TITLE: Section Resource Storage
-STATEMENT: >>>
-The GSSC Website Unified Backend SHALL store an optional list of resources for each section.
-<<<
-RATIONALE: >>>
-A section may reference resources. This requirement does not define resource contents. Announcement and event-detail resource storage stays under Generic Page Data.
-<<<
-DERIVED: True
-CHANGE_DRIVER: GSSC5-37
-REVIEW_STATUS: Changed
-
-[REQUIREMENT]
-UID: GSSC-BHLR-188
-TITLE: Section Tag Storage
-STATEMENT: >>>
-The GSSC Website Unified Backend SHALL store optional tags for each section.
-<<<
-RATIONALE: >>>
-Tags group sections. Page ownership for future page assembly is set by tags, not by a separate page-id foreign key in this model.
-<<<
-DERIVED: True
-CHANGE_DRIVER: GSSC5-37
-REVIEW_STATUS: Changed
-
-[REQUIREMENT]
-UID: GSSC-BHLR-189
-TITLE: Section Index Storage
-STATEMENT: >>>
-The GSSC Website Unified Backend SHALL store an index integer for each section that determines the order of sections on a page.
-<<<
-RATIONALE: >>>
-Index orders sections that share a page via tags. Lower index values appear before higher ones unless a later requirement specifies another sort.
-<<<
-DERIVED: True
-CHANGE_DRIVER: GSSC5-37
-REVIEW_STATUS: Changed
-
-[REQUIREMENT]
-UID: GSSC-BHLR-190
-TITLE: Section Public Flag Storage
-STATEMENT: >>>
-The GSSC Website Unified Backend SHALL store an isPublic flag for each section.
-<<<
-RATIONALE: >>>
-isPublic records whether the section is available without login. Announcement and event-detail audience storage stays under Generic Page Data.
-<<<
-DERIVED: True
-CHANGE_DRIVER: GSSC5-37
-REVIEW_STATUS: Changed
-
-[REQUIREMENT]
-UID: GSSC-BHLR-191
-TITLE: Section Permission Storage
-STATEMENT: >>>
-The GSSC Website Unified Backend SHALL store an octal permission value for each non-administrator permission type on each section covering create, modify, and delete, and SHALL grant an administrator create, modify, and delete on every section.
-<<<
-RATIONALE: >>>
-Octal permission values encode create, modify, and delete per permission type other than administrator. Administrator always has full section control. Announcement and event-detail permission storage stays under Generic Page Data.
-<<<
-DERIVED: True
-CHANGE_DRIVER: GSSC5-37
-REVIEW_STATUS: Changed
-
-[REQUIREMENT]
-UID: GSSC-BHLR-192
-TITLE: Section Template Get
-STATEMENT: >>>
-The GSSC Website Unified Backend SHALL provide a section template upon request from an administrator by template cuid in the path, including that template's name, isPublic flag, and permissions.
-<<<
-RATIONALE: >>>
-Administrators inspect a template before creating sections from it.
-<<<
-DERIVED: True
-CHANGE_DRIVER: GSSC5-37
-REVIEW_STATUS: Changed
-
-[REQUIREMENT]
-UID: GSSC-BHLR-193
-TITLE: Section Template List
-STATEMENT: >>>
-The GSSC Website Unified Backend SHALL provide a list of section templates upon request from a logged-in member, each entry including that template's name and cuid.
-<<<
-RATIONALE: >>>
-Logged-in members choose a template category when creating a section.
-<<<
-DERIVED: True
-CHANGE_DRIVER: GSSC5-37
-REVIEW_STATUS: Changed
-
-[REQUIREMENT]
-UID: GSSC-BHLR-194
-TITLE: Section Template Creation
-STATEMENT: >>>
-The GSSC Website Unified Backend SHALL accept creation of a section template by an administrator, requiring a name and isPublic flag, accepting optional permission values that default to 0 when omitted, and accepting optional tags.
-<<<
-RATIONALE: >>>
-Administrators define templates that supply isPublic and permissions to new sections.
-<<<
-DERIVED: True
-CHANGE_DRIVER: GSSC5-37
-REVIEW_STATUS: Changed
-
-[REQUIREMENT]
-UID: GSSC-BHLR-195
-TITLE: Section Template Modification
-STATEMENT: >>>
-The GSSC Website Unified Backend SHALL accept modification of a section template by an administrator by template cuid in the path, accepting optional isPublic and permission values while leaving omitted values, the name, and the tags unchanged.
-<<<
-RATIONALE: >>>
-Administrators adjust template audience and permissions without renaming or retagging in this operation.
-<<<
-DERIVED: True
-CHANGE_DRIVER: GSSC5-37
-REVIEW_STATUS: Changed
-
-[REQUIREMENT]
-UID: GSSC-BHLR-196
-TITLE: Section Template Deletion
-STATEMENT: >>>
-The GSSC Website Unified Backend SHALL accept deletion of a section template by an administrator by template cuid in the path.
-<<<
-RATIONALE: >>>
-Administrators remove templates that are no longer used for section creation.
+Templates supply the category and defaults used at section creation. Get, list, create, modify, and delete of templates, and which attributes a template holds, are low-level.
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-37
@@ -2966,11 +2836,11 @@ STATEMENT: >>>
 The GSSC Website Unified Backend SHALL store sections, announcements, and event details as entries in the page data table.
 <<<
 RATIONALE: >>>
-Sections, announcements, and event details share this table. Each entry is one section, one announcement, or one event's details. Section field shape, tags, index, and templates are under Generic Sections. The cemetery project and the war veterans project have their own datasets.
+Sections, announcements, and event details share this table. Each entry is one section, one announcement, or one event's details. The cemetery project and the war veterans project have their own datasets.
 <<<
 DERIVED: True
-CHANGE_DRIVER: GSSC5-37
-REVIEW_STATUS: Changed
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BHLR-124
@@ -2982,56 +2852,69 @@ RATIONALE: >>>
 The datatype records whether the entry is a section, an announcement, or event details. This requirement does not define further datatype values.
 <<<
 DERIVED: True
-CHANGE_DRIVER: GSSC5-37
-REVIEW_STATUS: Changed
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BHLR-121
 TITLE: Generic Page Headers
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL store headers for each announcement and event-details page data table entry.
+The GSSC Website Unified Backend SHALL store headers for each page data table entry.
 <<<
 RATIONALE: >>>
-Announcement and event-detail entries hold their headers. Section header storage is under Generic Sections and is an optional single string.
+A page data table entry holds its headers. This requirement does not set how many headers an entry has.
 <<<
 DERIVED: True
-CHANGE_DRIVER: GSSC5-37
-REVIEW_STATUS: Changed
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BHLR-122
 TITLE: Generic Page Bodies
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL store bodies for each announcement and event-details page data table entry.
+The GSSC Website Unified Backend SHALL store bodies for each page data table entry.
 <<<
 RATIONALE: >>>
-Announcement and event-detail entries hold their bodies. Section body storage is under Generic Sections and requires a body.
+A page data table entry holds its bodies. This requirement does not set how many bodies an entry has.
 <<<
 DERIVED: True
-CHANGE_DRIVER: GSSC5-37
-REVIEW_STATUS: Changed
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BHLR-123
 TITLE: Generic Page Resources
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL store resources for each announcement and event-details page data table entry.
+The GSSC Website Unified Backend SHALL store resources for each page data table entry.
 <<<
 RATIONALE: >>>
-Announcement and event-detail entries hold their resources. Section resource storage is under Generic Sections. This requirement does not define what a resource contains.
+A page data table entry holds its resources. This requirement does not define what a resource contains, or how many an entry has.
 <<<
 DERIVED: True
-CHANGE_DRIVER: GSSC5-37
-REVIEW_STATUS: Changed
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BHLR-134
 TITLE: Generic Page Audience
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL store whether each announcement and event-details page data table entry is public or members-only.
+The GSSC Website Unified Backend SHALL store whether each page data table entry is public or members-only.
 <<<
 RATIONALE: >>>
-The flag records whether the announcement or event-details entry is available to the public or only to members. Section isPublic storage is under Generic Sections.
+The flag records whether the entry is available to the public or only to members.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-BHLR-187
+TITLE: Generic Page Index
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store an index for each page data table entry that determines that entry's order among entries that share a page.
+<<<
+RATIONALE: >>>
+Index is shared by sections, announcements, and event details in the page data table. How page sharing is determined and the exact index type are low-level.
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-37
@@ -3041,27 +2924,27 @@ REVIEW_STATUS: Changed
 UID: GSSC-BHLR-140
 TITLE: Generic Page Modification Permissions
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL store the permissions that allow modification of each announcement and event-details page data table entry.
+The GSSC Website Unified Backend SHALL store the permissions that allow modification of each page data table entry.
 <<<
 RATIONALE: >>>
-The announcement or event-details entry holds the permissions a logged-in member must have to modify it. Section permission storage is under Generic Sections. This requirement does not name those permissions.
+The entry holds the permissions a logged-in member must have to modify it. This requirement does not name those permissions.
 <<<
 DERIVED: True
-CHANGE_DRIVER: GSSC5-37
-REVIEW_STATUS: Changed
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BHLR-141
 TITLE: Generic Page Deletion Permissions
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL store the permissions that allow deletion of each announcement and event-details page data table entry.
+The GSSC Website Unified Backend SHALL store the permissions that allow deletion of each page data table entry.
 <<<
 RATIONALE: >>>
-The announcement or event-details entry holds the permissions a logged-in member must have to delete it. These permissions are separate from the permissions that allow modification. Section permission storage is under Generic Sections. This requirement does not name those permissions, and it does not define the deletion operation.
+The entry holds the permissions a logged-in member must have to delete it. These permissions are separate from the permissions that allow modification. This requirement does not name those permissions, and it does not define the deletion operation.
 <<<
 DERIVED: True
-CHANGE_DRIVER: GSSC5-37
-REVIEW_STATUS: Changed
+CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Approved
 
 [[/SECTION]]
 
