@@ -22,6 +22,7 @@ const CONFIG_KEYS = [
   "SMTP_USER",
   "SMTP_PASSWORD",
   "SMTP_FROM",
+  "FILE_STORAGE_ROOT",
 ] as const;
 // @relation(GSSC-BLLR-39, scope=range_end, role=Implementation)
 
@@ -63,6 +64,9 @@ export const ConfigSchema = Type.Object({
   SMTP_PASSWORD: Type.String({ default: "" }),
   SMTP_FROM: Type.String({ default: "" }),
   // @relation(GSSC-BLLR-246, scope=range_end, role=Implementation)
+  // @relation(GSSC-BLLR-365, scope=range_start, role=Implementation)
+  FILE_STORAGE_ROOT: Type.String({ minLength: 1, default: "./data/files" }),
+  // @relation(GSSC-BLLR-365, scope=range_end, role=Implementation)
 });
 
 export type Config = Static<typeof ConfigSchema>;
@@ -120,7 +124,8 @@ function normalizeConfigValue(key: string, value: string): string {
     key === "ADMIN_EMAIL" ||
     key === "SMTP_HOST" ||
     key === "SMTP_USER" ||
-    key === "SMTP_FROM"
+    key === "SMTP_FROM" ||
+    key === "FILE_STORAGE_ROOT"
   ) {
     return value.trim();
   }

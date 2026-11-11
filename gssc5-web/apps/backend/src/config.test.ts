@@ -49,6 +49,7 @@ DATABASE_URL=''
     SMTP_USER: "",
     SMTP_PASSWORD: "",
     SMTP_FROM: "",
+    FILE_STORAGE_ROOT: "./data/files",
   });
   expect(loadConfig({ envFile: missingEnvFile, processEnv: {} })).toEqual({
     PORT: 3000,
@@ -67,6 +68,7 @@ DATABASE_URL=''
     SMTP_USER: "",
     SMTP_PASSWORD: "",
     SMTP_FROM: "",
+    FILE_STORAGE_ROOT: "./data/files",
   });
 });
 
@@ -206,3 +208,19 @@ test("GSSC-BLLR-22 Admin Account Enabled", async () => {
   }
 });
 // @relation(GSSC-BLLR-22, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-365, scope=range_start, role=Test)
+test("GSSC-BLLR-365 File Storage Root Configuration", async () => {
+  expect(
+    loadConfig({ envFile: missingEnvFile, processEnv: {} }).FILE_STORAGE_ROOT,
+  ).toBe("./data/files");
+  const configured = await temporaryEnv("FILE_STORAGE_ROOT=/tmp/gssc-files\n");
+  try {
+    expect(loadConfig({ envFile: configured.file, processEnv: {} }).FILE_STORAGE_ROOT).toBe(
+      "/tmp/gssc-files",
+    );
+  } finally {
+    await configured.remove();
+  }
+});
+// @relation(GSSC-BLLR-365, scope=range_end, role=Test)
