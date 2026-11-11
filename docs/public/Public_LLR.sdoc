@@ -2775,17 +2775,19 @@ TITLE: Contact Form
 UID: GSSC-PLLR-156
 TITLE: Semantic
 STATEMENT: >>>
-The Public Contact Overlay form SHALL collect the visitor's name, email address, contact reason, and message for a draft message to the organization, require each of those inputs before accepting submit, and complete the draft when the visitor submits a valid form.
+The Public Contact Overlay form SHALL collect the visitor's name, email address, contact reason, and message for a draft message to the organization, require each of those inputs before accepting submit, start the contact reason at General Inquiry, fill the name and email from the Public Frontend Member Session when a member is signed in, and complete the draft when the visitor submits a valid form.
 <<<
 RATIONALE: >>>
-The form is the draft Contents for a message to the organization. Required inputs keep an incomplete draft from completing. Completing the draft ends the current Contact Overlay form without a send or mail API.
+The form is the draft Contents for a message to the organization. Required inputs keep an incomplete draft from completing. General Inquiry is the default contact reason. Signed-in name and email come from the Member Session so a member does not retype known identity. Completing the draft ends the current Contact Overlay form without a send or mail API.
 <<<
 COMMENT: >>>
-Proposed for owner review (GSSC5-31). Field module chrome is owned by Prompt Overlay requirements.
+Owner feedback (GSSC5-31): default General Inquiry; autofill Name and Email when signed in. Field module chrome is owned by Prompt Overlay requirements.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-31
+CHANGE_DRIVER: >>>
+GSSC5-31
+<<<
 REVIEW_STATUS: Changed
 
 [REQUIREMENT]
@@ -2809,17 +2811,19 @@ REVIEW_STATUS: Changed
 UID: GSSC-PLLR-158
 TITLE: Lexical
 STATEMENT: >>>
-The Public Contact Overlay form SHALL use the title Contact; the field labels Name, Email, Contact reason, and Message; the contact reason choices General inquiry, Membership, Research help, and Other; the submit control label Submit; and the Prompt Overlay text, options-list, and button field modules for those fields.
+The Public Contact Overlay form SHALL use the title Contact; the field labels Name, Email, Contact reason, and Message; the contact reason choices General Inquiry, Membership, Research Help, Website Issue, and Other; the submit control label Submit; and the Prompt Overlay text, options-list, and button field modules for those fields.
 <<<
 RATIONALE: >>>
-Those labels and choices define the Contact Overlay draft wording. Reusing Prompt Overlay field modules keeps Contact Overlay presentation aligned with other prompt forms. Field module Lexical detail remains under Prompt Overlay requirements.
+Those labels and choices define the Contact Overlay draft wording. Each contact reason option capitalizes every word. Reusing Prompt Overlay field modules keeps Contact Overlay presentation aligned with other prompt forms. Field module Lexical detail remains under Prompt Overlay requirements.
 <<<
 COMMENT: >>>
-Proposed for owner review (GSSC5-31).
+Owner feedback (GSSC5-31): title-case reason options; add Website Issue.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-31
+CHANGE_DRIVER: >>>
+GSSC5-31
+<<<
 REVIEW_STATUS: Changed
 
 [[/SECTION]]

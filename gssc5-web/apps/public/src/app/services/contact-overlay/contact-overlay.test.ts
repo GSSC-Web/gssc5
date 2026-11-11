@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { nativeElement, setupPublicComponent } from '../../../test-harness';
 import { PromptOverlayView } from '../../modules/prompt-overlay/prompt-overlay';
+import { MemberSession } from '../member-session';
 import { PromptOverlay } from '../prompt-overlay/prompt-overlay';
 import { ContactOverlay, contactFormRequest } from './contact-overlay';
 
@@ -8,11 +9,14 @@ async function setupContactOverlay(): Promise<{
   fixture: Awaited<ReturnType<typeof setupPublicComponent<PromptOverlayView>>>;
   contactOverlay: ContactOverlay;
   promptOverlay: PromptOverlay;
+  memberSession: MemberSession;
   root: HTMLElement;
 }> {
   const fixture = await setupPublicComponent(PromptOverlayView);
   const contactOverlay = TestBed.inject(ContactOverlay);
   const promptOverlay = TestBed.inject(PromptOverlay);
+  const memberSession = TestBed.inject(MemberSession);
+  await memberSession.logout();
   promptOverlay.close();
   fixture.detectChanges();
   await fixture.whenStable();
@@ -20,6 +24,7 @@ async function setupContactOverlay(): Promise<{
     fixture,
     contactOverlay,
     promptOverlay,
+    memberSession,
     root: nativeElement(fixture),
   };
 }
@@ -74,8 +79,14 @@ test('GSSC-PLLR-155 Open', async () => {
 
 // @relation(GSSC-PLLR-156, scope=range_start, role=Test)
 test('GSSC-PLLR-156 Semantic', async () => {
-  const { fixture, contactOverlay, promptOverlay } = await setupContactOverlay();
+  const { fixture, contactOverlay, promptOverlay, memberSession } =
+    await setupContactOverlay();
   let root = await openContact(fixture, contactOverlay);
+
+  const reason = root.querySelector<HTMLSelectElement>(
+    '.gssc-prompt-options-list-field__control',
+  )!;
+  expect(reason.value).toBe('general');
 
   nativeElement(fixture)
     .querySelector<HTMLButtonElement>('.gssc-prompt-button-field')!
@@ -97,10 +108,27 @@ test('GSSC-PLLR-156 Semantic', async () => {
     expect.arrayContaining([
       expect.objectContaining({ id: 'name', required: true }),
       expect.objectContaining({ id: 'email', required: true }),
-      expect.objectContaining({ id: 'reason', required: true }),
+      expect.objectContaining({
+        id: 'reason',
+        required: true,
+        default: 'general',
+      }),
       expect.objectContaining({ id: 'content', required: true }),
     ]),
   );
+
+  memberSession.setSession('Ada Lovelace');
+  memberSession.setEmailAddress('ada@example.com');
+  root = await openContact(fixture, contactOverlay);
+  const texts = root.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>(
+    '.gssc-prompt-text-field__control',
+  );
+  expect(texts[0]!.value).toBe('Ada Lovelace');
+  expect(texts[1]!.value).toBe('ada@example.com');
+  expect(
+    root.querySelector<HTMLSelectElement>('.gssc-prompt-options-list-field__control')!
+      .value,
+  ).toBe('general');
 });
 // @relation(GSSC-PLLR-156, scope=range_end, role=Test)
 
@@ -141,9 +169,10 @@ test('GSSC-PLLR-158 Lexical', async () => {
     .filter((option) => option.value !== '')
     .map((option) => option.textContent?.trim());
   expect(choices).toEqual([
-    'General inquiry',
+    'General Inquiry',
     'Membership',
-    'Research help',
+    'Research Help',
+    'Website Issue',
     'Other',
   ]);
 

@@ -4,11 +4,14 @@ import { backend } from './backend';
 /** Legacy key cleared on logout so older sessions do not leave a Login Token behind. */
 const LEGACY_TOKEN_KEY = 'gssc.memberSessionToken';
 const NAME_KEY = 'gssc.memberDisplayName';
+const EMAIL_KEY = 'gssc.memberEmailAddress';
 
 @Injectable({ providedIn: 'root' })
 export class MemberSession {
   readonly loggedIn = signal(false);
   readonly displayName = signal(readStored(NAME_KEY) ?? '');
+  /** Member email for public UI autofill (Contact Overlay); not the Login Token. */
+  readonly emailAddress = signal(readStored(EMAIL_KEY) ?? '');
   /** Administrator visitor flag for public UI gates; backend role wiring is separate. */
   readonly isAdministrator = signal(false);
 
@@ -50,6 +53,12 @@ export class MemberSession {
     this.setSession(token, displayName);
   }
 
+  /** Record member email for public UI autofill. */
+  setEmailAddress(email: string): void {
+    this.emailAddress.set(email);
+    writeStored(EMAIL_KEY, email || null);
+  }
+
   async logout(): Promise<void> {
     this.clearLocal();
     try {
@@ -61,7 +70,9 @@ export class MemberSession {
 
   private clearLocal(): void {
     this.displayName.set('');
+    this.emailAddress.set('');
     writeStored(NAME_KEY, null);
+    writeStored(EMAIL_KEY, null);
     writeStored(LEGACY_TOKEN_KEY, null);
     this.loggedIn.set(false);
     this.isAdministrator.set(false);
