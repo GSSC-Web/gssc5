@@ -226,6 +226,7 @@ async function seedSection(data: {
   });
 }
 
+// @relation(GSSC-BLLR-333, scope=range_start, role=Test)
 test("GSSC-BLLR-333 Template List", async () => {
   const { status, body } = await getJson("/templates", memberTok);
   expect(status).toBe(200);
@@ -237,7 +238,9 @@ test("GSSC-BLLR-333 Template List", async () => {
     expect(Object.keys(entry).sort()).toEqual(["cuid", "name"]);
   }
 });
+// @relation(GSSC-BLLR-333, scope=range_end, role=Test)
 
+// @relation(GSSC-BLLR-334, scope=range_start, role=Test)
 test("GSSC-BLLR-334 Template Get", async () => {
   const { status, body } = await getJson(`/templates/${publicTemplateId}`, adminTok);
   expect(status).toBe(200);
@@ -251,7 +254,9 @@ test("GSSC-BLLR-334 Template Get", async () => {
     deletePerm: MEMBER_PERM,
   });
 });
+// @relation(GSSC-BLLR-334, scope=range_end, role=Test)
 
+// @relation(GSSC-BLLR-335, scope=range_start, role=Test)
 test("GSSC-BLLR-335 Template Create", async () => {
   const { status, body } = await sendJson(
     "POST",
@@ -270,7 +275,9 @@ test("GSSC-BLLR-335 Template Create", async () => {
     deletePerm: 0,
   });
 });
+// @relation(GSSC-BLLR-335, scope=range_end, role=Test)
 
+// @relation(GSSC-BLLR-336, scope=range_start, role=Test)
 test("GSSC-BLLR-336 Template Modify", async () => {
   const created = await db().contentTemplate.create({
     data: {
@@ -300,7 +307,9 @@ test("GSSC-BLLR-336 Template Modify", async () => {
     deletePerm: 0,
   });
 });
+// @relation(GSSC-BLLR-336, scope=range_end, role=Test)
 
+// @relation(GSSC-BLLR-337, scope=range_start, role=Test)
 test("GSSC-BLLR-337 Template Delete", async () => {
   const created = await db().contentTemplate.create({
     data: { name: "Disposable", isPublic: true, tags: "[]" },
@@ -314,7 +323,9 @@ test("GSSC-BLLR-337 Template Delete", async () => {
   expect(response.status).toBe(204);
   expect(await db().contentTemplate.findUnique({ where: { id: created.id } })).toBeNull();
 });
+// @relation(GSSC-BLLR-337, scope=range_end, role=Test)
 
+// @relation(GSSC-BLLR-340, scope=range_start, role=Test)
 test("GSSC-BLLR-340 Template Table", async () => {
   const row = await db().contentTemplate.create({
     data: {
@@ -336,3 +347,4 @@ test("GSSC-BLLR-340 Template Table", async () => {
     deletePerm: 3,
   });
 });
+// @relation(GSSC-BLLR-340, scope=range_end, role=Test)

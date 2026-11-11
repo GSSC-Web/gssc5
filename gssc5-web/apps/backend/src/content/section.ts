@@ -141,11 +141,11 @@ export const section = new Elysia({
       const template = await prisma.contentTemplate.findUnique({ where: { id: templateId } });
       if (!template) return status(404, "Not Found" as const);
 
-      // @relation(GSSC-BLLR-329, GSSC-BLLR-332, scope=range_start, role=Implementation)
+      // @relation(GSSC-BLLR-329, scope=range_start, role=Implementation)
       if (!hasPerm(session.user, template.createPerm)) {
         return status(403, "Forbidden" as const);
       }
-      // @relation(GSSC-BLLR-329, GSSC-BLLR-332, scope=range_end, role=Implementation)
+      // @relation(GSSC-BLLR-329, scope=range_end, role=Implementation)
 
       const header =
         record.header === undefined
@@ -221,7 +221,7 @@ export const section = new Elysia({
 
       const wantsIsPublic = Object.prototype.hasOwnProperty.call(record, "isPublic");
       if (wantsIsPublic) {
-        // @relation(GSSC-BLLR-331, GSSC-BLLR-332, scope=range_start, role=Implementation)
+        // @relation(GSSC-BLLR-331, scope=range_start, role=Implementation)
         if (
           !hasPerm(session.user, row.createPerm) ||
           !hasPerm(session.user, row.modifyPerm) ||
@@ -229,13 +229,11 @@ export const section = new Elysia({
         ) {
           return status(403, "Forbidden" as const);
         }
-        // @relation(GSSC-BLLR-331, GSSC-BLLR-332, scope=range_end, role=Implementation)
+        // @relation(GSSC-BLLR-331, scope=range_end, role=Implementation)
       } else {
-        // @relation(GSSC-BLLR-330, GSSC-BLLR-332, scope=range_start, role=Implementation)
         if (!hasPerm(session.user, row.modifyPerm)) {
           return status(403, "Forbidden" as const);
         }
-        // @relation(GSSC-BLLR-330, GSSC-BLLR-332, scope=range_end, role=Implementation)
       }
 
       const data: {
@@ -284,13 +282,13 @@ export const section = new Elysia({
         data.isPublic = record.isPublic;
       }
 
-      // @relation(GSSC-BLLR-330, GSSC-BLLR-331, scope=range_start, role=Implementation)
+      // @relation(GSSC-BLLR-330, scope=range_start, role=Implementation)
       const updated = await prisma.pageDataEntry.update({
         where: { id: row.id },
         data,
       });
       return status(200, toSectionDetail(updated));
-      // @relation(GSSC-BLLR-330, GSSC-BLLR-331, scope=range_end, role=Implementation)
+      // @relation(GSSC-BLLR-330, scope=range_end, role=Implementation)
     },
     {
       params: t.Object({ cuid: t.String({ minLength: 1 }) }),
@@ -316,13 +314,13 @@ export const section = new Elysia({
       });
       if (!row) return status(404, "Not Found" as const);
 
-      // @relation(GSSC-BLLR-341, GSSC-BLLR-332, scope=range_start, role=Implementation)
+      // @relation(GSSC-BLLR-341, scope=range_start, role=Implementation)
       if (!hasPerm(session.user, row.deletePerm)) {
         return status(403, "Forbidden" as const);
       }
       await prisma.pageDataEntry.delete({ where: { id: row.id } });
       return status(204, undefined);
-      // @relation(GSSC-BLLR-341, GSSC-BLLR-332, scope=range_end, role=Implementation)
+      // @relation(GSSC-BLLR-341, scope=range_end, role=Implementation)
     },
     {
       params: t.Object({ cuid: t.String({ minLength: 1 }) }),

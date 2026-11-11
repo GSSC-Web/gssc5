@@ -58,12 +58,12 @@ export async function openSession(cookie: CookieJar): Promise<Session> {
 }
 
 export function hasPerm(user: SessionUser, mask: number): boolean {
-  // @relation(GSSC-BLLR-332, GSSC-BLLR-342, scope=range_start, role=Implementation)
+  // @relation(GSSC-BLLR-332, scope=range_start, role=Implementation)
   if (user.isAdmin) return true;
+  // @relation(GSSC-BLLR-332, scope=range_end, role=Implementation)
   if (user.isUserMod && (mask & PERM_USER_MOD) !== 0) return true;
   if ((mask & PERM_MEMBER) !== 0) return true;
   return false;
-  // @relation(GSSC-BLLR-332, GSSC-BLLR-342, scope=range_end, role=Implementation)
 }
 
 export function parseStringArray(raw: string): string[] {

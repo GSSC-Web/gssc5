@@ -226,6 +226,7 @@ async function seedSection(data: {
   });
 }
 
+// @relation(GSSC-BLLR-320, scope=range_start, role=Test)
 test("GSSC-BLLR-320 Public Section List", async () => {
   await seedSection({ body: "public body", isPublic: true, header: "Pub", index: 1 });
   await seedSection({ body: "private body", isPublic: false, header: "Priv", index: 2 });
@@ -237,7 +238,9 @@ test("GSSC-BLLR-320 Public Section List", async () => {
   expect(list.some((entry) => entry.body === "public body")).toBe(true);
   expect(list.some((entry) => entry.body === "private body")).toBe(false);
 });
+// @relation(GSSC-BLLR-320, scope=range_end, role=Test)
 
+// @relation(GSSC-BLLR-321, scope=range_start, role=Test)
 test("GSSC-BLLR-321 Authenticated Section List", async () => {
   await seedSection({ body: "auth-public", isPublic: true, index: 10 });
   await seedSection({ body: "auth-private", isPublic: false, index: 11 });
@@ -248,7 +251,9 @@ test("GSSC-BLLR-321 Authenticated Section List", async () => {
   expect(list.some((entry) => entry.body === "auth-public")).toBe(true);
   expect(list.some((entry) => entry.body === "auth-private")).toBe(true);
 });
+// @relation(GSSC-BLLR-321, scope=range_end, role=Test)
 
+// @relation(GSSC-BLLR-322, scope=range_start, role=Test)
 test("GSSC-BLLR-322 Section List Entry Fields", async () => {
   const row = await seedSection({
     header: "Fields",
@@ -269,7 +274,9 @@ test("GSSC-BLLR-322 Section List Entry Fields", async () => {
     index: 42,
   });
 });
+// @relation(GSSC-BLLR-322, scope=range_end, role=Test)
 
+// @relation(GSSC-BLLR-323, scope=range_start, role=Test)
 test("GSSC-BLLR-323 Section List Index Order", async () => {
   const stamp = `order-${Date.now()}`;
   await seedSection({ body: `${stamp}-c`, isPublic: true, index: 30, tags: [stamp] });
@@ -282,7 +289,9 @@ test("GSSC-BLLR-323 Section List Index Order", async () => {
   expect(list.map((entry) => entry.body)).toEqual([`${stamp}-a`, `${stamp}-b`, `${stamp}-c`]);
   expect(list.map((entry) => entry.index)).toEqual([10, 20, 30]);
 });
+// @relation(GSSC-BLLR-323, scope=range_end, role=Test)
 
+// @relation(GSSC-BLLR-324, scope=range_start, role=Test)
 test("GSSC-BLLR-324 Public Section Get", async () => {
   const row = await seedSection({
     header: "Get Pub",
@@ -304,13 +313,17 @@ test("GSSC-BLLR-324 Public Section Get", async () => {
     index: 5,
   });
 });
+// @relation(GSSC-BLLR-324, scope=range_end, role=Test)
 
+// @relation(GSSC-BLLR-325, scope=range_start, role=Test)
 test("GSSC-BLLR-325 Public Section Get Rejects Private", async () => {
   const row = await seedSection({ body: "hidden", isPublic: false });
   const { status } = await getJson(`/sections/${row.id}`);
   expect(status).toBe(403);
 });
+// @relation(GSSC-BLLR-325, scope=range_end, role=Test)
 
+// @relation(GSSC-BLLR-326, scope=range_start, role=Test)
 test("GSSC-BLLR-326 Authenticated Section Get", async () => {
   const row = await seedSection({
     header: "Mem",
@@ -332,7 +345,9 @@ test("GSSC-BLLR-326 Authenticated Section Get", async () => {
     index: 7,
   });
 });
+// @relation(GSSC-BLLR-326, scope=range_end, role=Test)
 
+// @relation(GSSC-BLLR-327, scope=range_start, role=Test)
 test("GSSC-BLLR-327 Section List Filters", async () => {
   const stamp = `filt-${Date.now()}`;
   const row = await seedSection({
@@ -368,7 +383,9 @@ test("GSSC-BLLR-327 Section List Filters", async () => {
   const byContent = await getJson(`/sections?content=${encodeURIComponent(`alpha ${stamp}`)}`);
   expect((byContent.body as Array<{ cuid: string }>).map((e) => e.cuid)).toContain(row.id);
 });
+// @relation(GSSC-BLLR-327, scope=range_end, role=Test)
 
+// @relation(GSSC-BLLR-328, scope=range_start, role=Test)
 test("GSSC-BLLR-328 Section Creation", async () => {
   const { status, body } = await sendJson(
     "POST",
@@ -405,7 +422,9 @@ test("GSSC-BLLR-328 Section Creation", async () => {
   expect(stored?.deletePerm).toBe(MEMBER_PERM);
   expect(stored?.templateId).toBe(publicTemplateId);
 });
+// @relation(GSSC-BLLR-328, scope=range_end, role=Test)
 
+// @relation(GSSC-BLLR-329, scope=range_start, role=Test)
 test("GSSC-BLLR-329 Section Creation Forbidden", async () => {
   const before = await db().pageDataEntry.count({ where: { datatype: "section" } });
   const { status } = await sendJson(
@@ -418,7 +437,9 @@ test("GSSC-BLLR-329 Section Creation Forbidden", async () => {
   const after = await db().pageDataEntry.count({ where: { datatype: "section" } });
   expect(after).toBe(before);
 });
+// @relation(GSSC-BLLR-329, scope=range_end, role=Test)
 
+// @relation(GSSC-BLLR-330, scope=range_start, role=Test)
 test("GSSC-BLLR-330 Section Modification", async () => {
   const row = await seedSection({
     body: "before",
@@ -449,7 +470,9 @@ test("GSSC-BLLR-330 Section Modification", async () => {
     index: 8,
   });
 });
+// @relation(GSSC-BLLR-330, scope=range_end, role=Test)
 
+// @relation(GSSC-BLLR-331, scope=range_start, role=Test)
 test("GSSC-BLLR-331 Section IsPublic Modification", async () => {
   const allowed = await seedSection({
     body: "flip",
@@ -474,7 +497,9 @@ test("GSSC-BLLR-331 Section IsPublic Modification", async () => {
   const bad = await sendJson("PATCH", `/sections/${denied.id}`, { isPublic: false }, memberTok);
   expect(bad.status).toBe(403);
 });
+// @relation(GSSC-BLLR-331, scope=range_end, role=Test)
 
+// @relation(GSSC-BLLR-332, scope=range_start, role=Test)
 test("GSSC-BLLR-332 Administrator Section Permissions", async () => {
   const { status, body } = await sendJson(
     "POST",
@@ -493,7 +518,9 @@ test("GSSC-BLLR-332 Administrator Section Permissions", async () => {
   );
   expect(patched.status).toBe(200);
 });
+// @relation(GSSC-BLLR-332, scope=range_end, role=Test)
 
+// @relation(GSSC-BLLR-338, scope=range_start, role=Test)
 test("GSSC-BLLR-338 Page Entry Table", async () => {
   const template = await db().contentTemplate.findUnique({ where: { id: memberCreateTemplateId } });
   expect(template).toBeTruthy();
@@ -549,7 +576,9 @@ test("GSSC-BLLR-338 Page Entry Table", async () => {
   expect(announcement.datatype).toBe("announcement");
   expect(event.datatype).toBe("event");
 });
+// @relation(GSSC-BLLR-338, scope=range_end, role=Test)
 
+// @relation(GSSC-BLLR-339, scope=range_start, role=Test)
 test("GSSC-BLLR-339 Page Entry Index", async () => {
   const a = await db().pageDataEntry.create({
     data: { datatype: "announcement", body: "a", index: 15, isPublic: true },
@@ -564,7 +593,9 @@ test("GSSC-BLLR-339 Page Entry Index", async () => {
   expect((await db().pageDataEntry.findUnique({ where: { id: e.id } }))?.index).toBe(16);
   expect((await db().pageDataEntry.findUnique({ where: { id: s.id } }))?.index).toBe(17);
 });
+// @relation(GSSC-BLLR-339, scope=range_end, role=Test)
 
+// @relation(GSSC-BLLR-341, scope=range_start, role=Test)
 test("GSSC-BLLR-341 Section Deletion", async () => {
   const allowed = await seedSection({
     body: "delete-me",
@@ -595,7 +626,9 @@ test("GSSC-BLLR-341 Section Deletion", async () => {
   expect(bad.status).toBe(403);
   expect(await db().pageDataEntry.findUnique({ where: { id: denied.id } })).not.toBeNull();
 });
+// @relation(GSSC-BLLR-341, scope=range_end, role=Test)
 
+// @relation(GSSC-BLLR-342, scope=range_start, role=Test)
 test("GSSC-BLLR-342 Content Permission Bit Fields", async () => {
   // Bit 0 = member, bit 1 = user moderator.
   const memberOnly = await seedSection({
@@ -613,3 +646,4 @@ test("GSSC-BLLR-342 Content Permission Bit Fields", async () => {
   expect((await sendJson("PATCH", `/sections/${modOnly.id}`, { body: "m2" }, memberTok)).status).toBe(403);
   expect((await sendJson("PATCH", `/sections/${modOnly.id}`, { body: "m3" }, moderatorTok)).status).toBe(200);
 });
+// @relation(GSSC-BLLR-342, scope=range_end, role=Test)

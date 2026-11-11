@@ -184,7 +184,7 @@ model ContentTemplate {
 // @relation(GSSC-BLLR-340, scope=range_end, role=Implementation)
 
 // Sections, announcements, and event details share one table (GSSC-BHLR-185 / 187).
-// @relation(GSSC-BLLR-338, GSSC-BLLR-339, GSSC-BLLR-342, scope=range_start, role=Implementation)
+// @relation(GSSC-BLLR-338, GSSC-BLLR-339, scope=range_start, role=Implementation)
 model PageDataEntry {
   id         String           @id @default(cuid())
   /// "section" | "announcement" | "event"
@@ -206,4 +206,4 @@ model PageDataEntry {
   @@index([datatype, index])
   @@map("page_data")
 }
-// @relation(GSSC-BLLR-338, GSSC-BLLR-339, GSSC-BLLR-342, scope=range_end, role=Implementation)
+// @relation(GSSC-BLLR-338, GSSC-BLLR-339, scope=range_end, role=Implementation)
