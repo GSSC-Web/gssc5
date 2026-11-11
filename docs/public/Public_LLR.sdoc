@@ -4344,3 +4344,218 @@ RELATIONS:
 
 [[/SECTION]]
 
+[[SECTION]]
+UID: GSSC-PLLR-MEMBERSHIP-PAGE
+TITLE: Membership Information Page
+
+[[SECTION]]
+UID: GSSC-PLLR-MEMBERSHIP-PAGE-ELEMENT
+TITLE: Membership Information Page
+
+[REQUIREMENT]
+UID: GSSC-PLLR-198
+TITLE: Semantic
+STATEMENT: >>>
+The GSSC Website Public Frontend Membership Information Page SHALL retrieve the public Meeting Information sections and the public Membership Benefits sections from the Unified Backend and place each retrieved section through the Section From CUID.
+<<<
+RATIONALE: >>>
+Meeting Information and Membership Benefits are the membership page Contents. Retrieving those sections from the Unified Backend keeps the wording modifiable. Section From CUID places each section through the Section Container. Membership application is a separate requirement.
+<<<
+COMMENT: >>>
+GSSC5-15. Binding uses backend section tags owned by software; requirements stay tag-agnostic. PHLR-75 application is out of this ticket.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-15
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-63
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-64
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-65
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-66
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-67
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-199
+TITLE: Syntactic
+STATEMENT: >>>
+The Membership Information Page SHALL stack Meeting Information above Membership Benefits at full width in the Page Outlet, and SHALL omit a group when the Unified Backend provides no sections for that group.
+<<<
+RATIONALE: >>>
+Meeting Information precedes benefits so a visitor sees where and when the society meets before what membership provides. Full-width stacking matches other public page sections. Omitting an empty group avoids blank chrome when content is absent.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-15
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-63
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-67
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-200
+TITLE: Lexical
+STATEMENT: >>>
+The Membership Information Page SHALL inherit the Page Outlet font and text color theme tokens and present Meeting Information and Membership Benefits through the Section From CUID presentation, without independent page chrome of its own.
+<<<
+RATIONALE: >>>
+The page is an assembly of backend sections. Type tokens stay with the Page Outlet; section look stays with Section From CUID and the Section Container so the membership page does not fork a second section presentation.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-15
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-63
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-67
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-MEMBERSHIP-MEETING
+TITLE: Meeting Information
+
+[REQUIREMENT]
+UID: GSSC-PLLR-201
+TITLE: Semantic
+STATEMENT: >>>
+The Membership Information Page Meeting Information SHALL present Section Contents that include the general meeting location, the general meeting frequency, the general meeting schedule, and information on the next meeting, as provided by the Unified Backend Meeting Information sections.
+<<<
+RATIONALE: >>>
+Those topics refine the Meeting Information high-level requirements. The backend supplies the wording; the page presents the retrieved Contents without inventing meeting copy.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-15
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-63
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-64
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-65
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-66
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-202
+TITLE: Syntactic
+STATEMENT: >>>
+The Meeting Information SHALL appear as the first content group on the Membership Information Page and SHALL place each Meeting Information section through the Section From CUID in backend index order.
+<<<
+RATIONALE: >>>
+First placement keeps meeting facts ahead of benefits. Index order preserves the backend's section sequence when more than one Meeting Information section is returned.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-15
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-63
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-203
+TITLE: Lexical
+STATEMENT: >>>
+The Meeting Information SHALL present its Section Header, Section Body, and Section Resources through the Section From CUID presentation, without independent lexical chrome of its own.
+<<<
+RATIONALE: >>>
+Meeting Information reuses Section From CUID so meeting sections share the Section Container look with other public sections.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-15
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-63
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-MEMBERSHIP-BENEFITS
+TITLE: Membership Benefits
+
+[REQUIREMENT]
+UID: GSSC-PLLR-204
+TITLE: Semantic
+STATEMENT: >>>
+The Membership Information Page Membership Benefits SHALL present Section Contents that include information on the society's membership benefits, including programs, workshops, seminars, newsletters, queries, surname registration, interest groups, and research trips, as provided by the Unified Backend Membership Benefits sections.
+<<<
+RATIONALE: >>>
+That benefit set refines the Membership Benefit Information high-level requirement. The backend supplies the wording; the page presents the retrieved Contents without inventing benefit copy.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-15
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-67
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-205
+TITLE: Syntactic
+STATEMENT: >>>
+The Membership Benefits SHALL appear below Meeting Information on the Membership Information Page and SHALL place each Membership Benefits section through the Section From CUID in backend index order.
+<<<
+RATIONALE: >>>
+Benefits follow meeting facts. Index order preserves the backend's section sequence when more than one Membership Benefits section is returned.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-15
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-67
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-206
+TITLE: Lexical
+STATEMENT: >>>
+The Membership Benefits SHALL present their Section Header, Section Body, and Section Resources through the Section From CUID presentation, without independent lexical chrome of its own.
+<<<
+RATIONALE: >>>
+Membership Benefits reuse Section From CUID so benefit sections share the Section Container look with other public sections.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-15
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-67
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
