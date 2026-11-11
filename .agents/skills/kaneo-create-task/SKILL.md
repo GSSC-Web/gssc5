@@ -17,7 +17,7 @@ enabled: true
 
 ## Dedupe / refine (required for weekly scanners; prefer for all Defects)
 
-Project: `dcftjclsdggl1cwanntxnj8f`.
+Use the GSSC5 Kaneo project via MCP (list/discover projects; do not embed opaque project ids in repo docs).
 
 1. **Before create:** search Kaneo for open Defects (and optimization tickets) matching the same locus / symptom / optimization — title keywords, description paths, requirement UIDs.
 2. **Match criteria:** same primary code path, same requirement UID gap, or clearly the same optimization opportunity. Same label alone is **not** a match.

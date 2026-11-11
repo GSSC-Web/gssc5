@@ -26,7 +26,7 @@ Scan for defects: missing/wrong/extra behavior vs requirements, away-from-requir
 
 ## Dedupe before create
 
-Project: `dcftjclsdggl1cwanntxnj8f`.
+Use the GSSC5 Kaneo project via MCP (list/discover projects; do not embed opaque project ids in repo docs).
 
 1. Before creating, search Kaneo for **open** Defects/optimization tickets matching the same locus / symptom / optimization (title keywords, description paths, UIDs).
 2. **Match** = same primary code path, same requirement UID gap, or clearly the same optimization opportunity — **not** merely the same label.
