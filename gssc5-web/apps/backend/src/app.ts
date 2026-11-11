@@ -2,6 +2,7 @@ import { openapi } from "@elysia/openapi";
 import { cors } from "@elysiajs/cors";
 import { Elysia } from "elysia";
 
+import { researchTools } from "./content/research-tools";
 import { section } from "./content/section";
 import { template } from "./content/template";
 import { kvs } from "./kvs";
@@ -42,6 +43,7 @@ export const app = new Elysia({ normalize: false })
   .use(kvs)
   .use(section)
   .use(template)
+  .use(researchTools)
   .get("/", () => "Hello Elysia");
 
 export type App = typeof app;

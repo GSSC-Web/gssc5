@@ -52,6 +52,7 @@ type Concept =
   | "secondaryPhoneDisplay"
   | "isAdmin"
   | "isUserMod"
+  | "isToolEditor"
   | "membershipStatus"
   | "position"
   | "passwordHash";
@@ -102,6 +103,7 @@ const ALIASES: Record<Concept, string[]> = {
   secondaryPhoneDisplay: ["secondaryphonedisplay", "secondaryphonenumberdisplay"],
   isAdmin: ["isadmin"],
   isUserMod: ["isusermod"],
+  isToolEditor: ["istooleditor"],
   membershipStatus: ["membershipstatus"],
   position: ["position"],
   passwordHash: ["passwordhash"],
@@ -137,6 +139,7 @@ const DEFAULT_KEY: Record<Concept, string> = {
   secondaryPhoneDisplay: "secondaryPhoneDisplay",
   isAdmin: "isAdmin",
   isUserMod: "isUserMod",
+  isToolEditor: "isToolEditor",
   membershipStatus: "membershipStatus",
   position: "position",
   passwordHash: "passwordHash",
@@ -148,6 +151,7 @@ const BOOLEAN_FIELDS = new Set<Concept>([
   "secondaryPhoneDisplay",
   "isAdmin",
   "isUserMod",
+  "isToolEditor",
 ]);
 
 const PASSWORD = "account-secret";
@@ -264,6 +268,7 @@ function persona(label: string, overrides: Partial<Record<Concept, Value>>): Rec
     secondaryPhoneDisplay: true,
     isAdmin: false,
     isUserMod: false,
+    isToolEditor: false,
     membershipStatus: `${label}-roster-status`,
     position: null,
     passwordHash: null,
@@ -1731,6 +1736,15 @@ test("GSSC-BLLR-220 User Is User Mod Update", async () => {
   });
 });
 // @relation(GSSC-BLLR-220, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-353, scope=range_start, role=Test)
+test("GSSC-BLLR-353 Administrator Sets Tool Editor", async () => {
+  await withRow(mutable.id, async () => {
+    await expectStored(admin, mutable, "isToolEditor", true);
+    await expectStored(admin, mutable, "isToolEditor", false);
+  });
+});
+// @relation(GSSC-BLLR-353, scope=range_end, role=Test)
 
 // @relation(GSSC-BLLR-66, scope=range_start, role=Test)
 test("GSSC-BLLR-66 Membership Status Update", async () => {
