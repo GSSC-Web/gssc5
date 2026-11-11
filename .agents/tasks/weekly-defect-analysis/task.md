@@ -31,7 +31,7 @@ Use the GSSC5 Kaneo project via MCP (list/discover projects; do not embed opaque
 1. Before creating, search Kaneo for **open** Defects/optimization tickets matching the same locus / symptom / optimization (title keywords, description paths, UIDs).
 2. **Match** = same primary code path, same requirement UID gap, or clearly the same optimization opportunity — **not** merely the same label.
 3. **If match:** refine that task (description, Implementation note, locus/scope); add a comment with week date + what changed. Do **not** create a new number. Do **not** change column unless owner policy applies (e.g. demote a medium/low/no-priority Defect still on Not Ready → `planned`).
-4. **If no match:** create via `kaneo-create-task` (Issue Type Defect, DoR Satisfied false, Fix Version Future, no auto-fix). Put new Defects in **Planned backlog** (`status: planned`) unless priority is **High** or **Urgent** (then Not Ready is OK).
+4. **If no match:** create via `kaneo-create-task` (Issue Type Defect, DoR Satisfied false, Fix Version Future, no auto-fix). New Defects always go to **Planned backlog** (`status: planned`), regardless of priority.
 5. **If match and nothing material changed:** leave the task unchanged; count as unchanged-skipped.
 
 ## Steps

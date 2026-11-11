@@ -33,5 +33,5 @@ Use the GSSC5 Kaneo project via MCP (list/discover projects; do not embed opaque
 2. Set title, description (scope; no GitHub `<sub>Task` line on Kaneo), priority, labels (Backend / Frontend / Public / Member as fits — new row per task id).
 3. Custom fields: Work Type as known; DoR/DoD terse; DoR Satisfied `false`; DoD Satisfied `false`; Fix Version **Future**.
 4. Add `blocks` / parent relations instead of prose-only deps when known.
-5. Column: do not auto-mark ready. **Weekly scanner creates:** status `planned` (Planned backlog; columnId null) unless priority is **High** or **Urgent**, in which case `not-ready` is OK. Other creates: Planned backlog or Not Ready as appropriate.
+5. Column: do not auto-mark ready. **New Defects** (weekly scanners and any `kaneo-create-task` Defect create): always status `planned` (Planned backlog; columnId null), regardless of priority. Other Issue Types: Planned backlog or Not Ready as appropriate.
 6. Do **not** implement fixes in the same weekly pass that filed or refined the Defect.
