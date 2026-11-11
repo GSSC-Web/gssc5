@@ -3301,6 +3301,153 @@ RELATIONS:
 [[/SECTION]]
 
 [[SECTION]]
+UID: GSSC-PLLR-LEADERSHIP-PAGE
+TITLE: Public Leadership Page
+
+[[SECTION]]
+UID: GSSC-PLLR-OFFICERS-AND-DIRECTORS
+TITLE: Officers and Directors
+
+[REQUIREMENT]
+UID: GSSC-PLLR-159
+TITLE: Semantic
+STATEMENT: >>>
+The Officers and Directors SHALL retrieve the Unified Backend leadership list, present each officer and Director at Large office with the name of the leader whose Position matches that office when that list includes such a leader with a name, present that leader's email address for contact when that leadership list entry includes Primary Email, and present Vacant when that list has no matching Position or the matching leader has no name.
+<<<
+RATIONALE: >>>
+The leadership list supplies current names and offices. Matching by Position fills each officer and Director at Large slot. Primary Email on a list entry is the contact email when Preferred Contact Method is Email. Vacant marks an empty slot because the list omits empty Position.
+<<<
+COMMENT: >>>
+Canonical office titles are Lexical. Email appears only when the leadership list entry includes Primary Email (GSSC5-36).
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-16
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-76
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-77
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-78
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-79
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-160
+TITLE: Syntactic
+STATEMENT: >>>
+The Officers and Directors SHALL appear on the public leadership page as a vertical list of office rows above the Committee Chairs, with each row showing the office title beside the member name or Vacant and the email address when present, resizing with the page width.
+<<<
+RATIONALE: >>>
+A vertical list keeps each office readable. Placement above Committee Chairs matches the two leadership regions on the page. Showing title with name or Vacant and email when present keeps contact next to the office. Resizing with the page width keeps the list usable on narrow and wide layouts.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-16
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-76
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-161
+TITLE: Lexical
+STATEMENT: >>>
+The Officers and Directors SHALL use the section title Officers and Directors; the office titles President, 1st Vice President, 2nd Vice President, Secretary, Treasurer, Director at Large 1, Director at Large 2, Director at Large 3, Director at Large 4, Director at Large 5, and Past President; the vacant label Vacant; sans-serif type; the dark-green theme token for the section title and office titles; the black theme token for member names and email addresses; and a white background with the gray theme token for the region border.
+<<<
+RATIONALE: >>>
+Those office titles are the Positions the page matches on the leadership list. Vacant is the empty-slot label. Theme tokens keep the region aligned with other public chrome. A fuller color map is not set yet beyond these token choices.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-16
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-76
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-COMMITTEE-CHAIRS
+TITLE: Committee Chairs
+
+[REQUIREMENT]
+UID: GSSC-PLLR-162
+TITLE: Semantic
+STATEMENT: >>>
+The Committee Chairs SHALL retrieve the Unified Backend leadership list, present each committee chair office with the name of the leader whose Position matches that office when that list includes such a leader with a name, present that leader's email address for contact when that leadership list entry includes Primary Email, and present Vacant when that list has no matching Position or the matching leader has no name.
+<<<
+RATIONALE: >>>
+The leadership list supplies current chair names. Matching by Position fills each committee chair slot. Primary Email on a list entry is the contact email when Preferred Contact Method is Email. Vacant marks an empty chair because the list omits empty Position.
+<<<
+COMMENT: >>>
+Canonical committee titles are Lexical. Email appears only when the leadership list entry includes Primary Email (GSSC5-36).
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-16
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-80
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-81
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-82
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-163
+TITLE: Syntactic
+STATEMENT: >>>
+The Committee Chairs SHALL appear on the public leadership page as a vertical list of chair rows below the Officers and Directors, with each row showing the committee title beside the member name or Vacant and the email address when present, resizing with the page width.
+<<<
+RATIONALE: >>>
+A vertical list keeps each chair readable. Placement below Officers and Directors matches the two leadership regions on the page. Showing title with name or Vacant and email when present keeps contact next to the chair. Resizing with the page width keeps the list usable on narrow and wide layouts.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-16
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-80
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-164
+TITLE: Lexical
+STATEMENT: >>>
+The Committee Chairs SHALL use the section title Committee Chairs; the committee titles Acquisitions, Audit, Budget, Historian, Membership, Memorial Day, Mentor, Newsletter & Website, Planning, Programs, Publicity, Queries, Refreshments, Registrar, Research & Publications, Research Day Trips, Seminar, Seminar & Workshops, Social Media, Special Collections, and Sunshine; the vacant label Vacant; sans-serif type; the dark-green theme token for the section title and committee titles; the black theme token for member names and email addresses; and a white background with the gray theme token for the region border.
+<<<
+RATIONALE: >>>
+Those committee titles are the Positions the page matches on the leadership list. Vacant is the empty-chair label. Theme tokens keep the region aligned with other public chrome. A fuller color map is not set yet beyond these token choices.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-16
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-80
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
 UID: GSSC-PLLR-ROUTER
 TITLE: Public Router
 
