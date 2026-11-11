@@ -21,7 +21,7 @@ Use the GSSC5 Kaneo project via MCP (list/discover projects; do not embed opaque
 
 1. **Before create:** search Kaneo for open Defects (and optimization tickets) matching the same locus / symptom / optimization — title keywords, description paths, requirement UIDs.
 2. **Match criteria:** same primary code path, same requirement UID gap, or clearly the same optimization opportunity. Same label alone is **not** a match.
-3. **If match:** update that task (description, Implementation note, locus/scope as needed); add a comment with week date (when from a weekly scan) + what changed. Leave status unless owner policy says otherwise. Do **not** create a new ticket number.
+3. **If match:** update that task (description, Implementation note, locus/scope as needed); add a comment with week date (when from a weekly scan) + what changed. Do **not** create a new ticket number. Leave column unless owner policy applies (e.g. demote a medium/low/no-priority Defect still on Not Ready → `planned`).
 4. **If match and nothing material changed:** skip create; report as unchanged-skipped.
 5. **If no match:** proceed with create steps below.
 6. **Cross-scanner:** a third-party optimize finding and a defect-analysis finding that are the same issue share one ticket; refine rather than file twice.
@@ -33,5 +33,5 @@ Use the GSSC5 Kaneo project via MCP (list/discover projects; do not embed opaque
 2. Set title, description (scope; no GitHub `<sub>Task` line on Kaneo), priority, labels (Backend / Frontend / Public / Member as fits — new row per task id).
 3. Custom fields: Work Type as known; DoR/DoD terse; DoR Satisfied `false`; DoD Satisfied `false`; Fix Version **Future**.
 4. Add `blocks` / parent relations instead of prose-only deps when known.
-5. Column: Planned backlog or Not Ready as appropriate; do not auto-mark ready.
+5. Column: do not auto-mark ready. **New Defects** (weekly scanners and any `kaneo-create-task` Defect create): always status `planned` (Planned backlog; columnId null), regardless of priority. Other Issue Types: Planned backlog or Not Ready as appropriate.
 6. Do **not** implement fixes in the same weekly pass that filed or refined the Defect.
