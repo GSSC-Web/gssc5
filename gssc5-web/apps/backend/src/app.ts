@@ -2,6 +2,8 @@ import { openapi } from "@elysia/openapi";
 import { cors } from "@elysiajs/cors";
 import { Elysia } from "elysia";
 
+import { section } from "./content/section";
+import { template } from "./content/template";
 import { kvs } from "./kvs";
 import { accounts } from "./user/accounts";
 import { leadership } from "./user/leadership";
@@ -38,6 +40,8 @@ export const app = new Elysia({ normalize: false })
   .use(users)
   .use(leadership)
   .use(kvs)
+  .use(section)
+  .use(template)
   .get("/", () => "Hello Elysia");
 
 export type App = typeof app;

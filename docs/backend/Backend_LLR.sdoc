@@ -5490,6 +5490,462 @@ REVIEW_STATUS: Approved
 
 [[/SECTION]]
 
+[[SECTION]]
+UID: GSSC-BLLR-WEBPAGE-CONTENT
+TITLE: Webpage Content
+
+[[SECTION]]
+UID: GSSC-BLLR-GENERIC-CONTENT
+TITLE: Generic Content
+
+[[SECTION]]
+UID: GSSC-BLLR-SECTIONS-CATEGORY
+TITLE: Sections
+
+[[SECTION]]
+UID: GSSC-BLLR-SECTIONS-COLLECTION
+TITLE: /sections
+
+[[SECTION]]
+UID: GSSC-BLLR-SECTIONS-COLLECTION-GET
+TITLE: GET
+
+[REQUIREMENT]
+UID: GSSC-BLLR-320
+TITLE: Public Section List
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL return only public sections when listing sections without a valid Login Token.
+<<<
+RATIONALE: >>>
+Unauthenticated callers see the public catalog only.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-37
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-135
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-321
+TITLE: Authenticated Section List
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL return public and members-only sections when listing sections for a logged-in member.
+<<<
+RATIONALE: >>>
+A valid Login Token expands the list to every section.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-37
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-137
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-322
+TITLE: Section List Entry Fields
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL include header, body, tags, cuid, and index in each section list entry.
+<<<
+RATIONALE: >>>
+List entries carry the fields needed for page assembly without a second fetch for summary data.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-37
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-135
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-323
+TITLE: Section List Index Order
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL order section list results by index ascending.
+<<<
+RATIONALE: >>>
+Index determines order among page data entries that share a page; list order follows that index.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-37
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-187
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-327
+TITLE: Section List Filters
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL accept section-list query filters for header, body, tag, cuid, and content, matching header, body, tag, and content as a case-insensitive substring, matching content against the header or the body, and matching cuid exactly.
+<<<
+RATIONALE: >>>
+Filter keys and match rules refine the high-level filter requirement.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-37
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-183
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-SECTIONS-COLLECTION-POST
+TITLE: POST
+
+[REQUIREMENT]
+UID: GSSC-BLLR-328
+TITLE: Section Creation
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL create a section from a template for a logged-in member who has create permission on that template, requiring a body and a template cuid, accepting optional header, resources, tags, and index, storing isPublic and permission values from the template, and storing tags as the template tags plus the requested tags.
+<<<
+RATIONALE: >>>
+Creation uses a template for audience and permissions while accepting caller content and order fields.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-37
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-184
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-329
+TITLE: Section Creation Forbidden
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL reject section creation without storing a section when the caller lacks create permission on the template.
+<<<
+RATIONALE: >>>
+Create permission on the template gates who may add sections from that category.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-37
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-184
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-SECTIONS-ITEM
+TITLE: /sections/{cuid}
+
+[[SECTION]]
+UID: GSSC-BLLR-SECTIONS-ITEM-GET
+TITLE: GET
+
+[REQUIREMENT]
+UID: GSSC-BLLR-324
+TITLE: Public Section Get
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL return a public section by cuid in the path to an unauthenticated caller, including header, body, resources, tags, and index.
+<<<
+RATIONALE: >>>
+Path cuid identifies one public section for assembly.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-37
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-136
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-325
+TITLE: Public Section Get Rejects Private
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL reject an unauthenticated request for a members-only section by cuid.
+<<<
+RATIONALE: >>>
+Members-only sections stay off the public get path.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-37
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-136
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-326
+TITLE: Authenticated Section Get
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL return any section by cuid in the path to a logged-in member, including header, body, resources, tags, and index.
+<<<
+RATIONALE: >>>
+A logged-in member can load public or members-only sections by cuid.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-37
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-138
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-SECTIONS-ITEM-PATCH
+TITLE: PATCH
+
+[REQUIREMENT]
+UID: GSSC-BLLR-330
+TITLE: Section Modification
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL accept modification of header, body, resources, tags, and index on a section by a logged-in member who has modify permission on that section.
+<<<
+RATIONALE: >>>
+Modify permission gates content and order updates.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-37
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-139
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-331
+TITLE: Section IsPublic Modification
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL accept an isPublic change on a section only when the caller has create, modify, and delete permission on that section.
+<<<
+RATIONALE: >>>
+Audience changes require the full permission set on the entry.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-37
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-139
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-SECTIONS-ITEM-DELETE
+TITLE: DELETE
+
+[REQUIREMENT]
+UID: GSSC-BLLR-341
+TITLE: Section Deletion
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL delete a section by cuid for a logged-in member who has delete permission on that section.
+<<<
+RATIONALE: >>>
+Delete permission gates removal of a section identified by path cuid.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-37
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-176
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-TEMPLATES-CATEGORY
+TITLE: Templates
+
+[[SECTION]]
+UID: GSSC-BLLR-TEMPLATES-COLLECTION
+TITLE: /templates
+
+[[SECTION]]
+UID: GSSC-BLLR-TEMPLATES-COLLECTION-GET
+TITLE: GET
+
+[REQUIREMENT]
+UID: GSSC-BLLR-333
+TITLE: Content Template List
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL return each content template's name and cuid when a logged-in member lists templates.
+<<<
+RATIONALE: >>>
+Logged-in members pick a content template when creating an entry.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-37
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-186
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-TEMPLATES-COLLECTION-POST
+TITLE: POST
+
+[REQUIREMENT]
+UID: GSSC-BLLR-335
+TITLE: Content Template Create
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL create a content template for an administrator when the request includes a name and isPublic flag, defaulting omitted permission values to 0 and accepting optional tags.
+<<<
+RATIONALE: >>>
+Administrators define content templates used at entry creation.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-37
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-186
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-TEMPLATES-ITEM
+TITLE: /templates/{cuid}
+
+[[SECTION]]
+UID: GSSC-BLLR-TEMPLATES-ITEM-GET
+TITLE: GET
+
+[REQUIREMENT]
+UID: GSSC-BLLR-334
+TITLE: Content Template Get
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL return a content template's name, isPublic flag, tags, and permission values to an administrator by template cuid in the path.
+<<<
+RATIONALE: >>>
+Administrators inspect content template defaults before managing them.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-37
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-186
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-TEMPLATES-ITEM-PATCH
+TITLE: PATCH
+
+[REQUIREMENT]
+UID: GSSC-BLLR-336
+TITLE: Content Template Modify
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL accept administrator modification of a content template's isPublic flag and permission values by cuid while leaving omitted values, the name, and the tags unchanged.
+<<<
+RATIONALE: >>>
+Administrators adjust audience and permissions without renaming or retagging in this operation.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-37
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-186
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-TEMPLATES-ITEM-DELETE
+TITLE: DELETE
+
+[REQUIREMENT]
+UID: GSSC-BLLR-337
+TITLE: Content Template Delete
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL delete a content template by cuid when the caller is an administrator.
+<<<
+RATIONALE: >>>
+Administrators remove unused content templates.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-37
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-186
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-CONTENT-ADMIN-PERMISSIONS
+TITLE: Administrator Permissions
+
+[REQUIREMENT]
+UID: GSSC-BLLR-332
+TITLE: Administrator Section Permissions
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL treat an administrator as having create, modify, and delete permission on every section and every content template.
+<<<
+RATIONALE: >>>
+Administrators retain full control over page data entries and templates.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-37
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-185
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[/SECTION]]
+
 [[/SECTION]]
 
 [[SECTION]]
@@ -5945,8 +6401,6 @@ REVIEW_STATUS: Approved
 
 [[/SECTION]]
 
-[[/SECTION]]
-
 [[SECTION]]
 UID: GSSC-BLLR-PASSWORD-HISTORY-STORE
 TITLE: Password History
@@ -6027,7 +6481,7 @@ RELATIONS:
 
 [[SECTION]]
 UID: GSSC-BLLR-KEY-VALUE-STORE
-TITLE: Key-Value Store
+TITLE: Key-Value
 
 [REQUIREMENT]
 UID: GSSC-BLLR-306
@@ -6082,6 +6536,86 @@ RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-119
   ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-PAGE-DATA-STORAGE
+TITLE: Generic Content
+
+[REQUIREMENT]
+UID: GSSC-BLLR-338
+TITLE: Page Entry Table
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store sections, announcements, and event details as rows in a page data table with a datatype, optional header, body, resources, tags, index, isPublic flag, create permission, modify permission, delete permission, and optional template reference.
+<<<
+RATIONALE: >>>
+One table holds the three page data entry kinds with shared metadata including index and tags.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-37
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-185
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-339
+TITLE: Page Entry Index
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store an integer index on each page data table entry for sections, announcements, and event details.
+<<<
+RATIONALE: >>>
+Index is unified across entry kinds that share a page.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-37
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-187
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-340
+TITLE: Content Template Table
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store each content template with a name, isPublic flag, tags, create permission, modify permission, and delete permission.
+<<<
+RATIONALE: >>>
+Content templates persist the defaults applied when creating page data entries that use them.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-37
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-186
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-342
+TITLE: Content Permission Bit Fields
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL interpret each non-administrator create, modify, and delete permission integer with bit 0 set for a regular member and bit 1 set for a user moderator.
+<<<
+RATIONALE: >>>
+Permission integers on page data entries and content templates encode which non-administrator roles may create, modify, or delete.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-37
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-185
+  ROLE: Refines
+
+[[/SECTION]]
 
 [[/SECTION]]
 
