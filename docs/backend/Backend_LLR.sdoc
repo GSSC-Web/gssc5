@@ -6111,6 +6111,198 @@ RELATIONS:
 [[/SECTION]]
 
 [[SECTION]]
+UID: GSSC-BLLR-PUBLICATIONS-CATEGORY
+TITLE: Publications
+
+[[SECTION]]
+UID: GSSC-BLLR-PUBLICATIONS-COLLECTION
+TITLE: /publications
+
+[[SECTION]]
+UID: GSSC-BLLR-PUBLICATIONS-COLLECTION-GET
+TITLE: GET
+
+[REQUIREMENT]
+UID: GSSC-BLLR-356
+TITLE: Publications List
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL return each publication's cuid, title, reference link, and description when listing publications, with description null when that publication has no description.
+<<<
+RATIONALE: >>>
+The public publications page assembles its hyperlink grid from this list, including optional description text under each title when present.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-19
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-195
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-PUBLICATIONS-COLLECTION-POST
+TITLE: POST
+
+[REQUIREMENT]
+UID: GSSC-BLLR-357
+TITLE: Publication Creation
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL create a publication for a logged-in member who is a publication editor or an administrator, requiring a title and a reference link, accepting an optional description, and returning the created publication's cuid, title, reference link, and description.
+<<<
+RATIONALE: >>>
+Authorized editors add publications with the fields the public list presents. Description may be omitted.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-19
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-197
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-361
+TITLE: Publication Creation Forbidden
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL reject publication creation without storing a publication when the caller is not a publication editor and is not an administrator.
+<<<
+RATIONALE: >>>
+Only publication editors and administrators may add publications.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-19
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-197
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-PUBLICATIONS-ITEM
+TITLE: /publications/{cuid}
+
+[[SECTION]]
+UID: GSSC-BLLR-PUBLICATIONS-ITEM-GET
+TITLE: GET
+
+[REQUIREMENT]
+UID: GSSC-BLLR-358
+TITLE: Publication Get
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL return a publication by cuid in the path, including title, reference link, and description, with description null when that publication has no description.
+<<<
+RATIONALE: >>>
+Path cuid identifies one publication for assembly or editing.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-19
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-196
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-PUBLICATIONS-ITEM-PATCH
+TITLE: PATCH
+
+[REQUIREMENT]
+UID: GSSC-BLLR-359
+TITLE: Publication Modification
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL modify a publication by cuid for a logged-in member who is a publication editor or an administrator, accepting title, reference link, and description updates, and returning the updated publication's cuid, title, reference link, and description.
+<<<
+RATIONALE: >>>
+Authorized editors keep publication fields current, including clearing or setting the optional description.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-19
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-198
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-362
+TITLE: Publication Modification Forbidden
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL reject publication modification without changing the publication when the caller is not a publication editor and is not an administrator.
+<<<
+RATIONALE: >>>
+Only publication editors and administrators may change publications.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-19
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-198
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-PUBLICATIONS-ITEM-DELETE
+TITLE: DELETE
+
+[REQUIREMENT]
+UID: GSSC-BLLR-360
+TITLE: Publication Deletion
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL delete a publication by cuid for a logged-in member who is a publication editor or an administrator.
+<<<
+RATIONALE: >>>
+Authorized editors remove publications that are no longer listed.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-19
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-199
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-363
+TITLE: Publication Deletion Forbidden
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL reject publication deletion without deleting the publication when the caller is not a publication editor and is not an administrator.
+<<<
+RATIONALE: >>>
+Only publication editors and administrators may delete publications.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-19
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-199
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
 UID: GSSC-BLLR-CONTENT-ADMIN-PERMISSIONS
 TITLE: Administrator Permissions
 
@@ -6538,6 +6730,42 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
+UID: GSSC-BLLR-355
+TITLE: User is publication editor
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store is publication editor for each user in the users table. is publication editor is true or false. A user created before this column exists stores false.
+<<<
+RATIONALE: >>>
+is publication editor is a stored site privilege that authorizes publications catalog changes. Existing users store false.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-19
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-111
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-364
+TITLE: Administrator Sets Publication Editor
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL let an administrator set is publication editor true or false on a member account.
+<<<
+RATIONALE: >>>
+Administrators assign the publication editor privilege so authorized members can maintain the publications catalog.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-19
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-111
+  ROLE: Refines
+
+[REQUIREMENT]
 UID: GSSC-BLLR-64
 TITLE: User Membership Status
 STATEMENT: >>>
@@ -6865,6 +7093,30 @@ REVIEW_STATUS: Changed
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-194
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-PUBLICATIONS-STORAGE
+TITLE: Publications
+
+[REQUIREMENT]
+UID: GSSC-BLLR-354
+TITLE: Publications Table
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store each publication as a row in a publications table with a cuid, a title, a reference link, and an optional description.
+<<<
+RATIONALE: >>>
+The dedicated table is the source of truth for the public publications list. Description may be absent.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-19
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-201
   ROLE: Refines
 
 [[/SECTION]]

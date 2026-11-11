@@ -29,14 +29,7 @@ export class LeadershipPage {}
 export class CalendarPage {}
 // @relation(GSSC-PLLR-11, scope=range_end, role=Implementation)
 
-// @relation(GSSC-PLLR-12, scope=range_start, role=Implementation)
-@Component({
-  selector: 'gssc-publications-page',
-  template: '',
-})
-export class PublicationsPage {}
-// @relation(GSSC-PLLR-12, scope=range_end, role=Implementation)
-
+// PublicationsPage lives in ./publications/ (GSSC5-19).
 // ResearchToolsPage lives in ./research-tools/ (GSSC5-18).
 
 // @relation(GSSC-PLLR-14, scope=range_start, role=Implementation)

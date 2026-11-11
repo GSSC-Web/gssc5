@@ -91,6 +91,9 @@ model User {
   // @relation(GSSC-BLLR-344, scope=range_start, role=Implementation)
   isToolEditor Boolean @default(false)
   // @relation(GSSC-BLLR-344, scope=range_end, role=Implementation)
+  // @relation(GSSC-BLLR-355, scope=range_start, role=Implementation)
+  isPublicationEditor Boolean @default(false)
+  // @relation(GSSC-BLLR-355, scope=range_end, role=Implementation)
   // @relation(GSSC-BLLR-64, scope=range_start, role=Implementation)
   membershipStatus String?
   // @relation(GSSC-BLLR-64, scope=range_end, role=Implementation)
@@ -223,3 +226,17 @@ model ResearchTool {
   @@map("research_tools")
 }
 // @relation(GSSC-BLLR-343, scope=range_end, role=Implementation)
+
+// Publications catalog (GSSC-BHLR-201 / GSSC5-19).
+// @relation(GSSC-BLLR-354, scope=range_start, role=Implementation)
+model Publication {
+  id            String  @id @default(cuid())
+  /// @prismabox.options{ minLength: 1 }
+  title         String
+  /// @prismabox.options{ minLength: 1 }
+  referenceLink String
+  description   String?
+
+  @@map("publications")
+}
+// @relation(GSSC-BLLR-354, scope=range_end, role=Implementation)
