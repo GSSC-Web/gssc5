@@ -3323,7 +3323,9 @@ GSSC5-16. SW binds the leadership intro tag; requirements stay tag-agnostic.
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-16
-REVIEW_STATUS: Approved[REQUIREMENT]
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
 UID: GSSC-PLLR-235
 TITLE: Syntactic
 STATEMENT: >>>
@@ -3335,7 +3337,9 @@ Intro precedes the roster so visitors see page context first. Index order preser
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-16
-REVIEW_STATUS: Approved[REQUIREMENT]
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
 UID: GSSC-PLLR-236
 TITLE: Lexical
 STATEMENT: >>>
@@ -3348,6 +3352,7 @@ DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-16
 REVIEW_STATUS: Approved
+
 [[/SECTION]]
 
 [[SECTION]]
@@ -3570,7 +3575,9 @@ Large cards show identity, role, and how to reach the person. A silhouette place
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-16
-REVIEW_STATUS: Approved[REQUIREMENT]
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
 UID: GSSC-PLLR-238
 TITLE: Syntactic
 STATEMENT: >>>
@@ -3582,7 +3589,9 @@ A top photo with stacked text below matches the large officer card layout. Filli
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-16
-REVIEW_STATUS: Approved[REQUIREMENT]
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
 UID: GSSC-PLLR-239
 TITLE: Lexical
 STATEMENT: >>>
@@ -3595,6 +3604,7 @@ DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-16
 REVIEW_STATUS: Approved
+
 [[/SECTION]]
 
 [[SECTION]]
@@ -3613,7 +3623,9 @@ Small cards show identity, role, and how to reach the person in a compact form. 
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-16
-REVIEW_STATUS: Approved[REQUIREMENT]
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
 UID: GSSC-PLLR-241
 TITLE: Syntactic
 STATEMENT: >>>
@@ -3625,7 +3637,9 @@ A left photo with a text column matches the compact Director and chair card layo
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-16
-REVIEW_STATUS: Approved[REQUIREMENT]
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
 UID: GSSC-PLLR-242
 TITLE: Lexical
 STATEMENT: >>>
@@ -3638,6 +3652,7 @@ DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-16
 REVIEW_STATUS: Approved
+
 [[/SECTION]]
 
 [[/SECTION]]
