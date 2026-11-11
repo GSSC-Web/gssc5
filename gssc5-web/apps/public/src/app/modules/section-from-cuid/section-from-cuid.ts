@@ -7,7 +7,7 @@ import {
   signal,
 } from '@angular/core';
 import { backend } from '../../services/backend';
-import { Section, type SectionContents, type SectionResource } from './section';
+import { Section, type SectionContents, type SectionResource } from '../section/section';
 
 /** Public section payload from Unified Backend GET /sections/{cuid}. */
 export type BackendSectionData = {
