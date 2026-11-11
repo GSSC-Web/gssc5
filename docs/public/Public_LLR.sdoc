@@ -3180,7 +3180,7 @@ UID: GSSC-PLLR-RESEARCH-TOOL-LINK
 TITLE: Research Tool Link
 
 [REQUIREMENT]
-UID: GSSC-PLLR-207
+UID: GSSC-PLLR-228
 TITLE: Semantic
 STATEMENT: >>>
 A Research Tool Link SHALL present that tool's title and open that tool's reference link when selected.
@@ -3198,7 +3198,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-208
+UID: GSSC-PLLR-229
 TITLE: Syntactic
 STATEMENT: >>>
 A Research Tool Link SHALL occupy one cell in the Society Resources and Tools List hyperlink grid.
@@ -3216,7 +3216,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-209
+UID: GSSC-PLLR-230
 TITLE: Lexical
 STATEMENT: >>>
 A Research Tool Link SHALL use sans-serif type in the public dark green theme color.

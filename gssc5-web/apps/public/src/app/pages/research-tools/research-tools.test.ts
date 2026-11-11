@@ -105,8 +105,8 @@ test('GSSC-PLLR-161 Lexical', async () => {
 });
 // @relation(GSSC-PLLR-161, scope=range_end, role=Test)
 
-// @relation(GSSC-PLLR-207, scope=range_start, role=Test)
-test('GSSC-PLLR-207 Semantic', async () => {
+// @relation(GSSC-PLLR-228, scope=range_start, role=Test)
+test('GSSC-PLLR-228 Semantic', async () => {
   const { root } = await setupResearchToolsPage(async () => sampleTools);
   const links = [
     ...root.querySelectorAll<HTMLAnchorElement>('.gssc-research-tool-link'),
@@ -120,10 +120,10 @@ test('GSSC-PLLR-207 Semantic', async () => {
     'http://www.victoriags.org/',
   ]);
 });
-// @relation(GSSC-PLLR-207, scope=range_end, role=Test)
+// @relation(GSSC-PLLR-228, scope=range_end, role=Test)
 
-// @relation(GSSC-PLLR-208, scope=range_start, role=Test)
-test('GSSC-PLLR-208 Syntactic', async () => {
+// @relation(GSSC-PLLR-229, scope=range_start, role=Test)
+test('GSSC-PLLR-229 Syntactic', async () => {
   const { root } = await setupResearchToolsPage(async () => sampleTools);
   const cells = root.querySelectorAll('.gssc-research-tools-page__cell');
   expect(cells.length).toBe(2);
@@ -134,13 +134,13 @@ test('GSSC-PLLR-208 Syntactic', async () => {
     );
   }
 });
-// @relation(GSSC-PLLR-208, scope=range_end, role=Test)
+// @relation(GSSC-PLLR-229, scope=range_end, role=Test)
 
-// @relation(GSSC-PLLR-209, scope=range_start, role=Test)
-test('GSSC-PLLR-209 Lexical', async () => {
+// @relation(GSSC-PLLR-230, scope=range_start, role=Test)
+test('GSSC-PLLR-230 Lexical', async () => {
   const { root } = await setupResearchToolsPage(async () => sampleTools);
   const link = root.querySelector<HTMLElement>('.gssc-research-tool-link')!;
   expect(link.classList.contains('font-sans')).toBe(true);
   expect(link.classList.contains('text-gssc-dark-green')).toBe(true);
 });
-// @relation(GSSC-PLLR-209, scope=range_end, role=Test)
+// @relation(GSSC-PLLR-230, scope=range_end, role=Test)
