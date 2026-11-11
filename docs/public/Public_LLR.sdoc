@@ -1730,6 +1730,69 @@ REVIEW_STATUS: Approved
 
 [[/SECTION]]
 
+[[SECTION]]
+UID: GSSC-PLLR-SECTION-FROM-CUID
+TITLE: Section From CUID
+
+[REQUIREMENT]
+UID: GSSC-PLLR-152
+TITLE: Semantic
+STATEMENT: >>>
+The GSSC Website Public Frontend Section From CUID SHALL retrieve a public section's data from the Unified Backend using the section cuid it receives, building Section Contents from that data: the header when that data includes a header, the body, and resources when that data includes resources, using each backend resource string as that resource's name and that resource's target.
+<<<
+RATIONALE: >>>
+Pages identify sections by backend cuid. The loader turns that cuid into Section Contents so the Section Container can place them. Each backend resource string is both the label and the open target until a richer resource schema exists. This requirement does not set which cuids pages pass.
+<<<
+COMMENT: >>>
+Retrieval and Contents construction are one behavior for the cuid input. Resource name and target both come from the same backend string. REVIEW_STATUS stays Changed until owner approval.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-50
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-136
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-153
+TITLE: Syntactic
+STATEMENT: >>>
+The Section From CUID SHALL place those Section Contents through the Section Container when retrieval succeeds, and omit the Section Container when the Unified Backend does not provide the section for that cuid.
+<<<
+RATIONALE: >>>
+Successful loads reuse the Section Container placement shell. Omitting the Container when the section is unavailable avoids presenting empty chrome. Page assembly chooses where the Section From CUID appears.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-50
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-136
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-154
+TITLE: Lexical
+STATEMENT: >>>
+The Section From CUID SHALL present the Section Header, Section Body, and Section Resources through the Section Container presentation, without independent lexical chrome of its own.
+<<<
+RATIONALE: >>>
+Chrome, type, and colors stay on the Section Container so the cuid loader does not fork a second section look. Resource carousel and token choices remain those of the Container.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-50
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-136
+  ROLE: Refines
+
+[[/SECTION]]
+
 [[/SECTION]]
 
 [[SECTION]]
