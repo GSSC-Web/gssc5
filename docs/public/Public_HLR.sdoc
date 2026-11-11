@@ -2192,6 +2192,74 @@ RELATIONS:
   VALUE: GSSC-PIR-8
   ROLE: Refines
 
+[REQUIREMENT]
+UID: GSSC-PHLR-130
+TITLE: Current Year Newsletter List
+STATEMENT: >>>
+The newsletters page SHALL list the newsletters for the current calendar year.
+<<<
+RATIONALE: >>>
+The legacy page groups PDF issues by year. This page keeps the current year's issues visible as a list. Older years are reached through the Volume menu or catalog search.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-20
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-8
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-131
+TITLE: Newsletter Preview
+STATEMENT: >>>
+The newsletters page SHALL preview the selected newsletter.
+<<<
+RATIONALE: >>>
+Visitors can read the selected issue on the page without leaving it. Selected Newsletter requires display; this requirement sets that display as a preview of the issue file.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-20
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-8
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-132
+TITLE: Newsletter Download
+STATEMENT: >>>
+The newsletters page SHALL provide a download of the selected newsletter.
+<<<
+RATIONALE: >>>
+Visitors can save the selected issue file. Preview shows the issue on the page; download provides the file itself.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-20
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-8
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-133
+TITLE: Newsletter Catalog Search
+STATEMENT: >>>
+The newsletters page SHALL include a search of the older newsletter catalog that lets a found newsletter be selected for preview.
+<<<
+RATIONALE: >>>
+Older issues stay reachable without browsing every Volume year. A search hit uses the same preview path as a form selection. This requirement does not set the search matching rules beyond the older catalog.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-20
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-8
+  ROLE: Refines
+
 [[/SECTION]]
 
 [[/SECTION]]

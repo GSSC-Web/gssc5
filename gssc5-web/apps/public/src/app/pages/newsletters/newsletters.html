@@ -1,0 +1,134 @@
+<!-- @relation(GSSC-PLLR-208, GSSC-PLLR-209, scope=range_start, role=Implementation) -->
+<div
+  class="gssc-newsletters-page flex w-full flex-col gap-6 bg-gssc-white p-4 font-sans text-gssc-dark-green"
+>
+  <!-- @relation(GSSC-PLLR-207, scope=range_start, role=Implementation) -->
+  <form
+    class="gssc-newsletters-form flex flex-col gap-4 border border-gssc-gray bg-gssc-white p-4 font-sans text-gssc-dark-green"
+    aria-label="Newsletter selection"
+    (submit)="$event.preventDefault()"
+  >
+    <div class="gssc-newsletters-menus flex flex-wrap items-end gap-4">
+      <!-- @relation(GSSC-PLLR-213, GSSC-PLLR-214, GSSC-PLLR-215, scope=range_start, role=Implementation) -->
+      <label class="gssc-newsletters-volume flex min-w-40 flex-col gap-1 font-sans text-gssc-dark-green">
+        <span class="gssc-newsletters-volume__label font-semibold">Volume</span>
+        <select
+          class="gssc-newsletters-volume__control border border-gssc-gray bg-gssc-white px-2 py-1 font-sans text-gssc-dark-green"
+          [value]="selectedYear()"
+          (change)="onVolumeChange($any($event.target).value)"
+          data-testid="newsletter-volume"
+        >
+          @for (year of volumeYears(); track year) {
+            <option [value]="year">{{ year }}</option>
+          }
+        </select>
+      </label>
+      <!-- @relation(GSSC-PLLR-213, GSSC-PLLR-214, GSSC-PLLR-215, scope=range_end, role=Implementation) -->
+
+      <!-- @relation(GSSC-PLLR-216, GSSC-PLLR-217, GSSC-PLLR-218, scope=range_start, role=Implementation) -->
+      <label class="gssc-newsletters-number flex min-w-40 flex-col gap-1 font-sans text-gssc-dark-green">
+        <span class="gssc-newsletters-number__label font-semibold">Number</span>
+        <select
+          class="gssc-newsletters-number__control border border-gssc-gray bg-gssc-white px-2 py-1 font-sans text-gssc-dark-green"
+          [value]="selectedMonth() ?? ''"
+          (change)="onNumberChange($any($event.target).value)"
+          data-testid="newsletter-number"
+        >
+          @for (month of numberMonths(); track month) {
+            <option [value]="month">{{ labelForMonth(month) }}</option>
+          }
+        </select>
+      </label>
+      <!-- @relation(GSSC-PLLR-216, GSSC-PLLR-217, GSSC-PLLR-218, scope=range_end, role=Implementation) -->
+    </div>
+
+    <!-- @relation(GSSC-PLLR-210, GSSC-PLLR-211, GSSC-PLLR-212, scope=range_start, role=Implementation) -->
+    <div class="gssc-newsletters-current-year flex flex-col gap-2">
+      <h2 class="gssc-newsletters-current-year__heading m-0 text-base font-semibold text-gssc-dark-green">
+        {{ currentYear }} Newsletters
+      </h2>
+      <ul
+        class="gssc-newsletters-current-year__list m-0 flex list-none flex-col gap-1 p-0"
+        aria-label="Current year newsletters"
+      >
+        @for (entry of currentYearList(); track entry.cuid) {
+          <li>
+            <button
+              type="button"
+              class="gssc-newsletters-current-year__entry w-full cursor-pointer border-0 px-3 py-2 text-start font-sans text-gssc-dark-green"
+              [class.bg-gssc-gray]="selectedCuid() === entry.cuid"
+              [class.bg-transparent]="selectedCuid() !== entry.cuid"
+              (click)="selectEntry(entry)"
+            >
+              {{ labelFor(entry) }}
+            </button>
+          </li>
+        }
+      </ul>
+    </div>
+    <!-- @relation(GSSC-PLLR-210, GSSC-PLLR-211, GSSC-PLLR-212, scope=range_end, role=Implementation) -->
+  </form>
+  <!-- @relation(GSSC-PLLR-207, scope=range_end, role=Implementation) -->
+
+  <!-- @relation(GSSC-PLLR-225, GSSC-PLLR-226, GSSC-PLLR-227, scope=range_start, role=Implementation) -->
+  <div
+    class="gssc-newsletters-search flex flex-col gap-2 border border-gssc-gray bg-gssc-white p-3 font-sans text-gssc-dark-green"
+  >
+    <label class="flex flex-col gap-1 font-sans text-gssc-dark-green">
+      <span class="gssc-newsletters-search__label font-semibold">Search older catalog</span>
+      <input
+        type="search"
+        class="gssc-newsletters-search__field border border-gssc-gray bg-gssc-white px-2 py-1 font-sans text-gssc-dark-green"
+        [value]="searchQuery()"
+        (input)="onSearchInput($any($event.target).value)"
+        data-testid="newsletter-search"
+      />
+    </label>
+    <ul
+      class="gssc-newsletters-search__results m-0 flex list-none flex-col gap-1 border border-gssc-gray bg-gssc-white p-0"
+      aria-label="Older newsletter search results"
+    >
+      @for (entry of searchResults(); track entry.cuid) {
+        <li>
+          <button
+            type="button"
+            class="gssc-newsletters-search__result w-full cursor-pointer border-0 px-3 py-2 text-start font-sans text-gssc-dark-green"
+            [class.bg-gssc-gray]="selectedCuid() === entry.cuid"
+            [class.bg-transparent]="selectedCuid() !== entry.cuid"
+            (click)="selectEntry(entry)"
+          >
+            {{ labelFor(entry) }}
+          </button>
+        </li>
+      }
+    </ul>
+  </div>
+  <!-- @relation(GSSC-PLLR-225, GSSC-PLLR-226, GSSC-PLLR-227, scope=range_end, role=Implementation) -->
+
+  <div class="gssc-newsletters-selected flex flex-col gap-3">
+    <!-- @relation(GSSC-PLLR-222, GSSC-PLLR-223, GSSC-PLLR-224, scope=range_start, role=Implementation) -->
+    @if (selectedFileUrl(); as fileUrl) {
+      <a
+        class="gssc-newsletters-download inline-flex w-fit cursor-pointer border border-gssc-dark-green bg-transparent px-3 py-1 font-sans text-gssc-dark-green hover:bg-gssc-gray"
+        [href]="fileUrl"
+        download
+        data-testid="newsletter-download"
+      >
+        Download
+      </a>
+    }
+    <!-- @relation(GSSC-PLLR-222, GSSC-PLLR-223, GSSC-PLLR-224, scope=range_end, role=Implementation) -->
+
+    <!-- @relation(GSSC-PLLR-219, GSSC-PLLR-220, GSSC-PLLR-221, scope=range_start, role=Implementation) -->
+    @if (previewSafeUrl(); as previewUrl) {
+      <iframe
+        class="gssc-newsletters-preview min-h-96 w-full border border-gssc-gray bg-gssc-white"
+        [src]="previewUrl"
+        title="Newsletter preview"
+        data-testid="newsletter-preview"
+      ></iframe>
+    }
+    <!-- @relation(GSSC-PLLR-219, GSSC-PLLR-220, GSSC-PLLR-221, scope=range_end, role=Implementation) -->
+  </div>
+</div>
+<!-- @relation(GSSC-PLLR-208, GSSC-PLLR-209, scope=range_end, role=Implementation) -->
