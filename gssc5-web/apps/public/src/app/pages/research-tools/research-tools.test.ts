@@ -72,12 +72,19 @@ test('GSSC-PLLR-160 Syntactic', async () => {
   expect(textContent(present, '.gssc-research-tools-page__heading')).toBe(
     'Research Resources',
   );
+  expect(present.querySelector('.gssc-research-tools-page__content')).not.toBeNull();
   expect(present.querySelector('.gssc-research-tools-page__grid')).not.toBeNull();
   expect(present.querySelectorAll('.gssc-research-tool-link').length).toBe(2);
+  // Tools listing is normal page content — not nested under generic sections.
+  expect(present.querySelector('gssc-section')).toBeNull();
+  expect(present.querySelector('gssc-section-from-cuid')).toBeNull();
+  expect(present.querySelector('.gssc-section')).toBeNull();
 
   const { root: empty } = await setupResearchToolsPage(async () => []);
   expect(empty.querySelector('.gssc-research-tools-page__grid')).toBeNull();
   expect(empty.querySelector('.gssc-research-tool-link')).toBeNull();
+  expect(empty.querySelector('gssc-section')).toBeNull();
+  expect(empty.querySelector('gssc-section-from-cuid')).toBeNull();
 
   const { root: failed } = await setupResearchToolsPage(async () => null);
   expect(failed.querySelector('.gssc-research-tools-page__grid')).toBeNull();

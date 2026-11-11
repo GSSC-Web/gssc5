@@ -3120,13 +3120,13 @@ TITLE: Society Resources and Tools List
 UID: GSSC-PLLR-159
 TITLE: Semantic
 STATEMENT: >>>
-The Society Resources and Tools List SHALL request the current research tools from the Unified Backend research tools list, identifying each listed tool by that tool's cuid, title, and reference link in the order the Unified Backend provides.
+The Society Resources and Tools List SHALL request the current research tools from the Unified Backend research tools list as normal research tools page content, identifying each listed tool by that tool's cuid, title, and reference link in the order the Unified Backend provides.
 <<<
 RATIONALE: >>>
-The research tools page lists society-recommended tools such as charts, instruction sheets, and outside resource links from the dedicated research-tools catalog. Cemetery Project pages are outside this list. Section catalogs are not the source for this page.
+The research tools page lists society-recommended tools such as charts, instruction sheets, and outside resource links from the dedicated research-tools catalog. That catalog is normal webpage content for this page, not generic section Contents. Cemetery Project pages are outside this list. Tagged generic sections and Section From CUID are not the source for this list.
 <<<
 COMMENT: >>>
-REVIEW_STATUS stays Changed until owner approval. Owner expanded scope away from section-tag listings to the research-tools table API.
+REVIEW_STATUS stays Changed until owner approval. Owner clarified the tools listing lives in normal page content, not under generic/Section-from-CUID trees.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -3141,10 +3141,10 @@ RELATIONS:
 UID: GSSC-PLLR-160
 TITLE: Syntactic
 STATEMENT: >>>
-The Society Resources and Tools List SHALL place the Research Resources heading and each listed tool as a Research Tool Link in a hyperlink grid on the research tools page, omitting the grid when the Unified Backend provides no tools.
+The Society Resources and Tools List SHALL place the Research Resources heading and each listed tool as a Research Tool Link in a hyperlink grid in the research tools page's normal webpage content, not nested inside a generic section, omitting the grid when the Unified Backend provides no tools.
 <<<
 RATIONALE: >>>
-Legacy research tools used a heading and multi-column link layout. An empty or unavailable catalog leaves the page without the grid. Cemetery Project pages remain outside this placement.
+Legacy research tools used a heading and multi-column link layout hosted as page content. The tools subsection is a peer of normal page chrome/content, not a child of the Section Container or Section From CUID. An empty or unavailable catalog leaves the page without the grid. Cemetery Project pages remain outside this placement.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -3201,10 +3201,10 @@ RELATIONS:
 UID: GSSC-PLLR-229
 TITLE: Syntactic
 STATEMENT: >>>
-A Research Tool Link SHALL occupy one cell in the Society Resources and Tools List hyperlink grid.
+A Research Tool Link SHALL occupy one cell in the Society Resources and Tools List hyperlink grid in normal research tools page content.
 <<<
 RATIONALE: >>>
-Grid cells carry one tool each so the list reads as a resource grid rather than a stacked section list.
+Grid cells carry one tool each so the list reads as a resource grid on the page, not as Contents nested under a generic section.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test

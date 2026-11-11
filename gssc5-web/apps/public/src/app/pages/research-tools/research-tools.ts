@@ -38,7 +38,8 @@ async function defaultResearchToolsListGet(): Promise<ResearchToolEntry[] | null
 
 /**
  * Public Research Tools page (GSSC5-18): Society Resources and Tools List as a
- * refined hyperlink grid sourced from the research-tools catalog.
+ * refined hyperlink grid in normal page content (not nested under Section /
+ * Section From CUID), sourced from GET /research-tools.
  */
 // @relation(GSSC-PLLR-13, scope=range_start, role=Implementation)
 @Component({
