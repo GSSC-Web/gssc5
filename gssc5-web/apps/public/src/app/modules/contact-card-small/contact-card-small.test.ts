@@ -74,5 +74,26 @@ test('GSSC-PLLR-242 Contact Card Small Lexical', async () => {
 
   const contact = root.querySelector<HTMLElement>('.gssc-contact-card-small__contact')!;
   expect(contact.classList.contains('italic')).toBe(true);
+
+  const { root: vacantRoot } = await setupCard({
+    name: null,
+    title: 'Director at Large 4',
+    photoUrl: null,
+    contactLabel: null,
+    contactHref: null,
+  });
+  const vacantCard = vacantRoot.querySelector<HTMLElement>('.gssc-contact-card-small')!;
+  expect(vacantCard.classList.contains('bg-gssc-light-red')).toBe(true);
+  expect(vacantCard.classList.contains('border-gssc-dark-red')).toBe(true);
+  expect(
+    vacantRoot
+      .querySelector('.gssc-contact-card-small__title')!
+      .classList.contains('text-gssc-dark-red'),
+  ).toBe(true);
+  expect(
+    vacantRoot
+      .querySelector('.gssc-contact-card-small__vacant')!
+      .classList.contains('text-gssc-dark-red'),
+  ).toBe(true);
 });
 // @relation(GSSC-PLLR-242, scope=range_end, role=Test)

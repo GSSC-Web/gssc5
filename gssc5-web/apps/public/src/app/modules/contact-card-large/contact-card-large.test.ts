@@ -51,6 +51,9 @@ test('GSSC-PLLR-237 Contact Card Large Semantic', async () => {
   expect(empty.querySelector('.gssc-contact-card-large__photo-placeholder')).not.toBeNull();
   expect(textContent(empty, '.gssc-contact-card-large__vacant')).toBe('Vacant');
   expect(empty.querySelector('.gssc-contact-card-large__contact')).toBeNull();
+  expect(empty.querySelector('.gssc-contact-card-large')!.getAttribute('data-vacant')).toBe(
+    'true',
+  );
 
   const { root: phone } = await setupCard({
     ...filled,
@@ -101,5 +104,25 @@ test('GSSC-PLLR-239 Contact Card Large Lexical', async () => {
   const contact = root.querySelector<HTMLElement>('.gssc-contact-card-large__contact')!;
   expect(contact.classList.contains('italic')).toBe(true);
   expect(contact.classList.contains('text-gssc-black')).toBe(true);
+
+  const { root: vacantRoot } = await setupCard(vacant);
+  const vacantCard = vacantRoot.querySelector<HTMLElement>('.gssc-contact-card-large')!;
+  expect(vacantCard.classList.contains('bg-gssc-light-red')).toBe(true);
+  expect(vacantCard.classList.contains('border-gssc-dark-red')).toBe(true);
+  expect(
+    vacantRoot
+      .querySelector('.gssc-contact-card-large__title')!
+      .classList.contains('text-gssc-dark-red'),
+  ).toBe(true);
+  expect(
+    vacantRoot
+      .querySelector('.gssc-contact-card-large__vacant')!
+      .classList.contains('text-gssc-dark-red'),
+  ).toBe(true);
+  expect(
+    vacantRoot
+      .querySelector('.gssc-contact-card-large__photo-placeholder')!
+      .classList.contains('text-gssc-dark-red'),
+  ).toBe(true);
 });
 // @relation(GSSC-PLLR-239, scope=range_end, role=Test)

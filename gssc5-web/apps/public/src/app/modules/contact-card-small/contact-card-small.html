@@ -1,9 +1,16 @@
 <!-- @relation(GSSC-PLLR-240, GSSC-PLLR-241, GSSC-PLLR-242, scope=range_start, role=Implementation) -->
 <article
-  class="gssc-contact-card-small flex h-full w-full flex-row items-stretch border border-gssc-gray bg-gssc-white font-sans"
+  class="gssc-contact-card-small flex h-full w-full flex-row items-stretch border font-sans"
+  [class.border-gssc-gray]="contents().name !== null"
+  [class.bg-gssc-white]="contents().name !== null"
+  [class.border-gssc-dark-red]="contents().name === null"
+  [class.bg-gssc-light-red]="contents().name === null"
+  [attr.data-vacant]="contents().name === null ? 'true' : 'false'"
 >
   <div
-    class="gssc-contact-card-small__photo w-24 shrink-0 self-stretch overflow-hidden bg-gssc-light-green"
+    class="gssc-contact-card-small__photo w-24 shrink-0 self-stretch overflow-hidden"
+    [class.bg-gssc-light-green]="contents().name !== null"
+    [class.bg-gssc-light-red]="contents().name === null"
   >
     @if (contents().photoUrl) {
       <img
@@ -13,7 +20,9 @@
       />
     } @else {
       <svg
-        class="gssc-contact-card-small__photo-placeholder block h-full min-h-24 w-full text-gssc-dark-green"
+        class="gssc-contact-card-small__photo-placeholder block h-full min-h-24 w-full"
+        [class.text-gssc-dark-green]="contents().name !== null"
+        [class.text-gssc-dark-red]="contents().name === null"
         viewBox="0 0 120 120"
         preserveAspectRatio="xMidYMid slice"
         role="img"
@@ -30,13 +39,19 @@
   </div>
   <div class="gssc-contact-card-small__body flex min-w-0 flex-1 flex-col justify-center gap-1 px-3 py-2">
     @if (contents().name === null) {
-      <p class="gssc-contact-card-small__vacant m-0 text-base font-normal text-gssc-black">Vacant</p>
+      <p class="gssc-contact-card-small__vacant m-0 text-base font-normal text-gssc-dark-red">
+        Vacant
+      </p>
     } @else {
       <p class="gssc-contact-card-small__name m-0 text-base font-normal text-gssc-black">
         {{ contents().name }}
       </p>
     }
-    <p class="gssc-contact-card-small__title m-0 font-bold text-gssc-dark-green">
+    <p
+      class="gssc-contact-card-small__title m-0 font-bold"
+      [class.text-gssc-dark-green]="contents().name !== null"
+      [class.text-gssc-dark-red]="contents().name === null"
+    >
       {{ contents().title }}
     </p>
     @if (contents().contactLabel !== null) {

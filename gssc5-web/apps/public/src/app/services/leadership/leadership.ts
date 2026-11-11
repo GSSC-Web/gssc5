@@ -92,30 +92,11 @@ export const DIRECTOR_AT_LARGE_OFFICES = [
   'Director at Large 5',
 ] as const;
 
-/** Committee chair Position titles (Lexical; page presents alphabetically). */
-export const COMMITTEE_CHAIR_OFFICES = [
-  'Acquisitions',
-  'Audit',
-  'Budget',
-  'Historian',
-  'Membership',
-  'Memorial Day',
-  'Mentor',
-  'Newsletter & Website',
-  'Planning',
-  'Programs',
-  'Publicity',
-  'Queries',
-  'Refreshments',
-  'Registrar',
-  'Research & Publications',
-  'Research Day Trips',
-  'Seminar',
-  'Seminar & Workshops',
-  'Social Media',
-  'Special Collections',
-  'Sunshine',
-] as const;
+/** Officer + Director at Large Positions excluded from dynamic Committee Chairs. */
+const FIXED_LEADERSHIP_OFFICES = new Set<string>([
+  ...OFFICER_OFFICES,
+  ...DIRECTOR_AT_LARGE_OFFICES,
+]);
 
 export function leaderDisplayName(entry: LeadershipEntry): string | null {
   const parts = [entry.firstName, entry.lastName].filter(
@@ -188,12 +169,34 @@ export function cardsForRoster(
   });
 }
 
-/** Committee chair cards in alphabetical order by office title. */
+/**
+ * Committee chair cards from leadership list entries that are not Officers or
+ * Directors at Large. Only named entries; alphabetical by Position. No Vacant.
+ */
 export function committeeChairCards(
   leaders: readonly LeadershipEntry[],
 ): ContactCardContents[] {
-  const sorted = [...COMMITTEE_CHAIR_OFFICES].sort((a, b) => a.localeCompare(b));
-  return cardsForRoster(sorted, leaders);
+  return leaders
+    .filter((leader) => {
+      if (FIXED_LEADERSHIP_OFFICES.has(leader.position)) return false;
+      return leaderDisplayName(leader) !== null;
+    })
+    .slice()
+    .sort((a, b) => a.position.localeCompare(b.position))
+    .map((match) => {
+      const contact = preferredContact(match);
+      const photoUrl =
+        typeof match.accountPhoto === 'string' && match.accountPhoto.trim() !== ''
+          ? match.accountPhoto
+          : null;
+      return {
+        name: leaderDisplayName(match)!,
+        title: match.position,
+        photoUrl,
+        contactLabel: contact?.label ?? null,
+        contactHref: contact?.href ?? null,
+      };
+    });
 }
 
 /** Sort list entries by backend index ascending (stable for equal index). */

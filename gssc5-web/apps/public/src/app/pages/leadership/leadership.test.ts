@@ -5,7 +5,6 @@ import {
   type BackendSectionData,
 } from '../../modules/section-from-cuid/section-from-cuid';
 import {
-  COMMITTEE_CHAIR_OFFICES,
   DIRECTOR_AT_LARGE_OFFICES,
   LEADERSHIP_INTRO_TAG,
   LEADERSHIP_LIST_GET,
@@ -33,11 +32,25 @@ const sampleLeaders: LeadershipEntry[] = [
     primaryPhone: '209-555-0100',
   },
   {
+    position: 'Programs',
+    firstName: 'Lauren',
+    lastName: 'Hastings',
+    preferredContactMethod: 'Email',
+    primaryEmail: 'programs@example.com',
+  },
+  {
     position: 'Historian',
     firstName: 'Judy',
     lastName: 'Byrne',
     preferredContactMethod: 'Email',
     primaryEmail: 'historian@example.com',
+  },
+  {
+    position: 'Budget',
+    firstName: null,
+    lastName: null,
+    preferredContactMethod: 'Email',
+    primaryEmail: 'budget-empty@example.com',
   },
   {
     position: '2nd Vice President',
@@ -216,7 +229,11 @@ test('GSSC-PLLR-162 Officers Semantic', async () => {
     ),
   ).toBe('https://example.com/karen.jpg');
 
-  expect(textContent(byTitle('Secretary'), '.gssc-contact-card-large__vacant')).toBe('Vacant');
+  const secretary = byTitle('Secretary');
+  expect(textContent(secretary, '.gssc-contact-card-large__vacant')).toBe('Vacant');
+  const secretaryArticle = secretary.querySelector('.gssc-contact-card-large')!;
+  expect(secretaryArticle.getAttribute('data-vacant')).toBe('true');
+  expect(secretaryArticle.classList.contains('bg-gssc-light-red')).toBe(true);
   expect(textContent(byTitle('2nd Vice President'), '.gssc-contact-card-large__vacant')).toBe(
     'Vacant',
   );
@@ -270,12 +287,15 @@ test('GSSC-PLLR-165 Directors at Large Semantic', async () => {
     ),
   ).toBe('tel:209-555-0100');
 
-  const vacant = [...region.querySelectorAll('gssc-contact-card-small')].find((card) =>
-    card
-      .querySelector('.gssc-contact-card-small__title')
-      ?.textContent?.includes('Director at Large 4'),
+  const vacant = [...region.querySelectorAll('gssc-contact-card-small')].find(
+    (card) =>
+      card.querySelector('.gssc-contact-card-small__title')?.textContent?.trim() ===
+      'Director at Large 4',
   )!;
   expect(textContent(vacant, '.gssc-contact-card-small__vacant')).toBe('Vacant');
+  const vacantArticle = vacant.querySelector('.gssc-contact-card-small')!;
+  expect(vacantArticle.getAttribute('data-vacant')).toBe('true');
+  expect(vacantArticle.classList.contains('bg-gssc-light-red')).toBe(true);
 });
 // @relation(GSSC-PLLR-165, scope=range_end, role=Test)
 
@@ -313,8 +333,13 @@ test('GSSC-PLLR-167 Directors at Large Lexical', async () => {
 test('GSSC-PLLR-231 Committee Chairs Semantic', async () => {
   const { root } = await setupLeadershipPage();
   const region = root.querySelector('.gssc-committee-chairs')!;
-  const historian = [...region.querySelectorAll('gssc-contact-card-small')].find((card) =>
-    card.querySelector('.gssc-contact-card-small__title')?.textContent?.includes('Historian'),
+  const titles = cardTitles(root, 'gssc-committee-chairs');
+  expect(titles).toEqual(['Historian', 'Programs']);
+  expect(region.querySelector('.gssc-contact-card-small__vacant')).toBeNull();
+
+  const historian = [...region.querySelectorAll('gssc-contact-card-small')].find(
+    (card) =>
+      card.querySelector('.gssc-contact-card-small__title')?.textContent?.trim() === 'Historian',
   )!;
   expect(textContent(historian, '.gssc-contact-card-small__name')).toBe('Judy Byrne');
   expect(
@@ -323,10 +348,10 @@ test('GSSC-PLLR-231 Committee Chairs Semantic', async () => {
       ?.getAttribute('href'),
   ).toBe('mailto:historian@example.com');
 
-  const vacant = [...region.querySelectorAll('gssc-contact-card-small')].find((card) =>
-    card.querySelector('.gssc-contact-card-small__title')?.textContent?.includes('Acquisitions'),
-  )!;
-  expect(textContent(vacant, '.gssc-contact-card-small__vacant')).toBe('Vacant');
+  // Officers / Directors / nameless non-fixed roles are excluded.
+  expect(titles).not.toContain('President');
+  expect(titles).not.toContain('Director at Large 1');
+  expect(titles).not.toContain('Budget');
 });
 // @relation(GSSC-PLLR-231, scope=range_end, role=Test)
 
@@ -340,12 +365,10 @@ test('GSSC-PLLR-232 Committee Chairs Syntactic', async () => {
   ).toBeTruthy();
   const grid = chairs.querySelector('.gssc-committee-chairs__grid')!;
   expect(grid.classList.contains('justify-center')).toBe(true);
-  const titles = cardTitles(root, 'gssc-committee-chairs');
-  const sorted = [...COMMITTEE_CHAIR_OFFICES].sort((a, b) => a.localeCompare(b));
-  expect(titles).toEqual(sorted);
-  expect(chairs.querySelectorAll('gssc-contact-card-small').length).toBe(
-    COMMITTEE_CHAIR_OFFICES.length,
-  );
+  expect(cardTitles(root, 'gssc-committee-chairs')).toEqual(['Historian', 'Programs']);
+  expect(chairs.querySelectorAll('gssc-contact-card-small').length).toBe(2);
+  const cell = chairs.querySelector('.gssc-committee-chairs__cell')!;
+  expect(cell.className).toContain('lg:w-[calc((100%-4rem)/5)]');
 });
 // @relation(GSSC-PLLR-232, scope=range_end, role=Test)
 
@@ -356,9 +379,6 @@ test('GSSC-PLLR-233 Committee Chairs Lexical', async () => {
   expect(
     root.querySelector('.gssc-committee-chairs__title')!.classList.contains('text-gssc-dark-green'),
   ).toBe(true);
-  const titles = new Set(cardTitles(root, 'gssc-committee-chairs'));
-  for (const office of COMMITTEE_CHAIR_OFFICES) {
-    expect(titles.has(office)).toBe(true);
-  }
+  expect(root.querySelector('gssc-contact-card-small')).not.toBeNull();
 });
 // @relation(GSSC-PLLR-233, scope=range_end, role=Test)
