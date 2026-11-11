@@ -1,0 +1,7 @@
+<!-- @relation(GSSC-PLLR-160, GSSC-PLLR-161, scope=range_start, role=Implementation) -->
+<div class="gssc-research-tools-page bg-gssc-white font-sans flex flex-col gap-4 p-4">
+  @for (cuid of toolCuids(); track cuid) {
+    <gssc-section-from-cuid [cuid]="cuid" />
+  }
+</div>
+<!-- @relation(GSSC-PLLR-160, GSSC-PLLR-161, scope=range_end, role=Implementation) -->

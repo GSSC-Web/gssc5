@@ -37,13 +37,7 @@ export class CalendarPage {}
 export class PublicationsPage {}
 // @relation(GSSC-PLLR-12, scope=range_end, role=Implementation)
 
-// @relation(GSSC-PLLR-13, scope=range_start, role=Implementation)
-@Component({
-  selector: 'gssc-research-tools-page',
-  template: '',
-})
-export class ResearchToolsPage {}
-// @relation(GSSC-PLLR-13, scope=range_end, role=Implementation)
+// ResearchToolsPage lives in ./research-tools/ (GSSC5-18).
 
 // @relation(GSSC-PLLR-14, scope=range_start, role=Implementation)
 @Component({
