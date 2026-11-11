@@ -312,7 +312,7 @@ test('GSSC-PLLR-221 Lexical Preview', async () => {
 
 // @relation(GSSC-PLLR-222, scope=range_start, role=Test)
 test('GSSC-PLLR-222 Semantic Download', async () => {
-  const { root, page, fixture } = await setupNewslettersPage();
+  const { root, fixture } = await setupNewslettersPage();
   const download = root.querySelector<HTMLAnchorElement>('[data-testid="newsletter-download"]')!;
 
   expect(download.getAttribute('href')).toBe(
