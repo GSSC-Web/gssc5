@@ -44,6 +44,7 @@ const userSelect = {
   isAdmin: true,
   isUserMod: true,
   isToolEditor: true,
+  isPublicationEditor: true,
   membershipStatus: true,
   // @relation(GSSC-BLLR-275, GSSC-BLLR-277, GSSC-BLLR-278, scope=range_start, role=Implementation)
   position: true,
@@ -84,6 +85,7 @@ type AccountView = {
   isAdmin?: boolean;
   isUserMod?: boolean;
   isToolEditor?: boolean;
+  isPublicationEditor?: boolean;
   membershipStatus?: string | null;
   position?: string | null;
 };
@@ -123,6 +125,7 @@ const PublicUser = t.Object({
   isAdmin: t.Optional(t.Boolean()),
   isUserMod: t.Optional(t.Boolean()),
   isToolEditor: t.Optional(t.Boolean()),
+  isPublicationEditor: t.Optional(t.Boolean()),
   membershipStatus: t.Optional(NullableText),
   position: t.Optional(NullableText),
 });
@@ -154,6 +157,7 @@ const BOOLEAN_FILTERS = new Set([
   "isAdmin",
   "isUserMod",
   "isToolEditor",
+  "isPublicationEditor",
   "secondaryEmailDisplay",
   "secondaryPhoneDisplay",
 ]);
@@ -430,6 +434,9 @@ function project(user: StoredUser, caller: StoredUser): AccountView {
   if (canSee(caller, user, "isAdmin")) view.isAdmin = user.isAdmin;
   if (canSee(caller, user, "isUserMod")) view.isUserMod = user.isUserMod;
   if (canSee(caller, user, "isToolEditor")) view.isToolEditor = user.isToolEditor;
+  if (canSee(caller, user, "isPublicationEditor")) {
+    view.isPublicationEditor = user.isPublicationEditor;
+  }
   if (canSee(caller, user, "membershipStatus")) view.membershipStatus = user.membershipStatus;
   // @relation(GSSC-BLLR-277, GSSC-BLLR-278, scope=range_start, role=Implementation)
   if (canSee(caller, user, "position")) view.position = user.position;
@@ -551,7 +558,8 @@ function buildPatch(
     !caller.isAdmin &&
     (Object.prototype.hasOwnProperty.call(body, "isAdmin") ||
       Object.prototype.hasOwnProperty.call(body, "isUserMod") ||
-      Object.prototype.hasOwnProperty.call(body, "isToolEditor"))
+      Object.prototype.hasOwnProperty.call(body, "isToolEditor") ||
+      Object.prototype.hasOwnProperty.call(body, "isPublicationEditor"))
   ) {
     return "forbidden";
   }
@@ -574,6 +582,13 @@ function buildPatch(
       continue;
     }
     // @relation(GSSC-BLLR-353, scope=range_end, role=Implementation)
+    // @relation(GSSC-BLLR-364, scope=range_start, role=Implementation)
+    if (key === "isPublicationEditor") {
+      if (typeof value !== "boolean") return "invalid";
+      data.isPublicationEditor = value;
+      continue;
+    }
+    // @relation(GSSC-BLLR-364, scope=range_end, role=Implementation)
     if (key === "secondaryEmailDisplay" || key === "secondaryPhoneDisplay") {
       if (typeof value !== "boolean") return "invalid";
       data[key] = value;
@@ -761,6 +776,8 @@ function booleanField(user: StoredUser, name: string): boolean {
       return user.isUserMod;
     case "isToolEditor":
       return user.isToolEditor;
+    case "isPublicationEditor":
+      return user.isPublicationEditor;
     case "secondaryEmailDisplay":
       return user.secondaryEmailDisplay;
     case "secondaryPhoneDisplay":

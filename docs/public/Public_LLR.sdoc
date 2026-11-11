@@ -2965,6 +2965,195 @@ RELATIONS:
 
 [[/SECTION]]
 
+[[SECTION]]
+UID: GSSC-PLLR-PUBLICATIONS-PAGE
+TITLE: Publications Page
+
+[[SECTION]]
+UID: GSSC-PLLR-SOCIETY-PUBLICATIONS-LIST
+TITLE: Society Publications List
+
+[REQUIREMENT]
+UID: GSSC-PLLR-243
+TITLE: Semantic
+STATEMENT: >>>
+The Society Publications List SHALL request the current society publications from the Unified Backend publications list as normal publications page content, identifying each listed publication by that publication's cuid, title, reference link, and description in the order the Unified Backend provides.
+<<<
+RATIONALE: >>>
+The publications page lists society publications from the dedicated publications catalog as normal webpage content, not generic section Contents. The Stanislaus County Cemetery Project and War Veterans of Stanislaus County are outside this list. Tagged generic sections and Section From CUID are not the source for this list.
+<<<
+COMMENT: >>>
+REVIEW_STATUS stays Changed until owner approval. Mirrors the Research Tools page pattern with optional description under each title.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-19
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-84
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-244
+TITLE: Syntactic
+STATEMENT: >>>
+The Society Publications List SHALL place the Publications heading and each listed publication as a Publication Link with that publication's Publication Description when present in a hyperlink grid in the publications page's normal webpage content, not nested inside a generic section, omitting the grid when the Unified Backend provides no publications.
+<<<
+RATIONALE: >>>
+Legacy publications used a titled link layout hosted as page content. The publications subsection is a peer of normal page chrome/content, not a child of the Section Container or Section From CUID. An empty or unavailable catalog leaves the page without the grid. Cemetery Project and War Veterans remain outside this placement.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-19
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-84
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-245
+TITLE: Lexical
+STATEMENT: >>>
+The Society Publications List SHALL use the public white outermost surface and sans-serif default on the page host, present the Publications heading in dark green, and arrange Publication Links in a multi-column centered grid that becomes a single column when the page is narrow.
+<<<
+RATIONALE: >>>
+The layout refines the legacy publications grid with public theme tokens, matching the Research Tools page host treatment. Heading and host chrome stay on the list; each link and description's own type color is a separate requirement.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-19
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-84
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-PUBLICATION-LINK
+TITLE: Publication Link
+
+[REQUIREMENT]
+UID: GSSC-PLLR-246
+TITLE: Semantic
+STATEMENT: >>>
+A Publication Link SHALL present that publication's title and open that publication's reference link when selected.
+<<<
+RATIONALE: >>>
+Each catalog entry is a titled hyperlink to the publication's reference. The list supplies title and reference link from the Unified Backend.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-19
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-85
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-247
+TITLE: Syntactic
+STATEMENT: >>>
+A Publication Link SHALL occupy the title position in one cell of the Society Publications List hyperlink grid in normal publications page content, above that cell's Publication Description when a description is present.
+<<<
+RATIONALE: >>>
+Grid cells carry one publication each so the list reads as a resource grid on the page, not as Contents nested under a generic section. The title link leads; optional description follows below.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-19
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-85
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-248
+TITLE: Lexical
+STATEMENT: >>>
+A Publication Link SHALL use sans-serif type in the public dark green theme color.
+<<<
+RATIONALE: >>>
+Link color and typeface match the public palette so publications read as primary navigational links on a white host.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-19
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-85
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-PUBLICATION-DESCRIPTION
+TITLE: Publication Description
+
+[REQUIREMENT]
+UID: GSSC-PLLR-249
+TITLE: Semantic
+STATEMENT: >>>
+A Publication Description SHALL display that publication's description text from the Unified Backend when that publication has a description, and SHALL be omitted when that publication has no description.
+<<<
+RATIONALE: >>>
+Optional description text accompanies a publication listing when the catalog provides it. Absent descriptions leave the cell with only the title link.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-19
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-84
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-250
+TITLE: Syntactic
+STATEMENT: >>>
+A Publication Description SHALL appear below the Publication Link in the same Society Publications List grid cell when that publication has a description.
+<<<
+RATIONALE: >>>
+Placing description under the title keeps the link primary and the supporting text secondary within the cell.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-19
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-84
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-251
+TITLE: Lexical
+STATEMENT: >>>
+A Publication Description SHALL use sans-serif type, normal weight, and the public black theme color at a base text size.
+<<<
+RATIONALE: >>>
+Normal black body text under the dark-green title link keeps optional descriptions readable without competing with the link.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-19
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-84
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
 [[/SECTION]]
 
 [[SECTION]]

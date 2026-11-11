@@ -1,0 +1,39 @@
+<!-- Normal webpage content hosts the Publications subsection (not a generic section). -->
+<!-- @relation(GSSC-PLLR-244, GSSC-PLLR-245, scope=range_start, role=Implementation) -->
+<div class="gssc-publications-page bg-gssc-white font-sans p-4">
+  @if (publications().length > 0) {
+    <section class="gssc-publications-page__content" aria-labelledby="gssc-publications-heading">
+      <h2
+        id="gssc-publications-heading"
+        class="gssc-publications-page__heading text-gssc-dark-green font-semibold text-xl mb-4"
+      >
+        Publications
+      </h2>
+      <ul
+        class="gssc-publications-page__grid grid grid-cols-1 sm:grid-cols-2 gap-4 list-none p-0 m-0"
+      >
+        @for (publication of publications(); track publication.cuid) {
+          <li class="gssc-publications-page__cell text-center">
+            <!-- @relation(GSSC-PLLR-246, GSSC-PLLR-247, GSSC-PLLR-248, scope=range_start, role=Implementation) -->
+            <a
+              class="gssc-publication-link font-sans text-gssc-dark-green underline"
+              [href]="publication.referenceLink"
+              >{{ publication.title }}</a
+            >
+            <!-- @relation(GSSC-PLLR-246, GSSC-PLLR-247, GSSC-PLLR-248, scope=range_end, role=Implementation) -->
+            @if (publication.description) {
+              <!-- @relation(GSSC-PLLR-249, GSSC-PLLR-250, GSSC-PLLR-251, scope=range_start, role=Implementation) -->
+              <p
+                class="gssc-publication-description m-0 mt-1 font-sans text-base font-normal text-gssc-black"
+              >
+                {{ publication.description }}
+              </p>
+              <!-- @relation(GSSC-PLLR-249, GSSC-PLLR-250, GSSC-PLLR-251, scope=range_end, role=Implementation) -->
+            }
+          </li>
+        }
+      </ul>
+    </section>
+  }
+</div>
+<!-- @relation(GSSC-PLLR-244, GSSC-PLLR-245, scope=range_end, role=Implementation) -->

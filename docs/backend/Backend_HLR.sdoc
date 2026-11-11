@@ -2396,6 +2396,125 @@ RELATIONS:
 UID: GSSC-BHLR-PUBLICATIONS-CONTENT
 TITLE: Publications Content
 
+[REQUIREMENT]
+UID: GSSC-BHLR-195
+TITLE: Public Publications List
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL provide a list of society publications upon request.
+<<<
+RATIONALE: >>>
+The public publications page lists society publications from the dedicated publications catalog. Which fields appear in each list entry are low-level. The Stanislaus County Cemetery Project and War Veterans of Stanislaus County are outside this list.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-19
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-28
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-196
+TITLE: Publication Data
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL provide a publication's data upon request by publication cuid in the path.
+<<<
+RATIONALE: >>>
+Path cuid identifies one publication. Which fields the response includes is low-level.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-19
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-28
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-197
+TITLE: Publication Creation
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL accept creation of a publication by a logged-in member who has publication editor authorization.
+<<<
+RATIONALE: >>>
+Authorized editors add society publications. Which request fields are required is low-level.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-19
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-28
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-198
+TITLE: Publication Modification
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL accept modification of a publication by a logged-in member who has publication editor authorization.
+<<<
+RATIONALE: >>>
+Authorized editors keep publication titles, reference links, and optional descriptions current.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-19
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-28
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-199
+TITLE: Publication Deletion
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL accept deletion of a publication by a logged-in member who has publication editor authorization.
+<<<
+RATIONALE: >>>
+Authorized editors remove publications that are no longer listed.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-19
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-28
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-200
+TITLE: Publication Editor Authorization
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL treat a publication editor and an administrator as authorized to create, modify, and delete publications.
+<<<
+RATIONALE: >>>
+The publication editor site privilege authorizes publications catalog changes. An administrator retains the same authorization. This requirement does not set how the privilege is stored.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-19
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-28
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-201
+TITLE: Publications Storage
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store each publication with a cuid, a title, a reference link, and an optional description.
+<<<
+RATIONALE: >>>
+Each listed publication is identified by cuid and presents a title that opens a reference link. An optional description may accompany the title. Exact field shapes are low-level. Cemetery Project and War Veterans publications are outside this storage.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-19
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-28
+  ROLE: Refines
+
 [[/SECTION]]
 
 [[SECTION]]
