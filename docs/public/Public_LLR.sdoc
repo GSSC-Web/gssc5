@@ -3309,7 +3309,7 @@ UID: GSSC-PLLR-OFFICERS-AND-DIRECTORS
 TITLE: Officers and Directors
 
 [REQUIREMENT]
-UID: GSSC-PLLR-159
+UID: GSSC-PLLR-162
 TITLE: Semantic
 STATEMENT: >>>
 The Officers and Directors SHALL retrieve the Unified Backend leadership list, present each officer and Director at Large office with the name of the leader whose Position matches that office when that list includes such a leader with a name, present that leader's email address for contact when that leadership list entry includes Primary Email, and present Vacant when that list has no matching Position or the matching leader has no name.
@@ -3339,7 +3339,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-160
+UID: GSSC-PLLR-163
 TITLE: Syntactic
 STATEMENT: >>>
 The Officers and Directors SHALL appear on the public leadership page as a vertical list of office rows above the Committee Chairs, with each row showing the office title beside the member name or Vacant and the email address when present, resizing with the page width.
@@ -3357,7 +3357,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-161
+UID: GSSC-PLLR-164
 TITLE: Lexical
 STATEMENT: >>>
 The Officers and Directors SHALL use the section title Officers and Directors; the office titles President, 1st Vice President, 2nd Vice President, Secretary, Treasurer, Director at Large 1, Director at Large 2, Director at Large 3, Director at Large 4, Director at Large 5, and Past President; the vacant label Vacant; sans-serif type; the dark-green theme token for the section title and office titles; the black theme token for member names and email addresses; and a white background with the gray theme token for the region border.
@@ -3381,7 +3381,7 @@ UID: GSSC-PLLR-COMMITTEE-CHAIRS
 TITLE: Committee Chairs
 
 [REQUIREMENT]
-UID: GSSC-PLLR-162
+UID: GSSC-PLLR-165
 TITLE: Semantic
 STATEMENT: >>>
 The Committee Chairs SHALL retrieve the Unified Backend leadership list, present each committee chair office with the name of the leader whose Position matches that office when that list includes such a leader with a name, present that leader's email address for contact when that leadership list entry includes Primary Email, and present Vacant when that list has no matching Position or the matching leader has no name.
@@ -3408,7 +3408,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-163
+UID: GSSC-PLLR-166
 TITLE: Syntactic
 STATEMENT: >>>
 The Committee Chairs SHALL appear on the public leadership page as a vertical list of chair rows below the Officers and Directors, with each row showing the committee title beside the member name or Vacant and the email address when present, resizing with the page width.
@@ -3426,7 +3426,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-164
+UID: GSSC-PLLR-167
 TITLE: Lexical
 STATEMENT: >>>
 The Committee Chairs SHALL use the section title Committee Chairs; the committee titles Acquisitions, Audit, Budget, Historian, Membership, Memorial Day, Mentor, Newsletter & Website, Planning, Programs, Publicity, Queries, Refreshments, Registrar, Research & Publications, Research Day Trips, Seminar, Seminar & Workshops, Social Media, Special Collections, and Sunshine; the vacant label Vacant; sans-serif type; the dark-green theme token for the section title and committee titles; the black theme token for member names and email addresses; and a white background with the gray theme token for the region border.

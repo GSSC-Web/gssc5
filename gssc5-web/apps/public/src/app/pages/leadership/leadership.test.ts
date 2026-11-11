@@ -77,8 +77,8 @@ function officeRow(root: HTMLElement, region: string, office: string): HTMLEleme
   );
 }
 
-// @relation(GSSC-PLLR-159, scope=range_start, role=Test)
-test('GSSC-PLLR-159 Officers and Directors Semantic', async () => {
+// @relation(GSSC-PLLR-162, scope=range_start, role=Test)
+test('GSSC-PLLR-162 Officers and Directors Semantic', async () => {
   let calls = 0;
   TestBed.resetTestingModule();
   await TestBed.configureTestingModule({
@@ -122,10 +122,10 @@ test('GSSC-PLLR-159 Officers and Directors Semantic', async () => {
   expect(textContent(emptyName!, '.gssc-officers-and-directors__vacant')).toBe('Vacant');
   expect(emptyName!.querySelector('.gssc-officers-and-directors__email')).toBeNull();
 });
-// @relation(GSSC-PLLR-159, scope=range_end, role=Test)
+// @relation(GSSC-PLLR-162, scope=range_end, role=Test)
 
-// @relation(GSSC-PLLR-160, scope=range_start, role=Test)
-test('GSSC-PLLR-160 Officers and Directors Syntactic', async () => {
+// @relation(GSSC-PLLR-163, scope=range_start, role=Test)
+test('GSSC-PLLR-163 Officers and Directors Syntactic', async () => {
   const { root } = await setupLeadershipPage();
   const officers = root.querySelector('.gssc-officers-and-directors');
   const chairs = root.querySelector('.gssc-committee-chairs');
@@ -149,10 +149,10 @@ test('GSSC-PLLR-160 Officers and Directors Syntactic', async () => {
 
   expect(officers!.classList.contains('w-full')).toBe(true);
 });
-// @relation(GSSC-PLLR-160, scope=range_end, role=Test)
+// @relation(GSSC-PLLR-163, scope=range_end, role=Test)
 
-// @relation(GSSC-PLLR-161, scope=range_start, role=Test)
-test('GSSC-PLLR-161 Officers and Directors Lexical', async () => {
+// @relation(GSSC-PLLR-164, scope=range_start, role=Test)
+test('GSSC-PLLR-164 Officers and Directors Lexical', async () => {
   const { root } = await setupLeadershipPage();
   const region = root.querySelector<HTMLElement>('.gssc-officers-and-directors')!;
   expect(textContent(region, '.gssc-officers-and-directors__title')).toBe(
@@ -184,10 +184,10 @@ test('GSSC-PLLR-161 Officers and Directors Lexical', async () => {
   expect(vacant.textContent?.trim()).toBe('Vacant');
   expect(vacant.classList.contains('text-gssc-black')).toBe(true);
 });
-// @relation(GSSC-PLLR-161, scope=range_end, role=Test)
+// @relation(GSSC-PLLR-164, scope=range_end, role=Test)
 
-// @relation(GSSC-PLLR-162, scope=range_start, role=Test)
-test('GSSC-PLLR-162 Committee Chairs Semantic', async () => {
+// @relation(GSSC-PLLR-165, scope=range_start, role=Test)
+test('GSSC-PLLR-165 Committee Chairs Semantic', async () => {
   const { root } = await setupLeadershipPage();
 
   const historian = officeRow(root, 'gssc-committee-chairs', 'Historian');
@@ -201,10 +201,10 @@ test('GSSC-PLLR-162 Committee Chairs Semantic', async () => {
   const vacant = officeRow(root, 'gssc-committee-chairs', 'Acquisitions');
   expect(textContent(vacant!, '.gssc-committee-chairs__vacant')).toBe('Vacant');
 });
-// @relation(GSSC-PLLR-162, scope=range_end, role=Test)
+// @relation(GSSC-PLLR-165, scope=range_end, role=Test)
 
-// @relation(GSSC-PLLR-163, scope=range_start, role=Test)
-test('GSSC-PLLR-163 Committee Chairs Syntactic', async () => {
+// @relation(GSSC-PLLR-166, scope=range_start, role=Test)
+test('GSSC-PLLR-166 Committee Chairs Syntactic', async () => {
   const { root } = await setupLeadershipPage();
   const officers = root.querySelector('.gssc-officers-and-directors')!;
   const chairs = root.querySelector('.gssc-committee-chairs')!;
@@ -223,10 +223,10 @@ test('GSSC-PLLR-163 Committee Chairs Syntactic', async () => {
 
   expect(chairs.classList.contains('w-full')).toBe(true);
 });
-// @relation(GSSC-PLLR-163, scope=range_end, role=Test)
+// @relation(GSSC-PLLR-166, scope=range_end, role=Test)
 
-// @relation(GSSC-PLLR-164, scope=range_start, role=Test)
-test('GSSC-PLLR-164 Committee Chairs Lexical', async () => {
+// @relation(GSSC-PLLR-167, scope=range_start, role=Test)
+test('GSSC-PLLR-167 Committee Chairs Lexical', async () => {
   const { root } = await setupLeadershipPage();
   const region = root.querySelector<HTMLElement>('.gssc-committee-chairs')!;
   expect(textContent(region, '.gssc-committee-chairs__title')).toBe('Committee Chairs');
@@ -252,4 +252,4 @@ test('GSSC-PLLR-164 Committee Chairs Lexical', async () => {
   const vacant = region.querySelector<HTMLElement>('.gssc-committee-chairs__vacant')!;
   expect(vacant.textContent?.trim()).toBe('Vacant');
 });
-// @relation(GSSC-PLLR-164, scope=range_end, role=Test)
+// @relation(GSSC-PLLR-167, scope=range_end, role=Test)

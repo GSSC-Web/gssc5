@@ -30,11 +30,11 @@ export class LeadershipPage {
   }
 
   private async load(): Promise<void> {
-    // @relation(GSSC-PLLR-159, GSSC-PLLR-162, scope=range_start, role=Implementation)
+    // @relation(GSSC-PLLR-162, GSSC-PLLR-165, scope=range_start, role=Implementation)
     const leaders = await this.leadershipListGet();
     this.officersAndDirectors.set(rowsForRoster(OFFICER_AND_DIRECTOR_OFFICES, leaders));
     this.committeeChairs.set(rowsForRoster(COMMITTEE_CHAIR_OFFICES, leaders));
-    // @relation(GSSC-PLLR-159, GSSC-PLLR-162, scope=range_end, role=Implementation)
+    // @relation(GSSC-PLLR-162, GSSC-PLLR-165, scope=range_end, role=Implementation)
   }
 }
 // @relation(GSSC-PLLR-10, scope=range_end, role=Implementation)
