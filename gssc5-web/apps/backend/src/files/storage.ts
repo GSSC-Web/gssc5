@@ -6,9 +6,7 @@ import { loadConfig } from "../config";
 /** Resolve and write bytes under FILE_STORAGE_ROOT (GSSC5-71). */
 
 export function storageRoot(): string {
-  // @relation(GSSC-BLLR-365, scope=range_start, role=Implementation)
   return path.resolve(loadConfig().FILE_STORAGE_ROOT);
-  // @relation(GSSC-BLLR-365, scope=range_end, role=Implementation)
 }
 
 export function absoluteStoragePath(storageKey: string): string | null {

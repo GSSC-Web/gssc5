@@ -1902,7 +1902,7 @@ Authorized callers store file bytes under a directory. Write access follows stor
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-71
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-50
@@ -1922,7 +1922,7 @@ Authorized callers mark an entry deleted without a hard delete. Soft deletion is
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-71
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-50
@@ -1942,7 +1942,7 @@ Callers with read access receive the file bytes. Soft-deleted files are outside 
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-71
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-57
@@ -1959,7 +1959,7 @@ Callers with read access see the directory's non-deleted children. Exact URI sha
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-71
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-57
@@ -1976,7 +1976,7 @@ Authorized callers create folders so directories can hold files. Write access fo
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-71
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-50
@@ -3161,7 +3161,7 @@ File bytes live on the server filesystem. The root directory comes from backend 
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-71
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-57
@@ -3178,7 +3178,7 @@ Database entries describe the directory tree independent of filesystem permissio
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-71
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-57
@@ -3195,7 +3195,7 @@ ACL checks use database metadata rather than Unix filesystem permissions. The pu
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-71
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-57
@@ -3212,7 +3212,7 @@ Children start with the parent's publicity flag and role allow-lists so the tree
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-71
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-57
@@ -3229,7 +3229,7 @@ A child must not be looser than its parent. Broader access includes making a pri
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-71
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-57
@@ -3246,7 +3246,7 @@ Soft deletion hides the entry from normal list and get results while retaining b
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-71
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-57

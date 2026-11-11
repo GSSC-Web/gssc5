@@ -97,6 +97,12 @@ function userHasRole(user: FileSessionUser, role: string): boolean {
   return false;
 }
 
+// @relation(GSSC-BLLR-383, scope=range_start, role=Implementation)
+function isAdminFileBypass(user: FileSessionUser): boolean {
+  return user.isAdmin;
+}
+// @relation(GSSC-BLLR-383, scope=range_end, role=Implementation)
+
 export function canReadEntry(
   acl: FileAcl,
   user: FileSessionUser | null,
@@ -105,9 +111,7 @@ export function canReadEntry(
   if (acl.isPublic) return true;
   // @relation(GSSC-BLLR-384, scope=range_end, role=Implementation)
   if (user === null) return false;
-  // @relation(GSSC-BLLR-383, scope=range_start, role=Implementation)
-  if (user.isAdmin) return true;
-  // @relation(GSSC-BLLR-383, scope=range_end, role=Implementation)
+  if (isAdminFileBypass(user)) return true;
   // @relation(GSSC-BLLR-385, scope=range_start, role=Implementation)
   return acl.readRoles.some((role) => userHasRole(user, role));
   // @relation(GSSC-BLLR-385, scope=range_end, role=Implementation)
@@ -118,9 +122,7 @@ export function canWriteEntry(
   user: FileSessionUser | null,
 ): boolean {
   if (user === null) return false;
-  // @relation(GSSC-BLLR-383, scope=range_start, role=Implementation)
-  if (user.isAdmin) return true;
-  // @relation(GSSC-BLLR-383, scope=range_end, role=Implementation)
+  if (isAdminFileBypass(user)) return true;
   // @relation(GSSC-BLLR-386, scope=range_start, role=Implementation)
   return acl.writeRoles.some((role) => userHasRole(user, role));
   // @relation(GSSC-BLLR-386, scope=range_end, role=Implementation)

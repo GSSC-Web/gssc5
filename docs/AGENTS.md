@@ -20,7 +20,7 @@ Project guidelines (ALM, skills, profiles, memories): [`.agents/agents.md`](../.
 - Exactly one `SHALL` per requirement statement; join related clauses with commas or semicolons, or split into separate UIDs.
 - LLRs stay implementation-agnostic (describe required behavior and presentation, not libraries or APIs such as Tailwind class names or breakpoints). Software may use adopted third parties to satisfy them.
 - When requirements are changed, **append** the driving ALM task ID to `CHANGE_DRIVER` — never replace prior drivers. Prefer a multiline block that keeps history (`CHANGE_DRIVER: >>>` / prior ids / new id / `<<<`), or a comma-separated list that includes every prior driver. Set `REVIEW_STATUS` to Changed. Do not set `CHANGE_DRIVER` / Changed on a requirement whose statement and rationale were not actually changed.
-- When requirements are reviewed at the end of a task, and no more issues are identified, after confirmation from a human operator, the REVIEW_STATUS should be set to Approved.
+- When requirements closeout PASSes at the end of a task (or the owner asks for closeout), set in-scope `REVIEW_STATUS` to Approved. An owner closeout request is implicit approval; do not wait for a separate confirmation. On FAIL, leave status unchanged and list UID + fix.
 
 ## Frontend displayed-element LLRs
 
