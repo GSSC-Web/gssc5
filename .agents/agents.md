@@ -73,7 +73,7 @@ Durable stack facts (not wave status):
 
 ## Weekly tasks
 
-Repeat every 7 days; Kaneo **Defect** tasks only — no auto-fixes. Create only when no equivalent open Defect/optimization ticket exists; otherwise refine that ticket. Cross-scanner findings that are the same issue share one ticket. See `kaneo-create-task` dedupe/refine.
+Repeat every 7 days; Kaneo **Defect** tasks only — no auto-fixes. Create only when no equivalent open Defect/optimization ticket exists; otherwise refine that ticket. Cross-scanner findings that are the same issue share one ticket. New weekly Defects go to **Planned backlog** (`planned`) unless priority is High/Urgent (Not Ready OK). Refines leave column alone unless owner policy demotes a below-High Defect still on Not Ready. See `kaneo-create-task`.
 
 - `.agents/tasks/weekly-third-party-optimize/task.md`
 - `.agents/tasks/weekly-defect-analysis/task.md`
