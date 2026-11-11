@@ -1,0 +1,18 @@
+<!-- @relation(GSSC-PLLR-199, GSSC-PLLR-200, GSSC-PLLR-202, GSSC-PLLR-203, GSSC-PLLR-205, GSSC-PLLR-206, scope=range_start, role=Implementation) -->
+<div class="gssc-membership-page flex w-full flex-col gap-4 p-4 font-sans text-gssc-dark-green">
+  @if (meetingCuids().length > 0) {
+    <div class="gssc-membership-page__meeting flex w-full flex-col gap-4">
+      @for (cuid of meetingCuids(); track cuid) {
+        <gssc-section-from-cuid [cuid]="cuid" />
+      }
+    </div>
+  }
+  @if (benefitsCuids().length > 0) {
+    <div class="gssc-membership-page__benefits flex w-full flex-col gap-4">
+      @for (cuid of benefitsCuids(); track cuid) {
+        <gssc-section-from-cuid [cuid]="cuid" />
+      }
+    </div>
+  }
+</div>
+<!-- @relation(GSSC-PLLR-199, GSSC-PLLR-200, GSSC-PLLR-202, GSSC-PLLR-203, GSSC-PLLR-205, GSSC-PLLR-206, scope=range_end, role=Implementation) -->
