@@ -1,10 +1,18 @@
 import { TestBed } from '@angular/core/testing';
 import { nativeElement, textContent } from '../../../test-harness';
 import {
+  SECTION_BACKEND_GET,
+  type BackendSectionData,
+} from '../../modules/section-from-cuid/section-from-cuid';
+import {
   COMMITTEE_CHAIR_OFFICES,
+  DIRECTOR_AT_LARGE_OFFICES,
+  LEADERSHIP_INTRO_TAG,
   LEADERSHIP_LIST_GET,
-  OFFICER_AND_DIRECTOR_OFFICES,
+  LEADERSHIP_SECTION_LIST_BY_TAG,
+  OFFICER_OFFICES,
   type LeadershipEntry,
+  type LeadershipSectionListEntry,
 } from '../../services/leadership/leadership';
 import { LeadershipPage } from './leadership';
 
@@ -15,13 +23,14 @@ const sampleLeaders: LeadershipEntry[] = [
     lastName: 'Souza',
     preferredContactMethod: 'Email',
     primaryEmail: 'president@example.com',
+    accountPhoto: 'https://example.com/karen.jpg',
   },
   {
     position: 'Director at Large 1',
     firstName: 'Linda',
     lastName: 'Turley',
-    preferredContactMethod: 'Email',
-    primaryEmail: 'dal1@example.com',
+    preferredContactMethod: 'Phone',
+    primaryPhone: '209-555-0100',
   },
   {
     position: 'Historian',
@@ -31,31 +40,68 @@ const sampleLeaders: LeadershipEntry[] = [
     primaryEmail: 'historian@example.com',
   },
   {
-    position: 'Budget',
-    firstName: 'Anna',
-    lastName: 'Keppel',
-    preferredContactMethod: 'Phone',
-    primaryPhone: '209-555-0100',
-  },
-  {
     position: '2nd Vice President',
     firstName: null,
     lastName: null,
     preferredContactMethod: 'Email',
-    primaryEmail: 'empty-name@example.com',
+    primaryEmail: 'empty@example.com',
   },
 ];
 
-async function setupLeadershipPage(
-  leaders: LeadershipEntry[] = sampleLeaders,
-): Promise<{ root: HTMLElement; page: LeadershipPage }> {
+const introSections: LeadershipSectionListEntry[] = [
+  {
+    cuid: 'lead_intro_b',
+    header: 'About Leadership B',
+    body: 'Second intro',
+    tags: [LEADERSHIP_INTRO_TAG],
+    index: 2,
+  },
+  {
+    cuid: 'lead_intro_a',
+    header: 'About Leadership A',
+    body: 'First intro',
+    tags: [LEADERSHIP_INTRO_TAG],
+    index: 1,
+  },
+];
+
+const sectionBodies: Record<string, BackendSectionData> = {
+  lead_intro_a: {
+    cuid: 'lead_intro_a',
+    header: 'About Leadership A',
+    body: 'First intro',
+    resources: [],
+    tags: [LEADERSHIP_INTRO_TAG],
+    index: 1,
+  },
+  lead_intro_b: {
+    cuid: 'lead_intro_b',
+    header: 'About Leadership B',
+    body: 'Second intro',
+    resources: [],
+    tags: [LEADERSHIP_INTRO_TAG],
+    index: 2,
+  },
+};
+
+async function setupLeadershipPage(options?: {
+  leaders?: LeadershipEntry[];
+  intro?: LeadershipSectionListEntry[];
+}) {
+  const leaders = options?.leaders ?? sampleLeaders;
+  const intro = options?.intro ?? introSections;
   TestBed.resetTestingModule();
   await TestBed.configureTestingModule({
     imports: [LeadershipPage],
     providers: [
+      { provide: LEADERSHIP_LIST_GET, useValue: async () => leaders },
       {
-        provide: LEADERSHIP_LIST_GET,
-        useValue: async () => leaders,
+        provide: LEADERSHIP_SECTION_LIST_BY_TAG,
+        useValue: async (tag: string) => (tag === LEADERSHIP_INTRO_TAG ? intro : []),
+      },
+      {
+        provide: SECTION_BACKEND_GET,
+        useValue: async (cuid: string) => sectionBodies[cuid] ?? null,
       },
     ],
   }).compileComponents();
@@ -66,31 +112,38 @@ async function setupLeadershipPage(
   await Promise.resolve();
   fixture.detectChanges();
   await fixture.whenStable();
-  return { root: nativeElement(fixture), page: fixture.componentInstance };
+  await Promise.resolve();
+  await Promise.resolve();
+  fixture.detectChanges();
+  await fixture.whenStable();
+  return { fixture, root: nativeElement(fixture), page: fixture.componentInstance };
 }
 
-function officeRow(root: HTMLElement, region: string, office: string): HTMLElement | null {
-  const rows = [...root.querySelectorAll<HTMLElement>(`.${region}__row`)];
-  return (
-    rows.find((row) => row.querySelector(`.${region}__office`)?.textContent?.trim() === office) ??
-    null
-  );
+function cardTitles(root: HTMLElement, region: string): string[] {
+  return [...root.querySelectorAll(`.${region} .gssc-contact-card-large__title, .${region} .gssc-contact-card-small__title`)]
+    .map((el) => el.textContent?.trim() ?? '')
+    .filter(Boolean);
 }
 
-// @relation(GSSC-PLLR-162, scope=range_start, role=Test)
-test('GSSC-PLLR-162 Officers and Directors Semantic', async () => {
-  let calls = 0;
+// @relation(GSSC-PLLR-234, scope=range_start, role=Test)
+test('GSSC-PLLR-234 Leadership Intro Semantic', async () => {
+  const tags: string[] = [];
   TestBed.resetTestingModule();
   await TestBed.configureTestingModule({
     imports: [LeadershipPage],
     providers: [
+      { provide: LEADERSHIP_LIST_GET, useValue: async () => sampleLeaders },
       {
-        provide: LEADERSHIP_LIST_GET,
-        useValue: async () => {
-          calls += 1;
-          return sampleLeaders;
+        provide: LEADERSHIP_SECTION_LIST_BY_TAG,
+        useValue: async (tag: string) => {
+          tags.push(tag);
+          return introSections;
         },
       },
+      {
+        provide: SECTION_BACKEND_GET,
+        useValue: async (cuid: string) => sectionBodies[cuid] ?? null,
+      },
     ],
   }).compileComponents();
   const fixture = TestBed.createComponent(LeadershipPage);
@@ -99,157 +152,213 @@ test('GSSC-PLLR-162 Officers and Directors Semantic', async () => {
   await Promise.resolve();
   await Promise.resolve();
   fixture.detectChanges();
+  await fixture.whenStable();
+  await Promise.resolve();
+  await Promise.resolve();
+  fixture.detectChanges();
+  await fixture.whenStable();
   const root = nativeElement(fixture);
 
-  expect(calls).toBe(1);
+  expect(tags).toEqual([LEADERSHIP_INTRO_TAG]);
+  expect(root.querySelectorAll('gssc-section-from-cuid').length).toBe(2);
+  expect(textContent(root, '.gssc-section__header')).toBe('About Leadership A');
+});
+// @relation(GSSC-PLLR-234, scope=range_end, role=Test)
 
-  const president = officeRow(root, 'gssc-officers-and-directors', 'President');
-  expect(president).not.toBeNull();
-  expect(textContent(president!, '.gssc-officers-and-directors__name')).toBe('Karen Souza');
-  expect(textContent(president!, '.gssc-officers-and-directors__email')).toBe(
-    'president@example.com',
+// @relation(GSSC-PLLR-235, scope=range_start, role=Test)
+test('GSSC-PLLR-235 Leadership Intro Syntactic', async () => {
+  const { root } = await setupLeadershipPage();
+  const intro = root.querySelector('.gssc-leadership-intro')!;
+  const officers = root.querySelector('.gssc-officers')!;
+  expect(intro.compareDocumentPosition(officers) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  const cuids = [...intro.querySelectorAll('gssc-section-from-cuid')].map((el) =>
+    el.getAttribute('ng-reflect-cuid'),
   );
+  // Inputs may not reflect as attributes in all runners; order via headers.
+  const headers = [...intro.querySelectorAll('.gssc-section__header')].map(
+    (el) => el.textContent?.trim() ?? '',
+  );
+  expect(headers).toEqual(['About Leadership A', 'About Leadership B']);
 
-  const dal1 = officeRow(root, 'gssc-officers-and-directors', 'Director at Large 1');
-  expect(textContent(dal1!, '.gssc-officers-and-directors__name')).toBe('Linda Turley');
-  expect(textContent(dal1!, '.gssc-officers-and-directors__email')).toBe('dal1@example.com');
+  const { root: empty } = await setupLeadershipPage({ intro: [] });
+  expect(empty.querySelector('.gssc-leadership-intro')).toBeNull();
+});
+// @relation(GSSC-PLLR-235, scope=range_end, role=Test)
 
-  const vacantSecretary = officeRow(root, 'gssc-officers-and-directors', 'Secretary');
-  expect(textContent(vacantSecretary!, '.gssc-officers-and-directors__vacant')).toBe('Vacant');
-  expect(vacantSecretary!.querySelector('.gssc-officers-and-directors__email')).toBeNull();
+// @relation(GSSC-PLLR-236, scope=range_start, role=Test)
+test('GSSC-PLLR-236 Leadership Intro Lexical', async () => {
+  const { root } = await setupLeadershipPage();
+  const intro = root.querySelector('.gssc-leadership-intro')!;
+  expect(intro.querySelector('gssc-section')).not.toBeNull();
+  expect(intro.querySelector('.gssc-section')!.classList.contains('bg-gssc-white')).toBe(true);
+});
+// @relation(GSSC-PLLR-236, scope=range_end, role=Test)
 
-  const emptyName = officeRow(root, 'gssc-officers-and-directors', '2nd Vice President');
-  expect(textContent(emptyName!, '.gssc-officers-and-directors__vacant')).toBe('Vacant');
-  expect(emptyName!.querySelector('.gssc-officers-and-directors__email')).toBeNull();
+// @relation(GSSC-PLLR-162, scope=range_start, role=Test)
+test('GSSC-PLLR-162 Officers Semantic', async () => {
+  const { root } = await setupLeadershipPage();
+  const region = root.querySelector('.gssc-officers')!;
+  const byTitle = (title: string) =>
+    [...region.querySelectorAll('gssc-contact-card-large')].find(
+      (card) =>
+        card.querySelector('.gssc-contact-card-large__title')?.textContent?.trim() === title,
+    )!;
+  const president = byTitle('President');
+  expect(textContent(president, '.gssc-contact-card-large__name')).toBe('Karen Souza');
+  expect(
+    president.querySelector<HTMLAnchorElement>('.gssc-contact-card-large__contact')?.getAttribute(
+      'href',
+    ),
+  ).toBe('mailto:president@example.com');
+  expect(
+    president.querySelector<HTMLImageElement>('.gssc-contact-card-large__photo-img')?.getAttribute(
+      'src',
+    ),
+  ).toBe('https://example.com/karen.jpg');
+
+  expect(textContent(byTitle('Secretary'), '.gssc-contact-card-large__vacant')).toBe('Vacant');
+  expect(textContent(byTitle('2nd Vice President'), '.gssc-contact-card-large__vacant')).toBe(
+    'Vacant',
+  );
 });
 // @relation(GSSC-PLLR-162, scope=range_end, role=Test)
 
 // @relation(GSSC-PLLR-163, scope=range_start, role=Test)
-test('GSSC-PLLR-163 Officers and Directors Syntactic', async () => {
+test('GSSC-PLLR-163 Officers Syntactic', async () => {
   const { root } = await setupLeadershipPage();
-  const officers = root.querySelector('.gssc-officers-and-directors');
-  const chairs = root.querySelector('.gssc-committee-chairs');
-  expect(officers).not.toBeNull();
-  expect(chairs).not.toBeNull();
+  const intro = root.querySelector('.gssc-leadership-intro')!;
+  const officers = root.querySelector('.gssc-officers')!;
+  const directors = root.querySelector('.gssc-directors-at-large')!;
+  expect(intro.compareDocumentPosition(officers) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   expect(
-    officers!.compareDocumentPosition(chairs!) & Node.DOCUMENT_POSITION_FOLLOWING,
+    officers.compareDocumentPosition(directors) & Node.DOCUMENT_POSITION_FOLLOWING,
   ).toBeTruthy();
-
-  const list = root.querySelector('.gssc-officers-and-directors__list');
-  expect(list).not.toBeNull();
-  expect(list!.classList.contains('flex-col')).toBe(true);
-
-  const president = officeRow(root, 'gssc-officers-and-directors', 'President')!;
-  expect(president.querySelector('.gssc-officers-and-directors__office')).not.toBeNull();
-  expect(president.querySelector('.gssc-officers-and-directors__name')).not.toBeNull();
-  expect(president.querySelector('.gssc-officers-and-directors__email')).not.toBeNull();
-
-  const secretary = officeRow(root, 'gssc-officers-and-directors', 'Secretary')!;
-  expect(secretary.querySelector('.gssc-officers-and-directors__vacant')).not.toBeNull();
-
-  expect(officers!.classList.contains('w-full')).toBe(true);
+  const grid = officers.querySelector('.gssc-officers__grid')!;
+  expect(grid.classList.contains('flex-wrap')).toBe(true);
+  expect(grid.classList.contains('justify-center')).toBe(true);
+  const cell = officers.querySelector('.gssc-officers__cell')!;
+  expect(cell.className).toContain('lg:w-[calc((100%-2rem)/3)]');
+  expect(officers.querySelectorAll('gssc-contact-card-large').length).toBe(OFFICER_OFFICES.length);
 });
 // @relation(GSSC-PLLR-163, scope=range_end, role=Test)
 
 // @relation(GSSC-PLLR-164, scope=range_start, role=Test)
-test('GSSC-PLLR-164 Officers and Directors Lexical', async () => {
+test('GSSC-PLLR-164 Officers Lexical', async () => {
   const { root } = await setupLeadershipPage();
-  const region = root.querySelector<HTMLElement>('.gssc-officers-and-directors')!;
-  expect(textContent(region, '.gssc-officers-and-directors__title')).toBe(
-    'Officers and Directors',
-  );
-  expect(region.classList.contains('bg-gssc-white')).toBe(true);
-  expect(region.classList.contains('border-gssc-gray')).toBe(true);
-  expect(region.classList.contains('font-sans')).toBe(true);
-
-  const title = region.querySelector<HTMLElement>('.gssc-officers-and-directors__title')!;
-  expect(title.classList.contains('font-sans')).toBe(true);
-  expect(title.classList.contains('text-gssc-dark-green')).toBe(true);
-
-  const offices = [...region.querySelectorAll('.gssc-officers-and-directors__office')].map(
-    (el) => el.textContent?.trim() ?? '',
-  );
-  expect(offices).toEqual([...OFFICER_AND_DIRECTOR_OFFICES]);
-
-  for (const office of region.querySelectorAll<HTMLElement>('.gssc-officers-and-directors__office')) {
-    expect(office.classList.contains('text-gssc-dark-green')).toBe(true);
-    expect(office.classList.contains('font-sans')).toBe(true);
-  }
-
-  const name = region.querySelector<HTMLElement>('.gssc-officers-and-directors__name')!;
-  expect(name.classList.contains('text-gssc-black')).toBe(true);
-  const email = region.querySelector<HTMLElement>('.gssc-officers-and-directors__email')!;
-  expect(email.classList.contains('text-gssc-black')).toBe(true);
-  const vacant = region.querySelector<HTMLElement>('.gssc-officers-and-directors__vacant')!;
-  expect(vacant.textContent?.trim()).toBe('Vacant');
-  expect(vacant.classList.contains('text-gssc-black')).toBe(true);
+  expect(textContent(root, '.gssc-officers__title')).toBe('Officers');
+  expect(
+    root.querySelector('.gssc-officers__title')!.classList.contains('text-gssc-dark-green'),
+  ).toBe(true);
+  expect(cardTitles(root, 'gssc-officers')).toEqual([...OFFICER_OFFICES]);
+  expect(root.querySelector('gssc-contact-card-large')).not.toBeNull();
 });
 // @relation(GSSC-PLLR-164, scope=range_end, role=Test)
 
 // @relation(GSSC-PLLR-165, scope=range_start, role=Test)
-test('GSSC-PLLR-165 Committee Chairs Semantic', async () => {
+test('GSSC-PLLR-165 Directors at Large Semantic', async () => {
   const { root } = await setupLeadershipPage();
+  const region = root.querySelector('.gssc-directors-at-large')!;
+  const dal1 = [...region.querySelectorAll('gssc-contact-card-small')].find((card) =>
+    card
+      .querySelector('.gssc-contact-card-small__title')
+      ?.textContent?.includes('Director at Large 1'),
+  )!;
+  expect(textContent(dal1, '.gssc-contact-card-small__name')).toBe('Linda Turley');
+  expect(
+    dal1.querySelector<HTMLAnchorElement>('.gssc-contact-card-small__contact')?.getAttribute(
+      'href',
+    ),
+  ).toBe('tel:209-555-0100');
 
-  const historian = officeRow(root, 'gssc-committee-chairs', 'Historian');
-  expect(textContent(historian!, '.gssc-committee-chairs__name')).toBe('Judy Byrne');
-  expect(textContent(historian!, '.gssc-committee-chairs__email')).toBe('historian@example.com');
-
-  const budget = officeRow(root, 'gssc-committee-chairs', 'Budget');
-  expect(textContent(budget!, '.gssc-committee-chairs__name')).toBe('Anna Keppel');
-  expect(budget!.querySelector('.gssc-committee-chairs__email')).toBeNull();
-
-  const vacant = officeRow(root, 'gssc-committee-chairs', 'Acquisitions');
-  expect(textContent(vacant!, '.gssc-committee-chairs__vacant')).toBe('Vacant');
+  const vacant = [...region.querySelectorAll('gssc-contact-card-small')].find((card) =>
+    card
+      .querySelector('.gssc-contact-card-small__title')
+      ?.textContent?.includes('Director at Large 4'),
+  )!;
+  expect(textContent(vacant, '.gssc-contact-card-small__vacant')).toBe('Vacant');
 });
 // @relation(GSSC-PLLR-165, scope=range_end, role=Test)
 
 // @relation(GSSC-PLLR-166, scope=range_start, role=Test)
-test('GSSC-PLLR-166 Committee Chairs Syntactic', async () => {
+test('GSSC-PLLR-166 Directors at Large Syntactic', async () => {
   const { root } = await setupLeadershipPage();
-  const officers = root.querySelector('.gssc-officers-and-directors')!;
+  const officers = root.querySelector('.gssc-officers')!;
+  const directors = root.querySelector('.gssc-directors-at-large')!;
   const chairs = root.querySelector('.gssc-committee-chairs')!;
   expect(
-    officers.compareDocumentPosition(chairs) & Node.DOCUMENT_POSITION_FOLLOWING,
+    officers.compareDocumentPosition(directors) & Node.DOCUMENT_POSITION_FOLLOWING,
   ).toBeTruthy();
-
-  const list = root.querySelector('.gssc-committee-chairs__list');
-  expect(list).not.toBeNull();
-  expect(list!.classList.contains('flex-col')).toBe(true);
-
-  const historian = officeRow(root, 'gssc-committee-chairs', 'Historian')!;
-  expect(historian.querySelector('.gssc-committee-chairs__office')).not.toBeNull();
-  expect(historian.querySelector('.gssc-committee-chairs__name')).not.toBeNull();
-  expect(historian.querySelector('.gssc-committee-chairs__email')).not.toBeNull();
-
-  expect(chairs.classList.contains('w-full')).toBe(true);
+  expect(
+    directors.compareDocumentPosition(chairs) & Node.DOCUMENT_POSITION_FOLLOWING,
+  ).toBeTruthy();
+  const grid = directors.querySelector('.gssc-directors-at-large__grid')!;
+  expect(grid.classList.contains('justify-center')).toBe(true);
+  const cell = directors.querySelector('.gssc-directors-at-large__cell')!;
+  expect(cell.className).toContain('lg:w-[calc((100%-4rem)/5)]');
+  expect(directors.querySelectorAll('gssc-contact-card-small').length).toBe(
+    DIRECTOR_AT_LARGE_OFFICES.length,
+  );
 });
 // @relation(GSSC-PLLR-166, scope=range_end, role=Test)
 
 // @relation(GSSC-PLLR-167, scope=range_start, role=Test)
-test('GSSC-PLLR-167 Committee Chairs Lexical', async () => {
+test('GSSC-PLLR-167 Directors at Large Lexical', async () => {
   const { root } = await setupLeadershipPage();
-  const region = root.querySelector<HTMLElement>('.gssc-committee-chairs')!;
-  expect(textContent(region, '.gssc-committee-chairs__title')).toBe('Committee Chairs');
-  expect(region.classList.contains('bg-gssc-white')).toBe(true);
-  expect(region.classList.contains('border-gssc-gray')).toBe(true);
-  expect(region.classList.contains('font-sans')).toBe(true);
-
-  const title = region.querySelector<HTMLElement>('.gssc-committee-chairs__title')!;
-  expect(title.classList.contains('font-sans')).toBe(true);
-  expect(title.classList.contains('text-gssc-dark-green')).toBe(true);
-
-  const offices = [...region.querySelectorAll('.gssc-committee-chairs__office')].map(
-    (el) => el.textContent?.trim() ?? '',
-  );
-  expect(offices).toEqual([...COMMITTEE_CHAIR_OFFICES]);
-
-  for (const office of region.querySelectorAll<HTMLElement>('.gssc-committee-chairs__office')) {
-    expect(office.classList.contains('text-gssc-dark-green')).toBe(true);
-  }
-
-  const name = region.querySelector<HTMLElement>('.gssc-committee-chairs__name')!;
-  expect(name.classList.contains('text-gssc-black')).toBe(true);
-  const vacant = region.querySelector<HTMLElement>('.gssc-committee-chairs__vacant')!;
-  expect(vacant.textContent?.trim()).toBe('Vacant');
+  expect(textContent(root, '.gssc-directors-at-large__title')).toBe('Directors at Large');
+  expect(cardTitles(root, 'gssc-directors-at-large')).toEqual([...DIRECTOR_AT_LARGE_OFFICES]);
 });
 // @relation(GSSC-PLLR-167, scope=range_end, role=Test)
+
+// @relation(GSSC-PLLR-231, scope=range_start, role=Test)
+test('GSSC-PLLR-231 Committee Chairs Semantic', async () => {
+  const { root } = await setupLeadershipPage();
+  const region = root.querySelector('.gssc-committee-chairs')!;
+  const historian = [...region.querySelectorAll('gssc-contact-card-small')].find((card) =>
+    card.querySelector('.gssc-contact-card-small__title')?.textContent?.includes('Historian'),
+  )!;
+  expect(textContent(historian, '.gssc-contact-card-small__name')).toBe('Judy Byrne');
+  expect(
+    historian
+      .querySelector<HTMLAnchorElement>('.gssc-contact-card-small__contact')
+      ?.getAttribute('href'),
+  ).toBe('mailto:historian@example.com');
+
+  const vacant = [...region.querySelectorAll('gssc-contact-card-small')].find((card) =>
+    card.querySelector('.gssc-contact-card-small__title')?.textContent?.includes('Acquisitions'),
+  )!;
+  expect(textContent(vacant, '.gssc-contact-card-small__vacant')).toBe('Vacant');
+});
+// @relation(GSSC-PLLR-231, scope=range_end, role=Test)
+
+// @relation(GSSC-PLLR-232, scope=range_start, role=Test)
+test('GSSC-PLLR-232 Committee Chairs Syntactic', async () => {
+  const { root } = await setupLeadershipPage();
+  const directors = root.querySelector('.gssc-directors-at-large')!;
+  const chairs = root.querySelector('.gssc-committee-chairs')!;
+  expect(
+    directors.compareDocumentPosition(chairs) & Node.DOCUMENT_POSITION_FOLLOWING,
+  ).toBeTruthy();
+  const grid = chairs.querySelector('.gssc-committee-chairs__grid')!;
+  expect(grid.classList.contains('justify-center')).toBe(true);
+  const titles = cardTitles(root, 'gssc-committee-chairs');
+  const sorted = [...COMMITTEE_CHAIR_OFFICES].sort((a, b) => a.localeCompare(b));
+  expect(titles).toEqual(sorted);
+  expect(chairs.querySelectorAll('gssc-contact-card-small').length).toBe(
+    COMMITTEE_CHAIR_OFFICES.length,
+  );
+});
+// @relation(GSSC-PLLR-232, scope=range_end, role=Test)
+
+// @relation(GSSC-PLLR-233, scope=range_start, role=Test)
+test('GSSC-PLLR-233 Committee Chairs Lexical', async () => {
+  const { root } = await setupLeadershipPage();
+  expect(textContent(root, '.gssc-committee-chairs__title')).toBe('Committee Chairs');
+  expect(
+    root.querySelector('.gssc-committee-chairs__title')!.classList.contains('text-gssc-dark-green'),
+  ).toBe(true);
+  const titles = new Set(cardTitles(root, 'gssc-committee-chairs'));
+  for (const office of COMMITTEE_CHAIR_OFFICES) {
+    expect(titles.has(office)).toBe(true);
+  }
+});
+// @relation(GSSC-PLLR-233, scope=range_end, role=Test)

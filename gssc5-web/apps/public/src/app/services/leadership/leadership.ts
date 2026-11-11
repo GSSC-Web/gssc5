@@ -1,5 +1,9 @@
 import { InjectionToken } from '@angular/core';
+import type { ContactCardContents } from '../../modules/contact-card-large/contact-card-large';
 import { backend } from '../backend';
+
+/** Backend tag that binds public Leadership Intro sections to this page. */
+export const LEADERSHIP_INTRO_TAG = 'leadership';
 
 /** One entry from Unified Backend GET /leadership. */
 export type LeadershipEntry = {
@@ -12,16 +16,20 @@ export type LeadershipEntry = {
   accountPhoto?: string | null;
 };
 
-/** One presented row on the public leadership page. */
-export type LeadershipRow = {
-  office: string;
-  /** Display name when filled; null means Vacant. */
-  name: string | null;
-  /** Primary Email when the leadership entry includes it. */
-  email: string | null;
+/** One public section list entry from Unified Backend GET /sections. */
+export type LeadershipSectionListEntry = {
+  cuid: string;
+  header: string | null;
+  body: string;
+  tags: string[];
+  index: number;
 };
 
 export type LeadershipListGet = () => Promise<LeadershipEntry[]>;
+
+export type LeadershipSectionListByTag = (
+  tag: string,
+) => Promise<LeadershipSectionListEntry[]>;
 
 /** Default Unified Backend public leadership list GET. */
 export const LEADERSHIP_LIST_GET = new InjectionToken<LeadershipListGet>(
@@ -31,6 +39,13 @@ export const LEADERSHIP_LIST_GET = new InjectionToken<LeadershipListGet>(
     factory: () => defaultLeadershipListGet,
   },
 );
+
+/** Default Unified Backend public section list filtered by tag. */
+export const LEADERSHIP_SECTION_LIST_BY_TAG =
+  new InjectionToken<LeadershipSectionListByTag>('LEADERSHIP_SECTION_LIST_BY_TAG', {
+    providedIn: 'root',
+    factory: () => defaultLeadershipSectionListByTag,
+  });
 
 async function defaultLeadershipListGet(): Promise<LeadershipEntry[]> {
   try {
@@ -44,22 +59,40 @@ async function defaultLeadershipListGet(): Promise<LeadershipEntry[]> {
   }
 }
 
-/** Officer and Director at Large Position titles (Lexical). */
-export const OFFICER_AND_DIRECTOR_OFFICES = [
+async function defaultLeadershipSectionListByTag(
+  tag: string,
+): Promise<LeadershipSectionListEntry[]> {
+  try {
+    const result = await backend.sections.get({ query: { tag } });
+    if (result.error || result.data === null || result.data === undefined) {
+      return [];
+    }
+    return result.data;
+  } catch {
+    return [];
+  }
+}
+
+/** Officer Position titles (Lexical). */
+export const OFFICER_OFFICES = [
   'President',
   '1st Vice President',
   '2nd Vice President',
   'Secretary',
   'Treasurer',
+  'Past President',
+] as const;
+
+/** Director at Large Position titles in seat order (Lexical). */
+export const DIRECTOR_AT_LARGE_OFFICES = [
   'Director at Large 1',
   'Director at Large 2',
   'Director at Large 3',
   'Director at Large 4',
   'Director at Large 5',
-  'Past President',
 ] as const;
 
-/** Committee chair Position titles (Lexical). */
+/** Committee chair Position titles (Lexical; page presents alphabetically). */
 export const COMMITTEE_CHAIR_OFFICES = [
   'Acquisitions',
   'Audit',
@@ -92,24 +125,82 @@ export function leaderDisplayName(entry: LeadershipEntry): string | null {
   return parts.join(' ');
 }
 
+export function preferredContact(
+  entry: LeadershipEntry,
+): { label: string; href: string } | null {
+  if (entry.preferredContactMethod === 'Email') {
+    const email =
+      typeof entry.primaryEmail === 'string' && entry.primaryEmail.trim() !== ''
+        ? entry.primaryEmail.trim()
+        : null;
+    if (email === null) return null;
+    return { label: email, href: `mailto:${email}` };
+  }
+  if (entry.preferredContactMethod === 'Phone') {
+    const phone =
+      typeof entry.primaryPhone === 'string' && entry.primaryPhone.trim() !== ''
+        ? entry.primaryPhone.trim()
+        : null;
+    if (phone === null) return null;
+    return { label: phone, href: `tel:${phone}` };
+  }
+  return null;
+}
+
 /** Map a canonical roster onto leadership list entries by exact Position. */
-export function rowsForRoster(
+export function cardsForRoster(
   roster: readonly string[],
   leaders: readonly LeadershipEntry[],
-): LeadershipRow[] {
+): ContactCardContents[] {
   return roster.map((office) => {
     const match = leaders.find((leader) => leader.position === office);
     if (!match) {
-      return { office, name: null, email: null };
+      return {
+        name: null,
+        title: office,
+        photoUrl: null,
+        contactLabel: null,
+        contactHref: null,
+      };
     }
     const name = leaderDisplayName(match);
     if (name === null) {
-      return { office, name: null, email: null };
+      return {
+        name: null,
+        title: office,
+        photoUrl: null,
+        contactLabel: null,
+        contactHref: null,
+      };
     }
-    const email =
-      typeof match.primaryEmail === 'string' && match.primaryEmail.trim() !== ''
-        ? match.primaryEmail
+    const contact = preferredContact(match);
+    const photoUrl =
+      typeof match.accountPhoto === 'string' && match.accountPhoto.trim() !== ''
+        ? match.accountPhoto
         : null;
-    return { office, name, email };
+    return {
+      name,
+      title: office,
+      photoUrl,
+      contactLabel: contact?.label ?? null,
+      contactHref: contact?.href ?? null,
+    };
   });
+}
+
+/** Committee chair cards in alphabetical order by office title. */
+export function committeeChairCards(
+  leaders: readonly LeadershipEntry[],
+): ContactCardContents[] {
+  const sorted = [...COMMITTEE_CHAIR_OFFICES].sort((a, b) => a.localeCompare(b));
+  return cardsForRoster(sorted, leaders);
+}
+
+/** Sort list entries by backend index ascending (stable for equal index). */
+export function sortLeadershipSectionsByIndex(
+  entries: readonly LeadershipSectionListEntry[],
+): LeadershipSectionListEntry[] {
+  return [...entries].sort(
+    (a, b) => a.index - b.index || a.cuid.localeCompare(b.cuid),
+  );
 }

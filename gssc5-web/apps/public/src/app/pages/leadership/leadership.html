@@ -1,40 +1,33 @@
-<div class="gssc-leadership-page flex w-full flex-col gap-6 p-4 font-sans">
+<div class="gssc-leadership-page flex w-full flex-col gap-8 p-4 font-sans text-gssc-dark-green">
+  <!-- @relation(GSSC-PLLR-235, GSSC-PLLR-236, scope=range_start, role=Implementation) -->
+  @if (introCuids().length > 0) {
+    <div class="gssc-leadership-intro flex w-full flex-col gap-4">
+      @for (cuid of introCuids(); track cuid) {
+        <gssc-section-from-cuid [cuid]="cuid" />
+      }
+    </div>
+  }
+  <!-- @relation(GSSC-PLLR-235, GSSC-PLLR-236, scope=range_end, role=Implementation) -->
+
   <!-- @relation(GSSC-PLLR-163, GSSC-PLLR-164, scope=range_start, role=Implementation) -->
   <section
-    class="gssc-officers-and-directors flex w-full flex-col gap-3 border border-gssc-gray bg-gssc-white px-4 py-5 font-sans"
-    aria-labelledby="gssc-officers-and-directors-title"
+    class="gssc-officers flex w-full flex-col gap-4 font-sans"
+    aria-labelledby="gssc-officers-title"
   >
     <h2
-      id="gssc-officers-and-directors-title"
-      class="gssc-officers-and-directors__title m-0 font-sans font-semibold text-gssc-dark-green"
+      id="gssc-officers-title"
+      class="gssc-officers__title m-0 font-sans font-semibold text-gssc-dark-green"
     >
-      Officers and Directors
+      Officers
     </h2>
-    <ul class="gssc-officers-and-directors__list m-0 flex list-none flex-col gap-2 p-0">
-      @for (row of officersAndDirectors(); track row.office) {
+    <ul
+      class="gssc-officers__grid m-0 flex list-none flex-wrap justify-center gap-4 p-0"
+    >
+      @for (card of officers(); track card.title) {
         <li
-          class="gssc-officers-and-directors__row flex w-full flex-wrap items-baseline gap-x-3 gap-y-1"
+          class="gssc-officers__cell w-full sm:w-[calc((100%-1rem)/2)] lg:w-[calc((100%-2rem)/3)]"
         >
-          <span
-            class="gssc-officers-and-directors__office font-sans text-gssc-dark-green"
-            >{{ row.office }}</span
-          >
-          @if (row.name === null) {
-            <span class="gssc-officers-and-directors__vacant font-sans text-gssc-black"
-              >Vacant</span
-            >
-          } @else {
-            <span class="gssc-officers-and-directors__name font-sans text-gssc-black">{{
-              row.name
-            }}</span>
-            @if (row.email !== null) {
-              <a
-                class="gssc-officers-and-directors__email font-sans text-gssc-black no-underline"
-                [href]="'mailto:' + row.email"
-                >{{ row.email }}</a
-              >
-            }
-          }
+          <gssc-contact-card-large [contents]="card" />
         </li>
       }
     </ul>
@@ -43,7 +36,32 @@
 
   <!-- @relation(GSSC-PLLR-166, GSSC-PLLR-167, scope=range_start, role=Implementation) -->
   <section
-    class="gssc-committee-chairs flex w-full flex-col gap-3 border border-gssc-gray bg-gssc-white px-4 py-5 font-sans"
+    class="gssc-directors-at-large flex w-full flex-col gap-4 font-sans"
+    aria-labelledby="gssc-directors-at-large-title"
+  >
+    <h2
+      id="gssc-directors-at-large-title"
+      class="gssc-directors-at-large__title m-0 font-sans font-semibold text-gssc-dark-green"
+    >
+      Directors at Large
+    </h2>
+    <ul
+      class="gssc-directors-at-large__grid m-0 flex list-none flex-wrap justify-center gap-4 p-0"
+    >
+      @for (card of directors(); track card.title) {
+        <li
+          class="gssc-directors-at-large__cell w-full sm:w-[calc((100%-1rem)/2)] md:w-[calc((100%-2rem)/3)] lg:w-[calc((100%-4rem)/5)]"
+        >
+          <gssc-contact-card-small [contents]="card" />
+        </li>
+      }
+    </ul>
+  </section>
+  <!-- @relation(GSSC-PLLR-166, GSSC-PLLR-167, scope=range_end, role=Implementation) -->
+
+  <!-- @relation(GSSC-PLLR-232, GSSC-PLLR-233, scope=range_start, role=Implementation) -->
+  <section
+    class="gssc-committee-chairs flex w-full flex-col gap-4 font-sans"
     aria-labelledby="gssc-committee-chairs-title"
   >
     <h2
@@ -52,27 +70,17 @@
     >
       Committee Chairs
     </h2>
-    <ul class="gssc-committee-chairs__list m-0 flex list-none flex-col gap-2 p-0">
-      @for (row of committeeChairs(); track row.office) {
-        <li class="gssc-committee-chairs__row flex w-full flex-wrap items-baseline gap-x-3 gap-y-1">
-          <span class="gssc-committee-chairs__office font-sans text-gssc-dark-green">{{
-            row.office
-          }}</span>
-          @if (row.name === null) {
-            <span class="gssc-committee-chairs__vacant font-sans text-gssc-black">Vacant</span>
-          } @else {
-            <span class="gssc-committee-chairs__name font-sans text-gssc-black">{{ row.name }}</span>
-            @if (row.email !== null) {
-              <a
-                class="gssc-committee-chairs__email font-sans text-gssc-black no-underline"
-                [href]="'mailto:' + row.email"
-                >{{ row.email }}</a
-              >
-            }
-          }
+    <ul
+      class="gssc-committee-chairs__grid m-0 flex list-none flex-wrap justify-center gap-4 p-0"
+    >
+      @for (card of chairs(); track card.title) {
+        <li
+          class="gssc-committee-chairs__cell w-full sm:w-[calc((100%-1rem)/2)] md:w-[calc((100%-2rem)/3)] lg:w-[calc((100%-4rem)/5)]"
+        >
+          <gssc-contact-card-small [contents]="card" />
         </li>
       }
     </ul>
   </section>
-  <!-- @relation(GSSC-PLLR-166, GSSC-PLLR-167, scope=range_end, role=Implementation) -->
+  <!-- @relation(GSSC-PLLR-232, GSSC-PLLR-233, scope=range_end, role=Implementation) -->
 </div>

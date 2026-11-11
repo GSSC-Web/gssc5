@@ -1,0 +1,54 @@
+<!-- @relation(GSSC-PLLR-237, GSSC-PLLR-238, GSSC-PLLR-239, scope=range_start, role=Implementation) -->
+<article
+  class="gssc-contact-card-large flex h-full w-full flex-col border border-gssc-gray bg-gssc-white font-sans"
+>
+  <div class="gssc-contact-card-large__photo w-full shrink-0 overflow-hidden bg-gssc-light-green">
+    @if (contents().photoUrl) {
+      <img
+        class="gssc-contact-card-large__photo-img block h-40 w-full object-cover"
+        [src]="contents().photoUrl!"
+        alt=""
+      />
+    } @else {
+      <svg
+        class="gssc-contact-card-large__photo-placeholder block h-40 w-full text-gssc-dark-green"
+        viewBox="0 0 120 120"
+        role="img"
+        aria-hidden="true"
+      >
+        <circle cx="60" cy="42" r="22" fill="currentColor" opacity="0.35" />
+        <path
+          d="M20 108c8-28 28-40 40-40s32 12 40 40"
+          fill="currentColor"
+          opacity="0.35"
+        />
+      </svg>
+    }
+  </div>
+  <div class="gssc-contact-card-large__body flex flex-col items-center gap-1 px-3 py-3 text-center">
+    @if (contents().name === null) {
+      <p class="gssc-contact-card-large__vacant m-0 text-lg font-normal text-gssc-black">Vacant</p>
+    } @else {
+      <p class="gssc-contact-card-large__name m-0 text-lg font-normal text-gssc-black">
+        {{ contents().name }}
+      </p>
+    }
+    <p class="gssc-contact-card-large__title m-0 font-bold text-gssc-dark-green">
+      {{ contents().title }}
+    </p>
+    @if (contents().contactLabel !== null) {
+      @if (contents().contactHref !== null) {
+        <a
+          class="gssc-contact-card-large__contact font-sans text-base italic text-gssc-black no-underline"
+          [href]="contents().contactHref!"
+          >{{ contents().contactLabel }}</a
+        >
+      } @else {
+        <p class="gssc-contact-card-large__contact m-0 text-base italic text-gssc-black">
+          {{ contents().contactLabel }}
+        </p>
+      }
+    }
+  </div>
+</article>
+<!-- @relation(GSSC-PLLR-237, GSSC-PLLR-238, GSSC-PLLR-239, scope=range_end, role=Implementation) -->

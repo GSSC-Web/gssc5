@@ -3305,20 +3305,71 @@ UID: GSSC-PLLR-LEADERSHIP-PAGE
 TITLE: Public Leadership Page
 
 [[SECTION]]
-UID: GSSC-PLLR-OFFICERS-AND-DIRECTORS
-TITLE: Officers and Directors
+UID: GSSC-PLLR-LEADERSHIP-INTRO
+TITLE: Leadership Intro
+
+[REQUIREMENT]
+UID: GSSC-PLLR-234
+TITLE: Semantic
+STATEMENT: >>>
+The Leadership Intro SHALL retrieve the public leadership intro sections from the Unified Backend and place each retrieved section through the Section From CUID.
+<<<
+RATIONALE: >>>
+Intro wording lives in backend sections so editors can change it without a code change. Section From CUID places each section through the Section Container. Derived because no Public Frontend PIR names a leadership intro block.
+<<<
+COMMENT: >>>
+GSSC5-16. SW binds the leadership intro tag; requirements stay tag-agnostic.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-16
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-PLLR-235
+TITLE: Syntactic
+STATEMENT: >>>
+The Leadership Intro SHALL appear at the top of the public leadership page above Officers, place each intro section through the Section From CUID in backend index order, and omit the Intro when the Unified Backend provides no leadership intro sections.
+<<<
+RATIONALE: >>>
+Intro precedes the roster so visitors see page context first. Index order preserves the backend section sequence. Omitting an empty Intro avoids blank chrome.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-16
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-PLLR-236
+TITLE: Lexical
+STATEMENT: >>>
+The Leadership Intro SHALL present its Section Header, Section Body, and Section Resources through the Section From CUID presentation, without independent lexical chrome of its own.
+<<<
+RATIONALE: >>>
+Intro reuses Section From CUID so leadership sections share the Section Container look with other public sections.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-16
+REVIEW_STATUS: Changed
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-OFFICERS
+TITLE: Officers
 
 [REQUIREMENT]
 UID: GSSC-PLLR-162
 TITLE: Semantic
 STATEMENT: >>>
-The Officers and Directors SHALL retrieve the Unified Backend leadership list, present each officer and Director at Large office with the name of the leader whose Position matches that office when that list includes such a leader with a name, present that leader's email address for contact when that leadership list entry includes Primary Email, and present Vacant when that list has no matching Position or the matching leader has no name.
+The Officers SHALL retrieve the Unified Backend leadership list, present each officer office with the name of the leader whose Position matches that office when that list includes such a leader with a name, present that leader's preferred contact for contact when the matched entry includes the preferred contact value, present that leader's Account Photo when the matched entry includes Account Photo, and present Vacant when that list has no matching Position or the matching leader has no name.
 <<<
 RATIONALE: >>>
-The leadership list supplies current names and offices. Matching by Position fills each officer and Director at Large slot. Primary Email on a list entry is the contact email when Preferred Contact Method is Email. Vacant marks an empty slot because the list omits empty Position.
+The leadership list supplies current officer names. Matching by Position fills each officer slot. Preferred contact and Account Photo come from the list entry when present. Vacant marks an empty slot because the list omits empty Position.
 <<<
 COMMENT: >>>
-Canonical office titles are Lexical. Email appears only when the leadership list entry includes Primary Email (GSSC5-36).
+Canonical officer titles are Lexical. Card chrome is Contact Card Large.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -3327,9 +3378,6 @@ REVIEW_STATUS: Changed
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-76
-  ROLE: Refines
-- TYPE: Parent
-  VALUE: GSSC-PHLR-77
   ROLE: Refines
 - TYPE: Parent
   VALUE: GSSC-PHLR-78
@@ -3342,10 +3390,10 @@ RELATIONS:
 UID: GSSC-PLLR-163
 TITLE: Syntactic
 STATEMENT: >>>
-The Officers and Directors SHALL appear on the public leadership page as a vertical list of office rows above the Committee Chairs, with each row showing the office title beside the member name or Vacant and the email address when present, resizing with the page width.
+The Officers SHALL appear on the public leadership page below the Leadership Intro and above the Directors at Large as a grid of large contact cards with at most three columns, resizing with the page width.
 <<<
 RATIONALE: >>>
-A vertical list keeps each office readable. Placement above Committee Chairs matches the two leadership regions on the page. Showing title with name or Vacant and email when present keeps contact next to the office. Resizing with the page width keeps the list usable on narrow and wide layouts.
+A three-column large-card grid keeps the six officer offices scannable. Placement between Intro and Directors matches the page order. Resizing with page width keeps the grid usable on narrow and wide layouts.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -3360,10 +3408,10 @@ RELATIONS:
 UID: GSSC-PLLR-164
 TITLE: Lexical
 STATEMENT: >>>
-The Officers and Directors SHALL use the section title Officers and Directors; the office titles President, 1st Vice President, 2nd Vice President, Secretary, Treasurer, Director at Large 1, Director at Large 2, Director at Large 3, Director at Large 4, Director at Large 5, and Past President; the vacant label Vacant; sans-serif type; the dark-green theme token for the section title and office titles; the black theme token for member names and email addresses; and a white background with the gray theme token for the region border.
+The Officers SHALL use the section title Officers; the office titles President, 1st Vice President, 2nd Vice President, Secretary, Treasurer, and Past President; the vacant label Vacant; sans-serif type; the dark-green theme token for the section title; and the Contact Card Large for each office card.
 <<<
 RATIONALE: >>>
-Those office titles are the Positions the page matches on the leadership list. Vacant is the empty-slot label. Theme tokens keep the region aligned with other public chrome. A fuller color map is not set yet beyond these token choices.
+Those office titles are the Positions the page matches on the leadership list. Vacant is the empty-slot label. Contact Card Large owns card photo, name, title, and contact presentation.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -3377,20 +3425,89 @@ RELATIONS:
 [[/SECTION]]
 
 [[SECTION]]
-UID: GSSC-PLLR-COMMITTEE-CHAIRS
-TITLE: Committee Chairs
+UID: GSSC-PLLR-DIRECTORS-AT-LARGE
+TITLE: Directors at Large
 
 [REQUIREMENT]
 UID: GSSC-PLLR-165
 TITLE: Semantic
 STATEMENT: >>>
-The Committee Chairs SHALL retrieve the Unified Backend leadership list, present each committee chair office with the name of the leader whose Position matches that office when that list includes such a leader with a name, present that leader's email address for contact when that leadership list entry includes Primary Email, and present Vacant when that list has no matching Position or the matching leader has no name.
+The Directors at Large SHALL retrieve the Unified Backend leadership list, present each Director at Large office with the name of the leader whose Position matches that office when that list includes such a leader with a name, present that leader's preferred contact for contact when the matched entry includes the preferred contact value, present that leader's Account Photo when the matched entry includes Account Photo, and present Vacant when that list has no matching Position or the matching leader has no name.
 <<<
 RATIONALE: >>>
-The leadership list supplies current chair names. Matching by Position fills each committee chair slot. Primary Email on a list entry is the contact email when Preferred Contact Method is Email. Vacant marks an empty chair because the list omits empty Position.
+The leadership list supplies current Director at Large names. Matching by Position fills each Director at Large slot. Preferred contact and Account Photo come from the list entry when present. Vacant marks an empty slot because the list omits empty Position.
 <<<
 COMMENT: >>>
-Canonical committee titles are Lexical. Email appears only when the leadership list entry includes Primary Email (GSSC5-36).
+Canonical Director at Large titles are Lexical. Card chrome is Contact Card Small.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-16
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-77
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-78
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-79
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-166
+TITLE: Syntactic
+STATEMENT: >>>
+The Directors at Large SHALL appear on the public leadership page below Officers and above Committee Chairs as a grid of small contact cards with at most five columns, keep that card cell size when the last row is incomplete, center the remaining cards in that last row, and resize with the page width.
+<<<
+RATIONALE: >>>
+A five-column small-card grid matches five Director at Large seats. Keeping cell size and centering leftovers avoids shrinking leftover cards. Placement between Officers and Committee Chairs matches the page order.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-16
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-77
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-167
+TITLE: Lexical
+STATEMENT: >>>
+The Directors at Large SHALL use the section title Directors at Large; the office titles Director at Large 1, Director at Large 2, Director at Large 3, Director at Large 4, and Director at Large 5 in that order; the vacant label Vacant; sans-serif type; the dark-green theme token for the section title; and the Contact Card Small for each office card.
+<<<
+RATIONALE: >>>
+Those office titles are the Positions the page matches on the leadership list, in seat order. Vacant is the empty-slot label. Contact Card Small owns card photo, name, title, and contact presentation.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-16
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-77
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-COMMITTEE-CHAIRS
+TITLE: Committee Chairs
+
+[REQUIREMENT]
+UID: GSSC-PLLR-231
+TITLE: Semantic
+STATEMENT: >>>
+The Committee Chairs SHALL retrieve the Unified Backend leadership list, present each committee chair office with the name of the leader whose Position matches that office when that list includes such a leader with a name, present that leader's preferred contact for contact when the matched entry includes the preferred contact value, present that leader's Account Photo when the matched entry includes Account Photo, and present Vacant when that list has no matching Position or the matching leader has no name.
+<<<
+RATIONALE: >>>
+The leadership list supplies current chair names. Matching by Position fills each committee chair slot. Preferred contact and Account Photo come from the list entry when present. Vacant marks an empty chair because the list omits empty Position.
+<<<
+COMMENT: >>>
+Canonical committee titles are Lexical. Card chrome is Contact Card Small.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -3408,13 +3525,13 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-166
+UID: GSSC-PLLR-232
 TITLE: Syntactic
 STATEMENT: >>>
-The Committee Chairs SHALL appear on the public leadership page as a vertical list of chair rows below the Officers and Directors, with each row showing the committee title beside the member name or Vacant and the email address when present, resizing with the page width.
+The Committee Chairs SHALL appear on the public leadership page below the Directors at Large as a grid of small contact cards with at most five columns, keep that card cell size when the last row is incomplete, center the remaining cards in that last row, present chairs in alphabetical order by office title, and resize with the page width.
 <<<
 RATIONALE: >>>
-A vertical list keeps each chair readable. Placement below Officers and Directors matches the two leadership regions on the page. Showing title with name or Vacant and email when present keeps contact next to the chair. Resizing with the page width keeps the list usable on narrow and wide layouts.
+The same small-card grid as Directors at Large keeps chair presentation consistent. Alphabetical office order makes a long chair list scannable. Placement below Directors matches the page order.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -3426,13 +3543,13 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-167
+UID: GSSC-PLLR-233
 TITLE: Lexical
 STATEMENT: >>>
-The Committee Chairs SHALL use the section title Committee Chairs; the committee titles Acquisitions, Audit, Budget, Historian, Membership, Memorial Day, Mentor, Newsletter & Website, Planning, Programs, Publicity, Queries, Refreshments, Registrar, Research & Publications, Research Day Trips, Seminar, Seminar & Workshops, Social Media, Special Collections, and Sunshine; the vacant label Vacant; sans-serif type; the dark-green theme token for the section title and committee titles; the black theme token for member names and email addresses; and a white background with the gray theme token for the region border.
+The Committee Chairs SHALL use the section title Committee Chairs; the committee titles Acquisitions, Audit, Budget, Historian, Membership, Memorial Day, Mentor, Newsletter & Website, Planning, Programs, Publicity, Queries, Refreshments, Registrar, Research & Publications, Research Day Trips, Seminar, Seminar & Workshops, Social Media, Special Collections, and Sunshine; the vacant label Vacant; sans-serif type; the dark-green theme token for the section title; and the Contact Card Small for each chair card.
 <<<
 RATIONALE: >>>
-Those committee titles are the Positions the page matches on the leadership list. Vacant is the empty-chair label. Theme tokens keep the region aligned with other public chrome. A fuller color map is not set yet beyond these token choices.
+Those committee titles are the Positions the page matches on the leadership list. Vacant is the empty-chair label. Contact Card Small owns card photo, name, title, and contact presentation.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -3442,6 +3559,102 @@ RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-80
   ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-CONTACT-CARD-LARGE
+TITLE: Contact Card Large
+
+[REQUIREMENT]
+UID: GSSC-PLLR-237
+TITLE: Semantic
+STATEMENT: >>>
+The Contact Card Large SHALL present a person's photo when a photo is provided and a person silhouette placeholder when no photo is provided, present the person's name or Vacant, present the person's title, present the preferred contact value when provided, and open a mail or phone draft for that contact when the visitor activates the contact and a contact link is provided.
+<<<
+RATIONALE: >>>
+Large cards show identity, role, and how to reach the person. A silhouette placeholder keeps layout stable when no Account Photo is stored. Activating contact uses mail or phone from the preferred contact fields. Derived because no Public Frontend PIR names a contact card.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-16
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-PLLR-238
+TITLE: Syntactic
+STATEMENT: >>>
+The Contact Card Large SHALL place the photo across the top of the card at full card width, place the name, title, and contact below the photo in a vertical stack, and fill the grid cell the page assigns to the card.
+<<<
+RATIONALE: >>>
+A top photo with stacked text below matches the large officer card layout. Filling the assigned grid cell keeps cards aligned in the Officers grid.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-16
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-PLLR-239
+TITLE: Lexical
+STATEMENT: >>>
+The Contact Card Large SHALL center the name, title, and contact; present the name slightly larger than body text; present the title in bold; present the contact in italic; use sans-serif type; use the dark-green theme token for the title; use the black theme token for the name and contact; and use a white background with the gray theme token for the card border.
+<<<
+RATIONALE: >>>
+Centered hierarchy and theme tokens keep large cards readable and aligned with public chrome. A fuller color map is not set yet beyond these token choices.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-16
+REVIEW_STATUS: Changed
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-CONTACT-CARD-SMALL
+TITLE: Contact Card Small
+
+[REQUIREMENT]
+UID: GSSC-PLLR-240
+TITLE: Semantic
+STATEMENT: >>>
+The Contact Card Small SHALL present a person's photo when a photo is provided and a person silhouette placeholder when no photo is provided, present the person's name or Vacant, present the person's title, present the preferred contact value when provided, and open a mail or phone draft for that contact when the visitor activates the contact and a contact link is provided.
+<<<
+RATIONALE: >>>
+Small cards show identity, role, and how to reach the person in a compact form. A silhouette placeholder keeps layout stable when no Account Photo is stored. Activating contact uses mail or phone from the preferred contact fields. Derived because no Public Frontend PIR names a contact card.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-16
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-PLLR-241
+TITLE: Syntactic
+STATEMENT: >>>
+The Contact Card Small SHALL place the photo on the left at full card height, place the name, title, and contact in a text column to the right of the photo, and fill the grid cell the page assigns to the card.
+<<<
+RATIONALE: >>>
+A left photo with a text column matches the compact Director and chair card layout. Filling the assigned grid cell keeps cards aligned when the last row is centered.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-16
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-PLLR-242
+TITLE: Lexical
+STATEMENT: >>>
+The Contact Card Small SHALL present the name at body text size, present the title in bold, present the contact in italic, use sans-serif type, use the dark-green theme token for the title, use the black theme token for the name and contact, and use a white background with the gray theme token for the card border.
+<<<
+RATIONALE: >>>
+Default name size and bold title keep small cards dense but readable. Theme tokens keep small cards aligned with public chrome. A fuller color map is not set yet beyond these token choices.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-16
+REVIEW_STATUS: Changed
 
 [[/SECTION]]
 
