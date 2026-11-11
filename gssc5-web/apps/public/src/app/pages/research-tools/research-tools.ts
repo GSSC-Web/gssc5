@@ -5,41 +5,28 @@ import {
   signal,
 } from '@angular/core';
 import { backend } from '../../services/backend';
-import { SectionFromCuid } from '../../modules/section-from-cuid/section-from-cuid';
 
-/** Public section list entry from Unified Backend GET /sections. */
-export type ResearchToolsSectionListEntry = {
+/** Public research tool entry from Unified Backend GET /research-tools. */
+export type ResearchToolEntry = {
   cuid: string;
-  header: string | null;
-  body: string;
-  tags: string[];
-  index: number;
+  title: string;
+  referenceLink: string;
 };
 
-/** Page-ownership tag for research tools sections (GSSC5-37 tags). */
-export const RESEARCH_TOOLS_PAGE_TAG = 'research-tools';
+export type ResearchToolsListGet = () => Promise<ResearchToolEntry[] | null>;
 
-export type ResearchToolsSectionListGet = () => Promise<
-  ResearchToolsSectionListEntry[] | null
->;
+/** Default Unified Backend research tools list used by ResearchToolsPage. */
+export const RESEARCH_TOOLS_LIST_GET = new InjectionToken<ResearchToolsListGet>(
+  'RESEARCH_TOOLS_LIST_GET',
+  {
+    providedIn: 'root',
+    factory: () => defaultResearchToolsListGet,
+  },
+);
 
-/** Default Unified Backend public section list used by ResearchToolsPage. */
-export const RESEARCH_TOOLS_SECTION_LIST_GET =
-  new InjectionToken<ResearchToolsSectionListGet>(
-    'RESEARCH_TOOLS_SECTION_LIST_GET',
-    {
-      providedIn: 'root',
-      factory: () => defaultResearchToolsSectionListGet,
-    },
-  );
-
-async function defaultResearchToolsSectionListGet(): Promise<
-  ResearchToolsSectionListEntry[] | null
-> {
+async function defaultResearchToolsListGet(): Promise<ResearchToolEntry[] | null> {
   try {
-    const result = await backend.sections.get({
-      query: { tag: RESEARCH_TOOLS_PAGE_TAG },
-    });
+    const result = await backend['research-tools'].get();
     if (result.error || result.data === null || result.data === undefined) {
       return null;
     }
@@ -50,20 +37,19 @@ async function defaultResearchToolsSectionListGet(): Promise<
 }
 
 /**
- * Public Research Tools page (GSSC5-18): lists society resources and tools
- * from the Unified Backend and places each through Section From CUID.
+ * Public Research Tools page (GSSC5-18): Society Resources and Tools List as a
+ * refined hyperlink grid sourced from the research-tools catalog.
  */
 // @relation(GSSC-PLLR-13, scope=range_start, role=Implementation)
 @Component({
   selector: 'gssc-research-tools-page',
-  imports: [SectionFromCuid],
   templateUrl: './research-tools.html',
 })
 export class ResearchToolsPage {
-  private readonly listGet = inject(RESEARCH_TOOLS_SECTION_LIST_GET);
+  private readonly listGet = inject(RESEARCH_TOOLS_LIST_GET);
 
-  /** Backend section cuids for tools on this page, in list order. */
-  readonly toolCuids = signal<string[]>([]);
+  /** Research tools for the grid, in backend list order. */
+  readonly tools = signal<ResearchToolEntry[]>([]);
 
   constructor() {
     void this.loadTools();
@@ -72,9 +58,7 @@ export class ResearchToolsPage {
   private async loadTools(): Promise<void> {
     // @relation(GSSC-PLLR-159, scope=range_start, role=Implementation)
     const entries = await this.listGet();
-    this.toolCuids.set(
-      entries === null ? [] : entries.map((entry) => entry.cuid),
-    );
+    this.tools.set(entries === null ? [] : entries);
     // @relation(GSSC-PLLR-159, scope=range_end, role=Implementation)
   }
 }

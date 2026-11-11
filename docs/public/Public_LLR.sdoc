@@ -3120,13 +3120,13 @@ TITLE: Society Resources and Tools List
 UID: GSSC-PLLR-159
 TITLE: Semantic
 STATEMENT: >>>
-The Society Resources and Tools List SHALL request the current public research tools sections for the research tools page from the Unified Backend, identifying each listed tool by that section's cuid in the order the Unified Backend provides.
+The Society Resources and Tools List SHALL request the current research tools from the Unified Backend research tools list, identifying each listed tool by that tool's cuid, title, and reference link in the order the Unified Backend provides.
 <<<
 RATIONALE: >>>
-The research tools page lists society-recommended tools such as charts, instruction sheets, and outside resource links. The Unified Backend owns which public sections belong to that page and their order. Cemetery Project pages are outside this list.
+The research tools page lists society-recommended tools such as charts, instruction sheets, and outside resource links from the dedicated research-tools catalog. Cemetery Project pages are outside this list. Section catalogs are not the source for this page.
 <<<
 COMMENT: >>>
-REVIEW_STATUS stays Changed until owner approval. Page ownership uses the backend section catalog for the research tools page.
+REVIEW_STATUS stays Changed until owner approval. Owner expanded scope away from section-tag listings to the research-tools table API.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -3141,10 +3141,10 @@ RELATIONS:
 UID: GSSC-PLLR-160
 TITLE: Syntactic
 STATEMENT: >>>
-The Society Resources and Tools List SHALL place each listed tool through the Section From CUID in that order on the research tools page, omitting section hosts when the Unified Backend provides no tools for that page.
+The Society Resources and Tools List SHALL place the Research Resources heading and each listed tool as a Research Tool Link in a hyperlink grid on the research tools page, omitting the grid when the Unified Backend provides no tools.
 <<<
 RATIONALE: >>>
-Each tool reuses Section From CUID so header, body, and resources use the shared Section Container. An empty or unavailable catalog leaves the page without section hosts.
+Legacy research tools used a heading and multi-column link layout. An empty or unavailable catalog leaves the page without the grid. Cemetery Project pages remain outside this placement.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -3159,10 +3159,70 @@ RELATIONS:
 UID: GSSC-PLLR-161
 TITLE: Lexical
 STATEMENT: >>>
-The Society Resources and Tools List SHALL present each tool through the Section From CUID presentation without independent section lexical chrome of its own, using the public white outermost surface and sans-serif default on the page host.
+The Society Resources and Tools List SHALL use the public white outermost surface and sans-serif default on the page host, present the Research Resources heading in dark green, and arrange Research Tool Links in a multi-column centered grid that becomes a single column when the page is narrow.
 <<<
 RATIONALE: >>>
-Tool chrome stays on the Section Container. The page host matches the public white outermost surface and sans-serif default so the list does not invent a second look.
+The layout refines the legacy research tools grid with public theme tokens. Heading and host chrome stay on the list; each link's own type color is a separate requirement.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-18
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-83
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-RESEARCH-TOOL-LINK
+TITLE: Research Tool Link
+
+[REQUIREMENT]
+UID: GSSC-PLLR-207
+TITLE: Semantic
+STATEMENT: >>>
+A Research Tool Link SHALL present that tool's title and open that tool's reference link when selected.
+<<<
+RATIONALE: >>>
+Each catalog entry is a titled hyperlink to the tool's reference. The list supplies title and reference link from the Unified Backend.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-18
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-83
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-208
+TITLE: Syntactic
+STATEMENT: >>>
+A Research Tool Link SHALL occupy one cell in the Society Resources and Tools List hyperlink grid.
+<<<
+RATIONALE: >>>
+Grid cells carry one tool each so the list reads as a resource grid rather than a stacked section list.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-18
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-83
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-209
+TITLE: Lexical
+STATEMENT: >>>
+A Research Tool Link SHALL use sans-serif type in the public dark green theme color.
+<<<
+RATIONALE: >>>
+Link color and typeface match the public palette so research tools read as primary navigational links on a white host.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test

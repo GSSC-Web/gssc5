@@ -528,6 +528,22 @@ test("GSSC-BLLR-38 User Is User Mod", async () => {
 });
 // @relation(GSSC-BLLR-38, scope=range_end, role=Test)
 
+// @relation(GSSC-BLLR-344, scope=range_start, role=Test)
+test("GSSC-BLLR-344 User Is Tool Editor", async () => {
+  const column = columnNamed(["isToolEditor"], "isToolEditor");
+  const enabled = `gssc-bllr-344-${randomUUID()}`;
+  try {
+    await insertCopy(started.sql, started.table, started.columns, started.startupRows[0] ?? {}, {
+      ...freshIdentity(enabled, `${enabled}@example.com`, null),
+      [column]: 0,
+    });
+    expect(flagIsFalse((await selectWhere(enabled))?.[column])).toBe(true);
+  } finally {
+    await deleteWhere(started.sql, started.table, usernameColumn(), enabled);
+  }
+});
+// @relation(GSSC-BLLR-344, scope=range_end, role=Test)
+
 // @relation(GSSC-BLLR-64, scope=range_start, role=Test)
 test("GSSC-BLLR-64 User Membership Status", async () => {
   const column = columnNamed(["membershipStatus"], "Membership Status");

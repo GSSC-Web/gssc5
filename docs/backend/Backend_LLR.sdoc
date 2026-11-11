@@ -5919,6 +5919,198 @@ RELATIONS:
 [[/SECTION]]
 
 [[SECTION]]
+UID: GSSC-BLLR-RESEARCH-TOOLS-CATEGORY
+TITLE: Research Tools
+
+[[SECTION]]
+UID: GSSC-BLLR-RESEARCH-TOOLS-COLLECTION
+TITLE: /research-tools
+
+[[SECTION]]
+UID: GSSC-BLLR-RESEARCH-TOOLS-COLLECTION-GET
+TITLE: GET
+
+[REQUIREMENT]
+UID: GSSC-BLLR-345
+TITLE: Research Tools List
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL return each research tool's cuid, title, and reference link when listing research tools.
+<<<
+RATIONALE: >>>
+The public research tools page assembles its hyperlink grid from this list.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-18
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-188
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-RESEARCH-TOOLS-COLLECTION-POST
+TITLE: POST
+
+[REQUIREMENT]
+UID: GSSC-BLLR-346
+TITLE: Research Tool Creation
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL create a research tool for a logged-in member who is a tool editor or an administrator, requiring a title and a reference link, and returning the created tool's cuid, title, and reference link.
+<<<
+RATIONALE: >>>
+Authorized editors add tools with the fields the public list presents.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-18
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-190
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-350
+TITLE: Research Tool Creation Forbidden
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL reject research tool creation without storing a research tool when the caller is not a tool editor and is not an administrator.
+<<<
+RATIONALE: >>>
+Only tool editors and administrators may add research tools.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-18
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-190
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-RESEARCH-TOOLS-ITEM
+TITLE: /research-tools/{cuid}
+
+[[SECTION]]
+UID: GSSC-BLLR-RESEARCH-TOOLS-ITEM-GET
+TITLE: GET
+
+[REQUIREMENT]
+UID: GSSC-BLLR-347
+TITLE: Research Tool Get
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL return a research tool by cuid in the path, including title and reference link.
+<<<
+RATIONALE: >>>
+Path cuid identifies one research tool for assembly or editing.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-18
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-189
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-RESEARCH-TOOLS-ITEM-PATCH
+TITLE: PATCH
+
+[REQUIREMENT]
+UID: GSSC-BLLR-348
+TITLE: Research Tool Modification
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL modify a research tool by cuid for a logged-in member who is a tool editor or an administrator, accepting title and reference link updates, and returning the updated tool's cuid, title, and reference link.
+<<<
+RATIONALE: >>>
+Authorized editors keep tool titles and reference links current.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-18
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-191
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-351
+TITLE: Research Tool Modification Forbidden
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL reject research tool modification without changing the research tool when the caller is not a tool editor and is not an administrator.
+<<<
+RATIONALE: >>>
+Only tool editors and administrators may change research tools.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-18
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-191
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-RESEARCH-TOOLS-ITEM-DELETE
+TITLE: DELETE
+
+[REQUIREMENT]
+UID: GSSC-BLLR-349
+TITLE: Research Tool Deletion
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL delete a research tool by cuid for a logged-in member who is a tool editor or an administrator.
+<<<
+RATIONALE: >>>
+Authorized editors remove tools that are no longer recommended.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-18
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-192
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-352
+TITLE: Research Tool Deletion Forbidden
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL reject research tool deletion without deleting the research tool when the caller is not a tool editor and is not an administrator.
+<<<
+RATIONALE: >>>
+Only tool editors and administrators may delete research tools.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-18
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-192
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
 UID: GSSC-BLLR-CONTENT-ADMIN-PERMISSIONS
 TITLE: Administrator Permissions
 
@@ -6310,6 +6502,42 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
+UID: GSSC-BLLR-344
+TITLE: User is tool editor
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store is tool editor for each user in the users table. is tool editor is true or false. A user created before this column exists stores false.
+<<<
+RATIONALE: >>>
+is tool editor is a stored site privilege that authorizes research tool catalog changes. Existing users store false.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-18
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-111
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-353
+TITLE: Administrator Sets Tool Editor
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL let an administrator set is tool editor true or false on a member account.
+<<<
+RATIONALE: >>>
+Administrators assign the tool editor privilege so authorized members can maintain the research tools catalog.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-18
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-111
+  ROLE: Refines
+
+[REQUIREMENT]
 UID: GSSC-BLLR-64
 TITLE: User Membership Status
 STATEMENT: >>>
@@ -6613,6 +6841,30 @@ REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-185
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-RESEARCH-TOOLS-STORAGE
+TITLE: Research Tools
+
+[REQUIREMENT]
+UID: GSSC-BLLR-343
+TITLE: Research Tools Table
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store each research tool as a row in a research tools table with a cuid, a title, and a reference link.
+<<<
+RATIONALE: >>>
+The dedicated table is the source of truth for the public research tools list.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-18
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-194
   ROLE: Refines
 
 [[/SECTION]]

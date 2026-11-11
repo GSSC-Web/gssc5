@@ -2271,6 +2271,125 @@ TITLE: Public Calendar Content
 UID: GSSC-BHLR-RESEARCH-TOOLS-CONTENT
 TITLE: Research Tools Content
 
+[REQUIREMENT]
+UID: GSSC-BHLR-188
+TITLE: Public Research Tools List
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL provide a list of research tools upon request.
+<<<
+RATIONALE: >>>
+The public research tools page lists society-recommended tools. Which fields appear in each list entry are low-level. Cemetery Project pages are outside this list.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-18
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-27
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-189
+TITLE: Research Tool Data
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL provide a research tool's data upon request by tool cuid in the path.
+<<<
+RATIONALE: >>>
+Path cuid identifies one research tool. Which fields the response includes is low-level.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-18
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-27
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-190
+TITLE: Research Tool Creation
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL accept creation of a research tool by a logged-in member who has tool editor authorization.
+<<<
+RATIONALE: >>>
+Authorized editors add society research tools. Which request fields are required is low-level.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-18
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-27
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-191
+TITLE: Research Tool Modification
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL accept modification of a research tool by a logged-in member who has tool editor authorization.
+<<<
+RATIONALE: >>>
+Authorized editors keep research tool titles and reference links current.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-18
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-27
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-192
+TITLE: Research Tool Deletion
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL accept deletion of a research tool by a logged-in member who has tool editor authorization.
+<<<
+RATIONALE: >>>
+Authorized editors remove research tools that are no longer recommended.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-18
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-27
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-193
+TITLE: Tool Editor Authorization
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL treat a tool editor and an administrator as authorized to create, modify, and delete research tools.
+<<<
+RATIONALE: >>>
+The tool editor site privilege authorizes research-tool catalog changes. An administrator retains the same authorization. This requirement does not set how the privilege is stored.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-18
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-27
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-194
+TITLE: Research Tools Storage
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store each research tool with a cuid, a title, and a reference link.
+<<<
+RATIONALE: >>>
+Each recommended tool is identified by cuid and presents a title that opens a reference link. Exact field shapes are low-level.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-18
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-27
+  ROLE: Refines
+
 [[/SECTION]]
 
 [[SECTION]]

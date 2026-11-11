@@ -1,7 +1,24 @@
 <!-- @relation(GSSC-PLLR-160, GSSC-PLLR-161, scope=range_start, role=Implementation) -->
-<div class="gssc-research-tools-page bg-gssc-white font-sans flex flex-col gap-4 p-4">
-  @for (cuid of toolCuids(); track cuid) {
-    <gssc-section-from-cuid [cuid]="cuid" />
+<div class="gssc-research-tools-page bg-gssc-white font-sans p-4">
+  @if (tools().length > 0) {
+    <h2 class="gssc-research-tools-page__heading text-gssc-dark-green font-semibold text-xl mb-4">
+      Research Resources
+    </h2>
+    <ul
+      class="gssc-research-tools-page__grid grid grid-cols-1 sm:grid-cols-2 gap-4 list-none p-0 m-0"
+    >
+      @for (tool of tools(); track tool.cuid) {
+        <!-- @relation(GSSC-PLLR-207, GSSC-PLLR-208, GSSC-PLLR-209, scope=range_start, role=Implementation) -->
+        <li class="gssc-research-tools-page__cell text-center">
+          <a
+            class="gssc-research-tool-link font-sans text-gssc-dark-green underline"
+            [href]="tool.referenceLink"
+            >{{ tool.title }}</a
+          >
+        </li>
+        <!-- @relation(GSSC-PLLR-207, GSSC-PLLR-208, GSSC-PLLR-209, scope=range_end, role=Implementation) -->
+      }
+    </ul>
   }
 </div>
 <!-- @relation(GSSC-PLLR-160, GSSC-PLLR-161, scope=range_end, role=Implementation) -->
