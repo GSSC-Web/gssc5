@@ -2,8 +2,10 @@ import { Component } from '@angular/core';
 
 // Page contents belong to GSSC5-14–20/30. These stubs only resolve routes for the App Root.
 // HomePage lives in ./home/ (GSSC5-25 demo Section).
+// LeadershipPage lives in ./leadership/ (GSSC5-16).
 
 export { HomePage } from './home/home';
+export { LeadershipPage } from './leadership/leadership';
 
 // @relation(GSSC-PLLR-9, scope=range_start, role=Implementation)
 @Component({
@@ -12,14 +14,6 @@ export { HomePage } from './home/home';
 })
 export class MembershipPage {}
 // @relation(GSSC-PLLR-9, scope=range_end, role=Implementation)
-
-// @relation(GSSC-PLLR-10, scope=range_start, role=Implementation)
-@Component({
-  selector: 'gssc-leadership-page',
-  template: '',
-})
-export class LeadershipPage {}
-// @relation(GSSC-PLLR-10, scope=range_end, role=Implementation)
 
 // @relation(GSSC-PLLR-11, scope=range_start, role=Implementation)
 @Component({

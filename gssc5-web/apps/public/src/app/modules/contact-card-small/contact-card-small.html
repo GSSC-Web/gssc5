@@ -1,0 +1,72 @@
+<!-- @relation(GSSC-PLLR-240, GSSC-PLLR-241, GSSC-PLLR-242, scope=range_start, role=Implementation) -->
+<article
+  class="gssc-contact-card-small flex h-full w-full flex-row items-stretch border font-sans"
+  [class.border-gssc-gray]="contents().name !== null"
+  [class.bg-gssc-white]="contents().name !== null"
+  [class.border-gssc-dark-red]="contents().name === null"
+  [class.bg-gssc-light-red]="contents().name === null"
+  [attr.data-vacant]="contents().name === null ? 'true' : 'false'"
+>
+  <div
+    class="gssc-contact-card-small__photo w-24 shrink-0 self-stretch overflow-hidden"
+    [class.bg-gssc-light-green]="contents().name !== null"
+    [class.bg-gssc-light-red]="contents().name === null"
+  >
+    @if (contents().photoUrl) {
+      <img
+        class="gssc-contact-card-small__photo-img block h-full w-full object-cover"
+        [src]="contents().photoUrl!"
+        alt=""
+      />
+    } @else {
+      <svg
+        class="gssc-contact-card-small__photo-placeholder block h-full min-h-24 w-full"
+        [class.text-gssc-dark-green]="contents().name !== null"
+        [class.text-gssc-dark-red]="contents().name === null"
+        viewBox="0 0 120 120"
+        preserveAspectRatio="xMidYMid slice"
+        role="img"
+        aria-hidden="true"
+      >
+        <circle cx="60" cy="42" r="22" fill="currentColor" opacity="0.35" />
+        <path
+          d="M20 108c8-28 28-40 40-40s32 12 40 40"
+          fill="currentColor"
+          opacity="0.35"
+        />
+      </svg>
+    }
+  </div>
+  <div class="gssc-contact-card-small__body flex min-w-0 flex-1 flex-col justify-center gap-1 px-3 py-2">
+    @if (contents().name === null) {
+      <p class="gssc-contact-card-small__vacant m-0 text-base font-normal text-gssc-dark-red">
+        Vacant
+      </p>
+    } @else {
+      <p class="gssc-contact-card-small__name m-0 text-base font-normal text-gssc-black">
+        {{ contents().name }}
+      </p>
+    }
+    <p
+      class="gssc-contact-card-small__title m-0 font-bold"
+      [class.text-gssc-dark-green]="contents().name !== null"
+      [class.text-gssc-dark-red]="contents().name === null"
+    >
+      {{ contents().title }}
+    </p>
+    @if (contents().contactLabel !== null) {
+      @if (contents().contactHref !== null) {
+        <a
+          class="gssc-contact-card-small__contact font-sans text-base italic text-gssc-black no-underline"
+          [href]="contents().contactHref!"
+          >{{ contents().contactLabel }}</a
+        >
+      } @else {
+        <p class="gssc-contact-card-small__contact m-0 text-base italic text-gssc-black">
+          {{ contents().contactLabel }}
+        </p>
+      }
+    }
+  </div>
+</article>
+<!-- @relation(GSSC-PLLR-240, GSSC-PLLR-241, GSSC-PLLR-242, scope=range_end, role=Implementation) -->
