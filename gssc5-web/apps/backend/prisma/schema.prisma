@@ -240,3 +240,32 @@ model Publication {
   @@map("publications")
 }
 // @relation(GSSC-BLLR-354, scope=range_end, role=Implementation)
+
+// Local file storage metadata + DB ACLs (GSSC5-71).
+// @relation(GSSC-BLLR-366, scope=range_start, role=Implementation)
+model StoredFileEntry {
+  id          String           @id @default(cuid())
+  /// @prismabox.options{ minLength: 1 }
+  name        String
+  /// "file" | "folder"
+  kind        String
+  parentId    String?
+  parent      StoredFileEntry? @relation("FileTree", fields: [parentId], references: [id], onDelete: Restrict)
+  children    StoredFileEntry[] @relation("FileTree")
+  /// Relative path under FILE_STORAGE_ROOT for kind=file
+  storageKey  String?
+  mimeType    String?
+  sizeBytes   Int?
+  isPublic    Boolean          @default(true)
+  /// JSON string array of role tokens
+  readRoles   String           @default("[]")
+  /// JSON string array of role tokens
+  writeRoles  String           @default("[]")
+  deletedAt   DateTime?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  @@index([parentId, deletedAt])
+  @@map("stored_file_entries")
+}
+// @relation(GSSC-BLLR-366, scope=range_end, role=Implementation)

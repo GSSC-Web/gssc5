@@ -93,6 +93,7 @@ async function startInProcess(): Promise<InProcessApp> {
   setEnv("ADMIN_PASSWORD", memberPassword);
   setEnv("ADMIN_EMAIL", memberEmail);
   setEnv("LOGIN_TOKEN_LIFETIME_DAYS", undefined);
+  setEnv("FILE_STORAGE_ROOT", path.join(tempDir, "files"));
 
   migrate(databaseUrl);
   const [{ app }, { getPrisma }] = await Promise.all([import("./app"), import("./db")]);

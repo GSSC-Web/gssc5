@@ -5919,6 +5919,32 @@ RELATIONS:
 [[/SECTION]]
 
 [[SECTION]]
+UID: GSSC-BLLR-CONTENT-ADMIN-PERMISSIONS
+TITLE: Administrator Permissions
+
+[REQUIREMENT]
+UID: GSSC-BLLR-332
+TITLE: Administrator Section Permissions
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL treat an administrator as having create, modify, and delete permission on every section and every content template.
+<<<
+RATIONALE: >>>
+Administrators retain full control over page data entries and templates.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-37
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-185
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
 UID: GSSC-BLLR-RESEARCH-TOOLS-CATEGORY
 TITLE: Research Tools
 
@@ -6303,26 +6329,336 @@ RELATIONS:
 [[/SECTION]]
 
 [[SECTION]]
-UID: GSSC-BLLR-CONTENT-ADMIN-PERMISSIONS
-TITLE: Administrator Permissions
+UID: GSSC-BLLR-FILES-CATEGORY
+TITLE: Files
+
+[[SECTION]]
+UID: GSSC-BLLR-FILES-COLLECTION
+TITLE: /files
+
+[[SECTION]]
+UID: GSSC-BLLR-FILES-COLLECTION-GET
+TITLE: GET
 
 [REQUIREMENT]
-UID: GSSC-BLLR-332
-TITLE: Administrator Section Permissions
+UID: GSSC-BLLR-371
+TITLE: Directory List Parent
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL treat an administrator as having create, modify, and delete permission on every section and every content template.
+The GSSC Website Unified Backend SHALL list the non-deleted child files and folders of the parent folder identified by the parent query parameter when listing files, treating a missing parent query parameter as the storage root.
 <<<
 RATIONALE: >>>
-Administrators retain full control over page data entries and templates.
+Callers name a directory by parent cuid or omit it to list the root.
 <<<
-DERIVED: True
+DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-37
+CHANGE_DRIVER: GSSC5-71
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-BHLR-185
+  VALUE: GSSC-BHLR-205
   ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-372
+TITLE: Directory List Omits Soft-Deleted
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL omit soft-deleted files and folders from directory list results.
+<<<
+RATIONALE: >>>
+Soft-deleted entries stay out of normal directory listings.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-71
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-205
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-373
+TITLE: Directory List Read Access
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL include only child entries the caller may read when listing a directory, rejecting the list when the caller may not read the parent directory.
+<<<
+RATIONALE: >>>
+List results follow read ACL metadata for the parent and each child.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-71
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-205
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-374
+TITLE: Directory List Entry Fields
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL include cuid, name, kind, isPublic, readRoles, and writeRoles in each directory list entry.
+<<<
+RATIONALE: >>>
+List entries carry identity, type, and ACL fields needed to navigate and authorize further requests.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-71
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-205
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-384
+TITLE: Public File Read Access
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL treat a file or folder as readable by any caller when that entry's publicity flag is public and the entry is not soft-deleted.
+<<<
+RATIONALE: >>>
+Public entries are available without a login.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-71
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-204
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-BHLR-205
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-385
+TITLE: Role File Read Access
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL treat a non-public file or folder as readable by a logged-in member when that member holds at least one role named in the entry's read role allow-list, or when that member is an administrator.
+<<<
+RATIONALE: >>>
+Read allow-lists gate members-only entries; administrators retain read access.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-71
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-204
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-BHLR-205
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-FILES-COLLECTION-POST
+TITLE: POST
+
+[REQUIREMENT]
+UID: GSSC-BLLR-375
+TITLE: Folder Creation
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL create a folder under the parent folder identified in the request for a caller with write access to that parent, requiring a name, inheriting the parent's access control when the request omits access control fields, and returning the created folder's cuid, name, kind, isPublic, readRoles, and writeRoles.
+<<<
+RATIONALE: >>>
+Authorized writers create folders that start with the parent's ACL unless a non-loosening override is supplied.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-71
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-206
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-376
+TITLE: Folder Creation Forbidden
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL reject folder creation without storing a folder when the caller lacks write access to the parent directory.
+<<<
+RATIONALE: >>>
+Write ACL metadata gates folder creation.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-71
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-206
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-386
+TITLE: Role File Write Access
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL treat a file or folder as writable by a logged-in member when that member holds at least one role named in the entry's write role allow-list, or when that member is an administrator.
+<<<
+RATIONALE: >>>
+Write allow-lists gate uploads, folder creation, and soft deletion; administrators retain write access.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-71
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-202
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-BHLR-203
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-BHLR-206
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-FILES-UPLOAD
+TITLE: /files/upload
+
+[[SECTION]]
+UID: GSSC-BLLR-FILES-UPLOAD-POST
+TITLE: POST
+
+[REQUIREMENT]
+UID: GSSC-BLLR-377
+TITLE: File Upload
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store an uploaded file under the parent folder identified in the request for a caller with write access to that parent, writing the file bytes under the configured local storage root, inheriting the parent's access control when the request omits access control fields, and returning the created file's cuid, name, kind, isPublic, readRoles, and writeRoles.
+<<<
+RATIONALE: >>>
+Authorized writers place file bytes into a directory with ACL inheritance by default.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-71
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-202
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-378
+TITLE: File Upload Forbidden
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL reject file upload without storing a file when the caller lacks write access to the parent directory.
+<<<
+RATIONALE: >>>
+Write ACL metadata gates uploads.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-71
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-202
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-FILES-ITEM
+TITLE: /files/{cuid}
+
+[[SECTION]]
+UID: GSSC-BLLR-FILES-ITEM-GET
+TITLE: GET
+
+[REQUIREMENT]
+UID: GSSC-BLLR-379
+TITLE: File Get
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL return the stored file bytes for a file cuid in the path when the caller may read that file and the file is not soft-deleted.
+<<<
+RATIONALE: >>>
+Path cuid identifies one file for download or preview.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-71
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-204
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-380
+TITLE: File Get Denied
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL reject a file get without returning file bytes when the cuid is missing, names a folder, names a soft-deleted entry, or names a file the caller may not read.
+<<<
+RATIONALE: >>>
+Missing, deleted, folder, and unauthorized targets stay closed.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-71
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-204
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-FILES-ITEM-DELETE
+TITLE: DELETE
+
+[REQUIREMENT]
+UID: GSSC-BLLR-381
+TITLE: File Soft Deletion
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL soft-delete a file or folder by cuid for a caller with write access to that entry by setting a soft-delete marker without removing stored file bytes from the filesystem as part of that soft deletion.
+<<<
+RATIONALE: >>>
+Authorized writers hide entries while retaining bytes on disk.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-71
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-203
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-382
+TITLE: File Soft Deletion Forbidden
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL reject soft deletion without marking the entry deleted when the caller lacks write access to that entry.
+<<<
+RATIONALE: >>>
+Write ACL metadata gates soft deletion.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-71
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-203
+  ROLE: Refines
+
+[[/SECTION]]
 
 [[/SECTION]]
 
@@ -7117,6 +7453,147 @@ REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-201
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-FILE-STORAGE
+TITLE: File Storage
+
+[REQUIREMENT]
+UID: GSSC-BLLR-365
+TITLE: File Storage Root Configuration
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL take the local file storage root directory from backend configuration key FILE_STORAGE_ROOT. The root defaults to ./data/files.
+<<<
+RATIONALE: >>>
+Uploaded bytes are written under this configurable root on the local filesystem.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-71
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-207
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-366
+TITLE: Stored File Entries Table
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store each file and each folder as a row with a cuid, a name, a kind of file or folder, an optional parent folder cuid, a publicity flag, a read role allow-list, a write role allow-list, and an optional soft-delete marker.
+<<<
+RATIONALE: >>>
+The table is the source of truth for directory metadata and ACL checks.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-71
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-208
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-BHLR-209
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-BHLR-212
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-367
+TITLE: File ACL Role Tokens
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL interpret file and folder role allow-list entries as the role tokens member, userMod, toolEditor, and publicationEditor.
+<<<
+RATIONALE: >>>
+These tokens map to site privileges used when checking read and write access.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-71
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-209
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-368
+TITLE: File ACL Inheritance on Create
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL set a new file or folder's publicity flag, read role allow-list, and write role allow-list from its parent folder when the create request omits those access control fields.
+<<<
+RATIONALE: >>>
+Omitted ACL fields inherit from the parent so children match the directory by default.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-71
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-210
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-369
+TITLE: File ACL Non-Loosening Enforcement
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL reject creating or updating a file or folder when the requested publicity flag is public while the parent is not public, when the requested read role allow-list contains a role absent from the parent's read role allow-list, or when the requested write role allow-list contains a role absent from the parent's write role allow-list.
+<<<
+RATIONALE: >>>
+Children may tighten access but must not grant broader access than the parent.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-71
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-211
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-370
+TITLE: Soft-Delete Marker Retention
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL record soft deletion by setting the soft-delete marker on the entry while leaving that entry's file bytes on the local filesystem as part of soft deletion.
+<<<
+RATIONALE: >>>
+Soft deletion is a metadata change; bytes remain under the storage root.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-71
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-203
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-BHLR-212
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-383
+TITLE: Administrator File ACL Bypass
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL treat an administrator as having read access and write access to every file and every folder.
+<<<
+RATIONALE: >>>
+Administrators retain full control over stored files regardless of role allow-lists.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-71
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-209
   ROLE: Refines
 
 [[/SECTION]]
