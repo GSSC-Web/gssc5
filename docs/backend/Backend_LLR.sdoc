@@ -5919,6 +5919,33 @@ RELATIONS:
 [[/SECTION]]
 
 [[SECTION]]
+UID: GSSC-BLLR-CONTENT-ADMIN-PERMISSIONS
+TITLE: Administrator Permissions
+
+[REQUIREMENT]
+UID: GSSC-BLLR-332
+TITLE: Administrator Section Permissions
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL treat an administrator as having create, modify, and delete permission on every section and every content template.
+<<<
+RATIONALE: >>>
+Administrators retain full control over page data entries and templates.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-37
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-185
+  ROLE: Refines
+
+[[/SECTION]]
+
+
+[[/SECTION]]
+
+[[SECTION]]
 UID: GSSC-BLLR-RESEARCH-TOOLS-CATEGORY
 TITLE: Research Tools
 
@@ -6633,32 +6660,6 @@ RELATIONS:
   ROLE: Refines
 
 [[/SECTION]]
-
-[[/SECTION]]
-
-[[/SECTION]]
-
-[[SECTION]]
-UID: GSSC-BLLR-CONTENT-ADMIN-PERMISSIONS
-TITLE: Administrator Permissions
-
-[REQUIREMENT]
-UID: GSSC-BLLR-332
-TITLE: Administrator Section Permissions
-STATEMENT: >>>
-The GSSC Website Unified Backend SHALL treat an administrator as having create, modify, and delete permission on every section and every content template.
-<<<
-RATIONALE: >>>
-Administrators retain full control over page data entries and templates.
-<<<
-DERIVED: True
-VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-37
-REVIEW_STATUS: Approved
-RELATIONS:
-- TYPE: Parent
-  VALUE: GSSC-BHLR-185
-  ROLE: Refines
 
 [[/SECTION]]
 
