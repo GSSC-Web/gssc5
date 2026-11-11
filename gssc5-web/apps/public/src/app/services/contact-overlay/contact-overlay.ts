@@ -6,8 +6,8 @@ import {
 
 /** Contact Overlay form request queued on the Prompt Overlay (GSSC5-31). */
 export function contactFormRequest(): PromptRequest {
-  // @relation(GSSC-PLLR-153, scope=range_start, role=Implementation)
-  // @relation(GSSC-PLLR-155, scope=range_start, role=Implementation)
+  // @relation(GSSC-PLLR-156, scope=range_start, role=Implementation)
+  // @relation(GSSC-PLLR-158, scope=range_start, role=Implementation)
   return {
     title: 'Contact',
     fields: [
@@ -41,8 +41,8 @@ export function contactFormRequest(): PromptRequest {
       { kind: 'button', id: 'submit', label: 'Submit', role: 'submit' },
     ],
   };
-  // @relation(GSSC-PLLR-155, scope=range_end, role=Implementation)
-  // @relation(GSSC-PLLR-153, scope=range_end, role=Implementation)
+  // @relation(GSSC-PLLR-158, scope=range_end, role=Implementation)
+  // @relation(GSSC-PLLR-156, scope=range_end, role=Implementation)
 }
 
 /**
@@ -54,12 +54,12 @@ export class ContactOverlay {
   private readonly promptOverlay = inject(PromptOverlay);
   readonly openCount = signal(0);
 
-  // @relation(GSSC-PLLR-152, scope=range_start, role=Implementation)
-  // @relation(GSSC-PLLR-154, scope=range_start, role=Implementation)
+  // @relation(GSSC-PLLR-155, scope=range_start, role=Implementation)
+  // @relation(GSSC-PLLR-157, scope=range_start, role=Implementation)
   open(): void {
     this.openCount.update((count) => count + 1);
     this.promptOverlay.enqueue(contactFormRequest());
   }
-  // @relation(GSSC-PLLR-154, scope=range_end, role=Implementation)
-  // @relation(GSSC-PLLR-152, scope=range_end, role=Implementation)
+  // @relation(GSSC-PLLR-157, scope=range_end, role=Implementation)
+  // @relation(GSSC-PLLR-155, scope=range_end, role=Implementation)
 }

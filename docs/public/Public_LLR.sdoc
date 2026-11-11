@@ -2688,7 +2688,7 @@ UID: GSSC-PLLR-CONTACT-OVERLAY
 TITLE: Public Contact Overlay
 
 [REQUIREMENT]
-UID: GSSC-PLLR-152
+UID: GSSC-PLLR-155
 TITLE: Open
 STATEMENT: >>>
 The Public Contact Overlay SHALL enqueue its contact form on the Public Frontend Prompt Overlay when a visitor opens it.
@@ -2709,7 +2709,7 @@ UID: GSSC-PLLR-CONTACT-FORM
 TITLE: Contact Form
 
 [REQUIREMENT]
-UID: GSSC-PLLR-153
+UID: GSSC-PLLR-156
 TITLE: Semantic
 STATEMENT: >>>
 The Public Contact Overlay form SHALL collect the visitor's name, email address, contact reason, and message for a draft message to the organization, require each of those inputs before accepting submit, and complete the draft when the visitor submits a valid form.
@@ -2726,7 +2726,7 @@ CHANGE_DRIVER: GSSC5-31
 REVIEW_STATUS: Changed
 
 [REQUIREMENT]
-UID: GSSC-PLLR-154
+UID: GSSC-PLLR-157
 TITLE: Syntactic
 STATEMENT: >>>
 The Public Contact Overlay form SHALL appear as the current Prompt Overlay form when the Public Contact Overlay is open.
@@ -2743,7 +2743,7 @@ CHANGE_DRIVER: GSSC5-31
 REVIEW_STATUS: Changed
 
 [REQUIREMENT]
-UID: GSSC-PLLR-155
+UID: GSSC-PLLR-158
 TITLE: Lexical
 STATEMENT: >>>
 The Public Contact Overlay form SHALL use the title Contact; the field labels Name, Email, Contact reason, and Message; the contact reason choices General inquiry, Membership, Research help, and Other; the submit control label Submit; and the Prompt Overlay text, options-list, and button field modules for those fields.
