@@ -46,6 +46,7 @@ async function setupHeader(options?: {
     // Clear legacy Login Token key and display name between header setups.
     globalThis.localStorage?.removeItem('gssc.memberSessionToken');
     globalThis.localStorage?.removeItem('gssc.memberDisplayName');
+    globalThis.localStorage?.removeItem('gssc.memberEmailAddress');
   } catch {
     // ignore
   }

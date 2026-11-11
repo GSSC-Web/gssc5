@@ -888,7 +888,7 @@ RATIONALE: >>>
 Header Contact is the Header's path into the Public Contact Overlay. Overlay contents are separate requirements.
 <<<
 COMMENT: >>>
-Proposed for owner review (GSSC5-22). This ticket implements the Header open hook; Public Contact Overlay UI remains GSSC5-31.
+Header open hook from GSSC5-22. Public Contact Overlay Contents are GSSC5-31.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -1337,6 +1337,9 @@ The Footer Contact control SHALL open the Public Contact Overlay when the visito
 <<<
 RATIONALE: >>>
 Footer Contact opens an overlay for drafting a message to the organization. Overlay contents and layout are a separate feature.
+<<<
+COMMENT: >>>
+Footer open hook from GSSC5-23. Public Contact Overlay Contents are GSSC5-31.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -2182,7 +2185,7 @@ RATIONALE: >>>
 No Public Frontend PIR defines a prompt overlay. The overlay is the Container for prompt forms whose Contents the Prompt Overlay service queues. Completing or submitting advances the queue until empty. Dismiss cancels only the current prompt. Focus and Enter submit keep interaction on the form. Contact Overlay remains a separate feature that reuses this overlay. Derived because PIRs do not define this overlay.
 <<<
 COMMENT: >>>
-Proposed for owner review (GSSC5-27). Form field modules are in scope for GSSC5-27; Contact Overlay product UX remains GSSC5-31.
+Form field modules from GSSC5-27. Contact Overlay product UX is GSSC5-31.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
@@ -2738,6 +2741,90 @@ DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-27
 REVIEW_STATUS: Approved
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-CONTACT-OVERLAY
+TITLE: Public Contact Overlay
+
+[REQUIREMENT]
+UID: GSSC-PLLR-155
+TITLE: Open
+STATEMENT: >>>
+The Public Contact Overlay SHALL enqueue its contact form on the Public Frontend Prompt Overlay when a visitor opens it.
+<<<
+RATIONALE: >>>
+No Public Frontend PIR defines a contact overlay. Header Contact and Footer Contact open this overlay so a visitor can draft a message to the organization. Queueing the form on the Prompt Overlay reuses that shell. Phone number, email address, and postal address stay on the Footer. Derived because PIRs do not define this overlay.
+<<<
+COMMENT: >>>
+Proposed for owner review (GSSC5-31). Promotes the prior software-only contact form PoC. No send or mail API is in scope.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-31
+REVIEW_STATUS: Changed
+
+[[SECTION]]
+UID: GSSC-PLLR-CONTACT-FORM
+TITLE: Contact Form
+
+[REQUIREMENT]
+UID: GSSC-PLLR-156
+TITLE: Semantic
+STATEMENT: >>>
+The Public Contact Overlay form SHALL collect the visitor's name, email address, contact reason, and message for a draft message to the organization, require each of those inputs before accepting submit, start the contact reason at General Inquiry, fill the name and email from the Public Frontend Member Session when a member is signed in, and complete the draft when the visitor submits a valid form.
+<<<
+RATIONALE: >>>
+The form is the draft Contents for a message to the organization. Required inputs keep an incomplete draft from completing. General Inquiry is the default contact reason. Signed-in name and email come from the Member Session so a member does not retype known identity. Completing the draft ends the current Contact Overlay form without a send or mail API.
+<<<
+COMMENT: >>>
+Owner feedback (GSSC5-31): default General Inquiry; autofill Name and Email when signed in. Field module chrome is owned by Prompt Overlay requirements.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: >>>
+GSSC5-31
+<<<
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-PLLR-157
+TITLE: Syntactic
+STATEMENT: >>>
+The Public Contact Overlay form SHALL appear as the current Prompt Overlay form when the Public Contact Overlay is open.
+<<<
+RATIONALE: >>>
+Presenting the contact form through the Prompt Overlay keeps Contact Overlay Contents in the shared prompt shell without a separate overlay container.
+<<<
+COMMENT: >>>
+Proposed for owner review (GSSC5-31). Overlay chrome sizing and dismiss remain Prompt Overlay requirements.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-31
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-PLLR-158
+TITLE: Lexical
+STATEMENT: >>>
+The Public Contact Overlay form SHALL use the title Contact; the field labels Name, Email, Contact reason, and Message; the contact reason choices General Inquiry, Membership, Research Help, Website Issue, and Other; the submit control label Submit; and the Prompt Overlay text, options-list, and button field modules for those fields.
+<<<
+RATIONALE: >>>
+Those labels and choices define the Contact Overlay draft wording. Each contact reason option capitalizes every word. Reusing Prompt Overlay field modules keeps Contact Overlay presentation aligned with other prompt forms. Field module Lexical detail remains under Prompt Overlay requirements.
+<<<
+COMMENT: >>>
+Owner feedback (GSSC5-31): title-case reason options; add Website Issue.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: >>>
+GSSC5-31
+<<<
+REVIEW_STATUS: Changed
 
 [[/SECTION]]
 
