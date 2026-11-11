@@ -1,14 +1,16 @@
 import { TestBed } from '@angular/core/testing';
 import { nativeElement, textContent } from '../../../test-harness';
-import type { NewsletterCatalogEntry } from './newsletter-catalog';
+import { filesApiUrl, type NewsletterCatalogEntry } from './newsletter-catalog';
 import {
   NEWSLETTER_CATALOG_GET,
   NEWSLETTER_CURRENT_YEAR,
+  NEWSLETTER_FILE_RESOLVE,
   NewslettersPage,
 } from './newsletters';
 
 const FROZEN_YEAR = 2025;
 
+/** Catalog resources are stored-file cuids (GSSC5-71 /files/{cuid}). */
 const fixtureCatalog: NewsletterCatalogEntry[] = [
   {
     cuid: 'nl-2025-03',
@@ -16,7 +18,7 @@ const fixtureCatalog: NewsletterCatalogEntry[] = [
     body: 'Spring issue',
     tags: ['newsletter', 'year-2025', 'month-03'],
     index: 2,
-    resources: ['https://example.com/newsletters/2025-03.pdf'],
+    resources: ['file-2025-03'],
   },
   {
     cuid: 'nl-2025-01',
@@ -24,7 +26,7 @@ const fixtureCatalog: NewsletterCatalogEntry[] = [
     body: 'Winter issue',
     tags: ['newsletter', 'year-2025', 'month-01'],
     index: 1,
-    resources: ['https://example.com/newsletters/2025-01.pdf'],
+    resources: ['file-2025-01'],
   },
   {
     cuid: 'nl-2024-11',
@@ -32,7 +34,7 @@ const fixtureCatalog: NewsletterCatalogEntry[] = [
     body: 'Autumn archive',
     tags: ['newsletter', 'year-2024', 'month-11'],
     index: 3,
-    resources: ['https://example.com/newsletters/2024-11.pdf'],
+    resources: ['file-2024-11'],
   },
   {
     cuid: 'nl-2023-06',
@@ -40,36 +42,77 @@ const fixtureCatalog: NewsletterCatalogEntry[] = [
     body: 'Older summer',
     tags: ['newsletter', 'year-2023', 'month-06'],
     index: 4,
-    resources: ['https://example.com/newsletters/2023-06.pdf'],
+    resources: ['file-2023-06'],
   },
 ];
+
+function blobUrlFor(fileRef: string): string {
+  return `blob:newsletter-test/${fileRef}`;
+}
 
 async function setupNewslettersPage(
   catalog: NewsletterCatalogEntry[] = fixtureCatalog,
   currentYear = FROZEN_YEAR,
+  options: {
+    /** File refs that resolve to null (ACL deny / soft-delete / missing). */
+    deniedRefs?: Set<string>;
+    fileResolve?: (fileRef: string) => Promise<string | null>;
+  } = {},
 ) {
   TestBed.resetTestingModule();
+  const denied = options.deniedRefs ?? new Set<string>();
+  const resolveCalls: string[] = [];
+  const fileResolve =
+    options.fileResolve ??
+    (async (fileRef: string) => {
+      resolveCalls.push(fileRef);
+      if (denied.has(fileRef)) return null;
+      return blobUrlFor(fileRef);
+    });
+
   await TestBed.configureTestingModule({
     imports: [NewslettersPage],
     providers: [
       { provide: NEWSLETTER_CURRENT_YEAR, useValue: currentYear },
       { provide: NEWSLETTER_CATALOG_GET, useValue: async () => catalog },
+      { provide: NEWSLETTER_FILE_RESOLVE, useValue: fileResolve },
     ],
   }).compileComponents();
 
   const fixture = TestBed.createComponent(NewslettersPage);
-  fixture.detectChanges();
-  await fixture.whenStable();
-  await Promise.resolve();
-  await Promise.resolve();
-  fixture.detectChanges();
-  await fixture.whenStable();
+  const page = fixture.componentInstance;
+  await settle(fixture, page);
 
   return {
     fixture,
     root: nativeElement(fixture),
-    page: fixture.componentInstance,
+    page,
+    resolveCalls,
   };
+}
+
+async function settle(
+  fixture: { detectChanges: () => void; whenStable: () => Promise<void> },
+  page?: NewslettersPage,
+) {
+  fixture.detectChanges();
+  await fixture.whenStable();
+  // File resolve runs in an effect + Promise; flush until the URL settles.
+  for (let i = 0; i < 25; i++) {
+    await Promise.resolve();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    if (!page) continue;
+    const ref = page.selectedFileRef();
+    const url = page.selectedFileUrl();
+    if (ref === null && url === null) break;
+    if (ref !== null && (url !== null || i > 5)) {
+      // After a few turns, accept null URL as ACL/soft-delete denial.
+      if (url !== null || i >= 8) break;
+    }
+  }
+  fixture.detectChanges();
+  await fixture.whenStable();
 }
 
 function volumeSelect(root: HTMLElement): HTMLSelectElement {
@@ -83,12 +126,18 @@ function numberSelect(root: HTMLElement): HTMLSelectElement {
 function setSelectValue(
   select: HTMLSelectElement,
   value: string,
-  fixture: { detectChanges: () => void },
-): void {
+  fixture: { detectChanges: () => void; whenStable: () => Promise<void> },
+): Promise<void> {
   select.value = value;
   select.dispatchEvent(new Event('change'));
-  fixture.detectChanges();
+  return settle(fixture);
 }
+
+test('filesApiUrl maps cuid and /files paths to Unified Backend GET', () => {
+  expect(filesApiUrl('file-abc')).toBe('http://localhost:3000/files/file-abc');
+  expect(filesApiUrl('/files/file-abc')).toBe('http://localhost:3000/files/file-abc');
+  expect(filesApiUrl('https://cdn.example/x.pdf')).toBe('https://cdn.example/x.pdf');
+});
 
 // @relation(GSSC-PLLR-207, scope=range_start, role=Test)
 test('GSSC-PLLR-207 Semantic Selection Form', async () => {
@@ -99,7 +148,6 @@ test('GSSC-PLLR-207 Semantic Selection Form', async () => {
   expect(root.querySelector('.gssc-newsletters-number')).not.toBeNull();
   expect(root.querySelector('.gssc-newsletters-current-year')).not.toBeNull();
 
-  // Default selection is most recent (highest year, then highest month).
   expect(page.selected()?.cuid).toBe('nl-2025-03');
   expect(page.selectedYear()).toBe(2025);
   expect(page.selectedMonth()).toBe(3);
@@ -146,7 +194,7 @@ test('GSSC-PLLR-210 Semantic Current Year List', async () => {
   ]);
 
   (items[0] as HTMLButtonElement).click();
-  fixture.detectChanges();
+  await settle(fixture);
   expect(page.selected()?.cuid).toBe('nl-2025-01');
 });
 // @relation(GSSC-PLLR-210, scope=range_end, role=Test)
@@ -188,7 +236,7 @@ test('GSSC-PLLR-213 Semantic Volume Menu', async () => {
 
   expect(options).toEqual(['2025', '2024', '2023']);
 
-  setSelectValue(select, '2024', fixture);
+  await setSelectValue(select, '2024', fixture);
   expect(page.selectedYear()).toBe(2024);
   expect(page.numberMonths()).toEqual([11]);
   expect(page.selected()?.cuid).toBe('nl-2024-11');
@@ -237,7 +285,7 @@ test('GSSC-PLLR-216 Semantic Number Menu', async () => {
     'March',
   ]);
 
-  setSelectValue(numberSelect(root), '1', fixture);
+  await setSelectValue(numberSelect(root), '1', fixture);
   expect(page.selected()?.cuid).toBe('nl-2025-01');
 });
 // @relation(GSSC-PLLR-216, scope=range_end, role=Test)
@@ -271,17 +319,20 @@ test('GSSC-PLLR-218 Lexical Number Menu', async () => {
 
 // @relation(GSSC-PLLR-219, scope=range_start, role=Test)
 test('GSSC-PLLR-219 Semantic Preview', async () => {
-  const { root, page, fixture } = await setupNewslettersPage();
+  const { root, page, fixture, resolveCalls } = await setupNewslettersPage();
 
-  expect(page.selectedFileUrl()).toBe('https://example.com/newsletters/2025-03.pdf');
+  expect(page.selectedFileRef()).toBe('file-2025-03');
+  expect(resolveCalls[0]).toBe('file-2025-03');
+  expect(page.selectedFileUrl()).toBe(blobUrlFor('file-2025-03'));
   expect(root.querySelector('[data-testid="newsletter-preview"]')).not.toBeNull();
 
   const january = [
     ...root.querySelectorAll<HTMLButtonElement>('.gssc-newsletters-current-year__entry'),
   ].find((el) => el.textContent?.includes('January'))!;
   january.click();
-  fixture.detectChanges();
-  expect(page.selectedFileUrl()).toBe('https://example.com/newsletters/2025-01.pdf');
+  await settle(fixture);
+  expect(page.selectedFileRef()).toBe('file-2025-01');
+  expect(page.selectedFileUrl()).toBe(blobUrlFor('file-2025-01'));
   expect(root.querySelector('[data-testid="newsletter-preview"]')).not.toBeNull();
 });
 // @relation(GSSC-PLLR-219, scope=range_end, role=Test)
@@ -315,17 +366,15 @@ test('GSSC-PLLR-222 Semantic Download', async () => {
   const { root, fixture } = await setupNewslettersPage();
   const download = root.querySelector<HTMLAnchorElement>('[data-testid="newsletter-download"]')!;
 
-  expect(download.getAttribute('href')).toBe(
-    'https://example.com/newsletters/2025-03.pdf',
-  );
+  expect(download.getAttribute('href')).toBe(blobUrlFor('file-2025-03'));
   expect(download.hasAttribute('download')).toBe(true);
 
-  setSelectValue(volumeSelect(root), '2024', fixture);
+  await setSelectValue(volumeSelect(root), '2024', fixture);
   expect(
     root
       .querySelector<HTMLAnchorElement>('[data-testid="newsletter-download"]')!
       .getAttribute('href'),
-  ).toBe('https://example.com/newsletters/2024-11.pdf');
+  ).toBe(blobUrlFor('file-2024-11'));
 });
 // @relation(GSSC-PLLR-222, scope=range_end, role=Test)
 
@@ -360,27 +409,27 @@ test('GSSC-PLLR-225 Semantic Catalog Search', async () => {
 
   input.value = 'November';
   input.dispatchEvent(new Event('input'));
-  fixture.detectChanges();
+  await settle(fixture);
 
   const results = [...root.querySelectorAll('.gssc-newsletters-search__result')];
   expect(results.map((el) => el.textContent?.trim())).toEqual([
     'November 2024 Newsletter',
   ]);
 
-  // Current-year issues are excluded from older catalog search.
   input.value = 'March';
   input.dispatchEvent(new Event('input'));
-  fixture.detectChanges();
+  await settle(fixture);
   expect(root.querySelectorAll('.gssc-newsletters-search__result').length).toBe(0);
 
   input.value = '2023';
   input.dispatchEvent(new Event('input'));
-  fixture.detectChanges();
+  await settle(fixture);
   const older = root.querySelector<HTMLButtonElement>('.gssc-newsletters-search__result')!;
   older.click();
-  fixture.detectChanges();
+  await settle(fixture);
   expect(page.selected()?.cuid).toBe('nl-2023-06');
-  expect(page.selectedFileUrl()).toBe('https://example.com/newsletters/2023-06.pdf');
+  expect(page.selectedFileRef()).toBe('file-2023-06');
+  expect(page.selectedFileUrl()).toBe(blobUrlFor('file-2023-06'));
 });
 // @relation(GSSC-PLLR-225, scope=range_end, role=Test)
 
@@ -417,4 +466,15 @@ test('current year heading uses NEWSLETTER_CURRENT_YEAR token', async () => {
   expect(textContent(root, '.gssc-newsletters-current-year__heading')).toBe(
     '2025 Newsletters',
   );
+});
+
+test('preview and download omit when /files denies ACL or soft-deleted file', async () => {
+  const { root, page } = await setupNewslettersPage(fixtureCatalog, FROZEN_YEAR, {
+    deniedRefs: new Set(['file-2025-03']),
+  });
+
+  expect(page.selectedFileRef()).toBe('file-2025-03');
+  expect(page.selectedFileUrl()).toBeNull();
+  expect(root.querySelector('[data-testid="newsletter-preview"]')).toBeNull();
+  expect(root.querySelector('[data-testid="newsletter-download"]')).toBeNull();
 });

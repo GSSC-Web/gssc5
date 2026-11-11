@@ -1,6 +1,7 @@
 import {
   Component,
   computed,
+  effect,
   inject,
   InjectionToken,
   signal,
@@ -12,7 +13,8 @@ import {
   currentYearEntries,
   entryForYearMonth,
   entryLabel,
-  issueFileUrl,
+  filesApiUrl,
+  issueFileRef,
   monthLabel,
   monthsForYear,
   mostRecentEntry,
@@ -23,6 +25,12 @@ import {
 } from './newsletter-catalog';
 
 export type NewsletterCatalogListGet = () => Promise<NewsletterCatalogEntry[]>;
+
+/**
+ * Resolve a newsletter first-resource file ref to a browser-usable object URL.
+ * Returns null when the Unified Backend denies the file (ACL) or it is missing/soft-deleted.
+ */
+export type NewsletterFileResolve = (fileRef: string) => Promise<string | null>;
 
 /** Default Unified Backend public newsletter catalog list. */
 export const NEWSLETTER_CATALOG_GET = new InjectionToken<NewsletterCatalogListGet>(
@@ -42,15 +50,21 @@ export const NEWSLETTER_CURRENT_YEAR = new InjectionToken<number>(
   },
 );
 
+/** Default: credentialed GET /files/{cuid} respecting ACL + soft-delete (GSSC5-71). */
+export const NEWSLETTER_FILE_RESOLVE = new InjectionToken<NewsletterFileResolve>(
+  'NEWSLETTER_FILE_RESOLVE',
+  {
+    providedIn: 'root',
+    factory: () => defaultNewsletterFileResolve,
+  },
+);
+
 async function defaultNewsletterCatalogGet(): Promise<NewsletterCatalogEntry[]> {
   try {
     const result = await backend.sections.get({ query: { tag: 'newsletter' } });
     if (result.error || result.data === null || result.data === undefined) {
       return [];
     }
-    // List payload omits resources; map with empty resources until selection needs detail.
-    // Page selection uses list rows enriched via optional detail — for public catalog,
-    // request full rows by fetching each detail when resources are required.
     const list = result.data;
     const detailed = await Promise.all(
       list.map(async (row) => {
@@ -92,6 +106,21 @@ async function defaultNewsletterCatalogGet(): Promise<NewsletterCatalogEntry[]> 
   }
 }
 
+async function defaultNewsletterFileResolve(fileRef: string): Promise<string | null> {
+  // @relation(GSSC-PLLR-219, GSSC-PLLR-222, scope=range_start, role=Implementation)
+  const url = filesApiUrl(fileRef);
+  try {
+    const response = await fetch(url, { credentials: 'include' });
+    // Soft-deleted / missing → 404; ACL denial → 403; both omit preview/download.
+    if (!response.ok) return null;
+    const blob = await response.blob();
+    return URL.createObjectURL(blob);
+  } catch {
+    return null;
+  }
+  // @relation(GSSC-PLLR-219, GSSC-PLLR-222, scope=range_end, role=Implementation)
+}
+
 // @relation(GSSC-PLLR-14, scope=range_start, role=Implementation)
 @Component({
   selector: 'gssc-newsletters-page',
@@ -99,12 +128,19 @@ async function defaultNewsletterCatalogGet(): Promise<NewsletterCatalogEntry[]> 
 })
 export class NewslettersPage {
   private readonly catalogGet = inject(NEWSLETTER_CATALOG_GET);
+  private readonly fileResolve = inject(NEWSLETTER_FILE_RESOLVE);
   private readonly sanitizer = inject(DomSanitizer);
   readonly currentYear = inject(NEWSLETTER_CURRENT_YEAR);
 
   readonly catalog = signal<NewsletterCatalogEntry[]>([]);
   readonly selectedCuid = signal<string | null>(null);
   readonly searchQuery = signal('');
+
+  /** Browser object URL for the readable selected issue file; null when unavailable. */
+  readonly resolvedFileUrl = signal<string | null>(null);
+
+  private resolveGeneration = 0;
+  private objectUrlToRevoke: string | null = null;
 
   readonly selected = computed(() => {
     const cuid = this.selectedCuid();
@@ -145,17 +181,26 @@ export class NewslettersPage {
   );
   // @relation(GSSC-PLLR-225, scope=range_end, role=Implementation)
 
-  // @relation(GSSC-PLLR-219, GSSC-PLLR-222, scope=range_start, role=Implementation)
-  readonly selectedFileUrl = computed(() => issueFileUrl(this.selected()));
+  /** First catalog resource ref (file cuid / path); not yet ACL-checked. */
+  readonly selectedFileRef = computed(() => issueFileRef(this.selected()));
 
+  /** Alias used by tests: resolved browser URL when the file is readable. */
+  readonly selectedFileUrl = computed(() => this.resolvedFileUrl());
+
+  // @relation(GSSC-PLLR-219, GSSC-PLLR-222, scope=range_start, role=Implementation)
   readonly previewSafeUrl = computed((): SafeResourceUrl | null => {
-    const url = this.selectedFileUrl();
+    const url = this.resolvedFileUrl();
     return url === null ? null : this.sanitizer.bypassSecurityTrustResourceUrl(url);
   });
   // @relation(GSSC-PLLR-219, GSSC-PLLR-222, scope=range_end, role=Implementation)
 
   constructor() {
     void this.loadCatalog();
+
+    effect(() => {
+      const ref = this.selectedFileRef();
+      void this.resolveSelectedFile(ref);
+    });
   }
 
   // @relation(GSSC-PLLR-207, scope=range_start, role=Implementation)
@@ -166,6 +211,28 @@ export class NewslettersPage {
     this.selectedCuid.set(newest?.cuid ?? null);
   }
   // @relation(GSSC-PLLR-207, scope=range_end, role=Implementation)
+
+  private async resolveSelectedFile(fileRef: string | null): Promise<void> {
+    const generation = ++this.resolveGeneration;
+    this.revokeObjectUrl();
+    this.resolvedFileUrl.set(null);
+    if (fileRef === null) return;
+
+    const objectUrl = await this.fileResolve(fileRef);
+    if (generation !== this.resolveGeneration) {
+      if (objectUrl !== null) URL.revokeObjectURL(objectUrl);
+      return;
+    }
+    this.objectUrlToRevoke = objectUrl;
+    this.resolvedFileUrl.set(objectUrl);
+  }
+
+  private revokeObjectUrl(): void {
+    if (this.objectUrlToRevoke !== null) {
+      URL.revokeObjectURL(this.objectUrlToRevoke);
+      this.objectUrlToRevoke = null;
+    }
+  }
 
   labelFor(entry: NewsletterCatalogEntry): string {
     return entryLabel(entry);

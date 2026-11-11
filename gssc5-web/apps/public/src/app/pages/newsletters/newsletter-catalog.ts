@@ -99,10 +99,30 @@ export function mostRecentEntry(
   })[0]!;
 }
 
-export function issueFileUrl(entry: NewsletterCatalogEntry | null): string | null {
+/** First catalog resource: stored-file cuid, `/files/{cuid}`, or absolute URL. */
+export function issueFileRef(entry: NewsletterCatalogEntry | null): string | null {
   if (entry === null) return null;
   const resource = entry.resources[0];
-  return resource && resource.length > 0 ? resource : null;
+  return resource && resource.length > 0 ? resource.trim() : null;
+}
+
+/** @deprecated Prefer issueFileRef + filesApiUrl; kept as alias for first resource. */
+export function issueFileUrl(entry: NewsletterCatalogEntry | null): string | null {
+  return issueFileRef(entry);
+}
+
+const FILES_API_ORIGIN = 'http://localhost:3000';
+
+/**
+ * Resolve a newsletter resource string to a Unified Backend file GET URL.
+ * Absolute http(s) URLs pass through; `/files/...` and bare cuids map to GET /files/{cuid}.
+ */
+export function filesApiUrl(resource: string, origin: string = FILES_API_ORIGIN): string {
+  const trimmed = resource.trim();
+  if (/^https?:\/\//i.test(trimmed)) return trimmed;
+  if (trimmed.startsWith('/files/')) return `${origin}${trimmed}`;
+  const cuid = trimmed.replace(/^\/+/, '');
+  return `${origin}/files/${cuid}`;
 }
 
 export function entryLabel(entry: NewsletterCatalogEntry): string {
