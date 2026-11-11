@@ -73,7 +73,7 @@ Durable stack facts (not wave status):
 
 ## Weekly tasks
 
-Repeat every 7 days; file Kaneo **Defect** tasks only — no auto-fixes:
+Repeat every 7 days; Kaneo **Defect** tasks only — no auto-fixes. Create only when no equivalent open Defect/optimization ticket exists; otherwise refine that ticket. Cross-scanner findings that are the same issue share one ticket. See `kaneo-create-task` dedupe/refine.
 
 - `.agents/tasks/weekly-third-party-optimize/task.md`
 - `.agents/tasks/weekly-defect-analysis/task.md`
