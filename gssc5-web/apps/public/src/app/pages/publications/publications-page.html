@@ -13,14 +13,13 @@
         class="gssc-publications-page__grid grid grid-cols-1 sm:grid-cols-2 gap-4 list-none p-0 m-0"
       >
         @for (publication of publications(); track publication.cuid) {
+          <!-- @relation(GSSC-PLLR-246, GSSC-PLLR-247, GSSC-PLLR-248, scope=range_start, role=Implementation) -->
           <li class="gssc-publications-page__cell text-center">
-            <!-- @relation(GSSC-PLLR-246, GSSC-PLLR-247, GSSC-PLLR-248, scope=range_start, role=Implementation) -->
             <a
               class="gssc-publication-link font-sans text-gssc-dark-green underline"
               [href]="publication.referenceLink"
               >{{ publication.title }}</a
             >
-            <!-- @relation(GSSC-PLLR-246, GSSC-PLLR-247, GSSC-PLLR-248, scope=range_end, role=Implementation) -->
             @if (publication.description) {
               <!-- @relation(GSSC-PLLR-249, GSSC-PLLR-250, GSSC-PLLR-251, scope=range_start, role=Implementation) -->
               <p
@@ -31,6 +30,7 @@
               <!-- @relation(GSSC-PLLR-249, GSSC-PLLR-250, GSSC-PLLR-251, scope=range_end, role=Implementation) -->
             }
           </li>
+          <!-- @relation(GSSC-PLLR-246, GSSC-PLLR-247, GSSC-PLLR-248, scope=range_end, role=Implementation) -->
         }
       </ul>
     </section>

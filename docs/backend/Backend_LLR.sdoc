@@ -6134,7 +6134,7 @@ The public publications page assembles its hyperlink grid from this list, includ
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-19
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-195
@@ -6158,7 +6158,7 @@ Authorized editors add publications with the fields the public list presents. De
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-19
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-197
@@ -6176,7 +6176,7 @@ Only publication editors and administrators may add publications.
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-19
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-197
@@ -6206,7 +6206,7 @@ Path cuid identifies one publication for assembly or editing.
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-19
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-196
@@ -6230,7 +6230,7 @@ Authorized editors keep publication fields current, including clearing or settin
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-19
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-198
@@ -6248,7 +6248,7 @@ Only publication editors and administrators may change publications.
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-19
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-198
@@ -6272,7 +6272,7 @@ Authorized editors remove publications that are no longer listed.
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-19
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-199
@@ -6290,7 +6290,7 @@ Only publication editors and administrators may delete publications.
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-19
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-199
@@ -6741,7 +6741,7 @@ is publication editor is a stored site privilege that authorizes publications ca
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-19
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-111
@@ -6759,7 +6759,7 @@ Administrators assign the publication editor privilege so authorized members can
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-19
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-111
@@ -7113,7 +7113,7 @@ The dedicated table is the source of truth for the public publications list. Des
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-19
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-201

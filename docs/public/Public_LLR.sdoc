@@ -2983,12 +2983,12 @@ RATIONALE: >>>
 The publications page lists society publications from the dedicated publications catalog as normal webpage content, not generic section Contents. The Stanislaus County Cemetery Project and War Veterans of Stanislaus County are outside this list. Tagged generic sections and Section From CUID are not the source for this list.
 <<<
 COMMENT: >>>
-REVIEW_STATUS stays Changed until owner approval. Mirrors the Research Tools page pattern with optional description under each title.
+Mirrors the Research Tools page pattern with optional description under each title. Publication Link refines Society Publications List (GSSC-PHLR-84); reference links supersede dedicated-page listing (GSSC-PHLR-85) for this catalog.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-19
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-84
@@ -3006,7 +3006,7 @@ Legacy publications used a titled link layout hosted as page content. The public
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-19
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-84
@@ -3024,7 +3024,7 @@ The layout refines the legacy publications grid with public theme tokens, matchi
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-19
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-84
@@ -3048,10 +3048,10 @@ Each catalog entry is a titled hyperlink to the publication's reference. The lis
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-19
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-PHLR-85
+  VALUE: GSSC-PHLR-84
   ROLE: Refines
 
 [REQUIREMENT]
@@ -3066,10 +3066,10 @@ Grid cells carry one publication each so the list reads as a resource grid on th
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-19
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-PHLR-85
+  VALUE: GSSC-PHLR-84
   ROLE: Refines
 
 [REQUIREMENT]
@@ -3084,10 +3084,10 @@ Link color and typeface match the public palette so publications read as primary
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-19
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-PHLR-85
+  VALUE: GSSC-PHLR-84
   ROLE: Refines
 
 [[/SECTION]]
@@ -3108,7 +3108,7 @@ Optional description text accompanies a publication listing when the catalog pro
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-19
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-84
@@ -3126,7 +3126,7 @@ Placing description under the title keeps the link primary and the supporting te
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-19
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-84
@@ -3144,7 +3144,7 @@ Normal black body text under the dark-green title link keeps optional descriptio
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-19
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-84

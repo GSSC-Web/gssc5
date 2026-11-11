@@ -2407,7 +2407,7 @@ The public publications page lists society publications from the dedicated publi
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-19
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-28
@@ -2424,7 +2424,7 @@ Path cuid identifies one publication. Which fields the response includes is low-
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-19
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-28
@@ -2441,7 +2441,7 @@ Authorized editors add society publications. Which request fields are required i
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-19
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-28
@@ -2458,7 +2458,7 @@ Authorized editors keep publication titles, reference links, and optional descri
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-19
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-28
@@ -2475,7 +2475,7 @@ Authorized editors remove publications that are no longer listed.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-19
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-28
@@ -2492,7 +2492,7 @@ The publication editor site privilege authorizes publications catalog changes. A
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-19
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-28
@@ -2509,7 +2509,7 @@ Each listed publication is identified by cuid and presents a title that opens a 
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-19
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-28
