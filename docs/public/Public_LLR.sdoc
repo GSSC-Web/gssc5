@@ -3323,9 +3323,7 @@ GSSC5-16. SW binds the leadership intro tag; requirements stay tag-agnostic.
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-16
-REVIEW_STATUS: Changed
-
-[REQUIREMENT]
+REVIEW_STATUS: Approved[REQUIREMENT]
 UID: GSSC-PLLR-235
 TITLE: Syntactic
 STATEMENT: >>>
@@ -3337,9 +3335,7 @@ Intro precedes the roster so visitors see page context first. Index order preser
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-16
-REVIEW_STATUS: Changed
-
-[REQUIREMENT]
+REVIEW_STATUS: Approved[REQUIREMENT]
 UID: GSSC-PLLR-236
 TITLE: Lexical
 STATEMENT: >>>
@@ -3351,8 +3347,7 @@ Intro reuses Section From CUID so leadership sections share the Section Containe
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-16
-REVIEW_STATUS: Changed
-
+REVIEW_STATUS: Approved
 [[/SECTION]]
 
 [[SECTION]]
@@ -3374,7 +3369,7 @@ Canonical officer titles are Lexical. Card chrome is Contact Card Large.
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-16
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-76
@@ -3398,7 +3393,7 @@ A three-column large-card grid keeps the six officer offices scannable. Placemen
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-16
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-76
@@ -3416,7 +3411,7 @@ Those office titles are the Positions the page matches on the leadership list. V
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-16
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-76
@@ -3443,7 +3438,7 @@ Canonical Director at Large titles are Lexical. Card chrome is Contact Card Smal
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-16
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-77
@@ -3467,7 +3462,7 @@ A five-column small-card grid matches five Director at Large seats. Keeping cell
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-16
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-77
@@ -3485,7 +3480,7 @@ Those office titles are the Positions the page matches on the leadership list, i
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-16
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-77
@@ -3512,7 +3507,7 @@ GSSC5-16 owner follow-up: dynamic chairs from the API; no hardcoded chair roster
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-16
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-80
@@ -3533,7 +3528,7 @@ The same small-card grid as Directors at Large keeps chair presentation consiste
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-16
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-80
@@ -3551,7 +3546,7 @@ Position titles come from the leadership list at runtime. Contact Card Small own
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-16
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-80
@@ -3575,9 +3570,7 @@ Large cards show identity, role, and how to reach the person. A silhouette place
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-16
-REVIEW_STATUS: Changed
-
-[REQUIREMENT]
+REVIEW_STATUS: Approved[REQUIREMENT]
 UID: GSSC-PLLR-238
 TITLE: Syntactic
 STATEMENT: >>>
@@ -3589,9 +3582,7 @@ A top photo with stacked text below matches the large officer card layout. Filli
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-16
-REVIEW_STATUS: Changed
-
-[REQUIREMENT]
+REVIEW_STATUS: Approved[REQUIREMENT]
 UID: GSSC-PLLR-239
 TITLE: Lexical
 STATEMENT: >>>
@@ -3603,8 +3594,7 @@ Centered hierarchy keeps large cards readable. Green/white/gray marks a filled o
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-16
-REVIEW_STATUS: Changed
-
+REVIEW_STATUS: Approved
 [[/SECTION]]
 
 [[SECTION]]
@@ -3623,9 +3613,7 @@ Small cards show identity, role, and how to reach the person in a compact form. 
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-16
-REVIEW_STATUS: Changed
-
-[REQUIREMENT]
+REVIEW_STATUS: Approved[REQUIREMENT]
 UID: GSSC-PLLR-241
 TITLE: Syntactic
 STATEMENT: >>>
@@ -3637,9 +3625,7 @@ A left photo with a text column matches the compact Director and chair card layo
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-16
-REVIEW_STATUS: Changed
-
-[REQUIREMENT]
+REVIEW_STATUS: Approved[REQUIREMENT]
 UID: GSSC-PLLR-242
 TITLE: Lexical
 STATEMENT: >>>
@@ -3651,8 +3637,7 @@ Default name size and bold title keep small cards dense but readable. Green/whit
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-16
-REVIEW_STATUS: Changed
-
+REVIEW_STATUS: Approved
 [[/SECTION]]
 
 [[/SECTION]]
