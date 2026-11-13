@@ -2114,10 +2114,13 @@ STATEMENT: >>>
 The newsletters page SHALL include a form to select a newsletter.
 <<<
 RATIONALE: >>>
-The legacy newsletters page lists issues by year and month. This requirement gives the page a form for selecting an issue.
+Visitors choose an issue before the page previews or downloads it.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-10
+CHANGE_DRIVER: >>>
+GSSC5-10
+GSSC5-20
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -2128,13 +2131,16 @@ RELATIONS:
 UID: GSSC-PHLR-122
 TITLE: Newsletter Volume Menu
 STATEMENT: >>>
-The Newsletter Selection Form SHALL include a menu for the Volume, which is the year of the issue.
+The Newsletter Selection Form SHALL include a menu for the Volume, which is the series volume of the issue.
 <<<
 RATIONALE: >>>
-The Volume menu selects the year of the newsletter. The legacy page groups issues under a year. This requirement does not set the years in the menu.
+Volume identifies the newsletter series volume, independent of calendar year.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-10
+CHANGE_DRIVER: >>>
+GSSC5-10
+GSSC5-20
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -2145,13 +2151,16 @@ RELATIONS:
 UID: GSSC-PHLR-123
 TITLE: Newsletter Number Menu
 STATEMENT: >>>
-The Newsletter Selection Form SHALL include a menu for the Number, which is the month of the issue.
+The Newsletter Selection Form SHALL include a menu for the Number, which is the issue number within its Volume.
 <<<
 RATIONALE: >>>
-The Number menu selects the month of the newsletter. The legacy page lists months under each year. This requirement does not set the months in the menu.
+Number identifies the issue within a volume, independent of calendar month.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-10
+CHANGE_DRIVER: >>>
+GSSC5-10
+GSSC5-20
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -2165,10 +2174,13 @@ STATEMENT: >>>
 The newsletters page SHALL display the newsletter selected in the Newsletter Selection Form.
 <<<
 RATIONALE: >>>
-The page shows the issue chosen by the Volume and Number menus. The legacy page links to each issue as a separate file. This requirement does not set how the issue is presented.
+The page shows the issue chosen through the selection form.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-10
+CHANGE_DRIVER: >>>
+GSSC5-10
+GSSC5-20
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -2182,10 +2194,132 @@ STATEMENT: >>>
 The newsletters page SHALL display the most recent newsletter by default.
 <<<
 RATIONALE: >>>
-Before a visitor selects another issue, the page shows the most recent newsletter. The legacy page also identifies the newest issue separately from the yearly lists.
+Before a visitor selects another issue, and when deep-link query arguments do not identify a newsletter, the page shows the newest issue.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-10
+CHANGE_DRIVER: >>>
+GSSC5-10
+GSSC5-20
+<<<
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-8
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-130
+TITLE: Newsletter Month Menu
+STATEMENT: >>>
+The Newsletter Selection Form SHALL include a menu for the calendar month of the issue.
+<<<
+RATIONALE: >>>
+Month/Year selection is an alternate path to the same catalog as Volume/Number.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-20
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-8
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-131
+TITLE: Newsletter Preview
+STATEMENT: >>>
+The newsletters page SHALL preview the selected newsletter.
+<<<
+RATIONALE: >>>
+Visitors can read the selected issue on the page without leaving it.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-20
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-8
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-132
+TITLE: Newsletter Download
+STATEMENT: >>>
+The newsletters page SHALL provide a download of the selected newsletter.
+<<<
+RATIONALE: >>>
+Visitors can save the selected issue file.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-20
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-8
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-133
+TITLE: Newsletter Year Menu
+STATEMENT: >>>
+The Newsletter Selection Form SHALL include a menu for the calendar year of the issue.
+<<<
+RATIONALE: >>>
+Year pairs with Month for calendar-based selection.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-20
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-8
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-134
+TITLE: Newsletter Selection Mode Toggle
+STATEMENT: >>>
+The Newsletter Selection Form SHALL include a control that switches selection between Volume and Number menus and Month and Year menus.
+<<<
+RATIONALE: >>>
+Visitors pick one selection mode at a time without leaving the form.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-20
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-8
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-135
+TITLE: Newsletter Query Selection
+STATEMENT: >>>
+The newsletters page SHALL select a newsletter from the page URL query arguments when those arguments identify a newsletter in the catalog.
+<<<
+RATIONALE: >>>
+Deep links open a specific past issue. Unrecognized arguments fall back to the default newsletter.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-20
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-8
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-136
+TITLE: Newsletter Intro Sections
+STATEMENT: >>>
+The newsletters page SHALL place public sections tagged for newsletters above the newsletter selection and preview when the Unified Backend provides such sections, and omit that intro when none are provided.
+<<<
+RATIONALE: >>>
+Optional intro content mirrors other public pages that load tagged sections above the page-specific UI.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-20
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent

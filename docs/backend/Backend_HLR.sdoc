@@ -1891,6 +1891,100 @@ RELATIONS:
   VALUE: GSSC-PIR-57
   ROLE: Refines
 
+[REQUIREMENT]
+UID: GSSC-BHLR-202
+TITLE: File Upload
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL accept upload of a file into a directory by a caller who has write access to that directory.
+<<<
+RATIONALE: >>>
+Authorized callers store file bytes under a directory. Write access follows stored ACL metadata. Exact URI shape is low-level.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-71
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-57
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-203
+TITLE: File Soft Deletion
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL accept soft deletion of a stored file or folder by a caller who has write access to that entry.
+<<<
+RATIONALE: >>>
+Authorized callers mark an entry deleted without a hard delete. Soft deletion is the only deletion this capability provides.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-71
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-57
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-204
+TITLE: File Retrieval
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL provide a stored file's contents upon request to a caller who has read access to that file.
+<<<
+RATIONALE: >>>
+Callers with read access receive the file bytes. Soft-deleted files are outside this provision. Exact URI shape is low-level.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-71
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-57
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-205
+TITLE: Directory Listing
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL provide a list of files and folders in a given directory upon request to a caller who has read access to that directory.
+<<<
+RATIONALE: >>>
+Callers with read access see the directory's non-deleted children. Exact URI shape and list fields are low-level.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-71
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-57
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-206
+TITLE: Folder Creation
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL accept creation of a folder under a parent directory by a caller who has write access to that parent directory.
+<<<
+RATIONALE: >>>
+Authorized callers create folders so directories can hold files. Write access follows stored ACL metadata.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-71
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-57
+  ROLE: Refines
+
 [[/SECTION]]
 
 [[SECTION]]
@@ -2523,15 +2617,18 @@ TITLE: Newsletters Content
 
 [REQUIREMENT]
 UID: GSSC-BHLR-172
-TITLE: Newsletter List for a Year
+TITLE: Newsletter List
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL provide a list of newsletters for a given year upon request.
+The GSSC Website Unified Backend SHALL provide the list of newsletters upon request, including each newsletter's cuid, volume, number, month, year, file path, and keywords.
 <<<
 RATIONALE: >>>
-A caller can request the newsletters for one year. This requirement does not define the contents of a newsletter. Modification and deletion of a newsletter are the artifact modification and artifact deletion requirements.
+Callers receive the full catalog for selection and search filtering. File path identifies the stored file for the issue bytes.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-12
+CHANGE_DRIVER: >>>
+GSSC5-12
+GSSC5-20
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -2542,13 +2639,101 @@ RELATIONS:
 UID: GSSC-BHLR-173
 TITLE: Newsletter
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL provide a newsletter upon request.
+The GSSC Website Unified Backend SHALL provide a newsletter upon request by cuid, including volume, number, month, year, file path, and keywords.
 <<<
 RATIONALE: >>>
-A caller can request one newsletter. This requirement does not define the contents of a newsletter. Modification and deletion of a newsletter are the artifact modification and artifact deletion requirements.
+A caller can request one newsletter row for display or editing.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-12
+CHANGE_DRIVER: >>>
+GSSC5-12
+GSSC5-20
+<<<
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-31
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-213
+TITLE: Newsletter Creation
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL accept creation of a newsletter by a logged-in member who has newsletter editor authorization.
+<<<
+RATIONALE: >>>
+Authorized newsletter editors add catalog rows. Issue bytes are stored through file storage separately.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-20
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-31
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-214
+TITLE: Newsletter Modification
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL accept modification of a newsletter by a logged-in member who has newsletter editor authorization.
+<<<
+RATIONALE: >>>
+Authorized newsletter editors keep catalog fields current.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-20
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-31
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-215
+TITLE: Newsletter Deletion
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL accept deletion of a newsletter by a logged-in member who has newsletter editor authorization.
+<<<
+RATIONALE: >>>
+Authorized newsletter editors remove catalog rows that are no longer listed.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-20
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-31
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-217
+TITLE: Newsletter Editor Authorization
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL treat a newsletter editor and an administrator as authorized to create, modify, and delete newsletters.
+<<<
+RATIONALE: >>>
+The newsletter editor site privilege authorizes newsletters catalog changes and is separate from publication editor authorization. An administrator retains the same authorization. This requirement does not set how the privilege is stored.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-20
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-31
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-216
+TITLE: Newsletter Table
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store each newsletter as a row with a cuid, volume, number, month, year, file path, and keywords.
+<<<
+RATIONALE: >>>
+The dedicated table is the source of truth for the public newsletters catalog.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-20
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -3044,6 +3229,114 @@ The artifact holds the permissions a logged-in member must have to delete it. Th
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-12
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-57
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BHLR-FILE-STORAGE
+TITLE: File Storage
+
+[REQUIREMENT]
+UID: GSSC-BHLR-207
+TITLE: Local File Storage Root
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store uploaded file bytes on the local filesystem under a configurable root directory.
+<<<
+RATIONALE: >>>
+File bytes live on the server filesystem. The root directory comes from backend configuration. Object storage services are outside this requirement.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-71
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-57
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-208
+TITLE: Stored File Entries
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store metadata for each file and each folder as a database entry identified by a cuid, with a name, a kind of file or folder, and an optional parent folder.
+<<<
+RATIONALE: >>>
+Database entries describe the directory tree independent of filesystem permissions. Exact field shapes beyond these are low-level.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-71
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-57
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-209
+TITLE: File ACL Metadata
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store access control for each file and each folder in the database as a publicity flag and role allow-lists for read access and write access.
+<<<
+RATIONALE: >>>
+ACL checks use database metadata rather than Unix filesystem permissions. The publicity flag records whether the entry is public. Role allow-lists name which member roles may read or write when access is not public. Exact role names are low-level.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-71
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-57
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-210
+TITLE: File ACL Inheritance
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL assign a new file or folder the access control of its parent folder when that entry is created under a parent folder.
+<<<
+RATIONALE: >>>
+Children start with the parent's publicity flag and role allow-lists so the tree stays consistent until an authorized change tightens access.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-71
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-57
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-211
+TITLE: File ACL Non-Loosening
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL reject creation or update of a file or folder when the requested access control would grant broader access than the parent folder allows.
+<<<
+RATIONALE: >>>
+A child must not be looser than its parent. Broader access includes making a private parent entry public, or adding a role the parent does not allow for read or write.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-71
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-57
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-212
+TITLE: Soft-Deleted File Marker
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL mark a soft-deleted file or folder in its database metadata without removing that entry's stored file bytes from the filesystem as part of soft deletion.
+<<<
+RATIONALE: >>>
+Soft deletion hides the entry from normal list and get results while retaining bytes for recovery outside this capability. Hard deletion is outside this requirement.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-71
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent

@@ -94,6 +94,9 @@ model User {
   // @relation(GSSC-BLLR-355, scope=range_start, role=Implementation)
   isPublicationEditor Boolean @default(false)
   // @relation(GSSC-BLLR-355, scope=range_end, role=Implementation)
+  // @relation(GSSC-BLLR-397, scope=range_start, role=Implementation)
+  isNewsletterEditor Boolean @default(false)
+  // @relation(GSSC-BLLR-397, scope=range_end, role=Implementation)
   // @relation(GSSC-BLLR-64, scope=range_start, role=Implementation)
   membershipStatus String?
   // @relation(GSSC-BLLR-64, scope=range_end, role=Implementation)
@@ -240,3 +243,50 @@ model Publication {
   @@map("publications")
 }
 // @relation(GSSC-BLLR-354, scope=range_end, role=Implementation)
+
+// Newsletters catalog (GSSC-BHLR-216 / GSSC5-20).
+// @relation(GSSC-BLLR-395, scope=range_start, role=Implementation)
+model Newsletter {
+  id       String @id @default(cuid())
+  volume   Int
+  number   Int
+  month    Int
+  year     Int
+  /// StoredFileEntry cuid for issue bytes
+  /// @prismabox.options{ minLength: 1 }
+  filePath String
+  /// JSON string array of keyword strings
+  keywords String @default("[]")
+
+  @@map("newsletters")
+}
+// @relation(GSSC-BLLR-395, scope=range_end, role=Implementation)
+
+// Local file storage metadata + DB ACLs (GSSC5-71).
+// @relation(GSSC-BLLR-366, scope=range_start, role=Implementation)
+model StoredFileEntry {
+  id          String           @id @default(cuid())
+  /// @prismabox.options{ minLength: 1 }
+  name        String
+  /// "file" | "folder"
+  kind        String
+  parentId    String?
+  parent      StoredFileEntry? @relation("FileTree", fields: [parentId], references: [id], onDelete: Restrict)
+  children    StoredFileEntry[] @relation("FileTree")
+  /// Relative path under FILE_STORAGE_ROOT for kind=file
+  storageKey  String?
+  mimeType    String?
+  sizeBytes   Int?
+  isPublic    Boolean          @default(true)
+  /// JSON string array of role tokens
+  readRoles   String           @default("[]")
+  /// JSON string array of role tokens
+  writeRoles  String           @default("[]")
+  deletedAt   DateTime?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  @@index([parentId, deletedAt])
+  @@map("stored_file_entries")
+}
+// @relation(GSSC-BLLR-366, scope=range_end, role=Implementation)

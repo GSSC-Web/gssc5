@@ -4,8 +4,8 @@ import {
   HomePage,
   LeadershipPage,
   MembershipPage,
-  NewslettersPage,
 } from './pages/page-stubs';
+import { NewslettersPage } from './pages/newsletters/newsletters';
 import { PublicationsPage } from './pages/publications/publications-page';
 import { ResearchToolsPage } from './pages/research-tools/research-tools';
 

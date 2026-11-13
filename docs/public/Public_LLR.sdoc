@@ -3658,6 +3658,561 @@ REVIEW_STATUS: Approved
 [[/SECTION]]
 
 [[SECTION]]
+UID: GSSC-PLLR-NEWSLETTERS-PAGE
+TITLE: Newsletters Page
+
+[[SECTION]]
+UID: GSSC-PLLR-NEWSLETTER-SELECTION-FORM
+TITLE: Newsletter Selection Form
+
+[REQUIREMENT]
+UID: GSSC-PLLR-207
+TITLE: Semantic
+STATEMENT: >>>
+The Newsletter Selection Form SHALL obtain the newsletter catalog from the Unified Backend, present Volume and Number or Month and Year menus according to the selection mode, select a newsletter from URL query arguments when those arguments identify a catalog entry, and select the most recent newsletter by default when they do not.
+<<<
+RATIONALE: >>>
+The form is the selection path for the page. Query deep links and the newest-default share one catalog.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-20
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-121
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-125
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-135
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-208
+TITLE: Syntactic
+STATEMENT: >>>
+The Newsletter Selection Form SHALL place the mode toggle and active pair of menus on the newsletters page above the selected-newsletter preview and download controls, and below any newsletter intro sections.
+<<<
+RATIONALE: >>>
+Selection stays above the issue presentation and below optional intro content.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-20
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-121
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-209
+TITLE: Lexical
+STATEMENT: >>>
+The Newsletter Selection Form SHALL use the public sans-serif default typeface, the white theme token for its surface, the dark-green theme token for primary text, and the gray theme token for control borders.
+<<<
+RATIONALE: >>>
+Form chrome follows the public organization palette.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-20
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-121
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-NEWSLETTER-VOLUME-MENU
+TITLE: Newsletter Volume Menu
+
+[REQUIREMENT]
+UID: GSSC-PLLR-210
+TITLE: Semantic
+STATEMENT: >>>
+The Newsletter Volume Menu SHALL offer each distinct catalog Volume as an option when Volume and Number mode is active, and select the newsletter for that Volume and the current Number when the visitor chooses an option.
+<<<
+RATIONALE: >>>
+Volume options come from the catalog series volumes.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-20
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-122
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-211
+TITLE: Syntactic
+STATEMENT: >>>
+The Newsletter Volume Menu SHALL appear as a labeled menu within the Newsletter Selection Form beside the Number menu when Volume and Number mode is active.
+<<<
+RATIONALE: >>>
+Volume and Number stay adjacent as a pair.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-20
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-122
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-212
+TITLE: Lexical
+STATEMENT: >>>
+The Newsletter Volume Menu SHALL use the sans-serif default typeface, the dark-green theme token for its label and value text, the white theme token for its field surface, and the gray theme token for its border.
+<<<
+RATIONALE: >>>
+Menu styling matches other public form controls.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-20
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-122
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-NEWSLETTER-NUMBER-MENU
+TITLE: Newsletter Number Menu
+
+[REQUIREMENT]
+UID: GSSC-PLLR-213
+TITLE: Semantic
+STATEMENT: >>>
+The Newsletter Number Menu SHALL offer each catalog Number available for the selected Volume when Volume and Number mode is active, and select the newsletter for that Volume and Number when the visitor chooses an option.
+<<<
+RATIONALE: >>>
+Number options follow the issues present for the selected Volume.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-20
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-123
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-214
+TITLE: Syntactic
+STATEMENT: >>>
+The Newsletter Number Menu SHALL appear as a labeled menu within the Newsletter Selection Form beside the Volume menu when Volume and Number mode is active.
+<<<
+RATIONALE: >>>
+Number sits with Volume as the second half of the pair.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-20
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-123
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-215
+TITLE: Lexical
+STATEMENT: >>>
+The Newsletter Number Menu SHALL use the sans-serif default typeface, the dark-green theme token for its label and value text, the white theme token for its field surface, and the gray theme token for its border.
+<<<
+RATIONALE: >>>
+Number menu chrome matches the Volume menu.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-20
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-123
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-NEWSLETTER-MONTH-MENU
+TITLE: Newsletter Month Menu
+
+[REQUIREMENT]
+UID: GSSC-PLLR-216
+TITLE: Semantic
+STATEMENT: >>>
+The Newsletter Month Menu SHALL offer each catalog month available for the selected year when Month and Year mode is active, and select the newsletter for that year and month when the visitor chooses an option.
+<<<
+RATIONALE: >>>
+Month options follow issues present for the selected calendar year.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-20
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-130
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-217
+TITLE: Syntactic
+STATEMENT: >>>
+The Newsletter Month Menu SHALL appear as a labeled menu within the Newsletter Selection Form beside the Year menu when Month and Year mode is active.
+<<<
+RATIONALE: >>>
+Month and Year stay adjacent as a pair.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-20
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-130
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-218
+TITLE: Lexical
+STATEMENT: >>>
+The Newsletter Month Menu SHALL use the sans-serif default typeface, the dark-green theme token for its label and value text, the white theme token for its field surface, and the gray theme token for its border.
+<<<
+RATIONALE: >>>
+Month menu chrome matches other selection menus.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-20
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-130
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-NEWSLETTER-YEAR-MENU
+TITLE: Newsletter Year Menu
+
+[REQUIREMENT]
+UID: GSSC-PLLR-219
+TITLE: Semantic
+STATEMENT: >>>
+The Newsletter Year Menu SHALL offer each distinct catalog year as an option when Month and Year mode is active, and select the newsletter for that year and the current month when the visitor chooses an option.
+<<<
+RATIONALE: >>>
+Year options come from calendar years present in the catalog.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-20
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-133
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-220
+TITLE: Syntactic
+STATEMENT: >>>
+The Newsletter Year Menu SHALL appear as a labeled menu within the Newsletter Selection Form beside the Month menu when Month and Year mode is active.
+<<<
+RATIONALE: >>>
+Year sits with Month as the calendar selection pair.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-20
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-133
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-221
+TITLE: Lexical
+STATEMENT: >>>
+The Newsletter Year Menu SHALL use the sans-serif default typeface, the dark-green theme token for its label and value text, the white theme token for its field surface, and the gray theme token for its border.
+<<<
+RATIONALE: >>>
+Year menu chrome matches the Month menu.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-20
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-133
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-NEWSLETTER-MODE-TOGGLE
+TITLE: Newsletter Selection Mode Toggle
+
+[REQUIREMENT]
+UID: GSSC-PLLR-222
+TITLE: Semantic
+STATEMENT: >>>
+The Newsletter Selection Mode Toggle SHALL switch the Newsletter Selection Form between Volume and Number menus and Month and Year menus without changing the selected newsletter when that newsletter remains in the catalog.
+<<<
+RATIONALE: >>>
+The toggle changes which menus are active while keeping the same issue selected when possible.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-20
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-134
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-223
+TITLE: Syntactic
+STATEMENT: >>>
+The Newsletter Selection Mode Toggle SHALL appear within the Newsletter Selection Form above the active menu pair.
+<<<
+RATIONALE: >>>
+The toggle precedes the menus it controls.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-20
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-134
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-224
+TITLE: Lexical
+STATEMENT: >>>
+The Newsletter Selection Mode Toggle SHALL use the sans-serif default typeface, the dark-green theme token for text, and the gray theme token for borders on its controls.
+<<<
+RATIONALE: >>>
+Toggle chrome matches the selection form palette.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-20
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-134
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-NEWSLETTER-PREVIEW
+TITLE: Newsletter Preview
+
+[REQUIREMENT]
+UID: GSSC-PLLR-225
+TITLE: Semantic
+STATEMENT: >>>
+The Newsletter Preview SHALL present the selected newsletter's issue file from the Unified Backend file identified by that newsletter's file path as an in-page preview.
+<<<
+RATIONALE: >>>
+The newsletter row's file path names the stored file whose bytes the preview shows.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-20
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-131
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-124
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-226
+TITLE: Syntactic
+STATEMENT: >>>
+The Newsletter Preview SHALL occupy the primary content area of the newsletters page below the Newsletter Selection Form.
+<<<
+RATIONALE: >>>
+Preview is the main reading surface once an issue is selected.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-20
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-131
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-227
+TITLE: Lexical
+STATEMENT: >>>
+The Newsletter Preview SHALL use a white theme-token surface, a gray theme-token border, and a minimum preview height large enough to show the issue page content.
+<<<
+RATIONALE: >>>
+A bordered white frame marks the preview region.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-20
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-131
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-NEWSLETTER-DOWNLOAD
+TITLE: Newsletter Download
+
+[REQUIREMENT]
+UID: GSSC-PLLR-252
+TITLE: Semantic
+STATEMENT: >>>
+The Newsletter Download SHALL provide a download control whose target is the selected newsletter's issue file from the Unified Backend file identified by that newsletter's file path.
+<<<
+RATIONALE: >>>
+Download uses the same stored file as the preview.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-20
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-132
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-253
+TITLE: Syntactic
+STATEMENT: >>>
+The Newsletter Download SHALL appear adjacent to the Newsletter Preview on the newsletters page.
+<<<
+RATIONALE: >>>
+Download stays with the previewed issue.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-20
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-132
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-254
+TITLE: Lexical
+STATEMENT: >>>
+The Newsletter Download SHALL present a sans-serif control using the dark-green theme token for text and border and the gray theme token for its hover background.
+<<<
+RATIONALE: >>>
+Download chrome matches other public text controls.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-20
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-132
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-NEWSLETTER-INTRO
+TITLE: Newsletter Intro Sections
+
+[REQUIREMENT]
+UID: GSSC-PLLR-255
+TITLE: Semantic
+STATEMENT: >>>
+The Newsletter Intro Sections SHALL retrieve public sections tagged for newsletters from the Unified Backend and place each retrieved section through the Section From CUID.
+<<<
+RATIONALE: >>>
+Tagged sections supply optional intro content without hard-coding copy on the page.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-20
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-136
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-256
+TITLE: Syntactic
+STATEMENT: >>>
+The Newsletter Intro Sections SHALL appear at the top of the newsletters page above the Newsletter Selection Form, place each section through the Section From CUID in backend index order, and omit the intro when the Unified Backend provides no such sections.
+<<<
+RATIONALE: >>>
+Intro precedes selection and preview. Omitting empty intro avoids blank chrome.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-20
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-136
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-257
+TITLE: Lexical
+STATEMENT: >>>
+The Newsletter Intro Sections SHALL present Section Header, Section Body, and Section Resources through the Section From CUID presentation, without independent lexical chrome of their own.
+<<<
+RATIONALE: >>>
+Intro reuses Section From CUID so newsletters share the Section Container look.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-20
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-136
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
 UID: GSSC-PLLR-ROUTER
 TITLE: Public Router
 

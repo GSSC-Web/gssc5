@@ -2,10 +2,12 @@ import { openapi } from "@elysia/openapi";
 import { cors } from "@elysiajs/cors";
 import { Elysia } from "elysia";
 
+import { newsletters } from "./content/newsletters";
 import { publications } from "./content/publications";
 import { researchTools } from "./content/research-tools";
 import { section } from "./content/section";
 import { template } from "./content/template";
+import { files } from "./files/files";
 import { kvs } from "./kvs";
 import { accounts } from "./user/accounts";
 import { leadership } from "./user/leadership";
@@ -46,6 +48,8 @@ export const app = new Elysia({ normalize: false })
   .use(template)
   .use(researchTools)
   .use(publications)
+  .use(newsletters)
+  .use(files)
   .get("/", () => "Hello Elysia");
 
 export type App = typeof app;
