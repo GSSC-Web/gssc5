@@ -6329,6 +6329,216 @@ RELATIONS:
 [[/SECTION]]
 
 [[SECTION]]
+UID: GSSC-BLLR-NEWSLETTERS-CATEGORY
+TITLE: Newsletters
+
+[[SECTION]]
+UID: GSSC-BLLR-NEWSLETTERS-COLLECTION
+TITLE: /newsletters
+
+[[SECTION]]
+UID: GSSC-BLLR-NEWSLETTERS-COLLECTION-GET
+TITLE: GET
+
+[REQUIREMENT]
+UID: GSSC-BLLR-387
+TITLE: Newsletters List
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL return each newsletter's cuid, volume, number, month, year, file path, and keywords when listing newsletters, ordered from newest to oldest by year, then month, then volume, then number.
+<<<
+RATIONALE: >>>
+The public newsletters page builds its selection menus from this ordered catalog.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-20
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-172
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-396
+TITLE: Newsletters Keyword Filter
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL, when a keyword query is provided, limit the newsletter list to entries whose keywords include that keyword case-insensitively as a substring.
+<<<
+RATIONALE: >>>
+Keywords support catalog search without a separate FE search surface.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-20
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-172
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-NEWSLETTERS-COLLECTION-POST
+TITLE: POST
+
+[REQUIREMENT]
+UID: GSSC-BLLR-388
+TITLE: Newsletter Creation
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL create a newsletter for a logged-in member who is a publication editor or an administrator, requiring volume, number, month, year, file path, and keywords, and returning the created newsletter's cuid and those fields.
+<<<
+RATIONALE: >>>
+Authorized editors add catalog rows with the fields the public page presents.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-20
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-213
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-389
+TITLE: Newsletter Creation Forbidden
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL reject newsletter creation without storing a newsletter when the caller is not a publication editor and is not an administrator.
+<<<
+RATIONALE: >>>
+Only publication editors and administrators may add newsletters.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-20
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-213
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-NEWSLETTER-ITEM
+TITLE: /newsletter/{cuid}
+
+[[SECTION]]
+UID: GSSC-BLLR-NEWSLETTER-ITEM-GET
+TITLE: GET
+
+[REQUIREMENT]
+UID: GSSC-BLLR-390
+TITLE: Newsletter Get
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL return a newsletter by cuid in the path, including volume, number, month, year, file path, and keywords.
+<<<
+RATIONALE: >>>
+Path cuid identifies one newsletter for display or editing.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-20
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-173
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-NEWSLETTER-ITEM-PATCH
+TITLE: PATCH
+
+[REQUIREMENT]
+UID: GSSC-BLLR-391
+TITLE: Newsletter Modification
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL modify a newsletter by cuid for a logged-in member who is a publication editor or an administrator, accepting volume, number, month, year, file path, and keywords updates, and returning the updated newsletter.
+<<<
+RATIONALE: >>>
+Authorized editors keep newsletter fields current.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-20
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-214
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-392
+TITLE: Newsletter Modification Forbidden
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL reject newsletter modification without changing the newsletter when the caller is not a publication editor and is not an administrator.
+<<<
+RATIONALE: >>>
+Only publication editors and administrators may change newsletters.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-20
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-214
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-NEWSLETTER-ITEM-DELETE
+TITLE: DELETE
+
+[REQUIREMENT]
+UID: GSSC-BLLR-393
+TITLE: Newsletter Deletion
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL delete a newsletter by cuid for a logged-in member who is a publication editor or an administrator.
+<<<
+RATIONALE: >>>
+Authorized editors remove newsletters that are no longer listed.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-20
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-215
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-394
+TITLE: Newsletter Deletion Forbidden
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL reject newsletter deletion without deleting the newsletter when the caller is not a publication editor and is not an administrator.
+<<<
+RATIONALE: >>>
+Only publication editors and administrators may delete newsletters.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-20
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-215
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
 UID: GSSC-BLLR-FILES-CATEGORY
 TITLE: Files
 
@@ -7453,6 +7663,30 @@ REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-201
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-NEWSLETTERS-STORAGE
+TITLE: Newsletters
+
+[REQUIREMENT]
+UID: GSSC-BLLR-395
+TITLE: Newsletters Table
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store each newsletter as a row in a newsletters table with a cuid, an integer volume, an integer number, an integer month, an integer year, a file path string, and keywords as a string array.
+<<<
+RATIONALE: >>>
+The dedicated table is the source of truth for the public newsletters catalog. File path identifies the stored file for issue bytes.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-20
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-216
   ROLE: Refines
 
 [[/SECTION]]
