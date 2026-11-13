@@ -354,13 +354,21 @@ test("GSSC-BLLR-235 Password Recovery Request Input", async () => {
 
 // @relation(GSSC-BLLR-236, scope=range_start, role=Test)
 test("GSSC-BLLR-236 Password Recovery Message Sent", async () => {
-  mockMail();
+  let rowsAtSend = 0;
+  setMailTransporter({
+    async sendMail(message) {
+      rowsAtSend = (await recoveryRows()).length;
+      sent.push(message);
+    },
+  });
   await postJsonResponse(backend, "/password/recovery-request", {
     email: "regular@example.com",
   });
   expect(sent.length).toBe(1);
   expect(sent[0]?.to).toBe("regular@example.com");
   expect(sent[0]?.text.includes("recovery-token=")).toBe(true);
+  // Persist-before-send: durable hash must exist before SMTP runs.
+  expect(rowsAtSend).toBe(1);
 });
 // @relation(GSSC-BLLR-236, scope=range_end, role=Test)
 
