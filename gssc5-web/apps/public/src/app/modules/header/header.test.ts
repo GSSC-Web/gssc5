@@ -11,7 +11,23 @@ import {
   SocietyContact,
 } from '../../services/society-contact/society-contact';
 import { nativeElement, setupPublicComponent, textContent } from '../../../test-harness';
+import { memberSessionApi } from '../../services/member-session';
 import { Header } from './header';
+
+function stubBackendLogoutSuccess(): () => void {
+  const original = memberSessionApi.logout;
+  memberSessionApi.logout = (async () =>
+    ({
+      data: null,
+      error: null,
+      response: new Response(null, { status: 204 }),
+      status: 204,
+      headers: new Headers(),
+    })) as unknown as typeof memberSessionApi.logout;
+  return () => {
+    memberSessionApi.logout = original;
+  };
+}
 
 const sampleOrg = {
   organizationName: 'Genealogical Society of Stanislaus County',
@@ -311,18 +327,23 @@ test('GSSC-PLLR-63 Lexical', async () => {
 
 // @relation(GSSC-PLLR-64, scope=range_start, role=Test)
 test('GSSC-PLLR-64 Semantic', async () => {
-  const { fixture, root, router, session } = await setupHeader({ loggedIn: true });
-  await router.navigateByUrl('/membership');
-  fixture.detectChanges();
-  await fixture.whenStable();
-  expect(router.url).toBe('/membership');
+  const restoreLogout = stubBackendLogoutSuccess();
+  try {
+    const { fixture, root, router, session } = await setupHeader({ loggedIn: true });
+    await router.navigateByUrl('/membership');
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(router.url).toBe('/membership');
 
-  root.querySelector<HTMLButtonElement>('.gssc-header__logout')!.click();
-  fixture.detectChanges();
-  await fixture.whenStable();
+    root.querySelector<HTMLButtonElement>('.gssc-header__logout')!.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
 
-  expect(session.loggedIn()).toBe(false);
-  expect(router.url).toBe('/membership');
+    expect(session.loggedIn()).toBe(false);
+    expect(router.url).toBe('/membership');
+  } finally {
+    restoreLogout();
+  }
 });
 // @relation(GSSC-PLLR-64, scope=range_end, role=Test)
 

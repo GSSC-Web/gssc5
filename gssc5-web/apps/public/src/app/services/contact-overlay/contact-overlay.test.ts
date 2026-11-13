@@ -16,7 +16,18 @@ async function setupContactOverlay(): Promise<{
   const contactOverlay = TestBed.inject(ContactOverlay);
   const promptOverlay = TestBed.inject(PromptOverlay);
   const memberSession = TestBed.inject(MemberSession);
-  await memberSession.logout();
+  // Reset local UI session without backend (logout only clears after successful end).
+  try {
+    globalThis.localStorage?.removeItem('gssc.memberSessionToken');
+    globalThis.localStorage?.removeItem('gssc.memberDisplayName');
+    globalThis.localStorage?.removeItem('gssc.memberEmailAddress');
+  } catch {
+    // ignore
+  }
+  memberSession.loggedIn.set(false);
+  memberSession.displayName.set('');
+  memberSession.emailAddress.set('');
+  memberSession.isAdministrator.set(false);
   promptOverlay.close();
   fixture.detectChanges();
   await fixture.whenStable();
