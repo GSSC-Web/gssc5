@@ -9,6 +9,7 @@ import {
   DAY_MS,
   bootInProcess,
   challenge,
+  classifyReport,
   cookieHeaderForToken,
   establishedLogin,
   loginTokenFromSetCookie,
@@ -17,6 +18,7 @@ import {
   memberEmail,
   memberPassword,
   memberUsername,
+  parseChallengeReport,
   postJsonResponse,
   setEnv,
   type BackendFetch,
@@ -102,7 +104,7 @@ test("GSSC-BLLR-8 Login Token Issued", async () => {
   const token = loginTokenFromSetCookie(response.headers);
   expect(token).toEqual(expect.any(String));
   expect(token?.length).toBeGreaterThan(0);
-  expect((await challenge(backend, token ?? "")).trim()).toBe("valid");
+  expect(classifyReport(await challenge(backend, token ?? ""))).toBe("valid");
 });
 // @relation(GSSC-BLLR-8, scope=range_end, role=Test)
 
@@ -189,15 +191,41 @@ test("GSSC-BLLR-9 Login Token Challenge", async () => {
   expect(token).toEqual(expect.any(String));
   const issued = token ?? "";
   const valid = await challenge(backend, issued);
-  expect(valid.trim()).toBe("valid");
+  expect(classifyReport(valid)).toBe("valid");
   expect(valid.includes(issued)).toBe(false);
 
   const unknown = `unknown-${randomUUID()}`;
   const invalid = await challenge(backend, unknown);
-  expect(invalid.trim()).toBe("invalid");
+  expect(classifyReport(invalid)).toBe("invalid");
   expect(invalid.includes(unknown)).toBe(false);
 });
 // @relation(GSSC-BLLR-9, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-399, scope=range_start, role=Test)
+test("GSSC-BLLR-399 Login Token Challenge Member Cuid", async () => {
+  const token = await establishedLogin(backend, {
+    password: memberPassword,
+    username: memberUsername,
+  });
+  expect(token).toEqual(expect.any(String));
+  const issued = token ?? "";
+  const report = parseChallengeReport(await challenge(backend, issued));
+  expect(report.status).toBe("valid");
+  expect(report.cuid).toEqual(expect.any(String));
+  expect(report.cuid?.length).toBeGreaterThan(0);
+  expect(report.cuid).not.toBe(issued);
+
+  const member = await prisma().user.findUnique({
+    where: { username: memberUsername },
+    select: { id: true },
+  });
+  expect(report.cuid).toBe(member?.id);
+
+  const invalid = parseChallengeReport(await challenge(backend, `unknown-${randomUUID()}`));
+  expect(invalid.status).toBe("invalid");
+  expect(invalid.cuid).toBeNull();
+});
+// @relation(GSSC-BLLR-399, scope=range_end, role=Test)
 
 // @relation(GSSC-BLLR-10, scope=range_start, role=Test)
 test("GSSC-BLLR-10 Member Logout", async () => {
@@ -209,7 +237,7 @@ test("GSSC-BLLR-10 Member Logout", async () => {
   const issued = token ?? "";
   const response = await logout(backend, issued);
   expect(response.status).toBe(204);
-  expect((await challenge(backend, issued)).trim()).toBe("invalid");
+  expect(classifyReport(await challenge(backend, issued))).toBe("invalid");
 });
 // @relation(GSSC-BLLR-10, scope=range_end, role=Test)
 
@@ -286,7 +314,7 @@ test("GSSC-BLLR-318 Login Token Available After Start", async () => {
       expiresAt,
     },
   });
-  expect((await challenge(backend, token)).trim()).toBe("valid");
+  expect(classifyReport(await challenge(backend, token))).toBe("valid");
 });
 // @relation(GSSC-BLLR-318, scope=range_end, role=Test)
 
@@ -329,9 +357,9 @@ test("GSSC-BLLR-11 Login Token Lifetime", async () => {
     expect(defaultToken).toEqual(expect.any(String));
     const issued = defaultToken ?? "";
     setSystemTime(new Date(start.getTime() + 7 * DAY_MS - 1));
-    expect((await challenge(backend, issued)).trim()).toBe("valid");
+    expect(classifyReport(await challenge(backend, issued))).toBe("valid");
     setSystemTime(new Date(start.getTime() + 7 * DAY_MS));
-    expect((await challenge(backend, issued)).trim()).toBe("invalid");
+    expect(classifyReport(await challenge(backend, issued))).toBe("invalid");
 
     setEnv("LOGIN_TOKEN_LIFETIME_DAYS", "2");
     setSystemTime(start);
@@ -342,9 +370,9 @@ test("GSSC-BLLR-11 Login Token Lifetime", async () => {
     expect(configuredToken).toEqual(expect.any(String));
     const configured = configuredToken ?? "";
     setSystemTime(new Date(start.getTime() + 2 * DAY_MS - 1));
-    expect((await challenge(backend, configured)).trim()).toBe("valid");
+    expect(classifyReport(await challenge(backend, configured))).toBe("valid");
     setSystemTime(new Date(start.getTime() + 2 * DAY_MS));
-    expect((await challenge(backend, configured)).trim()).toBe("invalid");
+    expect(classifyReport(await challenge(backend, configured))).toBe("invalid");
   } finally {
     setEnv("LOGIN_TOKEN_LIFETIME_DAYS", undefined);
     setSystemTime();
@@ -366,9 +394,9 @@ test("GSSC-BLLR-12 Expired Login Token", async () => {
     });
     expect(token).toEqual(expect.any(String));
     const issued = token ?? "";
-    expect((await challenge(backend, issued)).trim()).toBe("valid");
+    expect(classifyReport(await challenge(backend, issued))).toBe("valid");
     setSystemTime(new Date(issuedAt + 7 * DAY_MS));
-    expect((await challenge(backend, issued)).trim()).toBe("invalid");
+    expect(classifyReport(await challenge(backend, issued))).toBe("invalid");
   } finally {
     setEnv("LOGIN_TOKEN_LIFETIME_DAYS", undefined);
     setSystemTime();

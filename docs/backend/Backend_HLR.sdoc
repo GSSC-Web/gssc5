@@ -105,13 +105,16 @@ REVIEW_STATUS: Approved
 UID: GSSC-BHLR-3
 TITLE: Token Challenge
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL report a challenged Login Token as valid or invalid.
+The GSSC Website Unified Backend SHALL report a challenged Login Token as valid or invalid; when the report is valid, include the member cuid for that Login Token.
 <<<
 RATIONALE: >>>
-The frontend uses this challenge to detect whether a member is logged in. The report is only valid or invalid. This requirement does not return the contents of the Login Token.
+The frontend uses this challenge to detect whether a member is logged in and to obtain the member cuid for a follow-on account read. The report does not return the contents of the Login Token.
 <<<
 DERIVED: True
-CHANGE_DRIVER: GSSC5-12
+CHANGE_DRIVER: >>>
+GSSC5-12
+GSSC5-58
+<<<
 REVIEW_STATUS: Approved
 
 [REQUIREMENT]

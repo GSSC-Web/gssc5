@@ -6,12 +6,25 @@ const LEGACY_TOKEN_KEY = 'gssc.memberSessionToken';
 const NAME_KEY = 'gssc.memberDisplayName';
 const EMAIL_KEY = 'gssc.memberEmailAddress';
 
+type ChallengeReport =
+  | { status: 'valid'; cuid: string }
+  | { status: 'invalid' };
+
+type AccountView = {
+  firstName?: string | null;
+  lastName?: string | null;
+  username?: string;
+  primaryEmail?: string | null;
+  isAdmin?: boolean;
+};
+
 /**
  * Treaty calls used by MemberSession. Mutable object so unit tests can stub
- * logout/challenge without fighting Eden Treaty proxies.
+ * challenge / profile / logout without fighting Eden Treaty proxies.
  */
 export const memberSessionApi = {
   challenge: () => backend.challenge.post({}),
+  getUser: (cuid: string) => backend.users({ cuid }).get(),
   logout: () => backend.logout.post({}),
 };
 
@@ -31,12 +44,21 @@ export class MemberSession {
   async refresh(): Promise<void> {
     try {
       // Login Token arrives via HttpOnly cookie; credentialed challenge reads it.
+      // Valid challenge includes member cuid (BLLR-399); FE loads account for greeting/admin.
       const { data, error } = await memberSessionApi.challenge();
-      if (error || data !== 'valid') {
+      const report = asChallengeReport(data);
+      if (error || !report || report.status !== 'valid') {
         this.clearLocal();
         return;
       }
-      this.loggedIn.set(true);
+
+      const profile = await memberSessionApi.getUser(report.cuid);
+      if (profile.error || !profile.data) {
+        this.clearLocal();
+        return;
+      }
+
+      this.applyAccount(profile.data as AccountView);
     } catch {
       this.clearLocal();
     }
@@ -86,6 +108,15 @@ export class MemberSession {
     return true;
   }
 
+  private applyAccount(user: AccountView): void {
+    const name = displayNameFromAccount(user);
+    this.setSession(name);
+    this.isAdministrator.set(user.isAdmin === true);
+    if (typeof user.primaryEmail === 'string' && user.primaryEmail.length > 0) {
+      this.setEmailAddress(user.primaryEmail);
+    }
+  }
+
   private clearLocal(): void {
     this.displayName.set('');
     this.emailAddress.set('');
@@ -95,6 +126,28 @@ export class MemberSession {
     this.loggedIn.set(false);
     this.isAdministrator.set(false);
   }
+}
+
+function asChallengeReport(data: unknown): ChallengeReport | null {
+  if (!data || typeof data !== 'object') return null;
+  const record = data as { status?: unknown; cuid?: unknown };
+  if (record.status === 'invalid') return { status: 'invalid' };
+  if (
+    record.status === 'valid' &&
+    typeof record.cuid === 'string' &&
+    record.cuid.length > 0
+  ) {
+    return { status: 'valid', cuid: record.cuid };
+  }
+  return null;
+}
+
+function displayNameFromAccount(user: AccountView): string {
+  const parts = [user.firstName, user.lastName].filter(
+    (part): part is string => typeof part === 'string' && part.trim().length > 0,
+  );
+  if (parts.length > 0) return parts.join(' ');
+  return typeof user.username === 'string' ? user.username.trim() : '';
 }
 
 function readStored(key: string): string | null {
