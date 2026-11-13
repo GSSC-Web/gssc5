@@ -6,7 +6,6 @@ import { UrgentAnnouncements, type UrgentAnnouncement } from '../../services/urg
 @Component({
   selector: 'gssc-announcements-bar',
   templateUrl: './announcements-bar.html',
-  styleUrl: './announcements-bar.css',
 })
 export class AnnouncementsBar {
   private readonly router = inject(Router);

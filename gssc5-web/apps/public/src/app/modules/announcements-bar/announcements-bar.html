@@ -1,14 +1,21 @@
-<aside class="gssc-announcements-bar" aria-label="Urgent announcements">
+<!-- @relation(GSSC-PLLR-17, scope=range_start, role=Implementation) -->
+<aside
+  class="gssc-announcements-bar flex flex-col gap-2 border-b border-gssc-gray bg-gssc-cream px-4 py-3"
+  aria-label="Urgent announcements"
+>
   <!-- @relation(GSSC-PLLR-15, scope=range_start, role=Implementation) -->
   @for (announcement of announcements(); track announcement.id) {
     <button
       type="button"
-      class="gssc-announcements-bar__item"
+      class="gssc-announcements-bar__item flex w-full cursor-pointer flex-col items-start gap-1 rounded px-3 py-2 text-start hover:bg-gssc-light-green focus-visible:bg-gssc-light-green focus-visible:outline-none"
       (click)="selectAnnouncement(announcement)"
     >
-      <span class="gssc-announcements-bar__title">{{ announcement.title }}</span>
-      <span class="gssc-announcements-bar__text">{{ announcement.text }}</span>
+      <span class="gssc-announcements-bar__title font-semibold text-gssc-dark-green">{{
+        announcement.title
+      }}</span>
+      <span class="gssc-announcements-bar__text text-gssc-dark-brown">{{ announcement.text }}</span>
     </button>
   }
   <!-- @relation(GSSC-PLLR-15, scope=range_end, role=Implementation) -->
 </aside>
+<!-- @relation(GSSC-PLLR-17, scope=range_end, role=Implementation) -->
