@@ -6,6 +6,15 @@ const LEGACY_TOKEN_KEY = 'gssc.memberSessionToken';
 const NAME_KEY = 'gssc.memberDisplayName';
 const EMAIL_KEY = 'gssc.memberEmailAddress';
 
+/**
+ * Treaty calls used by MemberSession. Mutable object so unit tests can stub
+ * logout/challenge without fighting Eden Treaty proxies.
+ */
+export const memberSessionApi = {
+  challenge: () => backend.challenge.post({}),
+  logout: () => backend.logout.post({}),
+};
+
 @Injectable({ providedIn: 'root' })
 export class MemberSession {
   readonly loggedIn = signal(false);
@@ -22,7 +31,7 @@ export class MemberSession {
   async refresh(): Promise<void> {
     try {
       // Login Token arrives via HttpOnly cookie; credentialed challenge reads it.
-      const { data, error } = await backend.challenge.post({});
+      const { data, error } = await memberSessionApi.challenge();
       if (error || data !== 'valid') {
         this.clearLocal();
         return;
@@ -59,13 +68,22 @@ export class MemberSession {
     writeStored(EMAIL_KEY, email || null);
   }
 
-  async logout(): Promise<void> {
-    this.clearLocal();
+  /**
+   * End the backend Login Token first, then clear public UI session state.
+   * On logout failure, keep the local UI logged-in so it does not diverge from
+   * a still-live cookie/row (GSSC-PLLR-64 / GSSC5-59).
+   */
+  async logout(): Promise<boolean> {
     try {
-      await backend.logout.post({});
+      const { error } = await memberSessionApi.logout();
+      if (error) {
+        return false;
+      }
     } catch {
-      // Backend logout is best-effort once the public session is cleared.
+      return false;
     }
+    this.clearLocal();
+    return true;
   }
 
   private clearLocal(): void {
