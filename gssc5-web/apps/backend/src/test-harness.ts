@@ -442,7 +442,40 @@ export async function postJson(
 export function classifyReport(body: string): "valid" | "invalid" | "other" {
   const trimmed = body.trim();
   if (trimmed === "valid" || trimmed === "invalid") return trimmed;
+  try {
+    const parsed = JSON.parse(trimmed) as { status?: unknown };
+    if (parsed?.status === "valid" || parsed?.status === "invalid") {
+      return parsed.status;
+    }
+  } catch {
+    // Non-JSON challenge bodies are neither valid nor invalid reports.
+  }
   return "other";
+}
+
+/** Parse a challenge response body into status and optional member cuid. */
+export function parseChallengeReport(body: string): {
+  status: "valid" | "invalid" | "other";
+  cuid: string | null;
+} {
+  const trimmed = body.trim();
+  try {
+    const parsed = JSON.parse(trimmed) as { status?: unknown; cuid?: unknown };
+    if (parsed?.status === "valid") {
+      return {
+        status: "valid",
+        cuid: typeof parsed.cuid === "string" && parsed.cuid.length > 0 ? parsed.cuid : null,
+      };
+    }
+    if (parsed?.status === "invalid") {
+      return { status: "invalid", cuid: null };
+    }
+  } catch {
+    // Fall through to legacy string reports.
+  }
+  if (trimmed === "valid") return { status: "valid", cuid: null };
+  if (trimmed === "invalid") return { status: "invalid", cuid: null };
+  return { status: "other", cuid: null };
 }
 
 function setCookieValues(headers: Headers): string[] {

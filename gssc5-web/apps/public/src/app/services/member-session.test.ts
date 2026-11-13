@@ -2,6 +2,8 @@ import { TestBed } from '@angular/core/testing';
 import { MemberSession, memberSessionApi } from './member-session';
 
 type LogoutFn = typeof memberSessionApi.logout;
+type ChallengeFn = typeof memberSessionApi.challenge;
+type GetUserFn = typeof memberSessionApi.getUser;
 
 function stubLogout(outcome: 'success' | 'error' | 'throw'): () => void {
   const original = memberSessionApi.logout;
@@ -35,12 +37,12 @@ function stubChallengeInvalid(): () => void {
   const original = memberSessionApi.challenge;
   memberSessionApi.challenge = (async () =>
     ({
-      data: 'invalid',
+      data: { status: 'invalid' },
       error: null,
       response: new Response(null, { status: 200 }),
       status: 200,
       headers: new Headers(),
-    })) as unknown as typeof memberSessionApi.challenge;
+    })) as unknown as ChallengeFn;
   return () => {
     memberSessionApi.challenge = original;
   };
@@ -120,6 +122,102 @@ test('MemberSession logout keeps UI logged-in when backend logout throws', async
     expect(session.loggedIn()).toBe(true);
   } finally {
     restore();
+    restoreChallenge();
+  }
+});
+
+test('MemberSession hydrates greeting name from account after challenge', async () => {
+  const { session, restoreChallenge } = await freshSession();
+  restoreChallenge();
+
+  const originalChallenge = memberSessionApi.challenge;
+  const originalGetUser = memberSessionApi.getUser;
+  memberSessionApi.challenge = (async () =>
+    ({
+      data: { status: 'valid', cuid: 'member-cuid' },
+      error: null,
+      response: new Response(null, { status: 200 }),
+      status: 200,
+      headers: new Headers(),
+    })) as unknown as ChallengeFn;
+  memberSessionApi.getUser = (async (cuid: string) => {
+    expect(cuid).toBe('member-cuid');
+    return {
+      data: {
+        cuid: 'member-cuid',
+        firstName: 'Ada',
+        lastName: 'Lovelace',
+        isAdmin: false,
+        primaryEmail: 'ada@example.com',
+      },
+      error: null,
+      response: new Response(null, { status: 200 }),
+      status: 200,
+      headers: new Headers(),
+    };
+  }) as unknown as GetUserFn;
+
+  try {
+    await session.refresh();
+    expect(session.loggedIn()).toBe(true);
+    expect(session.displayName()).toBe('Ada Lovelace');
+    expect(session.isAdministrator()).toBe(false);
+    expect(session.emailAddress()).toBe('ada@example.com');
+  } finally {
+    memberSessionApi.challenge = originalChallenge;
+    memberSessionApi.getUser = originalGetUser;
+  }
+});
+
+test('MemberSession hydrates administrator flag from account', async () => {
+  const { session, restoreChallenge } = await freshSession();
+  restoreChallenge();
+
+  const originalChallenge = memberSessionApi.challenge;
+  const originalGetUser = memberSessionApi.getUser;
+  memberSessionApi.challenge = (async () =>
+    ({
+      data: { status: 'valid', cuid: 'admin-cuid' },
+      error: null,
+      response: new Response(null, { status: 200 }),
+      status: 200,
+      headers: new Headers(),
+    })) as unknown as ChallengeFn;
+  memberSessionApi.getUser = (async () =>
+    ({
+      data: {
+        cuid: 'admin-cuid',
+        firstName: 'Admin',
+        lastName: 'User',
+        isAdmin: true,
+      },
+      error: null,
+      response: new Response(null, { status: 200 }),
+      status: 200,
+      headers: new Headers(),
+    })) as unknown as GetUserFn;
+
+  try {
+    await session.refresh();
+    expect(session.loggedIn()).toBe(true);
+    expect(session.isAdministrator()).toBe(true);
+    expect(session.displayName()).toBe('Admin User');
+  } finally {
+    memberSessionApi.challenge = originalChallenge;
+    memberSessionApi.getUser = originalGetUser;
+  }
+});
+
+test('MemberSession clears local session when challenge is invalid', async () => {
+  const { session, restoreChallenge } = await freshSession();
+  session.setSession('Stale');
+  session.isAdministrator.set(true);
+  try {
+    await session.refresh();
+    expect(session.loggedIn()).toBe(false);
+    expect(session.displayName()).toBe('');
+    expect(session.isAdministrator()).toBe(false);
+  } finally {
     restoreChallenge();
   }
 });

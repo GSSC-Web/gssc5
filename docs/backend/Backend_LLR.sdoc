@@ -530,11 +530,32 @@ STATEMENT: >>>
 The GSSC Website Unified Backend SHALL report a challenged Login Token as valid or invalid. The report is valid for a Login Token issued for a successful member login that has not expired and has not been logged out. The report does not include the contents of the Login Token.
 <<<
 RATIONALE: >>>
-The challenge tells the caller whether the Login Token is valid. The report is only valid or invalid, and it does not return the token contents.
+The challenge tells the caller whether the Login Token is valid without returning the token contents.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-33
+CHANGE_DRIVER: >>>
+GSSC5-33
+GSSC5-58
+<<<
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-3
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-399
+TITLE: Login Token Challenge Member Cuid
+STATEMENT: >>>
+When a challenged Login Token report is valid, the GSSC Website Unified Backend SHALL include the member cuid for that Login Token in the report.
+<<<
+RATIONALE: >>>
+A valid challenge needs the member cuid so the caller can load that member's account data without receiving the Login Token itself.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-58
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent

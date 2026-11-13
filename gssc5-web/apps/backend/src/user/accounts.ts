@@ -39,7 +39,15 @@ const LoginOk = t.Object({
   status: t.Literal("ok"),
 });
 
-const ChallengeResult = t.Union([t.Literal("valid"), t.Literal("invalid")]);
+const ChallengeResult = t.Union([
+  t.Object({
+    status: t.Literal("valid"),
+    cuid: t.String({ minLength: 1 }),
+  }),
+  t.Object({
+    status: t.Literal("invalid"),
+  }),
+]);
 
 // Used when the identifier matches nobody, so that failure still runs one Argon2id verify.
 const DUMMY_PASSWORD_HASH =
@@ -130,13 +138,16 @@ export const accounts = new Elysia({
       const { prisma } = runtime();
       const token = loginTokenFromCookie(cookie);
 
-      // @relation(GSSC-BLLR-9, GSSC-BLLR-12, GSSC-BLLR-318, scope=range_start, role=Implementation)
-      if (!token) return "invalid";
+      // @relation(GSSC-BLLR-9, GSSC-BLLR-12, GSSC-BLLR-318, GSSC-BLLR-399, scope=range_start, role=Implementation)
+      if (!token) return { status: "invalid" as const };
       const row = await prisma.loginToken.findUnique({
         where: { tokenHash: hashLoginToken(token) },
       });
-      return classifyLoginTokenRow(row) === "ok" ? "valid" : "invalid";
-      // @relation(GSSC-BLLR-9, GSSC-BLLR-12, GSSC-BLLR-318, scope=range_end, role=Implementation)
+      if (classifyLoginTokenRow(row) !== "ok" || !row) {
+        return { status: "invalid" as const };
+      }
+      return { status: "valid" as const, cuid: row.userId };
+      // @relation(GSSC-BLLR-9, GSSC-BLLR-12, GSSC-BLLR-318, GSSC-BLLR-399, scope=range_end, role=Implementation)
     },
     {
       cookie: loginTokenCookie,
