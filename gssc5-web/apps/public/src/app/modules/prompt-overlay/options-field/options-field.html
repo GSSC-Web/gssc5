@@ -2,16 +2,16 @@
 <fieldset
   class="gssc-prompt-options-field relative mt-2 min-w-0 rounded-md border px-2 pb-2 pt-3 font-sans"
   [class.border-gssc-dark-green]="!invalid()"
-  [class.border-red-500]="invalid()"
+  [class.border-gssc-dark-red]="invalid()"
   [class.bg-gssc-white]="enabled() && !invalid()"
   [class.bg-gssc-gray]="!enabled()"
-  [class.bg-red-50]="invalid()"
+  [class.bg-gssc-light-red]="invalid()"
   [disabled]="!enabled()"
 >
   <legend
     class="gssc-prompt-options-field__label px-1 text-xs font-extralight italic"
     [class.text-gssc-dark-green]="!invalid()"
-    [class.text-red-500]="invalid()"
+    [class.text-gssc-dark-red]="invalid()"
   >
     {{ label() }}@if (required()) {
       <span aria-hidden="true">&nbsp;*</span>
@@ -22,7 +22,7 @@
       <label
         class="gssc-prompt-options-field__choice flex items-center gap-2 text-sm font-normal"
         [class.text-gssc-dark-green]="!invalid()"
-        [class.text-red-500]="invalid()"
+        [class.text-gssc-dark-red]="invalid()"
       >
         <input
           class="gssc-prompt-options-field__radio"

@@ -2,15 +2,15 @@
 <div
   class="gssc-prompt-options-list-field relative mt-2 flex min-w-0 flex-col rounded-md border px-1 py-1 font-sans"
   [class.border-gssc-dark-green]="!invalid()"
-  [class.border-red-500]="invalid()"
+  [class.border-gssc-dark-red]="invalid()"
   [class.bg-gssc-white]="enabled() && !invalid()"
   [class.bg-gssc-gray]="!enabled()"
-  [class.bg-red-50]="invalid()"
+  [class.bg-gssc-light-red]="invalid()"
 >
   <label
     class="gssc-prompt-options-list-field__label absolute -top-2 start-2 bg-inherit px-1 text-xs font-extralight italic"
     [class.text-gssc-dark-green]="!invalid()"
-    [class.text-red-500]="invalid()"
+    [class.text-gssc-dark-red]="invalid()"
     [attr.for]="controlId()"
   >
     {{ label() }}@if (required()) {
@@ -20,7 +20,7 @@
   <select
     class="gssc-prompt-options-list-field__control w-full border-0 bg-transparent py-2 font-sans outline-none"
     [class.text-gssc-dark-green]="!invalid()"
-    [class.text-red-500]="invalid()"
+    [class.text-gssc-dark-red]="invalid()"
     [id]="controlId()"
     [disabled]="!enabled()"
     [attr.aria-invalid]="invalid()"

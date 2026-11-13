@@ -101,8 +101,8 @@ test('GSSC-PLLR-118 Lexical', async () => {
   host.invalid.set(true);
   fixture.detectChanges();
   const invalidField = root.querySelector<HTMLElement>('.gssc-prompt-text-field')!;
-  expect(invalidField.classList.contains('border-red-500')).toBe(true);
-  expect(root.querySelector('.gssc-prompt-text-field__label')!.classList.contains('text-red-500')).toBe(
+  expect(invalidField.classList.contains('border-gssc-dark-red')).toBe(true);
+  expect(root.querySelector('.gssc-prompt-text-field__label')!.classList.contains('text-gssc-dark-red')).toBe(
     true,
   );
 });

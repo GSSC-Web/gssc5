@@ -2,15 +2,15 @@
 <div
   class="gssc-prompt-file-field relative mt-2 flex min-w-0 flex-col rounded-md border px-1 py-2 font-sans"
   [class.border-gssc-dark-green]="!invalid()"
-  [class.border-red-500]="invalid()"
+  [class.border-gssc-dark-red]="invalid()"
   [class.bg-gssc-white]="enabled() && !invalid()"
   [class.bg-gssc-gray]="!enabled()"
-  [class.bg-red-50]="invalid()"
+  [class.bg-gssc-light-red]="invalid()"
 >
   <label
     class="gssc-prompt-file-field__label absolute -top-2 start-2 bg-inherit px-1 text-xs font-extralight italic"
     [class.text-gssc-dark-green]="!invalid()"
-    [class.text-red-500]="invalid()"
+    [class.text-gssc-dark-red]="invalid()"
     [attr.for]="controlId()"
   >
     {{ label() }}@if (required()) {
@@ -20,7 +20,7 @@
   <input
     class="gssc-prompt-file-field__control w-full border-0 bg-transparent font-sans text-sm outline-none"
     [class.text-gssc-dark-green]="!invalid()"
-    [class.text-red-500]="invalid()"
+    [class.text-gssc-dark-red]="invalid()"
     type="file"
     [id]="controlId()"
     [disabled]="!enabled()"
@@ -31,7 +31,7 @@
     (keydown.escape)="fieldEscape.emit()"
   />
   @if (value(); as file) {
-    <p class="gssc-prompt-file-field__name m-0 px-2 text-xs" [class.text-gssc-dark-green]="!invalid()" [class.text-red-500]="invalid()">
+    <p class="gssc-prompt-file-field__name m-0 px-2 text-xs" [class.text-gssc-dark-green]="!invalid()" [class.text-gssc-dark-red]="invalid()">
       {{ file.name }}
     </p>
   }

@@ -62,7 +62,7 @@ test('GSSC-PLLR-130 Lexical', async () => {
   );
   host.invalid.set(true);
   fixture.detectChanges();
-  expect(root.querySelector('.gssc-prompt-file-field')!.classList.contains('border-red-500')).toBe(
+  expect(root.querySelector('.gssc-prompt-file-field')!.classList.contains('border-gssc-dark-red')).toBe(
     true,
   );
 });

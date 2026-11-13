@@ -59,7 +59,7 @@ test('GSSC-PLLR-127 Lexical', async () => {
   expect(button.classList.contains('font-normal')).toBe(true);
   host.invalid.set(true);
   fixture.detectChanges();
-  expect(root.querySelector('.gssc-prompt-button-field')!.classList.contains('border-red-500')).toBe(
+  expect(root.querySelector('.gssc-prompt-button-field')!.classList.contains('border-gssc-dark-red')).toBe(
     true,
   );
 });
