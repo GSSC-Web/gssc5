@@ -254,6 +254,12 @@ export const users = new Elysia({
       }
       // @relation(GSSC-BLLR-264, scope=range_end, role=Implementation)
 
+      // @relation(GSSC-BLLR-265, GSSC-BLLR-266, scope=range_start, role=Implementation)
+      if (!session.user.isAdmin && !session.user.isUserMod) {
+        return status(403, "Forbidden" as const);
+      }
+      // @relation(GSSC-BLLR-265, GSSC-BLLR-266, scope=range_end, role=Implementation)
+
       const { prisma } = runtime();
       // @relation(GSSC-BLLR-267, scope=range_start, role=Implementation)
       const target = await prisma.user.findUnique({
@@ -262,12 +268,6 @@ export const users = new Elysia({
       });
       if (!target) return status(404, "Not Found" as const);
       // @relation(GSSC-BLLR-267, scope=range_end, role=Implementation)
-
-      // @relation(GSSC-BLLR-265, GSSC-BLLR-266, scope=range_start, role=Implementation)
-      if (!session.user.isAdmin && !session.user.isUserMod) {
-        return status(403, "Forbidden" as const);
-      }
-      // @relation(GSSC-BLLR-265, GSSC-BLLR-266, scope=range_end, role=Implementation)
 
       // @relation(GSSC-BLLR-263, scope=range_start, role=Implementation)
       await prisma.passwordHistory.deleteMany({ where: { userId: target.id } });

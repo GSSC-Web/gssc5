@@ -752,6 +752,8 @@ test("GSSC-BLLR-266 Clear Past Passwords Forbidden", async () => {
   const memberToken = await loginRegular(STRONG_NEXT);
   expect((await clearPasswords(memberId, memberToken)).status).toBe(403);
   expect((await historyHashes()).length).toBe(1);
+  // Non-moderator must get the same forbid for missing cuid (no existence oracle).
+  expect((await clearPasswords("missing-user-cuid", memberToken)).status).toBe(403);
 });
 // @relation(GSSC-BLLR-266, scope=range_end, role=Test)
 
