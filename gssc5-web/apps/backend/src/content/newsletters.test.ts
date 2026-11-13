@@ -31,7 +31,8 @@ beforeAll(async () => {
       passwordHash,
       isAdmin: false,
       isUserMod: false,
-      isPublicationEditor: true,
+      isPublicationEditor: false,
+      isNewsletterEditor: true,
       firstName: "Nl",
       lastName: "Editor",
       primaryPhone: "2095550401",
@@ -56,6 +57,7 @@ beforeAll(async () => {
       isAdmin: false,
       isUserMod: false,
       isPublicationEditor: false,
+      isNewsletterEditor: false,
       firstName: "Plain",
       lastName: "Member",
       primaryPhone: "2095550402",
@@ -286,6 +288,47 @@ test("GSSC-BLLR-389 Newsletter Creation Forbidden", async () => {
   expect(status).toBe(403);
   const after = await getPrisma(loadConfig().DATABASE_URL).newsletter.count();
   expect(after).toBe(before);
+
+  // Publication editor alone is not newsletter editor authorization.
+  const prisma = getPrisma(loadConfig().DATABASE_URL);
+  const passwordHash = await Bun.password.hash("pub-only-nl-secret", "argon2id");
+  await prisma.user.create({
+    data: {
+      username: "pub-only-nl",
+      primaryEmail: "pub.only.nl@example.com",
+      passwordHash,
+      isAdmin: false,
+      isUserMod: false,
+      isPublicationEditor: true,
+      isNewsletterEditor: false,
+      firstName: "Pub",
+      lastName: "Only",
+      primaryPhone: "2095550403",
+      preferredContactMethod: "Email",
+      homeLine1: "3 Pub",
+      homeCity: "Modesto",
+      homeState: "CA",
+      homeZip: "95350",
+      mailingLine1: "3 Pub",
+      mailingCity: "Modesto",
+      mailingState: "CA",
+      mailingZip: "95350",
+    },
+  });
+  const pubOnlyTok =
+    (await establishedLogin(backend, {
+      username: "pub-only-nl",
+      password: "pub-only-nl-secret",
+    })) ?? "";
+  expect(pubOnlyTok.length).toBeGreaterThan(0);
+  const asPub = await sendJson(
+    "POST",
+    "/newsletters",
+    sampleFields("pub-only"),
+    pubOnlyTok,
+  );
+  expect(asPub.status).toBe(403);
+  expect(await prisma.newsletter.count()).toBe(after);
 });
 // @relation(GSSC-BLLR-389, scope=range_end, role=Test)
 

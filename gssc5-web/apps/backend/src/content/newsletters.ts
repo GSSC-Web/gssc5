@@ -28,7 +28,7 @@ const NewsletterEntry = t.Object({
 
 type Session =
   | { failure: "missing" | "unknown" | "logged-out" | "expired" }
-  | { user: { isAdmin: boolean; isPublicationEditor: boolean } };
+  | { user: { isAdmin: boolean; isNewsletterEditor: boolean } };
 
 type NewsletterRow = {
   id: string;
@@ -54,9 +54,9 @@ function toEntry(row: NewsletterRow) {
 
 function canEditNewsletters(user: {
   isAdmin: boolean;
-  isPublicationEditor: boolean;
+  isNewsletterEditor: boolean;
 }): boolean {
-  return user.isAdmin || user.isPublicationEditor;
+  return user.isAdmin || user.isNewsletterEditor;
 }
 
 async function openSession(cookie: CookieJar): Promise<Session> {
@@ -67,7 +67,7 @@ async function openSession(cookie: CookieJar): Promise<Session> {
   const row = await prisma.loginToken.findUnique({
     where: { tokenHash: hashLoginToken(token) },
     include: {
-      user: { select: { isAdmin: true, isPublicationEditor: true } },
+      user: { select: { isAdmin: true, isNewsletterEditor: true } },
     },
   });
   const classified = classifyLoginTokenRow(row);

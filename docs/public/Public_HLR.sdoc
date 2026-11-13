@@ -2121,7 +2121,7 @@ CHANGE_DRIVER: >>>
 GSSC5-10
 GSSC5-20
 <<<
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-8
@@ -2141,7 +2141,7 @@ CHANGE_DRIVER: >>>
 GSSC5-10
 GSSC5-20
 <<<
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-8
@@ -2161,7 +2161,7 @@ CHANGE_DRIVER: >>>
 GSSC5-10
 GSSC5-20
 <<<
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-8
@@ -2181,7 +2181,7 @@ CHANGE_DRIVER: >>>
 GSSC5-10
 GSSC5-20
 <<<
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-8
@@ -2201,7 +2201,7 @@ CHANGE_DRIVER: >>>
 GSSC5-10
 GSSC5-20
 <<<
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-8
@@ -2218,7 +2218,7 @@ Month/Year selection is an alternate path to the same catalog as Volume/Number.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-20
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-8
@@ -2235,7 +2235,7 @@ Visitors can read the selected issue on the page without leaving it.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-20
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-8
@@ -2252,7 +2252,7 @@ Visitors can save the selected issue file.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-20
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-8
@@ -2269,7 +2269,7 @@ Year pairs with Month for calendar-based selection.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-20
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-8
@@ -2286,7 +2286,7 @@ Visitors pick one selection mode at a time without leaving the form.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-20
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-8
@@ -2303,7 +2303,7 @@ Deep links open a specific past issue. Unrecognized arguments fall back to the d
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-20
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-8
@@ -2320,7 +2320,7 @@ Optional intro content mirrors other public pages that load tagged sections abov
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-20
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-8

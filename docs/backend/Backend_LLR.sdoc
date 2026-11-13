@@ -6352,7 +6352,7 @@ The public newsletters page builds its selection menus from this ordered catalog
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-20
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-172
@@ -6370,7 +6370,7 @@ Keywords support catalog search without a separate FE search surface.
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-20
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-172
@@ -6386,7 +6386,7 @@ TITLE: POST
 UID: GSSC-BLLR-388
 TITLE: Newsletter Creation
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL create a newsletter for a logged-in member who is a publication editor or an administrator, requiring volume, number, month, year, file path, and keywords, and returning the created newsletter's cuid and those fields.
+The GSSC Website Unified Backend SHALL create a newsletter for a logged-in member who is a newsletter editor or an administrator, requiring volume, number, month, year, file path, and keywords, and returning the created newsletter's cuid and those fields.
 <<<
 RATIONALE: >>>
 Authorized editors add catalog rows with the fields the public page presents.
@@ -6394,7 +6394,7 @@ Authorized editors add catalog rows with the fields the public page presents.
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-20
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-213
@@ -6404,15 +6404,15 @@ RELATIONS:
 UID: GSSC-BLLR-389
 TITLE: Newsletter Creation Forbidden
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL reject newsletter creation without storing a newsletter when the caller is not a publication editor and is not an administrator.
+The GSSC Website Unified Backend SHALL reject newsletter creation without storing a newsletter when the caller is not a newsletter editor and is not an administrator.
 <<<
 RATIONALE: >>>
-Only publication editors and administrators may add newsletters.
+Only newsletter editors and administrators may add newsletters.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-20
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-213
@@ -6442,7 +6442,7 @@ Path cuid identifies one newsletter for display or editing.
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-20
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-173
@@ -6458,7 +6458,7 @@ TITLE: PATCH
 UID: GSSC-BLLR-391
 TITLE: Newsletter Modification
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL modify a newsletter by cuid for a logged-in member who is a publication editor or an administrator, accepting volume, number, month, year, file path, and keywords updates, and returning the updated newsletter.
+The GSSC Website Unified Backend SHALL modify a newsletter by cuid for a logged-in member who is a newsletter editor or an administrator, accepting volume, number, month, year, file path, and keywords updates, and returning the updated newsletter.
 <<<
 RATIONALE: >>>
 Authorized editors keep newsletter fields current.
@@ -6466,7 +6466,7 @@ Authorized editors keep newsletter fields current.
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-20
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-214
@@ -6476,15 +6476,15 @@ RELATIONS:
 UID: GSSC-BLLR-392
 TITLE: Newsletter Modification Forbidden
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL reject newsletter modification without changing the newsletter when the caller is not a publication editor and is not an administrator.
+The GSSC Website Unified Backend SHALL reject newsletter modification without changing the newsletter when the caller is not a newsletter editor and is not an administrator.
 <<<
 RATIONALE: >>>
-Only publication editors and administrators may change newsletters.
+Only newsletter editors and administrators may change newsletters.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-20
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-214
@@ -6500,7 +6500,7 @@ TITLE: DELETE
 UID: GSSC-BLLR-393
 TITLE: Newsletter Deletion
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL delete a newsletter by cuid for a logged-in member who is a publication editor or an administrator.
+The GSSC Website Unified Backend SHALL delete a newsletter by cuid for a logged-in member who is a newsletter editor or an administrator.
 <<<
 RATIONALE: >>>
 Authorized editors remove newsletters that are no longer listed.
@@ -6508,7 +6508,7 @@ Authorized editors remove newsletters that are no longer listed.
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-20
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-215
@@ -6518,15 +6518,15 @@ RELATIONS:
 UID: GSSC-BLLR-394
 TITLE: Newsletter Deletion Forbidden
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL reject newsletter deletion without deleting the newsletter when the caller is not a publication editor and is not an administrator.
+The GSSC Website Unified Backend SHALL reject newsletter deletion without deleting the newsletter when the caller is not a newsletter editor and is not an administrator.
 <<<
 RATIONALE: >>>
-Only publication editors and administrators may delete newsletters.
+Only newsletter editors and administrators may delete newsletters.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-20
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-215
@@ -7312,6 +7312,42 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
+UID: GSSC-BLLR-397
+TITLE: User is newsletter editor
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store is newsletter editor for each user in the users table. is newsletter editor is true or false. A user created before this column exists stores false.
+<<<
+RATIONALE: >>>
+is newsletter editor is a stored site privilege that authorizes newsletters catalog changes and is separate from is publication editor. Existing users store false.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-20
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-111
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-398
+TITLE: Administrator Sets Newsletter Editor
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL let an administrator set is newsletter editor true or false on a member account.
+<<<
+RATIONALE: >>>
+Administrators assign the newsletter editor privilege so authorized members can maintain the newsletters catalog.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-20
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-111
+  ROLE: Refines
+
+[REQUIREMENT]
 UID: GSSC-BLLR-64
 TITLE: User Membership Status
 STATEMENT: >>>
@@ -7683,7 +7719,7 @@ The dedicated table is the source of truth for the public newsletters catalog. F
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-20
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-216

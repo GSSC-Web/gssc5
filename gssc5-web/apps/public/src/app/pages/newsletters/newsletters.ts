@@ -108,7 +108,6 @@ async function defaultNewsletterSectionListByTag(
 }
 
 async function defaultNewsletterFileResolve(filePath: string): Promise<string | null> {
-  // @relation(GSSC-PLLR-225, GSSC-PLLR-252, scope=range_start, role=Implementation)
   const url = filesApiUrl(filePath);
   try {
     const response = await fetch(url, { credentials: 'include' });
@@ -119,7 +118,6 @@ async function defaultNewsletterFileResolve(filePath: string): Promise<string | 
   } catch {
     return null;
   }
-  // @relation(GSSC-PLLR-225, GSSC-PLLR-252, scope=range_end, role=Implementation)
 }
 
 function sortIntroByIndex(
@@ -168,35 +166,27 @@ export class NewslettersPage {
     return entryByCuid(this.catalog(), cuid);
   });
 
-  // @relation(GSSC-PLLR-210, scope=range_start, role=Implementation)
   readonly volumes = computed(() => catalogVolumes(this.catalog()));
-  // @relation(GSSC-PLLR-210, scope=range_end, role=Implementation)
 
   readonly selectedVolume = computed(() => this.selected()?.volume ?? null);
 
-  // @relation(GSSC-PLLR-213, scope=range_start, role=Implementation)
   readonly numbers = computed(() => {
     const volume = this.selectedVolume();
     if (volume === null) return [] as number[];
     return numbersForVolume(this.catalog(), volume);
   });
-  // @relation(GSSC-PLLR-213, scope=range_end, role=Implementation)
 
   readonly selectedNumber = computed(() => this.selected()?.number ?? null);
 
-  // @relation(GSSC-PLLR-219, scope=range_start, role=Implementation)
   readonly years = computed(() => catalogYears(this.catalog()));
-  // @relation(GSSC-PLLR-219, scope=range_end, role=Implementation)
 
   readonly selectedYear = computed(() => this.selected()?.year ?? null);
 
-  // @relation(GSSC-PLLR-216, scope=range_start, role=Implementation)
   readonly months = computed(() => {
     const year = this.selectedYear();
     if (year === null) return [] as number[];
     return monthsForYear(this.catalog(), year);
   });
-  // @relation(GSSC-PLLR-216, scope=range_end, role=Implementation)
 
   readonly selectedMonth = computed(() => this.selected()?.month ?? null);
 

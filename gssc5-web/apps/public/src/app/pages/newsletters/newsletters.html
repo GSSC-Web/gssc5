@@ -2,7 +2,7 @@
 <div
   class="gssc-newsletters-page flex w-full flex-col gap-6 bg-gssc-white p-4 font-sans text-gssc-dark-green"
 >
-  <!-- @relation(GSSC-PLLR-255, GSSC-PLLR-256, GSSC-PLLR-257, scope=range_start, role=Implementation) -->
+  <!-- @relation(GSSC-PLLR-256, GSSC-PLLR-257, scope=range_start, role=Implementation) -->
   @if (introCuids().length > 0) {
     <div class="gssc-newsletters-intro flex w-full flex-col gap-4">
       @for (cuid of introCuids(); track cuid) {
@@ -10,15 +10,14 @@
       }
     </div>
   }
-  <!-- @relation(GSSC-PLLR-255, GSSC-PLLR-256, GSSC-PLLR-257, scope=range_end, role=Implementation) -->
+  <!-- @relation(GSSC-PLLR-256, GSSC-PLLR-257, scope=range_end, role=Implementation) -->
 
-  <!-- @relation(GSSC-PLLR-207, scope=range_start, role=Implementation) -->
   <form
     class="gssc-newsletters-form flex flex-col gap-4 border border-gssc-gray bg-gssc-white p-4 font-sans text-gssc-dark-green"
     aria-label="Newsletter selection"
     (submit)="$event.preventDefault()"
   >
-    <!-- @relation(GSSC-PLLR-222, GSSC-PLLR-223, GSSC-PLLR-224, scope=range_start, role=Implementation) -->
+    <!-- @relation(GSSC-PLLR-223, GSSC-PLLR-224, scope=range_start, role=Implementation) -->
     <fieldset
       class="gssc-newsletters-mode flex flex-wrap gap-3 border-0 p-0 font-sans text-gssc-dark-green"
       data-testid="newsletter-mode"
@@ -51,11 +50,11 @@
         Month / Year
       </label>
     </fieldset>
-    <!-- @relation(GSSC-PLLR-222, GSSC-PLLR-223, GSSC-PLLR-224, scope=range_end, role=Implementation) -->
+    <!-- @relation(GSSC-PLLR-223, GSSC-PLLR-224, scope=range_end, role=Implementation) -->
 
     <div class="gssc-newsletters-menus flex flex-wrap items-end gap-4">
       @if (selectionMode() === 'volume-number') {
-        <!-- @relation(GSSC-PLLR-210, GSSC-PLLR-211, GSSC-PLLR-212, scope=range_start, role=Implementation) -->
+        <!-- @relation(GSSC-PLLR-211, GSSC-PLLR-212, scope=range_start, role=Implementation) -->
         <label class="gssc-newsletters-volume flex min-w-40 flex-col gap-1 font-sans text-gssc-dark-green">
           <span class="gssc-newsletters-volume__label font-semibold">Volume</span>
           <select
@@ -69,9 +68,9 @@
             }
           </select>
         </label>
-        <!-- @relation(GSSC-PLLR-210, GSSC-PLLR-211, GSSC-PLLR-212, scope=range_end, role=Implementation) -->
+        <!-- @relation(GSSC-PLLR-211, GSSC-PLLR-212, scope=range_end, role=Implementation) -->
 
-        <!-- @relation(GSSC-PLLR-213, GSSC-PLLR-214, GSSC-PLLR-215, scope=range_start, role=Implementation) -->
+        <!-- @relation(GSSC-PLLR-214, GSSC-PLLR-215, scope=range_start, role=Implementation) -->
         <label class="gssc-newsletters-number flex min-w-40 flex-col gap-1 font-sans text-gssc-dark-green">
           <span class="gssc-newsletters-number__label font-semibold">Number</span>
           <select
@@ -85,9 +84,9 @@
             }
           </select>
         </label>
-        <!-- @relation(GSSC-PLLR-213, GSSC-PLLR-214, GSSC-PLLR-215, scope=range_end, role=Implementation) -->
+        <!-- @relation(GSSC-PLLR-214, GSSC-PLLR-215, scope=range_end, role=Implementation) -->
       } @else {
-        <!-- @relation(GSSC-PLLR-216, GSSC-PLLR-217, GSSC-PLLR-218, scope=range_start, role=Implementation) -->
+        <!-- @relation(GSSC-PLLR-217, GSSC-PLLR-218, scope=range_start, role=Implementation) -->
         <label class="gssc-newsletters-month flex min-w-40 flex-col gap-1 font-sans text-gssc-dark-green">
           <span class="gssc-newsletters-month__label font-semibold">Month</span>
           <select
@@ -101,9 +100,9 @@
             }
           </select>
         </label>
-        <!-- @relation(GSSC-PLLR-216, GSSC-PLLR-217, GSSC-PLLR-218, scope=range_end, role=Implementation) -->
+        <!-- @relation(GSSC-PLLR-217, GSSC-PLLR-218, scope=range_end, role=Implementation) -->
 
-        <!-- @relation(GSSC-PLLR-219, GSSC-PLLR-220, GSSC-PLLR-221, scope=range_start, role=Implementation) -->
+        <!-- @relation(GSSC-PLLR-220, GSSC-PLLR-221, scope=range_start, role=Implementation) -->
         <label class="gssc-newsletters-year flex min-w-40 flex-col gap-1 font-sans text-gssc-dark-green">
           <span class="gssc-newsletters-year__label font-semibold">Year</span>
           <select
@@ -117,11 +116,10 @@
             }
           </select>
         </label>
-        <!-- @relation(GSSC-PLLR-219, GSSC-PLLR-220, GSSC-PLLR-221, scope=range_end, role=Implementation) -->
+        <!-- @relation(GSSC-PLLR-220, GSSC-PLLR-221, scope=range_end, role=Implementation) -->
       }
     </div>
   </form>
-  <!-- @relation(GSSC-PLLR-207, scope=range_end, role=Implementation) -->
 
   <div class="gssc-newsletters-selected flex flex-col gap-3">
     <!-- @relation(GSSC-PLLR-252, GSSC-PLLR-253, GSSC-PLLR-254, scope=range_start, role=Implementation) -->
@@ -137,7 +135,7 @@
     }
     <!-- @relation(GSSC-PLLR-252, GSSC-PLLR-253, GSSC-PLLR-254, scope=range_end, role=Implementation) -->
 
-    <!-- @relation(GSSC-PLLR-225, GSSC-PLLR-226, GSSC-PLLR-227, scope=range_start, role=Implementation) -->
+    <!-- @relation(GSSC-PLLR-226, GSSC-PLLR-227, scope=range_start, role=Implementation) -->
     @if (previewSafeUrl(); as previewUrl) {
       <iframe
         class="gssc-newsletters-preview min-h-96 w-full border border-gssc-gray bg-gssc-white"
@@ -146,7 +144,7 @@
         data-testid="newsletter-preview"
       ></iframe>
     }
-    <!-- @relation(GSSC-PLLR-225, GSSC-PLLR-226, GSSC-PLLR-227, scope=range_end, role=Implementation) -->
+    <!-- @relation(GSSC-PLLR-226, GSSC-PLLR-227, scope=range_end, role=Implementation) -->
   </div>
 </div>
 <!-- @relation(GSSC-PLLR-208, GSSC-PLLR-209, scope=range_end, role=Implementation) -->

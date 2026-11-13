@@ -94,6 +94,9 @@ model User {
   // @relation(GSSC-BLLR-355, scope=range_start, role=Implementation)
   isPublicationEditor Boolean @default(false)
   // @relation(GSSC-BLLR-355, scope=range_end, role=Implementation)
+  // @relation(GSSC-BLLR-397, scope=range_start, role=Implementation)
+  isNewsletterEditor Boolean @default(false)
+  // @relation(GSSC-BLLR-397, scope=range_end, role=Implementation)
   // @relation(GSSC-BLLR-64, scope=range_start, role=Implementation)
   membershipStatus String?
   // @relation(GSSC-BLLR-64, scope=range_end, role=Implementation)

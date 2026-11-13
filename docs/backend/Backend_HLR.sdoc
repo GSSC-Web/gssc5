@@ -2629,7 +2629,7 @@ CHANGE_DRIVER: >>>
 GSSC5-12
 GSSC5-20
 <<<
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-31
@@ -2649,7 +2649,7 @@ CHANGE_DRIVER: >>>
 GSSC5-12
 GSSC5-20
 <<<
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-31
@@ -2659,14 +2659,14 @@ RELATIONS:
 UID: GSSC-BHLR-213
 TITLE: Newsletter Creation
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL accept creation of a newsletter by a logged-in member who is a publication editor or an administrator.
+The GSSC Website Unified Backend SHALL accept creation of a newsletter by a logged-in member who has newsletter editor authorization.
 <<<
 RATIONALE: >>>
-Authorized editors add catalog rows. Issue bytes are stored through file storage separately.
+Authorized newsletter editors add catalog rows. Issue bytes are stored through file storage separately.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-20
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-31
@@ -2676,14 +2676,14 @@ RELATIONS:
 UID: GSSC-BHLR-214
 TITLE: Newsletter Modification
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL accept modification of a newsletter by a logged-in member who is a publication editor or an administrator.
+The GSSC Website Unified Backend SHALL accept modification of a newsletter by a logged-in member who has newsletter editor authorization.
 <<<
 RATIONALE: >>>
-Authorized editors keep catalog fields current.
+Authorized newsletter editors keep catalog fields current.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-20
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-31
@@ -2693,14 +2693,31 @@ RELATIONS:
 UID: GSSC-BHLR-215
 TITLE: Newsletter Deletion
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL accept deletion of a newsletter by a logged-in member who is a publication editor or an administrator.
+The GSSC Website Unified Backend SHALL accept deletion of a newsletter by a logged-in member who has newsletter editor authorization.
 <<<
 RATIONALE: >>>
-Authorized editors remove catalog rows that are no longer listed.
+Authorized newsletter editors remove catalog rows that are no longer listed.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-20
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-31
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-217
+TITLE: Newsletter Editor Authorization
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL treat a newsletter editor and an administrator as authorized to create, modify, and delete newsletters.
+<<<
+RATIONALE: >>>
+The newsletter editor site privilege authorizes newsletters catalog changes and is separate from publication editor authorization. An administrator retains the same authorization. This requirement does not set how the privilege is stored.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-20
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-31
@@ -2717,7 +2734,7 @@ The dedicated table is the source of truth for the public newsletters catalog.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-20
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-31
