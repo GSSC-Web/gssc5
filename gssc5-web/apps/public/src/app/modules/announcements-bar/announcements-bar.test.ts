@@ -46,10 +46,10 @@ test('GSSC-PLLR-17 Lexical', async () => {
   const bar = root.querySelector<HTMLElement>('.gssc-announcements-bar')!;
   const title = root.querySelector<HTMLElement>('.gssc-announcements-bar__title')!;
   const text = root.querySelector<HTMLElement>('.gssc-announcements-bar__text')!;
-  // jsdom returns the var() form; that still proves the theme tokens are used.
-  expect(getComputedStyle(bar).backgroundColor).toBe('var(--gssc-cream)');
-  expect(getComputedStyle(bar).borderBottomColor).toBe('var(--gssc-gray)');
-  expect(getComputedStyle(title).color).toBe('var(--gssc-dark-green)');
-  expect(getComputedStyle(text).color).toBe('var(--gssc-dark-brown)');
+  // Prefer theme utility classes over getComputedStyle (jsdom / @layer limits).
+  expect(bar.classList.contains('bg-gssc-cream')).toBe(true);
+  expect(bar.classList.contains('border-gssc-gray')).toBe(true);
+  expect(title.classList.contains('text-gssc-dark-green')).toBe(true);
+  expect(text.classList.contains('text-gssc-dark-brown')).toBe(true);
 });
 // @relation(GSSC-PLLR-17, scope=range_end, role=Test)
