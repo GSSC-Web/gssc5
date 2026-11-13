@@ -78,7 +78,7 @@ test('GSSC-PLLR-133 Lexical', async () => {
   host.invalid.set(true);
   fixture.detectChanges();
   expect(
-    root.querySelector('.gssc-prompt-options-list-field')!.classList.contains('border-red-500'),
+    root.querySelector('.gssc-prompt-options-list-field')!.classList.contains('border-gssc-dark-red'),
   ).toBe(true);
 });
 // @relation(GSSC-PLLR-133, scope=range_end, role=Test)
