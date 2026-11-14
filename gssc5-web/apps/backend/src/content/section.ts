@@ -354,8 +354,9 @@ function applySectionFilters(
       if (!tags.some((tag) => includesInsensitive(tag, query.tag!))) return false;
     }
     if (query.content !== undefined) {
-      const hay = `${row.header ?? ""}\n${row.body}`;
-      if (!includesInsensitive(hay, query.content)) return false;
+      const inHeader = includesInsensitive(row.header ?? "", query.content);
+      const inBody = includesInsensitive(row.body, query.content);
+      if (!inHeader && !inBody) return false;
     }
     return true;
   });
