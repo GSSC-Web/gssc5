@@ -18,6 +18,26 @@
         "Board project key: GSSC5.",
         "Tool intent: list/get/create/update tasks; move status by column slug; task relations (blocks/subtask/related); labels; custom fields (Issue Type, Work Type, DoR/DoD, Fix Version, Implementation); comments."
       ]
+    },
+    "gssc-langgraph": {
+      "description": "GSSC-LangGraph MCP: SoftDev / TestDev / Closeout graphs (+ Health, Conversation) for short-lived GSSC5 ticket workers.",
+      "url": "${GSSC_LANGGRAPH_MCP_URL}",
+      "headers": {
+        "Authorization": "Bearer ${GSSC_LANGGRAPH_API_KEY}"
+      },
+      "env": {
+        "GSSC_LANGGRAPH_MCP_URL": "${GSSC_LANGGRAPH_MCP_URL}",
+        "GSSC_LANGGRAPH_API_KEY": "${GSSC_LANGGRAPH_API_KEY}",
+        "GSSC5_ROOT": "${GSSC5_ROOT}"
+      },
+      "notes": [
+        "Placeholders only — never commit real tokens.",
+        "Cursor namespace name: GSSC-LangGraph.",
+        "Tools: GSSC_Software_Dev, GSSC_Test_Development, GSSC_Closeout_Review, GSSC_Health, GSSC_Conversation.",
+        "Default short-lived ticket loop: .agents/skills/gssc-langgraph-ticket/SKILL.md.",
+        "Closeout requires changeSet.files (path/status) and/or unified diff --git — not prose.",
+        "Feedback / Defects: Kaneo project GSSC LangGraph (slug GLG)."
+      ]
     }
   }
 }

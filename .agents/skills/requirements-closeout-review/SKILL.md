@@ -28,4 +28,6 @@ enabled: true
 
 ## Orchestration
 
+Short-lived bots: call `GSSC_Closeout_Review` first (real `changeSet` + `diff --git`; see `gssc-langgraph-ticket`), then this skill — owner closeout ask still means Approve on PASS.
+
 After this and peer SW/test closeout skills PASS and PR merges to master → `kaneo-task-closeout`.

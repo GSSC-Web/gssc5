@@ -7,6 +7,7 @@ tags: [backend, elysia, prisma, cookies, kvs, content]
 
 # Backend
 
+- **Domain:** gssc5 backend (Elysia/Bun/Prisma) — SoftDev/TestDev plans use `bun test` / `mise run //backend:test`, not Angular/`ng test` and not LangGraph Python packaging.
 - App: `gssc5-web/apps/backend` (Elysia + Bun + Prisma).
 - Auth session: durable `login_tokens` rows; hash via `hashLoginToken`; cookie name `gssc_login_token`.
 - Cookie I/O through Elysia cookies (`loginTokenCookie`, `setLoginTokenCookie`, `clearLoginTokenCookie` in `src/user/login-session.ts`) — httpOnly, secure, sameSite lax, path `/`.

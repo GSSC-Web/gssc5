@@ -7,6 +7,7 @@ tags: [frontend, public, angular, theme]
 
 # Public app
 
+- **Domain:** gssc5 public FE (Angular/Tailwind) — SoftDev/TestDev plans use focused `ng test` / `mise run //public:test`, not LangGraph Python/`src/gssc_langgraph` packaging.
 - App: `gssc5-web/apps/public` (Angular + Tailwind + Eden Treaty).
 - Layout under `src/app/`: `modules/`, `pages/`, `services/`; multi-file classes get a folder. Bootstrap stays in `src/app/`.
 - Modules include `header`, `footer`, `announcements-bar`, `error` (Error Container: bottom-right Page Outlet panel; light/dark-red chrome matching Prompt field fail; admin collapsibles; Report/Dismiss chrome; Esc-when-focused + focus restore), `section` (Section Container places Contents: white chrome, 1.5× header, black body; equal Resource Buttons in a left-aligned horizontal strip; looping prev/next carousel only when the strip overflows Section width), `section-from-cuid` (takes a backend section cuid, fetches via Eden Treaty `GET /sections/{cuid}`, maps resources string→name/href, and renders through the Section Container), `prompt-overlay` (Prompt Overlay shell + child field modules: `text-field`, `select-field`, `options-field`, `button-field`, `file-field`, `options-list-field`, `prompt-form`).

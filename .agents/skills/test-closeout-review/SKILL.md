@@ -25,4 +25,4 @@ enabled: true
 
 ## Orchestration
 
-Peer with requirements + software closeout; then `kaneo-task-closeout` on master merge.
+Short-lived bots: call `GSSC_Closeout_Review` first (lean real `changeSet`; see `gssc-langgraph-ticket`), then this skill. Peer with requirements + software closeout; then `kaneo-task-closeout` on master merge.
