@@ -3,19 +3,28 @@ import { Elysia, t } from "elysia";
 import { loadConfig } from "./config";
 import { getPrisma } from "./db";
 import {
+  KeyValuePlain,
+  KeyValuePlainInputCreate,
+} from "./generated/prismabox/KeyValue";
+import {
   loginTokenCookie,
   resolveLoginSessionUser,
   type CookieJar,
 } from "./user/login-session";
 
-const KeyValueEntry = t.Object({
-  key: t.String(),
-  value: t.String(),
-});
-
 type Session =
   | { failure: "missing" | "unknown" | "logged-out" | "expired" }
   | { user: { isAdmin: boolean } };
+
+/**
+ * Upsert body matches Prismabox `KeyValuePlainInputCreate` (`value: string`).
+ * `additionalProperties: true` keeps ignored extras (e.g. body `token`) so auth
+ * can return 403 before a schema reject would otherwise surface as 422.
+ */
+const KeyValueUpsertBody = t.Object(
+  { value: KeyValuePlainInputCreate.properties.value },
+  { additionalProperties: true },
+);
 
 /** Global website key-value store (GSSC-BHLR-119 / GSSC5-43). */
 export const kvs = new Elysia({
@@ -24,6 +33,10 @@ export const kvs = new Elysia({
   normalize: false,
   sanitize: (value) => value.trim(),
 })
+  .model({
+    keyValue: KeyValuePlain,
+    keyValueCreate: KeyValuePlainInputCreate,
+  })
   .onTransform(({ body }) => {
     trimStrings(body);
   })
@@ -42,7 +55,7 @@ export const kvs = new Elysia({
         key: t.String({ minLength: 1 }),
       }),
       response: {
-        200: KeyValueEntry,
+        200: KeyValuePlain,
         404: t.Literal("Not Found"),
       },
     },
@@ -60,15 +73,7 @@ export const kvs = new Elysia({
       // @relation(GSSC-BLLR-298, GSSC-BLLR-299, scope=range_end, role=Implementation)
 
       // @relation(GSSC-BLLR-300, scope=range_start, role=Implementation)
-      const record = bodyRecord(body);
-      if (record === "malformed" || record === "missing") {
-        return status(422, "Invalid" as const);
-      }
-      if (!Object.prototype.hasOwnProperty.call(record, "value")) {
-        return status(422, "Invalid" as const);
-      }
-      const value = record.value;
-      if (typeof value !== "string") return status(422, "Invalid" as const);
+      const value = body.value;
       // @relation(GSSC-BLLR-300, scope=range_end, role=Implementation)
 
       // @relation(GSSC-BLLR-296, scope=range_start, role=Implementation)
@@ -85,7 +90,7 @@ export const kvs = new Elysia({
       params: t.Object({
         key: t.String({ minLength: 1 }),
       }),
-      body: t.Optional(t.Unknown()),
+      body: KeyValueUpsertBody,
       cookie: loginTokenCookie,
       response: {
         204: t.Void(),
@@ -99,12 +104,6 @@ async function openSession(cookie: CookieJar): Promise<Session> {
   return resolveLoginSessionUser(getPrisma(loadConfig().DATABASE_URL), cookie, {
     isAdmin: true,
   });
-}
-
-function bodyRecord(body: unknown): Record<string, unknown> | "missing" | "malformed" {
-  if (body === undefined || body === null) return "missing";
-  if (typeof body !== "object" || Array.isArray(body)) return "malformed";
-  return body as Record<string, unknown>;
 }
 
 function trimStrings(value: unknown): void {
