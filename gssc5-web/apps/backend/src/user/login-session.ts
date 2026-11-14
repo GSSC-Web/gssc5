@@ -8,6 +8,7 @@ import type { Prisma, PrismaClient, User } from "../generated/prisma/client";
 export const LOGIN_TOKEN_COOKIE = "gssc_login_token" as const;
 
 /** Elysia cookie schema: Login Token attributes applied by the framework. */
+// @relation(GSSC-BLLR-292, GSSC-BLLR-310, GSSC-BLLR-311, GSSC-BLLR-312, scope=range_start, role=Implementation)
 export const loginTokenCookie = t.Cookie(
   {
     [LOGIN_TOKEN_COOKIE]: t.Optional(t.String()),
@@ -19,6 +20,7 @@ export const loginTokenCookie = t.Cookie(
     path: "/",
   },
 );
+// @relation(GSSC-BLLR-292, GSSC-BLLR-310, GSSC-BLLR-311, GSSC-BLLR-312, scope=range_end, role=Implementation)
 
 export type CookieJar = Record<string, Cookie<unknown>>;
 
@@ -42,6 +44,7 @@ export function loginTokenFromCookie(cookie: CookieJar): string | null {
 }
 
 /** Issue the Login Token through Elysia's Cookie.set. */
+// @relation(GSSC-BLLR-309, GSSC-BLLR-313, scope=range_start, role=Implementation)
 export function setLoginTokenCookie(
   cookie: CookieJar,
   token: string,
@@ -54,6 +57,7 @@ export function setLoginTokenCookie(
     expires: expiresAt,
   });
 }
+// @relation(GSSC-BLLR-309, GSSC-BLLR-313, scope=range_end, role=Implementation)
 
 /** Clear the Login Token through Elysia's Cookie.remove. */
 export function clearLoginTokenCookie(cookie: CookieJar): void {
