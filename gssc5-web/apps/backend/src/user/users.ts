@@ -3,6 +3,7 @@ import { Elysia, t } from "elysia";
 import { loadConfig, type Config } from "../config";
 import { getPrisma } from "../db";
 import type { Prisma, PrismaClient } from "../generated/prisma/client";
+import { UserPlain, UserPlainInputUpdate } from "../generated/prismabox/User";
 import {
   loginTokenCookie,
   resolveLoginSessionUser,
@@ -92,44 +93,64 @@ type AccountView = {
 
 type Session = { failure: LoginSessionFailure } | { user: StoredUser };
 
-const NullableText = t.Nullable(t.String());
-
+/**
+ * Public account projection: Prismabox `UserPlain` field types with intentional
+ * `cuid` (not `id`) and visibility optionals — not a blind `UserPlain` drop-in.
+ */
 const PublicUser = t.Object({
-  cuid: t.String(),
-  firstName: NullableText,
-  middleName: NullableText,
-  lastName: NullableText,
-  homeCity: NullableText,
-  homeState: NullableText,
-  username: t.Optional(t.String()),
-  primaryEmail: t.Optional(NullableText),
-  secondaryEmail: t.Optional(NullableText),
-  primaryPhone: t.Optional(NullableText),
-  secondaryPhone: t.Optional(NullableText),
-  preferredContactMethod: t.Optional(NullableText),
-  homeLine1: t.Optional(NullableText),
-  homeLine2: t.Optional(NullableText),
-  homeLine3: t.Optional(NullableText),
-  homeZip: t.Optional(NullableText),
-  homeZipExtension: t.Optional(NullableText),
-  homeAddressDisplay: t.Optional(NullableText),
-  mailingLine1: t.Optional(NullableText),
-  mailingLine2: t.Optional(NullableText),
-  mailingLine3: t.Optional(NullableText),
-  mailingCity: t.Optional(NullableText),
-  mailingState: t.Optional(NullableText),
-  mailingZip: t.Optional(NullableText),
-  mailingZipExtension: t.Optional(NullableText),
-  secondaryEmailDisplay: t.Optional(t.Boolean()),
-  secondaryPhoneDisplay: t.Optional(t.Boolean()),
-  isAdmin: t.Optional(t.Boolean()),
-  isUserMod: t.Optional(t.Boolean()),
-  isToolEditor: t.Optional(t.Boolean()),
-  isPublicationEditor: t.Optional(t.Boolean()),
-  isNewsletterEditor: t.Optional(t.Boolean()),
-  membershipStatus: t.Optional(NullableText),
-  position: t.Optional(NullableText),
+  cuid: UserPlain.properties.id,
+  firstName: UserPlain.properties.firstName,
+  middleName: UserPlain.properties.middleName,
+  lastName: UserPlain.properties.lastName,
+  homeCity: UserPlain.properties.homeCity,
+  homeState: UserPlain.properties.homeState,
+  username: t.Optional(UserPlain.properties.username),
+  primaryEmail: t.Optional(UserPlain.properties.primaryEmail),
+  secondaryEmail: t.Optional(UserPlain.properties.secondaryEmail),
+  primaryPhone: t.Optional(UserPlain.properties.primaryPhone),
+  secondaryPhone: t.Optional(UserPlain.properties.secondaryPhone),
+  preferredContactMethod: t.Optional(UserPlain.properties.preferredContactMethod),
+  homeLine1: t.Optional(UserPlain.properties.homeLine1),
+  homeLine2: t.Optional(UserPlain.properties.homeLine2),
+  homeLine3: t.Optional(UserPlain.properties.homeLine3),
+  homeZip: t.Optional(UserPlain.properties.homeZip),
+  homeZipExtension: t.Optional(UserPlain.properties.homeZipExtension),
+  homeAddressDisplay: t.Optional(UserPlain.properties.homeAddressDisplay),
+  mailingLine1: t.Optional(UserPlain.properties.mailingLine1),
+  mailingLine2: t.Optional(UserPlain.properties.mailingLine2),
+  mailingLine3: t.Optional(UserPlain.properties.mailingLine3),
+  mailingCity: t.Optional(UserPlain.properties.mailingCity),
+  mailingState: t.Optional(UserPlain.properties.mailingState),
+  mailingZip: t.Optional(UserPlain.properties.mailingZip),
+  mailingZipExtension: t.Optional(UserPlain.properties.mailingZipExtension),
+  secondaryEmailDisplay: t.Optional(UserPlain.properties.secondaryEmailDisplay),
+  secondaryPhoneDisplay: t.Optional(UserPlain.properties.secondaryPhoneDisplay),
+  isAdmin: t.Optional(UserPlain.properties.isAdmin),
+  isUserMod: t.Optional(UserPlain.properties.isUserMod),
+  isToolEditor: t.Optional(UserPlain.properties.isToolEditor),
+  isPublicationEditor: t.Optional(UserPlain.properties.isPublicationEditor),
+  isNewsletterEditor: t.Optional(UserPlain.properties.isNewsletterEditor),
+  membershipStatus: t.Optional(UserPlain.properties.membershipStatus),
+  position: t.Optional(UserPlain.properties.position),
 });
+
+/**
+ * Update body keys from Prismabox `UserPlainInputUpdate`. Value types stay loose
+ * (string | boolean | null) so empty-string clears and ignored `token` extras
+ * still reach `buildPatch`; that helper owns privilege and format rules.
+ * `UserPlainInputUpdate` itself is registered on the plugin for OpenAPI.
+ */
+const UserUpdateBody = t.Partial(
+  t.Object(
+    Object.fromEntries(
+      Object.keys(UserPlainInputUpdate.properties).map((key) => [
+        key,
+        t.Union([t.String(), t.Boolean(), t.Null()]),
+      ]),
+    ),
+    { additionalProperties: true },
+  ),
+);
 
 const TEXT_FILTERS = new Set([
   "firstName",
@@ -210,6 +231,10 @@ export const users = new Elysia({
   normalize: false,
   sanitize: (value) => value.trim(),
 })
+  .model({
+    user: UserPlain,
+    userUpdate: UserPlainInputUpdate,
+  })
   .onTransform(({ body }) => {
     trimStrings(body);
   })
@@ -352,7 +377,7 @@ export const users = new Elysia({
     },
     {
       params: t.Object({ cuid: t.String() }),
-      body: t.Optional(t.Unknown()),
+      body: t.Optional(UserUpdateBody),
       cookie: loginTokenCookie,
       response: {
         204: t.Void(),
