@@ -7,10 +7,8 @@ import { getPrisma } from "../db";
 import type { PrismaClient, User } from "../generated/prisma/client";
 import { getMailTransporter } from "../mail";
 import {
-  classifyLoginTokenRow,
-  hashLoginToken,
   loginTokenCookie,
-  loginTokenFromCookie,
+  resolveLoginSessionUser,
   type CookieJar,
 } from "./login-session";
 
@@ -188,14 +186,8 @@ async function openLoginFromCookie(
   prisma: PrismaClient,
   cookie: CookieJar,
 ): Promise<User | null> {
-  const token = loginTokenFromCookie(cookie);
-  if (!token) return null;
-  const row = await prisma.loginToken.findUnique({
-    where: { tokenHash: hashLoginToken(token) },
-    include: { user: true },
-  });
-  if (classifyLoginTokenRow(row) !== "ok" || !row) return null;
-  return row.user;
+  const session = await resolveLoginSessionUser(prisma, cookie);
+  return "user" in session ? session.user : null;
 }
 
 async function acceptNewPassword(

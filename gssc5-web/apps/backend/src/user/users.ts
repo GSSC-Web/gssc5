@@ -4,10 +4,8 @@ import { loadConfig, type Config } from "../config";
 import { getPrisma } from "../db";
 import type { Prisma, PrismaClient } from "../generated/prisma/client";
 import {
-  classifyLoginTokenRow,
-  hashLoginToken,
   loginTokenCookie,
-  loginTokenFromCookie,
+  resolveLoginSessionUser,
   type CookieJar,
   type LoginSessionFailure,
 } from "./login-session";
@@ -370,21 +368,9 @@ function runtime(): { prisma: PrismaClient; config: Config } {
   return { config, prisma: getPrisma(config.DATABASE_URL) };
 }
 
-// @relation(GSSC-BLLR-42, GSSC-BLLR-48, GSSC-BLLR-56, GSSC-BLLR-67, GSSC-BLLR-68, GSSC-BLLR-69, GSSC-BLLR-133, GSSC-BLLR-134, GSSC-BLLR-135, GSSC-BLLR-166, GSSC-BLLR-167, GSSC-BLLR-168, scope=range_start, role=Implementation)
 async function openSession(cookie: CookieJar): Promise<Session> {
-  const token = loginTokenFromCookie(cookie);
-  if (!token) return { failure: "missing" };
-
-  const { prisma } = runtime();
-  const row = await prisma.loginToken.findUnique({
-    where: { tokenHash: hashLoginToken(token) },
-    include: { user: { select: userSelect } },
-  });
-  const classified = classifyLoginTokenRow(row);
-  if (classified === "ok" && row) return { user: row.user };
-  return { failure: classified === "ok" ? "unknown" : classified };
+  return resolveLoginSessionUser(runtime().prisma, cookie, userSelect);
 }
-// @relation(GSSC-BLLR-42, GSSC-BLLR-48, GSSC-BLLR-56, GSSC-BLLR-67, GSSC-BLLR-68, GSSC-BLLR-69, GSSC-BLLR-133, GSSC-BLLR-134, GSSC-BLLR-135, GSSC-BLLR-166, GSSC-BLLR-167, GSSC-BLLR-168, scope=range_end, role=Implementation)
 
 // @relation(GSSC-BLLR-58, GSSC-BLLR-59, GSSC-BLLR-169, GSSC-BLLR-170, GSSC-BLLR-171, scope=range_start, role=Implementation)
 function authorize(caller: StoredUser, target: StoredUser): "ok" | "forbidden" {

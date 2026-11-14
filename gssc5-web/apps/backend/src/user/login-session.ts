@@ -2,6 +2,8 @@ import { createHash } from "node:crypto";
 
 import { Cookie, t } from "elysia";
 
+import type { Prisma, PrismaClient, User } from "../generated/prisma/client";
+
 /** HTTP cookie that carries the Login Token for the client. */
 export const LOGIN_TOKEN_COOKIE = "gssc_login_token" as const;
 
@@ -21,6 +23,10 @@ export const loginTokenCookie = t.Cookie(
 export type CookieJar = Record<string, Cookie<unknown>>;
 
 export type LoginSessionFailure = "missing" | "unknown" | "logged-out" | "expired";
+
+export type LoginSessionOutcome<TUser> =
+  | { failure: LoginSessionFailure }
+  | { user: TUser };
 
 /** Hash used when storing a Login Token in durable login_tokens rows. */
 export function hashLoginToken(token: string): string {
@@ -61,3 +67,41 @@ export function classifyLoginTokenRow(
   if (row.expiresAt.getTime() <= Date.now()) return "expired";
   return "ok";
 }
+
+/**
+ * Shared authenticated-session resolver: cookie → hash → loginToken.findUnique
+ * → classify → user payload. Pass a Prisma user `select` to project fields, or
+ * omit for the full User row.
+ */
+// @relation(GSSC-BLLR-42, GSSC-BLLR-48, GSSC-BLLR-56, GSSC-BLLR-67, GSSC-BLLR-68, GSSC-BLLR-69, GSSC-BLLR-133, GSSC-BLLR-134, GSSC-BLLR-135, GSSC-BLLR-166, GSSC-BLLR-167, GSSC-BLLR-168, scope=range_start, role=Implementation)
+export async function resolveLoginSessionUser(
+  prisma: PrismaClient,
+  cookie: CookieJar,
+): Promise<LoginSessionOutcome<User>>;
+export async function resolveLoginSessionUser<TSelect extends Prisma.UserSelect>(
+  prisma: PrismaClient,
+  cookie: CookieJar,
+  userSelect: TSelect,
+): Promise<LoginSessionOutcome<Prisma.UserGetPayload<{ select: TSelect }>>>;
+export async function resolveLoginSessionUser(
+  prisma: PrismaClient,
+  cookie: CookieJar,
+  userSelect?: Prisma.UserSelect,
+): Promise<LoginSessionOutcome<any>> {
+  const token = loginTokenFromCookie(cookie);
+  if (token === null) return { failure: "missing" };
+
+  const row = userSelect
+    ? await prisma.loginToken.findUnique({
+        where: { tokenHash: hashLoginToken(token) },
+        include: { user: { select: userSelect } },
+      })
+    : await prisma.loginToken.findUnique({
+        where: { tokenHash: hashLoginToken(token) },
+        include: { user: true },
+      });
+  const classified = classifyLoginTokenRow(row);
+  if (classified === "ok" && row) return { user: row.user };
+  return { failure: classified === "ok" ? "unknown" : classified };
+}
+// @relation(GSSC-BLLR-42, GSSC-BLLR-48, GSSC-BLLR-56, GSSC-BLLR-67, GSSC-BLLR-68, GSSC-BLLR-69, GSSC-BLLR-133, GSSC-BLLR-134, GSSC-BLLR-135, GSSC-BLLR-166, GSSC-BLLR-167, GSSC-BLLR-168, scope=range_end, role=Implementation)
