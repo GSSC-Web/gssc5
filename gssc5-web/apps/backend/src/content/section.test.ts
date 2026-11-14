@@ -382,6 +382,20 @@ test("GSSC-BLLR-327 Section List Filters", async () => {
 
   const byContent = await getJson(`/sections?content=${encodeURIComponent(`alpha ${stamp}`)}`);
   expect((byContent.body as Array<{ cuid: string }>).map((e) => e.cuid)).toContain(row.id);
+
+  const byContentBody = await getJson(`/sections?content=${encodeURIComponent(`bravo body ${stamp}`)}`);
+  expect((byContentBody.body as Array<{ cuid: string }>).map((e) => e.cuid)).toContain(row.id);
+
+  // Needle that only exists across header + "\n" + body must not match (GSSC5-65).
+  const boundary = await seedSection({
+    header: "Hello",
+    body: "World",
+    tags: [`boundary-${stamp}`],
+    isPublic: true,
+    index: 3,
+  });
+  const straddling = await getJson(`/sections?content=${encodeURIComponent("o\nW")}`);
+  expect((straddling.body as Array<{ cuid: string }>).map((e) => e.cuid)).not.toContain(boundary.id);
 });
 // @relation(GSSC-BLLR-327, scope=range_end, role=Test)
 
