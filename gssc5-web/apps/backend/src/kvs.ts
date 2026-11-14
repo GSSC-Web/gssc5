@@ -3,10 +3,8 @@ import { Elysia, t } from "elysia";
 import { loadConfig } from "./config";
 import { getPrisma } from "./db";
 import {
-  classifyLoginTokenRow,
-  hashLoginToken,
   loginTokenCookie,
-  loginTokenFromCookie,
+  resolveLoginSessionUser,
   type CookieJar,
 } from "./user/login-session";
 
@@ -98,17 +96,9 @@ export const kvs = new Elysia({
   );
 
 async function openSession(cookie: CookieJar): Promise<Session> {
-  const token = loginTokenFromCookie(cookie);
-  if (token === null) return { failure: "missing" };
-
-  const prisma = getPrisma(loadConfig().DATABASE_URL);
-  const row = await prisma.loginToken.findUnique({
-    where: { tokenHash: hashLoginToken(token) },
-    include: { user: { select: { isAdmin: true } } },
+  return resolveLoginSessionUser(getPrisma(loadConfig().DATABASE_URL), cookie, {
+    isAdmin: true,
   });
-  const classified = classifyLoginTokenRow(row);
-  if (classified === "ok" && row) return { user: row.user };
-  return { failure: classified === "ok" ? "unknown" : classified };
 }
 
 function bodyRecord(body: unknown): Record<string, unknown> | "missing" | "malformed" {
