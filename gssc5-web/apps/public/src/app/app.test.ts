@@ -57,10 +57,11 @@ test('GSSC-PLLR-20 Syntactic', async () => {
   const { root } = await setupApp();
   const host = hostOf(root);
   const appRoot = root.querySelector<HTMLElement>('.gssc-app-root')!;
-  expect(getComputedStyle(host).minHeight).toBe('100dvh');
-  expect(getComputedStyle(appRoot).minHeight).toBe('100dvh');
-  expect(getComputedStyle(appRoot).display).toBe('flex');
-  expect(getComputedStyle(appRoot).flexDirection).toBe('column');
+  // Prefer utility classes over getComputedStyle (jsdom does not load global Tailwind).
+  expect(host.classList.contains('min-h-dvh')).toBe(true);
+  expect(appRoot.classList.contains('min-h-dvh')).toBe(true);
+  expect(appRoot.classList.contains('flex')).toBe(true);
+  expect(appRoot.classList.contains('flex-col')).toBe(true);
 });
 // @relation(GSSC-PLLR-20, scope=range_end, role=Test)
 
@@ -69,10 +70,11 @@ test('GSSC-PLLR-21 Lexical', async () => {
   const { root } = await setupApp();
   const host = hostOf(root);
   const appRoot = root.querySelector<HTMLElement>('.gssc-app-root')!;
-  // jsdom returns the var() form; that still proves the theme token is used.
-  expect(getComputedStyle(host).backgroundColor).toBe('var(--gssc-white)');
-  expect(getComputedStyle(appRoot).backgroundColor).toBe('var(--gssc-white)');
-  expect(getComputedStyle(host).fontFamily).toBe('var(--font-sans)');
+  // Prefer theme utility classes over getComputedStyle (jsdom / @layer limits).
+  expect(host.classList.contains('bg-gssc-white')).toBe(true);
+  expect(host.classList.contains('font-sans')).toBe(true);
+  expect(host.classList.contains('text-gssc-black')).toBe(true);
+  expect(appRoot.classList.contains('bg-gssc-white')).toBe(true);
 });
 // @relation(GSSC-PLLR-21, scope=range_end, role=Test)
 
@@ -87,9 +89,9 @@ test('GSSC-PLLR-5 Semantic', async () => {
 test('GSSC-PLLR-22 Syntactic', async () => {
   const { root } = await setupApp();
   const header = root.querySelector<HTMLElement>('[data-slot="header"]')!;
-  const style = getComputedStyle(header);
-  expect(style.position).toBe('sticky');
-  expect(style.top).toBe('0px');
+  expect(header.classList.contains('sticky')).toBe(true);
+  expect(header.classList.contains('top-0')).toBe(true);
+  expect(header.classList.contains('z-[1]')).toBe(true);
 });
 // @relation(GSSC-PLLR-22, scope=range_end, role=Test)
 
@@ -208,7 +210,7 @@ test('GSSC-PLLR-26 Syntactic', async () => {
   const outlet = page.querySelector('router-outlet')!;
   expect(header.compareDocumentPosition(outlet) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   expect(outlet.compareDocumentPosition(footer) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
-  expect(getComputedStyle(page).flexGrow).toBe('1');
+  expect(page.classList.contains('flex-auto')).toBe(true);
 });
 // @relation(GSSC-PLLR-26, scope=range_end, role=Test)
 
@@ -229,7 +231,7 @@ test('GSSC-PLLR-96 Syntactic', async () => {
   const host = page.querySelector('gssc-error');
   expect(host).not.toBeNull();
   expect(page.contains(host)).toBe(true);
-  expect(getComputedStyle(page).position).toBe('relative');
+  expect(page.classList.contains('relative')).toBe(true);
 
   const publicError = TestBed.inject(PublicError);
   publicError.setContents({

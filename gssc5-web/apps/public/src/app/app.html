@@ -1,9 +1,11 @@
 <!-- @relation(GSSC-PLLR-4, scope=range_start, role=Implementation) -->
-<div class="gssc-app-root">
+<div class="gssc-app-root flex min-h-dvh flex-col bg-gssc-white">
   <!-- @relation(GSSC-PLLR-5, scope=range_start, role=Implementation) -->
-  <div class="gssc-header-host" data-slot="header">
+  <!-- @relation(GSSC-PLLR-22, GSSC-PLLR-23, scope=range_start, role=Implementation) -->
+  <div class="gssc-header-host sticky top-0 z-[1] text-inherit font-[inherit]" data-slot="header">
     <gssc-header />
   </div>
+  <!-- @relation(GSSC-PLLR-22, GSSC-PLLR-23, scope=range_end, role=Implementation) -->
   <!-- @relation(GSSC-PLLR-5, scope=range_end, role=Implementation) -->
 
   <!-- @relation(GSSC-PLLR-16, scope=range_start, role=Implementation) -->
@@ -13,22 +15,31 @@
   <!-- @relation(GSSC-PLLR-16, scope=range_end, role=Implementation) -->
 
   <!-- @relation(GSSC-PLLR-7, scope=range_start, role=Implementation) -->
-  <main class="gssc-page">
+  <!-- @relation(GSSC-PLLR-26, GSSC-PLLR-27, scope=range_start, role=Implementation) -->
+  <main class="gssc-page relative flex-auto text-inherit font-[inherit]">
     <gssc-error />
     <router-outlet />
   </main>
+  <!-- @relation(GSSC-PLLR-26, GSSC-PLLR-27, scope=range_end, role=Implementation) -->
   <!-- @relation(GSSC-PLLR-7, scope=range_end, role=Implementation) -->
 
   <!-- @relation(GSSC-PLLR-104, GSSC-PLLR-105, scope=range_start, role=Implementation) -->
-  <div class="gssc-prompt-overlay-host" data-slot="prompt-overlay">
+  <!-- @relation(GSSC-PLLR-106, scope=range_start, role=Implementation) -->
+  <div class="gssc-prompt-overlay-host text-inherit font-[inherit]" data-slot="prompt-overlay">
     <gssc-prompt-overlay />
   </div>
+  <!-- @relation(GSSC-PLLR-106, scope=range_end, role=Implementation) -->
   <!-- @relation(GSSC-PLLR-104, GSSC-PLLR-105, scope=range_end, role=Implementation) -->
 
   <!-- @relation(GSSC-PLLR-6, scope=range_start, role=Implementation) -->
-  <div class="gssc-footer-host" data-slot="footer">
+  <!-- @relation(GSSC-PLLR-24, GSSC-PLLR-25, scope=range_start, role=Implementation) -->
+  <div
+    class="gssc-footer-host mt-auto block w-full text-inherit font-[inherit]"
+    data-slot="footer"
+  >
     <gssc-footer />
   </div>
+  <!-- @relation(GSSC-PLLR-24, GSSC-PLLR-25, scope=range_end, role=Implementation) -->
   <!-- @relation(GSSC-PLLR-6, scope=range_end, role=Implementation) -->
 </div>
 <!-- @relation(GSSC-PLLR-4, scope=range_end, role=Implementation) -->

@@ -12,6 +12,11 @@ import { UrgentAnnouncements } from './services/urgent-announcements';
 @Component({
   imports: [RouterOutlet, AnnouncementsBar, ErrorContainer, Header, Footer, PromptOverlayView],
   selector: 'gssc-root',
+  // @relation(GSSC-PLLR-20, GSSC-PLLR-21, scope=range_start, role=Implementation)
+  host: {
+    class: 'min-h-dvh bg-gssc-white text-gssc-black font-sans',
+  },
+  // @relation(GSSC-PLLR-20, GSSC-PLLR-21, scope=range_end, role=Implementation)
   styleUrl: './app.css',
   templateUrl: './app.html',
 })
