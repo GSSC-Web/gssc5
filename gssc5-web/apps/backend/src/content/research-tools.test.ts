@@ -314,3 +314,24 @@ test("GSSC-BLLR-352 Research Tool Deletion Forbidden", async () => {
   expect(kept).not.toBeNull();
 });
 // @relation(GSSC-BLLR-352, scope=range_end, role=Test)
+
+test("Research tool mutation body schema rejects empty title and empty patch", async () => {
+  expect(
+    (
+      await sendJson(
+        "POST",
+        "/research-tools",
+        { title: "", referenceLink: "https://example.org/x" },
+        editorTok,
+      )
+    ).status,
+  ).toBe(422);
+
+  const row = await getPrisma(loadConfig().DATABASE_URL).researchTool.create({
+    data: {
+      title: `Schema Tool ${Date.now()}`,
+      referenceLink: "https://example.org/schema",
+    },
+  });
+  expect((await sendJson("PATCH", `/research-tools/${row.id}`, {}, editorTok)).status).toBe(422);
+});

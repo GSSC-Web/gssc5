@@ -67,17 +67,12 @@ export function parseStringArray(raw: string): string[] {
   }
 }
 
+/** Still used by newsletters mutation ladders (out of GSSC5-64 scope). */
 export function optionalStringArray(value: unknown): string[] | undefined | "invalid" {
   if (value === undefined) return undefined;
   if (!Array.isArray(value)) return "invalid";
   if (!value.every((item) => typeof item === "string")) return "invalid";
   return value as string[];
-}
-
-export function optionalPerm(value: unknown): number | undefined | "invalid" {
-  if (value === undefined) return undefined;
-  if (typeof value !== "number" || !Number.isInteger(value) || value < 0) return "invalid";
-  return value;
 }
 
 export function uniqueTags(tags: string[]): string[] {
@@ -91,6 +86,7 @@ export function uniqueTags(tags: string[]): string[] {
   return out;
 }
 
+/** Still used by newsletters mutation ladders (out of GSSC5-64 scope). */
 export function bodyRecord(body: unknown): Record<string, unknown> | "missing" | "malformed" {
   if (body === undefined || body === null) return "missing";
   if (typeof body !== "object" || Array.isArray(body)) return "malformed";

@@ -2,11 +2,9 @@ import { Elysia, t } from "elysia";
 
 import { loadConfig } from "../config";
 import { getPrisma } from "../db";
+import { ContentTemplatePlain } from "../generated/prismabox/ContentTemplate";
 import { loginTokenCookie } from "../user/login-session";
 import {
-  bodyRecord,
-  optionalPerm,
-  optionalStringArray,
   parseStringArray,
   trimStrings,
   openSession,
@@ -14,19 +12,51 @@ import {
 } from "./helpers";
 
 const TemplateListEntry = t.Object({
-  cuid: t.String(),
-  name: t.String(),
+  cuid: ContentTemplatePlain.properties.id,
+  name: ContentTemplatePlain.properties.name,
 });
 
+/**
+ * Wire detail: Prismabox scalars with `cuid` and tags as string[] (DB stays JSON string).
+ */
 const TemplateDetail = t.Object({
-  cuid: t.String(),
-  name: t.String(),
-  isPublic: t.Boolean(),
+  cuid: ContentTemplatePlain.properties.id,
+  name: ContentTemplatePlain.properties.name,
+  isPublic: ContentTemplatePlain.properties.isPublic,
   tags: t.Array(t.String()),
-  createPerm: t.Number(),
-  modifyPerm: t.Number(),
-  deletePerm: t.Number(),
+  createPerm: ContentTemplatePlain.properties.createPerm,
+  modifyPerm: ContentTemplatePlain.properties.modifyPerm,
+  deletePerm: ContentTemplatePlain.properties.deletePerm,
 });
+
+const NonNegativeInt = t.Integer({ minimum: 0 });
+
+/**
+ * Create body composes Prismabox scalars but keeps wire tags as string[] —
+ * not ContentTemplatePlain.tags (JSON string).
+ */
+const TemplateCreateBody = t.Object(
+  {
+    name: t.String({ minLength: 1 }),
+    isPublic: ContentTemplatePlain.properties.isPublic,
+    tags: t.Optional(t.Array(t.String())),
+    createPerm: t.Optional(NonNegativeInt),
+    modifyPerm: t.Optional(NonNegativeInt),
+    deletePerm: t.Optional(NonNegativeInt),
+  },
+  { additionalProperties: true },
+);
+
+/** Patch: visibility and perms only (name/tags are create-time). */
+const TemplateUpdateBody = t.Object(
+  {
+    isPublic: t.Optional(ContentTemplatePlain.properties.isPublic),
+    createPerm: t.Optional(NonNegativeInt),
+    modifyPerm: t.Optional(NonNegativeInt),
+    deletePerm: t.Optional(NonNegativeInt),
+  },
+  { additionalProperties: true },
+);
 
 export const template = new Elysia({
   name: "content-template",
@@ -34,6 +64,7 @@ export const template = new Elysia({
   normalize: false,
   sanitize: (value) => value.trim(),
 })
+  .model({ contentTemplate: ContentTemplatePlain })
   .onTransform(({ body }) => {
     trimStrings(body);
   })
@@ -94,44 +125,23 @@ export const template = new Elysia({
         return status(403, "Forbidden" as const);
       }
 
-      const record = bodyRecord(body);
-      if (record === "malformed" || record === "missing") {
-        return status(422, "Invalid" as const);
-      }
-      if (typeof record.name !== "string" || record.name.length === 0) {
-        return status(422, "Invalid" as const);
-      }
-      if (typeof record.isPublic !== "boolean") {
-        return status(422, "Invalid" as const);
-      }
-
-      const tags = optionalStringArray(record.tags);
-      if (tags === "invalid") return status(422, "Invalid" as const);
-
-      const createPerm = optionalPerm(record.createPerm);
-      const modifyPerm = optionalPerm(record.modifyPerm);
-      const deletePerm = optionalPerm(record.deletePerm);
-      if (createPerm === "invalid" || modifyPerm === "invalid" || deletePerm === "invalid") {
-        return status(422, "Invalid" as const);
-      }
-
       // @relation(GSSC-BLLR-335, scope=range_start, role=Implementation)
       const prisma = getPrisma(loadConfig().DATABASE_URL);
       const created = await prisma.contentTemplate.create({
         data: {
-          name: record.name,
-          isPublic: record.isPublic,
-          tags: JSON.stringify(tags ?? []),
-          createPerm: createPerm ?? 0,
-          modifyPerm: modifyPerm ?? 0,
-          deletePerm: deletePerm ?? 0,
+          name: body.name,
+          isPublic: body.isPublic,
+          tags: JSON.stringify(body.tags ?? []),
+          createPerm: body.createPerm ?? 0,
+          modifyPerm: body.modifyPerm ?? 0,
+          deletePerm: body.deletePerm ?? 0,
         },
       });
       return status(201, toTemplateDetail(created));
       // @relation(GSSC-BLLR-335, scope=range_end, role=Implementation)
     },
     {
-      body: t.Optional(t.Unknown()),
+      body: TemplateCreateBody,
       cookie: loginTokenCookie,
       response: {
         201: TemplateDetail,
@@ -152,11 +162,6 @@ export const template = new Elysia({
       const row = await prisma.contentTemplate.findUnique({ where: { id: params.cuid } });
       if (!row) return status(404, "Not Found" as const);
 
-      const record = bodyRecord(body);
-      if (record === "malformed" || record === "missing") {
-        return status(422, "Invalid" as const);
-      }
-
       const data: {
         isPublic?: boolean;
         createPerm?: number;
@@ -164,25 +169,10 @@ export const template = new Elysia({
         deletePerm?: number;
       } = {};
 
-      if (Object.prototype.hasOwnProperty.call(record, "isPublic")) {
-        if (typeof record.isPublic !== "boolean") return status(422, "Invalid" as const);
-        data.isPublic = record.isPublic;
-      }
-      if (Object.prototype.hasOwnProperty.call(record, "createPerm")) {
-        const value = optionalPerm(record.createPerm);
-        if (value === "invalid" || value === undefined) return status(422, "Invalid" as const);
-        data.createPerm = value;
-      }
-      if (Object.prototype.hasOwnProperty.call(record, "modifyPerm")) {
-        const value = optionalPerm(record.modifyPerm);
-        if (value === "invalid" || value === undefined) return status(422, "Invalid" as const);
-        data.modifyPerm = value;
-      }
-      if (Object.prototype.hasOwnProperty.call(record, "deletePerm")) {
-        const value = optionalPerm(record.deletePerm);
-        if (value === "invalid" || value === undefined) return status(422, "Invalid" as const);
-        data.deletePerm = value;
-      }
+      if (body.isPublic !== undefined) data.isPublic = body.isPublic;
+      if (body.createPerm !== undefined) data.createPerm = body.createPerm;
+      if (body.modifyPerm !== undefined) data.modifyPerm = body.modifyPerm;
+      if (body.deletePerm !== undefined) data.deletePerm = body.deletePerm;
 
       // @relation(GSSC-BLLR-336, scope=range_start, role=Implementation)
       const updated = await prisma.contentTemplate.update({
@@ -194,7 +184,7 @@ export const template = new Elysia({
     },
     {
       params: t.Object({ cuid: t.String({ minLength: 1 }) }),
-      body: t.Optional(t.Unknown()),
+      body: TemplateUpdateBody,
       cookie: loginTokenCookie,
       response: {
         200: TemplateDetail,
