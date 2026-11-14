@@ -94,7 +94,10 @@ export class MemberSession {
    * End the backend Login Token first, then clear public UI session state.
    * On logout failure, keep the local UI logged-in so it does not diverge from
    * a still-live cookie/row (GSSC-PLLR-64 / GSSC5-59).
+   * Header Greeting display (GSSC-PLLR-61) and admin error gates own their UI
+   * markers; this service supplies session state those surfaces consume.
    */
+  // @relation(GSSC-PLLR-64, scope=range_start, role=Implementation)
   async logout(): Promise<boolean> {
     try {
       const { error } = await memberSessionApi.logout();
@@ -107,6 +110,7 @@ export class MemberSession {
     this.clearLocal();
     return true;
   }
+  // @relation(GSSC-PLLR-64, scope=range_end, role=Implementation)
 
   private applyAccount(user: AccountView): void {
     const name = displayNameFromAccount(user);

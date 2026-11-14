@@ -31,11 +31,10 @@ export class Header implements OnInit {
   }
   // @relation(GSSC-PLLR-55, GSSC-PLLR-58, scope=range_end, role=Implementation)
 
-  // @relation(GSSC-PLLR-64, scope=range_start, role=Implementation)
+  /** Session end Implementation owned by MemberSession.logout (GSSC-PLLR-64). */
   protected async logout(): Promise<void> {
     await this.memberSession.logout();
   }
-  // @relation(GSSC-PLLR-64, scope=range_end, role=Implementation)
 
   // @relation(GSSC-PLLR-67, scope=range_start, role=Implementation)
   protected openContact(): void {
