@@ -7,7 +7,7 @@
 
   @if (hasHeader(contents())) {
     <!-- @relation(GSSC-PLLR-86, GSSC-PLLR-87, GSSC-PLLR-88, scope=range_start, role=Implementation) -->
-    <h2 class="gssc-section__header m-0 font-semibold text-gssc-dark-green">
+    <h2 class="gssc-section__header m-0 text-[1.5em] font-semibold text-gssc-dark-green">
       {{ contents().header }}
     </h2>
     <!-- @relation(GSSC-PLLR-86, GSSC-PLLR-87, GSSC-PLLR-88, scope=range_end, role=Implementation) -->
@@ -40,11 +40,13 @@
       }
 
       <div class="gssc-section__viewport min-w-0 flex-1 overflow-hidden">
-        <div class="gssc-section__track flex w-full items-stretch justify-start gap-2">
+        <div
+          class="gssc-section__track flex w-full items-stretch justify-start gap-2 transition-transform duration-200 ease-[ease]"
+        >
           @for (resource of visibleResources(); track $index + ':' + resource.href + resource.name) {
             <!-- @relation(GSSC-PLLR-137, GSSC-PLLR-138, GSSC-PLLR-139, scope=range_start, role=Implementation) -->
             <a
-              class="gssc-section__resource inline-flex items-center justify-center border border-gssc-dark-green bg-gssc-white px-2 text-center font-normal text-gssc-dark-green no-underline hover:bg-gssc-gray"
+              class="gssc-section__resource inline-flex h-11 items-center justify-center border border-gssc-dark-green bg-gssc-white px-2 text-center font-normal text-gssc-dark-green no-underline hover:bg-gssc-gray in-data-[carousel=false]:w-[8.5rem] in-data-[carousel=false]:flex-none in-data-[carousel=true]:w-auto in-data-[carousel=true]:min-w-0 in-data-[carousel=true]:flex-1"
               [href]="resource.href"
               >{{ resource.name }}</a
             >

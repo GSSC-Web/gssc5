@@ -24,7 +24,7 @@ export type SectionContents = {
   resources?: readonly SectionResource[] | null;
 };
 
-/** Matches `.gssc-section__resource` width in section.css (8.5rem at 16px root). */
+/** Matches `.gssc-section__resource` fit-mode width (`w-[8.5rem]` at 16px root). */
 export const RESOURCE_BUTTON_WIDTH_PX = 8.5 * 16;
 /** Matches Tailwind `gap-2` between Resource Buttons. */
 export const RESOURCE_BUTTON_GAP_PX = 0.5 * 16;
@@ -38,7 +38,6 @@ export const RESOURCE_ARROW_CHROME_RESERVE_PX = 80;
 @Component({
   selector: 'gssc-section',
   templateUrl: './section.html',
-  styleUrl: './section.css',
 })
 export class Section {
   private readonly destroyRef = inject(DestroyRef);

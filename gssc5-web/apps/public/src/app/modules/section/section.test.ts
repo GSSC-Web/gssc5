@@ -131,8 +131,9 @@ test('GSSC-PLLR-88 Lexical', async () => {
   const body = root.querySelector<HTMLElement>('.gssc-section__body')!;
   expect(header.classList.contains('font-semibold')).toBe(true);
   expect(header.classList.contains('text-gssc-dark-green')).toBe(true);
+  expect(header.classList.contains('text-[1.5em]')).toBe(true);
   expect(body.classList.contains('text-base')).toBe(true);
-  // 1.5× body: header font-size is 1.5em of the body text size.
+  // 1.5× body: header uses text-[1.5em]; h2 UA default also yields 1.5× in jsdom.
   const headerPx = Number.parseFloat(getComputedStyle(header).fontSize);
   const bodyPx = Number.parseFloat(getComputedStyle(body).fontSize);
   expect(bodyPx).toBeGreaterThan(0);
@@ -226,7 +227,7 @@ test('GSSC-PLLR-93 Syntactic', async () => {
   const filled = [...root.querySelectorAll<HTMLElement>('.gssc-section__resource')];
   expect(filled.length).toBeGreaterThan(0);
   for (const btn of filled) {
-    expect(getComputedStyle(btn).flexGrow).toBe('1');
+    expect(btn.classList.contains('in-data-[carousel=true]:flex-1')).toBe(true);
   }
 
   // Width change re-measures: widen → fit, no arrows.
@@ -273,9 +274,11 @@ test('GSSC-PLLR-94 Lexical', async () => {
   expect(link.classList.contains('text-gssc-dark-green')).toBe(true);
   expect(link.classList.contains('bg-gssc-white')).toBe(true);
   expect(link.classList.contains('hover:bg-gssc-gray')).toBe(true);
-  // Fit mode keeps fixed equal width/height from section.css.
-  expect(Number.parseFloat(getComputedStyle(link).width)).toBeCloseTo(8.5 * 16, 0);
-  expect(Number.parseFloat(getComputedStyle(link).height)).toBeCloseTo(2.75 * 16, 0);
+  // Fit mode keeps fixed equal width/height via Tailwind utilities
+  // (8.5rem × 2.75rem / h-11). Prefer class asserts: jsdom skips global Tailwind.
+  expect(link.classList.contains('h-11')).toBe(true);
+  expect(link.classList.contains('in-data-[carousel=false]:w-[8.5rem]')).toBe(true);
+  expect(link.classList.contains('in-data-[carousel=false]:flex-none')).toBe(true);
 });
 // @relation(GSSC-PLLR-94, scope=range_end, role=Test)
 
