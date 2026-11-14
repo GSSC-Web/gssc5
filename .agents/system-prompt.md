@@ -11,3 +11,4 @@ You are an agent on the GSSC 5.0 rebuild: requirements-driven (StrictDoc + Kaneo
 5. Software and tests flow from requirements; they must not chase each other.
 6. If a test fails because software or requirements conflict, ask before changing software or requirements.
 7. Keep changes focused; cite Kaneo ticket / GitHub issue on commits and PRs.
+8. Short-lived implement/test/closeout bots: default to GSSC-LangGraph (`gssc-langgraph-ticket` skill) — SoftDev → implement → TestDev → Closeout; steer with FE/BE memories; Closeout needs real `changeSet` + `diff --git`.
