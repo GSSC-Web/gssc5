@@ -2,12 +2,11 @@ import { Elysia, t } from "elysia";
 
 import { loadConfig } from "../config";
 import { getPrisma } from "../db";
+import { PageDataEntryPlain } from "../generated/prismabox/PageDataEntry";
 import { loginTokenCookie } from "../user/login-session";
 import {
-  bodyRecord,
   hasPerm,
   openSession,
-  optionalStringArray,
   parseStringArray,
   trimStrings,
   uniqueTags,
@@ -15,21 +14,54 @@ import {
 } from "./helpers";
 
 const SectionListEntry = t.Object({
-  cuid: t.String(),
-  header: t.Union([t.String(), t.Null()]),
-  body: t.String(),
+  cuid: PageDataEntryPlain.properties.id,
+  header: PageDataEntryPlain.properties.header,
+  body: PageDataEntryPlain.properties.body,
   tags: t.Array(t.String()),
-  index: t.Number(),
+  index: PageDataEntryPlain.properties.index,
 });
 
+/**
+ * Wire detail: Prismabox scalars with `cuid` and tags/resources as string[]
+ * (DB columns stay JSON strings). Do not expose raw PageDataEntryPlain.
+ */
 const SectionDetail = t.Object({
-  cuid: t.String(),
-  header: t.Union([t.String(), t.Null()]),
-  body: t.String(),
+  cuid: PageDataEntryPlain.properties.id,
+  header: PageDataEntryPlain.properties.header,
+  body: PageDataEntryPlain.properties.body,
   resources: t.Array(t.String()),
   tags: t.Array(t.String()),
-  index: t.Number(),
+  index: PageDataEntryPlain.properties.index,
 });
+
+/**
+ * Create body: wire contract keeps templateId/template, string[] tags/resources.
+ * datatype and perms are forced server-side from the template.
+ */
+const SectionCreateBody = t.Object(
+  {
+    body: t.String({ minLength: 1 }),
+    templateId: t.Optional(t.String({ minLength: 1 })),
+    template: t.Optional(t.String({ minLength: 1 })),
+    header: t.Optional(PageDataEntryPlain.properties.header),
+    resources: t.Optional(t.Array(t.String())),
+    tags: t.Optional(t.Array(t.String())),
+    index: t.Optional(PageDataEntryPlain.properties.index),
+  },
+  { additionalProperties: true },
+);
+
+const SectionUpdateBody = t.Object(
+  {
+    header: t.Optional(PageDataEntryPlain.properties.header),
+    body: t.Optional(t.String({ minLength: 1 })),
+    resources: t.Optional(t.Array(t.String())),
+    tags: t.Optional(t.Array(t.String())),
+    index: t.Optional(PageDataEntryPlain.properties.index),
+    isPublic: t.Optional(PageDataEntryPlain.properties.isPublic),
+  },
+  { additionalProperties: true },
+);
 
 export const section = new Elysia({
   name: "content-section",
@@ -37,6 +69,7 @@ export const section = new Elysia({
   normalize: false,
   sanitize: (value) => value.trim(),
 })
+  .model({ pageDataEntry: PageDataEntryPlain })
   .onTransform(({ body }) => {
     trimStrings(body);
   })
@@ -123,16 +156,7 @@ export const section = new Elysia({
       const session = await openSession(cookie);
       if ("failure" in session) return status(403, "Forbidden" as const);
 
-      const record = bodyRecord(body);
-      if (record === "malformed" || record === "missing") {
-        return status(422, "Invalid" as const);
-      }
-
-      const bodyText = record.body;
-      const templateId = record.templateId ?? record.template;
-      if (typeof bodyText !== "string" || bodyText.length === 0) {
-        return status(422, "Invalid" as const);
-      }
+      const templateId = body.templateId ?? body.template;
       if (typeof templateId !== "string" || templateId.length === 0) {
         return status(422, "Invalid" as const);
       }
@@ -147,38 +171,19 @@ export const section = new Elysia({
       }
       // @relation(GSSC-BLLR-329, scope=range_end, role=Implementation)
 
-      const header =
-        record.header === undefined
-          ? null
-          : record.header === null
-            ? null
-            : typeof record.header === "string"
-              ? record.header
-              : undefined;
-      if (header === undefined) return status(422, "Invalid" as const);
-
-      const resources = optionalStringArray(record.resources);
-      if (resources === "invalid") return status(422, "Invalid" as const);
-      const requestTags = optionalStringArray(record.tags);
-      if (requestTags === "invalid") return status(422, "Invalid" as const);
-
-      let index = 0;
-      if (record.index !== undefined) {
-        if (typeof record.index !== "number" || !Number.isInteger(record.index)) {
-          return status(422, "Invalid" as const);
-        }
-        index = record.index;
-      }
-
-      const tags = uniqueTags([...parseStringArray(template.tags), ...(requestTags ?? [])]);
+      const header = body.header === undefined ? null : body.header;
+      const resources = body.resources ?? [];
+      const requestTags = body.tags ?? [];
+      const index = body.index ?? 0;
+      const tags = uniqueTags([...parseStringArray(template.tags), ...requestTags]);
 
       // @relation(GSSC-BLLR-328, scope=range_start, role=Implementation)
       const created = await prisma.pageDataEntry.create({
         data: {
           datatype: "section",
           header,
-          body: bodyText,
-          resources: JSON.stringify(resources ?? []),
+          body: body.body,
+          resources: JSON.stringify(resources),
           tags: JSON.stringify(tags),
           index,
           isPublic: template.isPublic,
@@ -192,7 +197,7 @@ export const section = new Elysia({
       // @relation(GSSC-BLLR-328, scope=range_end, role=Implementation)
     },
     {
-      body: t.Optional(t.Unknown()),
+      body: SectionCreateBody,
       cookie: loginTokenCookie,
       response: {
         201: SectionDetail,
@@ -214,12 +219,7 @@ export const section = new Elysia({
       });
       if (!row) return status(404, "Not Found" as const);
 
-      const record = bodyRecord(body);
-      if (record === "malformed" || record === "missing") {
-        return status(422, "Invalid" as const);
-      }
-
-      const wantsIsPublic = Object.prototype.hasOwnProperty.call(record, "isPublic");
+      const wantsIsPublic = body.isPublic !== undefined;
       if (wantsIsPublic) {
         // @relation(GSSC-BLLR-331, scope=range_start, role=Implementation)
         if (
@@ -245,42 +245,12 @@ export const section = new Elysia({
         isPublic?: boolean;
       } = {};
 
-      if (Object.prototype.hasOwnProperty.call(record, "header")) {
-        if (record.header !== null && typeof record.header !== "string") {
-          return status(422, "Invalid" as const);
-        }
-        data.header = record.header as string | null;
-      }
-      if (Object.prototype.hasOwnProperty.call(record, "body")) {
-        if (typeof record.body !== "string" || record.body.length === 0) {
-          return status(422, "Invalid" as const);
-        }
-        data.body = record.body;
-      }
-      if (Object.prototype.hasOwnProperty.call(record, "resources")) {
-        const resources = optionalStringArray(record.resources);
-        if (resources === "invalid" || resources === undefined) {
-          return status(422, "Invalid" as const);
-        }
-        data.resources = JSON.stringify(resources);
-      }
-      if (Object.prototype.hasOwnProperty.call(record, "tags")) {
-        const tags = optionalStringArray(record.tags);
-        if (tags === "invalid" || tags === undefined) {
-          return status(422, "Invalid" as const);
-        }
-        data.tags = JSON.stringify(tags);
-      }
-      if (Object.prototype.hasOwnProperty.call(record, "index")) {
-        if (typeof record.index !== "number" || !Number.isInteger(record.index)) {
-          return status(422, "Invalid" as const);
-        }
-        data.index = record.index;
-      }
-      if (wantsIsPublic) {
-        if (typeof record.isPublic !== "boolean") return status(422, "Invalid" as const);
-        data.isPublic = record.isPublic;
-      }
+      if (body.header !== undefined) data.header = body.header;
+      if (body.body !== undefined) data.body = body.body;
+      if (body.resources !== undefined) data.resources = JSON.stringify(body.resources);
+      if (body.tags !== undefined) data.tags = JSON.stringify(body.tags);
+      if (body.index !== undefined) data.index = body.index;
+      if (wantsIsPublic) data.isPublic = body.isPublic;
 
       // @relation(GSSC-BLLR-330, scope=range_start, role=Implementation)
       const updated = await prisma.pageDataEntry.update({
@@ -292,7 +262,7 @@ export const section = new Elysia({
     },
     {
       params: t.Object({ cuid: t.String({ minLength: 1 }) }),
-      body: t.Optional(t.Unknown()),
+      body: SectionUpdateBody,
       cookie: loginTokenCookie,
       response: {
         200: SectionDetail,

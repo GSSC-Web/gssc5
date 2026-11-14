@@ -3,16 +3,44 @@ import { Elysia, t } from "elysia";
 import { loadConfig } from "../config";
 import { getPrisma } from "../db";
 import {
+  ResearchToolPlain,
+  ResearchToolPlainInputCreate,
+} from "../generated/prismabox/ResearchTool";
+import {
   loginTokenCookie,
   resolveLoginSessionUser,
   type CookieJar,
 } from "../user/login-session";
 
+/**
+ * Wire entry: Prismabox scalars with intentional `cuid` (not raw `id`).
+ */
 const ResearchToolEntry = t.Object({
-  cuid: t.String(),
-  title: t.String(),
-  referenceLink: t.String(),
+  cuid: ResearchToolPlain.properties.id,
+  title: ResearchToolPlain.properties.title,
+  referenceLink: ResearchToolPlain.properties.referenceLink,
 });
+
+/**
+ * Create body from Prismabox create input. `additionalProperties: true` keeps
+ * ignored extras so auth can return 403 before a schema reject surfaces as 422.
+ */
+const ResearchToolCreateBody = t.Object(
+  {
+    title: ResearchToolPlainInputCreate.properties.title,
+    referenceLink: ResearchToolPlainInputCreate.properties.referenceLink,
+  },
+  { additionalProperties: true },
+);
+
+/** Patch body: same scalars, all optional; handler rejects empty patches. */
+const ResearchToolUpdateBody = t.Object(
+  {
+    title: t.Optional(ResearchToolPlain.properties.title),
+    referenceLink: t.Optional(ResearchToolPlain.properties.referenceLink),
+  },
+  { additionalProperties: true },
+);
 
 type Session =
   | { failure: "missing" | "unknown" | "logged-out" | "expired" }
@@ -39,14 +67,6 @@ async function openSession(cookie: CookieJar): Promise<Session> {
   });
 }
 
-function bodyRecord(
-  body: unknown,
-): Record<string, unknown> | "missing" | "malformed" {
-  if (body === undefined || body === null) return "missing";
-  if (typeof body !== "object" || Array.isArray(body)) return "malformed";
-  return body as Record<string, unknown>;
-}
-
 function trimStrings(value: unknown): void {
   if (typeof value !== "object" || value === null || Array.isArray(value)) return;
   for (const [key, entry] of Object.entries(value as Record<string, unknown>)) {
@@ -56,16 +76,6 @@ function trimStrings(value: unknown): void {
   }
 }
 
-function readRequiredString(
-  record: Record<string, unknown>,
-  key: string,
-): string | "missing" | "invalid" {
-  if (!Object.prototype.hasOwnProperty.call(record, key)) return "missing";
-  const value = record[key];
-  if (typeof value !== "string" || value.length === 0) return "invalid";
-  return value;
-}
-
 /** Research tools catalog (GSSC5-18). */
 export const researchTools = new Elysia({
   name: "content-research-tools",
@@ -73,6 +83,10 @@ export const researchTools = new Elysia({
   normalize: false,
   sanitize: (value) => value.trim(),
 })
+  .model({
+    researchTool: ResearchToolPlain,
+    researchToolCreate: ResearchToolPlainInputCreate,
+  })
   .onTransform(({ body }) => {
     trimStrings(body);
   })
@@ -103,29 +117,16 @@ export const researchTools = new Elysia({
       if (!canEditTools(session.user)) return status(403, "Forbidden" as const);
       // @relation(GSSC-BLLR-350, scope=range_end, role=Implementation)
 
-      const record = bodyRecord(body);
-      if (record === "malformed" || record === "missing") {
-        return status(422, "Invalid" as const);
-      }
-      const title = readRequiredString(record, "title");
-      const referenceLink = readRequiredString(record, "referenceLink");
-      if (title === "missing" || title === "invalid") {
-        return status(422, "Invalid" as const);
-      }
-      if (referenceLink === "missing" || referenceLink === "invalid") {
-        return status(422, "Invalid" as const);
-      }
-
       // @relation(GSSC-BLLR-346, scope=range_start, role=Implementation)
       const prisma = getPrisma(loadConfig().DATABASE_URL);
       const created = await prisma.researchTool.create({
-        data: { title, referenceLink },
+        data: { title: body.title, referenceLink: body.referenceLink },
       });
       return status(200, toEntry(created));
       // @relation(GSSC-BLLR-346, scope=range_end, role=Implementation)
     },
     {
-      body: t.Optional(t.Unknown()),
+      body: ResearchToolCreateBody,
       cookie: loginTokenCookie,
       response: {
         200: ResearchToolEntry,
@@ -171,26 +172,9 @@ export const researchTools = new Elysia({
       });
       if (!existing) return status(404, "Not Found" as const);
 
-      const record = bodyRecord(body);
-      if (record === "malformed" || record === "missing") {
-        return status(422, "Invalid" as const);
-      }
-
       const data: { title?: string; referenceLink?: string } = {};
-      if (Object.prototype.hasOwnProperty.call(record, "title")) {
-        const title = readRequiredString(record, "title");
-        if (title === "missing" || title === "invalid") {
-          return status(422, "Invalid" as const);
-        }
-        data.title = title;
-      }
-      if (Object.prototype.hasOwnProperty.call(record, "referenceLink")) {
-        const referenceLink = readRequiredString(record, "referenceLink");
-        if (referenceLink === "missing" || referenceLink === "invalid") {
-          return status(422, "Invalid" as const);
-        }
-        data.referenceLink = referenceLink;
-      }
+      if (body.title !== undefined) data.title = body.title;
+      if (body.referenceLink !== undefined) data.referenceLink = body.referenceLink;
       if (Object.keys(data).length === 0) return status(422, "Invalid" as const);
 
       // @relation(GSSC-BLLR-348, scope=range_start, role=Implementation)
@@ -203,7 +187,7 @@ export const researchTools = new Elysia({
     },
     {
       params: t.Object({ cuid: t.String({ minLength: 1 }) }),
-      body: t.Optional(t.Unknown()),
+      body: ResearchToolUpdateBody,
       cookie: loginTokenCookie,
       response: {
         200: ResearchToolEntry,

@@ -3,17 +3,47 @@ import { Elysia, t } from "elysia";
 import { loadConfig } from "../config";
 import { getPrisma } from "../db";
 import {
+  PublicationPlain,
+  PublicationPlainInputCreate,
+} from "../generated/prismabox/Publication";
+import {
   loginTokenCookie,
   resolveLoginSessionUser,
   type CookieJar,
 } from "../user/login-session";
 
+/**
+ * Wire entry: Prismabox scalars with intentional `cuid` (not raw `id`).
+ */
 const PublicationEntry = t.Object({
-  cuid: t.String(),
-  title: t.String(),
-  referenceLink: t.String(),
-  description: t.Union([t.String(), t.Null()]),
+  cuid: PublicationPlain.properties.id,
+  title: PublicationPlain.properties.title,
+  referenceLink: PublicationPlain.properties.referenceLink,
+  description: PublicationPlain.properties.description,
 });
+
+/**
+ * Create body from Prismabox create input. `additionalProperties: true` keeps
+ * ignored extras so auth can return 403 before a schema reject surfaces as 422.
+ */
+const PublicationCreateBody = t.Object(
+  {
+    title: PublicationPlainInputCreate.properties.title,
+    referenceLink: PublicationPlainInputCreate.properties.referenceLink,
+    description: t.Optional(PublicationPlain.properties.description),
+  },
+  { additionalProperties: true },
+);
+
+/** Patch body: same scalars, all optional; handler rejects empty patches. */
+const PublicationUpdateBody = t.Object(
+  {
+    title: t.Optional(PublicationPlain.properties.title),
+    referenceLink: t.Optional(PublicationPlain.properties.referenceLink),
+    description: t.Optional(PublicationPlain.properties.description),
+  },
+  { additionalProperties: true },
+);
 
 type Session =
   | { failure: "missing" | "unknown" | "logged-out" | "expired" }
@@ -49,14 +79,6 @@ async function openSession(cookie: CookieJar): Promise<Session> {
   });
 }
 
-function bodyRecord(
-  body: unknown,
-): Record<string, unknown> | "missing" | "malformed" {
-  if (body === undefined || body === null) return "missing";
-  if (typeof body !== "object" || Array.isArray(body)) return "malformed";
-  return body as Record<string, unknown>;
-}
-
 function trimStrings(value: unknown): void {
   if (typeof value !== "object" || value === null || Array.isArray(value)) return;
   for (const [key, entry] of Object.entries(value as Record<string, unknown>)) {
@@ -66,24 +88,11 @@ function trimStrings(value: unknown): void {
   }
 }
 
-function readRequiredString(
-  record: Record<string, unknown>,
-  key: string,
-): string | "missing" | "invalid" {
-  if (!Object.prototype.hasOwnProperty.call(record, key)) return "missing";
-  const value = record[key];
-  if (typeof value !== "string" || value.length === 0) return "invalid";
+/** Empty string clears description to null (wire contract). */
+function normalizeDescription(value: string | null | undefined): string | null | undefined {
+  if (value === undefined) return undefined;
+  if (value === null || value.length === 0) return null;
   return value;
-}
-
-function readOptionalDescription(
-  record: Record<string, unknown>,
-): string | null | "invalid" | "absent" {
-  if (!Object.prototype.hasOwnProperty.call(record, "description")) return "absent";
-  const value = record.description;
-  if (value === null) return null;
-  if (typeof value !== "string") return "invalid";
-  return value.length === 0 ? null : value;
 }
 
 /** Society publications catalog (GSSC5-19). */
@@ -93,6 +102,10 @@ export const publications = new Elysia({
   normalize: false,
   sanitize: (value) => value.trim(),
 })
+  .model({
+    publication: PublicationPlain,
+    publicationCreate: PublicationPlainInputCreate,
+  })
   .onTransform(({ body }) => {
     trimStrings(body);
   })
@@ -123,35 +136,22 @@ export const publications = new Elysia({
       if (!canEditPublications(session.user)) return status(403, "Forbidden" as const);
       // @relation(GSSC-BLLR-361, scope=range_end, role=Implementation)
 
-      const record = bodyRecord(body);
-      if (record === "malformed" || record === "missing") {
-        return status(422, "Invalid" as const);
-      }
-      const title = readRequiredString(record, "title");
-      const referenceLink = readRequiredString(record, "referenceLink");
-      if (title === "missing" || title === "invalid") {
-        return status(422, "Invalid" as const);
-      }
-      if (referenceLink === "missing" || referenceLink === "invalid") {
-        return status(422, "Invalid" as const);
-      }
-      const description = readOptionalDescription(record);
-      if (description === "invalid") return status(422, "Invalid" as const);
+      const description = normalizeDescription(body.description) ?? null;
 
       // @relation(GSSC-BLLR-357, scope=range_start, role=Implementation)
       const prisma = getPrisma(loadConfig().DATABASE_URL);
       const created = await prisma.publication.create({
         data: {
-          title,
-          referenceLink,
-          description: description === "absent" ? null : description,
+          title: body.title,
+          referenceLink: body.referenceLink,
+          description,
         },
       });
       return status(200, toEntry(created));
       // @relation(GSSC-BLLR-357, scope=range_end, role=Implementation)
     },
     {
-      body: t.Optional(t.Unknown()),
+      body: PublicationCreateBody,
       cookie: loginTokenCookie,
       response: {
         200: PublicationEntry,
@@ -197,36 +197,15 @@ export const publications = new Elysia({
       });
       if (!existing) return status(404, "Not Found" as const);
 
-      const record = bodyRecord(body);
-      if (record === "malformed" || record === "missing") {
-        return status(422, "Invalid" as const);
-      }
-
       const data: {
         title?: string;
         referenceLink?: string;
         description?: string | null;
       } = {};
-      if (Object.prototype.hasOwnProperty.call(record, "title")) {
-        const title = readRequiredString(record, "title");
-        if (title === "missing" || title === "invalid") {
-          return status(422, "Invalid" as const);
-        }
-        data.title = title;
-      }
-      if (Object.prototype.hasOwnProperty.call(record, "referenceLink")) {
-        const referenceLink = readRequiredString(record, "referenceLink");
-        if (referenceLink === "missing" || referenceLink === "invalid") {
-          return status(422, "Invalid" as const);
-        }
-        data.referenceLink = referenceLink;
-      }
-      if (Object.prototype.hasOwnProperty.call(record, "description")) {
-        const description = readOptionalDescription(record);
-        if (description === "invalid" || description === "absent") {
-          return status(422, "Invalid" as const);
-        }
-        data.description = description;
+      if (body.title !== undefined) data.title = body.title;
+      if (body.referenceLink !== undefined) data.referenceLink = body.referenceLink;
+      if (body.description !== undefined) {
+        data.description = normalizeDescription(body.description) ?? null;
       }
       if (Object.keys(data).length === 0) return status(422, "Invalid" as const);
 
@@ -240,7 +219,7 @@ export const publications = new Elysia({
     },
     {
       params: t.Object({ cuid: t.String({ minLength: 1 }) }),
-      body: t.Optional(t.Unknown()),
+      body: PublicationUpdateBody,
       cookie: loginTokenCookie,
       response: {
         200: PublicationEntry,

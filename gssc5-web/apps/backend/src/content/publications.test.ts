@@ -340,3 +340,24 @@ test("GSSC-BLLR-363 Publication Deletion Forbidden", async () => {
   expect(kept).not.toBeNull();
 });
 // @relation(GSSC-BLLR-363, scope=range_end, role=Test)
+
+test("Publication mutation body schema rejects empty title and empty patch", async () => {
+  expect(
+    (
+      await sendJson(
+        "POST",
+        "/publications",
+        { title: "", referenceLink: "https://example.org/x" },
+        editorTok,
+      )
+    ).status,
+  ).toBe(422);
+
+  const row = await getPrisma(loadConfig().DATABASE_URL).publication.create({
+    data: {
+      title: `Schema Pub ${Date.now()}`,
+      referenceLink: "https://example.org/schema",
+    },
+  });
+  expect((await sendJson("PATCH", `/publications/${row.id}`, {}, editorTok)).status).toBe(422);
+});
