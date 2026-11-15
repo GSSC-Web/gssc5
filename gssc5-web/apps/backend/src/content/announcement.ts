@@ -399,7 +399,6 @@ function wireImagePosition(value: string | null): ImagePosition | null {
 }
 
 function toAnnouncementListEntry(row: EntryRow) {
-  // @relation(GSSC-BLLR-440, scope=range_start, role=Implementation)
   return {
     cuid: row.id,
     header: row.header,
@@ -416,7 +415,6 @@ function toAnnouncementListEntry(row: EntryRow) {
     imageFile: row.imageFile,
     imagePosition: wireImagePosition(row.imagePosition),
   };
-  // @relation(GSSC-BLLR-440, scope=range_end, role=Implementation)
 }
 
 function toIncludedEventEntry(row: {
@@ -452,7 +450,6 @@ function toIncludedEventEntry(row: {
 }
 
 function toAnnouncementDetail(row: EntryRow) {
-  // @relation(GSSC-BLLR-443, GSSC-BLLR-445, scope=range_start, role=Implementation)
   return {
     cuid: row.id,
     header: row.header,
@@ -469,7 +466,6 @@ function toAnnouncementDetail(row: EntryRow) {
     imageFile: row.imageFile,
     imagePosition: wireImagePosition(row.imagePosition),
   };
-  // @relation(GSSC-BLLR-443, GSSC-BLLR-445, scope=range_end, role=Implementation)
 }
 
 type CalendarParts = { year: number; month: number; day: number };
