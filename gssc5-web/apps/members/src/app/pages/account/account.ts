@@ -150,6 +150,11 @@ export class AccountPage implements OnInit {
 
   readonly photoPreviewUrl = signal<string | null>(null);
   readonly photoFileLabel = signal('No file chosen');
+  /** Remote account-photos URLs need credentialed CORS; blob previews must not. */
+  readonly photoPreviewUsesCredentials = computed(() => {
+    const url = this.photoPreviewUrl()?.trim() ?? '';
+    return /^https?:\/\//i.test(url);
+  });
   private pendingPhotoFile: File | null = null;
   private localPreviewObjectUrl: string | null = null;
 

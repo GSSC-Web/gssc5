@@ -18,6 +18,7 @@
           class="gssc-contact-row__photo-img size-full object-cover object-center"
           [src]="photoUrl()!"
           alt=""
+          crossorigin="use-credentials"
         />
       } @else {
         <svg
@@ -101,24 +102,24 @@
     <div class="gssc-contact-row__actions flex shrink-0 flex-col items-end gap-2">
       @if (showEdit() && editHref()) {
         <a
-          class="gssc-contact-row__edit inline-flex size-10 items-center justify-center rounded-md border border-gssc-dark-green bg-gssc-light-green text-gssc-dark-green no-underline hover:bg-gssc-gray"
+          class="gssc-contact-row__edit inline-flex size-8 items-center justify-center rounded-md border border-gssc-dark-green bg-gssc-light-green p-0 text-gssc-dark-green no-underline hover:bg-gssc-gray"
           [routerLink]="editHref()!"
           aria-label="Edit"
           title="Edit"
         >
-          <i class="nf nf-md-pencil text-xl leading-none" aria-hidden="true"></i>
+          <i class="nf nf-md-pencil text-base leading-none" aria-hidden="true"></i>
         </a>
       }
       @if (showSoftDelete()) {
         <button
           type="button"
-          class="gssc-contact-row__soft-delete inline-flex size-10 cursor-pointer items-center justify-center rounded-md border border-gssc-dark-green bg-gssc-light-green p-0 text-gssc-dark-green hover:bg-gssc-gray"
+          class="gssc-contact-row__soft-delete inline-flex size-8 cursor-pointer items-center justify-center rounded-md border border-gssc-dark-green bg-gssc-light-green p-0 text-gssc-dark-green hover:bg-gssc-gray"
           (click)="onSoftDeleteClick()"
           [attr.aria-label]="isDeleted() ? 'Undelete' : 'Soft-delete'"
           [attr.title]="isDeleted() ? 'Undelete' : 'Soft-delete'"
         >
           <i
-            class="nf text-xl leading-none"
+            class="nf text-base leading-none"
             [class.nf-md-delete_restore]="isDeleted()"
             [class.nf-md-delete]="!isDeleted()"
             aria-hidden="true"

@@ -5142,10 +5142,10 @@ RELATIONS:
 UID: GSSC-MLLR-220
 TITLE: Lexical
 STATEMENT: >>>
-The Directory Entry Edit Control SHALL present a larger edit icon inside a rounded control that has a filled background and a hover color change, in the dark-green theme color, with an accessible name of Edit and no visible word label.
+The Directory Entry Edit Control SHALL present an edit icon inside a compact rounded control that has a filled background and a hover color change, in the dark-green theme color, with an accessible name of Edit and no visible word label.
 <<<
 RATIONALE: >>>
-A larger icon in a rounded filled control is easier to target and shows hover feedback while remaining labeled for assistive technology.
+A compact icon in a rounded filled control is easy to target without excess padding and shows hover feedback while remaining labeled for assistive technology.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -5202,10 +5202,10 @@ RELATIONS:
 UID: GSSC-MLLR-223
 TITLE: Lexical
 STATEMENT: >>>
-The Directory Entry Soft-Delete Control SHALL present a larger delete icon when the member is not soft-deleted and a larger delete-restore icon when the member is soft-deleted, each inside a rounded control that has a filled background and a hover color change, in the dark-green theme color, with an accessible name of Soft-delete or Undelete that matches that state and with no visible word label.
+The Directory Entry Soft-Delete Control SHALL present a delete icon when the member is not soft-deleted and a delete-restore icon when the member is soft-deleted, each inside a compact rounded control that has a filled background and a hover color change, in the dark-green theme color, with an accessible name of Soft-delete or Undelete that matches that state and with no visible word label.
 <<<
 RATIONALE: >>>
-Larger icons in rounded filled controls match the Edit control and show hover feedback while the accessible name states which action the control will take.
+Compact icons in rounded filled controls match the Edit control without excess padding and show hover feedback while the accessible name states which action the control will take.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test

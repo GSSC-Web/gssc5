@@ -140,7 +140,7 @@ test("GSSC-BLLR-458 replacement deletes prior Account Photo file entry", async (
   await writeStoredBytes(legacyKey, new TextEncoder().encode("legacy-bytes"));
   await prisma.user.update({
     where: { id: memberId },
-    data: { accountPhoto: legacy.id },
+    data: { accountPhoto: legacy.id, position: null },
   });
 
   const replacement = await uploadPhoto(memberTok, "replacement-bytes", memberId);
@@ -155,14 +155,29 @@ test("GSSC-BLLR-458 replacement deletes prior Account Photo file entry", async (
     where: { name: memberId, parentId: folderId, kind: "file", deletedAt: null },
   });
   expect(active.length).toBe(1);
+
+  const userAfter = await prisma.user.findUnique({
+    where: { id: memberId },
+    select: { accountPhoto: true },
+  });
+  expect(userAfter?.accountPhoto).toBe(memberId);
+
   const got = await getPhoto(memberId, memberTok);
   expect(got.status).toBe(200);
   expect(await got.text()).toBe("replacement-bytes");
+
+  // Soft-deleted prior is gone; session still loads the replacement for the owner.
+  expect((await getPhoto(legacy.id, memberTok)).status).toBe(404);
 });
 // @relation(GSSC-BLLR-458, scope=range_end, role=Test)
 
 // @relation(GSSC-BLLR-454, scope=range_start, role=Test)
 test("GSSC-BLLR-454 GET account photo with valid token succeeds", async () => {
+  const prisma = getPrisma(loadConfig().DATABASE_URL);
+  await prisma.user.update({
+    where: { id: memberId },
+    data: { position: null },
+  });
   const uploaded = await uploadPhoto(memberTok, "token-photo", memberId);
   expect(uploaded.status).toBe(200);
   const response = await getPhoto(memberId, memberTok);

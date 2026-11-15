@@ -371,6 +371,7 @@
                       class="gssc-account-photo-username__preview size-full object-cover object-center"
                       [src]="photoPreviewUrl()"
                       alt="Account photo preview"
+                      [attr.crossorigin]="photoPreviewUsesCredentials() ? 'use-credentials' : null"
                     />
                   } @else {
                     <p

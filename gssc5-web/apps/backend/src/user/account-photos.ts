@@ -146,6 +146,8 @@ async function isAccountPhotoEntry(parentId: string | null): Promise<boolean> {
 /**
  * GET allowed when the caller has a valid login session, or when some user
  * stores this photo (or owns the cuid-named photo) and has a non-empty position.
+ * Cuid-named photos remain readable after replace once the user record points at
+ * the new key (upload updates accountPhoto); soft-deleted priors stay 404.
  */
 // @relation(GSSC-BLLR-454, GSSC-BLLR-455, scope=range_start, role=Implementation)
 export async function canGetAccountPhoto(
@@ -333,6 +335,15 @@ export const accountPhotos = new Elysia({ prefix: "/account-photos" })
         keepStorageKey: storageKey,
         folderId,
       });
+
+      // Point the user record at the cuid-named photo before the client PATCHes,
+      // so session and position ACL resolve the replacement (not the retired prior).
+      if (target.accountPhoto !== targetUserCuid) {
+        await prisma.user.update({
+          where: { id: targetUserCuid },
+          data: { accountPhoto: targetUserCuid },
+        });
+      }
       // @relation(GSSC-BLLR-456, GSSC-BLLR-458, scope=range_end, role=Implementation)
 
       return { cuid: targetUserCuid, path: storageKey };
