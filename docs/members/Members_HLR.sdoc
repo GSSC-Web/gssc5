@@ -1151,13 +1151,16 @@ TITLE: Publications and Tools
 UID: GSSC-MHLR-52
 TITLE: Member Publications Support
 STATEMENT: >>>
-The GSSC Website Member Frontend SHALL support publications by the membership.
+The GSSC Website Member Frontend SHALL support the Society publications catalog for the membership.
 <<<
 RATIONALE: >>>
-The Member Frontend is where members work with publications.
+The Member Frontend is where authorized members manage the publications catalog shown on the public site.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-11
+CHANGE_DRIVER: >>>
+GSSC5-11
+GSSC5-97
+<<<
 REVIEW_STATUS: Changed
 RELATIONS:
 - TYPE: Parent
@@ -1168,13 +1171,16 @@ RELATIONS:
 UID: GSSC-MHLR-53
 TITLE: Publication Modification
 STATEMENT: >>>
-The GSSC Website Member Frontend SHALL let a member with the necessary permissions modify a publication without programming knowledge.
+The GSSC Website Member Frontend SHALL let a member with the necessary permissions create, modify, and remove a publication catalog entry without programming knowledge.
 <<<
 RATIONALE: >>>
-Publications are included in public-page and section modification. This requirement states publication modification as Member Frontend functionality for publications by the membership.
+Authorized members maintain publication title, reference link, and optional description in the Society publications catalog without developer intervention.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-11
+CHANGE_DRIVER: >>>
+GSSC5-11
+GSSC5-97
+<<<
 REVIEW_STATUS: Changed
 RELATIONS:
 - TYPE: Parent
@@ -1188,13 +1194,16 @@ RELATIONS:
 UID: GSSC-MHLR-54
 TITLE: Research Tools Content Modification
 STATEMENT: >>>
-The GSSC Website Member Frontend SHALL let a member with the necessary permissions modify Research Tools page contents without programming knowledge.
+The GSSC Website Member Frontend SHALL let a member with the necessary permissions create, modify, and remove a research tools catalog entry without programming knowledge.
 <<<
 RATIONALE: >>>
-Research Tools is a public page whose sections authorized members modify under public-page editing. This requirement names that Research Tools case for v5.0.1 Member Frontend scope.
+Authorized members maintain research tool title and reference link in the Society research tools catalog without developer intervention.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-11
+CHANGE_DRIVER: >>>
+GSSC5-11
+GSSC5-97
+<<<
 REVIEW_STATUS: Changed
 RELATIONS:
 - TYPE: Parent
