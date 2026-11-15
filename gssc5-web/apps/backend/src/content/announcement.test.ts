@@ -195,35 +195,59 @@ async function seedAnnouncement(data: {
 }
 
 async function seedEvent(data: {
-  header?: string | null;
-  body: string;
-  tags?: string[];
-  index?: number;
+  name: string;
   isPublic: boolean;
-  startMonth?: number | null;
-  startDay?: number | null;
-  startYear?: number | null;
-  endMonth?: number | null;
-  endDay?: number | null;
-  endYear?: number | null;
+  month: number;
+  day: number;
+  year: number;
+  announcementStartMonth: number;
+  announcementStartDay: number;
+  announcementStartYear: number;
+  time?: string;
+  duration?: string;
+  location?: string;
 }) {
-  return db().pageDataEntry.create({
+  const details = await db().pageDataEntry.create({
     data: {
       datatype: "event",
-      header: data.header ?? null,
-      body: data.body,
-      tags: JSON.stringify(data.tags ?? []),
+      header: data.name,
+      body: data.name,
+      tags: JSON.stringify([]),
       resources: JSON.stringify([]),
-      index: data.index ?? 0,
+      index: 0,
       isPublic: data.isPublic,
-      startMonth: data.startMonth ?? null,
-      startDay: data.startDay ?? null,
-      startYear: data.startYear ?? null,
-      endMonth: data.endMonth ?? null,
-      endDay: data.endDay ?? null,
-      endYear: data.endYear ?? null,
+      startMonth: data.month,
+      startDay: data.day,
+      startYear: data.year,
+      endMonth: data.month,
+      endDay: data.day,
+      endYear: data.year,
     },
   });
+  return db().event.create({
+    data: {
+      name: data.name,
+      month: data.month,
+      day: data.day,
+      year: data.year,
+      announcementStartMonth: data.announcementStartMonth,
+      announcementStartDay: data.announcementStartDay,
+      announcementStartYear: data.announcementStartYear,
+      time: data.time ?? "10:00",
+      duration: data.duration ?? "1h",
+      location: data.location ?? "Hall",
+      isPublic: data.isPublic,
+      pageDataId: details.id,
+    },
+  });
+}
+
+function listAnnouncements(body: unknown): Array<Record<string, unknown>> {
+  return (body as { announcements: Array<Record<string, unknown>> }).announcements;
+}
+
+function listEvents(body: unknown): Array<Record<string, unknown>> {
+  return (body as { events: Array<Record<string, unknown>> }).events;
 }
 
 function farFuture(): { month: number; day: number; year: number } {
@@ -236,35 +260,34 @@ function farPast(): { month: number; day: number; year: number } {
   return { month: now.getMonth() + 1, day: now.getDate(), year: now.getFullYear() - 2 };
 }
 
-// @relation(GSSC-BLLR-402, scope=range_start, role=Test)
-test("GSSC-BLLR-402 Public Announcement List", async () => {
+// @relation(GSSC-BLLR-423, scope=range_start, role=Test)
+test("GSSC-BLLR-423 Public Announcement List", async () => {
   await seedAnnouncement({ body: "public ann", isPublic: true, header: "Pub", index: 1 });
   await seedAnnouncement({ body: "private ann", isPublic: false, header: "Priv", index: 2 });
 
   const { status, body } = await getJson("/announcements");
   expect(status).toBe(200);
-  expect(Array.isArray(body)).toBe(true);
-  const list = body as Array<{ header: string | null; body: string; datatype: string }>;
+  const list = listAnnouncements(body);
   expect(list.some((entry) => entry.body === "public ann")).toBe(true);
   expect(list.some((entry) => entry.body === "private ann")).toBe(false);
 });
-// @relation(GSSC-BLLR-402, scope=range_end, role=Test)
+// @relation(GSSC-BLLR-423, scope=range_end, role=Test)
 
-// @relation(GSSC-BLLR-403, scope=range_start, role=Test)
-test("GSSC-BLLR-403 Authenticated Announcement List", async () => {
+// @relation(GSSC-BLLR-424, scope=range_start, role=Test)
+test("GSSC-BLLR-424 Authenticated Announcement List", async () => {
   await seedAnnouncement({ body: "auth-public-ann", isPublic: true, index: 10 });
   await seedAnnouncement({ body: "auth-private-ann", isPublic: false, index: 11 });
 
   const { status, body } = await getJson("/announcements", memberTok);
   expect(status).toBe(200);
-  const list = body as Array<{ body: string }>;
+  const list = listAnnouncements(body);
   expect(list.some((entry) => entry.body === "auth-public-ann")).toBe(true);
   expect(list.some((entry) => entry.body === "auth-private-ann")).toBe(true);
 });
-// @relation(GSSC-BLLR-403, scope=range_end, role=Test)
+// @relation(GSSC-BLLR-424, scope=range_end, role=Test)
 
-// @relation(GSSC-BLLR-404, scope=range_start, role=Test)
-test("GSSC-BLLR-404 Announcement List Entry Fields", async () => {
+// @relation(GSSC-BLLR-425, scope=range_start, role=Test)
+test("GSSC-BLLR-425 Announcement List Entry Fields", async () => {
   const row = await seedAnnouncement({
     header: "Fields",
     body: "field body ann",
@@ -275,10 +298,9 @@ test("GSSC-BLLR-404 Announcement List Entry Fields", async () => {
 
   const { status, body } = await getJson("/announcements");
   expect(status).toBe(200);
-  const entry = (body as Array<Record<string, unknown>>).find((item) => item.cuid === row.id);
+  const entry = listAnnouncements(body).find((item) => item.cuid === row.id);
   expect(entry).toEqual({
     cuid: row.id,
-    datatype: "announcement",
     header: "Fields",
     body: "field body ann",
     tags: ["t1"],
@@ -291,10 +313,10 @@ test("GSSC-BLLR-404 Announcement List Entry Fields", async () => {
     endYear: null,
   });
 });
-// @relation(GSSC-BLLR-404, scope=range_end, role=Test)
+// @relation(GSSC-BLLR-425, scope=range_end, role=Test)
 
-// @relation(GSSC-BLLR-405, scope=range_start, role=Test)
-test("GSSC-BLLR-405 Announcement List Index Order", async () => {
+// @relation(GSSC-BLLR-426, scope=range_start, role=Test)
+test("GSSC-BLLR-426 Announcement List Index Order", async () => {
   const stamp = `ann-order-${Date.now()}`;
   await seedAnnouncement({ body: `${stamp}-c`, isPublic: true, index: 30, tags: [stamp] });
   await seedAnnouncement({ body: `${stamp}-a`, isPublic: true, index: 10, tags: [stamp] });
@@ -302,14 +324,14 @@ test("GSSC-BLLR-405 Announcement List Index Order", async () => {
 
   const { status, body } = await getJson(`/announcements?tag=${encodeURIComponent(stamp)}`);
   expect(status).toBe(200);
-  const list = body as Array<{ body: string; index: number }>;
+  const list = listAnnouncements(body);
   expect(list.map((entry) => entry.body)).toEqual([`${stamp}-a`, `${stamp}-b`, `${stamp}-c`]);
   expect(list.map((entry) => entry.index)).toEqual([10, 20, 30]);
 });
-// @relation(GSSC-BLLR-405, scope=range_end, role=Test)
+// @relation(GSSC-BLLR-426, scope=range_end, role=Test)
 
-// @relation(GSSC-BLLR-406, scope=range_start, role=Test)
-test("GSSC-BLLR-406 Announcement List Filters", async () => {
+// @relation(GSSC-BLLR-427, scope=range_start, role=Test)
+test("GSSC-BLLR-427 Announcement List Filters", async () => {
   const stamp = `ann-filt-${Date.now()}`;
   const row = await seedAnnouncement({
     header: `Alpha ${stamp}`,
@@ -328,29 +350,29 @@ test("GSSC-BLLR-406 Announcement List Filters", async () => {
 
   const byHeader = await getJson(`/announcements?header=${encodeURIComponent(stamp)}`);
   expect(byHeader.status).toBe(200);
-  expect((byHeader.body as Array<{ cuid: string }>).map((e) => e.cuid)).toContain(row.id);
+  expect(listAnnouncements(byHeader.body).map((e) => e.cuid)).toContain(row.id);
 
   const byBody = await getJson(`/announcements?body=${encodeURIComponent(`bravo body ${stamp}`)}`);
-  expect((byBody.body as Array<{ cuid: string }>).map((e) => e.cuid)).toContain(row.id);
+  expect(listAnnouncements(byBody.body).map((e) => e.cuid)).toContain(row.id);
 
   const byTag = await getJson(`/announcements?tag=${encodeURIComponent(`TAG-${stamp}`)}`);
-  expect((byTag.body as Array<{ cuid: string }>).map((e) => e.cuid)).toContain(row.id);
+  expect(listAnnouncements(byTag.body).map((e) => e.cuid)).toContain(row.id);
 
   const byCuid = await getJson(`/announcements?cuid=${encodeURIComponent(row.id)}`);
-  expect(byCuid.body).toEqual([expect.objectContaining({ cuid: row.id })]);
+  expect(listAnnouncements(byCuid.body)).toEqual([expect.objectContaining({ cuid: row.id })]);
 
   const byContent = await getJson(`/announcements?content=${encodeURIComponent(`alpha ${stamp}`)}`);
-  expect((byContent.body as Array<{ cuid: string }>).map((e) => e.cuid)).toContain(row.id);
+  expect(listAnnouncements(byContent.body).map((e) => e.cuid)).toContain(row.id);
 
   const byContentBody = await getJson(
     `/announcements?content=${encodeURIComponent(`bravo body ${stamp}`)}`,
   );
-  expect((byContentBody.body as Array<{ cuid: string }>).map((e) => e.cuid)).toContain(row.id);
+  expect(listAnnouncements(byContentBody.body).map((e) => e.cuid)).toContain(row.id);
 });
-// @relation(GSSC-BLLR-406, scope=range_end, role=Test)
+// @relation(GSSC-BLLR-427, scope=range_end, role=Test)
 
-// @relation(GSSC-BLLR-407, scope=range_start, role=Test)
-test("GSSC-BLLR-407 Public Announcement Get", async () => {
+// @relation(GSSC-BLLR-428, scope=range_start, role=Test)
+test("GSSC-BLLR-428 Public Announcement Get", async () => {
   const row = await seedAnnouncement({
     header: "Get Pub",
     body: "get public ann",
@@ -377,18 +399,18 @@ test("GSSC-BLLR-407 Public Announcement Get", async () => {
     endYear: null,
   });
 });
-// @relation(GSSC-BLLR-407, scope=range_end, role=Test)
+// @relation(GSSC-BLLR-428, scope=range_end, role=Test)
 
-// @relation(GSSC-BLLR-408, scope=range_start, role=Test)
-test("GSSC-BLLR-408 Public Announcement Get Rejects Private", async () => {
+// @relation(GSSC-BLLR-429, scope=range_start, role=Test)
+test("GSSC-BLLR-429 Public Announcement Get Rejects Private", async () => {
   const row = await seedAnnouncement({ body: "hidden ann", isPublic: false });
   const { status } = await getJson(`/announcements/${row.id}`);
   expect(status).toBe(403);
 });
-// @relation(GSSC-BLLR-408, scope=range_end, role=Test)
+// @relation(GSSC-BLLR-429, scope=range_end, role=Test)
 
-// @relation(GSSC-BLLR-409, scope=range_start, role=Test)
-test("GSSC-BLLR-409 Authenticated Announcement Get", async () => {
+// @relation(GSSC-BLLR-430, scope=range_start, role=Test)
+test("GSSC-BLLR-430 Authenticated Announcement Get", async () => {
   const row = await seedAnnouncement({
     header: "Mem",
     body: "member get ann",
@@ -415,10 +437,10 @@ test("GSSC-BLLR-409 Authenticated Announcement Get", async () => {
     endYear: null,
   });
 });
-// @relation(GSSC-BLLR-409, scope=range_end, role=Test)
+// @relation(GSSC-BLLR-430, scope=range_end, role=Test)
 
-// @relation(GSSC-BLLR-410, scope=range_start, role=Test)
-test("GSSC-BLLR-410 Announcement Creation", async () => {
+// @relation(GSSC-BLLR-431, scope=range_start, role=Test)
+test("GSSC-BLLR-431 Announcement Creation", async () => {
   const { status, body } = await sendJson(
     "POST",
     "/announcements",
@@ -455,10 +477,10 @@ test("GSSC-BLLR-410 Announcement Creation", async () => {
   expect(stored?.deletePerm).toBe(MEMBER_PERM);
   expect(stored?.templateId).toBe(publicTemplateId);
 });
-// @relation(GSSC-BLLR-410, scope=range_end, role=Test)
+// @relation(GSSC-BLLR-431, scope=range_end, role=Test)
 
-// @relation(GSSC-BLLR-411, scope=range_start, role=Test)
-test("GSSC-BLLR-411 Announcement Creation Forbidden", async () => {
+// @relation(GSSC-BLLR-432, scope=range_start, role=Test)
+test("GSSC-BLLR-432 Announcement Creation Forbidden", async () => {
   const before = await db().pageDataEntry.count({ where: { datatype: "announcement" } });
   const { status } = await sendJson(
     "POST",
@@ -470,94 +492,102 @@ test("GSSC-BLLR-411 Announcement Creation Forbidden", async () => {
   const after = await db().pageDataEntry.count({ where: { datatype: "announcement" } });
   expect(after).toBe(before);
 });
-// @relation(GSSC-BLLR-411, scope=range_end, role=Test)
+// @relation(GSSC-BLLR-432, scope=range_end, role=Test)
 
-// @relation(GSSC-BLLR-412, scope=range_start, role=Test)
-test("GSSC-BLLR-412 Public Announcement Events", async () => {
+// @relation(GSSC-BLLR-433, scope=range_start, role=Test)
+test("GSSC-BLLR-433 Public Announcement Events", async () => {
   const stamp = `ann-ev-pub-${Date.now()}`;
   const future = farFuture();
   const past = farPast();
+  const today = new Date();
+  const windowOpen = {
+    month: today.getMonth() + 1,
+    day: today.getDate(),
+    year: today.getFullYear() - 1,
+  };
   const upcoming = await seedEvent({
-    body: `${stamp}-upcoming`,
+    name: `${stamp}-upcoming`,
     isPublic: true,
-    index: 50,
-    tags: [stamp],
-    startMonth: future.month,
-    startDay: future.day,
-    startYear: future.year,
-    endMonth: future.month,
-    endDay: future.day,
-    endYear: future.year,
+    month: future.month,
+    day: future.day,
+    year: future.year,
+    announcementStartMonth: windowOpen.month,
+    announcementStartDay: windowOpen.day,
+    announcementStartYear: windowOpen.year,
   });
   await seedEvent({
-    body: `${stamp}-past`,
+    name: `${stamp}-past`,
     isPublic: true,
-    index: 51,
-    tags: [stamp],
-    startMonth: past.month,
-    startDay: past.day,
-    startYear: past.year,
-    endMonth: past.month,
-    endDay: past.day,
-    endYear: past.year,
+    month: past.month,
+    day: past.day,
+    year: past.year,
+    announcementStartMonth: past.month,
+    announcementStartDay: past.day,
+    announcementStartYear: past.year - 1,
   });
   await seedEvent({
-    body: `${stamp}-private`,
+    name: `${stamp}-private`,
     isPublic: false,
-    index: 52,
-    tags: [stamp],
-    startMonth: future.month,
-    startDay: future.day,
-    startYear: future.year,
+    month: future.month,
+    day: future.day,
+    year: future.year,
+    announcementStartMonth: windowOpen.month,
+    announcementStartDay: windowOpen.day,
+    announcementStartYear: windowOpen.year,
   });
   await seedEvent({
-    body: `${stamp}-nodates`,
+    name: `${stamp}-not-yet`,
     isPublic: true,
-    index: 53,
-    tags: [stamp],
+    month: future.month,
+    day: future.day,
+    year: future.year,
+    announcementStartMonth: future.month,
+    announcementStartDay: future.day,
+    announcementStartYear: future.year,
   });
 
-  const { status, body } = await getJson(`/announcements?tag=${encodeURIComponent(stamp)}`);
+  const { status, body } = await getJson("/announcements");
   expect(status).toBe(200);
-  const list = body as Array<{ cuid: string; datatype: string; body: string }>;
-  expect(list.some((e) => e.cuid === upcoming.id && e.datatype === "event")).toBe(true);
-  expect(list.some((e) => e.body === `${stamp}-past`)).toBe(false);
-  expect(list.some((e) => e.body === `${stamp}-private`)).toBe(false);
-  expect(list.some((e) => e.body === `${stamp}-nodates`)).toBe(false);
+  const events = listEvents(body);
+  expect(events.some((e) => e.cuid === upcoming.id && e.name === `${stamp}-upcoming`)).toBe(true);
+  expect(events.some((e) => e.name === `${stamp}-past`)).toBe(false);
+  expect(events.some((e) => e.name === `${stamp}-private`)).toBe(false);
+  expect(events.some((e) => e.name === `${stamp}-not-yet`)).toBe(false);
 });
-// @relation(GSSC-BLLR-412, scope=range_end, role=Test)
+// @relation(GSSC-BLLR-433, scope=range_end, role=Test)
 
-// @relation(GSSC-BLLR-413, scope=range_start, role=Test)
-test("GSSC-BLLR-413 Authenticated Announcement Events", async () => {
+// @relation(GSSC-BLLR-434, scope=range_start, role=Test)
+test("GSSC-BLLR-434 Authenticated Announcement Events", async () => {
   const stamp = `ann-ev-auth-${Date.now()}`;
   const future = farFuture();
+  const today = new Date();
+  const windowOpen = {
+    month: today.getMonth() + 1,
+    day: today.getDate(),
+    year: today.getFullYear() - 1,
+  };
   const privateUpcoming = await seedEvent({
-    body: `${stamp}-private-up`,
+    name: `${stamp}-private-up`,
     isPublic: false,
-    index: 60,
-    tags: [stamp],
-    startMonth: future.month,
-    startDay: future.day,
-    startYear: future.year,
+    month: future.month,
+    day: future.day,
+    year: future.year,
+    announcementStartMonth: windowOpen.month,
+    announcementStartDay: windowOpen.day,
+    announcementStartYear: windowOpen.year,
   });
 
-  const publicList = await getJson(`/announcements?tag=${encodeURIComponent(stamp)}`);
-  expect(
-    (publicList.body as Array<{ cuid: string }>).some((e) => e.cuid === privateUpcoming.id),
-  ).toBe(false);
+  const publicList = await getJson("/announcements");
+  expect(listEvents(publicList.body).some((e) => e.cuid === privateUpcoming.id)).toBe(false);
 
-  const authList = await getJson(`/announcements?tag=${encodeURIComponent(stamp)}`, memberTok);
+  const authList = await getJson("/announcements", memberTok);
   expect(authList.status).toBe(200);
-  expect(
-    (authList.body as Array<{ cuid: string; datatype: string }>).some(
-      (e) => e.cuid === privateUpcoming.id && e.datatype === "event",
-    ),
-  ).toBe(true);
+  expect(listEvents(authList.body).some((e) => e.cuid === privateUpcoming.id)).toBe(true);
 });
-// @relation(GSSC-BLLR-413, scope=range_end, role=Test)
+// @relation(GSSC-BLLR-434, scope=range_end, role=Test)
 
-// @relation(GSSC-BLLR-414, scope=range_start, role=Test)
-test("GSSC-BLLR-414 Announcement Modification", async () => {
+// @relation(GSSC-BLLR-435, scope=range_start, role=Test)
+test("GSSC-BLLR-435 Announcement Modification", async () => {
   const row = await seedAnnouncement({
     body: "before",
     isPublic: true,
@@ -593,10 +623,10 @@ test("GSSC-BLLR-414 Announcement Modification", async () => {
     endYear: null,
   });
 });
-// @relation(GSSC-BLLR-414, scope=range_end, role=Test)
+// @relation(GSSC-BLLR-435, scope=range_end, role=Test)
 
-// @relation(GSSC-BLLR-415, scope=range_start, role=Test)
-test("GSSC-BLLR-415 Announcement IsPublic Modification", async () => {
+// @relation(GSSC-BLLR-436, scope=range_start, role=Test)
+test("GSSC-BLLR-436 Announcement IsPublic Modification", async () => {
   const allowed = await seedAnnouncement({
     body: "flip",
     isPublic: true,
@@ -631,10 +661,10 @@ test("GSSC-BLLR-415 Announcement IsPublic Modification", async () => {
   );
   expect(bad.status).toBe(403);
 });
-// @relation(GSSC-BLLR-415, scope=range_end, role=Test)
+// @relation(GSSC-BLLR-436, scope=range_end, role=Test)
 
-// @relation(GSSC-BLLR-416, scope=range_start, role=Test)
-test("GSSC-BLLR-416 Announcement Deletion", async () => {
+// @relation(GSSC-BLLR-437, scope=range_start, role=Test)
+test("GSSC-BLLR-437 Announcement Deletion", async () => {
   const allowed = await seedAnnouncement({
     body: "delete-me-ann",
     isPublic: true,
@@ -664,7 +694,7 @@ test("GSSC-BLLR-416 Announcement Deletion", async () => {
   expect(bad.status).toBe(403);
   expect(await db().pageDataEntry.findUnique({ where: { id: denied.id } })).not.toBeNull();
 });
-// @relation(GSSC-BLLR-416, scope=range_end, role=Test)
+// @relation(GSSC-BLLR-437, scope=range_end, role=Test)
 
 // Sanity: section routes do not surface announcement datatype rows.
 test("announcement datatype isolated from /sections", async () => {

@@ -2,6 +2,7 @@ import { Elysia, t } from "elysia";
 
 import { loadConfig } from "../config";
 import { getPrisma } from "../db";
+import { EventPlain } from "../generated/prismabox/Event";
 import { PageDataEntryPlain } from "../generated/prismabox/PageDataEntry";
 import { loginTokenCookie } from "../user/login-session";
 import {
@@ -15,7 +16,6 @@ import {
 
 const AnnouncementListEntry = t.Object({
   cuid: PageDataEntryPlain.properties.id,
-  datatype: t.Union([t.Literal("announcement"), t.Literal("event")]),
   header: PageDataEntryPlain.properties.header,
   body: PageDataEntryPlain.properties.body,
   tags: t.Array(t.String()),
@@ -26,6 +26,28 @@ const AnnouncementListEntry = t.Object({
   endMonth: PageDataEntryPlain.properties.endMonth,
   endDay: PageDataEntryPlain.properties.endDay,
   endYear: PageDataEntryPlain.properties.endYear,
+});
+
+/** Event catalog fields included beside announcements (GSSC5-69 Event table). */
+const IncludedEventEntry = t.Object({
+  cuid: EventPlain.properties.id,
+  name: EventPlain.properties.name,
+  month: EventPlain.properties.month,
+  day: EventPlain.properties.day,
+  year: EventPlain.properties.year,
+  announcementStartMonth: EventPlain.properties.announcementStartMonth,
+  announcementStartDay: EventPlain.properties.announcementStartDay,
+  announcementStartYear: EventPlain.properties.announcementStartYear,
+  time: EventPlain.properties.time,
+  duration: EventPlain.properties.duration,
+  location: EventPlain.properties.location,
+  isPublic: EventPlain.properties.isPublic,
+  pageDataCuid: EventPlain.properties.pageDataId,
+});
+
+const AnnouncementListResponse = t.Object({
+  announcements: t.Array(AnnouncementListEntry),
+  events: t.Array(IncludedEventEntry),
 });
 
 /**
@@ -93,7 +115,7 @@ export const announcement = new Elysia({
       const loggedIn = !("failure" in session);
       const prisma = getPrisma(loadConfig().DATABASE_URL);
 
-      // @relation(GSSC-BLLR-402, GSSC-BLLR-403, scope=range_start, role=Implementation)
+      // @relation(GSSC-BLLR-423, GSSC-BLLR-424, scope=range_start, role=Implementation)
       const announcementRows = await prisma.pageDataEntry.findMany({
         where: {
           datatype: "announcement",
@@ -101,35 +123,29 @@ export const announcement = new Elysia({
         },
         orderBy: { index: "asc" },
       });
-      // @relation(GSSC-BLLR-402, GSSC-BLLR-403, scope=range_end, role=Implementation)
+      // @relation(GSSC-BLLR-423, GSSC-BLLR-424, scope=range_end, role=Implementation)
 
-      // @relation(GSSC-BLLR-412, GSSC-BLLR-413, scope=range_start, role=Implementation)
-      const eventRows = await prisma.pageDataEntry.findMany({
-        where: {
-          datatype: "event",
-          ...(loggedIn ? {} : { isPublic: true }),
-        },
+      // @relation(GSSC-BLLR-433, GSSC-BLLR-434, scope=range_start, role=Implementation)
+      const eventRows = await prisma.event.findMany({
+        where: loggedIn ? {} : { isPublic: true },
+        orderBy: [{ year: "asc" }, { month: "asc" }, { day: "asc" }],
       });
       const today = todayCalendarParts();
       const inWindowEvents = eventRows.filter((row) =>
         isUpcomingInAnnouncementWindow(row, today),
       );
-      // @relation(GSSC-BLLR-412, GSSC-BLLR-413, scope=range_end, role=Implementation)
+      // @relation(GSSC-BLLR-433, GSSC-BLLR-434, scope=range_end, role=Implementation)
 
-      const merged = [...announcementRows, ...inWindowEvents].sort(
-        (a, b) => a.index - b.index,
-      );
+      // @relation(GSSC-BLLR-427, scope=range_start, role=Implementation)
+      const filtered = applyAnnouncementFilters(announcementRows, query);
+      // @relation(GSSC-BLLR-427, scope=range_end, role=Implementation)
 
-      // @relation(GSSC-BLLR-406, scope=range_start, role=Implementation)
-      const filtered = applyAnnouncementFilters(merged, query);
-      // @relation(GSSC-BLLR-406, scope=range_end, role=Implementation)
-
-      // @relation(GSSC-BLLR-404, GSSC-BLLR-405, scope=range_start, role=Implementation)
-      return status(
-        200,
-        filtered.map((row) => toAnnouncementListEntry(row)),
-      );
-      // @relation(GSSC-BLLR-404, GSSC-BLLR-405, scope=range_end, role=Implementation)
+      // @relation(GSSC-BLLR-425, GSSC-BLLR-426, scope=range_start, role=Implementation)
+      return status(200, {
+        announcements: filtered.map((row) => toAnnouncementListEntry(row)),
+        events: inWindowEvents.map((row) => toIncludedEventEntry(row)),
+      });
+      // @relation(GSSC-BLLR-425, GSSC-BLLR-426, scope=range_end, role=Implementation)
     },
     {
       query: t.Object({
@@ -141,7 +157,7 @@ export const announcement = new Elysia({
       }),
       cookie: loginTokenCookie,
       response: {
-        200: t.Array(AnnouncementListEntry),
+        200: AnnouncementListResponse,
       },
     },
   )
@@ -156,13 +172,13 @@ export const announcement = new Elysia({
       });
       if (!row) return status(404, "Not Found" as const);
 
-      // @relation(GSSC-BLLR-408, scope=range_start, role=Implementation)
+      // @relation(GSSC-BLLR-429, scope=range_start, role=Implementation)
       if (!row.isPublic && !loggedIn) return status(403, "Forbidden" as const);
-      // @relation(GSSC-BLLR-408, scope=range_end, role=Implementation)
+      // @relation(GSSC-BLLR-429, scope=range_end, role=Implementation)
 
-      // @relation(GSSC-BLLR-407, GSSC-BLLR-409, scope=range_start, role=Implementation)
+      // @relation(GSSC-BLLR-428, GSSC-BLLR-430, scope=range_start, role=Implementation)
       return status(200, toAnnouncementDetail(row));
-      // @relation(GSSC-BLLR-407, GSSC-BLLR-409, scope=range_end, role=Implementation)
+      // @relation(GSSC-BLLR-428, GSSC-BLLR-430, scope=range_end, role=Implementation)
     },
     {
       params: t.Object({ cuid: t.String({ minLength: 1 }) }),
@@ -189,11 +205,11 @@ export const announcement = new Elysia({
       const template = await prisma.contentTemplate.findUnique({ where: { id: templateId } });
       if (!template) return status(404, "Not Found" as const);
 
-      // @relation(GSSC-BLLR-411, scope=range_start, role=Implementation)
+      // @relation(GSSC-BLLR-432, scope=range_start, role=Implementation)
       if (!hasPerm(session.user, template.createPerm)) {
         return status(403, "Forbidden" as const);
       }
-      // @relation(GSSC-BLLR-411, scope=range_end, role=Implementation)
+      // @relation(GSSC-BLLR-432, scope=range_end, role=Implementation)
 
       const header = body.header === undefined ? null : body.header;
       const resources = body.resources ?? [];
@@ -201,7 +217,7 @@ export const announcement = new Elysia({
       const index = body.index ?? 0;
       const tags = uniqueTags([...parseStringArray(template.tags), ...requestTags]);
 
-      // @relation(GSSC-BLLR-410, scope=range_start, role=Implementation)
+      // @relation(GSSC-BLLR-431, scope=range_start, role=Implementation)
       const created = await prisma.pageDataEntry.create({
         data: {
           datatype: "announcement",
@@ -218,7 +234,7 @@ export const announcement = new Elysia({
         },
       });
       return status(201, toAnnouncementDetail(created));
-      // @relation(GSSC-BLLR-410, scope=range_end, role=Implementation)
+      // @relation(GSSC-BLLR-431, scope=range_end, role=Implementation)
     },
     {
       body: AnnouncementCreateBody,
@@ -245,7 +261,7 @@ export const announcement = new Elysia({
 
       const wantsIsPublic = body.isPublic !== undefined;
       if (wantsIsPublic) {
-        // @relation(GSSC-BLLR-415, scope=range_start, role=Implementation)
+        // @relation(GSSC-BLLR-436, scope=range_start, role=Implementation)
         if (
           !hasPerm(session.user, row.createPerm) ||
           !hasPerm(session.user, row.modifyPerm) ||
@@ -253,7 +269,7 @@ export const announcement = new Elysia({
         ) {
           return status(403, "Forbidden" as const);
         }
-        // @relation(GSSC-BLLR-415, scope=range_end, role=Implementation)
+        // @relation(GSSC-BLLR-436, scope=range_end, role=Implementation)
       } else {
         if (!hasPerm(session.user, row.modifyPerm)) {
           return status(403, "Forbidden" as const);
@@ -276,13 +292,13 @@ export const announcement = new Elysia({
       if (body.index !== undefined) data.index = body.index;
       if (wantsIsPublic) data.isPublic = body.isPublic;
 
-      // @relation(GSSC-BLLR-414, scope=range_start, role=Implementation)
+      // @relation(GSSC-BLLR-435, scope=range_start, role=Implementation)
       const updated = await prisma.pageDataEntry.update({
         where: { id: row.id },
         data,
       });
       return status(200, toAnnouncementDetail(updated));
-      // @relation(GSSC-BLLR-414, scope=range_end, role=Implementation)
+      // @relation(GSSC-BLLR-435, scope=range_end, role=Implementation)
     },
     {
       params: t.Object({ cuid: t.String({ minLength: 1 }) }),
@@ -308,13 +324,13 @@ export const announcement = new Elysia({
       });
       if (!row) return status(404, "Not Found" as const);
 
-      // @relation(GSSC-BLLR-416, scope=range_start, role=Implementation)
+      // @relation(GSSC-BLLR-437, scope=range_start, role=Implementation)
       if (!hasPerm(session.user, row.deletePerm)) {
         return status(403, "Forbidden" as const);
       }
       await prisma.pageDataEntry.delete({ where: { id: row.id } });
       return status(204, undefined);
-      // @relation(GSSC-BLLR-416, scope=range_end, role=Implementation)
+      // @relation(GSSC-BLLR-437, scope=range_end, role=Implementation)
     },
     {
       params: t.Object({ cuid: t.String({ minLength: 1 }) }),
@@ -361,10 +377,8 @@ function includesInsensitive(haystack: string, needle: string): boolean {
 }
 
 function toAnnouncementListEntry(row: EntryRow) {
-  const datatype = row.datatype === "event" ? ("event" as const) : ("announcement" as const);
   return {
     cuid: row.id,
-    datatype,
     header: row.header,
     body: row.body,
     tags: parseStringArray(row.tags),
@@ -375,6 +389,38 @@ function toAnnouncementListEntry(row: EntryRow) {
     endMonth: row.endMonth,
     endDay: row.endDay,
     endYear: row.endYear,
+  };
+}
+
+function toIncludedEventEntry(row: {
+  id: string;
+  name: string;
+  month: number;
+  day: number;
+  year: number;
+  announcementStartMonth: number;
+  announcementStartDay: number;
+  announcementStartYear: number;
+  time: string;
+  duration: string;
+  location: string;
+  isPublic: boolean;
+  pageDataId: string;
+}) {
+  return {
+    cuid: row.id,
+    name: row.name,
+    month: row.month,
+    day: row.day,
+    year: row.year,
+    announcementStartMonth: row.announcementStartMonth,
+    announcementStartDay: row.announcementStartDay,
+    announcementStartYear: row.announcementStartYear,
+    time: row.time,
+    duration: row.duration,
+    location: row.location,
+    isPublic: row.isPublic,
+    pageDataCuid: row.pageDataId,
   };
 }
 
@@ -411,23 +457,26 @@ function calendarKey(parts: CalendarParts): number {
 }
 
 /**
- * Upcoming event inside its announcement window (page_data dates until Event table).
- * Window has no earlier bound until BHLR-133 announcement-start lives on the Event row;
- * end is the inclusive event end (or start when end is unset). Requires a complete start.
+ * Upcoming event inside its announcement window (Event table).
+ * Window: announcementStart ≤ today ≤ event date (Y/M/D).
  */
 export function isUpcomingInAnnouncementWindow(
-  row: Pick<
-    EntryRow,
-    "startMonth" | "startDay" | "startYear" | "endMonth" | "endDay" | "endYear"
-  >,
+  row: {
+    month: number;
+    day: number;
+    year: number;
+    announcementStartMonth: number;
+    announcementStartDay: number;
+    announcementStartYear: number;
+  },
   today: CalendarParts,
 ): boolean {
-  if (row.startYear == null || row.startMonth == null || row.startDay == null) {
-    return false;
-  }
-  const end: CalendarParts =
-    row.endYear != null && row.endMonth != null && row.endDay != null
-      ? { year: row.endYear, month: row.endMonth, day: row.endDay }
-      : { year: row.startYear, month: row.startMonth, day: row.startDay };
-  return calendarKey(today) <= calendarKey(end);
+  const start: CalendarParts = {
+    year: row.announcementStartYear,
+    month: row.announcementStartMonth,
+    day: row.announcementStartDay,
+  };
+  const end: CalendarParts = { year: row.year, month: row.month, day: row.day };
+  const key = calendarKey(today);
+  return key >= calendarKey(start) && key <= calendarKey(end);
 }
