@@ -15,14 +15,20 @@ type AccountView = {
   username?: string;
 };
 
+export type LoginCredentials = {
+  identity: string;
+  password: string;
+};
+
 /**
  * Treaty calls used by MemberSession. Mutable object so unit tests can stub
- * challenge / profile / logout without fighting Eden Treaty proxies.
- * Fuller session/hydration ownership expands under GSSC5-87.
+ * challenge / profile / login / logout without fighting Eden Treaty proxies.
  */
 export const memberSessionApi = {
   challenge: () => backend.challenge.post({}),
   getUser: (cuid: string) => backend.users({ cuid }).get(),
+  login: (body: { username: string; password: string } | { primaryEmail: string; password: string }) =>
+    backend.login.post(body),
   logout: () => backend.logout.post({}),
 };
 
@@ -30,20 +36,36 @@ export const memberSessionApi = {
 export class MemberSession {
   readonly loggedIn = signal(false);
   readonly displayName = signal(readStored(NAME_KEY) ?? '');
+  /** True after the first challenge/hydrate attempt finishes (success or fail). */
+  readonly ready = signal(false);
+
+  private readyWaiters: Array<() => void> = [];
 
   constructor() {
     void this.refresh();
   }
 
+  /** Resolves once the initial (or in-flight) session refresh has settled. */
+  whenReady(): Promise<void> {
+    if (this.ready()) return Promise.resolve();
+    return new Promise((resolve) => {
+      this.readyWaiters.push(resolve);
+    });
+  }
+
   async refresh(): Promise<void> {
     try {
       // Login Token arrives via HttpOnly cookie; credentialed challenge reads it.
+      // @relation(GSSC-MLLR-67, scope=range_start, role=Implementation)
       const { data, error } = await memberSessionApi.challenge();
       const report = asChallengeReport(data);
       if (error || !report || report.status !== 'valid') {
+        // @relation(GSSC-MLLR-68, scope=range_start, role=Implementation)
         this.clearLocal();
+        // @relation(GSSC-MLLR-68, scope=range_end, role=Implementation)
         return;
       }
+      // @relation(GSSC-MLLR-67, scope=range_end, role=Implementation)
 
       const profile = await memberSessionApi.getUser(report.cuid);
       if (profile.error || !profile.data) {
@@ -54,8 +76,45 @@ export class MemberSession {
       this.applyAccount(profile.data as AccountView);
     } catch {
       this.clearLocal();
+    } finally {
+      this.markReady();
     }
   }
+
+  /**
+   * Submit credentials to the Unified Backend. On success, hydrates UI session
+   * from challenge + account view. Cookie/token stay HttpOnly.
+   */
+  // @relation(GSSC-MLLR-69, GSSC-MLLR-70, GSSC-MLLR-71, scope=range_start, role=Implementation)
+  async login(credentials: LoginCredentials): Promise<boolean> {
+    const identity = credentials.identity.trim();
+    const password = credentials.password;
+    if (!identity || !password) {
+      this.clearLocal();
+      this.markReady();
+      return false;
+    }
+
+    const body = looksLikeEmail(identity)
+      ? { primaryEmail: identity, password }
+      : { username: identity, password };
+
+    try {
+      const { error } = await memberSessionApi.login(body);
+      if (error) {
+        this.clearLocal();
+        this.markReady();
+        return false;
+      }
+      await this.refresh();
+      return this.loggedIn();
+    } catch {
+      this.clearLocal();
+      this.markReady();
+      return false;
+    }
+  }
+  // @relation(GSSC-MLLR-69, GSSC-MLLR-70, GSSC-MLLR-71, scope=range_end, role=Implementation)
 
   /**
    * Record a successful members session for UI (greeting). The Login Token itself
@@ -98,6 +157,17 @@ export class MemberSession {
     writeStored(LEGACY_TOKEN_KEY, null);
     this.loggedIn.set(false);
   }
+
+  private markReady(): void {
+    this.ready.set(true);
+    const waiters = this.readyWaiters;
+    this.readyWaiters = [];
+    for (const resolve of waiters) resolve();
+  }
+}
+
+function looksLikeEmail(value: string): boolean {
+  return value.includes('@');
 }
 
 function asChallengeReport(data: unknown): ChallengeReport | null {

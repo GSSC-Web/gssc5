@@ -79,6 +79,10 @@ UID allocation for this document (coordinate parallel tickets before minting):
 GSSC5-79 Member FE Root + Router owns GSSC-MLLR-1 through GSSC-MLLR-13.
 GSSC5-81 Member Header owns GSSC-MLLR-14 through GSSC-MLLR-31.
 GSSC5-82 Member Footer owns GSSC-MLLR-40 through GSSC-MLLR-66 (Footer chrome, contact details, Key-Value Store, and Society Contact).
+GSSC5-87 Logout / Session Service owns GSSC-MLLR-67 through GSSC-MLLR-71.
+GSSC5-86 Login Page owns GSSC-MLLR-72 through GSSC-MLLR-91.
+GSSC5-88 Route Guards & Redirects owns GSSC-MLLR-92 through GSSC-MLLR-95.
+GSSC-MLLR-32 through GSSC-MLLR-39 remain free for Wave 3 (or later) claimants.
 Do not reuse numbers already claimed by another ticket.
 <<<
 
@@ -1291,6 +1295,594 @@ REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-21
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-AUTHENTICATION
+TITLE: Authentication
+
+[[SECTION]]
+UID: GSSC-MLLR-SESSION-SERVICE
+TITLE: Session Service
+
+[REQUIREMENT]
+UID: GSSC-MLLR-67
+TITLE: Session Challenge
+STATEMENT: >>>
+The Member Frontend Session Service SHALL determine whether a visitor is logged in by challenging the Unified Backend Login Token session and, when the challenge reports a valid session with a member identifier, loading that member's account view for Member Frontend display.
+<<<
+RATIONALE: >>>
+Session state comes from the Unified Backend cookie challenge rather than a Member Frontend-stored Login Token. The account view supplies the display name used by Header Greeting and other authenticated chrome.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-87
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-7
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-68
+TITLE: Invalid Session
+STATEMENT: >>>
+When the Login Token session challenge reports an invalid or absent session, or the account view cannot be loaded, the Member Frontend Session Service SHALL treat the visitor as logged out.
+<<<
+RATIONALE: >>>
+An invalid or missing session must not grant Member Frontend contents. Clearing local logged-in state keeps Header and guards aligned with the Unified Backend.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-87
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-8
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-69
+TITLE: Login Credentials Submission
+STATEMENT: >>>
+The Member Frontend Session Service SHALL submit a member's username or primary email together with that member's password to the Unified Backend login when the Login Page requests authentication.
+<<<
+RATIONALE: >>>
+The Unified Backend accepts either username or primary email with a password. The Session Service is the Member Frontend owner of that credentialed login call.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-87
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-4
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-70
+TITLE: Login Success Session
+STATEMENT: >>>
+When Unified Backend login succeeds, the Member Frontend Session Service SHALL treat the member as logged in after challenging the Login Token session and loading the member account view.
+<<<
+RATIONALE: >>>
+A successful login has to establish usable Member Frontend session state without minting a Login Token in the Member Frontend. Challenge plus account view hydrate display state after the cookie is set.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-87
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-5
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-71
+TITLE: Login Failure Session
+STATEMENT: >>>
+When Unified Backend login fails, the Member Frontend Session Service SHALL leave the visitor logged out.
+<<<
+RATIONALE: >>>
+A failed login must not grant Member Frontend contents. The Login Page shows failure feedback; this requirement covers session state only.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-87
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-6
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-LOGIN-PAGE
+TITLE: Login Page
+
+[[SECTION]]
+UID: GSSC-MLLR-LOGIN-PAGE-ELEMENT
+TITLE: Login Page
+
+[REQUIREMENT]
+UID: GSSC-MLLR-72
+TITLE: Semantic
+STATEMENT: >>>
+The Member Frontend Login Page SHALL present a large organization logo and a single-column login form that contains an identity field, a password field, and a login submit control.
+<<<
+RATIONALE: >>>
+The login experience is the unauthenticated entry to Member Frontend contents. Logo plus a compact credential form give a clear authentication surface.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-86
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-3
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-73
+TITLE: Syntactic
+STATEMENT: >>>
+The Member Frontend Login Page SHALL center its logo and login form in the page content area as one vertical column.
+<<<
+RATIONALE: >>>
+Centering the login experience keeps attention on authentication. A single column stacks logo above credentials without competing side content.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-86
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-3
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-74
+TITLE: Lexical
+STATEMENT: >>>
+The Member Frontend Login Page SHALL use the Member Frontend sans-serif typeface.
+<<<
+RATIONALE: >>>
+Login shares the Member Frontend typeface so authentication does not introduce a separate brand voice.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-86
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-3
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-LOGIN-LOGO
+TITLE: Login Logo
+
+[REQUIREMENT]
+UID: GSSC-MLLR-75
+TITLE: Semantic
+STATEMENT: >>>
+The Login Logo SHALL identify the Genealogical Society of Scandinavian Countries and link to the Member Frontend home path.
+<<<
+RATIONALE: >>>
+Visitors arriving at login still need a recognizable organization mark. Linking home keeps brand navigation consistent with the Header Logo.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-86
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-3
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-76
+TITLE: Syntactic
+STATEMENT: >>>
+The Login Logo SHALL appear above the login form in the Login Page column.
+<<<
+RATIONALE: >>>
+Placing the logo above credentials establishes brand before asking for input.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-86
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-3
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-77
+TITLE: Lexical
+STATEMENT: >>>
+The Login Logo SHALL use the Member Frontend dark-green theme color and present a larger mark than the Header Logo.
+<<<
+RATIONALE: >>>
+A larger mark makes login the brand-forward unauthenticated surface. Dark green matches other Member Frontend brand marks.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-86
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-3
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-LOGIN-IDENTITY-FIELD
+TITLE: Login Identity Field
+
+[REQUIREMENT]
+UID: GSSC-MLLR-78
+TITLE: Semantic
+STATEMENT: >>>
+The Login Identity Field SHALL accept the member's username or primary email for login and require a non-empty value before login submit proceeds.
+<<<
+RATIONALE: >>>
+Identity is one of the two credentials needed for login. Requiring a value before submit matches other Member Frontend form fields.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-86
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-4
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-79
+TITLE: Syntactic
+STATEMENT: >>>
+The Login Identity Field SHALL appear in the login form above the Login Password Field.
+<<<
+RATIONALE: >>>
+Identity before password follows conventional credential entry order.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-86
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-4
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-80
+TITLE: Lexical
+STATEMENT: >>>
+The Login Identity Field SHALL use the Member Frontend sans-serif typeface, a small italic floating label, and a dark-green border when valid or a dark-red border and light-red field background when invalid.
+<<<
+RATIONALE: >>>
+Login fields match the Prompt-style form chrome already used elsewhere so validation and focus feel familiar.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-86
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-4
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-LOGIN-PASSWORD-FIELD
+TITLE: Login Password Field
+
+[REQUIREMENT]
+UID: GSSC-MLLR-81
+TITLE: Semantic
+STATEMENT: >>>
+The Login Password Field SHALL accept the member's password with obscured entry and require a non-empty value before login submit proceeds.
+<<<
+RATIONALE: >>>
+Password is the second login credential. Obscuring entry protects the secret while typing.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-86
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-4
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-82
+TITLE: Syntactic
+STATEMENT: >>>
+The Login Password Field SHALL appear in the login form below the Login Identity Field and above the Login Submit control.
+<<<
+RATIONALE: >>>
+Password sits between identity and submit so the form reads top to bottom.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-86
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-4
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-83
+TITLE: Lexical
+STATEMENT: >>>
+The Login Password Field SHALL use the Member Frontend sans-serif typeface, a small italic floating label, and the same valid and invalid border and background treatment as the Login Identity Field.
+<<<
+RATIONALE: >>>
+Matching identity-field chrome keeps the single-column form visually coherent.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-86
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-4
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-LOGIN-SUBMIT
+TITLE: Login Submit
+
+[REQUIREMENT]
+UID: GSSC-MLLR-84
+TITLE: Semantic
+STATEMENT: >>>
+The Login Submit control SHALL submit the login form credentials for authentication when activated.
+<<<
+RATIONALE: >>>
+Submit is the explicit control that starts authentication after credentials are entered.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-86
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-4
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-85
+TITLE: Syntactic
+STATEMENT: >>>
+The Login Submit control SHALL appear at the bottom of the login form column.
+<<<
+RATIONALE: >>>
+Submit follows the credential fields so visitors finish entry before authenticating.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-86
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-4
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-86
+TITLE: Lexical
+STATEMENT: >>>
+The Login Submit control SHALL use the Member Frontend sans-serif typeface, light-green background, dark-green text, and dark-green border.
+<<<
+RATIONALE: >>>
+Submit uses Member Frontend theme colors so the primary login action matches other branded controls.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-86
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-4
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-LOGIN-FAILURE
+TITLE: Login Failure Message
+
+[REQUIREMENT]
+UID: GSSC-MLLR-87
+TITLE: Semantic
+STATEMENT: >>>
+When login fails, the Login Failure Message SHALL tell the visitor that login did not succeed without exposing Unified Backend internals.
+<<<
+RATIONALE: >>>
+Failed authentication must leave the visitor informed and logged out. Generic failure text avoids leaking account-existence or server details.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-86
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-6
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-88
+TITLE: Syntactic
+STATEMENT: >>>
+The Login Failure Message SHALL appear in the login form above the Login Submit control when present.
+<<<
+RATIONALE: >>>
+Placing failure feedback near submit keeps the error associated with the authentication attempt.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-86
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-6
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-89
+TITLE: Lexical
+STATEMENT: >>>
+The Login Failure Message SHALL use the Member Frontend sans-serif typeface and dark-red text at a small size.
+<<<
+RATIONALE: >>>
+Dark-red failure text matches other Member Frontend invalid-field feedback.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-86
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-6
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-LOGIN-BEHAVIOR
+TITLE: Login Form Behavior
+
+[REQUIREMENT]
+UID: GSSC-MLLR-90
+TITLE: Enter Submits Login
+STATEMENT: >>>
+When the visitor presses Enter while focus is in the Login Identity Field or the Login Password Field, the Login Page SHALL submit login the same way as activating the Login Submit control.
+<<<
+RATIONALE: >>>
+Enter-to-submit matches other Member Frontend forms and speeds credential entry.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-86
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-4
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-91
+TITLE: Login Field Validation
+STATEMENT: >>>
+When login is submitted with an empty Login Identity Field or an empty Login Password Field, the Login Page SHALL mark each empty field invalid and omit Unified Backend login until both fields have values.
+<<<
+RATIONALE: >>>
+Client-side required validation matches other Member Frontend forms and avoids useless backend round trips.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-86
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-4
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-GUARDS
+TITLE: Route Guards and Redirects
+
+[REQUIREMENT]
+UID: GSSC-MLLR-92
+TITLE: Unauthenticated Redirect With Return Path
+STATEMENT: >>>
+When a logged-out visitor requests Member Frontend contents other than the login experience, the Member Frontend SHALL redirect that visitor to the login experience and include the attempted Member Frontend path in the login query.
+<<<
+RATIONALE: >>>
+Protected contents stay gated behind login. Carrying the attempted path lets a later successful login return the member to that destination.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-88
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-10
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-93
+TITLE: Explicit Logout Login Landing
+STATEMENT: >>>
+When a logged-in member chooses Header Logout and the session ends, the Member Frontend SHALL take that visitor to the login experience without a return-path query for the page they left.
+<<<
+RATIONALE: >>>
+Explicit logout is a deliberate session end. Landing on login without a return path avoids sending the member straight back into the view they just left.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-88
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-9
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-94
+TITLE: Authenticated Login Redirect
+STATEMENT: >>>
+When a logged-in member requests the login experience, the Member Frontend SHALL redirect that member away from login to the return path in the login query when that path is a safe Member Frontend destination, otherwise to the Member Frontend home path.
+<<<
+RATIONALE: >>>
+An already-authenticated member does not need the login form. Honoring a safe return path keeps deep-link behavior consistent; home is the fallback.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-88
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-12
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-95
+TITLE: Post-Login Destination
+STATEMENT: >>>
+When login succeeds, the Member Frontend SHALL take the member to the return path from the login query when that path is a safe Member Frontend destination, otherwise to the Member Frontend home path.
+<<<
+RATIONALE: >>>
+Returning to the requested destination avoids an unnecessary detour through home after an unauthenticated deep link. Home remains the fallback.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-88
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-11
   ROLE: Refines
 
 [[/SECTION]]

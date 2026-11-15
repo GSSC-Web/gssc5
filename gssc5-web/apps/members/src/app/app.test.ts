@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { App } from './app';
 import { routes } from './app.routes';
-import { memberSessionApi } from './services/member-session';
+import { MemberSession, memberSessionApi } from './services/member-session';
 import { nativeElement, setupMembersComponent } from '../test-harness';
 
 function stubChallengeLoggedOut(): void {
@@ -16,19 +16,62 @@ function stubChallengeLoggedOut(): void {
     })) as unknown as typeof memberSessionApi.challenge;
 }
 
-async function setupApp(url = '/'): Promise<{
+function stubChallengeLoggedIn(): void {
+  memberSessionApi.challenge = (async () =>
+    ({
+      data: { status: 'valid', cuid: 'user_test' },
+      error: null,
+      response: new Response(null, { status: 200 }),
+      status: 200,
+      headers: new Headers(),
+    })) as unknown as typeof memberSessionApi.challenge;
+  memberSessionApi.getUser = (async () =>
+    ({
+      data: { firstName: 'Ada', lastName: 'Lovelace', username: 'ada' },
+      error: null,
+      response: new Response(null, { status: 200 }),
+      status: 200,
+      headers: new Headers(),
+    })) as unknown as typeof memberSessionApi.getUser;
+}
+
+async function setupApp(
+  url = '/',
+  options?: { loggedIn?: boolean },
+): Promise<{
   fixture: Awaited<ReturnType<typeof setupMembersComponent<App>>>;
   router: Router;
+  session: MemberSession;
   root: HTMLElement;
 }> {
-  stubChallengeLoggedOut();
+  const loggedIn = options?.loggedIn ?? true;
+  if (loggedIn) stubChallengeLoggedIn();
+  else stubChallengeLoggedOut();
+
+  try {
+    globalThis.localStorage?.removeItem('gssc.memberSessionToken');
+    globalThis.localStorage?.removeItem('gssc.memberDisplayName');
+  } catch {
+    // ignore
+  }
+
   const fixture = await setupMembersComponent(App);
   const router = TestBed.inject(Router);
+  const session = TestBed.inject(MemberSession);
   router.resetConfig(routes);
+  await fixture.whenStable();
+  if (loggedIn) {
+    session.setSession('Ada Lovelace');
+  } else {
+    session.loggedIn.set(false);
+    session.displayName.set('');
+  }
+  // ready may already be true from constructor refresh; ensure guards proceed
+  session.ready.set(true);
   await router.navigateByUrl(url);
   fixture.detectChanges();
   await fixture.whenStable();
-  return { fixture, router, root: nativeElement(fixture) };
+  return { fixture, router, session, root: nativeElement(fixture) };
 }
 
 function hostOf(root: HTMLElement): HTMLElement {

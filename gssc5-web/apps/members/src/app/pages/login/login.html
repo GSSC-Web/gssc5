@@ -1,0 +1,123 @@
+<!-- @relation(GSSC-MLLR-72, GSSC-MLLR-73, GSSC-MLLR-74, scope=range_start, role=Implementation) -->
+<section
+  class="gssc-login-page mx-auto flex min-h-[min(70dvh,40rem)] w-full max-w-md flex-col items-center justify-center gap-8 px-4 py-10 font-sans"
+>
+  <!-- @relation(GSSC-MLLR-75, GSSC-MLLR-76, GSSC-MLLR-77, scope=range_start, role=Implementation) -->
+  <a
+    class="gssc-login-page__logo inline-flex text-gssc-dark-green"
+    routerLink="/"
+    aria-label="GSSC Logo"
+  >
+    <svg
+      class="gssc-login-page__logo-mark block"
+      viewBox="0 0 48 48"
+      width="96"
+      height="96"
+      role="img"
+      aria-hidden="true"
+    >
+      <rect x="4" y="4" width="40" height="40" rx="6" fill="currentColor" opacity="0.15" />
+      <text
+        x="24"
+        y="30"
+        text-anchor="middle"
+        font-size="14"
+        font-weight="700"
+        fill="currentColor"
+      >
+        GSSC
+      </text>
+    </svg>
+  </a>
+  <!-- @relation(GSSC-MLLR-75, GSSC-MLLR-76, GSSC-MLLR-77, scope=range_end, role=Implementation) -->
+
+  <form
+    class="gssc-login-page__form flex w-full flex-col gap-4"
+    (ngSubmit)="onSubmit()"
+    novalidate
+  >
+    <!-- @relation(GSSC-MLLR-78, GSSC-MLLR-79, GSSC-MLLR-80, scope=range_start, role=Implementation) -->
+    <div
+      class="gssc-login-page__identity relative flex min-w-0 flex-col rounded-md border font-sans"
+      [class.border-gssc-dark-green]="!identityInvalid()"
+      [class.border-gssc-dark-red]="identityInvalid()"
+      [class.bg-gssc-white]="!identityInvalid()"
+      [class.bg-gssc-light-red]="identityInvalid()"
+    >
+      <label
+        class="gssc-login-page__identity-label absolute -top-2 start-2 bg-inherit px-1 text-xs font-extralight italic"
+        [class.text-gssc-dark-green]="!identityInvalid()"
+        [class.text-gssc-dark-red]="identityInvalid()"
+        for="gssc-login-identity"
+      >
+        Username or primary email&nbsp;*
+      </label>
+      <input
+        id="gssc-login-identity"
+        class="gssc-login-page__identity-control min-w-0 flex-1 border-0 bg-transparent px-2 py-2 font-sans text-sm outline-none"
+        [class.text-gssc-dark-green]="!identityInvalid()"
+        [class.text-gssc-dark-red]="identityInvalid()"
+        name="identity"
+        type="text"
+        autocomplete="username"
+        [(ngModel)]="identity"
+        [attr.aria-invalid]="identityInvalid()"
+        required
+      />
+    </div>
+    <!-- @relation(GSSC-MLLR-78, GSSC-MLLR-79, GSSC-MLLR-80, scope=range_end, role=Implementation) -->
+
+    <!-- @relation(GSSC-MLLR-81, GSSC-MLLR-82, GSSC-MLLR-83, scope=range_start, role=Implementation) -->
+    <div
+      class="gssc-login-page__password relative flex min-w-0 flex-col rounded-md border font-sans"
+      [class.border-gssc-dark-green]="!passwordInvalid()"
+      [class.border-gssc-dark-red]="passwordInvalid()"
+      [class.bg-gssc-white]="!passwordInvalid()"
+      [class.bg-gssc-light-red]="passwordInvalid()"
+    >
+      <label
+        class="gssc-login-page__password-label absolute -top-2 start-2 bg-inherit px-1 text-xs font-extralight italic"
+        [class.text-gssc-dark-green]="!passwordInvalid()"
+        [class.text-gssc-dark-red]="passwordInvalid()"
+        for="gssc-login-password"
+      >
+        Password&nbsp;*
+      </label>
+      <input
+        id="gssc-login-password"
+        class="gssc-login-page__password-control min-w-0 flex-1 border-0 bg-transparent px-2 py-2 font-sans text-sm outline-none"
+        [class.text-gssc-dark-green]="!passwordInvalid()"
+        [class.text-gssc-dark-red]="passwordInvalid()"
+        name="password"
+        type="password"
+        autocomplete="current-password"
+        [(ngModel)]="password"
+        [attr.aria-invalid]="passwordInvalid()"
+        required
+      />
+    </div>
+    <!-- @relation(GSSC-MLLR-81, GSSC-MLLR-82, GSSC-MLLR-83, scope=range_end, role=Implementation) -->
+
+    <!-- @relation(GSSC-MLLR-87, GSSC-MLLR-88, GSSC-MLLR-89, scope=range_start, role=Implementation) -->
+    @if (failureMessage()) {
+      <p
+        class="gssc-login-page__failure m-0 font-sans text-sm text-gssc-dark-red"
+        role="alert"
+      >
+        {{ failureMessage() }}
+      </p>
+    }
+    <!-- @relation(GSSC-MLLR-87, GSSC-MLLR-88, GSSC-MLLR-89, scope=range_end, role=Implementation) -->
+
+    <!-- @relation(GSSC-MLLR-84, GSSC-MLLR-85, GSSC-MLLR-86, scope=range_start, role=Implementation) -->
+    <button
+      type="submit"
+      class="gssc-login-page__submit mt-2 inline-flex cursor-pointer items-center justify-center rounded-md border border-gssc-dark-green bg-gssc-light-green px-3 py-2 font-sans text-sm font-normal text-gssc-dark-green hover:bg-gssc-gray disabled:cursor-not-allowed disabled:opacity-60"
+      [disabled]="submitting()"
+    >
+      Login
+    </button>
+    <!-- @relation(GSSC-MLLR-84, GSSC-MLLR-85, GSSC-MLLR-86, scope=range_end, role=Implementation) -->
+  </form>
+</section>
+<!-- @relation(GSSC-MLLR-72, GSSC-MLLR-73, GSSC-MLLR-74, scope=range_end, role=Implementation) -->
