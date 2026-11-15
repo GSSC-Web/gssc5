@@ -94,7 +94,9 @@ test('GSSC-MLLR-6 Lexical', async () => {
 // @relation(GSSC-MLLR-7, scope=range_start, role=Test)
 test('GSSC-MLLR-7 Semantic', async () => {
   const { root } = await setupApp();
-  expect(root.querySelector('[data-slot="footer"]')).not.toBeNull();
+  const host = root.querySelector('[data-slot="footer"]');
+  expect(host).not.toBeNull();
+  expect(host!.querySelector('gssc-footer')).not.toBeNull();
 });
 // @relation(GSSC-MLLR-7, scope=range_end, role=Test)
 

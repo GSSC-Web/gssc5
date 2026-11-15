@@ -1,0 +1,54 @@
+<!-- @relation(GSSC-MLLR-40, GSSC-MLLR-41, scope=range_start, role=Implementation) -->
+<!-- @relation(GSSC-MLLR-42, scope=range_start, role=Implementation) -->
+<footer
+  class="gssc-footer flex w-full flex-col gap-3 bg-gssc-black px-5 py-4 font-sans text-gssc-white"
+>
+  <!-- @relation(GSSC-MLLR-42, scope=range_end, role=Implementation) -->
+
+  <!-- @relation(GSSC-MLLR-43, GSSC-MLLR-44, GSSC-MLLR-45, scope=range_start, role=Implementation) -->
+  <p class="gssc-footer__organization-name m-0 font-semibold text-gssc-white">
+    {{ societyContact.organizationName() }}
+  </p>
+  <!-- @relation(GSSC-MLLR-43, GSSC-MLLR-44, GSSC-MLLR-45, scope=range_end, role=Implementation) -->
+
+  <div class="gssc-footer__contact-details flex flex-col items-start gap-1.5">
+    <!-- @relation(GSSC-MLLR-49, GSSC-MLLR-50, GSSC-MLLR-51, scope=range_start, role=Implementation) -->
+    <a
+      class="gssc-footer__phone m-0 font-normal text-gssc-white no-underline hover:underline"
+      [href]="societyContact.phoneDialHref()"
+      >{{ societyContact.phoneNumber() }}</a
+    >
+    <!-- @relation(GSSC-MLLR-49, GSSC-MLLR-50, GSSC-MLLR-51, scope=range_end, role=Implementation) -->
+
+    <!-- @relation(GSSC-MLLR-52, GSSC-MLLR-53, GSSC-MLLR-54, scope=range_start, role=Implementation) -->
+    <a
+      class="gssc-footer__email m-0 font-normal text-gssc-white no-underline hover:underline"
+      [href]="societyContact.emailMailtoHref()"
+      >{{ societyContact.emailAddress() }}</a
+    >
+    <!-- @relation(GSSC-MLLR-52, GSSC-MLLR-53, GSSC-MLLR-54, scope=range_end, role=Implementation) -->
+
+    <!-- @relation(GSSC-MLLR-55, GSSC-MLLR-56, GSSC-MLLR-57, scope=range_start, role=Implementation) -->
+    <p class="gssc-footer__postal m-0 font-normal text-gssc-white">
+      {{ societyContact.postalAddress() }}
+    </p>
+    <!-- @relation(GSSC-MLLR-55, GSSC-MLLR-56, GSSC-MLLR-57, scope=range_end, role=Implementation) -->
+
+    <!-- @relation(GSSC-MLLR-59, GSSC-MLLR-60, scope=range_start, role=Implementation) -->
+    <button
+      type="button"
+      class="gssc-footer__contact cursor-pointer font-normal text-gssc-white no-underline hover:underline"
+      (click)="openContact()"
+    >
+      Contact
+    </button>
+    <!-- @relation(GSSC-MLLR-59, GSSC-MLLR-60, scope=range_end, role=Implementation) -->
+  </div>
+
+  <!-- @relation(GSSC-MLLR-46, GSSC-MLLR-47, GSSC-MLLR-48, scope=range_start, role=Implementation) -->
+  <p class="gssc-footer__copyright m-0 font-normal text-gssc-white">
+    {{ copyrightStatement() }}
+  </p>
+  <!-- @relation(GSSC-MLLR-46, GSSC-MLLR-47, GSSC-MLLR-48, scope=range_end, role=Implementation) -->
+</footer>
+<!-- @relation(GSSC-MLLR-40, GSSC-MLLR-41, scope=range_end, role=Implementation) -->

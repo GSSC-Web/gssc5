@@ -66,7 +66,7 @@ TITLE: Introduction
 [TEXT]
 UID: GSSC-MHLR-INTRO-PURPOSE
 STATEMENT: >>>
-These Member High Level Requirements refine Member Frontend Platform Integration Requirements into Member Frontend functionality. This document is a rough draft for v5.0.1 Member Frontend scope. REVIEW_STATUS values are Changed, not Baselined. Refinement continues under a separate Kaneo ticket.
+These Member High Level Requirements refine Member Frontend Platform Integration Requirements into Member Frontend functionality. This document is a rough draft for v5.0.1 Member Frontend scope. REVIEW_STATUS values are Changed, not Baselined, except where a Wave ticket Approves the HLR slice it refines. Broad HLR refinement continues under GSSC5-78; Wave tickets may refine in-scope shell HLRs in the same PR (for example Footer under GSSC5-82).
 <<<
 
 [TEXT]
@@ -412,34 +412,95 @@ RATIONALE: >>>
 No Member Frontend PIR allocates placement of the Footer. This is the default placement of the Footer on authenticated Member Frontend views.
 <<<
 DERIVED: True
-CHANGE_DRIVER: GSSC5-11
-REVIEW_STATUS: Changed
+CHANGE_DRIVER: >>>
+GSSC5-11
+GSSC5-82
+<<<
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-MHLR-21
 TITLE: Footer Organization Name
 STATEMENT: >>>
-The GSSC Website Member Frontend Footer SHALL include the full name of the Genealogical Society of Stanislaus County.
+The GSSC Website Member Frontend Footer SHALL include the full name of the Genealogical Society of Stanislaus County from the website's society contact data, without substituting the society acronym for that full name.
 <<<
 RATIONALE: >>>
-No Member Frontend PIR requires the organization's name in the Footer. The Public Frontend Footer includes the society's full name. The Member Frontend Footer keeps that full name.
+No Member Frontend PIR requires the organization's name in the Footer. The Public Frontend Footer includes the society's full name from shared society contact data. The Member Frontend Footer keeps that full name in every layout and does not replace it with the acronym.
 <<<
 DERIVED: True
-CHANGE_DRIVER: GSSC5-11
-REVIEW_STATUS: Changed
+CHANGE_DRIVER: >>>
+GSSC5-11
+GSSC5-82
+<<<
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-MHLR-22
 TITLE: Footer Copyright
 STATEMENT: >>>
-The GSSC Website Member Frontend Footer SHALL include a copyright statement.
+The GSSC Website Member Frontend Footer SHALL include a copyright statement for the Genealogical Society of Stanislaus County.
 <<<
 RATIONALE: >>>
-No Member Frontend PIR requires a copyright statement. The Public Frontend Footer includes a copyright statement. The Member Frontend Footer keeps a copyright statement and does not set its wording.
+No Member Frontend PIR requires a copyright statement. The Public Frontend Footer includes a copyright statement. The Member Frontend Footer keeps a copyright statement for the society and does not set its exact wording.
 <<<
 DERIVED: True
-CHANGE_DRIVER: GSSC5-11
-REVIEW_STATUS: Changed
+CHANGE_DRIVER: >>>
+GSSC5-11
+GSSC5-82
+<<<
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-MHLR-70
+TITLE: Footer Phone Number
+STATEMENT: >>>
+The GSSC Website Member Frontend Footer SHALL include the society's phone number.
+<<<
+RATIONALE: >>>
+No Member Frontend PIR requires the society's phone number. The Public Frontend Footer includes that phone number. The Member Frontend Footer keeps the phone number separate from the Contact overlay and does not set the current number.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-82
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-MHLR-71
+TITLE: Footer Email Address
+STATEMENT: >>>
+The GSSC Website Member Frontend Footer SHALL include the society's email address.
+<<<
+RATIONALE: >>>
+No Member Frontend PIR requires the society's email address. The Public Frontend Footer includes that email address. The Member Frontend Footer keeps the email address separate from the Contact overlay and does not set the current address.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-82
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-MHLR-72
+TITLE: Footer Postal Address
+STATEMENT: >>>
+The GSSC Website Member Frontend Footer SHALL include the society's postal address.
+<<<
+RATIONALE: >>>
+No Member Frontend PIR requires the society's postal address. The Public Frontend Footer includes that postal address. The Member Frontend Footer keeps the postal address separate from the Contact overlay and does not set the current address.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-82
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-MHLR-73
+TITLE: Footer Contact
+STATEMENT: >>>
+The GSSC Website Member Frontend Footer SHALL offer a Contact control that opens a contact overlay for drafting a message to the organization.
+<<<
+RATIONALE: >>>
+No Member Frontend PIR requires a footer contact option. The Public Frontend Footer opens a contact overlay. The Member Frontend Footer keeps that path; overlay contents may land in a later ticket.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-82
+REVIEW_STATUS: Approved
 
 [[/SECTION]]
 
