@@ -158,14 +158,17 @@ RELATIONS:
 UID: GSSC-MHLR-4
 TITLE: Login Credentials
 STATEMENT: >>>
-The GSSC Website Member Frontend SHALL accept a member's username and password for login.
+The GSSC Website Member Frontend SHALL accept a member's username or primary email, together with that member's password, for login.
 <<<
 RATIONALE: >>>
-No Member Frontend PIR names the credentials a member enters. Login requires the member to supply a username and password. Credential verification is performed by the Unified Backend.
+No Member Frontend PIR names the credentials a member enters. Login requires an account identity the Unified Backend already accepts (username or primary email) plus a password. Credential verification is performed by the Unified Backend.
 <<<
 DERIVED: True
-CHANGE_DRIVER: GSSC5-11
-REVIEW_STATUS: Changed
+CHANGE_DRIVER: >>>
+GSSC5-11
+GSSC5-86
+<<<
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-MHLR-5
@@ -229,15 +232,16 @@ REVIEW_STATUS: Changed
 UID: GSSC-MHLR-9
 TITLE: Logout
 STATEMENT: >>>
-When a logged-in member chooses logout, the GSSC Website Member Frontend SHALL end that member's Login Token session and leave the visitor logged out.
+When a logged-in member chooses logout, the GSSC Website Member Frontend SHALL end that member's Login Token session, leave the visitor logged out, and take that visitor to the login experience without preserving the page they left as a return destination.
 <<<
 RATIONALE: >>>
-No Member Frontend PIR requires logout. A logged-in member needs a way to end the session. Logout ends the Unified Backend Login Token session for that member.
+No Member Frontend PIR requires logout. A logged-in member needs a way to end the session. Logout ends the Unified Backend Login Token session for that member. Explicit logout should land on login as a clean start rather than bouncing the member back to the page they just left.
 <<<
 DERIVED: True
 CHANGE_DRIVER: >>>
 GSSC5-11
 GSSC5-81
+GSSC5-87
 <<<
 REVIEW_STATUS: Approved
 
@@ -251,14 +255,17 @@ TITLE: Guards and Redirects
 UID: GSSC-MHLR-10
 TITLE: Unauthenticated Redirect
 STATEMENT: >>>
-When a logged-out visitor requests Member Frontend contents other than the login experience, the GSSC Website Member Frontend SHALL redirect that visitor to the login experience.
+When a logged-out visitor requests Member Frontend contents other than the login experience, the GSSC Website Member Frontend SHALL redirect that visitor to the login experience and include the attempted Member Frontend destination in the login query so a later successful login can return there.
 <<<
 RATIONALE: >>>
-Login is required before contents. A logged-out visitor who requests protected contents is sent to login rather than shown those contents.
+Login is required before contents. A logged-out visitor who requests protected contents is sent to login rather than shown those contents. Carrying the attempted destination in the query preserves deep links across authentication, except when logout intentionally omits a return destination.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-11
-REVIEW_STATUS: Changed
+CHANGE_DRIVER: >>>
+GSSC5-11
+GSSC5-88
+<<<
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-32
@@ -281,14 +288,17 @@ REVIEW_STATUS: Changed
 UID: GSSC-MHLR-12
 TITLE: Authenticated Login Redirect
 STATEMENT: >>>
-When a logged-in member requests the login experience, the GSSC Website Member Frontend SHALL redirect that member away from the login experience to the dashboard.
+When a logged-in member requests the login experience, the GSSC Website Member Frontend SHALL redirect that member away from the login experience to the return destination in the login query when that destination is still available, otherwise to the dashboard.
 <<<
 RATIONALE: >>>
-A member who is already logged in does not need the login experience. The dashboard is the Member Frontend home page.
+A member who is already logged in does not need the login experience. Honoring a return destination in the query keeps deep-link behavior consistent with post-login redirects; the dashboard remains the Member Frontend home page fallback.
 <<<
 DERIVED: True
-CHANGE_DRIVER: GSSC5-11
-REVIEW_STATUS: Changed
+CHANGE_DRIVER: >>>
+GSSC5-11
+GSSC5-88
+<<<
+REVIEW_STATUS: Approved
 
 [[/SECTION]]
 

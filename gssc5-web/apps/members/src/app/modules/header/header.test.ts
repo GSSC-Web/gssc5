@@ -54,14 +54,12 @@ async function setupHeader(options?: {
   stubChallengeLoggedOut();
   const fixture = await setupMembersComponent(Header);
   const router = TestBed.inject(Router);
-  router.resetConfig([
-    ...routes,
-    { path: 'login', pathMatch: 'full', component: Header },
-  ]);
+  router.resetConfig(routes);
   const session = TestBed.inject(MemberSession);
 
   // Allow in-flight constructor refresh (stubbed) to settle before overriding state.
   await fixture.whenStable();
+  session.ready.set(true);
 
   if (options?.loggedIn) {
     session.setSession(options.displayName ?? 'Ada');
@@ -125,12 +123,15 @@ test('GSSC-MLLR-16 Lexical', async () => {
 
 // @relation(GSSC-MLLR-17, scope=range_start, role=Test)
 test('GSSC-MLLR-17 Semantic', async () => {
-  const { fixture, root, router } = await setupHeader();
+  // Authenticated so home is reachable under the auth gate (GSSC5-88).
+  const { fixture, root, router } = await setupHeader({ loggedIn: true });
   const logo = root.querySelector<HTMLAnchorElement>('.gssc-header__logo')!;
   expect(logo.querySelector('.gssc-header__logo-mark')).not.toBeNull();
   expect(logo.getAttribute('aria-label')).toBe('GSSC Logo');
   await router.navigateByUrl('/login');
   fixture.detectChanges();
+  await fixture.whenStable();
+  // Authenticated login guard may already send us home; logo must still target home.
   logo.click();
   await fixture.whenStable();
   expect(router.url.split('?')[0]).toBe('/');
@@ -226,7 +227,10 @@ test('GSSC-MLLR-25 Lexical', async () => {
 test('GSSC-MLLR-26 Semantic', async () => {
   const restoreLogout = stubBackendLogoutSuccess();
   try {
-    const { fixture, root, session } = await setupHeader({ loggedIn: true, displayName: 'Ada' });
+    const { fixture, root, session, router } = await setupHeader({
+      loggedIn: true,
+      displayName: 'Ada',
+    });
     expect(session.loggedIn()).toBe(true);
     root.querySelector<HTMLButtonElement>('.gssc-header__logout')!.click();
     await fixture.whenStable();
@@ -234,6 +238,8 @@ test('GSSC-MLLR-26 Semantic', async () => {
     expect(session.loggedIn()).toBe(false);
     expect(root.querySelector('.gssc-header__logout')).toBeNull();
     expect(root.querySelector('.gssc-header__login')).not.toBeNull();
+    // Explicit Header logout lands on login without a return-path query (MLLR-93).
+    expect(router.url).toBe('/login');
   } finally {
     restoreLogout();
   }
