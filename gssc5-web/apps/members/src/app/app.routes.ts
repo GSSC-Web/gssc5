@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { AccountPage } from './pages/account/account';
 import { HomePage } from './pages/home/home';
 import { LoginPage } from './pages/login/login';
 import {
@@ -13,6 +14,17 @@ export const routes: Routes = [
     pathMatch: 'full',
     component: LoginPage,
     canActivate: [redirectIfAuthenticatedGuard],
+  },
+  {
+    path: 'account',
+    pathMatch: 'full',
+    component: AccountPage,
+    canActivate: [requireAuthGuard],
+  },
+  {
+    path: 'accounts/:cuid',
+    component: AccountPage,
+    canActivate: [requireAuthGuard],
   },
   {
     path: '',

@@ -10,9 +10,12 @@ type ChallengeReport =
   | { status: 'invalid' };
 
 type AccountView = {
+  cuid?: string;
   firstName?: string | null;
   lastName?: string | null;
   username?: string;
+  isAdmin?: boolean;
+  isUserMod?: boolean;
 };
 
 export type LoginCredentials = {
@@ -36,6 +39,12 @@ export const memberSessionApi = {
 export class MemberSession {
   readonly loggedIn = signal(false);
   readonly displayName = signal(readStored(NAME_KEY) ?? '');
+  /** Logged-in member cuid from the last successful hydrate. */
+  readonly cuid = signal('');
+  /** True when the hydrated account is an administrator. */
+  readonly isAdmin = signal(false);
+  /** True when the hydrated account is a user moderator (administrators included by backend flags). */
+  readonly isUserMod = signal(false);
   /** True after the first challenge/hydrate attempt finishes (success or fail). */
   readonly ready = signal(false);
 
@@ -148,11 +157,18 @@ export class MemberSession {
   // @relation(GSSC-MLLR-26, scope=range_end, role=Implementation)
 
   private applyAccount(user: AccountView): void {
+    this.cuid.set(typeof user.cuid === 'string' ? user.cuid : '');
+    this.isAdmin.set(user.isAdmin === true);
+    // Administrators are user moderators for FE role gates (admin ⊃ userMod).
+    this.isUserMod.set(user.isAdmin === true || user.isUserMod === true);
     this.setSession(displayNameFromAccount(user));
   }
 
   private clearLocal(): void {
     this.displayName.set('');
+    this.cuid.set('');
+    this.isAdmin.set(false);
+    this.isUserMod.set(false);
     writeStored(NAME_KEY, null);
     writeStored(LEGACY_TOKEN_KEY, null);
     this.loggedIn.set(false);
