@@ -4,6 +4,7 @@ import { Component } from '@angular/core';
 // HomePage lives in ./home/ (GSSC5-14 composition).
 // LeadershipPage lives in ./leadership/ (GSSC5-16).
 // MembershipPage lives in ./membership/ (GSSC5-15).
+// CalendarPage lives in ./calendar/ (GSSC5-17).
 // PublicationsPage lives in ./publications/ (GSSC5-19).
 // ResearchToolsPage lives in ./research-tools/ (GSSC5-18).
 // NewslettersPage lives in ./newsletters/ (GSSC5-20).
@@ -11,11 +12,4 @@ import { Component } from '@angular/core';
 export { HomePage } from './home/home';
 export { LeadershipPage } from './leadership/leadership';
 export { MembershipPage } from './membership/membership';
-
-// @relation(GSSC-PLLR-11, scope=range_start, role=Implementation)
-@Component({
-  selector: 'gssc-calendar-page',
-  template: '',
-})
-export class CalendarPage {}
-// @relation(GSSC-PLLR-11, scope=range_end, role=Implementation)
+export { CalendarPage } from './calendar/calendar-page';

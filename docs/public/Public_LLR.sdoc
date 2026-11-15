@@ -5601,6 +5601,201 @@ RELATIONS:
 [[/SECTION]]
 
 [[SECTION]]
+UID: GSSC-PLLR-CALENDAR-PAGE
+TITLE: Calendar Page
+
+[[SECTION]]
+UID: GSSC-PLLR-CALENDAR-PAGE-ELEMENT
+TITLE: Calendar Page
+
+[REQUIREMENT]
+UID: GSSC-PLLR-320
+TITLE: Semantic
+STATEMENT: >>>
+The GSSC Website Public Frontend Calendar Page SHALL present the Public Calendar and SHALL retrieve the public sections tagged for the calendar page from the Unified Backend and place each retrieved section through the Section From CUID.
+<<<
+RATIONALE: >>>
+The page hosts the Public Calendar month view and optional miscellaneous notices. Tagged sections keep notice wording modifiable. Section From CUID places each notice through the Section Container. Public Calendar behavior is defined by separate requirements.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-17
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-137
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-138
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-321
+TITLE: Syntactic
+STATEMENT: >>>
+The Calendar Page SHALL place calendar-page notice sections at full width in the Page Outlet above the Public Calendar in the Unified Backend's section order, SHALL omit the notice list when the Unified Backend provides no such sections, and SHALL place the Public Calendar at full width below those notices when present.
+<<<
+RATIONALE: >>>
+Notices precede the month calendar so optional announcements stay visible without covering the grid. Full-width stacking matches other public page sections. Omitting an empty notice list avoids blank chrome.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-17
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-137
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-138
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-322
+TITLE: Lexical
+STATEMENT: >>>
+The Calendar Page SHALL inherit the Page Outlet font and text color theme tokens, present notice sections through the Section From CUID presentation, and present the Public Calendar through the Public Calendar presentation, without independent page chrome of its own.
+<<<
+RATIONALE: >>>
+The page is an assembly of tagged notices and the Public Calendar. Type tokens stay with the Page Outlet; section look stays with Section From CUID; calendar look stays with the Public Calendar so the page does not fork a second presentation.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-17
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-137
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-138
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-CALENDAR-PAGE-NOTICES
+TITLE: Calendar Page Notices
+
+[REQUIREMENT]
+UID: GSSC-PLLR-323
+TITLE: Semantic
+STATEMENT: >>>
+The Calendar Page Notices SHALL present the Section Contents of each public calendar-page notice section retrieved from the Unified Backend.
+<<<
+RATIONALE: >>>
+The page displays whatever Contents those tagged sections provide. Notice wording stays with the backend sections and is not fixed by this requirement.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-17
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-138
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-324
+TITLE: Syntactic
+STATEMENT: >>>
+The Calendar Page Notices SHALL stack each retrieved section through the Section From CUID in the Unified Backend's section order.
+<<<
+RATIONALE: >>>
+One Section From CUID host per retrieved section keeps placement consistent. Backend section order is the stack order.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-17
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-138
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-325
+TITLE: Lexical
+STATEMENT: >>>
+The Calendar Page Notices SHALL present Section Header, Section Body, and Section Resources through the Section From CUID presentation, without independent lexical chrome of their own.
+<<<
+RATIONALE: >>>
+Calendar-page notices reuse Section From CUID so they share the Section Container look with other public sections.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-17
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-138
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-CALENDAR-PAGE-NOTICE
+TITLE: Calendar Page Notice
+
+[REQUIREMENT]
+UID: GSSC-PLLR-326
+TITLE: Semantic
+STATEMENT: >>>
+Each Calendar Page Notice SHALL present that section's Contents as retrieved for its section cuid through the Section From CUID.
+<<<
+RATIONALE: >>>
+Per-section Contents come from the Unified Backend for that cuid. The page does not invent notice copy.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-17
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-138
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-327
+TITLE: Syntactic
+STATEMENT: >>>
+Each Calendar Page Notice SHALL appear as one Section From CUID placement in the Calendar Page Notices stack.
+<<<
+RATIONALE: >>>
+One host per cuid keeps each calendar-page notice a discrete placement in the page stack.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-17
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-138
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-328
+TITLE: Lexical
+STATEMENT: >>>
+Each Calendar Page Notice SHALL present its Section Header, Section Body, and Section Resources through the Section From CUID presentation, without independent lexical chrome of its own.
+<<<
+RATIONALE: >>>
+Each calendar-page notice reuses Section From CUID so section look stays with the Section Container.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-17
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-138
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
 UID: GSSC-PLLR-SERVICES
 TITLE: Public Services
 
