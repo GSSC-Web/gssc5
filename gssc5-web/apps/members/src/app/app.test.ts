@@ -2,13 +2,26 @@ import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { App } from './app';
 import { routes } from './app.routes';
+import { memberSessionApi } from './services/member-session';
 import { nativeElement, setupMembersComponent } from '../test-harness';
+
+function stubChallengeLoggedOut(): void {
+  memberSessionApi.challenge = (async () =>
+    ({
+      data: { status: 'invalid' },
+      error: null,
+      response: new Response(null, { status: 200 }),
+      status: 200,
+      headers: new Headers(),
+    })) as unknown as typeof memberSessionApi.challenge;
+}
 
 async function setupApp(url = '/'): Promise<{
   fixture: Awaited<ReturnType<typeof setupMembersComponent<App>>>;
   router: Router;
   root: HTMLElement;
 }> {
+  stubChallengeLoggedOut();
   const fixture = await setupMembersComponent(App);
   const router = TestBed.inject(Router);
   router.resetConfig(routes);
@@ -67,7 +80,9 @@ test('GSSC-MLLR-3 Lexical', async () => {
 // @relation(GSSC-MLLR-4, scope=range_start, role=Test)
 test('GSSC-MLLR-4 Semantic', async () => {
   const { root } = await setupApp();
-  expect(root.querySelector('[data-slot="header"]')).not.toBeNull();
+  const host = root.querySelector('[data-slot="header"]');
+  expect(host).not.toBeNull();
+  expect(host!.querySelector('gssc-header')).not.toBeNull();
 });
 // @relation(GSSC-MLLR-4, scope=range_end, role=Test)
 

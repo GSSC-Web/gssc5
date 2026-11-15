@@ -77,7 +77,7 @@ UID: GSSC-MLLR-INTRO-UID-BLOCKS
 STATEMENT: >>>
 UID allocation for this document (coordinate parallel tickets before minting):
 GSSC5-79 Member FE Root + Router owns GSSC-MLLR-1 through GSSC-MLLR-13.
-GSSC5-81 Member Header reserves GSSC-MLLR-14 and the contiguous Header chrome block above that (do not overlap Footer).
+GSSC5-81 Member Header owns GSSC-MLLR-14 through GSSC-MLLR-31.
 GSSC5-82 Member Footer owns GSSC-MLLR-40 through GSSC-MLLR-66 (Footer chrome, contact details, Key-Value Store, and Society Contact).
 Do not reuse numbers already claimed by another ticket.
 <<<
@@ -357,6 +357,375 @@ RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-26
   ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-HEADER
+TITLE: Member Header
+
+[[SECTION]]
+UID: GSSC-MLLR-HEADER-BAR
+TITLE: Header
+
+[REQUIREMENT]
+UID: GSSC-MLLR-14
+TITLE: Semantic
+STATEMENT: >>>
+The GSSC Website Member Frontend Header SHALL present the Header Logo, and when a member is logged in SHALL present the Header Navigation, the Header Greeting, and the Header Logout control, and when no member is logged in SHALL present the Header Login control.
+<<<
+RATIONALE: >>>
+The Header composes those displayed elements in the Header host. Each element's behavior is a separate requirement. This is Member Frontend chrome with login and logout affordances, not a Public Frontend Header action-bar clone.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-81
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-15
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-15
+TITLE: Syntactic
+STATEMENT: >>>
+The GSSC Website Member Frontend Header SHALL fill the Header host and arrange identity, navigation, and account-access controls in a horizontal bar that wraps as the viewport narrows.
+<<<
+RATIONALE: >>>
+The Header host already sticks to the top of the viewport. Filling that host and wrapping the bar keeps Header contents available as the page resizes.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-81
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-15
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-16
+TITLE: Lexical
+STATEMENT: >>>
+The GSSC Website Member Frontend Header SHALL use the light-green theme token for its background, the gray theme token for a thicker bottom border, and the dark-green theme token for its text.
+<<<
+RATIONALE: >>>
+Theme tokens keep Header presentation aligned with the organization palette shared with the Public Frontend Header. A fuller color role map for the Member Header is not set yet beyond these token choices.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-81
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-15
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-HEADER-LOGO
+TITLE: Header Logo
+
+[REQUIREMENT]
+UID: GSSC-MLLR-17
+TITLE: Semantic
+STATEMENT: >>>
+The Header Logo SHALL display the GSSC Logo, and selection of the Header Logo SHALL open the Member Frontend dashboard.
+<<<
+RATIONALE: >>>
+The Header always includes the GSSC Logo so the member can identify the society. Selecting the logo returns the member to the Member Frontend dashboard home.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-81
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-16
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-18
+TITLE: Syntactic
+STATEMENT: >>>
+The Header Logo SHALL appear at the start of the Header in every layout.
+<<<
+RATIONALE: >>>
+Leading placement keeps the logo visible as the primary identity mark in the Member Header.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-81
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-16
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-19
+TITLE: Lexical
+STATEMENT: >>>
+The Header Logo SHALL use the dark-green theme token for its mark color.
+<<<
+RATIONALE: >>>
+A single theme token keeps the mark readable on the Header background until a brand color role is set.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-81
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-16
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-HEADER-NAV
+TITLE: Header Navigation
+
+[REQUIREMENT]
+UID: GSSC-MLLR-20
+TITLE: Semantic
+STATEMENT: >>>
+When a member is logged in, the Header Navigation SHALL provide a control that opens the Member Frontend dashboard and a control for each other Member Frontend area that member is permitted to open.
+<<<
+RATIONALE: >>>
+Logged-in members reach the dashboard and permitted Member Frontend areas from the Header. Area inventory grows as those areas land; this requirement covers the navigation affordance, not Public Frontend Contact or Site Search controls.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-81
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-19
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-21
+TITLE: Syntactic
+STATEMENT: >>>
+The Header Navigation SHALL appear after the Header Logo when a member is logged in, and SHALL be omitted when no member is logged in.
+<<<
+RATIONALE: >>>
+Navigation sits with identity for logged-in members. Omitting it when logged out keeps the Header focused on login until authentication succeeds.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-81
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-19
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-22
+TITLE: Lexical
+STATEMENT: >>>
+The Header Navigation SHALL use the sans-serif theme font and the dark-green theme token for its text color.
+<<<
+RATIONALE: >>>
+Navigation shares Header text tokens until a fuller control style map exists.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-81
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-19
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-HEADER-GREETING
+TITLE: Header Greeting
+
+[REQUIREMENT]
+UID: GSSC-MLLR-23
+TITLE: Semantic
+STATEMENT: >>>
+When a member is logged in with a valid Member Frontend session, the Header Greeting SHALL display a greeting that includes that member's name.
+<<<
+RATIONALE: >>>
+The greeting shows a logged-in member that the Header recognizes the session and identifies the member by name.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-81
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-17
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-24
+TITLE: Syntactic
+STATEMENT: >>>
+The Header Greeting SHALL appear among the Header account-access controls when a member is logged in, and SHALL be omitted when no member is logged in.
+<<<
+RATIONALE: >>>
+The Greeting is the logged-in account-access signal. Omitting it when logged out leaves room for the Header Login control.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-81
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-17
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-25
+TITLE: Lexical
+STATEMENT: >>>
+The Header Greeting SHALL use the sans-serif theme font and the dark-green theme token for its text color.
+<<<
+RATIONALE: >>>
+The Greeting shares Header account-access text tokens so it reads with Login and Logout.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-81
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-17
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-HEADER-LOGOUT
+TITLE: Header Logout
+
+[REQUIREMENT]
+UID: GSSC-MLLR-26
+TITLE: Semantic
+STATEMENT: >>>
+When a member is logged in, the Header Logout control SHALL end that member's Login Token session and leave the visitor logged out.
+<<<
+RATIONALE: >>>
+Logout ends the Unified Backend Login Token session for that member and clears Member Frontend logged-in presentation. Full route-guard redirects after logout are separate requirements.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-81
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-18
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-9
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-27
+TITLE: Syntactic
+STATEMENT: >>>
+The Header Logout control SHALL appear among the Header account-access controls when a member is logged in, and SHALL be omitted when no member is logged in.
+<<<
+RATIONALE: >>>
+Logout sits with the Greeting for logged-in members and is hidden when there is no session to end.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-81
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-18
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-28
+TITLE: Lexical
+STATEMENT: >>>
+The Header Logout control SHALL use the sans-serif theme font and the dark-green theme token for its text color.
+<<<
+RATIONALE: >>>
+Account-access controls share Header text tokens until a fuller control style map exists.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-81
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-18
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-HEADER-LOGIN
+TITLE: Header Login
+
+[REQUIREMENT]
+UID: GSSC-MLLR-29
+TITLE: Semantic
+STATEMENT: >>>
+When no member is logged in, the Header Login control SHALL navigate the visitor to the Member Frontend login experience.
+<<<
+RATIONALE: >>>
+Login on the Member Header is navigation to the login experience. Login page contents and route guards are separate requirements.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-81
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-60
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-30
+TITLE: Syntactic
+STATEMENT: >>>
+The Header Login control SHALL appear among the Header account-access controls when no member is logged in, and SHALL be omitted when a member is logged in.
+<<<
+RATIONALE: >>>
+Login replaces Greeting and Logout when there is no session. Omitting it when logged in avoids offering login to an authenticated member.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-81
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-60
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-31
+TITLE: Lexical
+STATEMENT: >>>
+The Header Login control SHALL use the sans-serif theme font and the dark-green theme token for its text color.
+<<<
+RATIONALE: >>>
+Account-access controls share Header text tokens until a fuller control style map exists.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-81
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-60
+  ROLE: Refines
+
+[[/SECTION]]
 
 [[/SECTION]]
 

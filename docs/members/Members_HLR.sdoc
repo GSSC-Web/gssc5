@@ -66,7 +66,7 @@ TITLE: Introduction
 [TEXT]
 UID: GSSC-MHLR-INTRO-PURPOSE
 STATEMENT: >>>
-These Member High Level Requirements refine Member Frontend Platform Integration Requirements into Member Frontend functionality. This document is a rough draft for v5.0.1 Member Frontend scope. REVIEW_STATUS values are Changed, not Baselined, except where a Wave ticket Approves the HLR slice it refines. Broad HLR refinement continues under GSSC5-78; Wave tickets may refine in-scope shell HLRs in the same PR (for example Footer under GSSC5-82).
+These Member High Level Requirements refine Member Frontend Platform Integration Requirements into Member Frontend functionality. This document is a rough draft for v5.0.1 Member Frontend scope. REVIEW_STATUS values are Changed, not Baselined, except where a Wave ticket Approves the HLR slice it refines. Broad HLR refinement continues under GSSC5-78; Wave tickets may refine in-scope shell HLRs in the same PR (for example Header under GSSC5-81 and Footer under GSSC5-82).
 <<<
 
 [TEXT]
@@ -235,8 +235,11 @@ RATIONALE: >>>
 No Member Frontend PIR requires logout. A logged-in member needs a way to end the session. Logout ends the Unified Backend Login Token session for that member.
 <<<
 DERIVED: True
-CHANGE_DRIVER: GSSC5-11
-REVIEW_STATUS: Changed
+CHANGE_DRIVER: >>>
+GSSC5-11
+GSSC5-81
+<<<
+REVIEW_STATUS: Approved
 
 [[/SECTION]]
 
@@ -341,8 +344,11 @@ RATIONALE: >>>
 No Member Frontend PIR allocates placement of the Header. This is the default placement of the Header on authenticated Member Frontend views.
 <<<
 DERIVED: True
-CHANGE_DRIVER: GSSC5-11
-REVIEW_STATUS: Changed
+CHANGE_DRIVER: >>>
+GSSC5-11
+GSSC5-81
+<<<
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-MHLR-16
@@ -354,8 +360,11 @@ RATIONALE: >>>
 No Member Frontend PIR requires a logo. The Public Frontend Header includes the GSSC Logo. The Member Frontend Header keeps that brand signal for logged-in members.
 <<<
 DERIVED: True
-CHANGE_DRIVER: GSSC5-11
-REVIEW_STATUS: Changed
+CHANGE_DRIVER: >>>
+GSSC5-11
+GSSC5-81
+<<<
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-MHLR-17
@@ -367,8 +376,11 @@ RATIONALE: >>>
 No Member Frontend PIR requires a greeting. The Header shows the logged-in member that the Member Frontend recognizes them.
 <<<
 DERIVED: True
-CHANGE_DRIVER: GSSC5-11
-REVIEW_STATUS: Changed
+CHANGE_DRIVER: >>>
+GSSC5-11
+GSSC5-81
+<<<
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-MHLR-18
@@ -380,8 +392,11 @@ RATIONALE: >>>
 Logout ends the member's session. Placing logout in the Header keeps that control available from authenticated views.
 <<<
 DERIVED: True
-CHANGE_DRIVER: GSSC5-11
-REVIEW_STATUS: Changed
+CHANGE_DRIVER: >>>
+GSSC5-11
+GSSC5-81
+<<<
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-MHLR-19
@@ -390,11 +405,27 @@ STATEMENT: >>>
 The GSSC Website Member Frontend Header SHALL provide navigation to the dashboard and to the Member Frontend areas the logged-in member is permitted to open.
 <<<
 RATIONALE: >>>
-No Member Frontend PIR requires header navigation. Logged-in members need a consistent way to reach the dashboard and other Member Frontend areas their permissions allow.
+No Member Frontend PIR requires header navigation. Logged-in members need a consistent way to reach the dashboard and other Member Frontend areas their permissions allow. This is Member Frontend area navigation, not a clone of the Public Frontend Header action bar.
 <<<
 DERIVED: True
-CHANGE_DRIVER: GSSC5-11
-REVIEW_STATUS: Changed
+CHANGE_DRIVER: >>>
+GSSC5-11
+GSSC5-81
+<<<
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-MHLR-60
+TITLE: Header Login
+STATEMENT: >>>
+When no member is logged in, the GSSC Website Member Frontend Header SHALL offer login.
+<<<
+RATIONALE: >>>
+No Member Frontend PIR places login in the Header. A logged-out visitor on the Member Frontend needs a Header path to the login experience. The login experience contents are separate requirements.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-81
+REVIEW_STATUS: Approved
 
 [[/SECTION]]
 

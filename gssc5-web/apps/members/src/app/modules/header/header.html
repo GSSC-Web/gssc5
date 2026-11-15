@@ -1,0 +1,79 @@
+<!-- @relation(GSSC-MLLR-14, GSSC-MLLR-15, scope=range_start, role=Implementation) -->
+<!-- @relation(GSSC-MLLR-16, scope=range_start, role=Implementation) -->
+<header
+  class="gssc-header flex w-full flex-wrap items-center gap-x-5 gap-y-3 border-b-4 border-gssc-gray bg-gssc-light-green px-4 py-3 font-sans text-gssc-dark-green"
+>
+  <!-- @relation(GSSC-MLLR-16, scope=range_end, role=Implementation) -->
+
+  <div class="gssc-header__identity flex min-w-0 items-center gap-3">
+    <!-- @relation(GSSC-MLLR-17, GSSC-MLLR-18, GSSC-MLLR-19, scope=range_start, role=Implementation) -->
+    <a
+      class="gssc-header__logo inline-flex shrink-0 text-gssc-dark-green"
+      routerLink="/"
+      aria-label="GSSC Logo"
+    >
+      <!-- Placeholder mark until shared brand artwork. -->
+      <svg
+        class="gssc-header__logo-mark block"
+        viewBox="0 0 48 48"
+        width="40"
+        height="40"
+        role="img"
+        aria-hidden="true"
+      >
+        <rect x="4" y="4" width="40" height="40" rx="6" fill="currentColor" opacity="0.15" />
+        <text
+          x="24"
+          y="30"
+          text-anchor="middle"
+          font-size="14"
+          font-weight="700"
+          fill="currentColor"
+        >
+          GSSC
+        </text>
+      </svg>
+    </a>
+    <!-- @relation(GSSC-MLLR-17, GSSC-MLLR-18, GSSC-MLLR-19, scope=range_end, role=Implementation) -->
+  </div>
+
+  @if (loggedIn()) {
+    <!-- @relation(GSSC-MLLR-20, GSSC-MLLR-21, GSSC-MLLR-22, scope=range_start, role=Implementation) -->
+    <nav class="gssc-header__nav flex min-w-0 flex-wrap items-center gap-x-4 font-sans text-gssc-dark-green" aria-label="Member">
+      <a class="gssc-header__nav-dashboard" routerLink="/">Dashboard</a>
+    </nav>
+    <!-- @relation(GSSC-MLLR-20, GSSC-MLLR-21, GSSC-MLLR-22, scope=range_end, role=Implementation) -->
+  }
+
+  <div class="gssc-header__actions ml-auto flex flex-wrap items-center gap-0">
+    <div class="gssc-header__account relative flex items-center gap-x-3">
+      @if (loggedIn()) {
+        <!-- @relation(GSSC-MLLR-23, GSSC-MLLR-24, GSSC-MLLR-25, scope=range_start, role=Implementation) -->
+        <span class="gssc-header__greeting font-sans text-gssc-dark-green">
+          Hello, {{ displayName() }}
+        </span>
+        <!-- @relation(GSSC-MLLR-23, GSSC-MLLR-24, GSSC-MLLR-25, scope=range_end, role=Implementation) -->
+
+        <!-- @relation(GSSC-MLLR-27, GSSC-MLLR-28, scope=range_start, role=Implementation) -->
+        <button
+          type="button"
+          class="gssc-header__logout cursor-pointer border-0 bg-transparent p-0 font-sans text-gssc-dark-green"
+          (click)="logout()"
+        >
+          Logout
+        </button>
+        <!-- @relation(GSSC-MLLR-27, GSSC-MLLR-28, scope=range_end, role=Implementation) -->
+      } @else {
+        <!-- @relation(GSSC-MLLR-29, GSSC-MLLR-30, GSSC-MLLR-31, scope=range_start, role=Implementation) -->
+        <a
+          class="gssc-header__login font-sans text-gssc-dark-green"
+          routerLink="/login"
+        >
+          Login
+        </a>
+        <!-- @relation(GSSC-MLLR-29, GSSC-MLLR-30, GSSC-MLLR-31, scope=range_end, role=Implementation) -->
+      }
+    </div>
+  </div>
+</header>
+<!-- @relation(GSSC-MLLR-14, GSSC-MLLR-15, scope=range_end, role=Implementation) -->
