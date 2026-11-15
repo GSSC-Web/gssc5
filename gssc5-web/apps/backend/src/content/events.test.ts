@@ -151,8 +151,7 @@ function sampleEvent(overrides: Record<string, unknown> = {}) {
   };
 }
 
-// @relation(GSSC-BLLR-412, GSSC-BLLR-414, role=Test)
-test("GSSC-BLLR-412/414 public event list returns only public entries with fields", async () => {
+async function seedListedEvents() {
   const prisma = getPrisma(loadConfig().DATABASE_URL);
   const publicDetails = await prisma.pageDataEntry.create({
     data: {
@@ -182,7 +181,7 @@ test("GSSC-BLLR-412/414 public event list returns only public entries with field
       endYear: 2027,
     },
   });
-  await prisma.event.create({
+  const pub = await prisma.event.create({
     data: {
       name: "Public Tour",
       month: 5,
@@ -201,7 +200,7 @@ test("GSSC-BLLR-412/414 public event list returns only public entries with field
       pageDataId: publicDetails.id,
     },
   });
-  await prisma.event.create({
+  const priv = await prisma.event.create({
     data: {
       name: "Members Meeting",
       month: 6,
@@ -220,14 +219,223 @@ test("GSSC-BLLR-412/414 public event list returns only public entries with field
       pageDataId: privateDetails.id,
     },
   });
+  return { pub, priv };
+}
 
+let seeded = false;
+async function ensureSeeded() {
+  if (seeded) return;
+  await seedListedEvents();
+  seeded = true;
+}
+
+// @relation(GSSC-BLLR-402, scope=range_start, role=Test)
+test("GSSC-BLLR-402 event table stores required columns", async () => {
+  const created = await sendJson(
+    "POST",
+    "/events",
+    sampleEvent({ name: "Table Shape", day: 2 }),
+    adminTok,
+  );
+  expect(created.status).toBe(201);
+  const cuid = (created.body as { cuid: string }).cuid;
+  const prisma = getPrisma(loadConfig().DATABASE_URL);
+  const row = await prisma.event.findUnique({ where: { id: cuid } });
+  expect(row).toMatchObject({
+    name: "Table Shape",
+    month: 4,
+    day: 2,
+    year: 2027,
+    announcementStartMonth: 3,
+    announcementStartDay: 1,
+    announcementStartYear: 2027,
+    time: "09:00",
+    duration: "3 hours",
+    location: "Main Gate",
+    isPublic: true,
+  });
+  expect(row!.pageDataId.length).toBeGreaterThan(0);
+  expect(typeof row!.createPerm).toBe("number");
+  expect(typeof row!.modifyPerm).toBe("number");
+  expect(typeof row!.deletePerm).toBe("number");
+});
+// @relation(GSSC-BLLR-402, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-403, scope=range_start, role=Test)
+test("GSSC-BLLR-403 event name is stored", async () => {
+  const created = await sendJson(
+    "POST",
+    "/events",
+    sampleEvent({ name: "Named Event", day: 3 }),
+    adminTok,
+  );
+  expect(created.status).toBe(201);
+  expect((created.body as { name: string }).name).toBe("Named Event");
+});
+// @relation(GSSC-BLLR-403, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-404, scope=range_start, role=Test)
+test("GSSC-BLLR-404 event date maps onto page_data start and end", async () => {
+  const created = await sendJson(
+    "POST",
+    "/events",
+    sampleEvent({ name: "Date Map", month: 8, day: 9, year: 2028 }),
+    adminTok,
+  );
+  expect(created.status).toBe(201);
+  const entry = created.body as {
+    month: number;
+    day: number;
+    year: number;
+    pageDataCuid: string;
+  };
+  expect(entry).toMatchObject({ month: 8, day: 9, year: 2028 });
+  const details = await getPrisma(loadConfig().DATABASE_URL).pageDataEntry.findUnique({
+    where: { id: entry.pageDataCuid },
+  });
+  expect(details).toMatchObject({
+    startMonth: 8,
+    startDay: 9,
+    startYear: 2028,
+    endMonth: 8,
+    endDay: 9,
+    endYear: 2028,
+  });
+});
+// @relation(GSSC-BLLR-404, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-405, scope=range_start, role=Test)
+test("GSSC-BLLR-405 announcement start is stored on the event row", async () => {
+  const created = await sendJson(
+    "POST",
+    "/events",
+    sampleEvent({
+      name: "Announce Start",
+      day: 4,
+      announcementStartMonth: 1,
+      announcementStartDay: 15,
+      announcementStartYear: 2026,
+    }),
+    adminTok,
+  );
+  expect(created.status).toBe(201);
+  const body = created.body as {
+    announcementStartMonth: number;
+    announcementStartDay: number;
+    announcementStartYear: number;
+    pageDataCuid: string;
+  };
+  expect(body).toMatchObject({
+    announcementStartMonth: 1,
+    announcementStartDay: 15,
+    announcementStartYear: 2026,
+  });
+  const details = await getPrisma(loadConfig().DATABASE_URL).pageDataEntry.findUnique({
+    where: { id: body.pageDataCuid },
+  });
+  expect(details!.startMonth).toBe(4);
+  expect(details!.startDay).toBe(4);
+});
+// @relation(GSSC-BLLR-405, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-406, scope=range_start, role=Test)
+test("GSSC-BLLR-406 event time is stored", async () => {
+  const created = await sendJson(
+    "POST",
+    "/events",
+    sampleEvent({ name: "Timed", day: 5, time: "14:30" }),
+    adminTok,
+  );
+  expect(created.status).toBe(201);
+  expect((created.body as { time: string }).time).toBe("14:30");
+});
+// @relation(GSSC-BLLR-406, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-407, scope=range_start, role=Test)
+test("GSSC-BLLR-407 event duration is stored", async () => {
+  const created = await sendJson(
+    "POST",
+    "/events",
+    sampleEvent({ name: "Duration", day: 6, duration: "90 minutes" }),
+    adminTok,
+  );
+  expect(created.status).toBe(201);
+  expect((created.body as { duration: string }).duration).toBe("90 minutes");
+});
+// @relation(GSSC-BLLR-407, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-408, scope=range_start, role=Test)
+test("GSSC-BLLR-408 event location is stored", async () => {
+  const created = await sendJson(
+    "POST",
+    "/events",
+    sampleEvent({ name: "Located", day: 7, location: "Chapel" }),
+    adminTok,
+  );
+  expect(created.status).toBe(201);
+  expect((created.body as { location: string }).location).toBe("Chapel");
+});
+// @relation(GSSC-BLLR-408, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-409, scope=range_start, role=Test)
+test("GSSC-BLLR-409 event references event-details page_data", async () => {
+  const created = await sendJson(
+    "POST",
+    "/events",
+    sampleEvent({ name: "Details Ref", day: 8 }),
+    adminTok,
+  );
+  expect(created.status).toBe(201);
+  const pageDataCuid = (created.body as { pageDataCuid: string }).pageDataCuid;
+  const details = await getPrisma(loadConfig().DATABASE_URL).pageDataEntry.findUnique({
+    where: { id: pageDataCuid },
+  });
+  expect(details!.datatype).toBe("event");
+});
+// @relation(GSSC-BLLR-409, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-410, scope=range_start, role=Test)
+test("GSSC-BLLR-410 event audience isPublic is stored", async () => {
+  const created = await sendJson(
+    "POST",
+    "/events",
+    sampleEvent({ name: "Private Audience", day: 9, isPublic: false }),
+    adminTok,
+  );
+  expect(created.status).toBe(201);
+  expect((created.body as { isPublic: boolean }).isPublic).toBe(false);
+});
+// @relation(GSSC-BLLR-410, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-412, scope=range_start, role=Test)
+test("GSSC-BLLR-412 public event list returns only public events", async () => {
+  await ensureSeeded();
   const { status, body } = await getJson("/events");
   expect(status).toBe(200);
-  expect(Array.isArray(body)).toBe(true);
-  const names = (body as { name: string; isPublic: boolean }[]).map((e) => e.name);
+  const names = (body as { name: string }[]).map((e) => e.name);
   expect(names).toContain("Public Tour");
   expect(names).not.toContain("Members Meeting");
-  const entry = (body as Record<string, unknown>[]).find((e) => e.name === "Public Tour")!;
+});
+// @relation(GSSC-BLLR-412, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-413, scope=range_start, role=Test)
+test("GSSC-BLLR-413 authenticated event list includes members-only", async () => {
+  await ensureSeeded();
+  const { status, body } = await getJson("/events", memberTok);
+  expect(status).toBe(200);
+  const names = (body as { name: string }[]).map((e) => e.name);
+  expect(names).toContain("Public Tour");
+  expect(names).toContain("Members Meeting");
+});
+// @relation(GSSC-BLLR-413, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-414, scope=range_start, role=Test)
+test("GSSC-BLLR-414 event list entry fields and date order", async () => {
+  await ensureSeeded();
+  const { status, body } = await getJson("/events", adminTok);
+  expect(status).toBe(200);
+  const entries = body as Record<string, unknown>[];
+  const entry = entries.find((e) => e.name === "Public Tour")!;
   expect(entry).toMatchObject({
     month: 5,
     day: 1,
@@ -242,87 +450,70 @@ test("GSSC-BLLR-412/414 public event list returns only public entries with field
   });
   expect(typeof entry.cuid).toBe("string");
   expect(typeof entry.pageDataCuid).toBe("string");
+  const years = entries.map((e) => e.year as number);
+  expect([...years].sort((a, b) => a - b)).toEqual(years);
 });
+// @relation(GSSC-BLLR-414, scope=range_end, role=Test)
 
-// @relation(GSSC-BLLR-413, role=Test)
-test("GSSC-BLLR-413 authenticated event list includes members-only", async () => {
-  const { status, body } = await getJson("/events", memberTok);
+// @relation(GSSC-BLLR-415, scope=range_start, role=Test)
+test("GSSC-BLLR-415 public get returns a public event", async () => {
+  await ensureSeeded();
+  const pub = await getPrisma(loadConfig().DATABASE_URL).event.findFirst({
+    where: { name: "Public Tour" },
+  });
+  const { status, body } = await getJson(`/events/${pub!.id}`);
   expect(status).toBe(200);
-  const names = (body as { name: string }[]).map((e) => e.name);
-  expect(names).toContain("Public Tour");
-  expect(names).toContain("Members Meeting");
+  expect((body as { name: string }).name).toBe("Public Tour");
 });
+// @relation(GSSC-BLLR-415, scope=range_end, role=Test)
 
-// @relation(GSSC-BLLR-415, GSSC-BLLR-416, role=Test)
-test("GSSC-BLLR-415/416 public get allows public and rejects private", async () => {
-  const prisma = getPrisma(loadConfig().DATABASE_URL);
-  const pub = await prisma.event.findFirst({ where: { name: "Public Tour" } });
-  const priv = await prisma.event.findFirst({ where: { name: "Members Meeting" } });
-  expect(pub).toBeTruthy();
-  expect(priv).toBeTruthy();
-
-  const ok = await getJson(`/events/${pub!.id}`);
-  expect(ok.status).toBe(200);
-  expect((ok.body as { name: string }).name).toBe("Public Tour");
-
-  const denied = await getJson(`/events/${priv!.id}`);
-  expect(denied.status).toBe(403);
+// @relation(GSSC-BLLR-416, scope=range_start, role=Test)
+test("GSSC-BLLR-416 public get rejects members-only event", async () => {
+  await ensureSeeded();
+  const priv = await getPrisma(loadConfig().DATABASE_URL).event.findFirst({
+    where: { name: "Members Meeting" },
+  });
+  const { status } = await getJson(`/events/${priv!.id}`);
+  expect(status).toBe(403);
 });
+// @relation(GSSC-BLLR-416, scope=range_end, role=Test)
 
-// @relation(GSSC-BLLR-417, role=Test)
+// @relation(GSSC-BLLR-417, scope=range_start, role=Test)
 test("GSSC-BLLR-417 authenticated get returns members-only event", async () => {
-  const prisma = getPrisma(loadConfig().DATABASE_URL);
-  const priv = await prisma.event.findFirst({ where: { name: "Members Meeting" } });
+  await ensureSeeded();
+  const priv = await getPrisma(loadConfig().DATABASE_URL).event.findFirst({
+    where: { name: "Members Meeting" },
+  });
   const { status, body } = await getJson(`/events/${priv!.id}`, memberTok);
   expect(status).toBe(200);
   expect((body as { name: string }).name).toBe("Members Meeting");
 });
+// @relation(GSSC-BLLR-417, scope=range_end, role=Test)
 
-// @relation(GSSC-BLLR-418, GSSC-BLLR-402, GSSC-BLLR-403, GSSC-BLLR-404, GSSC-BLLR-405, GSSC-BLLR-406, GSSC-BLLR-407, GSSC-BLLR-408, GSSC-BLLR-409, GSSC-BLLR-410, role=Test)
-test("GSSC-BLLR-418/402–410 create event with details and maps date onto page_data start/end", async () => {
-  const created = await sendJson("POST", "/events", sampleEvent(), userModTok);
+// @relation(GSSC-BLLR-418, scope=range_start, role=Test)
+test("GSSC-BLLR-418 create event and details for permitted caller", async () => {
+  const created = await sendJson("POST", "/events", sampleEvent({ name: "Created", day: 10 }), userModTok);
   expect(created.status).toBe(201);
-  const entry = created.body as {
-    cuid: string;
-    pageDataCuid: string;
-    name: string;
-    month: number;
-    day: number;
-    year: number;
-    announcementStartMonth: number;
-  };
-  expect(entry.name).toBe("Spring Cleanup");
-  expect(entry.month).toBe(4);
-  expect(entry.announcementStartMonth).toBe(3);
-
-  const prisma = getPrisma(loadConfig().DATABASE_URL);
-  const details = await prisma.pageDataEntry.findUnique({
-    where: { id: entry.pageDataCuid },
-  });
-  expect(details).toBeTruthy();
-  expect(details!.datatype).toBe("event");
-  expect(details!.startMonth).toBe(4);
-  expect(details!.startDay).toBe(12);
-  expect(details!.startYear).toBe(2027);
-  expect(details!.endMonth).toBe(4);
-  expect(details!.endDay).toBe(12);
-  expect(details!.endYear).toBe(2027);
-  expect(details!.isPublic).toBe(true);
-
-  const row = await prisma.event.findUnique({ where: { id: entry.cuid } });
-  expect(row!.announcementStartDay).toBe(1);
-  expect(row!.time).toBe("09:00");
-  expect(row!.duration).toBe("3 hours");
-  expect(row!.location).toBe("Main Gate");
+  const entry = created.body as { cuid: string; pageDataCuid: string; name: string };
+  expect(entry.name).toBe("Created");
+  expect(entry.cuid.length).toBeGreaterThan(0);
+  expect(entry.pageDataCuid.length).toBeGreaterThan(0);
 });
+// @relation(GSSC-BLLR-418, scope=range_end, role=Test)
 
-// @relation(GSSC-BLLR-419, role=Test)
-test("GSSC-BLLR-419 create forbidden for plain member without create permission", async () => {
-  const { status } = await sendJson("POST", "/events", sampleEvent({ name: "Denied" }), memberTok);
+// @relation(GSSC-BLLR-419, scope=range_start, role=Test)
+test("GSSC-BLLR-419 create forbidden without create permission", async () => {
+  const { status } = await sendJson(
+    "POST",
+    "/events",
+    sampleEvent({ name: "Denied", day: 11 }),
+    memberTok,
+  );
   expect(status).toBe(403);
 });
+// @relation(GSSC-BLLR-419, scope=range_end, role=Test)
 
-// @relation(GSSC-BLLR-420, role=Test)
+// @relation(GSSC-BLLR-420, scope=range_start, role=Test)
 test("GSSC-BLLR-420 modify updates event and remaps page_data dates", async () => {
   const created = await sendJson(
     "POST",
@@ -344,19 +535,23 @@ test("GSSC-BLLR-420 modify updates event and remaps page_data dates", async () =
   expect((patched.body as { location: string; month: number }).location).toBe("North Lawn");
   expect((patched.body as { month: number }).month).toBe(7);
 
-  const prisma = getPrisma(loadConfig().DATABASE_URL);
-  const details = await prisma.pageDataEntry.findUnique({ where: { id: pageDataCuid } });
-  expect(details!.startMonth).toBe(7);
-  expect(details!.startDay).toBe(20);
-  expect(details!.startYear).toBe(2028);
-  expect(details!.endMonth).toBe(7);
-  expect(details!.endDay).toBe(20);
-  expect(details!.endYear).toBe(2028);
-  expect(details!.body).toBe("Updated details");
+  const details = await getPrisma(loadConfig().DATABASE_URL).pageDataEntry.findUnique({
+    where: { id: pageDataCuid },
+  });
+  expect(details).toMatchObject({
+    startMonth: 7,
+    startDay: 20,
+    startYear: 2028,
+    endMonth: 7,
+    endDay: 20,
+    endYear: 2028,
+    body: "Updated details",
+  });
 });
+// @relation(GSSC-BLLR-420, scope=range_end, role=Test)
 
-// @relation(GSSC-BLLR-421, GSSC-BLLR-422, role=Test)
-test("GSSC-BLLR-421/422 delete removes event and details; forbidden without permission", async () => {
+// @relation(GSSC-BLLR-421, scope=range_start, role=Test)
+test("GSSC-BLLR-421 delete removes event and details", async () => {
   const created = await sendJson(
     "POST",
     "/events",
@@ -367,9 +562,6 @@ test("GSSC-BLLR-421/422 delete removes event and details; forbidden without perm
   const cuid = (created.body as { cuid: string }).cuid;
   const pageDataCuid = (created.body as { pageDataCuid: string }).pageDataCuid;
 
-  const denied = await sendJson("DELETE", `/events/${cuid}`, {}, memberTok);
-  expect(denied.status).toBe(403);
-
   const deleted = await sendJson("DELETE", `/events/${cuid}`, {}, userModTok);
   expect(deleted.status).toBe(204);
 
@@ -377,3 +569,19 @@ test("GSSC-BLLR-421/422 delete removes event and details; forbidden without perm
   expect(await prisma.event.findUnique({ where: { id: cuid } })).toBeNull();
   expect(await prisma.pageDataEntry.findUnique({ where: { id: pageDataCuid } })).toBeNull();
 });
+// @relation(GSSC-BLLR-421, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-422, scope=range_start, role=Test)
+test("GSSC-BLLR-422 delete forbidden without delete permission", async () => {
+  const created = await sendJson(
+    "POST",
+    "/events",
+    sampleEvent({ name: "Keep Me", day: 23 }),
+    adminTok,
+  );
+  expect(created.status).toBe(201);
+  const cuid = (created.body as { cuid: string }).cuid;
+  const denied = await sendJson("DELETE", `/events/${cuid}`, {}, memberTok);
+  expect(denied.status).toBe(403);
+});
+// @relation(GSSC-BLLR-422, scope=range_end, role=Test)
