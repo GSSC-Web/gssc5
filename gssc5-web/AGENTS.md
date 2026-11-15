@@ -31,7 +31,7 @@ Prefer running single test files when iterating (faster feedback).
 - Follow existing patterns in the codebase, or else conform to framework documentation recommendations. (see example files below)
 - Run relevant tests after making changes
 - Keep changes focused and minimal
-- Tests are permanent files, and each LLR should have a dedicated unit test. Backend: shared harness at `apps/backend/src/test-harness.ts` with `*.test.ts` beside sources. Public frontend: shared harness at `apps/public/src/test-harness.ts` with `*.test.ts` beside sources; run via `mise run //public:test`.
+- Tests are permanent files, and each LLR should have a dedicated unit test. Backend: shared harness at `apps/backend/src/test-harness.ts` with `*.test.ts` beside sources. Public frontend: shared harness at `apps/public/src/test-harness.ts` with `*.test.ts` beside sources; run via `mise run //public:test`. Members frontend: shared harness at `apps/members/src/test-harness.ts` with `*.test.ts` beside sources; run via `mise run //members:test`.
 
 ## Don't
 
@@ -44,3 +44,4 @@ Prefer running single test files when iterating (faster feedback).
 
 - Backend: `apps/backend/src/user/accounts.ts` and `apps/backend/src/user/accounts.test.ts`
 - Public frontend harness: `apps/public/src/test-harness.ts`, smoke `apps/public/src/app/app.test.ts`
+- Members frontend harness: `apps/members/src/test-harness.ts`, smoke `apps/members/src/app/app.test.ts`

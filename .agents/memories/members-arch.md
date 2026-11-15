@@ -14,3 +14,4 @@ tags: [frontend, members, angular, auth]
 - Backend client uses credentialed `fetch` so the HttpOnly Login Token cookie is sent (`gssc_login_token` issued by backend).
 - Auth consumption only — members FE does not mint or persist raw login tokens; session comes from cookie + backend challenge.
 - Build/test via mise under the members app (`mise` tasks in `gssc5-web` / app `mise.toml`).
+- **Testing harness (GSSC5-80, mirrors public GSSC5-39):** `src/test-harness.ts` (`setupMembersComponent`, DOM helpers), `src/test-providers.ts` (wired via `angular.json` `providersFile`), `**/*.test.ts` beside sources. Run with `mise run //members:test`. No testing-framework MLLRs; do not unit-test the harness. SoftDev/TestDev must use members `ng test` / mise — not LangGraph Python packaging.
