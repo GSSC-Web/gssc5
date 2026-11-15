@@ -1,0 +1,123 @@
+<!-- @relation(GSSC-MLLR-321, GSSC-MLLR-322, GSSC-MLLR-323, scope=range_start, role=Implementation) -->
+<section
+  class="gssc-events-page mx-auto flex w-full max-w-3xl flex-col gap-5 bg-gssc-white font-sans text-gssc-dark-green"
+>
+  <h1 class="gssc-events-page__title m-0 text-2xl font-medium text-gssc-dark-green sm:text-3xl">
+    Events
+  </h1>
+
+  <!-- @relation(GSSC-MLLR-324, GSSC-MLLR-325, GSSC-MLLR-326, scope=range_start, role=Implementation) -->
+  <div class="gssc-events-catalog flex w-full flex-col gap-3 font-sans text-gssc-dark-green">
+    <!-- @relation(GSSC-MLLR-330, GSSC-MLLR-331, GSSC-MLLR-332, scope=range_start, role=Implementation) -->
+    <button
+      type="button"
+      class="gssc-events-new inline-flex w-fit cursor-pointer items-center justify-center rounded-md border border-gssc-dark-green bg-gssc-light-green px-3 py-2 font-sans text-sm font-normal text-gssc-dark-green hover:bg-gssc-gray disabled:cursor-not-allowed disabled:opacity-60"
+      [disabled]="!canEdit()"
+      (click)="startCreate()"
+    >
+      New Event
+    </button>
+    <!-- @relation(GSSC-MLLR-330, GSSC-MLLR-331, GSSC-MLLR-332, scope=range_end, role=Implementation) -->
+
+    @if (loadError()) {
+      <p class="gssc-events-catalog__error m-0 text-sm text-gssc-dark-red" role="alert">
+        {{ loadError() }}
+      </p>
+    }
+
+    <ul class="gssc-events-catalog__list m-0 flex list-none flex-col gap-1 p-0">
+      @for (event of catalog(); track event.cuid) {
+        <!-- @relation(GSSC-MLLR-327, GSSC-MLLR-328, GSSC-MLLR-329, scope=range_start, role=Implementation) -->
+        <li class="gssc-events-catalog__entry">
+          <button
+            type="button"
+            class="gssc-events-catalog__entry-button w-full cursor-pointer border-0 bg-transparent px-0 py-1 text-start font-sans text-sm text-gssc-dark-green hover:underline"
+            [attr.data-event-cuid]="event.cuid"
+            [attr.aria-current]="editingCuid() === event.cuid ? 'true' : null"
+            (click)="selectEvent(event)"
+          >
+            {{ catalogLabel(event) }}
+          </button>
+        </li>
+        <!-- @relation(GSSC-MLLR-327, GSSC-MLLR-328, GSSC-MLLR-329, scope=range_end, role=Implementation) -->
+      } @empty {
+        <li class="gssc-events-catalog__empty font-sans text-sm text-gssc-dark-brown">
+          No events yet.
+        </li>
+      }
+    </ul>
+  </div>
+  <!-- @relation(GSSC-MLLR-324, GSSC-MLLR-325, GSSC-MLLR-326, scope=range_end, role=Implementation) -->
+
+  <!-- @relation(GSSC-MLLR-333, GSSC-MLLR-334, GSSC-MLLR-335, scope=range_start, role=Implementation) -->
+  @for (resourceId of [editorResourceId()]; track resourceId) {
+    <div class="gssc-event-editor-host w-full">
+      <gssc-editor
+        [resourceId]="resourceId"
+        [permitted]="canEdit()"
+        [title]="editorTitle()"
+        (saved)="onSaved()"
+        (cancelled)="onCancelled()"
+      >
+        <!-- @relation(GSSC-MLLR-336, GSSC-MLLR-337, GSSC-MLLR-338, scope=range_start, role=Implementation) -->
+        <div class="gssc-event-fields flex w-full flex-col gap-2">
+          <gssc-form-text-field label="Name" [(value)]="name" [required]="true" [enabled]="canEdit()" />
+          <gssc-form-text-field label="Month" [(value)]="month" [required]="true" [enabled]="canEdit()" />
+          <gssc-form-text-field label="Day" [(value)]="day" [required]="true" [enabled]="canEdit()" />
+          <gssc-form-text-field label="Year" [(value)]="year" [required]="true" [enabled]="canEdit()" />
+          <gssc-form-text-field
+            label="Announcement Start Month"
+            [(value)]="announcementStartMonth"
+            [required]="true"
+            [enabled]="canEdit()"
+          />
+          <gssc-form-text-field
+            label="Announcement Start Day"
+            [(value)]="announcementStartDay"
+            [required]="true"
+            [enabled]="canEdit()"
+          />
+          <gssc-form-text-field
+            label="Announcement Start Year"
+            [(value)]="announcementStartYear"
+            [required]="true"
+            [enabled]="canEdit()"
+          />
+          <gssc-form-text-field label="Time" [(value)]="time" [required]="true" [enabled]="canEdit()" />
+          <gssc-form-text-field
+            label="Duration"
+            [(value)]="duration"
+            [required]="true"
+            [enabled]="canEdit()"
+          />
+          <gssc-form-text-field
+            label="Location"
+            [(value)]="location"
+            [required]="true"
+            [enabled]="canEdit()"
+          />
+          <gssc-form-text-field label="Header" [(value)]="header" [enabled]="canEdit()" />
+          <gssc-form-text-field label="Body" [(value)]="body" [enabled]="canEdit()" />
+          <!-- @relation(GSSC-MLLR-341, scope=range_start, role=Implementation) -->
+          <gssc-form-select-field
+            label="Visibility"
+            [options]="visibilityOptions"
+            [(value)]="visibility"
+            [required]="true"
+            [enabled]="canEdit()"
+          />
+          <!-- @relation(GSSC-MLLR-341, scope=range_end, role=Implementation) -->
+        </div>
+        <!-- @relation(GSSC-MLLR-336, GSSC-MLLR-337, GSSC-MLLR-338, scope=range_end, role=Implementation) -->
+      </gssc-editor>
+    </div>
+  }
+  <!-- @relation(GSSC-MLLR-333, GSSC-MLLR-334, GSSC-MLLR-335, scope=range_end, role=Implementation) -->
+
+  @if (statusMessage()) {
+    <p class="gssc-events-page__status m-0 font-sans text-sm text-gssc-dark-brown" data-slot="events-status">
+      {{ statusMessage() }}
+    </p>
+  }
+</section>
+<!-- @relation(GSSC-MLLR-321, GSSC-MLLR-322, GSSC-MLLR-323, scope=range_end, role=Implementation) -->

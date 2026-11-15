@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { AccountPage } from './pages/account/account';
 import { AnnouncementsEditorPage } from './pages/announcements-editor/announcements-editor';
 import { DirectoryPage } from './pages/directory/directory';
+import { EventsPage } from './pages/events/events';
 import { HomePage } from './pages/home/home';
 import { LoginPage } from './pages/login/login';
 import { NewslettersPage } from './pages/newsletters/newsletters';
@@ -38,6 +39,14 @@ export const routes: Routes = [
     canActivate: [requireAuthGuard],
   },
   // @relation(GSSC-MLLR-211, scope=range_end, role=Implementation)
+  // @relation(GSSC-MLLR-345, scope=range_start, role=Implementation)
+  {
+    path: 'events',
+    pathMatch: 'full',
+    component: EventsPage,
+    canActivate: [requireAuthGuard],
+  },
+  // @relation(GSSC-MLLR-345, scope=range_end, role=Implementation)
   {
     path: 'page-sections',
     pathMatch: 'full',
