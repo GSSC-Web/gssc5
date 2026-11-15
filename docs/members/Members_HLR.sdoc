@@ -553,14 +553,17 @@ TITLE: Generic Primitives
 UID: GSSC-MHLR-23
 TITLE: Generic Section Display
 STATEMENT: >>>
-The GSSC Website Member Frontend SHALL provide a generic section display that presents a section's contents to a logged-in member.
+The GSSC Website Member Frontend SHALL provide a generic section display that places a section's contents for a logged-in member through a shared Section Container, including optional header, featured image, body, and resources.
 <<<
 RATIONALE: >>>
 No Member Frontend PIR names a generic section display. Page and content editing reuse a shared section presentation so members see section contents consistently without programming knowledge.
 <<<
 DERIVED: True
-CHANGE_DRIVER: GSSC5-11
-REVIEW_STATUS: Changed
+CHANGE_DRIVER: >>>
+GSSC5-11
+GSSC5-83
+<<<
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-MHLR-24

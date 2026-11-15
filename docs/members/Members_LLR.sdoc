@@ -82,7 +82,8 @@ GSSC5-82 Member Footer owns GSSC-MLLR-40 through GSSC-MLLR-66 (Footer chrome, co
 GSSC5-87 Logout / Session Service owns GSSC-MLLR-67 through GSSC-MLLR-71.
 GSSC5-86 Login Page owns GSSC-MLLR-72 through GSSC-MLLR-91.
 GSSC5-88 Route Guards & Redirects owns GSSC-MLLR-92 through GSSC-MLLR-95.
-GSSC-MLLR-32 through GSSC-MLLR-39 remain free for Wave 3 (or later) claimants.
+GSSC5-83 Member Generic Sections (display) owns GSSC-MLLR-96 through GSSC-MLLR-124.
+GSSC-MLLR-32 through GSSC-MLLR-39 remain free for later claimants.
 Do not reuse numbers already claimed by another ticket.
 <<<
 
@@ -1890,3 +1891,592 @@ RELATIONS:
 [[/SECTION]]
 
 [[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-SECTION
+TITLE: Member Section
+
+[[SECTION]]
+UID: GSSC-MLLR-SECTION-CONTAINER
+TITLE: Section Container
+
+[REQUIREMENT]
+UID: GSSC-MLLR-96
+TITLE: Semantic
+STATEMENT: >>>
+The GSSC Website Member Frontend Section Container SHALL place the Section Contents it receives: the Section Header when those Contents include a header, the Section Featured Image when those Contents include a featured image file and a left or right image position, the Section Body, and the Section Resources when those Contents include resources.
+<<<
+RATIONALE: >>>
+The Section Container is the placement shell for section data on member pages. Contents are the section data; the Container places them. Each placed element's behavior is a separate requirement. Page assembly and Contents APIs are separate features. Featured image placement is gated by file and position together.
+<<<
+COMMENT: >>>
+Derived for GSSC5-83. No Member Frontend PIR names the section Container.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-83
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-23
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-97
+TITLE: Syntactic
+STATEMENT: >>>
+The Section Container SHALL fill the width of its page content area, stack the Section Contents it places in a vertical order, apply vertical padding on the Container, and keep internal spacing between the Section Header, Section Featured Image when placed, Section Body, and Section Resources.
+<<<
+RATIONALE: >>>
+Full-width stacking keeps section Contents readable within the page content area as the viewport resizes. Vertical padding and spacing between Header, Featured Image, Body, and Resources separate those elements without crowding. Page assembly chooses where Containers appear on a page.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-83
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-23
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-98
+TITLE: Lexical
+STATEMENT: >>>
+The Section Container SHALL use the white theme token for its background, the gray theme token for its border, and the dark-green theme token for its default text, with a sans-serif typeface.
+<<<
+RATIONALE: >>>
+White background keeps the section aligned with the outermost shell. Theme tokens keep presentation in the organization palette. A fuller color role map for sections is not set yet beyond these token choices.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-83
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-23
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-SECTION-HEADER
+TITLE: Section Header
+
+[REQUIREMENT]
+UID: GSSC-MLLR-99
+TITLE: Semantic
+STATEMENT: >>>
+The Section Header SHALL display the header from the Section Contents when those Contents include a header.
+<<<
+RATIONALE: >>>
+A section header identifies the section when the Contents supply one. Absent headers are omitted. This requirement does not set header wording.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-83
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-23
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-100
+TITLE: Syntactic
+STATEMENT: >>>
+The Section Header SHALL appear above the Section Body inside the Section Container when the Section Contents include a header.
+<<<
+RATIONALE: >>>
+Leading with the header keeps the section title before the body text.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-83
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-23
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-101
+TITLE: Lexical
+STATEMENT: >>>
+The Section Header SHALL use a semibold weight and the dark-green theme token for its text color, at a size one and one-half times the Section Body text size.
+<<<
+RATIONALE: >>>
+Semibold dark-green text at one and one-half times the body size distinguishes the header within the Container. A fuller type scale is not set yet beyond this relative size and token choice.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-83
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-23
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-SECTION-FEATURED-IMAGE
+TITLE: Section Featured Image
+
+[REQUIREMENT]
+UID: GSSC-MLLR-102
+TITLE: Semantic
+STATEMENT: >>>
+The GSSC Website Member Frontend Section Featured Image SHALL present the featured image from the Section Contents when those Contents include an image file and an image position of left or right; SHALL omit the featured image when the image position is none even if an image file is present; and SHALL omit the featured image when the Contents lack an image file or lack an image position.
+<<<
+RATIONALE: >>>
+Optional featured imagery appears only when both a file and a side position are set. Position none suppresses display without clearing the stored file.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-83
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-23
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-103
+TITLE: Syntactic
+STATEMENT: >>>
+When the Section Featured Image is placed, it SHALL appear on the left of the Section Body when the image position is left and on the right of the Section Body when the image position is right at medium and larger viewports; at viewports smaller than medium, it SHALL appear between the Section Header and the Section Body; and it SHALL never occupy more than three-fifths of the Section width or more than two-fifths of its parent container.
+<<<
+RATIONALE: >>>
+Side placement at medium and larger viewports keeps body text beside the image. Narrow viewports stack the image between title and body for readable reading order. Size caps keep the image from dominating the section.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-83
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-23
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-104
+TITLE: Lexical
+STATEMENT: >>>
+The Section Featured Image SHALL keep the full image visible within its size caps without cropping, without adding independent border or background chrome beyond the Section Container.
+<<<
+RATIONALE: >>>
+Keeping the full image visible preserves the asset inside the width and parent size limits. Container chrome stays on the Section Container.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-83
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-23
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-SECTION-BODY
+TITLE: Section Body
+
+[REQUIREMENT]
+UID: GSSC-MLLR-105
+TITLE: Semantic
+STATEMENT: >>>
+The Section Body SHALL display the body from the Section Contents.
+<<<
+RATIONALE: >>>
+Every section's Contents include a body. The Body presents that text in the Container. This requirement does not set body wording.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-83
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-23
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-106
+TITLE: Syntactic
+STATEMENT: >>>
+The Section Body SHALL appear below the Section Header when a Section Header is present and no Section Featured Image is placed; below the Section Featured Image when that image is placed at viewports smaller than medium; beside the Section Featured Image at medium and larger viewports when that image is placed; and otherwise at the start of the Section Contents inside the Section Container.
+<<<
+RATIONALE: >>>
+Reading order stays header, then featured image when stacked, then body; at medium and larger viewports the body shares a row with the featured image when that image is placed.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-83
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-23
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-107
+TITLE: Lexical
+STATEMENT: >>>
+The Section Body SHALL use a normal weight and the black theme token for its text color.
+<<<
+RATIONALE: >>>
+Normal-weight black text keeps body copy readable on the white Container background and distinct from the dark-green header. A fuller type scale is not set yet beyond this weight and token choice.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-83
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-23
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-SECTION-RESOURCES
+TITLE: Section Resources
+
+[REQUIREMENT]
+UID: GSSC-MLLR-108
+TITLE: Semantic
+STATEMENT: >>>
+The Section Resources SHALL present each resource from the Section Contents as a Resource Button when those Contents include resources; selection of a Resource Button SHALL open that resource.
+<<<
+RATIONALE: >>>
+Resources accompany some sections. Equal Resource Buttons that open their targets let the member reach related material. This requirement does not set the resource catalog.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-83
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-23
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-109
+TITLE: Syntactic
+STATEMENT: >>>
+The Section Resources SHALL appear below the Section Body inside the Section Container when the Section Contents include resources; SHALL arrange equal-size Resource Buttons in a horizontal strip starting from the left; when that strip overflows the Section width, SHALL present a looping carousel with Resources Prev and Resources Next controls at the ends of the strip, expand the visible Resource Buttons equally to fill the strip width between those controls, slide animation when the strip moves, and movement of the carousel by Left Arrow, Right Arrow, H, and L while a Resource Button is focused; and when that strip fits within the Section width, SHALL show every Resource Button without carousel controls.
+<<<
+RATIONALE: >>>
+A horizontal strip below the body keeps resources grouped after the section text. Overflow uses a looping carousel with end controls and keyboard movement so every resource stays reachable as the Section width changes. Filling the strip between the controls avoids empty space at the end of the visible row without naming a layout framework.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-83
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-23
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-110
+TITLE: Lexical
+STATEMENT: >>>
+The Section Resources strip SHALL present Resource Buttons with shared height using the dark-green theme token for button text and border chrome on the white Container background, and SHALL use the gray theme token for each Resource Button background on hover.
+<<<
+RATIONALE: >>>
+Shared button chrome marks resources as equal controls rather than underline-only links. Gray hover marks each button as activatable. Dark-green tokens keep the strip aligned with the organization palette. A fuller button color role map is not set yet beyond these token choices.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-83
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-23
+  ROLE: Refines
+
+[[SECTION]]
+UID: GSSC-MLLR-SECTION-RESOURCE-BUTTON
+TITLE: Resource Button
+
+[REQUIREMENT]
+UID: GSSC-MLLR-111
+TITLE: Semantic
+STATEMENT: >>>
+The Resource Button SHALL display the resource name from the Section Contents and SHALL open that resource's target when the member activates the button.
+<<<
+RATIONALE: >>>
+The button label identifies the resource; activation opens the related material. This requirement does not set the resource catalog.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-83
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-23
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-112
+TITLE: Syntactic
+STATEMENT: >>>
+The Resource Button SHALL occupy one equal-size slot in the Section Resources horizontal strip and SHALL participate in carousel movement when the strip is a carousel.
+<<<
+RATIONALE: >>>
+Equal slots keep buttons aligned in the strip. Carousel participation keeps overflowing resources reachable.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-83
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-23
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-113
+TITLE: Lexical
+STATEMENT: >>>
+The Resource Button SHALL use a shared height with the other Resource Buttons, a normal weight, the dark-green theme token for its text and border, the white theme token for its background, and the gray theme token for its background on hover.
+<<<
+RATIONALE: >>>
+Shared height and dark-green chrome mark each resource as an equal hyperlink button on the white strip. Gray hover marks the control as activatable. A fuller button type scale is not set yet beyond these choices.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-83
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-23
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-SECTION-RESOURCES-PREV
+TITLE: Resources Prev
+
+[REQUIREMENT]
+UID: GSSC-MLLR-114
+TITLE: Semantic
+STATEMENT: >>>
+The Resources Prev control SHALL move the Section Resources carousel one step toward earlier resources when activated, wrapping from the first resource to the last.
+<<<
+RATIONALE: >>>
+Prev steps the looping strip backward so every resource stays reachable from the ends of the strip.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-83
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-23
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-115
+TITLE: Syntactic
+STATEMENT: >>>
+The Resources Prev control SHALL appear at the start of the Section Resources strip when that strip overflows the Section width and is presented as a carousel.
+<<<
+RATIONALE: >>>
+Placing Prev at the start of the strip marks the backward end of the carousel; when the strip fits, Prev is omitted.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-83
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-23
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-116
+TITLE: Lexical
+STATEMENT: >>>
+The Resources Prev control SHALL present a tailless previous-direction arrow icon with no border, rounded corners, the dark-green theme token for its icon color, a transparent background, and the gray theme token for its background on hover.
+<<<
+RATIONALE: >>>
+A borderless rounded icon control matches other Member Frontend icon buttons. Gray hover marks Prev as activatable without changing the icon color. A fuller control color map is not set yet beyond these token choices.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-83
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-23
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-SECTION-RESOURCES-NEXT
+TITLE: Resources Next
+
+[REQUIREMENT]
+UID: GSSC-MLLR-117
+TITLE: Semantic
+STATEMENT: >>>
+The Resources Next control SHALL move the Section Resources carousel one step toward later resources when activated, wrapping from the last resource to the first.
+<<<
+RATIONALE: >>>
+Next steps the looping strip forward so every resource stays reachable from the ends of the strip.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-83
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-23
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-118
+TITLE: Syntactic
+STATEMENT: >>>
+The Resources Next control SHALL appear at the end of the Section Resources strip when that strip overflows the Section width and is presented as a carousel.
+<<<
+RATIONALE: >>>
+Placing Next at the end of the strip marks the forward end of the carousel; when the strip fits, Next is omitted.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-83
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-23
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-119
+TITLE: Lexical
+STATEMENT: >>>
+The Resources Next control SHALL present a tailless next-direction arrow icon with no border, rounded corners, the dark-green theme token for its icon color, a transparent background, and the gray theme token for its background on hover.
+<<<
+RATIONALE: >>>
+A borderless rounded icon control matches other Member Frontend icon buttons. Gray hover marks Next as activatable without changing the icon color. A fuller control color map is not set yet beyond these token choices.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-83
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-23
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-SECTION-FROM-CUID
+TITLE: Section From CUID
+
+[REQUIREMENT]
+UID: GSSC-MLLR-120
+TITLE: Semantic
+STATEMENT: >>>
+The GSSC Website Member Frontend Section From CUID SHALL retrieve a section's data from the Unified Backend using the section cuid it receives, building Section Contents from that data: the header when that data includes a header, the body, resources when that data includes resources, using each backend resource string as that resource's name and that resource's target, and the optional image file and image position when that data includes them.
+<<<
+RATIONALE: >>>
+Member pages identify sections by backend cuid. The loader turns that cuid into Section Contents so the Section Container can place them. Each backend resource string is both the label and the open target until a richer resource schema exists. Featured image file and position pass through so the Container can place optional imagery. This requirement does not set which cuids pages pass.
+<<<
+COMMENT: >>>
+Retrieval and Contents construction are one behavior for the cuid input. Resource name and target both come from the same backend string.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-83
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-23
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-121
+TITLE: Syntactic
+STATEMENT: >>>
+The Section From CUID SHALL place those Section Contents through the Section Container when retrieval succeeds, and omit the Section Container when the Unified Backend does not provide the section for that cuid.
+<<<
+RATIONALE: >>>
+Successful loads reuse the Section Container placement shell. Omitting the Container when the section is unavailable avoids presenting empty chrome. Page assembly chooses where the Section From CUID appears.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-83
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-23
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-122
+TITLE: Lexical
+STATEMENT: >>>
+The Section From CUID SHALL present the Section Header, Section Featured Image, Section Body, and Section Resources through the Section Container presentation, without independent lexical chrome of its own.
+<<<
+RATIONALE: >>>
+Chrome, type, and colors stay on the Section Container so the cuid loader does not fork a second section look. Resource carousel, featured image presentation, and token choices remain those of the Container.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-83
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-23
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-123
+TITLE: Semantic
+STATEMENT: >>>
+The Section From CUID SHALL omit the Section Container when the retrieved section's start and end calendar dates, when set, do not include the current calendar date as an inclusive window; when those dates are unset, the section remains eligible for placement.
+<<<
+RATIONALE: >>>
+Optional display windows keep scheduled sections off the member page until their window begins and after it ends. Unset dates mean the section always shows.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-83
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-23
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-124
+TITLE: Semantic
+STATEMENT: >>>
+When the GSSC Website Member Frontend retrieves sections from the Unified Backend for page assembly, it SHALL omit each section whose start and end calendar dates, when set, do not include the current calendar date as an inclusive window; when those dates are unset, the section remains eligible for placement.
+<<<
+RATIONALE: >>>
+Member page assembly shares the same display-window rule so out-of-window sections are not requested for placement.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-83
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-23
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+

@@ -4,6 +4,18 @@
 @import "tailwindcss/preflight.css" layer(base);
 @import "tailwindcss/utilities.css" layer(utilities);
 
+/*
+ * Symbols Nerd Font — for UI symbols (section resource carousel arrows).
+ * No font package in this monorepo yet; load Symbols-only from jsDelivr
+ * (ryanoasis/nerd-fonts). https://www.nerdfonts.com/
+ */
+@font-face {
+  font-family: "Symbols Nerd Font";
+  src: url("https://cdn.jsdelivr.net/gh/ryanoasis/nerd-fonts@v3.3.0/patched-fonts/NerdFontsSymbolsOnly/SymbolsNerdFont-Regular.ttf")
+    format("truetype");
+  font-display: swap;
+}
+
 /* Organization palette — prefer these over hard-coded hex in components. */
 :root {
   --gssc-light-green: #c5cab6;
@@ -20,6 +32,7 @@
 }
 
 @theme {
+  --font-nerd-symbols: "Symbols Nerd Font", sans-serif;
   --font-sans: ui-sans-serif, system-ui, sans-serif;
   --color-gssc-light-green: var(--gssc-light-green);
   --color-gssc-dark-green: var(--gssc-dark-green);
@@ -31,6 +44,26 @@
   --color-gssc-black: var(--gssc-black);
   --color-gssc-light-red: var(--gssc-light-red);
   --color-gssc-dark-red: var(--gssc-dark-red);
+}
+
+/* Nerd Fonts icon classes (subset). Glyphs from nerd-fonts v3.3.0 cheat sheet. */
+.nf {
+  font-family: var(--font-nerd-symbols);
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.nf-md-chevron_left:before {
+  content: "\f0141";
+}
+
+.nf-md-chevron_right:before {
+  content: "\f0142";
 }
 
 /*
