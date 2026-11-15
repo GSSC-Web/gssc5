@@ -4827,10 +4827,10 @@ RELATIONS:
 UID: GSSC-MLLR-206
 TITLE: Syntactic
 STATEMENT: >>>
-The Directory Search SHALL appear as a static left-side filter bar with its criteria fields stacked in a single column, a Clear control under those fields, and a filter-area background that is distinct from the directory results region and that extends to the bottom of the viewport.
+The Directory Search SHALL appear as a static left-side filter bar with its criteria fields stacked in a single column, a Clear control under those fields, a white filter-area background, and a light-brown right border that separates the filter bar from the directory results and that extends to the bottom of the viewport.
 <<<
 RATIONALE: >>>
-A single-column left bar keeps filters scannable and fixed beside the results list. A full-height filter background separates controls from contact results down the viewport.
+A single-column left bar keeps filters scannable and fixed beside the results list. A full-height light-brown edge separates controls from contact results without a filled rail.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -4848,10 +4848,10 @@ RELATIONS:
 UID: GSSC-MLLR-207
 TITLE: Lexical
 STATEMENT: >>>
-The Directory Search SHALL use shared Member Frontend form-field primitives for its criteria fields, dark-green theme text on its Clear control, and the light-brown theme token for the filter-area background that is distinct from the page and results backgrounds.
+The Directory Search SHALL use shared Member Frontend form-field primitives for its criteria fields, dark-green theme text on its Clear control, the white theme token for the filter-area background, and the light-brown theme token for the right border that separates the filter bar from the results.
 <<<
 RATIONALE: >>>
-Reusing form primitives keeps directory search chrome consistent with other member forms; Clear is the only filter action. Light-brown keeps the filter rail visually separate from results without inventing a second theme.
+Reusing form primitives keeps directory search chrome consistent with other member forms; Clear is the only filter action. White filter area with a light-brown edge keeps separation without a filled brown rail.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -5142,10 +5142,10 @@ RELATIONS:
 UID: GSSC-MLLR-220
 TITLE: Lexical
 STATEMENT: >>>
-The Directory Entry Edit Control SHALL present an edit icon in the dark-green theme color, with an accessible name of Edit and no visible word label.
+The Directory Entry Edit Control SHALL present a larger edit icon inside a rounded control that has a filled background and a hover color change, in the dark-green theme color, with an accessible name of Edit and no visible word label.
 <<<
 RATIONALE: >>>
-An edit icon keeps the action compact on the card while remaining recognizable and labeled for assistive technology.
+A larger icon in a rounded filled control is easier to target and shows hover feedback while remaining labeled for assistive technology.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -5202,10 +5202,10 @@ RELATIONS:
 UID: GSSC-MLLR-223
 TITLE: Lexical
 STATEMENT: >>>
-The Directory Entry Soft-Delete Control SHALL present a delete icon when the member is not soft-deleted and a delete-restore icon when the member is soft-deleted, each in the dark-green theme color, with an accessible name of Soft-delete or Undelete that matches that state and with no visible word label.
+The Directory Entry Soft-Delete Control SHALL present a larger delete icon when the member is not soft-deleted and a larger delete-restore icon when the member is soft-deleted, each inside a rounded control that has a filled background and a hover color change, in the dark-green theme color, with an accessible name of Soft-delete or Undelete that matches that state and with no visible word label.
 <<<
 RATIONALE: >>>
-Delete and restore icons keep soft-delete actions compact while the accessible name states which action the control will take.
+Larger icons in rounded filled controls match the Edit control and show hover feedback while the accessible name states which action the control will take.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test

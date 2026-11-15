@@ -24,11 +24,11 @@
   </header>
 
   <div
-    class="gssc-directory-page__body flex w-full flex-col gap-6 md:min-h-[calc(100dvh-8rem)] md:flex-row md:items-stretch md:gap-8"
+    class="gssc-directory-page__body flex w-full flex-col gap-6 md:min-h-[calc(100dvh-8rem)] md:flex-row md:items-stretch md:gap-0"
   >
     <!-- @relation(GSSC-MLLR-205, GSSC-MLLR-206, GSSC-MLLR-207, scope=range_start, role=Implementation) -->
     <aside
-      class="gssc-directory-search sticky top-0 flex w-full shrink-0 flex-col gap-3 bg-gssc-light-brown p-3 md:w-56 md:max-w-xs md:min-h-full"
+      class="gssc-directory-search sticky top-0 flex w-full shrink-0 flex-col gap-3 bg-gssc-white p-3 md:w-56 md:max-w-xs md:min-h-full md:border-r-2 md:border-gssc-light-brown md:pe-4"
       aria-label="Directory filters"
     >
       <div class="gssc-directory-search__fields flex w-full flex-col gap-3">
@@ -72,7 +72,10 @@
     <!-- @relation(GSSC-MLLR-205, GSSC-MLLR-206, GSSC-MLLR-207, scope=range_end, role=Implementation) -->
 
     <!-- @relation(GSSC-MLLR-208, GSSC-MLLR-209, GSSC-MLLR-210, scope=range_start, role=Implementation) -->
-    <div class="gssc-directory-results flex min-w-0 flex-1 flex-col gap-4 bg-gssc-white" aria-live="polite">
+    <div
+      class="gssc-directory-results flex min-w-0 flex-1 flex-col gap-4 bg-gssc-white md:ps-6"
+      aria-live="polite"
+    >
       @if (loading()) {
         <p class="gssc-directory-results__status m-0 font-sans text-sm text-gssc-dark-green">
           Loading members…
