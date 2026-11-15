@@ -6913,6 +6913,252 @@ RELATIONS:
 
 [[/SECTION]]
 
+[[SECTION]]
+UID: GSSC-BLLR-EVENTS-CATEGORY
+TITLE: Events
+
+[[SECTION]]
+UID: GSSC-BLLR-EVENTS-COLLECTION
+TITLE: /events
+
+[[SECTION]]
+UID: GSSC-BLLR-EVENTS-COLLECTION-GET
+TITLE: GET
+
+[REQUIREMENT]
+UID: GSSC-BLLR-412
+TITLE: Public Event List
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL return only public events when listing events without a valid Login Token, without limiting results by announcement window.
+<<<
+RATIONALE: >>>
+Unauthenticated callers see the public event catalog only; announcement windows apply to announcement requests, not this list.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-69
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-174
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-413
+TITLE: Authenticated Event List
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL return public and members-only events when listing events for a logged-in member, without limiting results by announcement window.
+<<<
+RATIONALE: >>>
+A valid Login Token expands the list to every stored event; announcement windows do not apply.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-69
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-175
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-414
+TITLE: Event List Entry Fields
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL include cuid, name, month, day, year, announcement start month, announcement start day, announcement start year, time, duration, location, isPublic flag, and page data cuid in each event list entry, ordered by year, then month, then day ascending.
+<<<
+RATIONALE: >>>
+List entries carry the fields needed for calendar assembly without a second fetch for summary data.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-69
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-174
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-EVENTS-COLLECTION-POST
+TITLE: POST
+
+[REQUIREMENT]
+UID: GSSC-BLLR-418
+TITLE: Event Creation
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL create an event and its details page data entry for a logged-in member who has create permission, requiring name, event month, day, and year, announcement start month, day, and year, time, duration, location, and isPublic, accepting an optional template cuid and optional details header, body, resources, tags, and index, storing the event date onto the details entry start and end month, day, and year as equal values for a single-day event, and storing isPublic and permission values from the template when a template is provided.
+<<<
+RATIONALE: >>>
+Creation stores the event row and linked event-details page data together; announcement start stays on the event row while the event date maps onto page data start and end.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-69
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-218
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-419
+TITLE: Event Creation Forbidden
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL reject event creation without storing an event when the caller lacks create permission.
+<<<
+RATIONALE: >>>
+Create permission gates who may add events.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-69
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-218
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-EVENTS-ITEM
+TITLE: /events/{cuid}
+
+[[SECTION]]
+UID: GSSC-BLLR-EVENTS-ITEM-GET
+TITLE: GET
+
+[REQUIREMENT]
+UID: GSSC-BLLR-415
+TITLE: Public Event Get
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL return a public event by cuid in the path to an unauthenticated caller, including cuid, name, month, day, year, announcement start month, day, and year, time, duration, location, isPublic flag, and page data cuid.
+<<<
+RATIONALE: >>>
+Path cuid identifies one public event for calendar or detail assembly.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-69
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-174
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-416
+TITLE: Public Event Get Rejects Private
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL reject an unauthenticated request for a members-only event by cuid.
+<<<
+RATIONALE: >>>
+Members-only events stay off the public get path.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-69
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-174
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-417
+TITLE: Authenticated Event Get
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL return any event by cuid in the path to a logged-in member, including cuid, name, month, day, year, announcement start month, day, and year, time, duration, location, isPublic flag, and page data cuid.
+<<<
+RATIONALE: >>>
+A logged-in member can load public or members-only events by cuid.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-69
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-175
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-EVENTS-ITEM-PATCH
+TITLE: PATCH
+
+[REQUIREMENT]
+UID: GSSC-BLLR-420
+TITLE: Event Modification
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL accept modification of name, event month, day, and year, announcement start month, day, and year, time, duration, location, isPublic, and details header, body, resources, tags, and index on an event by a logged-in member who has modify permission on that event, and when the event date changes SHALL update the linked details page data start and end month, day, and year to match.
+<<<
+RATIONALE: >>>
+Modify permission gates event and details updates; event date stays mirrored onto page data start and end.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-69
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-219
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-EVENTS-ITEM-DELETE
+TITLE: DELETE
+
+[REQUIREMENT]
+UID: GSSC-BLLR-421
+TITLE: Event Deletion
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL delete an event and its details page data entry by cuid for a logged-in member who has delete permission on that event.
+<<<
+RATIONALE: >>>
+Delete permission gates removal of the event row and linked details.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-69
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-220
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-422
+TITLE: Event Deletion Forbidden
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL reject event deletion without deleting the event when the caller lacks delete permission.
+<<<
+RATIONALE: >>>
+Delete permission gates who may remove events.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-69
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-220
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[/SECTION]]
+
 [[/SECTION]]
 
 [[/SECTION]]
@@ -7762,6 +8008,174 @@ REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-185
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-EVENTS-STORAGE
+TITLE: Events
+
+[REQUIREMENT]
+UID: GSSC-BLLR-402
+TITLE: Event Table
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store each event as a row in an events table with a cuid, a name, an event month, day, and year, an announcement start month, day, and year, a time, a duration, a location, an isPublic flag, create permission, modify permission, delete permission, and a reference to the page data table entry that holds that event's details.
+<<<
+RATIONALE: >>>
+The dedicated events table is the source of truth for event catalog fields; details live in the shared page data table. Announcement-window start is stored on the event row and is not a parallel column on page data; page data start and end hold the event span (GSSC5-67).
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-69
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-125
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-403
+TITLE: Event Name Storage
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store a name string on each event row.
+<<<
+RATIONALE: >>>
+The event entry holds the event's name.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-69
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-126
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-404
+TITLE: Event Date Storage
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store an event month, day, and year on each event row, mirroring that same month, day, and year onto the linked details page data entry start and end month, day, and year when the event is a single-day event.
+<<<
+RATIONALE: >>>
+Event date lives on the event row and maps onto page data start and end for the event span; single-day events use equal start and end. This avoids parallel event-date columns on page data.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-69
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-127
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-405
+TITLE: Event Announcement Start Storage
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store an announcement start month, day, and year on each event row.
+<<<
+RATIONALE: >>>
+Announcement-window start lives on the event row. Page data start and end are reserved for the event span and display windows (GSSC5-67), so announcement start is not duplicated there.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-69
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-133
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-406
+TITLE: Event Time Storage
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store a time string on each event row.
+<<<
+RATIONALE: >>>
+The event entry holds the time of occurrence; this requirement does not define precision.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-69
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-128
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-407
+TITLE: Event Duration Storage
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store a duration string on each event row.
+<<<
+RATIONALE: >>>
+The event entry holds how long the event lasts; this requirement does not define units.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-69
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-129
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-408
+TITLE: Event Location Storage
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store a location string on each event row.
+<<<
+RATIONALE: >>>
+The event entry holds where the event occurs.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-69
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-130
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-409
+TITLE: Event Page Reference Storage
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store a reference from each event row to the page data table entry whose datatype is event and that holds that event's details.
+<<<
+RATIONALE: >>>
+Details stay in the shared page data table; the event row points at that entry.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-69
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-131
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-410
+TITLE: Event Audience Storage
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store an isPublic flag on each event row that records whether the event is public or members-only.
+<<<
+RATIONALE: >>>
+The flag records audience for list and get filtering.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-69
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-132
   ROLE: Refines
 
 [[/SECTION]]

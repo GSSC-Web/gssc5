@@ -226,11 +226,43 @@ model PageDataEntry {
   imagePosition String?
   templateId String?
   template   ContentTemplate? @relation(fields: [templateId], references: [id], onDelete: SetNull)
+  event      Event?
 
   @@index([datatype, index])
   @@map("page_data")
 }
 // @relation(GSSC-BLLR-338, GSSC-BLLR-339, GSSC-BLLR-400, GSSC-BLLR-401, GSSC-BLLR-402, GSSC-BLLR-403, scope=range_end, role=Implementation)
+
+// Events catalog (GSSC-BHLR-125–133 / GSSC5-69).
+// Event date maps onto linked page_data start/end; announcement start stays on this row.
+// @relation(GSSC-BLLR-402, GSSC-BLLR-403, GSSC-BLLR-404, GSSC-BLLR-405, GSSC-BLLR-406, GSSC-BLLR-407, GSSC-BLLR-408, GSSC-BLLR-409, GSSC-BLLR-410, scope=range_start, role=Implementation)
+model Event {
+  id                       String        @id @default(cuid())
+  /// @prismabox.options{ minLength: 1 }
+  name                     String
+  month                    Int
+  day                      Int
+  year                     Int
+  announcementStartMonth   Int
+  announcementStartDay     Int
+  announcementStartYear    Int
+  /// @prismabox.options{ minLength: 1 }
+  time                     String
+  /// @prismabox.options{ minLength: 1 }
+  duration                 String
+  /// @prismabox.options{ minLength: 1 }
+  location                 String
+  isPublic                 Boolean
+  createPerm               Int           @default(0)
+  modifyPerm               Int           @default(0)
+  deletePerm               Int           @default(0)
+  pageDataId               String        @unique
+  pageData                 PageDataEntry @relation(fields: [pageDataId], references: [id], onDelete: Cascade)
+
+  @@index([year, month, day])
+  @@map("events")
+}
+// @relation(GSSC-BLLR-402, GSSC-BLLR-403, GSSC-BLLR-404, GSSC-BLLR-405, GSSC-BLLR-406, GSSC-BLLR-407, GSSC-BLLR-408, GSSC-BLLR-409, GSSC-BLLR-410, scope=range_end, role=Implementation)
 
 // Research tools catalog (GSSC-BHLR-194 / GSSC5-18).
 // @relation(GSSC-BLLR-343, scope=range_start, role=Implementation)

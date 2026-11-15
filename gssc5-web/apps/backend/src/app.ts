@@ -2,6 +2,7 @@ import { openapi } from "@elysia/openapi";
 import { cors } from "@elysiajs/cors";
 import { Elysia } from "elysia";
 
+import { events } from "./content/events";
 import { newsletters } from "./content/newsletters";
 import { publications } from "./content/publications";
 import { researchTools } from "./content/research-tools";
@@ -46,6 +47,7 @@ export const app = new Elysia({ normalize: false })
   .use(kvs)
   .use(section)
   .use(template)
+  .use(events)
   .use(researchTools)
   .use(publications)
   .use(newsletters)
