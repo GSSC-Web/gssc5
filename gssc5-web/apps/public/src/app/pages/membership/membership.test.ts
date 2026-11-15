@@ -5,59 +5,49 @@ import {
   type BackendSectionData,
 } from '../../modules/section-from-cuid/section-from-cuid';
 import {
-  MEMBERSHIP_BENEFITS_TAG,
-  MEMBERSHIP_MEETING_TAG,
+  MEMBERSHIP_INFO_TAG,
   MEMBERSHIP_SECTION_LIST_BY_TAG,
   MembershipPage,
   type MembershipSectionListEntry,
 } from './membership';
 
-const meetingBody =
-  'General meetings are held at the Stanislaus County Library Modesto. ' +
-  'The society meets monthly. Meetings are on the second Thursday at 7:00 PM except holidays. ' +
-  'The next meeting is Thursday, December 11, 2025, featuring a research workshop.';
-
-const benefitsBody =
-  'Membership provides programs, workshops, seminars, newsletters, free queries, ' +
-  'surname registration, interest groups, and research trips.';
-
-const meetingSection: BackendSectionData = {
-  cuid: 'meeting_cuid_1',
+const firstSection: BackendSectionData = {
+  cuid: 'membership_cuid_1',
   header: 'Meeting Information',
-  body: meetingBody,
+  body: 'Society meeting details supplied by the backend section body.',
   resources: [],
-  tags: [MEMBERSHIP_MEETING_TAG],
+  tags: [MEMBERSHIP_INFO_TAG],
   index: 1,
 };
 
-const benefitsSection: BackendSectionData = {
-  cuid: 'benefits_cuid_1',
+const secondSection: BackendSectionData = {
+  cuid: 'membership_cuid_2',
   header: 'Membership Benefits',
-  body: benefitsBody,
+  body: 'Society membership benefits supplied by the backend section body.',
   resources: ['/newsletters'],
-  tags: [MEMBERSHIP_BENEFITS_TAG],
-  index: 1,
+  tags: [MEMBERSHIP_INFO_TAG],
+  index: 2,
 };
 
-const meetingListEntry: MembershipSectionListEntry = {
-  cuid: meetingSection.cuid,
-  header: meetingSection.header,
-  body: meetingSection.body,
-  tags: meetingSection.tags,
-  index: meetingSection.index,
+const firstListEntry: MembershipSectionListEntry = {
+  cuid: firstSection.cuid,
+  header: firstSection.header,
+  body: firstSection.body,
+  tags: firstSection.tags,
+  index: firstSection.index,
 };
 
-const benefitsListEntry: MembershipSectionListEntry = {
-  cuid: benefitsSection.cuid,
-  header: benefitsSection.header,
-  body: benefitsSection.body,
-  tags: benefitsSection.tags,
-  index: benefitsSection.index,
+const secondListEntry: MembershipSectionListEntry = {
+  cuid: secondSection.cuid,
+  header: secondSection.header,
+  body: secondSection.body,
+  tags: secondSection.tags,
+  index: secondSection.index,
 };
 
 const sectionsByCuid: Record<string, BackendSectionData> = {
-  [meetingSection.cuid]: meetingSection,
-  [benefitsSection.cuid]: benefitsSection,
+  [firstSection.cuid]: firstSection,
+  [secondSection.cuid]: secondSection,
 };
 
 async function setupMembershipPage(options?: {
@@ -67,8 +57,7 @@ async function setupMembershipPage(options?: {
   const listByTag =
     options?.listByTag ??
     (async (tag: string) => {
-      if (tag === MEMBERSHIP_MEETING_TAG) return [meetingListEntry];
-      if (tag === MEMBERSHIP_BENEFITS_TAG) return [benefitsListEntry];
+      if (tag === MEMBERSHIP_INFO_TAG) return [firstListEntry, secondListEntry];
       return [];
     });
   const backendGet =
@@ -104,8 +93,7 @@ test('GSSC-PLLR-198 Semantic', async () => {
   const { root, page } = await setupMembershipPage({
     listByTag: async (tag) => {
       tags.push(tag);
-      if (tag === MEMBERSHIP_MEETING_TAG) return [meetingListEntry];
-      if (tag === MEMBERSHIP_BENEFITS_TAG) return [benefitsListEntry];
+      if (tag === MEMBERSHIP_INFO_TAG) return [firstListEntry, secondListEntry];
       return [];
     },
     backendGet: async (cuid) => {
@@ -114,13 +102,10 @@ test('GSSC-PLLR-198 Semantic', async () => {
     },
   });
 
-  expect(tags).toEqual(
-    expect.arrayContaining([MEMBERSHIP_MEETING_TAG, MEMBERSHIP_BENEFITS_TAG]),
-  );
-  expect(page.meetingCuids()).toEqual([meetingSection.cuid]);
-  expect(page.benefitsCuids()).toEqual([benefitsSection.cuid]);
+  expect(tags).toEqual([MEMBERSHIP_INFO_TAG]);
+  expect(page.sectionCuids()).toEqual([firstSection.cuid, secondSection.cuid]);
   expect(cuids).toEqual(
-    expect.arrayContaining([meetingSection.cuid, benefitsSection.cuid]),
+    expect.arrayContaining([firstSection.cuid, secondSection.cuid]),
   );
   expect(root.querySelectorAll('gssc-section-from-cuid').length).toBe(2);
   expect(root.querySelectorAll('gssc-section').length).toBe(2);
@@ -129,39 +114,19 @@ test('GSSC-PLLR-198 Semantic', async () => {
 
 // @relation(GSSC-PLLR-199, scope=range_start, role=Test)
 test('GSSC-PLLR-199 Syntactic', async () => {
-  const { root: full } = await setupMembershipPage();
-  const meeting = full.querySelector('.gssc-membership-page__meeting');
-  const benefits = full.querySelector('.gssc-membership-page__benefits');
-  expect(meeting).not.toBeNull();
-  expect(benefits).not.toBeNull();
-  expect(
-    meeting!.compareDocumentPosition(benefits!) &
-      Node.DOCUMENT_POSITION_FOLLOWING,
-  ).toBeTruthy();
+  const { root: full, page } = await setupMembershipPage();
+  const sections = full.querySelector('.gssc-membership-page__sections');
+  expect(sections).not.toBeNull();
   expect(full.querySelector('.gssc-membership-page')!.classList.contains('w-full')).toBe(
     true,
   );
+  expect(page.sectionCuids()).toEqual([firstSection.cuid, secondSection.cuid]);
 
-  const { root: emptyMeeting } = await setupMembershipPage({
-    listByTag: async (tag) =>
-      tag === MEMBERSHIP_BENEFITS_TAG ? [benefitsListEntry] : [],
-  });
-  expect(emptyMeeting.querySelector('.gssc-membership-page__meeting')).toBeNull();
-  expect(emptyMeeting.querySelector('.gssc-membership-page__benefits')).not.toBeNull();
-
-  const { root: emptyBenefits } = await setupMembershipPage({
-    listByTag: async (tag) =>
-      tag === MEMBERSHIP_MEETING_TAG ? [meetingListEntry] : [],
-  });
-  expect(emptyBenefits.querySelector('.gssc-membership-page__meeting')).not.toBeNull();
-  expect(emptyBenefits.querySelector('.gssc-membership-page__benefits')).toBeNull();
-
-  const { root: emptyBoth } = await setupMembershipPage({
+  const { root: empty } = await setupMembershipPage({
     listByTag: async () => [],
   });
-  expect(emptyBoth.querySelector('.gssc-membership-page__meeting')).toBeNull();
-  expect(emptyBoth.querySelector('.gssc-membership-page__benefits')).toBeNull();
-  expect(emptyBoth.querySelector('gssc-section')).toBeNull();
+  expect(empty.querySelector('.gssc-membership-page__sections')).toBeNull();
+  expect(empty.querySelector('gssc-section')).toBeNull();
 });
 // @relation(GSSC-PLLR-199, scope=range_end, role=Test)
 
@@ -183,67 +148,47 @@ test('GSSC-PLLR-200 Lexical', async () => {
 // @relation(GSSC-PLLR-201, scope=range_start, role=Test)
 test('GSSC-PLLR-201 Semantic', async () => {
   const { root } = await setupMembershipPage();
-  const meeting = root.querySelector('.gssc-membership-page__meeting')!;
-  const body = textContent(meeting, '.gssc-section__body');
-  expect(body).toContain('Stanislaus County Library Modesto');
-  expect(body).toContain('monthly');
-  expect(body).toContain('second Thursday at 7:00 PM');
-  expect(body).toContain('next meeting');
-  expect(textContent(meeting, '.gssc-section__header')).toBe('Meeting Information');
+  const sections = root.querySelector('.gssc-membership-page__sections')!;
+  const bodies = [...sections.querySelectorAll('.gssc-section__body')].map(
+    (el) => el.textContent?.trim(),
+  );
+  expect(bodies).toEqual([firstSection.body, secondSection.body]);
+  const headers = [...sections.querySelectorAll('.gssc-section__header')].map(
+    (el) => el.textContent?.trim(),
+  );
+  expect(headers).toEqual([firstSection.header, secondSection.header]);
 });
 // @relation(GSSC-PLLR-201, scope=range_end, role=Test)
 
 // @relation(GSSC-PLLR-202, scope=range_start, role=Test)
 test('GSSC-PLLR-202 Syntactic', async () => {
-  const secondMeeting: MembershipSectionListEntry = {
-    cuid: 'meeting_cuid_0',
-    header: 'Earlier Meeting Note',
-    body: 'Earlier index meeting body with location frequency schedule and next meeting.',
-    tags: [MEMBERSHIP_MEETING_TAG],
-    index: 0,
-  };
-  const secondData: BackendSectionData = {
-    cuid: secondMeeting.cuid,
-    header: secondMeeting.header,
-    body: secondMeeting.body,
-    resources: [],
-    tags: secondMeeting.tags,
-    index: secondMeeting.index,
-  };
-
   const { root, page } = await setupMembershipPage({
     listByTag: async (tag) => {
-      if (tag === MEMBERSHIP_MEETING_TAG) return [meetingListEntry, secondMeeting];
-      if (tag === MEMBERSHIP_BENEFITS_TAG) return [benefitsListEntry];
-      return [];
+      if (tag !== MEMBERSHIP_INFO_TAG) return [];
+      // Backend order as returned (not FE-resorted).
+      return [secondListEntry, firstListEntry];
     },
-    backendGet: async (cuid) =>
-      cuid === secondMeeting.cuid ? secondData : (sectionsByCuid[cuid] ?? null),
   });
 
-  expect(page.meetingCuids()).toEqual([secondMeeting.cuid, meetingSection.cuid]);
-  const meetingGroup = root.querySelector('.gssc-membership-page__meeting')!;
-  const benefitsGroup = root.querySelector('.gssc-membership-page__benefits')!;
-  expect(
-    meetingGroup.compareDocumentPosition(benefitsGroup) &
-      Node.DOCUMENT_POSITION_FOLLOWING,
-  ).toBeTruthy();
-  const headers = [
-    ...meetingGroup.querySelectorAll('.gssc-section__header'),
-  ].map((el) => el.textContent?.trim());
-  expect(headers).toEqual(['Earlier Meeting Note', 'Meeting Information']);
+  expect(page.sectionCuids()).toEqual([secondSection.cuid, firstSection.cuid]);
+  const sections = root.querySelector('.gssc-membership-page__sections')!;
+  const headers = [...sections.querySelectorAll('.gssc-section__header')].map(
+    (el) => el.textContent?.trim(),
+  );
+  expect(headers).toEqual([secondSection.header, firstSection.header]);
+  expect(sections.querySelectorAll('gssc-section-from-cuid').length).toBe(2);
 });
 // @relation(GSSC-PLLR-202, scope=range_end, role=Test)
 
 // @relation(GSSC-PLLR-203, scope=range_start, role=Test)
 test('GSSC-PLLR-203 Lexical', async () => {
   const { root } = await setupMembershipPage();
-  const meeting = root.querySelector('.gssc-membership-page__meeting')!;
-  const container = meeting.querySelector<HTMLElement>('.gssc-section')!;
+  const sections = root.querySelector('.gssc-membership-page__sections')!;
+  const container = sections.querySelector<HTMLElement>('.gssc-section')!;
   expect(container.classList.contains('bg-gssc-white')).toBe(true);
   expect(container.classList.contains('border-gssc-gray')).toBe(true);
-  const header = meeting.querySelector<HTMLElement>('.gssc-section__header')!;
-  const body = meeting.querySelector<HTMLElement>('.gssc-section__body')!;
+  const header = sections.querySelector<HTMLElement>('.gssc-section__header')!;
+  const body = sections.querySelector<HTMLElement>('.gssc-section__body')!;
   expect(header.classList.contains('font-semibold')).toBe(true);
   expect(header.classList.contains('text-gssc-dark-green')).toBe(true);
   expect(body.classList.contains('font-normal')).toBe(true);
@@ -254,78 +199,37 @@ test('GSSC-PLLR-203 Lexical', async () => {
 // @relation(GSSC-PLLR-204, scope=range_start, role=Test)
 test('GSSC-PLLR-204 Semantic', async () => {
   const { root } = await setupMembershipPage();
-  const benefits = root.querySelector('.gssc-membership-page__benefits')!;
-  const body = textContent(benefits, '.gssc-section__body') ?? '';
-  for (const topic of [
-    'programs',
-    'workshops',
-    'seminars',
-    'newsletters',
-    'queries',
-    'surname registration',
-    'interest groups',
-    'research trips',
-  ]) {
-    expect(body.toLowerCase()).toContain(topic);
-  }
-  expect(textContent(benefits, '.gssc-section__header')).toBe('Membership Benefits');
+  const hosts = [...root.querySelectorAll('gssc-section-from-cuid')];
+  expect(hosts.length).toBe(2);
+  expect(textContent(hosts[0]!, '.gssc-section__body')).toBe(firstSection.body);
+  expect(textContent(hosts[1]!, '.gssc-section__body')).toBe(secondSection.body);
+  expect(textContent(hosts[0]!, '.gssc-section__header')).toBe(firstSection.header);
+  expect(textContent(hosts[1]!, '.gssc-section__header')).toBe(secondSection.header);
 });
 // @relation(GSSC-PLLR-204, scope=range_end, role=Test)
 
 // @relation(GSSC-PLLR-205, scope=range_start, role=Test)
 test('GSSC-PLLR-205 Syntactic', async () => {
-  const secondBenefits: MembershipSectionListEntry = {
-    cuid: 'benefits_cuid_0',
-    header: 'Earlier Benefits Note',
-    body: 'Earlier benefits covering programs workshops seminars newsletters queries surname registration interest groups research trips.',
-    tags: [MEMBERSHIP_BENEFITS_TAG],
-    index: 0,
-  };
-  const secondData: BackendSectionData = {
-    cuid: secondBenefits.cuid,
-    header: secondBenefits.header,
-    body: secondBenefits.body,
-    resources: [],
-    tags: secondBenefits.tags,
-    index: secondBenefits.index,
-  };
-
-  const { root, page } = await setupMembershipPage({
-    listByTag: async (tag) => {
-      if (tag === MEMBERSHIP_MEETING_TAG) return [meetingListEntry];
-      if (tag === MEMBERSHIP_BENEFITS_TAG)
-        return [benefitsListEntry, secondBenefits];
-      return [];
-    },
-    backendGet: async (cuid) =>
-      cuid === secondBenefits.cuid ? secondData : (sectionsByCuid[cuid] ?? null),
-  });
-
-  expect(page.benefitsCuids()).toEqual([
-    secondBenefits.cuid,
-    benefitsSection.cuid,
-  ]);
-  const meetingGroup = root.querySelector('.gssc-membership-page__meeting')!;
-  const benefitsGroup = root.querySelector('.gssc-membership-page__benefits')!;
+  const { root } = await setupMembershipPage();
+  const sections = root.querySelector('.gssc-membership-page__sections')!;
+  const hosts = [...sections.querySelectorAll('gssc-section-from-cuid')];
+  expect(hosts.length).toBe(2);
+  expect(hosts[0]!.querySelector('gssc-section')).not.toBeNull();
+  expect(hosts[1]!.querySelector('gssc-section')).not.toBeNull();
   expect(
-    meetingGroup.compareDocumentPosition(benefitsGroup) &
-      Node.DOCUMENT_POSITION_FOLLOWING,
+    hosts[0]!.compareDocumentPosition(hosts[1]!) & Node.DOCUMENT_POSITION_FOLLOWING,
   ).toBeTruthy();
-  const headers = [
-    ...benefitsGroup.querySelectorAll('.gssc-section__header'),
-  ].map((el) => el.textContent?.trim());
-  expect(headers).toEqual(['Earlier Benefits Note', 'Membership Benefits']);
 });
 // @relation(GSSC-PLLR-205, scope=range_end, role=Test)
 
 // @relation(GSSC-PLLR-206, scope=range_start, role=Test)
 test('GSSC-PLLR-206 Lexical', async () => {
   const { root } = await setupMembershipPage();
-  const benefits = root.querySelector('.gssc-membership-page__benefits')!;
-  const container = benefits.querySelector<HTMLElement>('.gssc-section')!;
+  const secondHost = root.querySelectorAll('gssc-section-from-cuid')[1]!;
+  const container = secondHost.querySelector<HTMLElement>('.gssc-section')!;
   expect(container.classList.contains('bg-gssc-white')).toBe(true);
   expect(container.classList.contains('border-gssc-gray')).toBe(true);
-  const resource = benefits.querySelector<HTMLElement>('.gssc-section__resource')!;
+  const resource = secondHost.querySelector<HTMLElement>('.gssc-section__resource')!;
   expect(resource.classList.contains('bg-gssc-white')).toBe(true);
   expect(resource.classList.contains('text-gssc-dark-green')).toBe(true);
   expect(resource.classList.contains('border-gssc-dark-green')).toBe(true);

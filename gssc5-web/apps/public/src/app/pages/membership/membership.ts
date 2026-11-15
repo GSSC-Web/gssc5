@@ -2,11 +2,8 @@ import { Component, InjectionToken, inject, signal } from '@angular/core';
 import { SectionFromCuid } from '../../modules/section-from-cuid/section-from-cuid';
 import { backend } from '../../services/backend';
 
-/** Backend tag that binds public Meeting Information sections to this page. */
-export const MEMBERSHIP_MEETING_TAG = 'membership-meeting';
-
-/** Backend tag that binds public Membership Benefits sections to this page. */
-export const MEMBERSHIP_BENEFITS_TAG = 'membership-benefits';
+/** Backend tag that binds public membership information sections to this page. */
+export const MEMBERSHIP_INFO_TAG = 'membership-info';
 
 /** One public section list entry from Unified Backend GET /sections. */
 export type MembershipSectionListEntry = {
@@ -45,16 +42,9 @@ async function defaultMembershipSectionListByTag(
   }
 }
 
-/** Sort list entries by backend index ascending (stable for equal index). */
-export function sortMembershipSectionsByIndex(
-  entries: readonly MembershipSectionListEntry[],
-): MembershipSectionListEntry[] {
-  return [...entries].sort((a, b) => a.index - b.index || a.cuid.localeCompare(b.cuid));
-}
-
 /**
- * Public Membership Information Page (GSSC5-15): Meeting Information and
- * Membership Benefits via tagged backend sections + Section From CUID.
+ * Public Membership Information Page (GSSC5-15): membership-info tagged
+ * backend sections placed through Section From CUID in backend order.
  */
 // @relation(GSSC-PLLR-9, scope=range_start, role=Implementation)
 @Component({
@@ -66,11 +56,8 @@ export class MembershipPage {
   private readonly listByTag = inject(MEMBERSHIP_SECTION_LIST_BY_TAG);
   private loadGeneration = 0;
 
-  /** Meeting Information section cuids in backend index order. */
-  readonly meetingCuids = signal<string[]>([]);
-
-  /** Membership Benefits section cuids in backend index order. */
-  readonly benefitsCuids = signal<string[]>([]);
+  /** Membership information section cuids in Unified Backend section order. */
+  readonly sectionCuids = signal<string[]>([]);
 
   constructor() {
     void this.load();
@@ -79,17 +66,10 @@ export class MembershipPage {
   private async load(): Promise<void> {
     const generation = ++this.loadGeneration;
     // @relation(GSSC-PLLR-198, GSSC-PLLR-201, GSSC-PLLR-204, scope=range_start, role=Implementation)
-    const [meeting, benefits] = await Promise.all([
-      this.listByTag(MEMBERSHIP_MEETING_TAG),
-      this.listByTag(MEMBERSHIP_BENEFITS_TAG),
-    ]);
+    const sections = await this.listByTag(MEMBERSHIP_INFO_TAG);
     if (generation !== this.loadGeneration) return;
-    this.meetingCuids.set(
-      sortMembershipSectionsByIndex(meeting).map((entry) => entry.cuid),
-    );
-    this.benefitsCuids.set(
-      sortMembershipSectionsByIndex(benefits).map((entry) => entry.cuid),
-    );
+    // Backend GET /sections already returns index order; do not invent FE ordering.
+    this.sectionCuids.set(sections.map((entry) => entry.cuid));
     // @relation(GSSC-PLLR-198, GSSC-PLLR-201, GSSC-PLLR-204, scope=range_end, role=Implementation)
   }
 }
