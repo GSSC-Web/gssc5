@@ -58,6 +58,12 @@ export class Section {
   readonly visibleSlotCount = signal(0);
 
   /**
+   * Equal Resource Button width in carousel mode (CSS px), sized so `visibleSlotCount`
+   * buttons fill the viewport between Prev/Next. `0` when not a carousel.
+   */
+  readonly carouselButtonWidthPx = signal(0);
+
+  /**
    * Test/harness override for the resources container width in CSS pixels.
    * `null` uses the live element `clientWidth`.
    */
@@ -65,6 +71,18 @@ export class Section {
 
   readonly resources = computed(() => this.contents().resources ?? []);
 
+  /**
+   * Track contents: full strip, doubled in carousel mode so a wrap window
+   * (last + first) can sit under the viewport without replace-in-place.
+   */
+  readonly trackResources = computed(() => {
+    const all = this.resources();
+    if (all.length === 0) return [];
+    if (!this.isCarousel()) return [...all];
+    return [...all, ...all];
+  });
+
+  /** Logical visible window (for callers/tests); DOM slides via transform. */
   readonly visibleResources = computed(() => {
     const all = this.resources();
     if (all.length === 0) return [];
@@ -76,6 +94,17 @@ export class Section {
       visible.push(all[(start + i) % all.length]!);
     }
     return visible;
+  });
+
+  /** Pixel `translateX` for the resource track; animates via CSS transition (GSSC-PLLR-93). */
+  readonly trackTransform = computed(() => {
+    if (!this.isCarousel()) return 'none';
+    const offset = this.carouselOffset();
+    if (offset === 0) return 'none';
+    const buttonW = this.carouselButtonWidthPx();
+    if (buttonW <= 0) return 'none';
+    const stride = buttonW + RESOURCE_BUTTON_GAP_PX;
+    return `translateX(-${offset * stride}px)`;
   });
 
   constructor() {
@@ -111,6 +140,7 @@ export class Section {
       this.isCarousel.set(false);
       this.visibleSlotCount.set(0);
       this.carouselOffset.set(0);
+      this.carouselButtonWidthPx.set(0);
       return;
     }
 
@@ -125,6 +155,7 @@ export class Section {
       this.isCarousel.set(false);
       this.visibleSlotCount.set(n);
       this.carouselOffset.set(0);
+      this.carouselButtonWidthPx.set(0);
       return;
     }
 
@@ -132,6 +163,7 @@ export class Section {
       this.isCarousel.set(false);
       this.visibleSlotCount.set(n);
       this.carouselOffset.set(0);
+      this.carouselButtonWidthPx.set(0);
       return;
     }
 
@@ -141,11 +173,14 @@ export class Section {
       this.isCarousel.set(false);
       this.visibleSlotCount.set(n);
       this.carouselOffset.set(0);
+      this.carouselButtonWidthPx.set(0);
       return;
     }
 
     this.isCarousel.set(true);
     this.visibleSlotCount.set(slots);
+    const filledButtonW = (viewportW - (slots - 1) * gap) / slots;
+    this.carouselButtonWidthPx.set(filledButtonW);
     const maxOffset = n;
     if (this.carouselOffset() >= maxOffset) this.carouselOffset.set(0);
   }
