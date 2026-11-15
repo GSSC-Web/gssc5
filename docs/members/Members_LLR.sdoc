@@ -92,7 +92,8 @@ GSSC5-93 Page/Section Content Editor owns GSSC-MLLR-261 through GSSC-MLLR-286 (p
 GSSC5-89 Member Dashboard Page owns GSSC-MLLR-231 through GSSC-MLLR-239.
 GSSC5-94 Announcements Editor owns GSSC-MLLR-291 through GSSC-MLLR-307 (page, catalog, Generic Editor host, create/modify/publish behaviors; reuses GSSC5-84/85; consumes GSSC5-68 /announcements).
 GSSC5-96 Newsletters Editor owns GSSC-MLLR-351 through GSSC-MLLR-373 (exact end 373; band 351–380 reserved so parallel Wave editors do not collide).
-Wave coordination: GSSC5-92 directory 202–214 (band through 230), GSSC5-89 dashboard 231–239, GSSC5-93 page/section 261–286, GSSC5-94 announcements 291–307, GSSC5-95 events editor ~321+, GSSC5-96 newsletters 351–373 — do not collide.
+GSSC5-95 Events Editor owns GSSC-MLLR-321 through GSSC-MLLR-346 (events page, catalog, create/publish/modify host; composes GSSC5-84 Generic Editor + GSSC5-85 form fields; uses GSSC5-69 /events APIs).
+Wave coordination: GSSC5-92 directory 202–214 (band through 230), GSSC5-89 dashboard 231–239, GSSC5-93 page/section 261–286, GSSC5-94 announcements 291–307, GSSC5-95 events 321–346, GSSC5-96 newsletters 351–373 — do not collide.
 GSSC-MLLR-33 through GSSC-MLLR-39 remain free for later claimants.
 Do not reuse numbers already claimed by another ticket.
 <<<
@@ -6135,6 +6136,567 @@ REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-51
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-EVENTS-EDITOR
+TITLE: Events Editor
+
+[[SECTION]]
+UID: GSSC-MLLR-EVENTS-PAGE
+TITLE: Events Page
+
+[REQUIREMENT]
+UID: GSSC-MLLR-321
+TITLE: Semantic
+STATEMENT: >>>
+The Events Page SHALL present an events catalog and an event editor host so an authorized member can create, publish, and modify events without programming knowledge.
+<<<
+RATIONALE: >>>
+One page gathers catalog selection and the Generic Editor host for event work.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-95
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-46
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-47
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-48
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-322
+TITLE: Syntactic
+STATEMENT: >>>
+The Events Page SHALL place the events catalog above the event editor host in a single vertical column that fills the available content width.
+<<<
+RATIONALE: >>>
+Catalog-above-editor keeps selection and editing ordered on small and large viewports.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-95
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-46
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-48
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-323
+TITLE: Lexical
+STATEMENT: >>>
+The Events Page SHALL use the Member Frontend sans-serif typeface and the dark-green and white theme tokens for page text and background.
+<<<
+RATIONALE: >>>
+Page chrome matches the Member Frontend shell palette.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-95
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-46
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-EVENTS-CATALOG
+TITLE: Events Catalog
+
+[REQUIREMENT]
+UID: GSSC-MLLR-324
+TITLE: Semantic
+STATEMENT: >>>
+The Events Catalog SHALL list stored events for the logged-in member, showing each event's name and calendar date, and SHALL let the member select an event to modify.
+<<<
+RATIONALE: >>>
+A catalog is how members find an existing event before modifying it.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-95
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-48
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-325
+TITLE: Syntactic
+STATEMENT: >>>
+The Events Catalog SHALL stack catalog entries in a vertical list under a New Event control.
+<<<
+RATIONALE: >>>
+A vertical list keeps entries scannable above the editor.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-95
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-48
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-326
+TITLE: Lexical
+STATEMENT: >>>
+The Events Catalog SHALL use the Member Frontend sans-serif typeface and the dark-green theme token for catalog text.
+<<<
+RATIONALE: >>>
+Catalog text matches Member Frontend content color.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-95
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-48
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-EVENTS-CATALOG-ENTRY
+TITLE: Events Catalog Entry
+
+[REQUIREMENT]
+UID: GSSC-MLLR-327
+TITLE: Semantic
+STATEMENT: >>>
+Each Events Catalog Entry SHALL present one event's name and calendar date, and SHALL activate modification of that event in the event editor host when selected.
+<<<
+RATIONALE: >>>
+Selecting an entry loads that event for modification.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-95
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-48
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-328
+TITLE: Syntactic
+STATEMENT: >>>
+Each Events Catalog Entry SHALL appear as one row in the Events Catalog list.
+<<<
+RATIONALE: >>>
+One row per event keeps the catalog compact.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-95
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-48
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-329
+TITLE: Lexical
+STATEMENT: >>>
+Each Events Catalog Entry SHALL use the Member Frontend sans-serif typeface and the dark-green theme token for its label.
+<<<
+RATIONALE: >>>
+Entry labels match catalog text styling.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-95
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-48
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-EVENTS-NEW-CONTROL
+TITLE: New Event Control
+
+[REQUIREMENT]
+UID: GSSC-MLLR-330
+TITLE: Semantic
+STATEMENT: >>>
+The New Event Control SHALL start creation of a new event in the event editor host with empty editable fields when the member is authorized to create events.
+<<<
+RATIONALE: >>>
+Create needs an explicit start so the editor is not left on a prior event.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-95
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-46
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-331
+TITLE: Syntactic
+STATEMENT: >>>
+The New Event Control SHALL appear above the Events Catalog list on the Events Page.
+<<<
+RATIONALE: >>>
+Placing New Event above the list keeps create discoverable before selection.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-95
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-46
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-332
+TITLE: Lexical
+STATEMENT: >>>
+The New Event Control SHALL use the light-green theme token for its background, the dark-green theme token for its border and label, a sans-serif typeface, and the label New Event.
+<<<
+RATIONALE: >>>
+Light-green fill matches Member Frontend primary action chrome.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-95
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-46
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-EVENT-EDITOR-HOST
+TITLE: Event Editor Host
+
+[REQUIREMENT]
+UID: GSSC-MLLR-333
+TITLE: Semantic
+STATEMENT: >>>
+The Event Editor Host SHALL place event editable fields into the Generic Editor, SHALL use a distinct exclusive-edit resource identity for each event being created or modified, and SHALL request persistence or discard through the Generic Editor Save and Cancel controls.
+<<<
+RATIONALE: >>>
+Wave 7 hosts compose the Generic Editor rather than reinventing shell, contention, and dirty tracking.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-95
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-46
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-48
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-24
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-334
+TITLE: Syntactic
+STATEMENT: >>>
+The Event Editor Host SHALL appear below the Events Catalog on the Events Page and SHALL fill the available content width.
+<<<
+RATIONALE: >>>
+Editor below catalog keeps selection then edit as one vertical flow.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-95
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-46
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-48
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-335
+TITLE: Lexical
+STATEMENT: >>>
+The Event Editor Host SHALL use the Generic Editor shell presentation for its border, background, and action controls without adding a second editor chrome.
+<<<
+RATIONALE: >>>
+Shared shell chrome keeps Wave 7 editors consistent.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-95
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-46
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-24
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-EVENT-FIELDS
+TITLE: Event Fields
+
+[REQUIREMENT]
+UID: GSSC-MLLR-336
+TITLE: Semantic
+STATEMENT: >>>
+The Event Fields SHALL present editable controls for name, event month, event day, event year, announcement-window start month, start day, and start year, time, duration, location, details header, details body, and public-visibility publication choice.
+<<<
+RATIONALE: >>>
+Those fields are the event catalog and details values authorized members create and modify for Public Frontend presentation.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-95
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-46
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-47
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-48
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-337
+TITLE: Syntactic
+STATEMENT: >>>
+The Event Fields SHALL stack vertically inside the Generic Editor field area.
+<<<
+RATIONALE: >>>
+A vertical stack matches Generic Editor field-area layout.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-95
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-46
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-48
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-338
+TITLE: Lexical
+STATEMENT: >>>
+The Event Fields SHALL present Title Case field names through Member Frontend form-field controls and SHALL mark required fields with an asterisk after the field name.
+<<<
+RATIONALE: >>>
+Form-field primitives own field chrome; Title Case names and required markers match Member Frontend form styling.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-95
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-46
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-48
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-EVENTS-BEHAVIORS
+TITLE: Events Editor Behaviors
+
+[REQUIREMENT]
+UID: GSSC-MLLR-339
+TITLE: Catalog Load
+STATEMENT: >>>
+When the Events Page opens for a logged-in member, the Member Frontend SHALL load the authenticated events catalog from the Unified Backend and present those events in the Events Catalog.
+<<<
+RATIONALE: >>>
+Modification starts from the stored catalog the backend already provides to logged-in members.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-95
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-48
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-340
+TITLE: Event Creation Persist
+STATEMENT: >>>
+When Save is requested while the Event Editor Host is creating a new event and the member is authorized, the Member Frontend SHALL create the event on the Unified Backend with the edited name, event date, announcement-window start, time, duration, location, details header, details body, and public-visibility values.
+<<<
+RATIONALE: >>>
+Creation without programming knowledge still needs a backend write of the required event fields.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-95
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-46
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-341
+TITLE: Event Publication Choice
+STATEMENT: >>>
+The Event Fields public-visibility control SHALL let an authorized member choose whether the event is published for the Public Frontend, and the Member Frontend SHALL store that choice with create and modify persistence.
+<<<
+RATIONALE: >>>
+Publishing an event on the Public Frontend is the public-visibility choice on the event record.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-95
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-47
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-342
+TITLE: Event Modification Persist
+STATEMENT: >>>
+When Save is requested while the Event Editor Host is modifying an existing event and the member is authorized, the Member Frontend SHALL update that event on the Unified Backend with the edited name, event date, announcement-window start, time, duration, location, details header, details body, and public-visibility values.
+<<<
+RATIONALE: >>>
+Modification without programming knowledge still needs a backend write of the changed event fields.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-95
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-48
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-343
+TITLE: Event Editor Cancel
+STATEMENT: >>>
+When Cancel is requested on the Event Editor Host, the Member Frontend SHALL restore the editor fields to the last loaded or last successfully saved values for the current create or modify session without writing to the Unified Backend.
+<<<
+RATIONALE: >>>
+Discard without write matches Generic Editor Cancel behavior for the events host.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-95
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-46
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-48
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-344
+TITLE: Event Editor Permission
+STATEMENT: >>>
+The Event Editor Host SHALL allow create and modify only for a logged-in member who is a user moderator, and SHALL keep the editor read-only for other logged-in members.
+<<<
+RATIONALE: >>>
+Backend event create and modify require user-moderator permission by default. Administrators already satisfy user-moderator for Member Frontend role gates.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-95
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-46
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-48
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-345
+TITLE: Events Page Route
+STATEMENT: >>>
+The Member Frontend SHALL expose the Events Page at the path /events for logged-in members and SHALL redirect logged-out visitors to login.
+<<<
+RATIONALE: >>>
+A stable path lets authorized members open the events editor; auth guards already protect member routes.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-95
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-46
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-48
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-346
+TITLE: Event Exclusive Resource Identity
+STATEMENT: >>>
+While creating a new event, the Event Editor Host SHALL use a create-session exclusive-edit resource identity distinct from every stored event identity, and while modifying a stored event SHALL use that event's identity as the exclusive-edit resource identity.
+<<<
+RATIONALE: >>>
+Distinct resource identities let different events be edited concurrently while the same event stays exclusive, matching Generic Editor session rules.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-95
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-48
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-24
   ROLE: Refines
 
 [[/SECTION]]

@@ -1039,8 +1039,11 @@ RATIONALE: >>>
 Authorized members create events that appear on the Public Frontend.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-11
-REVIEW_STATUS: Changed
+CHANGE_DRIVER: >>>
+GSSC5-11
+GSSC5-95
+<<<
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-55
@@ -1056,8 +1059,11 @@ RATIONALE: >>>
 Authorized members publish events so the Public Frontend can present them.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-11
-REVIEW_STATUS: Changed
+CHANGE_DRIVER: >>>
+GSSC5-11
+GSSC5-95
+<<<
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-55
@@ -1073,8 +1079,11 @@ RATIONALE: >>>
 No Member Frontend PIR separately requires event edits after create. Authorized members need to correct or update events without developer intervention.
 <<<
 DERIVED: True
-CHANGE_DRIVER: GSSC5-11
-REVIEW_STATUS: Changed
+CHANGE_DRIVER: >>>
+GSSC5-11
+GSSC5-95
+<<<
+REVIEW_STATUS: Approved
 
 [[/SECTION]]
 
