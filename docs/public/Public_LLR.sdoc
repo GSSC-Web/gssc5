@@ -3154,155 +3154,9 @@ RELATIONS:
 
 [[/SECTION]]
 
-[[/SECTION]]
-
-[[SECTION]]
-UID: GSSC-PLLR-SERVICES
-TITLE: Public Services
-
-[[SECTION]]
-UID: GSSC-PLLR-KV-STORE
-TITLE: Key-Value Store
-
-[REQUIREMENT]
-UID: GSSC-PLLR-76
-TITLE: Key-Value Retrieval
-STATEMENT: >>>
-The Public Frontend Key-Value Store SHALL retrieve the value for a requested key from the Unified Backend key-value store.
-<<<
-RATIONALE: >>>
-Global website data lives in the Unified Backend key-value store. The Public Frontend Key-Value Store fetches that value so other Public Frontend services can use it.
-<<<
-DERIVED: False
-VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-23
-REVIEW_STATUS: Approved
-RELATIONS:
-- TYPE: Parent
-  VALUE: GSSC-BHLR-119
-  ROLE: Refines
-
-[REQUIREMENT]
-UID: GSSC-PLLR-77
-TITLE: Key-Value Absence
-STATEMENT: >>>
-When the Unified Backend key-value store has no entry for the requested key, the Public Frontend Key-Value Store SHALL provide no value.
-<<<
-RATIONALE: >>>
-A missing key is not an error for the public shell. Callers treat the absent value as empty until the store has an entry.
-<<<
-DERIVED: False
-VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-23
-REVIEW_STATUS: Approved
-RELATIONS:
-- TYPE: Parent
-  VALUE: GSSC-BHLR-119
-  ROLE: Refines
-
-[[/SECTION]]
-
-[[SECTION]]
-UID: GSSC-PLLR-SOCIETY-CONTACT
-TITLE: Society Contact
-
-[REQUIREMENT]
-UID: GSSC-PLLR-78
-TITLE: Society Phone Number
-STATEMENT: >>>
-The Public Frontend Society Contact service SHALL provide the society's phone number from the Key-Value Store under the key society.phoneNumber.
-<<<
-RATIONALE: >>>
-Footer Phone Number reads the number from this service. The Key-Value Store key society.phoneNumber holds that number. This requirement does not set the current number.
-<<<
-DERIVED: False
-VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-23
-REVIEW_STATUS: Approved
-RELATIONS:
-- TYPE: Parent
-  VALUE: GSSC-PHLR-24
-  ROLE: Refines
-
-[REQUIREMENT]
-UID: GSSC-PLLR-79
-TITLE: Society Email Address
-STATEMENT: >>>
-The Public Frontend Society Contact service SHALL provide the society's email address from the Key-Value Store under the key society.emailAddress.
-<<<
-RATIONALE: >>>
-Footer Email Address reads the address from this service. The Key-Value Store key society.emailAddress holds that address. This requirement does not set the current address.
-<<<
-DERIVED: False
-VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-23
-REVIEW_STATUS: Approved
-RELATIONS:
-- TYPE: Parent
-  VALUE: GSSC-PHLR-25
-  ROLE: Refines
-
-[REQUIREMENT]
-UID: GSSC-PLLR-80
-TITLE: Society Postal Address
-STATEMENT: >>>
-The Public Frontend Society Contact service SHALL provide the society's postal address from the Key-Value Store under the key society.postalAddress.
-<<<
-RATIONALE: >>>
-Footer Postal Address reads the address from this service. The Key-Value Store key society.postalAddress holds that address. This requirement does not set the current address.
-<<<
-DERIVED: False
-VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-23
-REVIEW_STATUS: Approved
-RELATIONS:
-- TYPE: Parent
-  VALUE: GSSC-PHLR-26
-  ROLE: Refines
-
-[REQUIREMENT]
-UID: GSSC-PLLR-81
-TITLE: Society Organization Name
-STATEMENT: >>>
-The Public Frontend Society Contact service SHALL provide the society's organization name from the Key-Value Store under the key society.organizationName.
-<<<
-RATIONALE: >>>
-Footer Organization Name reads the full name from this service. The Key-Value Store key society.organizationName holds that name. This requirement does not set the current name.
-<<<
-DERIVED: False
-VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-23
-REVIEW_STATUS: Approved
-RELATIONS:
-- TYPE: Parent
-  VALUE: GSSC-PHLR-21
-  ROLE: Refines
-
-[REQUIREMENT]
-UID: GSSC-PLLR-82
-TITLE: Society Organization Acronym
-STATEMENT: >>>
-The Public Frontend Society Contact service SHALL provide the society's organization acronym from the Key-Value Store under the key society.organizationAcronym.
-<<<
-RATIONALE: >>>
-Footer Organization Name reads the acronym from this service for narrow presentations. The Key-Value Store key society.organizationAcronym holds that acronym. This requirement does not set the current acronym.
-<<<
-DERIVED: False
-VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-23
-REVIEW_STATUS: Approved
-RELATIONS:
-- TYPE: Parent
-  VALUE: GSSC-PHLR-21
-  ROLE: Refines
-
-[[/SECTION]]
-
-[[/SECTION]]
-
 [[SECTION]]
 UID: GSSC-PLLR-LEADERSHIP-PAGE
-TITLE: Public Leadership Page
+TITLE: Leadership Page
 
 [[SECTION]]
 UID: GSSC-PLLR-LEADERSHIP-INTRO
@@ -4213,138 +4067,6 @@ RELATIONS:
 [[/SECTION]]
 
 [[SECTION]]
-UID: GSSC-PLLR-ROUTER
-TITLE: Public Router
-
-[REQUIREMENT]
-UID: GSSC-PLLR-8
-TITLE: Home Page Route
-STATEMENT: >>>
-The GSSC Website Public Frontend Router SHALL open the public home page at the root path.
-<<<
-RATIONALE: >>>
-The Navigation Menu reaches the public home page through this route.
-<<<
-DERIVED: False
-VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-38
-REVIEW_STATUS: Approved
-RELATIONS:
-- TYPE: Parent
-  VALUE: GSSC-PHLR-10
-  ROLE: Refines
-
-[REQUIREMENT]
-UID: GSSC-PLLR-9
-TITLE: Membership Information Page Route
-STATEMENT: >>>
-The GSSC Website Public Frontend Router SHALL open the public membership information page at the membership path.
-<<<
-RATIONALE: >>>
-The Navigation Menu reaches the public membership information page through this route.
-<<<
-DERIVED: False
-VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-38
-REVIEW_STATUS: Approved
-RELATIONS:
-- TYPE: Parent
-  VALUE: GSSC-PHLR-11
-  ROLE: Refines
-
-[REQUIREMENT]
-UID: GSSC-PLLR-10
-TITLE: Leadership Page Route
-STATEMENT: >>>
-The GSSC Website Public Frontend Router SHALL open the public leadership page at the leadership path.
-<<<
-RATIONALE: >>>
-The Navigation Menu reaches the public leadership page through this route.
-<<<
-DERIVED: False
-VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-38
-REVIEW_STATUS: Approved
-RELATIONS:
-- TYPE: Parent
-  VALUE: GSSC-PHLR-126
-  ROLE: Refines
-
-[REQUIREMENT]
-UID: GSSC-PLLR-11
-TITLE: Calendar Page Route
-STATEMENT: >>>
-The GSSC Website Public Frontend Router SHALL open the public calendar page at the calendar path.
-<<<
-RATIONALE: >>>
-The Navigation Menu reaches the public calendar through this route.
-<<<
-DERIVED: False
-VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-38
-REVIEW_STATUS: Approved
-RELATIONS:
-- TYPE: Parent
-  VALUE: GSSC-PHLR-12
-  ROLE: Refines
-
-[REQUIREMENT]
-UID: GSSC-PLLR-12
-TITLE: Publications Page Route
-STATEMENT: >>>
-The GSSC Website Public Frontend Router SHALL open the public publications page at the publications path.
-<<<
-RATIONALE: >>>
-The Navigation Menu reaches the public publications page through this route.
-<<<
-DERIVED: False
-VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-38
-REVIEW_STATUS: Approved
-RELATIONS:
-- TYPE: Parent
-  VALUE: GSSC-PHLR-13
-  ROLE: Refines
-
-[REQUIREMENT]
-UID: GSSC-PLLR-13
-TITLE: Research Tools Page Route
-STATEMENT: >>>
-The GSSC Website Public Frontend Router SHALL open the public research tools page at the research-tools path.
-<<<
-RATIONALE: >>>
-The Navigation Menu reaches the public research tools page through this route.
-<<<
-DERIVED: False
-VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-38
-REVIEW_STATUS: Approved
-RELATIONS:
-- TYPE: Parent
-  VALUE: GSSC-PHLR-14
-  ROLE: Refines
-
-[REQUIREMENT]
-UID: GSSC-PLLR-14
-TITLE: Newsletters Page Route
-STATEMENT: >>>
-The GSSC Website Public Frontend Router SHALL open the public newsletters page at the newsletters path.
-<<<
-RATIONALE: >>>
-The Navigation Menu reaches the public newsletters page through this route.
-<<<
-DERIVED: False
-VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-38
-REVIEW_STATUS: Approved
-RELATIONS:
-- TYPE: Parent
-  VALUE: GSSC-PHLR-15
-  ROLE: Refines
-
-[[/SECTION]]
-
-[[SECTION]]
 UID: GSSC-PLLR-MEMBERSHIP-PAGE
 TITLE: Membership Information Page
 
@@ -4568,3 +4290,282 @@ RELATIONS:
 [[/SECTION]]
 
 [[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-SERVICES
+TITLE: Public Services
+
+[[SECTION]]
+UID: GSSC-PLLR-KV-STORE
+TITLE: Key-Value Store
+
+[REQUIREMENT]
+UID: GSSC-PLLR-76
+TITLE: Key-Value Retrieval
+STATEMENT: >>>
+The Public Frontend Key-Value Store SHALL retrieve the value for a requested key from the Unified Backend key-value store.
+<<<
+RATIONALE: >>>
+Global website data lives in the Unified Backend key-value store. The Public Frontend Key-Value Store fetches that value so other Public Frontend services can use it.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-23
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-119
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-77
+TITLE: Key-Value Absence
+STATEMENT: >>>
+When the Unified Backend key-value store has no entry for the requested key, the Public Frontend Key-Value Store SHALL provide no value.
+<<<
+RATIONALE: >>>
+A missing key is not an error for the public shell. Callers treat the absent value as empty until the store has an entry.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-23
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-119
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-SOCIETY-CONTACT
+TITLE: Society Contact
+
+[REQUIREMENT]
+UID: GSSC-PLLR-78
+TITLE: Society Phone Number
+STATEMENT: >>>
+The Public Frontend Society Contact service SHALL provide the society's phone number from the Key-Value Store under the key society.phoneNumber.
+<<<
+RATIONALE: >>>
+Footer Phone Number reads the number from this service. The Key-Value Store key society.phoneNumber holds that number. This requirement does not set the current number.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-23
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-24
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-79
+TITLE: Society Email Address
+STATEMENT: >>>
+The Public Frontend Society Contact service SHALL provide the society's email address from the Key-Value Store under the key society.emailAddress.
+<<<
+RATIONALE: >>>
+Footer Email Address reads the address from this service. The Key-Value Store key society.emailAddress holds that address. This requirement does not set the current address.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-23
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-25
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-80
+TITLE: Society Postal Address
+STATEMENT: >>>
+The Public Frontend Society Contact service SHALL provide the society's postal address from the Key-Value Store under the key society.postalAddress.
+<<<
+RATIONALE: >>>
+Footer Postal Address reads the address from this service. The Key-Value Store key society.postalAddress holds that address. This requirement does not set the current address.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-23
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-26
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-81
+TITLE: Society Organization Name
+STATEMENT: >>>
+The Public Frontend Society Contact service SHALL provide the society's organization name from the Key-Value Store under the key society.organizationName.
+<<<
+RATIONALE: >>>
+Footer Organization Name reads the full name from this service. The Key-Value Store key society.organizationName holds that name. This requirement does not set the current name.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-23
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-21
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-82
+TITLE: Society Organization Acronym
+STATEMENT: >>>
+The Public Frontend Society Contact service SHALL provide the society's organization acronym from the Key-Value Store under the key society.organizationAcronym.
+<<<
+RATIONALE: >>>
+Footer Organization Name reads the acronym from this service for narrow presentations. The Key-Value Store key society.organizationAcronym holds that acronym. This requirement does not set the current acronym.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-23
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-21
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-ROUTER
+TITLE: Public Router
+
+[REQUIREMENT]
+UID: GSSC-PLLR-8
+TITLE: Home Page Route
+STATEMENT: >>>
+The GSSC Website Public Frontend Router SHALL open the public home page at the root path.
+<<<
+RATIONALE: >>>
+The Navigation Menu reaches the public home page through this route.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-38
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-10
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-9
+TITLE: Membership Information Page Route
+STATEMENT: >>>
+The GSSC Website Public Frontend Router SHALL open the public membership information page at the membership path.
+<<<
+RATIONALE: >>>
+The Navigation Menu reaches the public membership information page through this route.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-38
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-11
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-10
+TITLE: Leadership Page Route
+STATEMENT: >>>
+The GSSC Website Public Frontend Router SHALL open the public leadership page at the leadership path.
+<<<
+RATIONALE: >>>
+The Navigation Menu reaches the public leadership page through this route.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-38
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-126
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-11
+TITLE: Calendar Page Route
+STATEMENT: >>>
+The GSSC Website Public Frontend Router SHALL open the public calendar page at the calendar path.
+<<<
+RATIONALE: >>>
+The Navigation Menu reaches the public calendar through this route.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-38
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-12
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-12
+TITLE: Publications Page Route
+STATEMENT: >>>
+The GSSC Website Public Frontend Router SHALL open the public publications page at the publications path.
+<<<
+RATIONALE: >>>
+The Navigation Menu reaches the public publications page through this route.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-38
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-13
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-13
+TITLE: Research Tools Page Route
+STATEMENT: >>>
+The GSSC Website Public Frontend Router SHALL open the public research tools page at the research-tools path.
+<<<
+RATIONALE: >>>
+The Navigation Menu reaches the public research tools page through this route.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-38
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-14
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-14
+TITLE: Newsletters Page Route
+STATEMENT: >>>
+The GSSC Website Public Frontend Router SHALL open the public newsletters page at the newsletters path.
+<<<
+RATIONALE: >>>
+The Navigation Menu reaches the public newsletters page through this route.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-38
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-15
+  ROLE: Refines
+
+[[/SECTION]]
+
