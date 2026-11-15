@@ -881,11 +881,14 @@ STATEMENT: >>>
 The GSSC Website Member Frontend SHALL let a member with the necessary permissions modify a public page without programming knowledge.
 <<<
 RATIONALE: >>>
-Authorized members keep public pages current without developer intervention.
+Authorized members keep public pages current without developer intervention by editing the sections that compose each public page.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-11
-REVIEW_STATUS: Changed
+CHANGE_DRIVER: >>>
+GSSC5-11
+GSSC5-93
+<<<
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-20
@@ -898,11 +901,14 @@ STATEMENT: >>>
 The GSSC Website Member Frontend SHALL let a member with the necessary permissions modify a section of a public page, including publication sections, without programming knowledge.
 <<<
 RATIONALE: >>>
-Authorized members keep public page sections current without developer intervention. Publications are included as sections of public pages.
+Authorized members keep public page sections current without developer intervention. Publications are included as sections of public pages. The Page/Section Content Editor hosts section field edits for those members.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-11
-REVIEW_STATUS: Changed
+CHANGE_DRIVER: >>>
+GSSC5-11
+GSSC5-93
+<<<
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-20
@@ -915,11 +921,14 @@ STATEMENT: >>>
 The GSSC Website Member Frontend SHALL let members with the necessary permissions modify different public pages or sections at the same time.
 <<<
 RATIONALE: >>>
-Simultaneous editing of different pages or sections keeps content work from serializing across the membership.
+Simultaneous editing of different pages or sections keeps content work from serializing across the membership. Distinct section identities may be held for modification concurrently.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-11
-REVIEW_STATUS: Changed
+CHANGE_DRIVER: >>>
+GSSC5-11
+GSSC5-93
+<<<
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-22
@@ -932,11 +941,14 @@ STATEMENT: >>>
 The GSSC Website Member Frontend SHALL limit modification of a given public page or section to one user at a time.
 <<<
 RATIONALE: >>>
-The website does not resolve editing conflicts. One user at a time on a public page or section prevents lost changes.
+The website does not resolve editing conflicts. One user at a time on a public page or section prevents lost changes when the Page/Section Content Editor holds exclusive modification for that section.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-11
-REVIEW_STATUS: Changed
+CHANGE_DRIVER: >>>
+GSSC5-11
+GSSC5-93
+<<<
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-22
@@ -949,11 +961,14 @@ STATEMENT: >>>
 When another user already holds modification of a public page or section, the GSSC Website Member Frontend SHALL prevent a second user from modifying that same page or section and show that it is unavailable for modification.
 <<<
 RATIONALE: >>>
-No Member Frontend PIR requires contention feedback. Exclusive edit needs a clear outcome for the second user so that user does not believe changes were accepted.
+No Member Frontend PIR requires contention feedback. Exclusive edit needs a clear unavailable outcome for the second user so that user does not believe changes were accepted.
 <<<
 DERIVED: True
-CHANGE_DRIVER: GSSC5-11
-REVIEW_STATUS: Changed
+CHANGE_DRIVER: >>>
+GSSC5-11
+GSSC5-93
+<<<
+REVIEW_STATUS: Approved
 
 [[/SECTION]]
 
