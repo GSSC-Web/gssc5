@@ -87,8 +87,8 @@ GSSC5-100 Hide Header/Footer when logged out owns GSSC-MLLR-32 (App Root chrome 
 GSSC5-90 Account Self-Service and GSSC5-91 Admin Account Management share GSSC-MLLR-125 through GSSC-MLLR-158 (same Account Page).
 GSSC5-85 Contact-row / Form Primitives owns GSSC-MLLR-159 through GSSC-MLLR-179 (Contact Row + form-field building blocks).
 GSSC5-84 Generic Editor Module owns GSSC-MLLR-180 through GSSC-MLLR-201 (editor shell, actions, contention, session behaviors; composes GSSC5-85 form fields).
-GSSC5-92 Members Directory + Search owns GSSC-MLLR-202 through GSSC-MLLR-214.
-Next contiguous free block starts at GSSC-MLLR-215.
+GSSC5-92 Members Directory + Search owns GSSC-MLLR-202 through GSSC-MLLR-214 (exact end 214; band 202–230 reserved for directory so parallel Wave tickets do not mint below 231).
+Parallel Wave tickets (GSSC5-89, 93–97) start at GSSC-MLLR-231 and above.
 GSSC-MLLR-33 through GSSC-MLLR-39 remain free for later claimants.
 Do not reuse numbers already claimed by another ticket.
 <<<
