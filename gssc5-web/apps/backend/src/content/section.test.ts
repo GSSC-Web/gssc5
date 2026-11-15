@@ -272,6 +272,12 @@ test("GSSC-BLLR-322 Section List Entry Fields", async () => {
     body: "field body",
     tags: ["t1"],
     index: 42,
+    startMonth: null,
+    startDay: null,
+    startYear: null,
+    endMonth: null,
+    endDay: null,
+    endYear: null,
   });
 });
 // @relation(GSSC-BLLR-322, scope=range_end, role=Test)
@@ -311,6 +317,12 @@ test("GSSC-BLLR-324 Public Section Get", async () => {
     resources: ["r1"],
     tags: ["g"],
     index: 5,
+    startMonth: null,
+    startDay: null,
+    startYear: null,
+    endMonth: null,
+    endDay: null,
+    endYear: null,
   });
 });
 // @relation(GSSC-BLLR-324, scope=range_end, role=Test)
@@ -343,6 +355,12 @@ test("GSSC-BLLR-326 Authenticated Section Get", async () => {
     resources: ["x"],
     tags: ["m"],
     index: 7,
+    startMonth: null,
+    startDay: null,
+    startYear: null,
+    endMonth: null,
+    endDay: null,
+    endYear: null,
   });
 });
 // @relation(GSSC-BLLR-326, scope=range_end, role=Test)
@@ -482,6 +500,12 @@ test("GSSC-BLLR-330 Section Modification", async () => {
     resources: ["r2"],
     tags: ["new"],
     index: 8,
+    startMonth: null,
+    startDay: null,
+    startYear: null,
+    endMonth: null,
+    endDay: null,
+    endYear: null,
   });
 });
 // @relation(GSSC-BLLR-330, scope=range_end, role=Test)
@@ -591,6 +615,91 @@ test("GSSC-BLLR-338 Page Entry Table", async () => {
   expect(event.datatype).toBe("event");
 });
 // @relation(GSSC-BLLR-338, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-400, scope=range_start, role=Test)
+test("GSSC-BLLR-400 Page Data Start Date", async () => {
+  const announcement = await db().pageDataEntry.create({
+    data: {
+      datatype: "announcement",
+      body: "announce-with-start",
+      isPublic: true,
+      startMonth: 10,
+      startDay: 1,
+      startYear: 2026,
+    },
+  });
+  const event = await db().pageDataEntry.create({
+    data: {
+      datatype: "event",
+      body: "single-day-event",
+      isPublic: true,
+      startMonth: 11,
+      startDay: 15,
+      startYear: 2026,
+      endMonth: 11,
+      endDay: 15,
+      endYear: 2026,
+    },
+  });
+  expect(
+    await db().pageDataEntry.findUnique({ where: { id: announcement.id } }),
+  ).toMatchObject({
+    datatype: "announcement",
+    startMonth: 10,
+    startDay: 1,
+    startYear: 2026,
+  });
+  expect(await db().pageDataEntry.findUnique({ where: { id: event.id } })).toMatchObject({
+    datatype: "event",
+    startMonth: 11,
+    startDay: 15,
+    startYear: 2026,
+  });
+});
+// @relation(GSSC-BLLR-400, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-401, scope=range_start, role=Test)
+test("GSSC-BLLR-401 Page Data End Date", async () => {
+  const section = await db().pageDataEntry.create({
+    data: {
+      datatype: "section",
+      body: "section-with-window",
+      isPublic: true,
+      startMonth: 9,
+      startDay: 1,
+      startYear: 2026,
+      endMonth: 9,
+      endDay: 30,
+      endYear: 2026,
+    },
+  });
+  const event = await db().pageDataEntry.create({
+    data: {
+      datatype: "event",
+      body: "multi-day-event",
+      isPublic: true,
+      startMonth: 11,
+      startDay: 15,
+      startYear: 2026,
+      endMonth: 11,
+      endDay: 17,
+      endYear: 2026,
+    },
+  });
+  expect(await db().pageDataEntry.findUnique({ where: { id: section.id } })).toMatchObject({
+    datatype: "section",
+    endMonth: 9,
+    endDay: 30,
+    endYear: 2026,
+  });
+  expect(await db().pageDataEntry.findUnique({ where: { id: event.id } })).toMatchObject({
+    datatype: "event",
+    endMonth: 11,
+    endDay: 17,
+    endYear: 2026,
+  });
+});
+// @relation(GSSC-BLLR-401, scope=range_end, role=Test)
 
 // @relation(GSSC-BLLR-339, scope=range_start, role=Test)
 test("GSSC-BLLR-339 Page Entry Index", async () => {

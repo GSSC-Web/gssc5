@@ -11,6 +11,15 @@ import {
   type MembershipSectionListEntry,
 } from './membership';
 
+const unsetBounds = {
+  startMonth: null,
+  startDay: null,
+  startYear: null,
+  endMonth: null,
+  endDay: null,
+  endYear: null,
+} as const;
+
 const firstSection: BackendSectionData = {
   cuid: 'membership_cuid_1',
   header: 'Meeting Information',
@@ -18,6 +27,7 @@ const firstSection: BackendSectionData = {
   resources: [],
   tags: [MEMBERSHIP_INFO_TAG],
   index: 1,
+  ...unsetBounds,
 };
 
 const secondSection: BackendSectionData = {
@@ -27,6 +37,7 @@ const secondSection: BackendSectionData = {
   resources: ['/newsletters'],
   tags: [MEMBERSHIP_INFO_TAG],
   index: 2,
+  ...unsetBounds,
 };
 
 const firstListEntry: MembershipSectionListEntry = {
@@ -35,6 +46,7 @@ const firstListEntry: MembershipSectionListEntry = {
   body: firstSection.body,
   tags: firstSection.tags,
   index: firstSection.index,
+  ...unsetBounds,
 };
 
 const secondListEntry: MembershipSectionListEntry = {
@@ -43,6 +55,7 @@ const secondListEntry: MembershipSectionListEntry = {
   body: secondSection.body,
   tags: secondSection.tags,
   index: secondSection.index,
+  ...unsetBounds,
 };
 
 const sectionsByCuid: Record<string, BackendSectionData> = {

@@ -1,6 +1,7 @@
 import { Component, InjectionToken, inject, signal } from '@angular/core';
 import { SectionFromCuid } from '../../modules/section-from-cuid/section-from-cuid';
 import { backend } from '../../services/backend';
+import { filterSectionsVisibleOn } from '../../services/section-display-window/section-display-window';
 
 /** Backend tag that binds public membership information sections to this page. */
 export const MEMBERSHIP_INFO_TAG = 'membership-info';
@@ -12,6 +13,12 @@ export type MembershipSectionListEntry = {
   body: string;
   tags: string[];
   index: number;
+  startMonth: number | null;
+  startDay: number | null;
+  startYear: number | null;
+  endMonth: number | null;
+  endDay: number | null;
+  endYear: number | null;
 };
 
 export type MembershipSectionListByTag = (
@@ -36,7 +43,7 @@ async function defaultMembershipSectionListByTag(
     if (result.error || result.data === null || result.data === undefined) {
       return [];
     }
-    return result.data;
+    return filterSectionsVisibleOn(result.data);
   } catch {
     return [];
   }

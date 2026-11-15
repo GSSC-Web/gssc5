@@ -61,6 +61,15 @@ const sampleLeaders: LeadershipEntry[] = [
   },
 ];
 
+const unsetBounds = {
+  startMonth: null,
+  startDay: null,
+  startYear: null,
+  endMonth: null,
+  endDay: null,
+  endYear: null,
+} as const;
+
 const introSections: LeadershipSectionListEntry[] = [
   {
     cuid: 'lead_intro_b',
@@ -68,6 +77,7 @@ const introSections: LeadershipSectionListEntry[] = [
     body: 'Second intro',
     tags: [LEADERSHIP_INTRO_TAG],
     index: 2,
+    ...unsetBounds,
   },
   {
     cuid: 'lead_intro_a',
@@ -75,6 +85,7 @@ const introSections: LeadershipSectionListEntry[] = [
     body: 'First intro',
     tags: [LEADERSHIP_INTRO_TAG],
     index: 1,
+    ...unsetBounds,
   },
 ];
 
@@ -86,6 +97,7 @@ const sectionBodies: Record<string, BackendSectionData> = {
     resources: [],
     tags: [LEADERSHIP_INTRO_TAG],
     index: 1,
+    ...unsetBounds,
   },
   lead_intro_b: {
     cuid: 'lead_intro_b',
@@ -94,6 +106,7 @@ const sectionBodies: Record<string, BackendSectionData> = {
     resources: [],
     tags: [LEADERSHIP_INTRO_TAG],
     index: 2,
+    ...unsetBounds,
   },
 };
 

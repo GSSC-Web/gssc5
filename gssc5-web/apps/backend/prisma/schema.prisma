@@ -193,7 +193,9 @@ model ContentTemplate {
 // @relation(GSSC-BLLR-340, scope=range_end, role=Implementation)
 
 // Sections, announcements, and event details share one table (GSSC-BHLR-185 / 187).
-// @relation(GSSC-BLLR-338, GSSC-BLLR-339, scope=range_start, role=Implementation)
+// Generic start/end calendar bounds (GSSC5-67): display windows for announcements/sections;
+// event span (single-day ⇒ start equals end).
+// @relation(GSSC-BLLR-338, GSSC-BLLR-339, GSSC-BLLR-400, GSSC-BLLR-401, scope=range_start, role=Implementation)
 model PageDataEntry {
   id         String           @id @default(cuid())
   /// "section" | "announcement" | "event"
@@ -209,13 +211,21 @@ model PageDataEntry {
   createPerm Int              @default(0)
   modifyPerm Int              @default(0)
   deletePerm Int              @default(0)
+  /// Inclusive calendar start (month / day / year)
+  startMonth Int?
+  startDay   Int?
+  startYear  Int?
+  /// Inclusive calendar end (month / day / year)
+  endMonth   Int?
+  endDay     Int?
+  endYear    Int?
   templateId String?
   template   ContentTemplate? @relation(fields: [templateId], references: [id], onDelete: SetNull)
 
   @@index([datatype, index])
   @@map("page_data")
 }
-// @relation(GSSC-BLLR-338, GSSC-BLLR-339, scope=range_end, role=Implementation)
+// @relation(GSSC-BLLR-338, GSSC-BLLR-339, GSSC-BLLR-400, GSSC-BLLR-401, scope=range_end, role=Implementation)
 
 // Research tools catalog (GSSC-BHLR-194 / GSSC5-18).
 // @relation(GSSC-BLLR-343, scope=range_start, role=Implementation)

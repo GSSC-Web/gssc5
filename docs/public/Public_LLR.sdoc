@@ -1794,6 +1794,42 @@ RELATIONS:
   VALUE: GSSC-BHLR-136
   ROLE: Refines
 
+[REQUIREMENT]
+UID: GSSC-PLLR-258
+TITLE: Semantic
+STATEMENT: >>>
+The Section From CUID SHALL omit the Section Container when the retrieved section's start and end calendar dates, when set, do not include the current calendar date as an inclusive window; when those dates are unset, the section remains eligible for placement.
+<<<
+RATIONALE: >>>
+Optional display windows keep scheduled sections off the public page until their window begins and after it ends. Unset dates mean the section always shows.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-67
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-136
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-259
+TITLE: Semantic
+STATEMENT: >>>
+When the GSSC Website Public Frontend retrieves public sections from the Unified Backend for page assembly, it SHALL omit each section whose start and end calendar dates, when set, do not include the current calendar date as an inclusive window; when those dates are unset, the section remains eligible for placement.
+<<<
+RATIONALE: >>>
+Tag-listed intros and membership information share the same display-window rule so out-of-window sections are not requested for placement.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-67
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-136
+  ROLE: Refines
+
 [[/SECTION]]
 
 [[/SECTION]]

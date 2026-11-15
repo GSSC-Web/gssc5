@@ -5571,14 +5571,17 @@ RELATIONS:
 UID: GSSC-BLLR-322
 TITLE: Section List Entry Fields
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL include header, body, tags, cuid, and index in each section list entry.
+The GSSC Website Unified Backend SHALL include header, body, tags, cuid, index, start month, start day, start year, end month, end day, and end year in each section list entry.
 <<<
 RATIONALE: >>>
-List entries carry the fields needed for page assembly without a second fetch for summary data.
+List entries carry the fields needed for page assembly without a second fetch for summary data, including optional display-window bounds.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-37
+CHANGE_DRIVER: >>>
+GSSC5-37
+GSSC5-67
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -5679,14 +5682,17 @@ TITLE: GET
 UID: GSSC-BLLR-324
 TITLE: Public Section Get
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return a public section by cuid in the path to an unauthenticated caller, including header, body, resources, tags, and index.
+The GSSC Website Unified Backend SHALL return a public section by cuid in the path to an unauthenticated caller, including header, body, resources, tags, index, start month, start day, start year, end month, end day, and end year.
 <<<
 RATIONALE: >>>
-Path cuid identifies one public section for assembly.
+Path cuid identifies one public section for assembly, including optional display-window bounds.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-37
+CHANGE_DRIVER: >>>
+GSSC5-37
+GSSC5-67
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -5715,14 +5721,17 @@ RELATIONS:
 UID: GSSC-BLLR-326
 TITLE: Authenticated Section Get
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return any section by cuid in the path to a logged-in member, including header, body, resources, tags, and index.
+The GSSC Website Unified Backend SHALL return any section by cuid in the path to a logged-in member, including header, body, resources, tags, index, start month, start day, start year, end month, end day, and end year.
 <<<
 RATIONALE: >>>
-A logged-in member can load public or members-only sections by cuid.
+A logged-in member can load public or members-only sections by cuid, including optional display-window bounds.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-37
+CHANGE_DRIVER: >>>
+GSSC5-37
+GSSC5-67
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -7636,6 +7645,42 @@ REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-187
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-400
+TITLE: Page Data Start Date
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store a start month, a start day, and a start year on each page data table entry for sections, announcements, and event details.
+<<<
+RATIONALE: >>>
+The start date begins a limited display window for announcements and sections, and begins an event's span. For a single-day event the start date equals the end date. Whether a given entry kind requires the start date is outside this storage requirement.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-67
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-185
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-401
+TITLE: Page Data End Date
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store an end month, an end day, and an end year on each page data table entry for sections, announcements, and event details.
+<<<
+RATIONALE: >>>
+The end date ends a limited display window for announcements and sections, and ends an event's span. For a single-day event the end date equals the start date. Whether a given entry kind requires the end date is outside this storage requirement.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-67
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-185
   ROLE: Refines
 
 [REQUIREMENT]

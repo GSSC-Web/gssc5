@@ -38,6 +38,12 @@ export type EntryRow = {
   createPerm: number;
   modifyPerm: number;
   deletePerm: number;
+  startMonth: number | null;
+  startDay: number | null;
+  startYear: number | null;
+  endMonth: number | null;
+  endDay: number | null;
+  endYear: number | null;
   templateId: string | null;
 };
 
