@@ -3154,155 +3154,9 @@ RELATIONS:
 
 [[/SECTION]]
 
-[[/SECTION]]
-
-[[SECTION]]
-UID: GSSC-PLLR-SERVICES
-TITLE: Public Services
-
-[[SECTION]]
-UID: GSSC-PLLR-KV-STORE
-TITLE: Key-Value Store
-
-[REQUIREMENT]
-UID: GSSC-PLLR-76
-TITLE: Key-Value Retrieval
-STATEMENT: >>>
-The Public Frontend Key-Value Store SHALL retrieve the value for a requested key from the Unified Backend key-value store.
-<<<
-RATIONALE: >>>
-Global website data lives in the Unified Backend key-value store. The Public Frontend Key-Value Store fetches that value so other Public Frontend services can use it.
-<<<
-DERIVED: False
-VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-23
-REVIEW_STATUS: Approved
-RELATIONS:
-- TYPE: Parent
-  VALUE: GSSC-BHLR-119
-  ROLE: Refines
-
-[REQUIREMENT]
-UID: GSSC-PLLR-77
-TITLE: Key-Value Absence
-STATEMENT: >>>
-When the Unified Backend key-value store has no entry for the requested key, the Public Frontend Key-Value Store SHALL provide no value.
-<<<
-RATIONALE: >>>
-A missing key is not an error for the public shell. Callers treat the absent value as empty until the store has an entry.
-<<<
-DERIVED: False
-VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-23
-REVIEW_STATUS: Approved
-RELATIONS:
-- TYPE: Parent
-  VALUE: GSSC-BHLR-119
-  ROLE: Refines
-
-[[/SECTION]]
-
-[[SECTION]]
-UID: GSSC-PLLR-SOCIETY-CONTACT
-TITLE: Society Contact
-
-[REQUIREMENT]
-UID: GSSC-PLLR-78
-TITLE: Society Phone Number
-STATEMENT: >>>
-The Public Frontend Society Contact service SHALL provide the society's phone number from the Key-Value Store under the key society.phoneNumber.
-<<<
-RATIONALE: >>>
-Footer Phone Number reads the number from this service. The Key-Value Store key society.phoneNumber holds that number. This requirement does not set the current number.
-<<<
-DERIVED: False
-VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-23
-REVIEW_STATUS: Approved
-RELATIONS:
-- TYPE: Parent
-  VALUE: GSSC-PHLR-24
-  ROLE: Refines
-
-[REQUIREMENT]
-UID: GSSC-PLLR-79
-TITLE: Society Email Address
-STATEMENT: >>>
-The Public Frontend Society Contact service SHALL provide the society's email address from the Key-Value Store under the key society.emailAddress.
-<<<
-RATIONALE: >>>
-Footer Email Address reads the address from this service. The Key-Value Store key society.emailAddress holds that address. This requirement does not set the current address.
-<<<
-DERIVED: False
-VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-23
-REVIEW_STATUS: Approved
-RELATIONS:
-- TYPE: Parent
-  VALUE: GSSC-PHLR-25
-  ROLE: Refines
-
-[REQUIREMENT]
-UID: GSSC-PLLR-80
-TITLE: Society Postal Address
-STATEMENT: >>>
-The Public Frontend Society Contact service SHALL provide the society's postal address from the Key-Value Store under the key society.postalAddress.
-<<<
-RATIONALE: >>>
-Footer Postal Address reads the address from this service. The Key-Value Store key society.postalAddress holds that address. This requirement does not set the current address.
-<<<
-DERIVED: False
-VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-23
-REVIEW_STATUS: Approved
-RELATIONS:
-- TYPE: Parent
-  VALUE: GSSC-PHLR-26
-  ROLE: Refines
-
-[REQUIREMENT]
-UID: GSSC-PLLR-81
-TITLE: Society Organization Name
-STATEMENT: >>>
-The Public Frontend Society Contact service SHALL provide the society's organization name from the Key-Value Store under the key society.organizationName.
-<<<
-RATIONALE: >>>
-Footer Organization Name reads the full name from this service. The Key-Value Store key society.organizationName holds that name. This requirement does not set the current name.
-<<<
-DERIVED: False
-VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-23
-REVIEW_STATUS: Approved
-RELATIONS:
-- TYPE: Parent
-  VALUE: GSSC-PHLR-21
-  ROLE: Refines
-
-[REQUIREMENT]
-UID: GSSC-PLLR-82
-TITLE: Society Organization Acronym
-STATEMENT: >>>
-The Public Frontend Society Contact service SHALL provide the society's organization acronym from the Key-Value Store under the key society.organizationAcronym.
-<<<
-RATIONALE: >>>
-Footer Organization Name reads the acronym from this service for narrow presentations. The Key-Value Store key society.organizationAcronym holds that acronym. This requirement does not set the current acronym.
-<<<
-DERIVED: False
-VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-23
-REVIEW_STATUS: Approved
-RELATIONS:
-- TYPE: Parent
-  VALUE: GSSC-PHLR-21
-  ROLE: Refines
-
-[[/SECTION]]
-
-[[/SECTION]]
-
 [[SECTION]]
 UID: GSSC-PLLR-LEADERSHIP-PAGE
-TITLE: Public Leadership Page
+TITLE: Leadership Page
 
 [[SECTION]]
 UID: GSSC-PLLR-LEADERSHIP-INTRO
@@ -4206,6 +4060,377 @@ REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-136
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-MEMBERSHIP-PAGE
+TITLE: Membership Information Page
+
+[[SECTION]]
+UID: GSSC-PLLR-MEMBERSHIP-PAGE-ELEMENT
+TITLE: Membership Information Page
+
+[REQUIREMENT]
+UID: GSSC-PLLR-198
+TITLE: Semantic
+STATEMENT: >>>
+The GSSC Website Public Frontend Membership Information Page SHALL retrieve the public sections tagged for membership information from the Unified Backend and place each retrieved section through the Section From CUID.
+<<<
+RATIONALE: >>>
+Tagged membership information sections are the page Contents. Retrieving them from the Unified Backend keeps the wording modifiable. Section From CUID places each section through the Section Container. Membership application is a separate requirement.
+<<<
+COMMENT: >>>
+GSSC5-15 owner change: one membership-info tag; no FE-enforced meeting/benefits topic lists. Binding tag is software-owned; requirements stay tag-agnostic. PHLR-75 application is out of this ticket.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-15
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-63
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-64
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-65
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-66
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-67
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-199
+TITLE: Syntactic
+STATEMENT: >>>
+The Membership Information Page SHALL place those sections at full width in the Page Outlet in the Unified Backend's section order, and SHALL omit the section list when the Unified Backend provides no such sections.
+<<<
+RATIONALE: >>>
+Full-width stacking matches other public page sections. Backend section order is the display order; the page does not invent a separate ordering scheme. Omitting an empty list avoids blank chrome when content is absent.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-15
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-63
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-67
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-200
+TITLE: Lexical
+STATEMENT: >>>
+The Membership Information Page SHALL inherit the Page Outlet font and text color theme tokens and present those sections through the Section From CUID presentation, without independent page chrome of its own.
+<<<
+RATIONALE: >>>
+The page is an assembly of backend sections. Type tokens stay with the Page Outlet; section look stays with Section From CUID and the Section Container so the membership page does not fork a second section presentation.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-15
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-63
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-67
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-MEMBERSHIP-SECTIONS
+TITLE: Membership Information Sections
+
+[REQUIREMENT]
+UID: GSSC-PLLR-201
+TITLE: Semantic
+STATEMENT: >>>
+The Membership Information Sections SHALL present the Section Contents of each public membership information section retrieved from the Unified Backend.
+<<<
+RATIONALE: >>>
+The page displays whatever Contents those tagged sections provide. Topic wording stays with the backend sections and is not fixed by this requirement.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-15
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-63
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-67
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-202
+TITLE: Syntactic
+STATEMENT: >>>
+The Membership Information Sections SHALL stack each retrieved section through the Section From CUID in the Unified Backend's section order.
+<<<
+RATIONALE: >>>
+One Section From CUID host per retrieved section keeps placement consistent. Backend section order is the stack order.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-15
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-63
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-67
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-203
+TITLE: Lexical
+STATEMENT: >>>
+The Membership Information Sections SHALL present Section Header, Section Body, and Section Resources through the Section From CUID presentation, without independent lexical chrome of their own.
+<<<
+RATIONALE: >>>
+Membership information sections reuse Section From CUID so they share the Section Container look with other public sections.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-15
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-63
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-67
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-MEMBERSHIP-SECTION
+TITLE: Membership Information Section
+
+[REQUIREMENT]
+UID: GSSC-PLLR-204
+TITLE: Semantic
+STATEMENT: >>>
+Each Membership Information Section SHALL present that section's Contents as retrieved for its section cuid through the Section From CUID.
+<<<
+RATIONALE: >>>
+Per-section Contents come from the Unified Backend for that cuid. The page does not invent section copy.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-15
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-63
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-67
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-205
+TITLE: Syntactic
+STATEMENT: >>>
+Each Membership Information Section SHALL appear as one Section From CUID placement in the Membership Information Sections stack.
+<<<
+RATIONALE: >>>
+One host per cuid keeps each membership information section a discrete placement in the page stack.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-15
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-63
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-67
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-206
+TITLE: Lexical
+STATEMENT: >>>
+Each Membership Information Section SHALL present its Section Header, Section Body, and Section Resources through the Section From CUID presentation, without independent lexical chrome of its own.
+<<<
+RATIONALE: >>>
+Each membership information section reuses Section From CUID so section look stays with the Section Container.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-15
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-63
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-67
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-SERVICES
+TITLE: Public Services
+
+[[SECTION]]
+UID: GSSC-PLLR-KV-STORE
+TITLE: Key-Value Store
+
+[REQUIREMENT]
+UID: GSSC-PLLR-76
+TITLE: Key-Value Retrieval
+STATEMENT: >>>
+The Public Frontend Key-Value Store SHALL retrieve the value for a requested key from the Unified Backend key-value store.
+<<<
+RATIONALE: >>>
+Global website data lives in the Unified Backend key-value store. The Public Frontend Key-Value Store fetches that value so other Public Frontend services can use it.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-23
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-119
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-77
+TITLE: Key-Value Absence
+STATEMENT: >>>
+When the Unified Backend key-value store has no entry for the requested key, the Public Frontend Key-Value Store SHALL provide no value.
+<<<
+RATIONALE: >>>
+A missing key is not an error for the public shell. Callers treat the absent value as empty until the store has an entry.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-23
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-119
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-SOCIETY-CONTACT
+TITLE: Society Contact
+
+[REQUIREMENT]
+UID: GSSC-PLLR-78
+TITLE: Society Phone Number
+STATEMENT: >>>
+The Public Frontend Society Contact service SHALL provide the society's phone number from the Key-Value Store under the key society.phoneNumber.
+<<<
+RATIONALE: >>>
+Footer Phone Number reads the number from this service. The Key-Value Store key society.phoneNumber holds that number. This requirement does not set the current number.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-23
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-24
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-79
+TITLE: Society Email Address
+STATEMENT: >>>
+The Public Frontend Society Contact service SHALL provide the society's email address from the Key-Value Store under the key society.emailAddress.
+<<<
+RATIONALE: >>>
+Footer Email Address reads the address from this service. The Key-Value Store key society.emailAddress holds that address. This requirement does not set the current address.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-23
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-25
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-80
+TITLE: Society Postal Address
+STATEMENT: >>>
+The Public Frontend Society Contact service SHALL provide the society's postal address from the Key-Value Store under the key society.postalAddress.
+<<<
+RATIONALE: >>>
+Footer Postal Address reads the address from this service. The Key-Value Store key society.postalAddress holds that address. This requirement does not set the current address.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-23
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-26
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-81
+TITLE: Society Organization Name
+STATEMENT: >>>
+The Public Frontend Society Contact service SHALL provide the society's organization name from the Key-Value Store under the key society.organizationName.
+<<<
+RATIONALE: >>>
+Footer Organization Name reads the full name from this service. The Key-Value Store key society.organizationName holds that name. This requirement does not set the current name.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-23
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-21
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-82
+TITLE: Society Organization Acronym
+STATEMENT: >>>
+The Public Frontend Society Contact service SHALL provide the society's organization acronym from the Key-Value Store under the key society.organizationAcronym.
+<<<
+RATIONALE: >>>
+Footer Organization Name reads the acronym from this service for narrow presentations. The Key-Value Store key society.organizationAcronym holds that acronym. This requirement does not set the current acronym.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-23
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-21
   ROLE: Refines
 
 [[/SECTION]]
