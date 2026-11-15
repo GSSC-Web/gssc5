@@ -3,13 +3,16 @@ import {
   Component,
   computed,
   DestroyRef,
+  effect,
   ElementRef,
   HostListener,
   inject,
+  InjectionToken,
   input,
   signal,
   viewChild,
 } from '@angular/core';
+import { filesApiUrl } from '../../services/files-api';
 
 /** One resource linked from Section Contents (FE presentation; no Contents API). */
 export type SectionResource = {
@@ -17,12 +20,40 @@ export type SectionResource = {
   href: string;
 };
 
+/** Featured-image side from page_data (GSSC5-74). */
+export type SectionImagePosition = 'none' | 'left' | 'right';
+
 /** Section data placed by the Section Container. */
 export type SectionContents = {
   header?: string | null;
   body: string;
   resources?: readonly SectionResource[] | null;
+  imageFile?: string | null;
+  imagePosition?: SectionImagePosition | null;
 };
+
+export type SectionFeaturedImageResolve = (imageFile: string) => Promise<string | null>;
+
+/** Default: credentialed GET /files/{cuid} (StoredFileEntry), matching newsletters. */
+export const SECTION_FEATURED_IMAGE_RESOLVE = new InjectionToken<SectionFeaturedImageResolve>(
+  'SECTION_FEATURED_IMAGE_RESOLVE',
+  {
+    providedIn: 'root',
+    factory: () => defaultSectionFeaturedImageResolve,
+  },
+);
+
+async function defaultSectionFeaturedImageResolve(imageFile: string): Promise<string | null> {
+  const url = filesApiUrl(imageFile);
+  try {
+    const response = await fetch(url, { credentials: 'include' });
+    if (!response.ok) return null;
+    const blob = await response.blob();
+    return URL.createObjectURL(blob);
+  } catch {
+    return null;
+  }
+}
 
 /** Matches `.gssc-section__resource` fit-mode width (`w-[8.5rem]` at 16px root). */
 export const RESOURCE_BUTTON_WIDTH_PX = 8.5 * 16;
@@ -41,9 +72,12 @@ export const RESOURCE_ARROW_CHROME_RESERVE_PX = 80;
 })
 export class Section {
   private readonly destroyRef = inject(DestroyRef);
+  private readonly imageResolve = inject(SECTION_FEATURED_IMAGE_RESOLVE);
   private readonly resourcesHost = viewChild<ElementRef<HTMLElement>>('resourcesHost');
   private resizeObserver: ResizeObserver | null = null;
   private observedHost: HTMLElement | null = null;
+  private imageLoadGeneration = 0;
+  private objectUrlToRevoke: string | null = null;
 
   /** Section Contents supplied by the page (no Contents API in this task). */
   readonly contents = input.required<SectionContents>();
@@ -68,6 +102,9 @@ export class Section {
    * `null` uses the live element `clientWidth`.
    */
   readonly containerWidthOverride = signal<number | null>(null);
+
+  /** Resolved object URL for the featured image when shown. */
+  readonly featuredImageUrl = signal<string | null>(null);
 
   readonly resources = computed(() => this.contents().resources ?? []);
 
@@ -112,6 +149,12 @@ export class Section {
       this.resizeObserver?.disconnect();
       this.resizeObserver = null;
       this.observedHost = null;
+      this.revokeObjectUrl();
+    });
+
+    effect(() => {
+      const contents = this.contents();
+      void this.resolveFeaturedImage(contents);
     });
 
     afterRenderEffect(() => {
@@ -130,6 +173,43 @@ export class Section {
 
   protected hasResources(contents: SectionContents): boolean {
     return (contents.resources?.length ?? 0) > 0;
+  }
+
+  /** True when Contents request a side image and a resolved URL is ready. */
+  protected showFeaturedImage(): boolean {
+    return this.wantsFeaturedImage(this.contents()) && this.featuredImageUrl() != null;
+  }
+
+  private wantsFeaturedImage(contents: SectionContents): boolean {
+    const position = contents.imagePosition;
+    const file = contents.imageFile;
+    if (position !== 'left' && position !== 'right') return false;
+    return file != null && file.length > 0;
+  }
+
+  private async resolveFeaturedImage(contents: SectionContents): Promise<void> {
+    const generation = ++this.imageLoadGeneration;
+    if (!this.wantsFeaturedImage(contents)) {
+      this.revokeObjectUrl();
+      this.featuredImageUrl.set(null);
+      return;
+    }
+    const file = contents.imageFile!;
+    const url = await this.imageResolve(file);
+    if (generation !== this.imageLoadGeneration) {
+      if (url?.startsWith('blob:')) URL.revokeObjectURL(url);
+      return;
+    }
+    this.revokeObjectUrl();
+    if (url?.startsWith('blob:')) this.objectUrlToRevoke = url;
+    this.featuredImageUrl.set(url);
+  }
+
+  private revokeObjectUrl(): void {
+    if (this.objectUrlToRevoke != null) {
+      URL.revokeObjectURL(this.objectUrlToRevoke);
+      this.objectUrlToRevoke = null;
+    }
   }
 
   /** Recompute overflow carousel state from container width and equal button sizes. */

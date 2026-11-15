@@ -6,12 +6,20 @@ import { PageDataEntryPlain } from "../generated/prismabox/PageDataEntry";
 import { loginTokenCookie } from "../user/login-session";
 import {
   hasPerm,
+  isImagePosition,
   openSession,
   parseStringArray,
   trimStrings,
   uniqueTags,
   type EntryRow,
+  type ImagePosition,
 } from "./helpers";
+
+const ImagePositionWire = t.Union([
+  t.Literal("none"),
+  t.Literal("left"),
+  t.Literal("right"),
+]);
 
 const SectionListEntry = t.Object({
   cuid: PageDataEntryPlain.properties.id,
@@ -25,6 +33,8 @@ const SectionListEntry = t.Object({
   endMonth: PageDataEntryPlain.properties.endMonth,
   endDay: PageDataEntryPlain.properties.endDay,
   endYear: PageDataEntryPlain.properties.endYear,
+  imageFile: PageDataEntryPlain.properties.imageFile,
+  imagePosition: t.Union([ImagePositionWire, t.Null()]),
 });
 
 /**
@@ -44,6 +54,8 @@ const SectionDetail = t.Object({
   endMonth: PageDataEntryPlain.properties.endMonth,
   endDay: PageDataEntryPlain.properties.endDay,
   endYear: PageDataEntryPlain.properties.endYear,
+  imageFile: PageDataEntryPlain.properties.imageFile,
+  imagePosition: t.Union([ImagePositionWire, t.Null()]),
 });
 
 /**
@@ -59,6 +71,8 @@ const SectionCreateBody = t.Object(
     resources: t.Optional(t.Array(t.String())),
     tags: t.Optional(t.Array(t.String())),
     index: t.Optional(PageDataEntryPlain.properties.index),
+    imageFile: t.Optional(t.Union([t.String(), t.Null()])),
+    imagePosition: t.Optional(t.Union([ImagePositionWire, t.Null()])),
   },
   { additionalProperties: true },
 );
@@ -71,6 +85,8 @@ const SectionUpdateBody = t.Object(
     tags: t.Optional(t.Array(t.String())),
     index: t.Optional(PageDataEntryPlain.properties.index),
     isPublic: t.Optional(PageDataEntryPlain.properties.isPublic),
+    imageFile: t.Optional(t.Union([t.String(), t.Null()])),
+    imagePosition: t.Optional(t.Union([ImagePositionWire, t.Null()])),
   },
   { additionalProperties: true },
 );
@@ -121,6 +137,8 @@ export const section = new Elysia({
           endMonth: row.endMonth,
           endDay: row.endDay,
           endYear: row.endYear,
+          imageFile: row.imageFile,
+          imagePosition: wireImagePosition(row.imagePosition),
         })),
       );
       // @relation(GSSC-BLLR-322, GSSC-BLLR-323, scope=range_end, role=Implementation)
@@ -194,6 +212,18 @@ export const section = new Elysia({
       const requestTags = body.tags ?? [];
       const index = body.index ?? 0;
       const tags = uniqueTags([...parseStringArray(template.tags), ...requestTags]);
+      const imageFile =
+        body.imageFile === undefined ? null : body.imageFile === null ? null : body.imageFile;
+      const imagePositionRaw = body.imagePosition;
+      if (
+        imagePositionRaw !== undefined &&
+        imagePositionRaw !== null &&
+        !isImagePosition(imagePositionRaw)
+      ) {
+        return status(422, "Invalid" as const);
+      }
+      const imagePosition: ImagePosition | null =
+        imagePositionRaw === undefined ? null : imagePositionRaw;
 
       // @relation(GSSC-BLLR-328, scope=range_start, role=Implementation)
       const created = await prisma.pageDataEntry.create({
@@ -209,6 +239,8 @@ export const section = new Elysia({
           modifyPerm: template.modifyPerm,
           deletePerm: template.deletePerm,
           templateId: template.id,
+          imageFile,
+          imagePosition,
         },
       });
       return status(201, toSectionDetail(created));
@@ -254,6 +286,14 @@ export const section = new Elysia({
         }
       }
 
+      if (
+        body.imagePosition !== undefined &&
+        body.imagePosition !== null &&
+        !isImagePosition(body.imagePosition)
+      ) {
+        return status(422, "Invalid" as const);
+      }
+
       const data: {
         header?: string | null;
         body?: string;
@@ -261,6 +301,8 @@ export const section = new Elysia({
         tags?: string;
         index?: number;
         isPublic?: boolean;
+        imageFile?: string | null;
+        imagePosition?: string | null;
       } = {};
 
       if (body.header !== undefined) data.header = body.header;
@@ -268,6 +310,8 @@ export const section = new Elysia({
       if (body.resources !== undefined) data.resources = JSON.stringify(body.resources);
       if (body.tags !== undefined) data.tags = JSON.stringify(body.tags);
       if (body.index !== undefined) data.index = body.index;
+      if (body.imageFile !== undefined) data.imageFile = body.imageFile;
+      if (body.imagePosition !== undefined) data.imagePosition = body.imagePosition;
       if (wantsIsPublic) data.isPublic = body.isPublic;
 
       // @relation(GSSC-BLLR-330, scope=range_start, role=Implementation)
@@ -354,6 +398,11 @@ function includesInsensitive(haystack: string, needle: string): boolean {
   return haystack.toLowerCase().includes(needle.toLowerCase());
 }
 
+function wireImagePosition(value: string | null): ImagePosition | null {
+  if (value === null) return null;
+  return isImagePosition(value) ? value : null;
+}
+
 function toSectionDetail(row: EntryRow) {
   return {
     cuid: row.id,
@@ -368,5 +417,7 @@ function toSectionDetail(row: EntryRow) {
     endMonth: row.endMonth,
     endDay: row.endDay,
     endYear: row.endYear,
+    imageFile: row.imageFile,
+    imagePosition: wireImagePosition(row.imagePosition),
   };
 }

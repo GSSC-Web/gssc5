@@ -4,6 +4,7 @@ import {
   RESOURCE_ARROW_CHROME_RESERVE_PX,
   RESOURCE_BUTTON_GAP_PX,
   RESOURCE_BUTTON_WIDTH_PX,
+  SECTION_FEATURED_IMAGE_RESOLVE,
   Section,
   type SectionContents,
 } from './section';
@@ -42,15 +43,27 @@ const NARROW_OVERFLOW_PX =
 
 async function setupSection(
   contents: SectionContents,
-  options?: { containerWidthPx?: number },
+  options?: { containerWidthPx?: number; imageUrl?: string | null },
 ) {
   TestBed.resetTestingModule();
+  const imageUrl = options?.imageUrl === undefined ? 'blob:section-test/featured' : options.imageUrl;
   await TestBed.configureTestingModule({
     imports: [Section],
+    providers: [
+      {
+        provide: SECTION_FEATURED_IMAGE_RESOLVE,
+        useValue: async () => imageUrl,
+      },
+    ],
   }).compileComponents();
   const fixture = TestBed.createComponent(Section);
   fixture.componentRef.setInput('contents', contents);
   fixture.detectChanges();
+  await fixture.whenStable();
+  await Promise.resolve();
+  await Promise.resolve();
+  fixture.detectChanges();
+  await fixture.whenStable();
   if (options?.containerWidthPx != null) {
     fixture.componentInstance.containerWidthOverride.set(options.containerWidthPx);
     fixture.componentInstance.remeasureFromLayout();
@@ -429,3 +442,86 @@ test('GSSC-PLLR-145 Lexical', async () => {
   expect(next.querySelector('.nf.nf-md-chevron_right')).not.toBeNull();
 });
 // @relation(GSSC-PLLR-145, scope=range_end, role=Test)
+
+const sampleWithImageLeft: SectionContents = {
+  header: 'With Image',
+  body: 'Body beside image.',
+  imageFile: 'featured-cuid',
+  imagePosition: 'left',
+};
+
+const sampleWithImageRight: SectionContents = {
+  ...sampleWithImageLeft,
+  imagePosition: 'right',
+};
+
+const sampleImageNone: SectionContents = {
+  header: 'Suppressed',
+  body: 'No image shown.',
+  imageFile: 'featured-cuid',
+  imagePosition: 'none',
+};
+
+const sampleImageNoPosition: SectionContents = {
+  header: 'No Position',
+  body: 'Unchanged layout.',
+  imageFile: 'featured-cuid',
+};
+
+// @relation(GSSC-PLLR-260, scope=range_start, role=Test)
+test('GSSC-PLLR-260 Semantic', async () => {
+  const { root: left } = await setupSection(sampleWithImageLeft);
+  expect(left.querySelector('.gssc-section__image')).not.toBeNull();
+  expect(left.querySelector('.gssc-section__media')?.getAttribute('data-image-position')).toBe('left');
+
+  const { root: none } = await setupSection(sampleImageNone);
+  expect(none.querySelector('.gssc-section__image')).toBeNull();
+  expect(none.querySelector('.gssc-section__media')).toBeNull();
+
+  const { root: missingPos } = await setupSection(sampleImageNoPosition);
+  expect(missingPos.querySelector('.gssc-section__image')).toBeNull();
+
+  const { root: noFile } = await setupSection({
+    header: 'No File',
+    body: 'Body only.',
+    imagePosition: 'left',
+  });
+  expect(noFile.querySelector('.gssc-section__image')).toBeNull();
+});
+// @relation(GSSC-PLLR-260, scope=range_end, role=Test)
+
+// @relation(GSSC-PLLR-261, scope=range_start, role=Test)
+test('GSSC-PLLR-261 Syntactic', async () => {
+  const { root: left } = await setupSection(sampleWithImageLeft);
+  const media = left.querySelector<HTMLElement>('.gssc-section__media')!;
+  const image = left.querySelector<HTMLElement>('.gssc-section__image')!;
+  expect(media.classList.contains('flex-col')).toBe(true);
+  expect(media.classList.contains('sm:flex-row')).toBe(true);
+  expect(media.classList.contains('sm:flex-row-reverse')).toBe(false);
+  expect(image.classList.contains('max-w-[60%]')).toBe(true);
+  expect(image.classList.contains('max-h-[40%]')).toBe(true);
+  const children = [...media.children];
+  expect(children[0]?.classList.contains('gssc-section__image')).toBe(true);
+  expect(children[1]?.classList.contains('gssc-section__body')).toBe(true);
+
+  const container = left.querySelector('.gssc-section')!;
+  const sectionChildren = [...container.children].filter((c) => c instanceof HTMLElement);
+  expect(sectionChildren[0]?.classList.contains('gssc-section__header')).toBe(true);
+  expect(sectionChildren[1]?.classList.contains('gssc-section__media')).toBe(true);
+
+  const { root: right } = await setupSection(sampleWithImageRight);
+  const rightMedia = right.querySelector<HTMLElement>('.gssc-section__media')!;
+  expect(rightMedia.classList.contains('sm:flex-row-reverse')).toBe(true);
+  expect(rightMedia.getAttribute('data-image-position')).toBe('right');
+});
+// @relation(GSSC-PLLR-261, scope=range_end, role=Test)
+
+// @relation(GSSC-PLLR-262, scope=range_start, role=Test)
+test('GSSC-PLLR-262 Lexical', async () => {
+  const { root } = await setupSection(sampleWithImageLeft);
+  const image = root.querySelector<HTMLElement>('.gssc-section__image')!;
+  expect(image.classList.contains('object-contain')).toBe(true);
+  expect(image.classList.contains('border')).toBe(false);
+  expect(image.classList.contains('bg-gssc-gray')).toBe(false);
+});
+// @relation(GSSC-PLLR-262, scope=range_end, role=Test)

@@ -1402,32 +1402,38 @@ TITLE: Section Container
 UID: GSSC-PLLR-83
 TITLE: Semantic
 STATEMENT: >>>
-The GSSC Website Public Frontend Section Container SHALL place the Section Contents it receives: the Section Header when those Contents include a header, the Section Body, and the Section Resources when those Contents include resources.
+The GSSC Website Public Frontend Section Container SHALL place the Section Contents it receives: the Section Header when those Contents include a header, the Section Featured Image when those Contents include a featured image file and a left or right image position, the Section Body, and the Section Resources when those Contents include resources.
 <<<
 RATIONALE: >>>
-The Section Container is the placement shell for section data on public pages. Contents are the section data; the Container places them. Each placed element's behavior is a separate requirement. Page assembly and Contents APIs are separate features.
+The Section Container is the placement shell for section data on public pages. Contents are the section data; the Container places them. Each placed element's behavior is a separate requirement. Page assembly and Contents APIs are separate features. Featured image placement is gated by file and position together.
 <<<
 COMMENT: >>>
-Derived for GSSC5-25. PIRs do not define the section Container. REVIEW_STATUS stays Changed until owner approval.
+Derived for GSSC5-25. PIRs do not define the section Container.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-25
-REVIEW_STATUS: Approved
+CHANGE_DRIVER: >>>
+GSSC5-25
+GSSC5-74
+<<<
+REVIEW_STATUS: Changed
 
 [REQUIREMENT]
 UID: GSSC-PLLR-84
 TITLE: Syntactic
 STATEMENT: >>>
-The Section Container SHALL fill the width of its page content area, stack the Section Contents it places in a vertical order, apply vertical padding on the Container, and keep internal spacing between the Section Header, Section Body, and Section Resources.
+The Section Container SHALL fill the width of its page content area, stack the Section Contents it places in a vertical order, apply vertical padding on the Container, and keep internal spacing between the Section Header, Section Featured Image when placed, Section Body, and Section Resources.
 <<<
 RATIONALE: >>>
-Full-width stacking keeps section Contents readable within the page content area as the viewport resizes. Vertical padding and spacing between Header, Body, and Resources separate those elements without crowding. Page assembly chooses where Containers appear on a page.
+Full-width stacking keeps section Contents readable within the page content area as the viewport resizes. Vertical padding and spacing between Header, Featured Image, Body, and Resources separate those elements without crowding. Page assembly chooses where Containers appear on a page.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-25
-REVIEW_STATUS: Approved
+CHANGE_DRIVER: >>>
+GSSC5-25
+GSSC5-74
+<<<
+REVIEW_STATUS: Changed
 
 [REQUIREMENT]
 UID: GSSC-PLLR-85
@@ -1494,6 +1500,54 @@ REVIEW_STATUS: Approved
 [[/SECTION]]
 
 [[SECTION]]
+UID: GSSC-PLLR-SECTION-FEATURED-IMAGE
+TITLE: Section Featured Image
+
+[REQUIREMENT]
+UID: GSSC-PLLR-260
+TITLE: Semantic
+STATEMENT: >>>
+The GSSC Website Public Frontend Section Featured Image SHALL present the featured image from the Section Contents when those Contents include an image file and an image position of left or right; SHALL omit the featured image when the image position is none even if an image file is present; and SHALL omit the featured image when the Contents lack an image file or lack an image position.
+<<<
+RATIONALE: >>>
+Optional featured imagery appears only when both a file and a side position are set. Position none suppresses display without clearing the stored file.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-74
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-PLLR-261
+TITLE: Syntactic
+STATEMENT: >>>
+When the Section Featured Image is placed, it SHALL appear on the left of the Section Body when the image position is left and on the right of the Section Body when the image position is right at medium and larger viewports; at viewports smaller than medium, it SHALL appear between the Section Header and the Section Body; and it SHALL never occupy more than three-fifths of the Section width or more than two-fifths of its parent container.
+<<<
+RATIONALE: >>>
+Side placement at medium and larger viewports keeps body text beside the image. Narrow viewports stack the image between title and body for readable reading order. Size caps keep the image from dominating the section.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-74
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-PLLR-262
+TITLE: Lexical
+STATEMENT: >>>
+The Section Featured Image SHALL keep the full image visible within its size caps without cropping, without adding independent border or background chrome beyond the Section Container.
+<<<
+RATIONALE: >>>
+Keeping the full image visible preserves the asset inside the width and parent size limits. Container chrome stays on the Section Container.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-74
+REVIEW_STATUS: Changed
+
+[[/SECTION]]
+
+[[SECTION]]
 UID: GSSC-PLLR-SECTION-BODY
 TITLE: Section Body
 
@@ -1515,15 +1569,18 @@ REVIEW_STATUS: Approved
 UID: GSSC-PLLR-90
 TITLE: Syntactic
 STATEMENT: >>>
-The Section Body SHALL appear below the Section Header when a Section Header is present, and otherwise at the start of the Section Contents inside the Section Container.
+The Section Body SHALL appear below the Section Header when a Section Header is present and no Section Featured Image is placed; below the Section Featured Image when that image is placed at viewports smaller than medium; beside the Section Featured Image at medium and larger viewports when that image is placed; and otherwise at the start of the Section Contents inside the Section Container.
 <<<
 RATIONALE: >>>
-The body follows the header when a header exists, and starts the Contents when it does not, so reading order stays consistent.
+Reading order stays header, then featured image when stacked, then body; at medium and larger viewports the body shares a row with the featured image when that image is placed.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-25
-REVIEW_STATUS: Approved
+CHANGE_DRIVER: >>>
+GSSC5-25
+GSSC5-74
+<<<
+REVIEW_STATUS: Changed
 
 [REQUIREMENT]
 UID: GSSC-PLLR-91
@@ -1741,17 +1798,20 @@ TITLE: Section From CUID
 UID: GSSC-PLLR-152
 TITLE: Semantic
 STATEMENT: >>>
-The GSSC Website Public Frontend Section From CUID SHALL retrieve a public section's data from the Unified Backend using the section cuid it receives, building Section Contents from that data: the header when that data includes a header, the body, and resources when that data includes resources, using each backend resource string as that resource's name and that resource's target.
+The GSSC Website Public Frontend Section From CUID SHALL retrieve a public section's data from the Unified Backend using the section cuid it receives, building Section Contents from that data: the header when that data includes a header, the body, resources when that data includes resources, using each backend resource string as that resource's name and that resource's target, and the optional image file and image position when that data includes them.
 <<<
 RATIONALE: >>>
-Pages identify sections by backend cuid. The loader turns that cuid into Section Contents so the Section Container can place them. Each backend resource string is both the label and the open target until a richer resource schema exists. This requirement does not set which cuids pages pass.
+Pages identify sections by backend cuid. The loader turns that cuid into Section Contents so the Section Container can place them. Each backend resource string is both the label and the open target until a richer resource schema exists. Featured image file and position pass through so the Container can place optional imagery. This requirement does not set which cuids pages pass.
 <<<
 COMMENT: >>>
-Retrieval and Contents construction are one behavior for the cuid input. Resource name and target both come from the same backend string. REVIEW_STATUS stays Changed until owner approval.
+Retrieval and Contents construction are one behavior for the cuid input. Resource name and target both come from the same backend string.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-50
+CHANGE_DRIVER: >>>
+GSSC5-50
+GSSC5-74
+<<<
 REVIEW_STATUS: Changed
 RELATIONS:
 - TYPE: Parent
@@ -1780,14 +1840,17 @@ RELATIONS:
 UID: GSSC-PLLR-154
 TITLE: Lexical
 STATEMENT: >>>
-The Section From CUID SHALL present the Section Header, Section Body, and Section Resources through the Section Container presentation, without independent lexical chrome of its own.
+The Section From CUID SHALL present the Section Header, Section Featured Image, Section Body, and Section Resources through the Section Container presentation, without independent lexical chrome of its own.
 <<<
 RATIONALE: >>>
-Chrome, type, and colors stay on the Section Container so the cuid loader does not fork a second section look. Resource carousel and token choices remain those of the Container.
+Chrome, type, and colors stay on the Section Container so the cuid loader does not fork a second section look. Resource carousel, featured image presentation, and token choices remain those of the Container.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-50
+CHANGE_DRIVER: >>>
+GSSC5-50
+GSSC5-74
+<<<
 REVIEW_STATUS: Changed
 RELATIONS:
 - TYPE: Parent

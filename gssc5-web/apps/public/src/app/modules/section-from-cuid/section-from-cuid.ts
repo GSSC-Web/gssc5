@@ -8,7 +8,12 @@ import {
 } from '@angular/core';
 import { backend } from '../../services/backend';
 import { isSectionVisibleOn } from '../../services/section-display-window/section-display-window';
-import { Section, type SectionContents, type SectionResource } from '../section/section';
+import {
+  Section,
+  type SectionContents,
+  type SectionImagePosition,
+  type SectionResource,
+} from '../section/section';
 
 /** Public section payload from Unified Backend GET /sections/{cuid}. */
 export type BackendSectionData = {
@@ -24,6 +29,8 @@ export type BackendSectionData = {
   endMonth: number | null;
   endDay: number | null;
   endYear: number | null;
+  imageFile?: string | null;
+  imagePosition?: SectionImagePosition | null;
 };
 
 export type SectionBackendGet = (cuid: string) => Promise<BackendSectionData | null>;
@@ -49,6 +56,11 @@ async function defaultSectionBackendGet(cuid: string): Promise<BackendSectionDat
   }
 }
 
+function parseImagePosition(value: string | null | undefined): SectionImagePosition | null {
+  if (value === 'none' || value === 'left' || value === 'right') return value;
+  return null;
+}
+
 /** Map backend section data into Section Contents for the Section Container. */
 export function sectionContentsFromBackend(data: BackendSectionData): SectionContents {
   const resources: SectionResource[] = data.resources.map((resource) => ({
@@ -59,6 +71,8 @@ export function sectionContentsFromBackend(data: BackendSectionData): SectionCon
     header: data.header,
     body: data.body,
     resources: resources.length > 0 ? resources : null,
+    imageFile: data.imageFile ?? null,
+    imagePosition: parseImagePosition(data.imagePosition ?? null),
   };
 }
 

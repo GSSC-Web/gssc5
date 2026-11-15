@@ -278,6 +278,8 @@ test("GSSC-BLLR-322 Section List Entry Fields", async () => {
     endMonth: null,
     endDay: null,
     endYear: null,
+    imageFile: null,
+    imagePosition: null,
   });
 });
 // @relation(GSSC-BLLR-322, scope=range_end, role=Test)
@@ -323,6 +325,8 @@ test("GSSC-BLLR-324 Public Section Get", async () => {
     endMonth: null,
     endDay: null,
     endYear: null,
+    imageFile: null,
+    imagePosition: null,
   });
 });
 // @relation(GSSC-BLLR-324, scope=range_end, role=Test)
@@ -361,6 +365,8 @@ test("GSSC-BLLR-326 Authenticated Section Get", async () => {
     endMonth: null,
     endDay: null,
     endYear: null,
+    imageFile: null,
+    imagePosition: null,
   });
 });
 // @relation(GSSC-BLLR-326, scope=range_end, role=Test)
@@ -429,6 +435,8 @@ test("GSSC-BLLR-328 Section Creation", async () => {
       resources: ["res-a"],
       tags: ["extra"],
       index: 99,
+      imageFile: "created-image-cuid",
+      imagePosition: "right",
     },
     memberTok,
   );
@@ -440,12 +448,16 @@ test("GSSC-BLLR-328 Section Creation", async () => {
     resources: string[];
     tags: string[];
     index: number;
+    imageFile: string | null;
+    imagePosition: string | null;
   };
   expect(created.header).toBe("Created");
   expect(created.body).toBe("created section");
   expect(created.resources).toEqual(["res-a"]);
   expect(created.tags).toEqual(expect.arrayContaining(["about", "extra"]));
   expect(created.index).toBe(99);
+  expect(created.imageFile).toBe("created-image-cuid");
+  expect(created.imagePosition).toBe("right");
 
   const stored = await db().pageDataEntry.findUnique({ where: { id: created.cuid } });
   expect(stored?.isPublic).toBe(true);
@@ -489,6 +501,8 @@ test("GSSC-BLLR-330 Section Modification", async () => {
       resources: ["r2"],
       tags: ["new"],
       index: 8,
+      imageFile: "patched-image",
+      imagePosition: "left",
     },
     memberTok,
   );
@@ -506,6 +520,8 @@ test("GSSC-BLLR-330 Section Modification", async () => {
     endMonth: null,
     endDay: null,
     endYear: null,
+    imageFile: "patched-image",
+    imagePosition: "left",
   });
 });
 // @relation(GSSC-BLLR-330, scope=range_end, role=Test)
@@ -700,6 +716,77 @@ test("GSSC-BLLR-401 Page Data End Date", async () => {
   });
 });
 // @relation(GSSC-BLLR-401, scope=range_end, role=Test)
+
+
+// @relation(GSSC-BLLR-402, scope=range_start, role=Test)
+test("GSSC-BLLR-402 Page Data Image File", async () => {
+  const section = await db().pageDataEntry.create({
+    data: {
+      datatype: "section",
+      body: "section-with-image",
+      isPublic: true,
+      imageFile: "stored-file-cuid-abc",
+      imagePosition: "left",
+    },
+  });
+  const announcement = await db().pageDataEntry.create({
+    data: {
+      datatype: "announcement",
+      body: "announcement-with-image",
+      isPublic: true,
+      imageFile: "dir/file-name.png",
+    },
+  });
+  expect(await db().pageDataEntry.findUnique({ where: { id: section.id } })).toMatchObject({
+    datatype: "section",
+    imageFile: "stored-file-cuid-abc",
+  });
+  expect(await db().pageDataEntry.findUnique({ where: { id: announcement.id } })).toMatchObject({
+    datatype: "announcement",
+    imageFile: "dir/file-name.png",
+  });
+});
+// @relation(GSSC-BLLR-402, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-403, scope=range_start, role=Test)
+test("GSSC-BLLR-403 Page Data Image Position", async () => {
+  const left = await db().pageDataEntry.create({
+    data: {
+      datatype: "section",
+      body: "pos-left",
+      isPublic: true,
+      imageFile: "file-left",
+      imagePosition: "left",
+    },
+  });
+  const none = await db().pageDataEntry.create({
+    data: {
+      datatype: "event",
+      body: "pos-none",
+      isPublic: true,
+      imageFile: "file-none",
+      imagePosition: "none",
+    },
+  });
+  const right = await db().pageDataEntry.create({
+    data: {
+      datatype: "announcement",
+      body: "pos-right",
+      isPublic: true,
+      imagePosition: "right",
+    },
+  });
+  expect(await db().pageDataEntry.findUnique({ where: { id: left.id } })).toMatchObject({
+    imagePosition: "left",
+  });
+  expect(await db().pageDataEntry.findUnique({ where: { id: none.id } })).toMatchObject({
+    imagePosition: "none",
+  });
+  expect(await db().pageDataEntry.findUnique({ where: { id: right.id } })).toMatchObject({
+    imagePosition: "right",
+  });
+});
+// @relation(GSSC-BLLR-403, scope=range_end, role=Test)
 
 // @relation(GSSC-BLLR-339, scope=range_start, role=Test)
 test("GSSC-BLLR-339 Page Entry Index", async () => {
