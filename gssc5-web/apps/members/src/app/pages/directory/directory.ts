@@ -4,6 +4,8 @@ import { FormTextField } from '../../modules/form-text-field/form-text-field';
 import type { AccountRecord } from '../../services/account-api';
 import {
   directoryApi,
+  directoryIsDeleted,
+  directoryPhotoUrl,
   toContactRowContents,
   toDirectoryQuery,
   type DirectorySearchFilters,
@@ -20,12 +22,10 @@ export class DirectoryPage implements OnInit {
   private readonly filtersReady = signal(false);
   private reloadGeneration = 0;
 
-  readonly firstName = model('');
-  readonly lastName = model('');
+  readonly name = model('');
   readonly email = model('');
   readonly phone = model('');
-  readonly homeCity = model('');
-  readonly homeState = model('');
+  readonly address = model('');
 
   readonly entries = signal<AccountRecord[]>([]);
   readonly loadError = signal(false);
@@ -36,21 +36,22 @@ export class DirectoryPage implements OnInit {
   readonly isAdministrator = this.memberSession.isAdmin;
   // @relation(GSSC-MLLR-214, scope=range_end, role=Implementation)
 
+  /** True when the viewer may open another member's Account Page (admin ⊃ userMod). */
+  readonly isUserMod = this.memberSession.isUserMod;
+
   constructor() {
-    // @relation(GSSC-MLLR-212, scope=range_start, role=Implementation)
+    // @relation(GSSC-MLLR-212, GSSC-MLLR-226, GSSC-MLLR-227, scope=range_start, role=Implementation)
     effect(() => {
       if (!this.filtersReady()) return;
       const filters: DirectorySearchFilters = {
-        firstName: this.firstName(),
-        lastName: this.lastName(),
+        name: this.name(),
         email: this.email(),
         phone: this.phone(),
-        homeCity: this.homeCity(),
-        homeState: this.homeState(),
+        address: this.address(),
       };
       void this.reload(filters);
     });
-    // @relation(GSSC-MLLR-212, scope=range_end, role=Implementation)
+    // @relation(GSSC-MLLR-212, GSSC-MLLR-226, GSSC-MLLR-227, scope=range_end, role=Implementation)
   }
 
   async ngOnInit(): Promise<void> {
@@ -64,13 +65,54 @@ export class DirectoryPage implements OnInit {
   }
   // @relation(GSSC-MLLR-213, scope=range_end, role=Implementation)
 
+  photoUrl(entry: AccountRecord): string | null {
+    return directoryPhotoUrl(entry);
+  }
+
+  isDeleted(entry: AccountRecord): boolean {
+    return directoryIsDeleted(entry);
+  }
+
+  editHref(entry: AccountRecord): string {
+    return `/accounts/${entry.cuid}`;
+  }
+
   async clearSearch(): Promise<void> {
-    this.firstName.set('');
-    this.lastName.set('');
+    this.name.set('');
     this.email.set('');
     this.phone.set('');
-    this.homeCity.set('');
-    this.homeState.set('');
+    this.address.set('');
+  }
+
+  // @relation(GSSC-MLLR-224, GSSC-MLLR-225, scope=range_start, role=Implementation)
+  async onSoftDelete(entry: AccountRecord): Promise<void> {
+    try {
+      const { error } = await directoryApi.softDeleteUser(entry.cuid);
+      if (error) return;
+      await this.reload(this.currentFilters());
+    } catch {
+      // leave current list; next filter change will retry
+    }
+  }
+
+  async onUndelete(entry: AccountRecord): Promise<void> {
+    try {
+      const { error } = await directoryApi.undeleteUser(entry.cuid);
+      if (error) return;
+      await this.reload(this.currentFilters());
+    } catch {
+      // leave current list; next filter change will retry
+    }
+  }
+  // @relation(GSSC-MLLR-224, GSSC-MLLR-225, scope=range_end, role=Implementation)
+
+  private currentFilters(): DirectorySearchFilters {
+    return {
+      name: this.name(),
+      email: this.email(),
+      phone: this.phone(),
+      address: this.address(),
+    };
   }
 
   private async reload(filters: DirectorySearchFilters): Promise<void> {

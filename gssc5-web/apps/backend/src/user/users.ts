@@ -52,6 +52,9 @@ const userSelect = {
   // @relation(GSSC-BLLR-457, scope=range_start, role=Implementation)
   accountPhoto: true,
   // @relation(GSSC-BLLR-457, scope=range_end, role=Implementation)
+  // @relation(GSSC-BLLR-459, GSSC-BLLR-466, scope=range_start, role=Implementation)
+  deletedAt: true,
+  // @relation(GSSC-BLLR-459, GSSC-BLLR-466, scope=range_end, role=Implementation)
   // @relation(GSSC-BLLR-54, GSSC-BLLR-100, scope=range_end, role=Implementation)
 } as const;
 
@@ -93,6 +96,7 @@ type AccountView = {
   membershipStatus?: string | null;
   position?: string | null;
   accountPhoto?: string | null;
+  deletedAt?: string | null;
 };
 
 type Session = { failure: LoginSessionFailure } | { user: StoredUser };
@@ -137,6 +141,9 @@ const PublicUser = t.Object({
   membershipStatus: t.Optional(UserPlain.properties.membershipStatus),
   position: t.Optional(UserPlain.properties.position),
   accountPhoto: t.Optional(UserPlain.properties.accountPhoto),
+  // @relation(GSSC-BLLR-466, scope=range_start, role=Implementation)
+  deletedAt: t.Optional(t.Union([t.String({ format: "date-time" }), t.Null()])),
+  // @relation(GSSC-BLLR-466, scope=range_end, role=Implementation)
 });
 
 /**
@@ -254,14 +261,18 @@ export const users = new Elysia({
       const filters = readFilters(query);
       if (filters === "invalid") return status(422, "Invalid" as const);
 
-      // @relation(GSSC-BLLR-41, scope=range_start, role=Implementation)
+      // @relation(GSSC-BLLR-41, GSSC-BLLR-460, scope=range_start, role=Implementation)
       const { prisma } = runtime();
-      const rows = await prisma.user.findMany({ select: userSelect, orderBy: { id: "asc" } });
+      const rows = await prisma.user.findMany({
+        select: userSelect,
+        orderBy: { id: "asc" },
+        ...(session.user.isAdmin ? {} : { where: { deletedAt: null } }),
+      });
       const listed = rows
         .filter((user) => matchesAll(user, session.user, filters))
         .map((user) => project(user, session.user));
       return status(200, listed);
-      // @relation(GSSC-BLLR-41, scope=range_end, role=Implementation)
+      // @relation(GSSC-BLLR-41, GSSC-BLLR-460, scope=range_end, role=Implementation)
     },
     {
       query: t.Record(t.String(), t.String()),
@@ -270,6 +281,82 @@ export const users = new Elysia({
         200: t.Array(PublicUser),
         403: t.Literal("Forbidden"),
         422: t.Literal("Invalid"),
+      },
+    },
+  )
+  .post(
+    "/:cuid/soft-delete",
+    async ({ params, cookie, status }) => {
+      const session = await openSession(cookie);
+      if ("failure" in session) {
+        return status(403, "Forbidden" as const);
+      }
+      // @relation(GSSC-BLLR-463, scope=range_start, role=Implementation)
+      if (!session.user.isAdmin) {
+        return status(403, "Forbidden" as const);
+      }
+      // @relation(GSSC-BLLR-463, scope=range_end, role=Implementation)
+
+      const { prisma } = runtime();
+      const target = await prisma.user.findUnique({
+        where: { id: params.cuid },
+        select: { id: true },
+      });
+      if (!target) return status(404, "Not Found" as const);
+
+      // @relation(GSSC-BLLR-461, scope=range_start, role=Implementation)
+      await prisma.user.update({
+        where: { id: target.id },
+        data: { deletedAt: new Date() },
+      });
+      return status(204, undefined);
+      // @relation(GSSC-BLLR-461, scope=range_end, role=Implementation)
+    },
+    {
+      params: t.Object({ cuid: t.String() }),
+      cookie: loginTokenCookie,
+      response: {
+        204: t.Void(),
+        403: t.Literal("Forbidden"),
+        404: t.Literal("Not Found"),
+      },
+    },
+  )
+  .post(
+    "/:cuid/undelete",
+    async ({ params, cookie, status }) => {
+      const session = await openSession(cookie);
+      if ("failure" in session) {
+        return status(403, "Forbidden" as const);
+      }
+      // @relation(GSSC-BLLR-463, scope=range_start, role=Implementation)
+      if (!session.user.isAdmin) {
+        return status(403, "Forbidden" as const);
+      }
+      // @relation(GSSC-BLLR-463, scope=range_end, role=Implementation)
+
+      const { prisma } = runtime();
+      const target = await prisma.user.findUnique({
+        where: { id: params.cuid },
+        select: { id: true },
+      });
+      if (!target) return status(404, "Not Found" as const);
+
+      // @relation(GSSC-BLLR-462, scope=range_start, role=Implementation)
+      await prisma.user.update({
+        where: { id: target.id },
+        data: { deletedAt: null },
+      });
+      return status(204, undefined);
+      // @relation(GSSC-BLLR-462, scope=range_end, role=Implementation)
+    },
+    {
+      params: t.Object({ cuid: t.String() }),
+      cookie: loginTokenCookie,
+      response: {
+        204: t.Void(),
+        403: t.Literal("Forbidden"),
+        404: t.Literal("Not Found"),
       },
     },
   )
@@ -468,6 +555,11 @@ function project(user: StoredUser, caller: StoredUser): AccountView {
   // @relation(GSSC-BLLR-457, scope=range_start, role=Implementation)
   if (canSee(caller, user, "accountPhoto")) view.accountPhoto = user.accountPhoto;
   // @relation(GSSC-BLLR-457, scope=range_end, role=Implementation)
+  // @relation(GSSC-BLLR-466, scope=range_start, role=Implementation)
+  if (canSee(caller, user, "deletedAt")) {
+    view.deletedAt = user.deletedAt ? user.deletedAt.toISOString() : null;
+  }
+  // @relation(GSSC-BLLR-466, scope=range_end, role=Implementation)
   return view;
 }
 
@@ -482,10 +574,13 @@ function canSee(caller: StoredUser, user: StoredUser, field: string): boolean {
   ) {
     return true;
   }
-  if (caller.id === user.id || caller.isAdmin || caller.isUserMod) return true;
   // @relation(GSSC-BLLR-457, scope=range_start, role=Implementation)
   if (field === "accountPhoto") return true;
   // @relation(GSSC-BLLR-457, scope=range_end, role=Implementation)
+  // @relation(GSSC-BLLR-466, scope=range_start, role=Implementation)
+  if (field === "deletedAt") return caller.isAdmin;
+  // @relation(GSSC-BLLR-466, scope=range_end, role=Implementation)
+  if (caller.id === user.id || caller.isAdmin || caller.isUserMod) return true;
   if (field === "primaryEmail") {
     return user.preferredContactMethod === "Email" || user.preferredContactMethod === "None";
   }
@@ -539,6 +634,20 @@ function matchesOne(user: StoredUser, caller: StoredUser, name: string, needle: 
       (canSee(caller, user, "secondaryPhone") && includes(user.secondaryPhone, needle))
     );
   }
+  // @relation(GSSC-BLLR-464, scope=range_start, role=Implementation)
+  if (name === "name") {
+    return (
+      includes(user.firstName, needle) ||
+      includes(user.middleName, needle) ||
+      includes(user.lastName, needle)
+    );
+  }
+  // @relation(GSSC-BLLR-464, scope=range_end, role=Implementation)
+  // @relation(GSSC-BLLR-465, scope=range_start, role=Implementation)
+  if (name === "address") {
+    return includes(user.homeCity, needle) || includes(user.homeState, needle);
+  }
+  // @relation(GSSC-BLLR-465, scope=range_end, role=Implementation)
   if (!canSee(caller, user, name)) return false;
   if (BOOLEAN_FILTERS.has(name)) return booleanMatch(booleanField(user, name), needle);
   if (STRING_LITERAL_FILTERS.has(name)) return literalMatch(stringField(user, name), needle);
@@ -565,7 +674,9 @@ function readFilters(
         STRING_LITERAL_FILTERS.has(name) ||
         BOOLEAN_FILTERS.has(name) ||
         name === "email" ||
-        name === "phone"
+        name === "phone" ||
+        name === "name" ||
+        name === "address"
       )
     ) {
       return "invalid";

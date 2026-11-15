@@ -153,6 +153,11 @@ export class AccountPage implements OnInit {
   private pendingPhotoFile: File | null = null;
   private localPreviewObjectUrl: string | null = null;
 
+  // @relation(GSSC-MLLR-429, GSSC-MLLR-432, GSSC-MLLR-433, GSSC-MLLR-434, GSSC-MLLR-435, scope=range_start, role=Implementation)
+  /** When true, mailing address tracks home and mailing inputs stay disabled. */
+  readonly mailingEqualsHome = signal(false);
+  // @relation(GSSC-MLLR-429, GSSC-MLLR-432, GSSC-MLLR-433, GSSC-MLLR-434, GSSC-MLLR-435, scope=range_end, role=Implementation)
+
   memberInfo = emptyMemberInfo();
   accountInfo = emptyAccountInfo();
   private loadedMemberInfo = emptyMemberInfo();
@@ -215,10 +220,32 @@ export class AccountPage implements OnInit {
   // @relation(GSSC-MLLR-133, scope=range_start, role=Implementation)
   resetMemberInfo(): void {
     this.memberInfo = { ...this.loadedMemberInfo };
+    this.mailingEqualsHome.set(homeMatchesMailing(this.memberInfo));
     this.memberMessage.set('');
     this.memberInvalid.set(new Set());
   }
   // @relation(GSSC-MLLR-133, scope=range_end, role=Implementation)
+
+  // @relation(GSSC-MLLR-432, GSSC-MLLR-433, GSSC-MLLR-434, GSSC-MLLR-435, scope=range_start, role=Implementation)
+  onMailingEqualsHomeChange(checked: boolean): void {
+    this.mailingEqualsHome.set(checked);
+    if (checked) this.copyHomeToMailing();
+  }
+
+  onHomeAddressChange(): void {
+    if (this.mailingEqualsHome()) this.copyHomeToMailing();
+  }
+
+  private copyHomeToMailing(): void {
+    this.memberInfo.mailingLine1 = this.memberInfo.homeLine1;
+    this.memberInfo.mailingLine2 = this.memberInfo.homeLine2;
+    this.memberInfo.mailingLine3 = this.memberInfo.homeLine3;
+    this.memberInfo.mailingCity = this.memberInfo.homeCity;
+    this.memberInfo.mailingState = this.memberInfo.homeState;
+    this.memberInfo.mailingZip = this.memberInfo.homeZip;
+    this.memberInfo.mailingZipExtension = this.memberInfo.homeZipExtension;
+  }
+  // @relation(GSSC-MLLR-432, GSSC-MLLR-433, GSSC-MLLR-434, GSSC-MLLR-435, scope=range_end, role=Implementation)
 
   // @relation(GSSC-MLLR-134, GSSC-MLLR-418, GSSC-MLLR-419, scope=range_start, role=Implementation)
   async submitMemberInfo(): Promise<void> {
@@ -413,6 +440,7 @@ export class AccountPage implements OnInit {
     this.accountInfo = { ...info };
     this.loadedMemberInfo = { ...member };
     this.loadedAccountInfo = { ...info };
+    this.mailingEqualsHome.set(homeMatchesMailing(member));
     this.pendingPhotoFile = null;
     this.photoFileLabel.set('No file chosen');
     if (this.localPreviewObjectUrl) {
@@ -424,6 +452,34 @@ export class AccountPage implements OnInit {
     this.accountInvalid.set(new Set());
     this.passwordInvalid.set(false);
   }
+}
+
+/** True when every corresponding home/mailing address field matches. */
+export function homeMatchesMailing(form: {
+  homeLine1: string;
+  homeLine2: string;
+  homeLine3: string;
+  homeCity: string;
+  homeState: string;
+  homeZip: string;
+  homeZipExtension: string;
+  mailingLine1: string;
+  mailingLine2: string;
+  mailingLine3: string;
+  mailingCity: string;
+  mailingState: string;
+  mailingZip: string;
+  mailingZipExtension: string;
+}): boolean {
+  return (
+    form.homeLine1 === form.mailingLine1 &&
+    form.homeLine2 === form.mailingLine2 &&
+    form.homeLine3 === form.mailingLine3 &&
+    form.homeCity === form.mailingCity &&
+    form.homeState === form.mailingState &&
+    form.homeZip === form.mailingZip &&
+    form.homeZipExtension === form.mailingZipExtension
+  );
 }
 
 function memberInfoFromAccount(account: AccountRecord): MemberInfoForm {

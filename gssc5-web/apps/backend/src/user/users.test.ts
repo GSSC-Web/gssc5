@@ -766,7 +766,11 @@ async function expiredToken(): Promise<string> {
 test("GSSC-BLLR-41 User List", async () => {
   const listed = await listEntries(emailMember.token);
   const stored = await allRows();
-  expect(new Set(idsOf(listed))).toEqual(new Set(stored.map((row) => cell(row, "cuid") ?? "")));
+  const active = stored.filter((row) => {
+    const deleted = row["deletedAt"];
+    return deleted === null || deleted === undefined;
+  });
+  expect(new Set(idsOf(listed))).toEqual(new Set(active.map((row) => cell(row, "cuid") ?? "")));
   expect(idsOf(listed)).toContain(emailMember.id);
   expect(idsOf(listed)).toContain(moderator.id);
 });
@@ -2256,4 +2260,79 @@ test("GSSC-BLLR-276 User Account Photo", async () => {
   expect(cellText((await rowById(emailMember.id))[column?.name ?? ""])).toBeNull();
 });
 // @relation(GSSC-BLLR-276, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-459, scope=range_start, role=Test)
+test("GSSC-BLLR-459 User Soft-Delete Marker", async () => {
+  const column = app.columns.find((item) => normalize(item.name) === "deletedat");
+  expect(column).toBeDefined();
+  expect(column?.notnull).toBe(false);
+  expect((await rowById(emailMember.id))[column?.name ?? ""]).toBeNull();
+});
+// @relation(GSSC-BLLR-459, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-460, GSSC-BLLR-461, GSSC-BLLR-462, GSSC-BLLR-463, GSSC-BLLR-466, scope=range_start, role=Test)
+test("GSSC-BLLR-460 User List Omits Soft-Deleted", async () => {
+  await withRow(mutable.id, async () => {
+    const forbidden = await call("POST", `/users/${encodeURIComponent(mutable.id)}/soft-delete`, emailMember.token);
+    expect(forbidden.status).toBe(403);
+
+    const deleted = await call("POST", `/users/${encodeURIComponent(mutable.id)}/soft-delete`, admin.token);
+    expect(deleted.status).toBe(204);
+
+    const memberList = await listEntries(emailMember.token);
+    expect(idsOf(memberList)).not.toContain(mutable.id);
+
+    const adminList = await listEntries(admin.token);
+    expect(idsOf(adminList)).toContain(mutable.id);
+    const adminEntry = adminList.find((entry) => entry["cuid"] === mutable.id);
+    expect(adminEntry?.["deletedAt"]).toEqual(expect.any(String));
+
+    const undeleteForbidden = await call(
+      "POST",
+      `/users/${encodeURIComponent(mutable.id)}/undelete`,
+      moderator.token,
+    );
+    expect(undeleteForbidden.status).toBe(403);
+
+    const restored = await call("POST", `/users/${encodeURIComponent(mutable.id)}/undelete`, admin.token);
+    expect(restored.status).toBe(204);
+
+    const after = await listEntries(emailMember.token);
+    expect(idsOf(after)).toContain(mutable.id);
+    const adminAfter = (await listEntries(admin.token)).find((entry) => entry["cuid"] === mutable.id);
+    expect(adminAfter?.["deletedAt"] ?? null).toBeNull();
+  });
+});
+// @relation(GSSC-BLLR-460, GSSC-BLLR-461, GSSC-BLLR-462, GSSC-BLLR-463, GSSC-BLLR-466, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-464, scope=range_start, role=Test)
+test("GSSC-BLLR-464 User List Name Filter", async () => {
+  const byFirst = await listEntries(emailMember.token, { name: "Quillanetta" });
+  expect(idsOf(byFirst)).toContain(phoneMember.id);
+  expect(idsOf(byFirst)).not.toContain(emailMember.id);
+
+  const byMiddle = await listEntries(emailMember.token, { name: "email-middle" });
+  expect(idsOf(byMiddle)).toContain(emailMember.id);
+
+  const byLast = await listEntries(admin.token, { name: "MODERATOR-LAST" });
+  expect(idsOf(byLast)).toContain(moderator.id);
+});
+// @relation(GSSC-BLLR-464, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-465, scope=range_start, role=Test)
+test("GSSC-BLLR-465 User List Address Filter", async () => {
+  const byCity = await listEntries(emailMember.token, { address: "emailville" });
+  expect(idsOf(byCity)).toContain(emailMember.id);
+  expect(idsOf(byCity)).not.toContain(phoneMember.id);
+
+  const byState = await listEntries(admin.token, { address: "PHONESTATE" });
+  expect(idsOf(byState)).toContain(phoneMember.id);
+
+  const mailNeedle = String(emailMember.values.mailCity ?? "");
+  if (mailNeedle.length > 0) {
+    const mailingOnly = await listEntries(admin.token, { address: mailNeedle });
+    expect(idsOf(mailingOnly)).not.toContain(emailMember.id);
+  }
+});
+// @relation(GSSC-BLLR-465, scope=range_end, role=Test)
 

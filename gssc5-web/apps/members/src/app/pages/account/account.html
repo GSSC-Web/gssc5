@@ -137,15 +137,15 @@
             [class.bg-gssc-light-red]="fieldInvalid('homeLine1')"
           >
             <label class="absolute -top-2 start-2 bg-inherit px-1 text-xs font-extralight italic text-gssc-dark-green" for="gssc-account-home-line1">Home Line 1&nbsp;*</label>
-            <input id="gssc-account-home-line1" class="gssc-account-addresses__home-line1 min-w-0 border-0 bg-transparent px-2 py-2 font-sans text-sm outline-none text-gssc-dark-green" name="homeLine1" [(ngModel)]="memberInfo.homeLine1" required />
+            <input id="gssc-account-home-line1" class="gssc-account-addresses__home-line1 min-w-0 border-0 bg-transparent px-2 py-2 font-sans text-sm outline-none text-gssc-dark-green" name="homeLine1" [(ngModel)]="memberInfo.homeLine1" (ngModelChange)="onHomeAddressChange()" required />
           </div>
           <div class="gssc-field relative flex min-w-0 flex-col rounded-md border border-gssc-dark-green bg-gssc-white font-sans">
             <label class="absolute -top-2 start-2 bg-inherit px-1 text-xs font-extralight italic text-gssc-dark-green" for="gssc-account-home-line2">Home Line 2</label>
-            <input id="gssc-account-home-line2" class="gssc-account-addresses__home-line2 min-w-0 border-0 bg-transparent px-2 py-2 font-sans text-sm outline-none text-gssc-dark-green" name="homeLine2" [(ngModel)]="memberInfo.homeLine2" />
+            <input id="gssc-account-home-line2" class="gssc-account-addresses__home-line2 min-w-0 border-0 bg-transparent px-2 py-2 font-sans text-sm outline-none text-gssc-dark-green" name="homeLine2" [(ngModel)]="memberInfo.homeLine2" (ngModelChange)="onHomeAddressChange()" />
           </div>
           <div class="gssc-field relative flex min-w-0 flex-col rounded-md border border-gssc-dark-green bg-gssc-white font-sans">
             <label class="absolute -top-2 start-2 bg-inherit px-1 text-xs font-extralight italic text-gssc-dark-green" for="gssc-account-home-line3">Home Line 3</label>
-            <input id="gssc-account-home-line3" class="gssc-account-addresses__home-line3 min-w-0 border-0 bg-transparent px-2 py-2 font-sans text-sm outline-none text-gssc-dark-green" name="homeLine3" [(ngModel)]="memberInfo.homeLine3" />
+            <input id="gssc-account-home-line3" class="gssc-account-addresses__home-line3 min-w-0 border-0 bg-transparent px-2 py-2 font-sans text-sm outline-none text-gssc-dark-green" name="homeLine3" [(ngModel)]="memberInfo.homeLine3" (ngModelChange)="onHomeAddressChange()" />
           </div>
           <div
             class="gssc-field relative flex min-w-0 flex-col rounded-md border font-sans"
@@ -155,7 +155,7 @@
             [class.bg-gssc-light-red]="fieldInvalid('homeCity')"
           >
             <label class="absolute -top-2 start-2 bg-inherit px-1 text-xs font-extralight italic text-gssc-dark-green" for="gssc-account-home-city">Home City&nbsp;*</label>
-            <input id="gssc-account-home-city" class="gssc-account-addresses__home-city min-w-0 border-0 bg-transparent px-2 py-2 font-sans text-sm outline-none text-gssc-dark-green" name="homeCity" [(ngModel)]="memberInfo.homeCity" required />
+            <input id="gssc-account-home-city" class="gssc-account-addresses__home-city min-w-0 border-0 bg-transparent px-2 py-2 font-sans text-sm outline-none text-gssc-dark-green" name="homeCity" [(ngModel)]="memberInfo.homeCity" (ngModelChange)="onHomeAddressChange()" required />
           </div>
           <div
             class="gssc-field relative flex min-w-0 flex-col rounded-md border font-sans"
@@ -165,7 +165,7 @@
             [class.bg-gssc-light-red]="fieldInvalid('homeState')"
           >
             <label class="absolute -top-2 start-2 bg-inherit px-1 text-xs font-extralight italic text-gssc-dark-green" for="gssc-account-home-state">Home State&nbsp;*</label>
-            <input id="gssc-account-home-state" class="gssc-account-addresses__home-state min-w-0 border-0 bg-transparent px-2 py-2 font-sans text-sm outline-none text-gssc-dark-green" name="homeState" [(ngModel)]="memberInfo.homeState" required />
+            <input id="gssc-account-home-state" class="gssc-account-addresses__home-state min-w-0 border-0 bg-transparent px-2 py-2 font-sans text-sm outline-none text-gssc-dark-green" name="homeState" [(ngModel)]="memberInfo.homeState" (ngModelChange)="onHomeAddressChange()" required />
           </div>
           <div class="gssc-account-addresses__home-zip-row flex min-w-0 items-center gap-2">
             <div
@@ -176,7 +176,7 @@
               [class.bg-gssc-light-red]="fieldInvalid('homeZip')"
             >
               <label class="absolute -top-2 start-2 bg-inherit px-1 text-xs font-extralight italic text-gssc-dark-green" for="gssc-account-home-zip">Zip&nbsp;*</label>
-              <input id="gssc-account-home-zip" class="gssc-account-addresses__home-zip min-w-0 border-0 bg-transparent px-2 py-2 font-sans text-sm outline-none text-gssc-dark-green" name="homeZip" [(ngModel)]="memberInfo.homeZip" required />
+              <input id="gssc-account-home-zip" class="gssc-account-addresses__home-zip min-w-0 border-0 bg-transparent px-2 py-2 font-sans text-sm outline-none text-gssc-dark-green" name="homeZip" [(ngModel)]="memberInfo.homeZip" (ngModelChange)="onHomeAddressChange()" required />
             </div>
             <span class="gssc-account-addresses__zip-plus shrink-0 font-sans text-sm text-gssc-dark-green" aria-hidden="true">+</span>
             <div
@@ -187,7 +187,7 @@
               [class.bg-gssc-light-red]="fieldInvalid('homeZipExtension')"
             >
               <label class="absolute -top-2 start-2 bg-inherit px-1 text-xs font-extralight italic text-gssc-dark-green" for="gssc-account-home-zip-ext">Zip Extension</label>
-              <input id="gssc-account-home-zip-ext" class="gssc-account-addresses__home-zip-ext min-w-0 border-0 bg-transparent px-2 py-2 font-sans text-sm outline-none text-gssc-dark-green" name="homeZipExtension" [(ngModel)]="memberInfo.homeZipExtension" />
+              <input id="gssc-account-home-zip-ext" class="gssc-account-addresses__home-zip-ext min-w-0 border-0 bg-transparent px-2 py-2 font-sans text-sm outline-none text-gssc-dark-green" name="homeZipExtension" [(ngModel)]="memberInfo.homeZipExtension" (ngModelChange)="onHomeAddressChange()" />
             </div>
           </div>
           <div class="gssc-field relative flex min-w-0 flex-col rounded-md border border-gssc-dark-green bg-gssc-white font-sans">
@@ -197,67 +197,103 @@
               <option value="redacted">Redacted</option>
             </select>
           </div>
+          <!-- @relation(GSSC-MLLR-429, GSSC-MLLR-430, GSSC-MLLR-431, scope=range_start, role=Implementation) -->
+          <label class="gssc-account-addresses__mailing-equals-home flex items-center gap-2 font-sans text-sm text-gssc-dark-green">
+            <input
+              id="gssc-account-mailing-equals-home"
+              type="checkbox"
+              name="mailingEqualsHome"
+              [ngModel]="mailingEqualsHome()"
+              (ngModelChange)="onMailingEqualsHomeChange($event)"
+            />
+            Mailing = Home
+          </label>
+          <!-- @relation(GSSC-MLLR-429, GSSC-MLLR-430, GSSC-MLLR-431, scope=range_end, role=Implementation) -->
+          <!-- @relation(GSSC-MLLR-434, GSSC-MLLR-436, GSSC-MLLR-437, scope=range_start, role=Implementation) -->
           <div
             class="gssc-field relative flex min-w-0 flex-col rounded-md border font-sans"
-            [class.border-gssc-dark-green]="!fieldInvalid('mailingLine1')"
+            [class.border-gssc-dark-green]="!fieldInvalid('mailingLine1') && !mailingEqualsHome()"
             [class.border-gssc-dark-red]="fieldInvalid('mailingLine1')"
-            [class.bg-gssc-white]="!fieldInvalid('mailingLine1')"
+            [class.border-gssc-gray]="mailingEqualsHome() && !fieldInvalid('mailingLine1')"
+            [class.bg-gssc-white]="!fieldInvalid('mailingLine1') && !mailingEqualsHome()"
             [class.bg-gssc-light-red]="fieldInvalid('mailingLine1')"
+            [class.bg-gssc-gray]="mailingEqualsHome() && !fieldInvalid('mailingLine1')"
           >
             <label class="absolute -top-2 start-2 bg-inherit px-1 text-xs font-extralight italic text-gssc-dark-green" for="gssc-account-mail-line1">Mailing Line 1&nbsp;*</label>
-            <input id="gssc-account-mail-line1" class="gssc-account-addresses__mail-line1 min-w-0 border-0 bg-transparent px-2 py-2 font-sans text-sm outline-none text-gssc-dark-green" name="mailingLine1" [(ngModel)]="memberInfo.mailingLine1" required />
-          </div>
-          <div class="gssc-field relative flex min-w-0 flex-col rounded-md border border-gssc-dark-green bg-gssc-white font-sans">
-            <label class="absolute -top-2 start-2 bg-inherit px-1 text-xs font-extralight italic text-gssc-dark-green" for="gssc-account-mail-line2">Mailing Line 2</label>
-            <input id="gssc-account-mail-line2" class="gssc-account-addresses__mail-line2 min-w-0 border-0 bg-transparent px-2 py-2 font-sans text-sm outline-none text-gssc-dark-green" name="mailingLine2" [(ngModel)]="memberInfo.mailingLine2" />
-          </div>
-          <div class="gssc-field relative flex min-w-0 flex-col rounded-md border border-gssc-dark-green bg-gssc-white font-sans">
-            <label class="absolute -top-2 start-2 bg-inherit px-1 text-xs font-extralight italic text-gssc-dark-green" for="gssc-account-mail-line3">Mailing Line 3</label>
-            <input id="gssc-account-mail-line3" class="gssc-account-addresses__mail-line3 min-w-0 border-0 bg-transparent px-2 py-2 font-sans text-sm outline-none text-gssc-dark-green" name="mailingLine3" [(ngModel)]="memberInfo.mailingLine3" />
+            <input id="gssc-account-mail-line1" class="gssc-account-addresses__mail-line1 min-w-0 border-0 bg-transparent px-2 py-2 font-sans text-sm outline-none text-gssc-dark-green" name="mailingLine1" [(ngModel)]="memberInfo.mailingLine1" [disabled]="mailingEqualsHome()" required />
           </div>
           <div
             class="gssc-field relative flex min-w-0 flex-col rounded-md border font-sans"
-            [class.border-gssc-dark-green]="!fieldInvalid('mailingCity')"
+            [class.border-gssc-dark-green]="!mailingEqualsHome()"
+            [class.border-gssc-gray]="mailingEqualsHome()"
+            [class.bg-gssc-white]="!mailingEqualsHome()"
+            [class.bg-gssc-gray]="mailingEqualsHome()"
+          >
+            <label class="absolute -top-2 start-2 bg-inherit px-1 text-xs font-extralight italic text-gssc-dark-green" for="gssc-account-mail-line2">Mailing Line 2</label>
+            <input id="gssc-account-mail-line2" class="gssc-account-addresses__mail-line2 min-w-0 border-0 bg-transparent px-2 py-2 font-sans text-sm outline-none text-gssc-dark-green" name="mailingLine2" [(ngModel)]="memberInfo.mailingLine2" [disabled]="mailingEqualsHome()" />
+          </div>
+          <div
+            class="gssc-field relative flex min-w-0 flex-col rounded-md border font-sans"
+            [class.border-gssc-dark-green]="!mailingEqualsHome()"
+            [class.border-gssc-gray]="mailingEqualsHome()"
+            [class.bg-gssc-white]="!mailingEqualsHome()"
+            [class.bg-gssc-gray]="mailingEqualsHome()"
+          >
+            <label class="absolute -top-2 start-2 bg-inherit px-1 text-xs font-extralight italic text-gssc-dark-green" for="gssc-account-mail-line3">Mailing Line 3</label>
+            <input id="gssc-account-mail-line3" class="gssc-account-addresses__mail-line3 min-w-0 border-0 bg-transparent px-2 py-2 font-sans text-sm outline-none text-gssc-dark-green" name="mailingLine3" [(ngModel)]="memberInfo.mailingLine3" [disabled]="mailingEqualsHome()" />
+          </div>
+          <div
+            class="gssc-field relative flex min-w-0 flex-col rounded-md border font-sans"
+            [class.border-gssc-dark-green]="!fieldInvalid('mailingCity') && !mailingEqualsHome()"
             [class.border-gssc-dark-red]="fieldInvalid('mailingCity')"
-            [class.bg-gssc-white]="!fieldInvalid('mailingCity')"
+            [class.border-gssc-gray]="mailingEqualsHome() && !fieldInvalid('mailingCity')"
+            [class.bg-gssc-white]="!fieldInvalid('mailingCity') && !mailingEqualsHome()"
             [class.bg-gssc-light-red]="fieldInvalid('mailingCity')"
+            [class.bg-gssc-gray]="mailingEqualsHome() && !fieldInvalid('mailingCity')"
           >
             <label class="absolute -top-2 start-2 bg-inherit px-1 text-xs font-extralight italic text-gssc-dark-green" for="gssc-account-mail-city">Mailing City&nbsp;*</label>
-            <input id="gssc-account-mail-city" class="gssc-account-addresses__mail-city min-w-0 border-0 bg-transparent px-2 py-2 font-sans text-sm outline-none text-gssc-dark-green" name="mailingCity" [(ngModel)]="memberInfo.mailingCity" required />
+            <input id="gssc-account-mail-city" class="gssc-account-addresses__mail-city min-w-0 border-0 bg-transparent px-2 py-2 font-sans text-sm outline-none text-gssc-dark-green" name="mailingCity" [(ngModel)]="memberInfo.mailingCity" [disabled]="mailingEqualsHome()" required />
           </div>
           <div
             class="gssc-field relative flex min-w-0 flex-col rounded-md border font-sans"
-            [class.border-gssc-dark-green]="!fieldInvalid('mailingState')"
+            [class.border-gssc-dark-green]="!fieldInvalid('mailingState') && !mailingEqualsHome()"
             [class.border-gssc-dark-red]="fieldInvalid('mailingState')"
-            [class.bg-gssc-white]="!fieldInvalid('mailingState')"
+            [class.border-gssc-gray]="mailingEqualsHome() && !fieldInvalid('mailingState')"
+            [class.bg-gssc-white]="!fieldInvalid('mailingState') && !mailingEqualsHome()"
             [class.bg-gssc-light-red]="fieldInvalid('mailingState')"
+            [class.bg-gssc-gray]="mailingEqualsHome() && !fieldInvalid('mailingState')"
           >
             <label class="absolute -top-2 start-2 bg-inherit px-1 text-xs font-extralight italic text-gssc-dark-green" for="gssc-account-mail-state">Mailing State&nbsp;*</label>
-            <input id="gssc-account-mail-state" class="gssc-account-addresses__mail-state min-w-0 border-0 bg-transparent px-2 py-2 font-sans text-sm outline-none text-gssc-dark-green" name="mailingState" [(ngModel)]="memberInfo.mailingState" required />
+            <input id="gssc-account-mail-state" class="gssc-account-addresses__mail-state min-w-0 border-0 bg-transparent px-2 py-2 font-sans text-sm outline-none text-gssc-dark-green" name="mailingState" [(ngModel)]="memberInfo.mailingState" [disabled]="mailingEqualsHome()" required />
           </div>
           <div class="gssc-account-addresses__mail-zip-row flex min-w-0 items-center gap-2">
             <div
               class="gssc-field relative flex min-w-0 flex-1 flex-col rounded-md border font-sans"
-              [class.border-gssc-dark-green]="!fieldInvalid('mailingZip')"
+              [class.border-gssc-dark-green]="!fieldInvalid('mailingZip') && !mailingEqualsHome()"
               [class.border-gssc-dark-red]="fieldInvalid('mailingZip')"
-              [class.bg-gssc-white]="!fieldInvalid('mailingZip')"
+              [class.border-gssc-gray]="mailingEqualsHome() && !fieldInvalid('mailingZip')"
+              [class.bg-gssc-white]="!fieldInvalid('mailingZip') && !mailingEqualsHome()"
               [class.bg-gssc-light-red]="fieldInvalid('mailingZip')"
+              [class.bg-gssc-gray]="mailingEqualsHome() && !fieldInvalid('mailingZip')"
             >
               <label class="absolute -top-2 start-2 bg-inherit px-1 text-xs font-extralight italic text-gssc-dark-green" for="gssc-account-mail-zip">Zip&nbsp;*</label>
-              <input id="gssc-account-mail-zip" class="gssc-account-addresses__mail-zip min-w-0 border-0 bg-transparent px-2 py-2 font-sans text-sm outline-none text-gssc-dark-green" name="mailingZip" [(ngModel)]="memberInfo.mailingZip" required />
+              <input id="gssc-account-mail-zip" class="gssc-account-addresses__mail-zip min-w-0 border-0 bg-transparent px-2 py-2 font-sans text-sm outline-none text-gssc-dark-green" name="mailingZip" [(ngModel)]="memberInfo.mailingZip" [disabled]="mailingEqualsHome()" required />
             </div>
             <span class="gssc-account-addresses__zip-plus shrink-0 font-sans text-sm text-gssc-dark-green" aria-hidden="true">+</span>
             <div
               class="gssc-field relative flex min-w-0 flex-1 flex-col rounded-md border font-sans"
-              [class.border-gssc-dark-green]="!fieldInvalid('mailingZipExtension')"
+              [class.border-gssc-dark-green]="!fieldInvalid('mailingZipExtension') && !mailingEqualsHome()"
               [class.border-gssc-dark-red]="fieldInvalid('mailingZipExtension')"
-              [class.bg-gssc-white]="!fieldInvalid('mailingZipExtension')"
+              [class.border-gssc-gray]="mailingEqualsHome() && !fieldInvalid('mailingZipExtension')"
+              [class.bg-gssc-white]="!fieldInvalid('mailingZipExtension') && !mailingEqualsHome()"
               [class.bg-gssc-light-red]="fieldInvalid('mailingZipExtension')"
+              [class.bg-gssc-gray]="mailingEqualsHome() && !fieldInvalid('mailingZipExtension')"
             >
               <label class="absolute -top-2 start-2 bg-inherit px-1 text-xs font-extralight italic text-gssc-dark-green" for="gssc-account-mail-zip-ext">Zip Extension</label>
-              <input id="gssc-account-mail-zip-ext" class="gssc-account-addresses__mail-zip-ext min-w-0 border-0 bg-transparent px-2 py-2 font-sans text-sm outline-none text-gssc-dark-green" name="mailingZipExtension" [(ngModel)]="memberInfo.mailingZipExtension" />
+              <input id="gssc-account-mail-zip-ext" class="gssc-account-addresses__mail-zip-ext min-w-0 border-0 bg-transparent px-2 py-2 font-sans text-sm outline-none text-gssc-dark-green" name="mailingZipExtension" [(ngModel)]="memberInfo.mailingZipExtension" [disabled]="mailingEqualsHome()" />
             </div>
           </div>
+          <!-- @relation(GSSC-MLLR-434, GSSC-MLLR-436, GSSC-MLLR-437, scope=range_end, role=Implementation) -->
         </div>
         <!-- @relation(GSSC-MLLR-138, GSSC-MLLR-139, GSSC-MLLR-140, scope=range_end, role=Implementation) -->
       </div>

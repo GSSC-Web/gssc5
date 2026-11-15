@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { Router } from '@angular/router';
+import { provideRouter, Router } from '@angular/router';
 import { routes } from '../../app.routes';
 import { requireAuthGuard } from '../../services/auth-guards';
 import { MemberSession, memberSessionApi } from '../../services/member-session';
@@ -26,6 +26,7 @@ const fellowMember = {
   homeState: 'VA',
   primaryEmail: 'grace@example.com',
   primaryPhone: '555-0200',
+  accountPhoto: 'photo_grace',
 };
 
 const mutedMember = {
@@ -35,6 +36,15 @@ const mutedMember = {
   lastName: 'Turing',
   homeCity: 'Cambridge',
   homeState: 'EN',
+  accountPhoto: '',
+};
+
+const deletedMember = {
+  cuid: 'user_4',
+  firstName: 'Deleted',
+  lastName: 'Member',
+  deletedAt: '2026-11-15T00:00:00.000Z',
+  accountPhoto: null,
 };
 
 async function setupDirectory(options?: {
@@ -48,12 +58,16 @@ async function setupDirectory(options?: {
   session: MemberSession;
   router: Router;
   listCalls: Array<Record<string, string>>;
+  softDeleteCalls: string[];
+  undeleteCalls: string[];
   restore: () => void;
 }> {
   const originals = {
     challenge: memberSessionApi.challenge,
     getUser: memberSessionApi.getUser,
     listUsers: directoryApi.listUsers,
+    softDeleteUser: directoryApi.softDeleteUser,
+    undeleteUser: directoryApi.undeleteUser,
   };
 
   try {
@@ -77,6 +91,8 @@ async function setupDirectory(options?: {
     })) as typeof memberSessionApi.getUser;
 
   const listCalls: Array<Record<string, string>> = [];
+  const softDeleteCalls: string[] = [];
+  const undeleteCalls: string[] = [];
   directoryApi.listUsers = (async (query: Record<string, string> = {}) => {
     listCalls.push({ ...query });
     if (options?.listError) {
@@ -91,8 +107,20 @@ async function setupDirectory(options?: {
     return okResponse(options?.list ?? [fellowMember, mutedMember]);
   }) as typeof directoryApi.listUsers;
 
+  directoryApi.softDeleteUser = (async (cuid: string) => {
+    softDeleteCalls.push(cuid);
+    return okResponse(null, 204);
+  }) as typeof directoryApi.softDeleteUser;
+
+  directoryApi.undeleteUser = (async (cuid: string) => {
+    undeleteCalls.push(cuid);
+    return okResponse(null, 204);
+  }) as typeof directoryApi.undeleteUser;
+
   TestBed.resetTestingModule();
-  const fixture = await setupMembersComponent(DirectoryPage);
+  const fixture = await setupMembersComponent(DirectoryPage, {
+    providers: [provideRouter(routes)],
+  });
   const session = TestBed.inject(MemberSession);
   const router = TestBed.inject(Router);
   await session.whenReady();
@@ -114,10 +142,14 @@ async function setupDirectory(options?: {
     session,
     router,
     listCalls,
+    softDeleteCalls,
+    undeleteCalls,
     restore: () => {
       memberSessionApi.challenge = originals.challenge;
       memberSessionApi.getUser = originals.getUser;
       directoryApi.listUsers = originals.listUsers;
+      directoryApi.softDeleteUser = originals.softDeleteUser;
+      directoryApi.undeleteUser = originals.undeleteUser;
     },
   };
 }
@@ -185,29 +217,24 @@ async function settleFilters(
 test('GSSC-MLLR-205 Semantic', async () => {
   const { root, page, listCalls, fixture, restore } = await setupDirectory();
   try {
-    expect(root.querySelector('#gssc-directory-first-name')).not.toBeNull();
-    expect(root.querySelector('#gssc-directory-last-name')).not.toBeNull();
+    expect(root.querySelector('#gssc-directory-name')).not.toBeNull();
     expect(root.querySelector('#gssc-directory-email')).not.toBeNull();
     expect(root.querySelector('#gssc-directory-phone')).not.toBeNull();
-    expect(root.querySelector('#gssc-directory-city')).not.toBeNull();
-    expect(root.querySelector('#gssc-directory-state')).not.toBeNull();
+    expect(root.querySelector('#gssc-directory-address')).not.toBeNull();
+    expect(root.querySelector('#gssc-directory-first-name')).toBeNull();
     expect(root.querySelector('.gssc-directory-search__submit')).toBeNull();
 
     listCalls.length = 0;
-    page.firstName.set('Grace');
-    page.lastName.set('Hopper');
+    page.name.set('Grace');
     page.email.set('grace@example.com');
     page.phone.set('555');
-    page.homeCity.set('Arlington');
-    page.homeState.set('VA');
+    page.address.set('Arlington');
     await settleFilters(fixture);
     expect(listCalls.at(-1)).toEqual({
-      firstName: 'Grace',
-      lastName: 'Hopper',
+      name: 'Grace',
       email: 'grace@example.com',
       phone: '555',
-      homeCity: 'Arlington',
-      homeState: 'VA',
+      address: 'Arlington',
     });
   } finally {
     restore();
@@ -222,6 +249,7 @@ test('GSSC-MLLR-206 Syntactic', async () => {
     const search = root.querySelector<HTMLElement>('.gssc-directory-search')!;
     const fields = root.querySelector<HTMLElement>('.gssc-directory-search__fields')!;
     const actions = root.querySelector<HTMLElement>('.gssc-directory-search__actions')!;
+    const results = root.querySelector<HTMLElement>('.gssc-directory-results')!;
     expect(search.tagName).toBe('ASIDE');
     expect(search.classList.contains('sticky')).toBe(true);
     expect(fields.classList.contains('flex-col')).toBe(true);
@@ -229,6 +257,8 @@ test('GSSC-MLLR-206 Syntactic', async () => {
     expect(fields.compareDocumentPosition(actions) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     expect(root.querySelector('.gssc-directory-search__submit')).toBeNull();
     expect(root.querySelector('.gssc-directory-search__clear')).not.toBeNull();
+    expect(search.classList.contains('bg-gssc-cream')).toBe(true);
+    expect(results.classList.contains('bg-gssc-white')).toBe(true);
   } finally {
     restore();
   }
@@ -239,10 +269,13 @@ test('GSSC-MLLR-206 Syntactic', async () => {
 test('GSSC-MLLR-207 Lexical', async () => {
   const { root, restore } = await setupDirectory();
   try {
-    expect(root.querySelectorAll('gssc-form-text-field').length).toBe(6);
+    expect(root.querySelectorAll('gssc-form-text-field').length).toBe(4);
     const clear = root.querySelector<HTMLElement>('.gssc-directory-search__clear')!;
     expect(clear.classList.contains('text-gssc-dark-green')).toBe(true);
     expect(root.querySelector('.gssc-directory-search__submit')).toBeNull();
+    expect(root.querySelector('.gssc-directory-search')!.classList.contains('bg-gssc-cream')).toBe(
+      true,
+    );
   } finally {
     restore();
   }
@@ -256,6 +289,7 @@ test('GSSC-MLLR-208 Semantic', async () => {
     const rows = root.querySelectorAll('gssc-contact-row');
     expect(rows.length).toBe(2);
     expect(textContent(root, '.gssc-contact-row__name')).toContain('Grace Hopper');
+    expect(root.querySelector('.gssc-contact-row__photo')).not.toBeNull();
   } finally {
     restore();
   }
@@ -313,14 +347,14 @@ test('GSSC-MLLR-212 Directory Load And Filter', async () => {
   try {
     expect(listCalls[0]).toEqual({});
     listCalls.length = 0;
-    page.firstName.set('Grace');
+    page.name.set('Grace');
     await settleFilters(fixture);
-    expect(listCalls.at(-1)).toEqual({ firstName: 'Grace' });
+    expect(listCalls.at(-1)).toEqual({ name: 'Grace' });
 
     listCalls.length = 0;
     await page.clearSearch();
     await settleFilters(fixture);
-    expect(page.firstName()).toBe('');
+    expect(page.name()).toBe('');
     expect(listCalls.at(-1)).toEqual({});
   } finally {
     restore();
@@ -357,11 +391,303 @@ test('GSSC-MLLR-214 Administrator Registered Members View', async () => {
     expect(textContent(root, '.gssc-directory-page__title')).toBe('Registered Members');
     expect(textContent(root, '.gssc-directory-page__lede')).toContain('registered membership');
     listCalls.length = 0;
-    page.lastName.set('Hopper');
+    page.name.set('Hopper');
     await settleFilters(fixture);
-    expect(listCalls.at(-1)).toEqual({ lastName: 'Hopper' });
+    expect(listCalls.at(-1)).toEqual({ name: 'Hopper' });
   } finally {
     restore();
   }
 });
 // @relation(GSSC-MLLR-214, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-215, scope=range_start, role=Test)
+test('GSSC-MLLR-215 Semantic', async () => {
+  const { root, restore } = await setupDirectory({
+    list: [fellowMember, mutedMember],
+  });
+  try {
+    const photos = [...root.querySelectorAll('.gssc-contact-row__photo')];
+    expect(photos.length).toBe(2);
+    expect(photos[0].querySelector('.gssc-contact-row__photo-img')?.getAttribute('src')).toContain(
+      'photo_grace',
+    );
+    expect(photos[1].querySelector('.gssc-contact-row__photo-silhouette')).not.toBeNull();
+    expect(photos[1].querySelector('.gssc-contact-row__photo-img')).toBeNull();
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-215, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-216, scope=range_start, role=Test)
+test('GSSC-MLLR-216 Syntactic', async () => {
+  const { root, restore } = await setupDirectory();
+  try {
+    const row = root.querySelector('.gssc-contact-row')!;
+    const photo = root.querySelector('.gssc-contact-row__photo')!;
+    expect(row.classList.contains('flex-row')).toBe(true);
+    expect(photo.classList.contains('size-16')).toBe(true);
+    expect(photo.classList.contains('shrink-0')).toBe(true);
+    expect(
+      photo.compareDocumentPosition(root.querySelector('.gssc-contact-row__body')!) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-216, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-217, scope=range_start, role=Test)
+test('GSSC-MLLR-217 Lexical', async () => {
+  const { root, restore } = await setupDirectory({ list: [mutedMember] });
+  try {
+    const img = root.querySelector('.gssc-contact-row__photo-img');
+    const silhouette = root.querySelector('.gssc-contact-row__photo-silhouette');
+    expect(img).toBeNull();
+    expect(silhouette).not.toBeNull();
+    expect(root.querySelector('.gssc-contact-row__photo')!.classList.contains('overflow-hidden')).toBe(
+      true,
+    );
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-217, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-218, scope=range_start, role=Test)
+test('GSSC-MLLR-218 Semantic', async () => {
+  const member = await setupDirectory({ viewer: { cuid: 'user_1', isUserMod: true } });
+  try {
+    const edit = member.root.querySelector<HTMLAnchorElement>('.gssc-contact-row__edit')!;
+    expect(edit).not.toBeNull();
+    expect(edit.getAttribute('href')).toBe('/accounts/user_2');
+    expect(edit.textContent?.trim()).toBe('Edit');
+  } finally {
+    member.restore();
+  }
+
+  const plain = await setupDirectory({ viewer: { cuid: 'user_1', isUserMod: false } });
+  try {
+    expect(plain.root.querySelector('.gssc-contact-row__edit')).toBeNull();
+  } finally {
+    plain.restore();
+  }
+
+  const admin = await setupDirectory({ viewer: { cuid: 'admin_1', isAdmin: true } });
+  try {
+    expect(admin.root.querySelector('.gssc-contact-row__edit')?.getAttribute('href')).toBe(
+      '/accounts/user_2',
+    );
+  } finally {
+    admin.restore();
+  }
+});
+// @relation(GSSC-MLLR-218, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-219, scope=range_start, role=Test)
+test('GSSC-MLLR-219 Syntactic', async () => {
+  const { root, restore } = await setupDirectory({
+    viewer: { cuid: 'admin_1', isAdmin: true },
+  });
+  try {
+    const row = root.querySelector('.gssc-contact-row')!;
+    const body = root.querySelector('.gssc-contact-row__body')!;
+    const actions = root.querySelector('.gssc-contact-row__actions')!;
+    expect(actions.classList.contains('items-end')).toBe(true);
+    expect(body.compareDocumentPosition(actions) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(row.lastElementChild).toBe(actions);
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-219, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-220, scope=range_start, role=Test)
+test('GSSC-MLLR-220 Lexical', async () => {
+  const { root, restore } = await setupDirectory({
+    viewer: { cuid: 'mod_1', isUserMod: true },
+  });
+  try {
+    const edit = root.querySelector<HTMLElement>('.gssc-contact-row__edit')!;
+    expect(edit.classList.contains('font-sans')).toBe(true);
+    expect(edit.classList.contains('text-gssc-dark-green')).toBe(true);
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-220, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-221, scope=range_start, role=Test)
+test('GSSC-MLLR-221 Semantic', async () => {
+  const admin = await setupDirectory({
+    viewer: { cuid: 'admin_1', isAdmin: true },
+    list: [fellowMember, deletedMember],
+  });
+  try {
+    const buttons = [...admin.root.querySelectorAll('.gssc-contact-row__soft-delete')];
+    expect(buttons.length).toBe(2);
+    expect(buttons[0].textContent?.trim()).toBe('Soft-delete');
+    expect(buttons[1].textContent?.trim()).toBe('Undelete');
+  } finally {
+    admin.restore();
+  }
+
+  const plain = await setupDirectory({ viewer: { cuid: 'user_1', isUserMod: true } });
+  try {
+    expect(plain.root.querySelector('.gssc-contact-row__soft-delete')).toBeNull();
+  } finally {
+    plain.restore();
+  }
+});
+// @relation(GSSC-MLLR-221, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-222, scope=range_start, role=Test)
+test('GSSC-MLLR-222 Syntactic', async () => {
+  const { root, restore } = await setupDirectory({
+    viewer: { cuid: 'admin_1', isAdmin: true },
+  });
+  try {
+    const actions = root.querySelector('.gssc-contact-row__actions')!;
+    const edit = root.querySelector('.gssc-contact-row__edit')!;
+    const soft = root.querySelector('.gssc-contact-row__soft-delete')!;
+    expect(actions.classList.contains('flex-col')).toBe(true);
+    expect(edit.compareDocumentPosition(soft) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-222, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-223, scope=range_start, role=Test)
+test('GSSC-MLLR-223 Lexical', async () => {
+  const { root, restore } = await setupDirectory({
+    viewer: { cuid: 'admin_1', isAdmin: true },
+    list: [fellowMember, deletedMember],
+  });
+  try {
+    const soft = root.querySelectorAll('.gssc-contact-row__soft-delete');
+    expect(soft[0].classList.contains('font-sans')).toBe(true);
+    expect(soft[0].textContent?.trim()).toBe('Soft-delete');
+    expect(soft[1].textContent?.trim()).toBe('Undelete');
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-223, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-224, scope=range_start, role=Test)
+test('GSSC-MLLR-224 Soft-Delete Persists And Refreshes', async () => {
+  const { root, listCalls, softDeleteCalls, fixture, restore } = await setupDirectory({
+    viewer: { cuid: 'admin_1', isAdmin: true },
+  });
+  try {
+    listCalls.length = 0;
+    root.querySelector<HTMLButtonElement>('.gssc-contact-row__soft-delete')!.click();
+    await settleFilters(fixture);
+    expect(softDeleteCalls).toEqual(['user_2']);
+    expect(listCalls.length).toBeGreaterThan(0);
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-224, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-225, scope=range_start, role=Test)
+test('GSSC-MLLR-225 Undelete Persists And Refreshes', async () => {
+  const { root, listCalls, undeleteCalls, fixture, restore } = await setupDirectory({
+    viewer: { cuid: 'admin_1', isAdmin: true },
+    list: [deletedMember],
+  });
+  try {
+    listCalls.length = 0;
+    root.querySelector<HTMLButtonElement>('.gssc-contact-row__soft-delete')!.click();
+    await settleFilters(fixture);
+    expect(undeleteCalls).toEqual(['user_4']);
+    expect(listCalls.length).toBeGreaterThan(0);
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-225, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-226, scope=range_start, role=Test)
+test('GSSC-MLLR-226 Name Criterion Backend Filter', async () => {
+  const { page, listCalls, fixture, restore } = await setupDirectory();
+  try {
+    listCalls.length = 0;
+    page.name.set('Hopper');
+    await settleFilters(fixture);
+    expect(listCalls.at(-1)).toEqual({ name: 'Hopper' });
+    expect(listCalls.at(-1)).not.toHaveProperty('firstName');
+    expect(listCalls.at(-1)).not.toHaveProperty('lastName');
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-226, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-227, scope=range_start, role=Test)
+test('GSSC-MLLR-227 Address Criterion Backend Filter', async () => {
+  const { page, listCalls, fixture, restore } = await setupDirectory();
+  try {
+    listCalls.length = 0;
+    page.address.set('Arlington VA');
+    await settleFilters(fixture);
+    expect(listCalls.at(-1)).toEqual({ address: 'Arlington VA' });
+    expect(listCalls.at(-1)).not.toHaveProperty('homeCity');
+    expect(listCalls.at(-1)).not.toHaveProperty('homeState');
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-227, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-228, scope=range_start, role=Test)
+test('GSSC-MLLR-228 Semantic', async () => {
+  const { root, restore } = await setupDirectory({
+    viewer: { cuid: 'admin_1', isAdmin: true },
+  });
+  try {
+    const row = root.querySelector('.gssc-contact-row')!;
+    expect(row.querySelector('.gssc-contact-row__photo')).not.toBeNull();
+    expect(row.querySelector('.gssc-contact-row__body')).not.toBeNull();
+    expect(row.querySelector('.gssc-contact-row__edit')).not.toBeNull();
+    expect(row.querySelector('.gssc-contact-row__soft-delete')).not.toBeNull();
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-228, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-229, scope=range_start, role=Test)
+test('GSSC-MLLR-229 Syntactic', async () => {
+  const { root, restore } = await setupDirectory({
+    viewer: { cuid: 'admin_1', isAdmin: true },
+  });
+  try {
+    const row = root.querySelector<HTMLElement>('.gssc-contact-row')!;
+    expect(row.classList.contains('flex-row')).toBe(true);
+    expect(row.classList.contains('w-full')).toBe(true);
+    expect(row.classList.contains('items-start')).toBe(true);
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-229, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-230, scope=range_start, role=Test)
+test('GSSC-MLLR-230 Lexical', async () => {
+  const { root, restore } = await setupDirectory();
+  try {
+    const name = root.querySelector<HTMLElement>('.gssc-contact-row__name')!;
+    const methods = root.querySelector<HTMLElement>('.gssc-contact-row__methods')!;
+    expect(name.classList.contains('font-sans')).toBe(true);
+    expect(name.classList.contains('text-gssc-dark-green')).toBe(true);
+    expect(methods.classList.contains('font-sans')).toBe(true);
+    expect(methods.classList.contains('text-gssc-dark-green')).toBe(true);
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-230, scope=range_end, role=Test)

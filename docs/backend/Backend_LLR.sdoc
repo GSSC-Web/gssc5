@@ -1382,18 +1382,24 @@ TITLE: Data Returned
 UID: GSSC-BLLR-41
 TITLE: User List
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL let a logged-in member retrieve the list of every stored user.
+The GSSC Website Unified Backend SHALL let a logged-in member retrieve the list of stored users, omitting soft-deleted users unless the caller is an administrator.
 <<<
 RATIONALE: >>>
-A logged-in member can retrieve the users. The list includes every stored user. Membership Status does not remove a user from the list.
+A logged-in member can retrieve users for directory collaboration. Soft-deleted users stay out of the non-admin list. Administrators see soft-deleted users when managing the registered-member list. Membership Status does not remove a user from the list.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: >>>
+GSSC5-34
+GSSC5-102
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-21
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-BHLR-224
   ROLE: Refines
 
 [REQUIREMENT]
@@ -2677,6 +2683,141 @@ REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-22
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-460
+TITLE: User List Omits Soft-Deleted
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL omit soft-deleted users from the user list response unless the caller is an administrator.
+<<<
+RATIONALE: >>>
+Soft-deleted accounts stay hidden from ordinary member directory loads. Administrators receive soft-deleted users so they can restore or manage them.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-102
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-224
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-BHLR-21
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-464
+TITLE: User List Name Filter
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL match a name filter to a case-insensitive substring of First Name, Middle Name, or Last Name, and First Name, Middle Name, and Last Name remain filterable for every logged-in caller who can retrieve the user list.
+<<<
+RATIONALE: >>>
+Directory search uses one name criterion across the three name parts. Name fields stay visible to fellow members, so the combined name filter is always available on the user list.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-102
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-22
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-465
+TITLE: User List Address Filter
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL match an address filter to a case-insensitive substring of Home Address city or Home Address state only, without matching that filter against mailing address fields.
+<<<
+RATIONALE: >>>
+Directory address search covers home locality only. Mailing address is not a directory address criterion.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-102
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-22
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-466
+TITLE: User List Soft-Delete Marker Projection
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL include the soft-delete marker in each user list entry returned to an administrator so that administrator can see which listed users are soft-deleted.
+<<<
+RATIONALE: >>>
+Administrators need the deleted state on each row to choose soft-delete or undelete in the directory.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-102
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-224
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-USER-LIST-SOFT-DELETE
+TITLE: Soft Delete And Undelete
+
+[REQUIREMENT]
+UID: GSSC-BLLR-461
+TITLE: Administrator Soft-Deletes User
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL soft-delete a user for an administrator by setting that user's soft-delete marker.
+<<<
+RATIONALE: >>>
+Soft deletion is a marker write on the users table row. The account record remains stored.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-102
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-223
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-462
+TITLE: Administrator Undeletes User
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL undelete a soft-deleted user for an administrator by clearing that user's soft-delete marker.
+<<<
+RATIONALE: >>>
+Clearing the marker restores the user to ordinary member-list visibility.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-102
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-223
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-463
+TITLE: Soft-Delete And Undelete Reject Non-Admin
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL reject a soft-delete or undelete of a user when the caller is not an administrator.
+<<<
+RATIONALE: >>>
+Only administrators may change a user's soft-delete marker.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-102
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-223
   ROLE: Refines
 
 [[/SECTION]]
@@ -8020,6 +8161,24 @@ REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-109
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-459
+TITLE: User Soft-Delete Marker
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store an optional soft-delete marker for each user in the users table.
+<<<
+RATIONALE: >>>
+An absent marker means the user is not soft-deleted. A set marker hides the user from non-administrator member lists while retaining the account row.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-102
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-223
   ROLE: Refines
 
 [[/SECTION]]
