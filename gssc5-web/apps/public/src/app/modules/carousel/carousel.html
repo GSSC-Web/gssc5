@@ -1,0 +1,98 @@
+@if (visibleItem(); as item) {
+  <!-- @relation(GSSC-PLLR-263, GSSC-PLLR-264, scope=range_start, role=Implementation) -->
+  <!-- @relation(GSSC-PLLR-265, scope=range_start, role=Implementation) -->
+  <section
+    class="gssc-carousel flex w-full items-stretch gap-2 border border-gssc-gray bg-gssc-white px-4 py-5 font-sans text-gssc-dark-green"
+    [attr.data-slide-count]="items().length"
+    [attr.data-active-index]="activeIndex()"
+  >
+    <!-- @relation(GSSC-PLLR-265, scope=range_end, role=Implementation) -->
+
+    @if (hasMultiple()) {
+      <!-- @relation(GSSC-PLLR-279, GSSC-PLLR-280, scope=range_start, role=Implementation) -->
+      <button
+        type="button"
+        class="gssc-carousel__prev inline-flex size-8 shrink-0 cursor-pointer items-center justify-center self-center rounded border-0 bg-transparent p-0 text-gssc-dark-green hover:bg-gssc-gray"
+        aria-label="Previous slide"
+        (click)="stepPrev()"
+      >
+        <i class="nf nf-md-chevron_left text-base leading-none" aria-hidden="true"></i>
+      </button>
+      <!-- @relation(GSSC-PLLR-279, GSSC-PLLR-280, scope=range_end, role=Implementation) -->
+    }
+
+    <div
+      class="gssc-carousel__viewport min-w-0 flex-1 overflow-hidden"
+      [attr.data-item-id]="item.id ?? null"
+    >
+      <article
+        class="gssc-carousel__slide flex w-full flex-col gap-4 transition-opacity duration-200 ease-[ease]"
+      >
+        @if (hasHeader(item)) {
+          <!-- @relation(GSSC-PLLR-266, GSSC-PLLR-267, GSSC-PLLR-268, scope=range_start, role=Implementation) -->
+          <h2 class="gssc-carousel__title m-0 text-[1.5em] font-semibold text-gssc-dark-green">
+            {{ item.header }}
+          </h2>
+          <!-- @relation(GSSC-PLLR-266, GSSC-PLLR-267, GSSC-PLLR-268, scope=range_end, role=Implementation) -->
+        }
+
+        @if (showSlideGraphic()) {
+          <!-- @relation(GSSC-PLLR-275, GSSC-PLLR-276, GSSC-PLLR-277, scope=range_start, role=Implementation) -->
+          <!-- @relation(GSSC-PLLR-269, GSSC-PLLR-270, GSSC-PLLR-271, scope=range_start, role=Implementation) -->
+          <div
+            class="gssc-carousel__media flex w-full flex-col gap-4 sm:flex-row sm:items-start"
+            [class.sm:flex-row-reverse]="item.imagePosition === 'right'"
+            [attr.data-image-position]="item.imagePosition"
+          >
+            <img
+              class="gssc-carousel__graphic max-h-[40%] max-w-[60%] object-contain self-start"
+              [src]="slideGraphicUrl()"
+              alt=""
+            />
+            <div
+              class="gssc-carousel__description m-0 min-w-0 flex-1 text-base font-normal text-gssc-black"
+            >
+              {{ item.body }}
+            </div>
+          </div>
+          <!-- @relation(GSSC-PLLR-269, GSSC-PLLR-270, GSSC-PLLR-271, scope=range_end, role=Implementation) -->
+          <!-- @relation(GSSC-PLLR-275, GSSC-PLLR-276, GSSC-PLLR-277, scope=range_end, role=Implementation) -->
+        } @else {
+          <!-- @relation(GSSC-PLLR-269, GSSC-PLLR-270, GSSC-PLLR-271, scope=range_start, role=Implementation) -->
+          <div class="gssc-carousel__description m-0 text-base font-normal text-gssc-black">
+            {{ item.body }}
+          </div>
+          <!-- @relation(GSSC-PLLR-269, GSSC-PLLR-270, GSSC-PLLR-271, scope=range_end, role=Implementation) -->
+        }
+
+        @if (hasLinks(item)) {
+          <!-- @relation(GSSC-PLLR-272, GSSC-PLLR-273, GSSC-PLLR-274, scope=range_start, role=Implementation) -->
+          <div class="gssc-carousel__links flex w-full flex-wrap items-stretch justify-start gap-2">
+            @for (resource of slideLinks(); track resource) {
+              <a
+                class="gssc-carousel__link inline-flex h-11 shrink-0 items-center justify-center border border-gssc-dark-green bg-gssc-white px-2 text-center font-normal text-gssc-dark-green no-underline hover:bg-gssc-gray"
+                [href]="resource"
+                >{{ resource }}</a
+              >
+            }
+          </div>
+          <!-- @relation(GSSC-PLLR-272, GSSC-PLLR-273, GSSC-PLLR-274, scope=range_end, role=Implementation) -->
+        }
+      </article>
+    </div>
+
+    @if (hasMultiple()) {
+      <!-- @relation(GSSC-PLLR-282, GSSC-PLLR-283, scope=range_start, role=Implementation) -->
+      <button
+        type="button"
+        class="gssc-carousel__next inline-flex size-8 shrink-0 cursor-pointer items-center justify-center self-center rounded border-0 bg-transparent p-0 text-gssc-dark-green hover:bg-gssc-gray"
+        aria-label="Next slide"
+        (click)="stepNext()"
+      >
+        <i class="nf nf-md-chevron_right text-base leading-none" aria-hidden="true"></i>
+      </button>
+      <!-- @relation(GSSC-PLLR-282, GSSC-PLLR-283, scope=range_end, role=Implementation) -->
+    }
+  </section>
+  <!-- @relation(GSSC-PLLR-263, GSSC-PLLR-264, scope=range_end, role=Implementation) -->
+}
