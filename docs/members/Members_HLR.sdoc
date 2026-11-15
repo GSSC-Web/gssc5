@@ -592,7 +592,7 @@ CHANGE_DRIVER: >>>
 GSSC5-11
 GSSC5-85
 <<<
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-MHLR-61
@@ -605,7 +605,7 @@ No Member Frontend PIR names form-field primitives. Account forms, directory sea
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-85
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [[/SECTION]]
 
