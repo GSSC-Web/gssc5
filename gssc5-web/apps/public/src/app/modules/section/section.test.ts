@@ -66,6 +66,17 @@ function resourceNames(root: HTMLElement): string[] {
   );
 }
 
+/** Logical visible window (carousel slides the full track; DOM holds clones). */
+function visibleNames(section: Section): string[] {
+  return section.visibleResources().map((resource) => resource.name);
+}
+
+function trackTransform(root: HTMLElement): string {
+  return (
+    root.querySelector<HTMLElement>('.gssc-section__track')?.style.transform ?? ''
+  );
+}
+
 // @relation(GSSC-PLLR-83, scope=range_start, role=Test)
 test('GSSC-PLLR-83 Semantic', async () => {
   const { root } = await setupSection(sampleWithAll);
@@ -206,6 +217,7 @@ test('GSSC-PLLR-93 Syntactic', async () => {
   expect(fitRoot.querySelector('.gssc-section__resources-prev')).toBeNull();
   expect(fitRoot.querySelector('.gssc-section__resources-next')).toBeNull();
   expect(resourceNames(fitRoot)).toEqual(sampleWithAll.resources!.map((r) => r.name));
+  expect(trackTransform(fitRoot)).toBe('none');
 
   // Overflow: narrow container + many resources → carousel + keyboard.
   const { root, section, fixture } = await setupSection(manyResources, {
@@ -220,14 +232,21 @@ test('GSSC-PLLR-93 Syntactic', async () => {
   );
   expect(root.querySelector('.gssc-section__resources-prev')).not.toBeNull();
   expect(root.querySelector('.gssc-section__resources-next')).not.toBeNull();
-  expect(resourceNames(root).length).toBe(section.visibleSlotCount());
+  expect(visibleNames(section).length).toBe(section.visibleSlotCount());
   expect(section.visibleSlotCount()).toBeGreaterThan(0);
   expect(section.visibleSlotCount()).toBeLessThan(manyResources.resources!.length);
-  // Carousel fill: visible buttons flex equally across the strip between arrows.
+  // Full strip stays in the track (doubled for wrap); movement is transform slide.
+  expect(resourceNames(root).length).toBe(manyResources.resources!.length * 2);
+  const track = root.querySelector<HTMLElement>('.gssc-section__track')!;
+  expect(track.classList.contains('transition-transform')).toBe(true);
+  expect(track.classList.contains('duration-200')).toBe(true);
+  expect(trackTransform(root)).toBe('none');
+  // Carousel fill: equal button widths sized to fill the strip between arrows.
+  expect(section.carouselButtonWidthPx()).toBeGreaterThan(0);
   const filled = [...root.querySelectorAll<HTMLElement>('.gssc-section__resource')];
   expect(filled.length).toBeGreaterThan(0);
   for (const btn of filled) {
-    expect(btn.classList.contains('in-data-[carousel=true]:flex-1')).toBe(true);
+    expect(btn.style.width).toBe(`${section.carouselButtonWidthPx()}px`);
   }
 
   // Width change re-measures: widen → fit, no arrows.
@@ -240,7 +259,7 @@ test('GSSC-PLLR-93 Syntactic', async () => {
   expect(root.querySelector('.gssc-section__resources-prev')).toBeNull();
   expect(resourceNames(root).length).toBe(manyResources.resources!.length);
 
-  // Narrow again for keyboard coverage.
+  // Narrow again for keyboard coverage + slide transform.
   section.containerWidthOverride.set(NARROW_OVERFLOW_PX);
   section.remeasureFromLayout();
   fixture.detectChanges();
@@ -254,7 +273,9 @@ test('GSSC-PLLR-93 Syntactic', async () => {
     new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true, cancelable: true }),
   );
   fixture.detectChanges();
-  expect(resourceNames(root)[0]).toBe('R2');
+  expect(visibleNames(section)[0]).toBe('R2');
+  expect(trackTransform(root)).toMatch(/^translateX\(-/);
+  expect(trackTransform(root)).not.toBe('none');
 
   const afterAdvance = root.querySelector<HTMLAnchorElement>('.gssc-section__resource')!;
   afterAdvance.focus();
@@ -262,7 +283,8 @@ test('GSSC-PLLR-93 Syntactic', async () => {
     new KeyboardEvent('keydown', { key: 'h', bubbles: true, cancelable: true }),
   );
   fixture.detectChanges();
-  expect(resourceNames(root)[0]).toBe('R1');
+  expect(visibleNames(section)[0]).toBe('R1');
+  expect(trackTransform(root)).toBe('none');
 });
 // @relation(GSSC-PLLR-93, scope=range_end, role=Test)
 
@@ -293,14 +315,14 @@ test('GSSC-PLLR-137 Semantic', async () => {
 
 // @relation(GSSC-PLLR-138, scope=range_start, role=Test)
 test('GSSC-PLLR-138 Syntactic', async () => {
-  const { root, section, fixture } = await setupSection(manyResources, {
+  const { section, fixture } = await setupSection(manyResources, {
     containerWidthPx: NARROW_OVERFLOW_PX,
   });
-  expect(resourceNames(root).length).toBe(section.visibleSlotCount());
-  const before = resourceNames(root);
+  expect(visibleNames(section).length).toBe(section.visibleSlotCount());
+  const before = visibleNames(section);
   section.stepNext();
   fixture.detectChanges();
-  const after = resourceNames(root);
+  const after = visibleNames(section);
   expect(after.length).toBe(before.length);
   expect(after[0]).toBe('R2');
 });
@@ -328,13 +350,13 @@ test('GSSC-PLLR-140 Semantic', async () => {
   const { root, section, fixture } = await setupSection(manyResources, {
     containerWidthPx: NARROW_OVERFLOW_PX,
   });
-  expect(resourceNames(root)[0]).toBe('R1');
+  expect(visibleNames(section)[0]).toBe('R1');
   section.stepPrev();
   fixture.detectChanges();
-  expect(resourceNames(root)[0]).toBe('R5');
+  expect(visibleNames(section)[0]).toBe('R5');
   root.querySelector<HTMLButtonElement>('.gssc-section__resources-prev')!.click();
   fixture.detectChanges();
-  expect(resourceNames(root)[0]).toBe('R4');
+  expect(visibleNames(section)[0]).toBe('R4');
 });
 // @relation(GSSC-PLLR-140, scope=range_end, role=Test)
 
@@ -370,17 +392,17 @@ test('GSSC-PLLR-143 Semantic', async () => {
   const { root, section, fixture } = await setupSection(manyResources, {
     containerWidthPx: NARROW_OVERFLOW_PX,
   });
-  expect(resourceNames(root)[0]).toBe('R1');
+  expect(visibleNames(section)[0]).toBe('R1');
   section.stepNext();
   fixture.detectChanges();
-  expect(resourceNames(root)[0]).toBe('R2');
+  expect(visibleNames(section)[0]).toBe('R2');
   // Wrap last → first: offset to last then next.
   section.carouselOffset.set(4);
   fixture.detectChanges();
-  expect(resourceNames(root)[0]).toBe('R5');
+  expect(visibleNames(section)[0]).toBe('R5');
   root.querySelector<HTMLButtonElement>('.gssc-section__resources-next')!.click();
   fixture.detectChanges();
-  expect(resourceNames(root)[0]).toBe('R1');
+  expect(visibleNames(section)[0]).toBe('R1');
 });
 // @relation(GSSC-PLLR-143, scope=range_end, role=Test)
 
