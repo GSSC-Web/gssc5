@@ -592,6 +592,50 @@ test("GSSC-BLLR-338 Page Entry Table", async () => {
 });
 // @relation(GSSC-BLLR-338, scope=range_end, role=Test)
 
+// @relation(GSSC-BLLR-400, scope=range_start, role=Test)
+test("GSSC-BLLR-400 Event Date on Page Data", async () => {
+  const event = await db().pageDataEntry.create({
+    data: {
+      datatype: "event",
+      body: "event-with-date",
+      isPublic: true,
+      eventMonth: 11,
+      eventDay: 15,
+      eventYear: 2026,
+    },
+  });
+  const stored = await db().pageDataEntry.findUnique({ where: { id: event.id } });
+  expect(stored).toMatchObject({
+    datatype: "event",
+    eventMonth: 11,
+    eventDay: 15,
+    eventYear: 2026,
+  });
+});
+// @relation(GSSC-BLLR-400, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-401, scope=range_start, role=Test)
+test("GSSC-BLLR-401 Event Announcement Start on Page Data", async () => {
+  const event = await db().pageDataEntry.create({
+    data: {
+      datatype: "event",
+      body: "event-with-announce-start",
+      isPublic: true,
+      announcementStartMonth: 10,
+      announcementStartDay: 1,
+      announcementStartYear: 2026,
+    },
+  });
+  const stored = await db().pageDataEntry.findUnique({ where: { id: event.id } });
+  expect(stored).toMatchObject({
+    datatype: "event",
+    announcementStartMonth: 10,
+    announcementStartDay: 1,
+    announcementStartYear: 2026,
+  });
+});
+// @relation(GSSC-BLLR-401, scope=range_end, role=Test)
+
 // @relation(GSSC-BLLR-339, scope=range_start, role=Test)
 test("GSSC-BLLR-339 Page Entry Index", async () => {
   const a = await db().pageDataEntry.create({
