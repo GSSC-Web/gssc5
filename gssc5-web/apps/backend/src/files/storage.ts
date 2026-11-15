@@ -1,4 +1,4 @@
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, unlink, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 import { loadConfig } from "../config";
@@ -30,6 +30,26 @@ export async function writeStoredBytes(
   await mkdir(path.dirname(absolute), { recursive: true });
   await writeFile(absolute, bytes);
   return absolute;
+}
+
+/** Remove bytes for a storage key when present; missing files are not an error. */
+export async function removeStoredBytes(storageKey: string): Promise<boolean> {
+  const absolute = absoluteStoragePath(storageKey);
+  if (absolute === null) return false;
+  try {
+    await unlink(absolute);
+    return true;
+  } catch (error: unknown) {
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "code" in error &&
+      (error as { code?: string }).code === "ENOENT"
+    ) {
+      return false;
+    }
+    throw error;
+  }
 }
 
 export function readStoredFile(storageKey: string): Bun.BunFile | null {

@@ -125,11 +125,24 @@ export class AccountPage implements OnInit {
   readonly canEditMembership = signal(false);
   readonly isAdminViewer = signal(false);
   readonly canChangePassword = signal(true);
+  /** Administrators may clear retained past password hashes for the loaded account. */
+  readonly canResetPasswordHistory = signal(false);
+  readonly passwordHistoryResetting = signal(false);
 
   // @relation(GSSC-MLLR-415, GSSC-MLLR-416, scope=range_start, role=Implementation)
   readonly memberSectionOpen = signal(true);
   readonly accountSectionOpen = signal(true);
   readonly passwordSectionOpen = signal(true);
+
+  /** Password Change and/or Password History Reset share one collapsible section. */
+  readonly showPasswordSection = computed(
+    () => this.canChangePassword() || this.canResetPasswordHistory(),
+  );
+
+  passwordSectionHeading(): string {
+    if (this.canChangePassword()) return 'Password Change';
+    return 'Password History Reset';
+  }
 
   toggleMemberSection(): void {
     this.memberSectionOpen.update((open) => !open);
@@ -150,8 +163,18 @@ export class AccountPage implements OnInit {
 
   readonly photoPreviewUrl = signal<string | null>(null);
   readonly photoFileLabel = signal('No file chosen');
+  /** Remote account-photos URLs need credentialed CORS; blob previews must not. */
+  readonly photoPreviewUsesCredentials = computed(() => {
+    const url = this.photoPreviewUrl()?.trim() ?? '';
+    return /^https?:\/\//i.test(url);
+  });
   private pendingPhotoFile: File | null = null;
   private localPreviewObjectUrl: string | null = null;
+
+  // @relation(GSSC-MLLR-429, GSSC-MLLR-432, GSSC-MLLR-433, GSSC-MLLR-434, GSSC-MLLR-435, scope=range_start, role=Implementation)
+  /** When true, mailing address tracks home and mailing inputs stay disabled. */
+  readonly mailingEqualsHome = signal(false);
+  // @relation(GSSC-MLLR-429, GSSC-MLLR-432, GSSC-MLLR-433, GSSC-MLLR-434, GSSC-MLLR-435, scope=range_end, role=Implementation)
 
   memberInfo = emptyMemberInfo();
   accountInfo = emptyAccountInfo();
@@ -215,10 +238,32 @@ export class AccountPage implements OnInit {
   // @relation(GSSC-MLLR-133, scope=range_start, role=Implementation)
   resetMemberInfo(): void {
     this.memberInfo = { ...this.loadedMemberInfo };
+    this.mailingEqualsHome.set(homeMatchesMailing(this.memberInfo));
     this.memberMessage.set('');
     this.memberInvalid.set(new Set());
   }
   // @relation(GSSC-MLLR-133, scope=range_end, role=Implementation)
+
+  // @relation(GSSC-MLLR-432, GSSC-MLLR-433, GSSC-MLLR-434, GSSC-MLLR-435, scope=range_start, role=Implementation)
+  onMailingEqualsHomeChange(checked: boolean): void {
+    this.mailingEqualsHome.set(checked);
+    if (checked) this.copyHomeToMailing();
+  }
+
+  onHomeAddressChange(): void {
+    if (this.mailingEqualsHome()) this.copyHomeToMailing();
+  }
+
+  private copyHomeToMailing(): void {
+    this.memberInfo.mailingLine1 = this.memberInfo.homeLine1;
+    this.memberInfo.mailingLine2 = this.memberInfo.homeLine2;
+    this.memberInfo.mailingLine3 = this.memberInfo.homeLine3;
+    this.memberInfo.mailingCity = this.memberInfo.homeCity;
+    this.memberInfo.mailingState = this.memberInfo.homeState;
+    this.memberInfo.mailingZip = this.memberInfo.homeZip;
+    this.memberInfo.mailingZipExtension = this.memberInfo.homeZipExtension;
+  }
+  // @relation(GSSC-MLLR-432, GSSC-MLLR-433, GSSC-MLLR-434, GSSC-MLLR-435, scope=range_end, role=Implementation)
 
   // @relation(GSSC-MLLR-134, GSSC-MLLR-418, GSSC-MLLR-419, scope=range_start, role=Implementation)
   async submitMemberInfo(): Promise<void> {
@@ -346,6 +391,28 @@ export class AccountPage implements OnInit {
   }
   // @relation(GSSC-MLLR-149, GSSC-MLLR-158, GSSC-MLLR-427, GSSC-MLLR-428, scope=range_end, role=Implementation)
 
+  // @relation(GSSC-MLLR-438, GSSC-MLLR-439, GSSC-MLLR-440, scope=range_start, role=Implementation)
+  async submitPasswordHistoryReset(): Promise<void> {
+    if (this.passwordHistoryResetting() || !this.canResetPasswordHistory()) return;
+    const cuid = this.targetCuid().trim();
+    if (!cuid) return;
+    this.passwordHistoryResetting.set(true);
+    this.passwordMessage.set('');
+    try {
+      const { error } = await accountApi.clearPasswordHistory(cuid);
+      if (error) {
+        this.passwordMessage.set('Password history could not be reset.');
+        return;
+      }
+      this.passwordMessage.set('Password history reset.');
+    } catch {
+      this.passwordMessage.set('Password history could not be reset.');
+    } finally {
+      this.passwordHistoryResetting.set(false);
+    }
+  }
+  // @relation(GSSC-MLLR-438, GSSC-MLLR-439, GSSC-MLLR-440, scope=range_end, role=Implementation)
+
   activePrivilegeLabels(): string[] {
     return SITE_PRIVILEGES.filter((p) => this.accountInfo[p.key]).map((p) => p.label);
   }
@@ -388,7 +455,10 @@ export class AccountPage implements OnInit {
     this.isOwnAccount.set(isOwn);
     this.canEditMembership.set(viewerIsUserMod);
     this.isAdminViewer.set(viewerIsAdmin);
+    // @relation(GSSC-MLLR-158, GSSC-MLLR-438, scope=range_start, role=Implementation)
     this.canChangePassword.set(isOwn);
+    this.canResetPasswordHistory.set(viewerIsAdmin);
+    // @relation(GSSC-MLLR-158, GSSC-MLLR-438, scope=range_end, role=Implementation)
 
     try {
       const { data, error } = await accountApi.getUser(cuid);
@@ -413,6 +483,7 @@ export class AccountPage implements OnInit {
     this.accountInfo = { ...info };
     this.loadedMemberInfo = { ...member };
     this.loadedAccountInfo = { ...info };
+    this.mailingEqualsHome.set(homeMatchesMailing(member));
     this.pendingPhotoFile = null;
     this.photoFileLabel.set('No file chosen');
     if (this.localPreviewObjectUrl) {
@@ -424,6 +495,34 @@ export class AccountPage implements OnInit {
     this.accountInvalid.set(new Set());
     this.passwordInvalid.set(false);
   }
+}
+
+/** True when every corresponding home/mailing address field matches. */
+export function homeMatchesMailing(form: {
+  homeLine1: string;
+  homeLine2: string;
+  homeLine3: string;
+  homeCity: string;
+  homeState: string;
+  homeZip: string;
+  homeZipExtension: string;
+  mailingLine1: string;
+  mailingLine2: string;
+  mailingLine3: string;
+  mailingCity: string;
+  mailingState: string;
+  mailingZip: string;
+  mailingZipExtension: string;
+}): boolean {
+  return (
+    form.homeLine1 === form.mailingLine1 &&
+    form.homeLine2 === form.mailingLine2 &&
+    form.homeLine3 === form.mailingLine3 &&
+    form.homeCity === form.mailingCity &&
+    form.homeState === form.mailingState &&
+    form.homeZip === form.mailingZip &&
+    form.homeZipExtension === form.mailingZipExtension
+  );
 }
 
 function memberInfoFromAccount(account: AccountRecord): MemberInfoForm {

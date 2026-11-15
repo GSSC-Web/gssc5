@@ -33,6 +33,8 @@ export type AccountRecord = {
   membershipStatus?: string | null;
   position?: string | null;
   accountPhoto?: string | null;
+  /** Soft-delete marker when projected (administrators only); string, Date, or epoch. */
+  deletedAt?: string | Date | number | null;
   isAdmin?: boolean;
   isUserMod?: boolean;
   isToolEditor?: boolean;
@@ -48,12 +50,26 @@ export type AccountPhotoUploadResult = { cuid: string; path: string };
  * Treaty calls for account load / update / password change / photo upload.
  * Mutable object so unit tests can stub without fighting Eden proxies.
  */
+/** Minimal Treaty-shaped result for clear-passwords. */
+type ClearPasswordsResult = {
+  data: unknown;
+  error: { status?: number; value?: unknown } | null;
+  status?: number;
+};
+
+type ClearPasswordsRoutes = {
+  'clear-passwords': { post: (body?: Record<string, never>) => Promise<ClearPasswordsResult> };
+};
+
 export const accountApi = {
   getUser: (cuid: string) => backend.users({ cuid }).get(),
   updateUser: (cuid: string, body: AccountUpdateBody) =>
     backend.users({ cuid }).post(body as never),
   changePassword: (body: { currentPassword: string; newPassword: string }) =>
     backend.password.change.post(body),
+  /** Admin/user-mod: delete retained past password hashes (BLLR-263). */
+  clearPasswordHistory: (cuid: string) =>
+    (backend.users({ cuid }) as unknown as ClearPasswordsRoutes)['clear-passwords'].post({}),
   uploadAccountPhoto: async (
     file: File,
     userCuid: string,

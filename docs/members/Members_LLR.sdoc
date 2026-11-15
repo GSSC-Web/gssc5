@@ -88,6 +88,7 @@ GSSC5-90 Account Self-Service and GSSC5-91 Admin Account Management share GSSC-M
 GSSC5-85 Contact-row / Form Primitives owns GSSC-MLLR-159 through GSSC-MLLR-179 (Contact Row + form-field building blocks).
 GSSC5-84 Generic Editor Module owns GSSC-MLLR-180 through GSSC-MLLR-201 (editor shell, actions, contention, session behaviors; composes GSSC5-85 form fields).
 GSSC5-92 Members Directory + Search owns GSSC-MLLR-202 through GSSC-MLLR-214 (exact end 214; band 202–230 reserved for directory so parallel Wave tickets do not mint below 231).
+GSSC5-102 Directory Contact Cards + Soft-Delete owns GSSC-MLLR-215 through GSSC-MLLR-230 (exact end 230); also CHANGE_DRIVER on GSSC-MLLR-205 through GSSC-MLLR-208 and on GSSC-MHLR-57 / GSSC-MHLR-59.
 GSSC5-93 Page/Section Content Editor owns GSSC-MLLR-261 through GSSC-MLLR-286 (page selector, section list, section editor host, preview, save/cancel/permission behaviors).
 GSSC5-89 Member Dashboard Page owns GSSC-MLLR-231 through GSSC-MLLR-239.
 GSSC5-94 Announcements Editor owns GSSC-MLLR-291 through GSSC-MLLR-307 (page, catalog, Generic Editor host, create/modify/publish behaviors; reuses GSSC5-84/85; consumes GSSC5-68 /announcements).
@@ -95,7 +96,9 @@ GSSC5-96 Newsletters Editor owns GSSC-MLLR-351 through GSSC-MLLR-373 (exact end 
 GSSC5-95 Events Editor owns GSSC-MLLR-321 through GSSC-MLLR-346 (events page, catalog, create/publish/modify host; composes GSSC5-84 Generic Editor + GSSC5-85 form fields; uses GSSC5-69 /events APIs).
 GSSC5-97 Publications/Tools Editors owns GSSC-MLLR-381 through GSSC-MLLR-414 (publications catalog editor 381–397; research tools catalog editor 398–414). Composes GSSC5-84 Generic Editor and GSSC5-85 form fields; does not re-claim 180–201.
 GSSC5-101 Account Page Refinement owns GSSC-MLLR-415 through GSSC-MLLR-428 (collapsible sections, submit validation, Enter-to-submit, account photo upload with polished Choose Photo control, password current/previous rejection); also CHANGE_DRIVER on GSSC-MLLR-146.
-Wave coordination: GSSC5-92 directory 202–214 (band through 230), GSSC5-89 dashboard 231–239, GSSC5-93 page/section 261–286, GSSC5-94 announcements 291–307, GSSC5-95 events 321–346, GSSC5-96 newsletters 351–373, GSSC5-97 publications/tools 381–414, GSSC5-101 account refinement 415–428 — do not collide.
+GSSC5-103 Account Mailing Equals Home owns GSSC-MLLR-429 through GSSC-MLLR-437 (exact end 437); HLR GSSC-MHLR-78.
+GSSC5-102 also owns GSSC-MLLR-438 through GSSC-MLLR-440 (Password History Reset on Account Page) and CHANGE_DRIVER on GSSC-MLLR-125 / GSSC-MLLR-158 / GSSC-MHLR-34.
+Wave coordination: GSSC5-92 directory 202–214, GSSC5-102 directory refinement 215–230, GSSC5-89 dashboard 231–239, GSSC5-93 page/section 261–286, GSSC5-94 announcements 291–307, GSSC5-95 events 321–346, GSSC5-96 newsletters 351–373, GSSC5-97 publications/tools 381–414, GSSC5-101 account refinement 415–428, GSSC5-103 mailing-equals-home 429–437, GSSC5-102 password-history-reset 438–440 — do not collide.
 GSSC-MLLR-33 through GSSC-MLLR-39 remain free for later claimants.
 Do not reuse numbers already claimed by another ticket.
 <<<
@@ -2538,16 +2541,17 @@ TITLE: Account Page
 UID: GSSC-MLLR-125
 TITLE: Semantic
 STATEMENT: >>>
-The Member Frontend Account Page SHALL present three form sections in order: Member Information, Account Information, and Password Change, and SHALL load the account identified by the page path from the Unified Backend for a logged-in viewer.
+The Member Frontend Account Page SHALL present Member Information and Account Information sections in that order, SHALL present the Password Change section when the page shows the logged-in viewer's own account, SHALL present Password History Reset when the logged-in viewer is an administrator, and SHALL load the account identified by the page path from the Unified Backend for a logged-in viewer.
 <<<
 RATIONALE: >>>
-Self-service and administrator account management share one Account Page so the experience stays consistent.
+Self-service and administrator account management share one Account Page so the experience stays consistent, while password change stays limited to the viewer's own account and password-history reset stays limited to administrators.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: >>>
 GSSC5-90
 GSSC5-91
+GSSC5-102
 <<<
 REVIEW_STATUS: Approved
 RELATIONS:
@@ -3367,22 +3371,86 @@ TITLE: Password Change Scope
 UID: GSSC-MLLR-158
 TITLE: Semantic
 STATEMENT: >>>
-When the Account Page is showing another member's account, the Password Change Section SHALL remain visible and SHALL disable password submission for that other account.
+When the Account Page is showing another member's account, the Password Change Section SHALL not be presented. When the Account Page is showing the logged-in viewer's own account, the Password Change Section SHALL be presented and SHALL accept password submission for that own account.
 <<<
 RATIONALE: >>>
-The shared layout keeps three sections on managed accounts, while password change applies only to the logged-in member's own password.
+Password change applies only to the logged-in member's own password; managed accounts omit the Password Change fields.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: >>>
 GSSC5-90
 GSSC5-91
+GSSC5-102
 <<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-32
   ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-34
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-ACCOUNT-PASSWORD-HISTORY-RESET
+TITLE: Password History Reset
+
+[REQUIREMENT]
+UID: GSSC-MLLR-438
+TITLE: Semantic
+STATEMENT: >>>
+When the logged-in viewer is an administrator, the Account Page SHALL present a Password History Reset control for the loaded account that clears that account's retained past password hashes through the Unified Backend clear-passwords transaction, whether the page shows the administrator's own account or another member's account.
+<<<
+RATIONALE: >>>
+Administrators need to clear password history so a member can reuse a prior password after an assisted reset, without changing the current password hash from this control.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-102
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-34
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-32
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-439
+TITLE: Syntactic
+STATEMENT: >>>
+The Password History Reset control SHALL appear in the Account Page password section below the Password Change fields when those fields are present, or as the sole content of that section when Password Change is not presented.
+<<<
+RATIONALE: >>>
+Keeping password actions in one section preserves the vertical Account Page stack while swapping Password Change for Password History Reset on managed accounts.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-102
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-34
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-440
+TITLE: Lexical
+STATEMENT: >>>
+The Password History Reset control SHALL present the visible label Password History Reset on a filled rounded control that uses the dark-green theme color and a hover color change.
+<<<
+RATIONALE: >>>
+A labeled admin action matches other Account Page submit controls without introducing a separate accent.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-102
+REVIEW_STATUS: Approved
+RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-34
   ROLE: Refines
@@ -3661,6 +3729,186 @@ REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-77
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-MAILING-EQUALS-HOME
+TITLE: Mailing Equals Home Checkbox
+
+[REQUIREMENT]
+UID: GSSC-MLLR-429
+TITLE: Semantic
+STATEMENT: >>>
+The Addresses Column SHALL present a mailing-equals-home checkbox between the home address fields and the mailing address fields that marks mailing address equal to home address when checked.
+<<<
+RATIONALE: >>>
+The checkbox sits between the two address blocks so the member can keep mailing aligned with home.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-103
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-78
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-430
+TITLE: Syntactic
+STATEMENT: >>>
+The Mailing Equals Home Checkbox SHALL sit between the home address field group and the mailing address field group in the Addresses Column.
+<<<
+RATIONALE: >>>
+Placement between home and mailing keeps the control next to the fields it couples.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-103
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-78
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-431
+TITLE: Lexical
+STATEMENT: >>>
+The Mailing Equals Home Checkbox SHALL use the Member Frontend sans-serif typeface and dark-green label color for its label text.
+<<<
+RATIONALE: >>>
+The control matches Addresses Column form chrome.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-103
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-78
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-MAILING-EQUALS-HOME-BEHAVIOR
+TITLE: Mailing Equals Home Behavior
+
+[REQUIREMENT]
+UID: GSSC-MLLR-432
+TITLE: Checkbox Initial State
+STATEMENT: >>>
+When the Account Page loads address values, the Mailing Equals Home Checkbox SHALL start checked if and only if the home address field values match the mailing address field values.
+<<<
+RATIONALE: >>>
+Initial check state reflects whether mailing already equals home.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-103
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-78
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-433
+TITLE: Home Updates Mailing When Checked
+STATEMENT: >>>
+While the Mailing Equals Home Checkbox is checked, the Account Page SHALL update the mailing address fields to match whenever the home address fields change.
+<<<
+RATIONALE: >>>
+Checked means mailing stays equal to home as the member edits home.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-103
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-78
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-434
+TITLE: Mailing Fields Disabled When Checked
+STATEMENT: >>>
+While the Mailing Equals Home Checkbox is checked, the Account Page SHALL disable the mailing address fields and present them grayed out.
+<<<
+RATIONALE: >>>
+Disabled grayed mailing fields show that mailing is driven by home while the checkbox remains checked.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-103
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-78
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-435
+TITLE: Uncheck Stops Automatic Mailing Updates
+STATEMENT: >>>
+When the viewer unchecks the Mailing Equals Home Checkbox, the Account Page SHALL stop automatically updating mailing address fields from home address changes.
+<<<
+RATIONALE: >>>
+Unchecking leaves the last copied mailing values editable and independent of further home edits.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-103
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-78
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-DISABLED-MAILING-FIELDS
+TITLE: Disabled Mailing Fields Appearance
+
+[REQUIREMENT]
+UID: GSSC-MLLR-436
+TITLE: Syntactic
+STATEMENT: >>>
+When mailing address fields are disabled because mailing equals home, those fields SHALL remain visible in the mailing address field group, continue to display the mailing values that match home, and refuse direct viewer input until the checkbox is unchecked.
+<<<
+RATIONALE: >>>
+Disabled mailing stays in place so the member can verify the coupled values that will save.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-103
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-78
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-437
+TITLE: Lexical
+STATEMENT: >>>
+When mailing address fields are disabled because mailing equals home, those fields SHALL use a grayed-out appearance that is visually distinct from enabled address fields.
+<<<
+RATIONALE: >>>
+Grayed mailing fields signal they are not editable while the checkbox keeps mailing equal to home.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-103
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-78
   ROLE: Refines
 
 [[/SECTION]]
@@ -4621,14 +4869,17 @@ TITLE: Directory Search
 UID: GSSC-MLLR-205
 TITLE: Semantic
 STATEMENT: >>>
-The Directory Search SHALL accept first name, last name, email, phone, city, and state criteria from the viewer and SHALL update the directory results from the Unified Backend as those criteria change, without requiring a separate search submit control.
+The Directory Search SHALL accept Name, Email, Phone, and Address criteria from the viewer and update the directory results from the Unified Backend as those criteria change, without requiring a separate search submit control.
 <<<
 RATIONALE: >>>
-Live filtering lets members refine the list as they type; the Unified Backend applies matching.
+Live filtering lets members refine the list as they type; the Unified Backend applies matching. Name and Address replace separate first/last and city/state fields.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-92
+CHANGE_DRIVER: >>>
+GSSC5-92
+GSSC5-102
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -4642,14 +4893,17 @@ RELATIONS:
 UID: GSSC-MLLR-206
 TITLE: Syntactic
 STATEMENT: >>>
-The Directory Search SHALL appear as a static left-side filter bar with its criteria fields stacked in a single column and a Clear control under those fields.
+The Directory Search SHALL appear as a static left-side filter bar with its criteria fields stacked in a single column, a Clear control under those fields, a white filter-area background, and a light-brown right border that separates the filter bar from the directory results and that extends to the bottom of the viewport.
 <<<
 RATIONALE: >>>
-A single-column left bar keeps filters scannable and fixed beside the results list.
+A single-column left bar keeps filters scannable and fixed beside the results list. A full-height light-brown edge separates controls from contact results without a filled rail.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-92
+CHANGE_DRIVER: >>>
+GSSC5-92
+GSSC5-102
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -4660,14 +4914,17 @@ RELATIONS:
 UID: GSSC-MLLR-207
 TITLE: Lexical
 STATEMENT: >>>
-The Directory Search SHALL use shared Member Frontend form-field primitives for its criteria fields and dark-green theme text on its Clear control.
+The Directory Search SHALL use shared Member Frontend form-field primitives for its criteria fields, dark-green theme text on its Clear control, the white theme token for the filter-area background, and the light-brown theme token for the right border that separates the filter bar from the results.
 <<<
 RATIONALE: >>>
-Reusing form primitives keeps directory search chrome consistent with other member forms; Clear is the only filter action.
+Reusing form primitives keeps directory search chrome consistent with other member forms; Clear is the only filter action. White filter area with a light-brown edge keeps separation without a filled brown rail.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-92
+CHANGE_DRIVER: >>>
+GSSC5-92
+GSSC5-102
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -4687,14 +4944,17 @@ TITLE: Directory Results
 UID: GSSC-MLLR-208
 TITLE: Semantic
 STATEMENT: >>>
-The Directory Results SHALL present one Contact Row for each member returned by the Unified Backend for the current directory load or search.
+The Directory Results SHALL present one directory contact card for each member returned by the Unified Backend for the current directory load or search, with that member's account photo, name and contact information, and optional Edit and soft-delete controls when the viewer is permitted to use them.
 <<<
 RATIONALE: >>>
-Contact Row is the shared presentation for a person's name and available contact methods in the directory.
+Each result is a contact card. Photo, identity, and permitted actions sit on one row so administrators and user moderators can manage accounts from the directory.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-92
+CHANGE_DRIVER: >>>
+GSSC5-92
+GSSC5-102
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -4834,6 +5094,339 @@ RELATIONS:
   ROLE: Refines
 - TYPE: Parent
   VALUE: GSSC-MHLR-59
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-DIRECTORY-CONTACT-CARD-PHOTO
+TITLE: Directory Contact Card Photo
+
+[REQUIREMENT]
+UID: GSSC-MLLR-215
+TITLE: Semantic
+STATEMENT: >>>
+Each directory contact card SHALL present that member's account photo from the Unified Backend list entry, or a silhouette placeholder when that member has no account photo.
+<<<
+RATIONALE: >>>
+A photo or placeholder identifies the member at a glance in the directory list.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-102
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-56
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-55
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-216
+TITLE: Syntactic
+STATEMENT: >>>
+The Directory Contact Card Photo SHALL sit at the left end of the contact card as a square-cropped image or square silhouette placeholder.
+<<<
+RATIONALE: >>>
+A fixed square on the left anchors the card layout beside name and contact text.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-102
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-55
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-217
+TITLE: Lexical
+STATEMENT: >>>
+The Directory Contact Card Photo SHALL use a square crop for the account photo and a neutral silhouette placeholder that reads as a person outline when no photo is available.
+<<<
+RATIONALE: >>>
+Square crop keeps photos uniform; a silhouette avoids empty space without inventing decorative chrome.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-102
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-55
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-DIRECTORY-ENTRY-EDIT
+TITLE: Directory Entry Edit Control
+
+[REQUIREMENT]
+UID: GSSC-MLLR-218
+TITLE: Semantic
+STATEMENT: >>>
+When the logged-in viewer is a user moderator or an administrator, each directory contact card SHALL present an Edit control that opens that listed member's Account Page for management, not the viewer's own account path.
+<<<
+RATIONALE: >>>
+User moderators and administrators manage other members from the directory without navigating through a separate picker.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-102
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-34
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-55
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-219
+TITLE: Syntactic
+STATEMENT: >>>
+The Directory Entry Edit Control SHALL sit at the right end of the contact card.
+<<<
+RATIONALE: >>>
+Actions stay on the trailing edge so name and contact text remain scannable on the left of the actions.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-102
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-34
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-220
+TITLE: Lexical
+STATEMENT: >>>
+The Directory Entry Edit Control SHALL present an edit icon inside a compact rounded control that has a filled background and a hover color change, in the dark-green theme color, with an accessible name of Edit and no visible word label.
+<<<
+RATIONALE: >>>
+A compact icon in a rounded filled control is easy to target without excess padding and shows hover feedback while remaining labeled for assistive technology.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-102
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-34
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-DIRECTORY-ENTRY-SOFT-DELETE
+TITLE: Directory Entry Soft-Delete Control
+
+[REQUIREMENT]
+UID: GSSC-MLLR-221
+TITLE: Semantic
+STATEMENT: >>>
+When the logged-in viewer is an administrator, each directory contact card SHALL present a soft-delete control that soft-deletes that listed member when the member is not soft-deleted, or undeletes that member when the member is soft-deleted, with an icon and accessible name that match the current soft-delete state.
+<<<
+RATIONALE: >>>
+Administrators restore or remove members from ordinary directory visibility without leaving the list.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-102
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-58
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-222
+TITLE: Syntactic
+STATEMENT: >>>
+The Directory Entry Soft-Delete Control SHALL sit below the Edit control at the right end of the contact card.
+<<<
+RATIONALE: >>>
+Soft-delete stays under Edit so both admin actions share the trailing action column.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-102
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-58
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-223
+TITLE: Lexical
+STATEMENT: >>>
+The Directory Entry Soft-Delete Control SHALL present a delete icon when the member is not soft-deleted and a delete-restore icon when the member is soft-deleted, each inside a compact rounded control that has a filled background and a hover color change, in the dark-green theme color, with an accessible name of Soft-delete or Undelete that matches that state and with no visible word label.
+<<<
+RATIONALE: >>>
+Compact icons in rounded filled controls match the Edit control without excess padding and show hover feedback while the accessible name states which action the control will take.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-102
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-58
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-DIRECTORY-SOFT-DELETE-BEHAVIOR
+TITLE: Directory Soft-Delete Behavior
+
+[REQUIREMENT]
+UID: GSSC-MLLR-224
+TITLE: Soft-Delete Persists And Refreshes
+STATEMENT: >>>
+When an administrator activates soft-delete on a directory contact card, the Member Frontend SHALL persist that soft-delete through the Unified Backend and refresh the directory results.
+<<<
+RATIONALE: >>>
+The list must reflect the new soft-delete state after the backend accepts the change.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-102
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-58
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-225
+TITLE: Undelete Persists And Refreshes
+STATEMENT: >>>
+When an administrator activates undelete on a directory contact card, the Member Frontend SHALL persist that undelete through the Unified Backend and refresh the directory results.
+<<<
+RATIONALE: >>>
+Restored members return to ordinary directory visibility after the backend clears the soft-delete marker.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-102
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-58
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-226
+TITLE: Name Criterion Backend Filter
+STATEMENT: >>>
+When the viewer supplies a Name criterion, the Member Frontend SHALL search First Name, Middle Name, and Last Name by sending that criterion as the Unified Backend name filter.
+<<<
+RATIONALE: >>>
+One Name field maps to the backend combined name filter across the three name parts.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-102
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-57
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-59
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-227
+TITLE: Address Criterion Backend Filter
+STATEMENT: >>>
+When the viewer supplies an Address criterion, the Member Frontend SHALL search home address only—including home lines, city, state, and zip fields subject to Unified Backend visibility—by sending that criterion as the Unified Backend address filter.
+<<<
+RATIONALE: >>>
+Address search covers viewable home address parts and does not query mailing address fields.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-102
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-57
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-59
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-DIRECTORY-CONTACT-CARD-LAYOUT
+TITLE: Directory Contact Card Layout
+
+[REQUIREMENT]
+UID: GSSC-MLLR-228
+TITLE: Semantic
+STATEMENT: >>>
+Each directory contact card SHALL arrange the account photo on the left, the member name and contact information left-justified to the right of that photo, and permitted Edit and soft-delete controls on the right.
+<<<
+RATIONALE: >>>
+Photo, identity, and actions share one horizontal composition so the directory list stays scannable.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-102
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-55
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-56
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-229
+TITLE: Syntactic
+STATEMENT: >>>
+The Directory Contact Card Layout SHALL keep the photo, text block, and action column on one horizontal row that stretches across the Directory Results content width.
+<<<
+RATIONALE: >>>
+A single-row card aligns with the results list beside the filter bar.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-102
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-55
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-230
+TITLE: Lexical
+STATEMENT: >>>
+The Directory Contact Card Layout SHALL use the Member Frontend sans-serif typeface and dark-green theme color for the member name and contact text on the card, and SHALL strike through the member name when that member is soft-deleted.
+<<<
+RATIONALE: >>>
+Card text matches Directory Page brand type and color; a struck-through name makes soft-deleted members obvious to administrators who still see them in the list.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-102
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-55
   ROLE: Refines
 
 [[/SECTION]]

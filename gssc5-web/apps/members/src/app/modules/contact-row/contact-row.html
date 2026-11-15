@@ -1,30 +1,140 @@
 <!-- @relation(GSSC-MLLR-159, GSSC-MLLR-160, GSSC-MLLR-161, scope=range_start, role=Implementation) -->
-<article class="gssc-contact-row flex w-full flex-col gap-1 font-sans text-gssc-dark-green">
-  <!-- @relation(GSSC-MLLR-162, GSSC-MLLR-163, GSSC-MLLR-164, scope=range_start, role=Implementation) -->
-  <h3 class="gssc-contact-row__name m-0 font-sans text-base font-semibold text-gssc-dark-green">
-    {{ contents().displayName }}
-  </h3>
-  <!-- @relation(GSSC-MLLR-162, GSSC-MLLR-163, GSSC-MLLR-164, scope=range_end, role=Implementation) -->
+<!-- @relation(GSSC-MLLR-215, GSSC-MLLR-216, GSSC-MLLR-217, GSSC-MLLR-228, GSSC-MLLR-229, GSSC-MLLR-230, scope=range_start, role=Implementation) -->
+<article
+  class="gssc-contact-row flex w-full font-sans text-gssc-dark-green"
+  [class.flex-col]="!cardLayout()"
+  [class.gap-1]="!cardLayout()"
+  [class.flex-row]="cardLayout()"
+  [class.items-start]="cardLayout()"
+  [class.gap-3]="cardLayout()"
+>
+  @if (showPhoto()) {
+    <div
+      class="gssc-contact-row__photo size-16 shrink-0 overflow-hidden rounded-sm bg-gssc-gray"
+      aria-hidden="true"
+    >
+      @if (hasPhotoImage()) {
+        <img
+          class="gssc-contact-row__photo-img size-full object-cover object-center"
+          [src]="photoUrl()!"
+          alt=""
+          crossorigin="use-credentials"
+        />
+      } @else {
+        <svg
+          class="gssc-contact-row__photo-silhouette size-full text-gssc-dark-brown"
+          viewBox="0 0 64 64"
+          xmlns="http://www.w3.org/2000/svg"
+          role="img"
+          aria-label="No account photo"
+        >
+          <circle cx="32" cy="22" r="12" fill="currentColor" opacity="0.55" />
+          <path
+            d="M8 58c0-13.255 10.745-24 24-24s24 10.745 24 24"
+            fill="currentColor"
+            opacity="0.55"
+          />
+        </svg>
+      }
+    </div>
+  }
 
-  <!-- @relation(GSSC-MLLR-165, GSSC-MLLR-166, GSSC-MLLR-167, scope=range_start, role=Implementation) -->
-  <ul class="gssc-contact-row__methods m-0 flex list-none flex-col gap-0.5 p-0 font-sans text-sm font-normal text-gssc-dark-green">
-    @for (method of contents().methods; track method.label) {
-      <li class="gssc-contact-row__method">
-        @if (hasHref(method)) {
-          <a
-            class="gssc-contact-row__method-link font-sans font-normal text-gssc-dark-green underline-offset-2 hover:underline"
-            [href]="method.href!"
-          >
-            {{ method.label }}
-          </a>
-        } @else {
-          <span class="gssc-contact-row__method-text font-sans font-normal text-gssc-dark-green">
-            {{ method.label }}
-          </span>
+  @if (cardLayout()) {
+    <div class="gssc-contact-row__body flex min-w-0 flex-1 flex-col gap-1 text-start">
+      <!-- @relation(GSSC-MLLR-162, GSSC-MLLR-163, GSSC-MLLR-164, scope=range_start, role=Implementation) -->
+      <h3
+        class="gssc-contact-row__name m-0 font-sans text-base font-semibold text-gssc-dark-green"
+        [class.line-through]="isDeleted()"
+      >
+        {{ contents().displayName }}
+      </h3>
+      <!-- @relation(GSSC-MLLR-162, GSSC-MLLR-163, GSSC-MLLR-164, scope=range_end, role=Implementation) -->
+
+      <!-- @relation(GSSC-MLLR-165, GSSC-MLLR-166, GSSC-MLLR-167, scope=range_start, role=Implementation) -->
+      <ul class="gssc-contact-row__methods m-0 flex list-none flex-col gap-0.5 p-0 font-sans text-sm font-normal text-gssc-dark-green">
+        @for (method of contents().methods; track method.label) {
+          <li class="gssc-contact-row__method">
+            @if (hasHref(method)) {
+              <a
+                class="gssc-contact-row__method-link font-sans font-normal text-gssc-dark-green underline-offset-2 hover:underline"
+                [href]="method.href!"
+              >
+                {{ method.label }}
+              </a>
+            } @else {
+              <span class="gssc-contact-row__method-text font-sans font-normal text-gssc-dark-green">
+                {{ method.label }}
+              </span>
+            }
+          </li>
         }
-      </li>
-    }
-  </ul>
-  <!-- @relation(GSSC-MLLR-165, GSSC-MLLR-166, GSSC-MLLR-167, scope=range_end, role=Implementation) -->
+      </ul>
+      <!-- @relation(GSSC-MLLR-165, GSSC-MLLR-166, GSSC-MLLR-167, scope=range_end, role=Implementation) -->
+    </div>
+  } @else {
+    <!-- @relation(GSSC-MLLR-162, GSSC-MLLR-163, GSSC-MLLR-164, scope=range_start, role=Implementation) -->
+    <h3
+      class="gssc-contact-row__name m-0 font-sans text-base font-semibold text-gssc-dark-green"
+      [class.line-through]="isDeleted()"
+    >
+      {{ contents().displayName }}
+    </h3>
+    <!-- @relation(GSSC-MLLR-162, GSSC-MLLR-163, GSSC-MLLR-164, scope=range_end, role=Implementation) -->
+
+    <!-- @relation(GSSC-MLLR-165, GSSC-MLLR-166, GSSC-MLLR-167, scope=range_start, role=Implementation) -->
+    <ul class="gssc-contact-row__methods m-0 flex list-none flex-col gap-0.5 p-0 font-sans text-sm font-normal text-gssc-dark-green">
+      @for (method of contents().methods; track method.label) {
+        <li class="gssc-contact-row__method">
+          @if (hasHref(method)) {
+            <a
+              class="gssc-contact-row__method-link font-sans font-normal text-gssc-dark-green underline-offset-2 hover:underline"
+              [href]="method.href!"
+            >
+              {{ method.label }}
+            </a>
+          } @else {
+            <span class="gssc-contact-row__method-text font-sans font-normal text-gssc-dark-green">
+              {{ method.label }}
+            </span>
+          }
+        </li>
+      }
+    </ul>
+    <!-- @relation(GSSC-MLLR-165, GSSC-MLLR-166, GSSC-MLLR-167, scope=range_end, role=Implementation) -->
+  }
+
+  @if (showEdit() || showSoftDelete()) {
+    <!-- @relation(GSSC-MLLR-218, GSSC-MLLR-219, GSSC-MLLR-220, GSSC-MLLR-221, GSSC-MLLR-222, GSSC-MLLR-223, scope=range_start, role=Implementation) -->
+    <div class="gssc-contact-row__actions flex shrink-0 flex-col items-end gap-2">
+      @if (showEdit() && editHref()) {
+        <a
+          class="gssc-contact-row__edit inline-flex size-8 items-center justify-center rounded-md border border-gssc-dark-green bg-gssc-light-green p-0 text-gssc-dark-green no-underline hover:bg-gssc-gray"
+          [routerLink]="editHref()!"
+          aria-label="Edit"
+          title="Edit"
+        >
+          <i class="nf nf-md-pencil text-base leading-none" aria-hidden="true"></i>
+        </a>
+      }
+      @if (showSoftDelete()) {
+        <button
+          type="button"
+          class="gssc-contact-row__soft-delete inline-flex size-8 cursor-pointer items-center justify-center rounded-md border border-gssc-dark-green bg-gssc-light-green p-0 text-gssc-dark-green hover:bg-gssc-gray"
+          (click)="onSoftDeleteClick()"
+          [attr.aria-label]="isDeleted() ? 'Undelete' : 'Soft-delete'"
+          [attr.title]="isDeleted() ? 'Undelete' : 'Soft-delete'"
+        >
+          <i
+            class="nf text-base leading-none"
+            [class.nf-md-delete_restore]="isDeleted()"
+            [class.nf-md-delete]="!isDeleted()"
+            aria-hidden="true"
+          ></i>
+        </button>
+      }
+    </div>
+    <!-- @relation(GSSC-MLLR-218, GSSC-MLLR-219, GSSC-MLLR-220, GSSC-MLLR-221, GSSC-MLLR-222, GSSC-MLLR-223, scope=range_end, role=Implementation) -->
+  }
 </article>
+<!-- @relation(GSSC-MLLR-215, GSSC-MLLR-216, GSSC-MLLR-217, GSSC-MLLR-228, GSSC-MLLR-229, GSSC-MLLR-230, scope=range_end, role=Implementation) -->
 <!-- @relation(GSSC-MLLR-159, GSSC-MLLR-160, GSSC-MLLR-161, scope=range_end, role=Implementation) -->

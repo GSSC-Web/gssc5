@@ -16,6 +16,7 @@ import {
   type BackendFetch,
   type InProcessApp,
 } from "../test-harness";
+import { writeStoredBytes } from "../files/storage";
 import {
   ACCOUNT_PHOTOS_DIR,
   ensureAccountPhotosFolder,
@@ -114,10 +115,69 @@ test("GSSC-BLLR-458 upload for same user cuid overwrites existing photo", async 
   expect(got.status).toBe(200);
   expect(await got.text()).toBe("second-bytes");
 });
+
+test("GSSC-BLLR-458 replacement deletes prior Account Photo file entry", async () => {
+  const prisma = getPrisma(loadConfig().DATABASE_URL);
+  const folderId = await ensureAccountPhotosFolder();
+  const legacy = await prisma.storedFileEntry.create({
+    data: {
+      name: "legacy-face.png",
+      kind: "file",
+      parentId: folderId,
+      storageKey: "pending",
+      mimeType: "image/png",
+      sizeBytes: 11,
+      isPublic: false,
+      readRoles: JSON.stringify(["member"]),
+      writeRoles: JSON.stringify(["member"]),
+    },
+  });
+  const legacyKey = legacy.id;
+  await prisma.storedFileEntry.update({
+    where: { id: legacy.id },
+    data: { storageKey: legacyKey },
+  });
+  await writeStoredBytes(legacyKey, new TextEncoder().encode("legacy-bytes"));
+  await prisma.user.update({
+    where: { id: memberId },
+    data: { accountPhoto: legacy.id, position: null },
+  });
+
+  const replacement = await uploadPhoto(memberTok, "replacement-bytes", memberId);
+  expect(replacement.status).toBe(200);
+
+  const retired = await prisma.storedFileEntry.findUnique({ where: { id: legacy.id } });
+  expect(retired?.deletedAt).not.toBeNull();
+  const legacyPath = path.resolve(loadConfig().FILE_STORAGE_ROOT, legacyKey);
+  expect(await Bun.file(legacyPath).exists()).toBe(false);
+
+  const active = await prisma.storedFileEntry.findMany({
+    where: { name: memberId, parentId: folderId, kind: "file", deletedAt: null },
+  });
+  expect(active.length).toBe(1);
+
+  const userAfter = await prisma.user.findUnique({
+    where: { id: memberId },
+    select: { accountPhoto: true },
+  });
+  expect(userAfter?.accountPhoto).toBe(memberId);
+
+  const got = await getPhoto(memberId, memberTok);
+  expect(got.status).toBe(200);
+  expect(await got.text()).toBe("replacement-bytes");
+
+  // Soft-deleted prior is gone; session still loads the replacement for the owner.
+  expect((await getPhoto(legacy.id, memberTok)).status).toBe(404);
+});
 // @relation(GSSC-BLLR-458, scope=range_end, role=Test)
 
 // @relation(GSSC-BLLR-454, scope=range_start, role=Test)
 test("GSSC-BLLR-454 GET account photo with valid token succeeds", async () => {
+  const prisma = getPrisma(loadConfig().DATABASE_URL);
+  await prisma.user.update({
+    where: { id: memberId },
+    data: { position: null },
+  });
   const uploaded = await uploadPhoto(memberTok, "token-photo", memberId);
   expect(uploaded.status).toBe(200);
   const response = await getPhoto(memberId, memberTok);

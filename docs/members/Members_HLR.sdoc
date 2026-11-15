@@ -793,15 +793,16 @@ TITLE: Administrator Account Management
 UID: GSSC-MHLR-34
 TITLE: Administrator Account Management Access
 STATEMENT: >>>
-The GSSC Website Member Frontend SHALL let a user moderator open a selected member's Account Page that presents the same Member Information, Account Information, and Password Change sections used for own-account management.
+The GSSC Website Member Frontend SHALL let a user moderator open a selected member's Account Page that presents the same Member Information and Account Information sections used for own-account management. Password Change SHALL appear only on the logged-in viewer's own Account Page. An administrator SHALL also receive Password History Reset on any Account Page that administrator opens.
 <<<
 RATIONALE: >>>
-User moderators manage member accounts from the Member Frontend. An administrator is a user moderator. Sharing the Account Page layout keeps self-service and management visually consistent.
+User moderators manage member accounts from the Member Frontend. An administrator is a user moderator. Sharing Member and Account Information keeps self-service and management visually consistent, while password change stays self-service-only and password-history reset stays an administrator action.
 <<<
 DERIVED: False
 CHANGE_DRIVER: >>>
 GSSC5-11
 GSSC5-91
+GSSC5-102
 <<<
 REVIEW_STATUS: Approved
 RELATIONS:
@@ -919,6 +920,23 @@ Password replacement must meet strength rules and must not reuse current or prev
 DERIVED: True
 CHANGE_DRIVER: GSSC5-101
 REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-MHLR-78
+TITLE: Account Mailing Equals Home
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL let a member mark mailing address equal to home address on the Account Page.
+<<<
+RATIONALE: >>>
+Members often use the same street address for home and mailing. A single control keeps those fields aligned without retyping. No Member Frontend PIR names mailing-equals-home; it refines own-account address management.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-103
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-10
+  ROLE: Refines
 
 [[/SECTION]]
 
@@ -1320,15 +1338,16 @@ RELATIONS:
 UID: GSSC-MHLR-57
 TITLE: Members Directory Search
 STATEMENT: >>>
-The GSSC Website Member Frontend SHALL let a logged-in member search the members directory by name, email, phone, city, and state.
+The GSSC Website Member Frontend SHALL let a logged-in member search the members directory by name, email, phone, and address (home).
 <<<
 RATIONALE: >>>
-No Member Frontend PIR requires directory search. Search makes the directory usable as membership grows. Matching rules remain low-level on the Unified Backend.
+No Member Frontend PIR requires directory search. Search makes the directory usable as membership grows. Matching rules remain low-level on the Unified Backend. Address search covers home locality, not mailing address.
 <<<
 DERIVED: True
 CHANGE_DRIVER: >>>
 GSSC5-11
 GSSC5-92
+GSSC5-102
 <<<
 REVIEW_STATUS: Approved
 RELATIONS:
@@ -1360,15 +1379,16 @@ RELATIONS:
 UID: GSSC-MHLR-59
 TITLE: Administrator Directory Search
 STATEMENT: >>>
-The GSSC Website Member Frontend SHALL let an authorized administrator search the registered members directory by name, email, phone, city, and state.
+The GSSC Website Member Frontend SHALL let an authorized administrator search the registered members directory by name, email, phone, and address (home).
 <<<
 RATIONALE: >>>
-No Member Frontend PIR requires administrator directory search. Search makes the registered-member list usable for administrators. Matching rules remain low-level on the Unified Backend.
+No Member Frontend PIR requires administrator directory search. Search makes the registered-member list usable for administrators. Matching rules remain low-level on the Unified Backend. Address search covers home locality, not mailing address.
 <<<
 DERIVED: True
 CHANGE_DRIVER: >>>
 GSSC5-11
 GSSC5-92
+GSSC5-102
 <<<
 REVIEW_STATUS: Approved
 RELATIONS:

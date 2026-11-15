@@ -23,24 +23,20 @@
     </p>
   </header>
 
-  <div class="gssc-directory-page__body flex w-full flex-col gap-6 md:flex-row md:items-start md:gap-8">
+  <div
+    class="gssc-directory-page__body flex w-full flex-col gap-6 md:min-h-[calc(100dvh-8rem)] md:flex-row md:items-stretch md:gap-0"
+  >
     <!-- @relation(GSSC-MLLR-205, GSSC-MLLR-206, GSSC-MLLR-207, scope=range_start, role=Implementation) -->
     <aside
-      class="gssc-directory-search sticky top-4 flex w-full shrink-0 flex-col gap-3 md:w-56 md:max-w-xs"
+      class="gssc-directory-search sticky top-0 flex w-full shrink-0 flex-col gap-3 bg-gssc-white p-3 md:w-56 md:max-w-xs md:min-h-full md:border-r-2 md:border-gssc-light-brown md:pe-4"
       aria-label="Directory filters"
     >
       <div class="gssc-directory-search__fields flex w-full flex-col gap-3">
         <gssc-form-text-field
-          label="First Name"
-          name="firstName"
-          [(value)]="firstName"
-          controlId="gssc-directory-first-name"
-        />
-        <gssc-form-text-field
-          label="Last Name"
-          name="lastName"
-          [(value)]="lastName"
-          controlId="gssc-directory-last-name"
+          label="Name"
+          name="name"
+          [(value)]="name"
+          controlId="gssc-directory-name"
         />
         <gssc-form-text-field
           label="Email"
@@ -57,16 +53,10 @@
           controlId="gssc-directory-phone"
         />
         <gssc-form-text-field
-          label="City"
-          name="homeCity"
-          [(value)]="homeCity"
-          controlId="gssc-directory-city"
-        />
-        <gssc-form-text-field
-          label="State"
-          name="homeState"
-          [(value)]="homeState"
-          controlId="gssc-directory-state"
+          label="Address"
+          name="address"
+          [(value)]="address"
+          controlId="gssc-directory-address"
         />
       </div>
       <div class="gssc-directory-search__actions flex flex-wrap items-center gap-3">
@@ -82,7 +72,10 @@
     <!-- @relation(GSSC-MLLR-205, GSSC-MLLR-206, GSSC-MLLR-207, scope=range_end, role=Implementation) -->
 
     <!-- @relation(GSSC-MLLR-208, GSSC-MLLR-209, GSSC-MLLR-210, scope=range_start, role=Implementation) -->
-    <div class="gssc-directory-results flex min-w-0 flex-1 flex-col gap-4" aria-live="polite">
+    <div
+      class="gssc-directory-results flex min-w-0 flex-1 flex-col gap-4 bg-gssc-white md:ps-6"
+      aria-live="polite"
+    >
       @if (loading()) {
         <p class="gssc-directory-results__status m-0 font-sans text-sm text-gssc-dark-green">
           Loading members…
@@ -99,7 +92,17 @@
         <ul class="gssc-directory-results__list m-0 flex list-none flex-col gap-4 p-0">
           @for (entry of entries(); track entry.cuid) {
             <li class="gssc-directory-results__item border-b border-gssc-gray pb-4 last:border-b-0">
-              <gssc-contact-row [contents]="contactContents(entry)" />
+              <gssc-contact-row
+                [contents]="contactContents(entry)"
+                [showPhoto]="true"
+                [photoUrl]="photoUrl(entry)"
+                [showEdit]="isUserMod()"
+                [editHref]="editHref(entry)"
+                [showSoftDelete]="isAdministrator()"
+                [isDeleted]="isDeleted(entry)"
+                (softDelete)="onSoftDelete(entry)"
+                (undelete)="onUndelete(entry)"
+              />
             </li>
           }
         </ul>

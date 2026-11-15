@@ -1,24 +1,39 @@
 import { backend } from './backend';
 import type { AccountRecord } from './account-api';
+import { accountPhotoUrl } from './account-api';
 import type { ContactMethod, ContactRowContents } from '../modules/contact-row/contact-row';
 
 /** Query filters accepted by Unified Backend GET /users. */
 export type DirectorySearchFilters = {
-  firstName?: string;
-  lastName?: string;
+  name?: string;
   email?: string;
   phone?: string;
-  homeCity?: string;
-  homeState?: string;
+  address?: string;
 };
 
 /**
- * Treaty calls for members directory list/search.
+ * Treaty calls for members directory list/search and soft-delete.
  * Mutable object so unit tests can stub without fighting Eden proxies.
  */
+/** Minimal Treaty-shaped result used by soft-delete / undelete callers. */
+type SoftDeleteResult = {
+  data: unknown;
+  error: { status?: number; value?: unknown } | null;
+  status?: number;
+};
+
+type SoftDeleteRoutes = {
+  'soft-delete': { post: (body?: Record<string, never>) => Promise<SoftDeleteResult> };
+  undelete: { post: (body?: Record<string, never>) => Promise<SoftDeleteResult> };
+};
+
 export const directoryApi = {
   listUsers: (query: Record<string, string> = {}) =>
     backend.users.get({ query }),
+  softDeleteUser: (cuid: string) =>
+    (backend.users({ cuid }) as unknown as SoftDeleteRoutes)['soft-delete'].post({}),
+  undeleteUser: (cuid: string) =>
+    (backend.users({ cuid }) as unknown as SoftDeleteRoutes).undelete.post({}),
 };
 
 /** Drop blank filter values so the request stays a valid users query. */
@@ -87,4 +102,19 @@ export function toContactRowContents(entry: AccountRecord): ContactRowContents {
     displayName: directoryDisplayName(entry) || entry.username || entry.cuid,
     methods: directoryContactMethods(entry),
   };
+}
+
+/** Resolved account photo URL for a directory list entry, or null for silhouette. */
+export function directoryPhotoUrl(entry: AccountRecord): string | null {
+  return accountPhotoUrl(entry.accountPhoto);
+}
+
+/** True when the Unified Backend projected a soft-delete marker for this entry. */
+export function directoryIsDeleted(entry: AccountRecord): boolean {
+  const deletedAt = entry.deletedAt;
+  if (deletedAt === null || deletedAt === undefined) return false;
+  if (typeof deletedAt === 'string') return deletedAt.trim().length > 0;
+  if (deletedAt instanceof Date) return !Number.isNaN(deletedAt.getTime());
+  if (typeof deletedAt === 'number') return Number.isFinite(deletedAt);
+  return String(deletedAt).trim().length > 0;
 }

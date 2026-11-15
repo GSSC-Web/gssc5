@@ -9,6 +9,7 @@ import {
   absoluteStoragePath,
   ensureStorageRoot,
   readStoredFile,
+  removeStoredBytes,
   storageRoot,
   writeStoredBytes,
 } from "../files/storage";
@@ -145,6 +146,8 @@ async function isAccountPhotoEntry(parentId: string | null): Promise<boolean> {
 /**
  * GET allowed when the caller has a valid login session, or when some user
  * stores this photo (or owns the cuid-named photo) and has a non-empty position.
+ * Cuid-named photos remain readable after replace once the user record points at
+ * the new key (upload updates accountPhoto); soft-deleted priors stay 404.
  */
 // @relation(GSSC-BLLR-454, GSSC-BLLR-455, scope=range_start, role=Implementation)
 export async function canGetAccountPhoto(
@@ -167,6 +170,76 @@ export async function canGetAccountPhoto(
 function canUploadForUser(sessionUser: SessionUser, targetUserCuid: string): boolean {
   if (sessionUser.id === targetUserCuid) return true;
   return sessionUser.isAdmin || sessionUser.isUserMod;
+}
+
+/**
+ * Soft-delete a prior photo entry and remove its bytes when they are not the
+ * replacement storage key (same-key overwrites keep the file on disk).
+ */
+async function retirePriorAccountPhoto(args: {
+  entryId: string;
+  storageKey: string | null;
+  keepEntryId: string;
+  keepStorageKey: string;
+}): Promise<void> {
+  if (args.entryId === args.keepEntryId) return;
+  const prisma = runtimePrisma();
+  await prisma.storedFileEntry.update({
+    where: { id: args.entryId },
+    data: { deletedAt: new Date() },
+  });
+  if (
+    args.storageKey !== null &&
+    args.storageKey.length > 0 &&
+    args.storageKey !== args.keepStorageKey
+  ) {
+    await removeStoredBytes(args.storageKey);
+  }
+}
+
+/** Soft-delete prior photos for this user that the replacement supersedes. */
+async function deletePriorAccountPhotos(args: {
+  userCuid: string;
+  priorAccountPhoto: string | null | undefined;
+  keepEntryId: string;
+  keepStorageKey: string;
+  folderId: string;
+}): Promise<void> {
+  const prisma = runtimePrisma();
+  const prior = args.priorAccountPhoto?.trim() ?? "";
+  if (prior.length > 0 && prior !== args.userCuid) {
+    const priorEntry = await prisma.storedFileEntry.findUnique({
+      where: { id: prior },
+      select: { id: true, storageKey: true, deletedAt: true },
+    });
+    if (priorEntry !== null && priorEntry.deletedAt === null) {
+      await retirePriorAccountPhoto({
+        entryId: priorEntry.id,
+        storageKey: priorEntry.storageKey,
+        keepEntryId: args.keepEntryId,
+        keepStorageKey: args.keepStorageKey,
+      });
+    }
+  }
+
+  const siblings = await prisma.storedFileEntry.findMany({
+    where: {
+      parentId: args.folderId,
+      kind: "file",
+      deletedAt: null,
+      NOT: { id: args.keepEntryId },
+      OR: [{ name: args.userCuid }, ...(prior.length > 0 ? [{ id: prior }] : [])],
+    },
+    select: { id: true, storageKey: true },
+  });
+  for (const sibling of siblings) {
+    await retirePriorAccountPhoto({
+      entryId: sibling.id,
+      storageKey: sibling.storageKey,
+      keepEntryId: args.keepEntryId,
+      keepStorageKey: args.keepStorageKey,
+    });
+  }
 }
 
 export const accountPhotos = new Elysia({ prefix: "/account-photos" })
@@ -198,7 +271,7 @@ export const accountPhotos = new Elysia({ prefix: "/account-photos" })
       const prisma = runtimePrisma();
       const target = await prisma.user.findUnique({
         where: { id: targetUserCuid },
-        select: { id: true },
+        select: { id: true, accountPhoto: true },
       });
       if (target === null) return statusFn(404, { error: "user not found" });
 
@@ -218,6 +291,7 @@ export const accountPhotos = new Elysia({ prefix: "/account-photos" })
         select: { id: true },
       });
 
+      let keepEntryId: string;
       if (existing !== null) {
         const written = await writeStoredBytes(storageKey, bytes);
         if (written === null) {
@@ -231,26 +305,44 @@ export const accountPhotos = new Elysia({ prefix: "/account-photos" })
             sizeBytes: bytes.byteLength,
           },
         });
-        return { cuid: targetUserCuid, path: storageKey };
+        keepEntryId = existing.id;
+      } else {
+        const created = await prisma.storedFileEntry.create({
+          data: {
+            name: targetUserCuid,
+            kind: "file",
+            parentId: folderId,
+            storageKey,
+            mimeType,
+            sizeBytes: bytes.byteLength,
+            isPublic: false,
+            readRoles: JSON.stringify(["member"]),
+            writeRoles: JSON.stringify(["member"]),
+          },
+        });
+        const written = await writeStoredBytes(storageKey, bytes);
+        if (written === null) {
+          await prisma.storedFileEntry.delete({ where: { id: created.id } });
+          return statusFn(500, { error: "storage write failed" });
+        }
+        keepEntryId = created.id;
       }
 
-      const created = await prisma.storedFileEntry.create({
-        data: {
-          name: targetUserCuid,
-          kind: "file",
-          parentId: folderId,
-          storageKey,
-          mimeType,
-          sizeBytes: bytes.byteLength,
-          isPublic: false,
-          readRoles: JSON.stringify(["member"]),
-          writeRoles: JSON.stringify(["member"]),
-        },
+      await deletePriorAccountPhotos({
+        userCuid: targetUserCuid,
+        priorAccountPhoto: target.accountPhoto,
+        keepEntryId,
+        keepStorageKey: storageKey,
+        folderId,
       });
-      const written = await writeStoredBytes(storageKey, bytes);
-      if (written === null) {
-        await prisma.storedFileEntry.delete({ where: { id: created.id } });
-        return statusFn(500, { error: "storage write failed" });
+
+      // Point the user record at the cuid-named photo before the client PATCHes,
+      // so session and position ACL resolve the replacement (not the retired prior).
+      if (target.accountPhoto !== targetUserCuid) {
+        await prisma.user.update({
+          where: { id: targetUserCuid },
+          data: { accountPhoto: targetUserCuid },
+        });
       }
       // @relation(GSSC-BLLR-456, GSSC-BLLR-458, scope=range_end, role=Implementation)
 

@@ -1480,6 +1480,46 @@ RELATIONS:
   VALUE: GSSC-PIR-50
   ROLE: Refines
 
+[REQUIREMENT]
+UID: GSSC-BHLR-223
+TITLE: Soft-Delete Of Users By Administrator
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL let an administrator soft-delete a user and undelete a soft-deleted user without removing that user's stored account record.
+<<<
+RATIONALE: >>>
+Administrators need to remove members from normal collaboration views while retaining the account for later restoration. Soft deletion is a marker change, not a hard delete of the users table row.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-102
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-44
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-224
+TITLE: Member List Soft-Deleted Users
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL omit soft-deleted users from the member list for callers who are not administrators, while including soft-deleted users when the caller is an administrator.
+<<<
+RATIONALE: >>>
+Fellow members see only active collaboration contacts. Administrators managing the registered-member list need soft-deleted accounts visible.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-102
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-36
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
+  ROLE: Refines
+
 [[/SECTION]]
 
 [REQUIREMENT]
