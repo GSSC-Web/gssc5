@@ -1,7 +1,7 @@
 import { InjectionToken } from '@angular/core';
 import type { ContactCardContents } from '../../modules/contact-card-large/contact-card-large';
 import { backend } from '../backend';
-import { filterSectionsVisibleOn } from '../section-display-window';
+import { filterSectionsVisibleOn } from '../section-display-window/section-display-window';
 
 /** Backend tag that binds public Leadership Intro sections to this page. */
 export const LEADERSHIP_INTRO_TAG = 'leadership';

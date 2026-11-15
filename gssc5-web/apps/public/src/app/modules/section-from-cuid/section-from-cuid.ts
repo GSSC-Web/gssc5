@@ -7,7 +7,7 @@ import {
   signal,
 } from '@angular/core';
 import { backend } from '../../services/backend';
-import { isSectionVisibleOn } from '../../services/section-display-window';
+import { isSectionVisibleOn } from '../../services/section-display-window/section-display-window';
 import { Section, type SectionContents, type SectionResource } from '../section/section';
 
 /** Public section payload from Unified Backend GET /sections/{cuid}. */

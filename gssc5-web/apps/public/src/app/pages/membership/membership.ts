@@ -1,7 +1,7 @@
 import { Component, InjectionToken, inject, signal } from '@angular/core';
 import { SectionFromCuid } from '../../modules/section-from-cuid/section-from-cuid';
 import { backend } from '../../services/backend';
-import { filterSectionsVisibleOn } from '../../services/section-display-window';
+import { filterSectionsVisibleOn } from '../../services/section-display-window/section-display-window';
 
 /** Backend tag that binds public membership information sections to this page. */
 export const MEMBERSHIP_INFO_TAG = 'membership-info';

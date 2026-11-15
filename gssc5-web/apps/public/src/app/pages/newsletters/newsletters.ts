@@ -10,7 +10,7 @@ import { DomSanitizer, type SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SectionFromCuid } from '../../modules/section-from-cuid/section-from-cuid';
 import { backend } from '../../services/backend';
-import { filterSectionsVisibleOn } from '../../services/section-display-window';
+import { filterSectionsVisibleOn } from '../../services/section-display-window/section-display-window';
 import {
   catalogVolumes,
   catalogYears,
