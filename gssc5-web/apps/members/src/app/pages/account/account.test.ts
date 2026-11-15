@@ -912,7 +912,7 @@ test('GSSC-MLLR-425 Syntactic', async () => {
     expect(field.classList.contains('gssc-field')).toBe(true);
     const frame = field.querySelector('.gssc-account-photo-username__preview-frame')!;
     const choose = field.querySelector('.gssc-account-photo-username__choose')!;
-    expect(frame.classList.contains('size-24')).toBe(true);
+    expect(frame.classList.contains('size-40')).toBe(true);
     expect(frame.classList.contains('shrink-0')).toBe(true);
     expect(
       frame.compareDocumentPosition(choose) & Node.DOCUMENT_POSITION_FOLLOWING,

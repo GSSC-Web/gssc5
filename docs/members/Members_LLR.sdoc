@@ -3589,10 +3589,10 @@ RELATIONS:
 UID: GSSC-MLLR-425
 TITLE: Syntactic
 STATEMENT: >>>
-The Account Photo preview and Choose Photo control SHALL share one floating-label Account Photo field in the left column of Account Information, with a left-aligned square preview that crops the image to fill that square and the Choose Photo control beside that preview.
+The Account Photo preview and Choose Photo control SHALL share one floating-label Account Photo field in the left column of Account Information, with a left-aligned square preview that crops the image to fill that square and the Choose Photo control with selected file name stacked below that preview.
 <<<
 RATIONALE: >>>
-One field keeps photo chrome consistent with other Account Information inputs; square crop shows a stable avatar without distorting the image.
+One field keeps photo chrome consistent with other Account Information inputs; square crop shows a stable avatar without distorting the image; stacking choose controls under the preview matches the prior photo interaction order.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test

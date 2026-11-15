@@ -326,9 +326,9 @@
                 accept="image/*"
                 (change)="onPhotoSelected($event)"
               />
-              <div class="flex flex-wrap items-center gap-3 px-2 py-2">
+              <div class="flex flex-col items-start gap-3 px-2 py-2">
                 <div
-                  class="gssc-account-photo-username__preview-frame size-24 shrink-0 overflow-hidden rounded-md border border-gssc-dark-green bg-gssc-gray"
+                  class="gssc-account-photo-username__preview-frame size-40 shrink-0 overflow-hidden rounded-md border border-gssc-dark-green bg-gssc-gray"
                 >
                   @if (photoPreviewUrl()) {
                     <img
@@ -338,13 +338,13 @@
                     />
                   } @else {
                     <p
-                      class="gssc-account-photo-username__preview-empty m-0 flex size-full items-center justify-center p-1 text-center font-sans text-[0.65rem] leading-tight text-gssc-dark-brown"
+                      class="gssc-account-photo-username__preview-empty m-0 flex size-full items-center justify-center p-2 text-center font-sans text-sm text-gssc-dark-brown"
                     >
                       No account photo
                     </p>
                   }
                 </div>
-                <div class="flex min-w-0 flex-1 flex-col gap-1">
+                <div class="flex min-w-0 flex-wrap items-center gap-3">
                   <label
                     for="gssc-account-photo"
                     class="gssc-account-photo-username__choose inline-flex w-fit cursor-pointer items-center justify-center rounded-md border border-gssc-dark-green bg-gssc-light-green px-3 py-1.5 font-sans text-sm text-gssc-dark-green hover:bg-gssc-gray"
