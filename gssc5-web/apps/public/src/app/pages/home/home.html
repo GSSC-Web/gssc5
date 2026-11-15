@@ -1,3 +1,28 @@
-<div class="gssc-home-page p-4">
-  <gssc-section [contents]="demoContents" />
+<!-- @relation(GSSC-PLLR-312, GSSC-PLLR-313, GSSC-PLLR-315, GSSC-PLLR-316, GSSC-PLLR-318, GSSC-PLLR-319, scope=range_start, role=Implementation) -->
+<div class="gssc-home-page flex w-full flex-col gap-4 p-4 font-sans text-gssc-dark-green">
+  @if (announcementItems().length > 0) {
+    <div class="gssc-home-page__announcements w-full">
+      <gssc-carousel
+        [contents]="announcementItems()"
+        [focusedItemId]="focusedAnnouncementId()"
+      />
+    </div>
+  }
+
+  @if (specialEventSections().length > 0) {
+    <div class="gssc-home-page__special-events flex w-full flex-col gap-4">
+      @for (contents of specialEventSections(); track $index) {
+        <gssc-section [contents]="contents" />
+      }
+    </div>
+  }
+
+  @if (sectionCuids().length > 0) {
+    <div class="gssc-home-page__sections flex w-full flex-col gap-4">
+      @for (cuid of sectionCuids(); track cuid) {
+        <gssc-section-from-cuid [cuid]="cuid" />
+      }
+    </div>
+  }
 </div>
+<!-- @relation(GSSC-PLLR-312, GSSC-PLLR-313, GSSC-PLLR-315, GSSC-PLLR-316, GSSC-PLLR-318, GSSC-PLLR-319, scope=range_end, role=Implementation) -->
