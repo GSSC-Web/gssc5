@@ -33,8 +33,8 @@ export type AccountRecord = {
   membershipStatus?: string | null;
   position?: string | null;
   accountPhoto?: string | null;
-  /** ISO soft-delete timestamp when projected (administrators only). */
-  deletedAt?: string | null;
+  /** Soft-delete marker when projected (administrators only); string, Date, or epoch. */
+  deletedAt?: string | Date | number | null;
   isAdmin?: boolean;
   isUserMod?: boolean;
   isToolEditor?: boolean;

@@ -142,7 +142,8 @@ const PublicUser = t.Object({
   position: t.Optional(UserPlain.properties.position),
   accountPhoto: t.Optional(UserPlain.properties.accountPhoto),
   // @relation(GSSC-BLLR-466, scope=range_start, role=Implementation)
-  deletedAt: t.Optional(t.Union([t.String({ format: "date-time" }), t.Null()])),
+  // Plain string (ISO), not date-time format: clients must not coerce this to Date.
+  deletedAt: t.Optional(t.Union([t.String(), t.Null()])),
   // @relation(GSSC-BLLR-466, scope=range_end, role=Implementation)
 });
 

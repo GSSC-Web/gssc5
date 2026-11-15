@@ -109,8 +109,12 @@ export function directoryPhotoUrl(entry: AccountRecord): string | null {
   return accountPhotoUrl(entry.accountPhoto);
 }
 
-/** True when the Unified Backend projected a soft-delete timestamp for this entry. */
+/** True when the Unified Backend projected a soft-delete marker for this entry. */
 export function directoryIsDeleted(entry: AccountRecord): boolean {
-  const deletedAt = entry.deletedAt?.trim() ?? '';
-  return deletedAt.length > 0;
+  const deletedAt = entry.deletedAt;
+  if (deletedAt === null || deletedAt === undefined) return false;
+  if (typeof deletedAt === 'string') return deletedAt.trim().length > 0;
+  if (deletedAt instanceof Date) return !Number.isNaN(deletedAt.getTime());
+  if (typeof deletedAt === 'number') return Number.isFinite(deletedAt);
+  return String(deletedAt).trim().length > 0;
 }
