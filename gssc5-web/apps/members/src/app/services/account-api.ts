@@ -56,10 +56,10 @@ export const PASSWORD_MIN_LENGTH = 8;
 
 export const SITE_PRIVILEGES = [
   { key: 'isAdmin', label: 'Administrator' },
-  { key: 'isUserMod', label: 'User moderator' },
-  { key: 'isToolEditor', label: 'Tool editor' },
-  { key: 'isPublicationEditor', label: 'Publication editor' },
-  { key: 'isNewsletterEditor', label: 'Newsletter editor' },
+  { key: 'isUserMod', label: 'User Moderator' },
+  { key: 'isToolEditor', label: 'Tool Editor' },
+  { key: 'isPublicationEditor', label: 'Publication Editor' },
+  { key: 'isNewsletterEditor', label: 'Newsletter Editor' },
 ] as const;
 
 export type PrivilegeKey = (typeof SITE_PRIVILEGES)[number]['key'];

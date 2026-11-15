@@ -348,6 +348,9 @@ test('GSSC-MLLR-137 Lexical', async () => {
     const col = root.querySelector<HTMLElement>('.gssc-account-name-contact')!;
     expect(col.classList.contains('font-sans')).toBe(true);
     expect(col.classList.contains('text-gssc-dark-green')).toBe(true);
+    const firstLabel = root.querySelector('label[for="gssc-account-first-name"]')!;
+    expect(firstLabel.textContent).toContain('First Name');
+    expect(firstLabel.textContent).toContain('*');
   } finally {
     restore();
   }
@@ -373,6 +376,14 @@ test('GSSC-MLLR-139 Syntactic', async () => {
   try {
     const col = root.querySelector<HTMLElement>('.gssc-account-addresses')!;
     expect(col.classList.contains('flex-col')).toBe(true);
+    const homeZipRow = root.querySelector<HTMLElement>('.gssc-account-addresses__home-zip-row')!;
+    const mailZipRow = root.querySelector<HTMLElement>('.gssc-account-addresses__mail-zip-row')!;
+    expect(homeZipRow.classList.contains('items-center')).toBe(true);
+    expect(mailZipRow.classList.contains('items-center')).toBe(true);
+    expect(homeZipRow.querySelector('.gssc-account-addresses__home-zip')).not.toBeNull();
+    expect(homeZipRow.querySelector('.gssc-account-addresses__home-zip-ext')).not.toBeNull();
+    expect(homeZipRow.querySelector('.gssc-account-addresses__zip-plus')?.textContent).toBe('+');
+    expect(mailZipRow.querySelector('.gssc-account-addresses__zip-plus')?.textContent).toBe('+');
   } finally {
     restore();
   }
@@ -386,6 +397,12 @@ test('GSSC-MLLR-140 Lexical', async () => {
     const col = root.querySelector<HTMLElement>('.gssc-account-addresses')!;
     expect(col.classList.contains('font-sans')).toBe(true);
     expect(col.classList.contains('text-gssc-dark-green')).toBe(true);
+    const zipLabel = root.querySelector('label[for="gssc-account-home-zip"]')!;
+    expect(zipLabel.textContent).toContain('Zip');
+    expect(zipLabel.textContent).toContain('*');
+    expect(root.querySelector('label[for="gssc-account-home-zip-ext"]')!.textContent).toContain(
+      'Zip Extension',
+    );
   } finally {
     restore();
   }
@@ -464,7 +481,7 @@ test('GSSC-MLLR-145 Semantic', async () => {
   try {
     expect(plain.root.querySelector('.gssc-account-privileges__switches')).toBeNull();
     expect(plain.root.querySelector('.gssc-account-privileges__active-list')).not.toBeNull();
-    expect(plain.root.textContent).toContain('Tool editor');
+    expect(plain.root.textContent).toContain('Tool Editor');
     expect(plain.root.textContent).not.toContain('Administrator');
   } finally {
     plain.restore();
@@ -518,6 +535,10 @@ test('GSSC-MLLR-148 Lexical', async () => {
   try {
     const block = root.querySelector<HTMLElement>('.gssc-account-photo-username')!;
     expect(block.classList.contains('font-sans') || block.parentElement?.classList.contains('font-sans')).toBe(true);
+    expect(root.querySelector('label[for="gssc-account-photo"]')!.textContent).toContain('Account Photo');
+    const usernameLabel = root.querySelector('label[for="gssc-account-username"]')!;
+    expect(usernameLabel.textContent).toContain('Username');
+    expect(usernameLabel.textContent).toContain('*');
   } finally {
     restore();
   }
@@ -593,6 +614,9 @@ test('GSSC-MLLR-154 Lexical', async () => {
     const fields = root.querySelector<HTMLElement>('.gssc-account-password-fields')!;
     expect(fields.classList.contains('font-sans')).toBe(true);
     expect(fields.classList.contains('text-gssc-dark-green')).toBe(true);
+    const currentLabel = root.querySelector('label[for="gssc-account-current-password"]')!;
+    expect(currentLabel.textContent).toContain('Current Password');
+    expect(currentLabel.textContent).toContain('*');
   } finally {
     restore();
   }
@@ -642,11 +666,13 @@ test('GSSC-MLLR-157 Lexical', async () => {
     fixture.detectChanges();
     const match = root.querySelector<HTMLElement>('.gssc-account-password-criteria__match')!;
     expect(match.classList.contains('text-gssc-dark-red')).toBe(true);
+    expect(match.querySelector('.nf-fa-times')).not.toBeNull();
 
     page.onNewPasswordInput('Abcdef1!');
     page.onConfirmPasswordInput('Abcdef1!');
     fixture.detectChanges();
     expect(match.classList.contains('text-gssc-dark-green')).toBe(true);
+    expect(match.querySelector('.nf-fa-check')).not.toBeNull();
   } finally {
     restore();
   }

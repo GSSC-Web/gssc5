@@ -2851,10 +2851,10 @@ RELATIONS:
 UID: GSSC-MLLR-137
 TITLE: Lexical
 STATEMENT: >>>
-The Name and Contact Column SHALL use the Member Frontend sans-serif typeface and dark-green label color.
+The Name and Contact Column SHALL use the Member Frontend sans-serif typeface and dark-green label color, SHALL present capitalized field names, and SHALL place an asterisk after each required field name.
 <<<
 RATIONALE: >>>
-Column fields share Member Frontend form styling.
+Column fields share Member Frontend form styling. Capitalized names and required asterisks match owner Account Page chrome.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -2881,7 +2881,7 @@ TITLE: Addresses Column
 UID: GSSC-MLLR-138
 TITLE: Semantic
 STATEMENT: >>>
-The Addresses Column SHALL present home address lines, city, state, postal code, postal extension, home address display preference, and the corresponding mailing address fields.
+The Addresses Column SHALL present home address lines, city, state, Zip, Zip Extension, home address display preference, and the corresponding mailing address fields.
 <<<
 RATIONALE: >>>
 Addresses occupy the right column of Member Information.
@@ -2905,10 +2905,10 @@ RELATIONS:
 UID: GSSC-MLLR-139
 TITLE: Syntactic
 STATEMENT: >>>
-The Addresses Column SHALL stack its fields vertically in the right column of the Member Information Section.
+The Addresses Column SHALL stack its fields vertically in the right column of the Member Information Section, and SHALL place Zip and Zip Extension on the same row with a plus sign between them for home and for mailing.
 <<<
 RATIONALE: >>>
-A vertical stack keeps address parts ordered beside name and contact.
+A vertical stack keeps address parts ordered beside name and contact. Zip and Zip Extension share one row per owner Account Page layout.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -2929,10 +2929,10 @@ RELATIONS:
 UID: GSSC-MLLR-140
 TITLE: Lexical
 STATEMENT: >>>
-The Addresses Column SHALL use the Member Frontend sans-serif typeface and dark-green label color.
+The Addresses Column SHALL use the Member Frontend sans-serif typeface and dark-green label color, SHALL present capitalized field names, and SHALL place an asterisk after each required field name.
 <<<
 RATIONALE: >>>
-Address fields share Member Frontend form styling.
+Address fields share Member Frontend form styling. Capitalized names and required asterisks match owner Account Page chrome.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -3145,10 +3145,10 @@ RELATIONS:
 UID: GSSC-MLLR-148
 TITLE: Lexical
 STATEMENT: >>>
-The Account Photo and Username controls SHALL use the Member Frontend sans-serif typeface and dark-green label color.
+The Account Photo and Username controls SHALL use the Member Frontend sans-serif typeface and dark-green label color, SHALL present capitalized field names, and SHALL place an asterisk after the Username field name.
 <<<
 RATIONALE: >>>
-These controls share Member Frontend form styling.
+These controls share Member Frontend form styling. Capitalized names and the Username required asterisk match owner Account Page chrome.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -3271,10 +3271,10 @@ RELATIONS:
 UID: GSSC-MLLR-154
 TITLE: Lexical
 STATEMENT: >>>
-The Password Fields SHALL use the Member Frontend sans-serif typeface and dark-green label color on white field chrome.
+The Password Fields SHALL use the Member Frontend sans-serif typeface and dark-green label color on white field chrome, SHALL present capitalized field names, and SHALL place an asterisk after each password field name.
 <<<
 RATIONALE: >>>
-Password fields share Member Frontend form styling.
+Password fields share Member Frontend form styling. Capitalized names and required asterisks match owner Account Page chrome.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -3331,10 +3331,10 @@ RELATIONS:
 UID: GSSC-MLLR-157
 TITLE: Lexical
 STATEMENT: >>>
-The Password Criteria list SHALL present a fulfilled criterion in the Member Frontend dark-green theme color and an unfulfilled criterion in the Member Frontend dark-red theme color.
+The Password Criteria list SHALL present a fulfilled criterion in the Member Frontend dark-green theme color with a checkmark icon before the criterion text, and an unfulfilled criterion in the Member Frontend dark-red theme color with an X icon before the criterion text.
 <<<
 RATIONALE: >>>
-Color flip shows which rules still block submit.
+Color and icon flip show which rules still block submit.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
