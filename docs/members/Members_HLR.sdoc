@@ -1093,7 +1093,7 @@ Authorized members create newsletters that appear on the Public Frontend.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-11
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-54
@@ -1113,7 +1113,7 @@ CHANGE_DRIVER: >>>
 GSSC5-11
 GSSC5-96
 <<<
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-54
@@ -1130,7 +1130,7 @@ No Member Frontend PIR separately requires newsletter edits after create. Author
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-11
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [[/SECTION]]
 
