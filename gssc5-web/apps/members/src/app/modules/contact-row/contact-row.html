@@ -42,7 +42,10 @@
   @if (cardLayout()) {
     <div class="gssc-contact-row__body flex min-w-0 flex-1 flex-col gap-1 text-start">
       <!-- @relation(GSSC-MLLR-162, GSSC-MLLR-163, GSSC-MLLR-164, scope=range_start, role=Implementation) -->
-      <h3 class="gssc-contact-row__name m-0 font-sans text-base font-semibold text-gssc-dark-green">
+      <h3
+        class="gssc-contact-row__name m-0 font-sans text-base font-semibold text-gssc-dark-green"
+        [class.line-through]="isDeleted()"
+      >
         {{ contents().displayName }}
       </h3>
       <!-- @relation(GSSC-MLLR-162, GSSC-MLLR-163, GSSC-MLLR-164, scope=range_end, role=Implementation) -->
@@ -70,7 +73,10 @@
     </div>
   } @else {
     <!-- @relation(GSSC-MLLR-162, GSSC-MLLR-163, GSSC-MLLR-164, scope=range_start, role=Implementation) -->
-    <h3 class="gssc-contact-row__name m-0 font-sans text-base font-semibold text-gssc-dark-green">
+    <h3
+      class="gssc-contact-row__name m-0 font-sans text-base font-semibold text-gssc-dark-green"
+      [class.line-through]="isDeleted()"
+    >
       {{ contents().displayName }}
     </h3>
     <!-- @relation(GSSC-MLLR-162, GSSC-MLLR-163, GSSC-MLLR-164, scope=range_end, role=Implementation) -->

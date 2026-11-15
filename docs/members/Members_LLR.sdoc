@@ -5349,10 +5349,10 @@ RELATIONS:
 UID: GSSC-MLLR-230
 TITLE: Lexical
 STATEMENT: >>>
-The Directory Contact Card Layout SHALL use the Member Frontend sans-serif typeface and dark-green theme color for the member name and contact text on the card.
+The Directory Contact Card Layout SHALL use the Member Frontend sans-serif typeface and dark-green theme color for the member name and contact text on the card, and SHALL strike through the member name when that member is soft-deleted.
 <<<
 RATIONALE: >>>
-Card text matches Directory Page brand type and color.
+Card text matches Directory Page brand type and color; a struck-through name makes soft-deleted members obvious to administrators who still see them in the list.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test

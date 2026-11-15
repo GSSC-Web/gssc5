@@ -705,12 +705,17 @@ test('GSSC-MLLR-229 Syntactic', async () => {
 
 // @relation(GSSC-MLLR-230, scope=range_start, role=Test)
 test('GSSC-MLLR-230 Lexical', async () => {
-  const { root, restore } = await setupDirectory();
+  const { root, restore } = await setupDirectory({
+    viewer: { cuid: 'admin_1', isAdmin: true },
+    list: [fellowMember, deletedMember],
+  });
   try {
-    const name = root.querySelector<HTMLElement>('.gssc-contact-row__name')!;
+    const names = [...root.querySelectorAll<HTMLElement>('.gssc-contact-row__name')];
     const methods = root.querySelector<HTMLElement>('.gssc-contact-row__methods')!;
-    expect(name.classList.contains('font-sans')).toBe(true);
-    expect(name.classList.contains('text-gssc-dark-green')).toBe(true);
+    expect(names[0].classList.contains('font-sans')).toBe(true);
+    expect(names[0].classList.contains('text-gssc-dark-green')).toBe(true);
+    expect(names[0].classList.contains('line-through')).toBe(false);
+    expect(names[1].classList.contains('line-through')).toBe(true);
     expect(methods.classList.contains('font-sans')).toBe(true);
     expect(methods.classList.contains('text-gssc-dark-green')).toBe(true);
   } finally {
