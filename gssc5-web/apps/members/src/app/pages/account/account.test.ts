@@ -73,6 +73,7 @@ async function setupAccount(options?: {
     accountGet: accountApi.getUser,
     accountUpdate: accountApi.updateUser,
     changePassword: accountApi.changePassword,
+    uploadAccountPhoto: accountApi.uploadAccountPhoto,
   };
 
   try {
@@ -112,6 +113,10 @@ async function setupAccount(options?: {
     okResponse(null, 204)) as typeof accountApi.updateUser;
   accountApi.changePassword = (async () =>
     okResponse(null, 204)) as typeof accountApi.changePassword;
+  accountApi.uploadAccountPhoto = (async () => ({
+    data: { cuid: 'photo_1', path: 'account-photos/photo_1' },
+    error: null,
+  })) as typeof accountApi.uploadAccountPhoto;
 
   const url = options?.url ?? '/account';
   const cuidParam = url.startsWith('/accounts/')
@@ -161,6 +166,7 @@ async function setupAccount(options?: {
       accountApi.getUser = originals.accountGet;
       accountApi.updateUser = originals.accountUpdate;
       accountApi.changePassword = originals.changePassword;
+      accountApi.uploadAccountPhoto = originals.uploadAccountPhoto;
     },
   };
 }
@@ -697,3 +703,220 @@ test('GSSC-MLLR-158 Semantic', async () => {
   }
 });
 // @relation(GSSC-MLLR-158, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-415, scope=range_start, role=Test)
+test('GSSC-MLLR-415 Semantic', async () => {
+  const { page, restore } = await setupAccount();
+  try {
+    expect(page.memberSectionOpen()).toBe(true);
+    page.toggleMemberSection();
+    expect(page.memberSectionOpen()).toBe(false);
+    page.toggleAccountSection();
+    expect(page.accountSectionOpen()).toBe(false);
+    page.togglePasswordSection();
+    expect(page.passwordSectionOpen()).toBe(false);
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-415, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-416, scope=range_start, role=Test)
+test('GSSC-MLLR-416 Syntactic', async () => {
+  const { root, page, restore } = await setupAccount();
+  try {
+    expect(page.memberSectionOpen()).toBe(true);
+    expect(page.accountSectionOpen()).toBe(true);
+    expect(page.passwordSectionOpen()).toBe(true);
+    expect(root.querySelector('.gssc-account-member-info__toggle')).not.toBeNull();
+    expect(root.querySelector('.gssc-account-account-info__toggle')).not.toBeNull();
+    expect(root.querySelector('.gssc-account-password__toggle')).not.toBeNull();
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-416, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-417, scope=range_start, role=Test)
+test('GSSC-MLLR-417 Lexical', async () => {
+  const { root, restore } = await setupAccount();
+  try {
+    const heading = root.querySelector<HTMLElement>('.gssc-account-member-info__heading')!;
+    expect(heading.classList.contains('font-sans')).toBe(true);
+    expect(heading.classList.contains('text-gssc-dark-green')).toBe(true);
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-417, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-418, scope=range_start, role=Test)
+test('GSSC-MLLR-418 Semantic', async () => {
+  const { page, restore } = await setupAccount();
+  try {
+    let called = false;
+    accountApi.updateUser = (async () => {
+      called = true;
+      return okResponse(null, 204) as never;
+    }) as typeof accountApi.updateUser;
+    page.memberInfo.firstName = '';
+    page.memberInfo.primaryEmail = 'not-an-email';
+    await page.submitMemberInfo();
+    expect(called).toBe(false);
+    expect(page.memberInvalid().has('firstName')).toBe(true);
+    expect(page.memberInvalid().has('primaryEmail')).toBe(true);
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-418, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-419, scope=range_start, role=Test)
+test('GSSC-MLLR-419 Semantic', async () => {
+  const { page, fixture, root, restore } = await setupAccount();
+  try {
+    page.memberInfo.homeZip = '12';
+    await page.submitMemberInfo();
+    fixture.detectChanges();
+    expect(page.fieldInvalid('homeZip')).toBe(true);
+    const zipField = root.querySelector('#gssc-account-home-zip')!.closest('.gssc-field')!;
+    expect(zipField.classList.contains('border-gssc-dark-red')).toBe(true);
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-419, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-420, scope=range_start, role=Test)
+test('GSSC-MLLR-420 Lexical', async () => {
+  const { page, fixture, root, restore } = await setupAccount();
+  try {
+    page.memberInfo.lastName = '';
+    await page.submitMemberInfo();
+    fixture.detectChanges();
+    const field = root.querySelector('#gssc-account-last-name')!.closest('.gssc-field')!;
+    expect(field.classList.contains('border-gssc-dark-red')).toBe(true);
+    expect(field.classList.contains('bg-gssc-light-red')).toBe(true);
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-420, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-421, scope=range_start, role=Test)
+test('GSSC-MLLR-421 Semantic', async () => {
+  const { page, restore } = await setupAccount();
+  try {
+    let uploaded = false;
+    let savedPhoto: string | null = null;
+    accountApi.uploadAccountPhoto = (async () => {
+      uploaded = true;
+      return { data: { cuid: 'photo_new', path: 'account-photos/photo_new' }, error: null };
+    }) as typeof accountApi.uploadAccountPhoto;
+    accountApi.updateUser = (async (_cuid, body) => {
+      savedPhoto = (body as { accountPhoto?: string }).accountPhoto ?? null;
+      return okResponse(null, 204) as never;
+    }) as typeof accountApi.updateUser;
+    const input = document.createElement('input');
+    Object.defineProperty(input, 'files', {
+      value: [new File(['x'], 'face.png', { type: 'image/png' })],
+    });
+    page.onPhotoSelected({ target: input } as unknown as Event);
+    await page.submitAccountInfo();
+    expect(uploaded).toBe(true);
+    expect(savedPhoto).toBe('photo_new');
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-421, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-424, scope=range_start, role=Test)
+test('GSSC-MLLR-424 Semantic', async () => {
+  const { root, restore } = await setupAccount();
+  try {
+    expect(root.querySelector('.gssc-account-photo-username__photo')).not.toBeNull();
+    expect(
+      root.querySelector<HTMLInputElement>('.gssc-account-photo-username__photo')!.type,
+    ).toBe('file');
+    expect(root.querySelector('.gssc-account-photo-username__preview-empty')).not.toBeNull();
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-424, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-425, scope=range_start, role=Test)
+test('GSSC-MLLR-425 Syntactic', async () => {
+  const { root, restore } = await setupAccount();
+  try {
+    const wrap = root.querySelector('.gssc-account-photo-username__preview-wrap')!;
+    const preview = wrap.querySelector('.gssc-account-photo-username__preview-empty')!;
+    const file = wrap.querySelector('.gssc-account-photo-username__photo')!;
+    expect(
+      preview.compareDocumentPosition(file) & Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-425, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-426, scope=range_start, role=Test)
+test('GSSC-MLLR-426 Lexical', async () => {
+  const { root, restore } = await setupAccount();
+  try {
+    const label = root.querySelector('label[for="gssc-account-photo"]')!;
+    expect(label.classList.contains('font-sans') || label.className.includes('font-sans')).toBe(
+      true,
+    );
+    expect(label.classList.contains('text-gssc-dark-green')).toBe(true);
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-426, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-427, scope=range_start, role=Test)
+test('GSSC-MLLR-427 Semantic', async () => {
+  const { page, restore } = await setupAccount();
+  try {
+    let called = false;
+    accountApi.changePassword = (async () => {
+      called = true;
+      return okResponse(null, 204) as never;
+    }) as typeof accountApi.changePassword;
+    page.currentPassword = 'OldPass1!';
+    page.onNewPasswordInput('OldPass1!');
+    page.onConfirmPasswordInput('OldPass1!');
+    await page.submitPasswordChange();
+    expect(called).toBe(false);
+    expect(page.passwordInvalid()).toBe(true);
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-427, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-428, scope=range_start, role=Test)
+test('GSSC-MLLR-428 Semantic', async () => {
+  const { page, restore } = await setupAccount();
+  try {
+    accountApi.changePassword = (async () => ({
+      data: null,
+      error: { status: 422, value: 'Invalid' },
+      response: new Response(null, { status: 422 }),
+      status: 422,
+      headers: new Headers(),
+    })) as typeof accountApi.changePassword;
+    page.currentPassword = 'OldPass1!';
+    page.onNewPasswordInput('NewPass1!');
+    page.onConfirmPasswordInput('NewPass1!');
+    await page.submitPasswordChange();
+    expect(page.passwordInvalid()).toBe(true);
+    expect(page.passwordMessage()).toContain('previous');
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-428, scope=range_end, role=Test)

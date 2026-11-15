@@ -864,6 +864,64 @@ REVIEW_STATUS: Changed
 
 [[/SECTION]]
 
+[[SECTION]]
+UID: GSSC-MHLR-ACCOUNT-REFINEMENT
+TITLE: Account Page Refinement
+
+[REQUIREMENT]
+UID: GSSC-MHLR-74
+TITLE: Account Section Collapse
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL let a logged-in member collapse and expand each Account Page section, with those sections expanded by default.
+<<<
+RATIONALE: >>>
+Long account forms need optional collapse without hiding sections on first open.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-101
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-MHLR-75
+TITLE: Account Form Validation
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL refuse Account Page Member Information and Account Information submission when required fields are empty or format-validated fields are invalid, and SHALL mark failing fields as invalid.
+<<<
+RATIONALE: >>>
+Submit-time validation stops incomplete or malformed account updates.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-101
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-MHLR-76
+TITLE: Account Photo File Upload
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL present the account photo as a preview with a file upload control, upload a chosen photo to the Unified Backend account-photos store, and save the returned path on the account.
+<<<
+RATIONALE: >>>
+Account photos are files stored in a dedicated backend directory, not free-text paths.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-101
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-MHLR-77
+TITLE: Password Change Rejection Rules
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL refuse a password change when password criteria are unmet or the new password equals the current password, and SHALL surface Unified Backend rejection when the new password matches a previous password.
+<<<
+RATIONALE: >>>
+Password replacement must meet strength rules and must not reuse current or previous passwords.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-101
+REVIEW_STATUS: Approved
+
+[[/SECTION]]
+
 [[/SECTION]]
 
 [[SECTION]]
