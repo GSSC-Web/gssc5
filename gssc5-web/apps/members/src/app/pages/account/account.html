@@ -312,42 +312,46 @@
           <!-- @relation(GSSC-MLLR-146, GSSC-MLLR-147, GSSC-MLLR-148, scope=range_start, role=Implementation) -->
           <div class="gssc-account-photo-username flex flex-col gap-4 font-sans text-gssc-dark-green">
             <!-- @relation(GSSC-MLLR-424, GSSC-MLLR-425, GSSC-MLLR-426, scope=range_start, role=Implementation) -->
-            <div class="gssc-account-photo-username__preview-wrap flex flex-col gap-3 font-sans text-gssc-dark-green">
-              <div
-                class="gssc-account-photo-username__preview-frame flex min-h-40 w-full items-center justify-center overflow-hidden rounded-md border border-gssc-dark-green bg-gssc-white p-2"
-              >
-                @if (photoPreviewUrl()) {
-                  <img
-                    class="gssc-account-photo-username__preview max-h-40 w-auto max-w-full object-contain"
-                    [src]="photoPreviewUrl()"
-                    alt="Account photo preview"
-                  />
-                } @else {
-                  <p class="gssc-account-photo-username__preview-empty m-0 font-sans text-sm text-gssc-dark-brown">
-                    No account photo
-                  </p>
-                }
-              </div>
-              <div class="gssc-field gssc-account-photo-username__picker relative flex min-w-0 flex-col rounded-md border border-gssc-dark-green bg-gssc-white font-sans">
-                <span class="gssc-account-photo-username__file-label absolute -top-2 start-2 bg-inherit px-1 text-xs font-extralight italic text-gssc-dark-green">
-                  Account Photo
-                </span>
-                <input
-                  id="gssc-account-photo"
-                  class="gssc-account-photo-username__photo sr-only"
-                  name="accountPhoto"
-                  type="file"
-                  accept="image/*"
-                  (change)="onPhotoSelected($event)"
-                />
-                <div class="flex flex-wrap items-center gap-3 px-2 py-2">
+            <div
+              class="gssc-field gssc-account-photo-username__picker gssc-account-photo-username__preview-wrap relative flex min-w-0 flex-col rounded-md border border-gssc-dark-green bg-gssc-white font-sans text-gssc-dark-green"
+            >
+              <span class="gssc-account-photo-username__file-label absolute -top-2 start-2 bg-inherit px-1 text-xs font-extralight italic text-gssc-dark-green">
+                Account Photo
+              </span>
+              <input
+                id="gssc-account-photo"
+                class="gssc-account-photo-username__photo sr-only"
+                name="accountPhoto"
+                type="file"
+                accept="image/*"
+                (change)="onPhotoSelected($event)"
+              />
+              <div class="flex flex-wrap items-center gap-3 px-2 py-2">
+                <div
+                  class="gssc-account-photo-username__preview-frame size-24 shrink-0 overflow-hidden rounded-md border border-gssc-dark-green bg-gssc-gray"
+                >
+                  @if (photoPreviewUrl()) {
+                    <img
+                      class="gssc-account-photo-username__preview size-full object-cover object-center"
+                      [src]="photoPreviewUrl()"
+                      alt="Account photo preview"
+                    />
+                  } @else {
+                    <p
+                      class="gssc-account-photo-username__preview-empty m-0 flex size-full items-center justify-center p-1 text-center font-sans text-[0.65rem] leading-tight text-gssc-dark-brown"
+                    >
+                      No account photo
+                    </p>
+                  }
+                </div>
+                <div class="flex min-w-0 flex-1 flex-col gap-1">
                   <label
                     for="gssc-account-photo"
-                    class="gssc-account-photo-username__choose inline-flex cursor-pointer items-center justify-center rounded-md border border-gssc-dark-green bg-gssc-light-green px-3 py-1.5 font-sans text-sm text-gssc-dark-green hover:bg-gssc-gray"
+                    class="gssc-account-photo-username__choose inline-flex w-fit cursor-pointer items-center justify-center rounded-md border border-gssc-dark-green bg-gssc-light-green px-3 py-1.5 font-sans text-sm text-gssc-dark-green hover:bg-gssc-gray"
                   >
                     Choose Photo
                   </label>
-                  <span class="gssc-account-photo-username__file-name min-w-0 flex-1 truncate font-sans text-sm text-gssc-dark-brown">
+                  <span class="gssc-account-photo-username__file-name truncate font-sans text-sm text-gssc-dark-brown">
                     {{ photoFileLabel() }}
                   </span>
                 </div>

@@ -881,17 +881,23 @@ test('GSSC-MLLR-423 Syntactic', async () => {
 
 // @relation(GSSC-MLLR-424, scope=range_start, role=Test)
 test('GSSC-MLLR-424 Semantic', async () => {
-  const { root, restore } = await setupAccount();
+  const { page, fixture, root, restore } = await setupAccount();
   try {
-    expect(root.querySelector('.gssc-account-photo-username__preview-frame')).not.toBeNull();
-    expect(root.querySelector('.gssc-account-photo-username__preview-empty')).not.toBeNull();
-    expect(root.querySelector('.gssc-account-photo-username__choose')).not.toBeNull();
+    const field = root.querySelector('.gssc-account-photo-username__picker')!;
+    expect(field.querySelector('.gssc-account-photo-username__preview-frame')).not.toBeNull();
+    expect(field.querySelector('.gssc-account-photo-username__preview-empty')).not.toBeNull();
+    expect(field.querySelector('.gssc-account-photo-username__choose')).not.toBeNull();
     expect(
       root.querySelector<HTMLInputElement>('.gssc-account-photo-username__photo')!.type,
     ).toBe('file');
     expect(
       root.querySelector('.gssc-account-photo-username__photo')!.classList.contains('sr-only'),
     ).toBe(true);
+    page.photoPreviewUrl.set('http://localhost:3000/account-photos/user_1');
+    fixture.detectChanges();
+    const img = root.querySelector('.gssc-account-photo-username__preview')!;
+    expect(img.classList.contains('object-cover')).toBe(true);
+    expect(img.classList.contains('object-center')).toBe(true);
   } finally {
     restore();
   }
@@ -902,14 +908,16 @@ test('GSSC-MLLR-424 Semantic', async () => {
 test('GSSC-MLLR-425 Syntactic', async () => {
   const { root, restore } = await setupAccount();
   try {
-    const wrap = root.querySelector('.gssc-account-photo-username__preview-wrap')!;
-    const frame = wrap.querySelector('.gssc-account-photo-username__preview-frame')!;
-    const picker = wrap.querySelector('.gssc-account-photo-username__picker')!;
+    const field = root.querySelector('.gssc-account-photo-username__picker')!;
+    expect(field.classList.contains('gssc-field')).toBe(true);
+    const frame = field.querySelector('.gssc-account-photo-username__preview-frame')!;
+    const choose = field.querySelector('.gssc-account-photo-username__choose')!;
+    expect(frame.classList.contains('size-24')).toBe(true);
+    expect(frame.classList.contains('shrink-0')).toBe(true);
     expect(
-      frame.compareDocumentPosition(picker) & Node.DOCUMENT_POSITION_FOLLOWING,
+      frame.compareDocumentPosition(choose) & Node.DOCUMENT_POSITION_FOLLOWING,
     ).toBeTruthy();
-    expect(picker.querySelector('.gssc-account-photo-username__choose')).not.toBeNull();
-    expect(picker.querySelector('.gssc-account-photo-username__file-name')).not.toBeNull();
+    expect(field.querySelector('.gssc-account-photo-username__file-name')).not.toBeNull();
   } finally {
     restore();
   }

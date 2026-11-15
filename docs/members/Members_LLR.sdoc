@@ -3571,10 +3571,10 @@ RELATIONS:
 UID: GSSC-MLLR-424
 TITLE: Semantic
 STATEMENT: >>>
-The Account Photo control SHALL show a preview of the current or newly chosen account photo and SHALL present a Choose Photo control that opens a file selection for a replacement photo, without exposing a raw browser file-input chrome as the primary control.
+The Account Photo control SHALL show a preview of the current or newly chosen account photo and SHALL present a Choose Photo control that opens a file selection for a replacement photo, without exposing a raw browser file-input chrome as the primary control, and SHALL crop that preview to a square by trimming rather than distorting the image.
 <<<
 RATIONALE: >>>
-Preview and a styled choose action replace free-text photo path editing and avoid unstyled native file UI.
+Preview and a styled choose action replace free-text photo path editing and avoid unstyled native file UI; square crop keeps avatar framing consistent.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
@@ -3589,10 +3589,10 @@ RELATIONS:
 UID: GSSC-MLLR-425
 TITLE: Syntactic
 STATEMENT: >>>
-The Account Photo preview SHALL appear in a bordered preview frame above a floating-label Account Photo picker that contains the Choose Photo control and the selected file name, in the left column of Account Information.
+The Account Photo preview and Choose Photo control SHALL share one floating-label Account Photo field in the left column of Account Information, with a left-aligned square preview that crops the image to fill that square and the Choose Photo control beside that preview.
 <<<
 RATIONALE: >>>
-Preview-first stacking and floating-label chrome match other Account Information fields.
+One field keeps photo chrome consistent with other Account Information inputs; square crop shows a stable avatar without distorting the image.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
@@ -3607,7 +3607,7 @@ RELATIONS:
 UID: GSSC-MLLR-426
 TITLE: Lexical
 STATEMENT: >>>
-The Account Photo preview frame, floating Account Photo label, Choose Photo control, and file-name text SHALL use the Member Frontend sans-serif typeface with dark-green label and control chrome and light-green fill on Choose Photo.
+The Account Photo field, square preview frame, floating Account Photo label, Choose Photo control, and file-name text SHALL use the Member Frontend sans-serif typeface with dark-green label and control chrome and light-green fill on Choose Photo.
 <<<
 RATIONALE: >>>
 Photo controls share Account Page form and primary-action styling.
