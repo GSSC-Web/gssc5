@@ -45,11 +45,9 @@ export class DirectoryPage implements OnInit {
   }
   // @relation(GSSC-MLLR-213, scope=range_end, role=Implementation)
 
-  // @relation(GSSC-MLLR-205, GSSC-MLLR-212, scope=range_start, role=Implementation)
   async search(): Promise<void> {
     await this.reload();
   }
-  // @relation(GSSC-MLLR-205, GSSC-MLLR-212, scope=range_end, role=Implementation)
 
   async clearSearch(): Promise<void> {
     this.firstName.set('');
@@ -61,7 +59,7 @@ export class DirectoryPage implements OnInit {
     await this.reload();
   }
 
-  // @relation(GSSC-MLLR-202, GSSC-MLLR-212, GSSC-MLLR-214, scope=range_start, role=Implementation)
+  // @relation(GSSC-MLLR-212, scope=range_start, role=Implementation)
   private async reload(): Promise<void> {
     this.loading.set(true);
     this.loadError.set(false);
@@ -88,5 +86,5 @@ export class DirectoryPage implements OnInit {
       this.loading.set(false);
     }
   }
-  // @relation(GSSC-MLLR-202, GSSC-MLLR-212, GSSC-MLLR-214, scope=range_end, role=Implementation)
+  // @relation(GSSC-MLLR-212, scope=range_end, role=Implementation)
 }
