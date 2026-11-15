@@ -5158,6 +5158,222 @@ RELATIONS:
 [[/SECTION]]
 
 [[SECTION]]
+UID: GSSC-PLLR-HOME-PAGE
+TITLE: Home Page
+
+[[SECTION]]
+UID: GSSC-PLLR-HOME-ANNOUNCEMENTS-DISPLAY
+TITLE: Home Announcements Display
+
+[REQUIREMENT]
+UID: GSSC-PLLR-311
+TITLE: Semantic
+STATEMENT: >>>
+The GSSC Website Public Frontend Home Page SHALL retrieve the visible public announcements from the Unified Backend and place them as Carousel Contents through the Carousel Container, and when the page receives a focused announcement identifier that matches an announcement among those Contents, SHALL begin on that announcement's slide.
+<<<
+RATIONALE: >>>
+The home page Announcements Display refines PHLR-49 through PHLR-57 by supplying announcement Contents to the Carousel Container. Visibility follows each announcement's optional display window. A focused identifier lets the Announcements Bar open a specific slide.
+<<<
+COMMENT: >>>
+GSSC5-14. Carousel Container owns slide chrome, rotation, and switching. Purpose of the Society is not a dedicated home element; it may appear only as a tagged home dynamic section when authored in the backend.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-14
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-49
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-50
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-56
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-57
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-312
+TITLE: Syntactic
+STATEMENT: >>>
+The Home Announcements Display SHALL place the Carousel Container at full width at the top of the Page Outlet contents, and SHALL omit the Carousel Container when the Unified Backend provides no visible public announcements.
+<<<
+RATIONALE: >>>
+Announcements lead the home page. Omitting an empty carousel avoids blank chrome when there is nothing to rotate.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-14
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-49
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-313
+TITLE: Lexical
+STATEMENT: >>>
+The Home Announcements Display SHALL inherit the Page Outlet font and text color theme tokens and present announcement slides through the Carousel Container presentation, without independent page carousel chrome of its own.
+<<<
+RATIONALE: >>>
+Slide look stays with the Carousel Container so the home page does not fork a second carousel presentation.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-14
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-49
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-HOME-SPECIAL-EVENTS
+TITLE: Home Special Event Sections
+
+[REQUIREMENT]
+UID: GSSC-PLLR-314
+TITLE: Semantic
+STATEMENT: >>>
+The GSSC Website Public Frontend Home Page SHALL retrieve public events from the Unified Backend whose occurrence is within one month of today and place each such event's details as Section Contents through the Section Container.
+<<<
+RATIONALE: >>>
+Special events near their occurrence appear as ordinary sections so their wording and imagery stay backend-modifiable without a dedicated event-section widget. Event details already travel with the public event catalog.
+<<<
+COMMENT: >>>
+GSSC5-14. Occurrence uses the event's catalog date, or the event details span start when that span is complete. Within one month means the occurrence date falls between one month before today and one month after today, inclusive.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-14
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-2
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-315
+TITLE: Syntactic
+STATEMENT: >>>
+The Home Special Event Sections SHALL stack each retrieved event section at full width in the Page Outlet below the Home Announcements Display, and SHALL omit the special event section list when no public event is within one month of occurrence.
+<<<
+RATIONALE: >>>
+Special events follow announcements and precede other home sections. Omitting an empty list avoids blank chrome.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-14
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-2
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-316
+TITLE: Lexical
+STATEMENT: >>>
+The Home Special Event Sections SHALL present Section Header, Section Body, and Section Resources through the Section Container presentation, without independent lexical chrome of their own.
+<<<
+RATIONALE: >>>
+Special event sections reuse the Section Container so they share the look of other public sections.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-14
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-2
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-HOME-DYNAMIC-SECTIONS
+TITLE: Home Dynamic Sections
+
+[REQUIREMENT]
+UID: GSSC-PLLR-317
+TITLE: Semantic
+STATEMENT: >>>
+The GSSC Website Public Frontend Home Page SHALL retrieve the public sections tagged for the home page from the Unified Backend and place each retrieved section through the Section From CUID.
+<<<
+RATIONALE: >>>
+Tagged home sections are the remaining page Contents, including purpose-of-society text, library notices, cookbook offers, and other backend-authored material. Retrieving them from the Unified Backend keeps wording modifiable. Section From CUID places each section through the Section Container. There is no dedicated Purpose-of-the-Society home element.
+<<<
+COMMENT: >>>
+GSSC5-14 owner 2026-11-15: Purpose is covered only under this dynamic-section pipeline; no Purpose-only LLR or UI. Binding tag is software-owned; requirements stay tag-agnostic. Featured Photos remain out of scope until a featured-photos backend exists.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-14
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-2
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-61
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-62
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-318
+TITLE: Syntactic
+STATEMENT: >>>
+The Home Dynamic Sections SHALL place those sections at full width in the Page Outlet below the Home Special Event Sections in the Unified Backend's section order, and SHALL omit the section list when the Unified Backend provides no such sections.
+<<<
+RATIONALE: >>>
+Backend section order is the display order; the page does not invent a separate ordering scheme. Omitting an empty list avoids blank chrome when content is absent.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-14
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-2
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-61
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-319
+TITLE: Lexical
+STATEMENT: >>>
+The Home Dynamic Sections SHALL inherit the Page Outlet font and text color theme tokens and present those sections through the Section From CUID presentation, without independent page chrome of their own.
+<<<
+RATIONALE: >>>
+The page is an assembly of backend sections. Type tokens stay with the Page Outlet; section look stays with Section From CUID and the Section Container.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-14
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-2
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-61
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
 UID: GSSC-PLLR-MEMBERSHIP-PAGE
 TITLE: Membership Information Page
 

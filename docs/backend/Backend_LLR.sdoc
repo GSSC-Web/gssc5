@@ -5871,14 +5871,17 @@ RELATIONS:
 UID: GSSC-BLLR-440
 TITLE: Announcement List Entry Fields
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL include header, body, tags, cuid, index, and start and end calendar fields in each announcement list entry, and SHALL return included events in a separate events array beside the announcements array.
+The GSSC Website Unified Backend SHALL include header, body, resources, tags, cuid, index, start and end calendar fields, image file, and image position in each announcement list entry, and SHALL return included events in a separate events array beside the announcements array.
 <<<
 RATIONALE: >>>
-List entries carry the fields needed for page assembly without a second fetch for summary data; included events keep the Event catalog shape.
+List entries carry the fields needed for page assembly without a second fetch for summary data, including optional featured image fields for home carousel slides; included events keep the Event catalog shape.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-68
+CHANGE_DRIVER: >>>
+GSSC5-68
+GSSC5-14
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -6015,14 +6018,17 @@ TITLE: GET
 UID: GSSC-BLLR-443
 TITLE: Public Announcement Get
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return a public announcement by cuid in the path to an unauthenticated caller, including header, body, resources, tags, index, and start and end calendar fields.
+The GSSC Website Unified Backend SHALL return a public announcement by cuid in the path to an unauthenticated caller, including header, body, resources, tags, index, start and end calendar fields, image file, and image position.
 <<<
 RATIONALE: >>>
-Path cuid identifies one public announcement for assembly.
+Path cuid identifies one public announcement for assembly, including optional featured image fields.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-68
+CHANGE_DRIVER: >>>
+GSSC5-68
+GSSC5-14
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -6051,14 +6057,17 @@ RELATIONS:
 UID: GSSC-BLLR-445
 TITLE: Authenticated Announcement Get
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return any announcement by cuid in the path to a logged-in member, including header, body, resources, tags, index, and start and end calendar fields.
+The GSSC Website Unified Backend SHALL return any announcement by cuid in the path to a logged-in member, including header, body, resources, tags, index, start and end calendar fields, image file, and image position.
 <<<
 RATIONALE: >>>
-A logged-in member can load public or members-only announcements by cuid.
+A logged-in member can load public or members-only announcements by cuid, including optional featured image fields.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-68
+CHANGE_DRIVER: >>>
+GSSC5-68
+GSSC5-14
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent

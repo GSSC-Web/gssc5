@@ -303,6 +303,7 @@ test("GSSC-BLLR-440 Announcement List Entry Fields", async () => {
     cuid: row.id,
     header: "Fields",
     body: "field body ann",
+    resources: [],
     tags: ["t1"],
     index: 42,
     startMonth: null,
@@ -311,6 +312,8 @@ test("GSSC-BLLR-440 Announcement List Entry Fields", async () => {
     endMonth: null,
     endDay: null,
     endYear: null,
+    imageFile: null,
+    imagePosition: null,
   });
 });
 // @relation(GSSC-BLLR-440, scope=range_end, role=Test)
@@ -397,6 +400,8 @@ test("GSSC-BLLR-443 Public Announcement Get", async () => {
     endMonth: null,
     endDay: null,
     endYear: null,
+    imageFile: null,
+    imagePosition: null,
   });
 });
 // @relation(GSSC-BLLR-443, scope=range_end, role=Test)
@@ -435,6 +440,8 @@ test("GSSC-BLLR-445 Authenticated Announcement Get", async () => {
     endMonth: null,
     endDay: null,
     endYear: null,
+    imageFile: null,
+    imagePosition: null,
   });
 });
 // @relation(GSSC-BLLR-445, scope=range_end, role=Test)
@@ -621,6 +628,8 @@ test("GSSC-BLLR-450 Announcement Modification", async () => {
     endMonth: null,
     endDay: null,
     endYear: null,
+    imageFile: null,
+    imagePosition: null,
   });
 });
 // @relation(GSSC-BLLR-450, scope=range_end, role=Test)

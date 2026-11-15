@@ -7,17 +7,20 @@ import { PageDataEntryPlain } from "../generated/prismabox/PageDataEntry";
 import { loginTokenCookie } from "../user/login-session";
 import {
   hasPerm,
+  isImagePosition,
   openSession,
   parseStringArray,
   trimStrings,
   uniqueTags,
   type EntryRow,
+  type ImagePosition,
 } from "./helpers";
 
 const AnnouncementListEntry = t.Object({
   cuid: PageDataEntryPlain.properties.id,
   header: PageDataEntryPlain.properties.header,
   body: PageDataEntryPlain.properties.body,
+  resources: t.Array(t.String()),
   tags: t.Array(t.String()),
   index: PageDataEntryPlain.properties.index,
   startMonth: PageDataEntryPlain.properties.startMonth,
@@ -26,6 +29,13 @@ const AnnouncementListEntry = t.Object({
   endMonth: PageDataEntryPlain.properties.endMonth,
   endDay: PageDataEntryPlain.properties.endDay,
   endYear: PageDataEntryPlain.properties.endYear,
+  imageFile: PageDataEntryPlain.properties.imageFile,
+  imagePosition: t.Union([
+    t.Literal("none"),
+    t.Literal("left"),
+    t.Literal("right"),
+    t.Null(),
+  ]),
 });
 
 /** Event catalog fields included beside announcements (GSSC5-69 Event table). */
@@ -67,6 +77,13 @@ const AnnouncementDetail = t.Object({
   endMonth: PageDataEntryPlain.properties.endMonth,
   endDay: PageDataEntryPlain.properties.endDay,
   endYear: PageDataEntryPlain.properties.endYear,
+  imageFile: PageDataEntryPlain.properties.imageFile,
+  imagePosition: t.Union([
+    t.Literal("none"),
+    t.Literal("left"),
+    t.Literal("right"),
+    t.Null(),
+  ]),
 });
 
 /**
@@ -376,11 +393,17 @@ function includesInsensitive(haystack: string, needle: string): boolean {
   return haystack.toLowerCase().includes(needle.toLowerCase());
 }
 
+function wireImagePosition(value: string | null): ImagePosition | null {
+  if (value === null) return null;
+  return isImagePosition(value) ? value : null;
+}
+
 function toAnnouncementListEntry(row: EntryRow) {
   return {
     cuid: row.id,
     header: row.header,
     body: row.body,
+    resources: parseStringArray(row.resources),
     tags: parseStringArray(row.tags),
     index: row.index,
     startMonth: row.startMonth,
@@ -389,6 +412,8 @@ function toAnnouncementListEntry(row: EntryRow) {
     endMonth: row.endMonth,
     endDay: row.endDay,
     endYear: row.endYear,
+    imageFile: row.imageFile,
+    imagePosition: wireImagePosition(row.imagePosition),
   };
 }
 
@@ -438,6 +463,8 @@ function toAnnouncementDetail(row: EntryRow) {
     endMonth: row.endMonth,
     endDay: row.endDay,
     endYear: row.endYear,
+    imageFile: row.imageFile,
+    imagePosition: wireImagePosition(row.imagePosition),
   };
 }
 
