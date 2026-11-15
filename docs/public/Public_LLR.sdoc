@@ -5404,7 +5404,7 @@ The page hosts the Public Calendar month view and optional miscellaneous notices
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-17
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-137
@@ -5425,7 +5425,7 @@ Notices precede the month calendar so optional announcements stay visible withou
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-17
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-137
@@ -5446,7 +5446,7 @@ The page is an assembly of tagged notices and the Public Calendar. Type tokens s
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-17
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-137
@@ -5473,7 +5473,7 @@ The page displays whatever Contents those tagged sections provide. Notice wordin
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-17
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-138
@@ -5491,7 +5491,7 @@ One Section From CUID host per retrieved section keeps placement consistent. Bac
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-17
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-138
@@ -5509,7 +5509,7 @@ Calendar-page notices reuse Section From CUID so they share the Section Containe
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-17
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-138
@@ -5533,7 +5533,7 @@ Per-section Contents come from the Unified Backend for that cuid. The page does 
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-17
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-138
@@ -5551,7 +5551,7 @@ One host per cuid keeps each calendar-page notice a discrete placement in the pa
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-17
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-138
@@ -5569,7 +5569,7 @@ Each calendar-page notice reuses Section From CUID so section look stays with th
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-17
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-138

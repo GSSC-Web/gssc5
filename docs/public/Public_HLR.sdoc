@@ -1374,7 +1374,7 @@ The Public Calendar module is the month-view surface for society events. This re
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-17
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-5
@@ -1391,7 +1391,7 @@ Optional notice content mirrors other public pages that load tagged sections bes
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-17
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-5
