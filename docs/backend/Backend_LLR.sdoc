@@ -7640,38 +7640,38 @@ RELATIONS:
 
 [REQUIREMENT]
 UID: GSSC-BLLR-400
-TITLE: Event Date on Page Data
+TITLE: Page Data Start Date
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL store a month, a day, and a year for the event date on each event-details page data table entry.
+The GSSC Website Unified Backend SHALL store a start month, a start day, and a start year on each page data table entry for sections, announcements, and event details.
 <<<
 RATIONALE: >>>
-Event-detail rows in the page data table hold the calendar date on which the event occurs.
+The start date begins a limited display window for announcements and sections, and begins an event's span. For a single-day event the start date equals the end date. Whether a given entry kind requires the start date is outside this storage requirement.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-67
-REVIEW_STATUS: Approved
+REVIEW_STATUS: Changed
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-BHLR-127
+  VALUE: GSSC-BHLR-185
   ROLE: Refines
 
 [REQUIREMENT]
 UID: GSSC-BLLR-401
-TITLE: Event Announcement Start on Page Data
+TITLE: Page Data End Date
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL store a month, a day, and a year for the start of the announcement window on each event-details page data table entry.
+The GSSC Website Unified Backend SHALL store an end month, an end day, and an end year on each page data table entry for sections, announcements, and event details.
 <<<
 RATIONALE: >>>
-Event-detail rows in the page data table hold the date on which announcement of the event begins. This requirement does not set when that announcement ends.
+The end date ends a limited display window for announcements and sections, and ends an event's span. For a single-day event the end date equals the start date. Whether a given entry kind requires the end date is outside this storage requirement.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-67
-REVIEW_STATUS: Approved
+REVIEW_STATUS: Changed
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-BHLR-133
+  VALUE: GSSC-BHLR-185
   ROLE: Refines
 
 [REQUIREMENT]

@@ -593,45 +593,86 @@ test("GSSC-BLLR-338 Page Entry Table", async () => {
 // @relation(GSSC-BLLR-338, scope=range_end, role=Test)
 
 // @relation(GSSC-BLLR-400, scope=range_start, role=Test)
-test("GSSC-BLLR-400 Event Date on Page Data", async () => {
+test("GSSC-BLLR-400 Page Data Start Date", async () => {
+  const announcement = await db().pageDataEntry.create({
+    data: {
+      datatype: "announcement",
+      body: "announce-with-start",
+      isPublic: true,
+      startMonth: 10,
+      startDay: 1,
+      startYear: 2026,
+    },
+  });
   const event = await db().pageDataEntry.create({
     data: {
       datatype: "event",
-      body: "event-with-date",
+      body: "single-day-event",
       isPublic: true,
-      eventMonth: 11,
-      eventDay: 15,
-      eventYear: 2026,
+      startMonth: 11,
+      startDay: 15,
+      startYear: 2026,
+      endMonth: 11,
+      endDay: 15,
+      endYear: 2026,
     },
   });
-  const stored = await db().pageDataEntry.findUnique({ where: { id: event.id } });
-  expect(stored).toMatchObject({
+  expect(
+    await db().pageDataEntry.findUnique({ where: { id: announcement.id } }),
+  ).toMatchObject({
+    datatype: "announcement",
+    startMonth: 10,
+    startDay: 1,
+    startYear: 2026,
+  });
+  expect(await db().pageDataEntry.findUnique({ where: { id: event.id } })).toMatchObject({
     datatype: "event",
-    eventMonth: 11,
-    eventDay: 15,
-    eventYear: 2026,
+    startMonth: 11,
+    startDay: 15,
+    startYear: 2026,
   });
 });
 // @relation(GSSC-BLLR-400, scope=range_end, role=Test)
 
 // @relation(GSSC-BLLR-401, scope=range_start, role=Test)
-test("GSSC-BLLR-401 Event Announcement Start on Page Data", async () => {
+test("GSSC-BLLR-401 Page Data End Date", async () => {
+  const section = await db().pageDataEntry.create({
+    data: {
+      datatype: "section",
+      body: "section-with-window",
+      isPublic: true,
+      startMonth: 9,
+      startDay: 1,
+      startYear: 2026,
+      endMonth: 9,
+      endDay: 30,
+      endYear: 2026,
+    },
+  });
   const event = await db().pageDataEntry.create({
     data: {
       datatype: "event",
-      body: "event-with-announce-start",
+      body: "multi-day-event",
       isPublic: true,
-      announcementStartMonth: 10,
-      announcementStartDay: 1,
-      announcementStartYear: 2026,
+      startMonth: 11,
+      startDay: 15,
+      startYear: 2026,
+      endMonth: 11,
+      endDay: 17,
+      endYear: 2026,
     },
   });
-  const stored = await db().pageDataEntry.findUnique({ where: { id: event.id } });
-  expect(stored).toMatchObject({
+  expect(await db().pageDataEntry.findUnique({ where: { id: section.id } })).toMatchObject({
+    datatype: "section",
+    endMonth: 9,
+    endDay: 30,
+    endYear: 2026,
+  });
+  expect(await db().pageDataEntry.findUnique({ where: { id: event.id } })).toMatchObject({
     datatype: "event",
-    announcementStartMonth: 10,
-    announcementStartDay: 1,
-    announcementStartYear: 2026,
+    endMonth: 11,
+    endDay: 17,
+    endYear: 2026,
   });
 });
 // @relation(GSSC-BLLR-401, scope=range_end, role=Test)
