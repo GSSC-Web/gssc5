@@ -88,9 +88,10 @@ GSSC5-90 Account Self-Service and GSSC5-91 Admin Account Management share GSSC-M
 GSSC5-85 Contact-row / Form Primitives owns GSSC-MLLR-159 through GSSC-MLLR-179 (Contact Row + form-field building blocks).
 GSSC5-84 Generic Editor Module owns GSSC-MLLR-180 through GSSC-MLLR-201 (editor shell, actions, contention, session behaviors; composes GSSC5-85 form fields).
 GSSC5-92 Members Directory + Search owns GSSC-MLLR-202 through GSSC-MLLR-214 (exact end 214; band 202–230 reserved for directory so parallel Wave tickets do not mint below 231).
+GSSC5-93 Page/Section Content Editor owns GSSC-MLLR-261 through GSSC-MLLR-286 (page selector, section list, section editor host, preview, save/cancel/permission behaviors).
 GSSC5-89 Member Dashboard Page owns GSSC-MLLR-231 through GSSC-MLLR-239.
 GSSC5-94 Announcements Editor owns GSSC-MLLR-291 through GSSC-MLLR-307 (page, catalog, Generic Editor host, create/modify/publish behaviors; reuses GSSC5-84/85; consumes GSSC5-68 /announcements).
-Wave coordination: GSSC5-92 directory 202–214 (band through 230), GSSC5-89 dashboard 231–239, GSSC5-93 page/section editor ~261+, GSSC5-94 announcements 291–307, GSSC5-95 events editor ~321+ — do not collide.
+Wave coordination: GSSC5-92 directory 202–214 (band through 230), GSSC5-89 dashboard 231–239, GSSC5-93 page/section 261–286, GSSC5-94 announcements 291–307, GSSC5-95 events editor ~321+ — do not collide.
 GSSC-MLLR-33 through GSSC-MLLR-39 remain free for later claimants.
 Do not reuse numbers already claimed by another ticket.
 <<<
@@ -5113,6 +5114,537 @@ REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-28
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-PAGE-SECTION-EDITOR
+TITLE: Page/Section Content Editor
+
+[[SECTION]]
+UID: GSSC-MLLR-PAGE-SECTION-EDITOR-PAGE
+TITLE: Page/Section Editor Page
+
+[REQUIREMENT]
+UID: GSSC-MLLR-261
+TITLE: Semantic
+STATEMENT: >>>
+The GSSC Website Member Frontend Page/Section Editor Page SHALL let a logged-in member with the necessary permissions choose a public page, select a section of that page, and modify that section's editable contents through the Generic Editor without programming knowledge.
+<<<
+RATIONALE: >>>
+One host page covers public page and section modification by composing page selection, section selection, and the shared Generic Editor.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-93
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-38
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-39
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-262
+TITLE: Syntactic
+STATEMENT: >>>
+The Page/Section Editor Page SHALL fill the page content area as a single vertical column of page selection, section list, and when a section is selected, the section editor and preview regions.
+<<<
+RATIONALE: >>>
+A vertical stack keeps selection and editing ordered as the viewport resizes.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-93
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-38
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-263
+TITLE: Lexical
+STATEMENT: >>>
+The Page/Section Editor Page SHALL use a sans-serif typeface and the dark-green theme token for its page title and default text.
+<<<
+RATIONALE: >>>
+Page chrome matches Member Frontend brand type and color.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-93
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-38
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-PAGE-SELECTOR
+TITLE: Page Selector
+
+[REQUIREMENT]
+UID: GSSC-MLLR-264
+TITLE: Semantic
+STATEMENT: >>>
+The Page Selector SHALL present the set of public pages whose sections the member may browse for modification and SHALL set the active public page used to retrieve sections.
+<<<
+RATIONALE: >>>
+Choosing a public page scopes section listing to that page's tagged contents.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-93
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-38
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-265
+TITLE: Syntactic
+STATEMENT: >>>
+The Page Selector SHALL fill the width of the Page/Section Editor Page content column and appear above the Section List.
+<<<
+RATIONALE: >>>
+Page choice precedes section listing so the member selects scope before picking a section.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-93
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-38
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-266
+TITLE: Lexical
+STATEMENT: >>>
+The Page Selector SHALL use shared form-select field chrome with the dark-green theme token for its border and label and the white theme token for its field background.
+<<<
+RATIONALE: >>>
+Shared form chrome keeps page selection consistent with other Member Frontend editors.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-93
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-38
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-SECTION-LIST
+TITLE: Section List
+
+[REQUIREMENT]
+UID: GSSC-MLLR-267
+TITLE: Semantic
+STATEMENT: >>>
+When a public page is selected, the Section List SHALL present the sections that belong to that page so the member can choose one section to modify.
+<<<
+RATIONALE: >>>
+Listing page sections is how a member reaches a specific section for modification.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-93
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-38
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-39
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-268
+TITLE: Syntactic
+STATEMENT: >>>
+The Section List SHALL fill the width of the Page/Section Editor Page content column and stack section choices vertically below the Page Selector.
+<<<
+RATIONALE: >>>
+A full-width stacked list keeps section choices scannable before the editor opens.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-93
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-38
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-269
+TITLE: Lexical
+STATEMENT: >>>
+The Section List SHALL use the white theme token for its background, the gray theme token for its border, and the dark-green theme token for its heading text.
+<<<
+RATIONALE: >>>
+List chrome stays aligned with Member Frontend content panels.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-93
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-38
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-SECTION-LIST-ITEM
+TITLE: Section List Item
+
+[REQUIREMENT]
+UID: GSSC-MLLR-270
+TITLE: Semantic
+STATEMENT: >>>
+Each Section List Item SHALL identify one section on the selected public page and, when activated, SHALL make that section the active section for modification in the Section Editor Host.
+<<<
+RATIONALE: >>>
+Selecting a list item loads that section into the editor.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-93
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-39
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-271
+TITLE: Syntactic
+STATEMENT: >>>
+Each Section List Item SHALL span the width of the Section List and present its label as a single left-aligned row.
+<<<
+RATIONALE: >>>
+Full-width rows keep section choices easy to hit and scan.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-93
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-39
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-272
+TITLE: Lexical
+STATEMENT: >>>
+Each Section List Item SHALL use a sans-serif typeface and the dark-green theme token for its label text.
+<<<
+RATIONALE: >>>
+List item text matches Member Frontend body chrome.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-93
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-39
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-SECTION-EDITOR-HOST
+TITLE: Section Editor Host
+
+[REQUIREMENT]
+UID: GSSC-MLLR-273
+TITLE: Semantic
+STATEMENT: >>>
+When a section is selected, the Section Editor Host SHALL place a Generic Editor for that section's header, body, featured-image position, featured-image file identifier, and resources so the member can modify those contents without programming knowledge.
+<<<
+RATIONALE: >>>
+Hosting the Generic Editor with section fields is the section modification surface.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-93
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-39
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-24
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-274
+TITLE: Syntactic
+STATEMENT: >>>
+The Section Editor Host SHALL occupy the editing column of the Page/Section Editor Page workspace beside the Section Preview when both are shown.
+<<<
+RATIONALE: >>>
+Side-by-side editor and preview keeps field edits and resulting presentation visible together on large viewports; the workspace stacks on smaller viewports.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-93
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-39
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-275
+TITLE: Lexical
+STATEMENT: >>>
+The Section Editor Host SHALL rely on Generic Editor shell chrome, including the white theme token for background, the gray theme token for border, and the dark-green theme token for default text.
+<<<
+RATIONALE: >>>
+Reusing Generic Editor lexical chrome keeps Wave 7 hosts consistent.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-93
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-39
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-SECTION-PREVIEW
+TITLE: Section Preview
+
+[REQUIREMENT]
+UID: GSSC-MLLR-276
+TITLE: Semantic
+STATEMENT: >>>
+When a section is selected, the Section Preview SHALL place a read-only Member Section Container showing the section contents currently held in the Section Editor Host fields.
+<<<
+RATIONALE: >>>
+A live preview lets the member see section presentation while editing without leaving the page.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-93
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-39
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-23
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-277
+TITLE: Syntactic
+STATEMENT: >>>
+The Section Preview SHALL fill its workspace column and stack a preview heading above the Member Section Container.
+<<<
+RATIONALE: >>>
+A headed column keeps the preview region distinct from the editor fields.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-93
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-39
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-278
+TITLE: Lexical
+STATEMENT: >>>
+The Section Preview heading SHALL use a sans-serif typeface, semi-bold weight, and the dark-green theme token for its text.
+<<<
+RATIONALE: >>>
+Preview heading chrome matches other Page/Section Editor section headings.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-93
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-39
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-PAGE-SECTION-EDITOR-BEHAVIOR
+TITLE: Page/Section Editor Behaviors
+
+[REQUIREMENT]
+UID: GSSC-MLLR-279
+TITLE: Semantic
+STATEMENT: >>>
+When the member selects a public page, the Page/Section Editor Page SHALL retrieve the sections that belong to that page from the Unified Backend and place them in the Section List in backend order.
+<<<
+RATIONALE: >>>
+Backend-ordered retrieval keeps the editor list aligned with public page assembly.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-93
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-38
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-280
+TITLE: Semantic
+STATEMENT: >>>
+When the member selects a section, the Page/Section Editor Page SHALL retrieve that section's detail from the Unified Backend and place its editable fields into the Section Editor Host.
+<<<
+RATIONALE: >>>
+Loading detail into the Generic Editor fields is the start of a section modification session.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-93
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-39
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-281
+TITLE: Semantic
+STATEMENT: >>>
+When Save succeeds from the Section Editor Host, the Page/Section Editor Page SHALL persist the editor field values to the Unified Backend for the selected section.
+<<<
+RATIONALE: >>>
+Persistence through the section write API completes permitted modification without programming knowledge.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-93
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-39
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-282
+TITLE: Semantic
+STATEMENT: >>>
+When Cancel is activated on the Section Editor Host, the Page/Section Editor Page SHALL restore the selected section's field values to the last loaded or saved baseline without requesting persistence.
+<<<
+RATIONALE: >>>
+Discard without write lets the member abandon an edit safely.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-93
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-39
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-283
+TITLE: Semantic
+STATEMENT: >>>
+When the Unified Backend refuses a section modification because the member lacks the necessary permissions, the Page/Section Editor Page SHALL prevent further modification of that section in the Section Editor Host and SHALL show that modification is not permitted.
+<<<
+RATIONALE: >>>
+Permission failures must stop editing and communicate the outcome so the member does not believe changes were accepted.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-93
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-39
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-284
+TITLE: Semantic
+STATEMENT: >>>
+The Section Editor Host SHALL identify exclusive modification of the selected section by that section's stable identity so the Generic Editor can limit modification of that section to one holder at a time.
+<<<
+RATIONALE: >>>
+Per-section exclusive identity satisfies exclusive page/section edit when composing the Generic Editor.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-93
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-41
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-42
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-285
+TITLE: Semantic
+STATEMENT: >>>
+The Page/Section Editor Page SHALL allow modification of different sections at the same time by using distinct section identities for exclusive modification.
+<<<
+RATIONALE: >>>
+Distinct identities keep concurrent different-section edits from blocking each other.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-93
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-40
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-286
+TITLE: Semantic
+STATEMENT: >>>
+Modifying a public page on the Page/Section Editor Page SHALL mean selecting that page and modifying one or more of the sections that belong to it.
+<<<
+RATIONALE: >>>
+Public pages are composed of tagged sections; page modification is section modification scoped to that page.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-93
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-38
   ROLE: Refines
 
 [[/SECTION]]
