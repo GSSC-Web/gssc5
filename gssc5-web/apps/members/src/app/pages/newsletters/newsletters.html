@@ -1,0 +1,142 @@
+<!-- @relation(GSSC-MLLR-351, GSSC-MLLR-352, GSSC-MLLR-353, scope=range_start, role=Implementation) -->
+<section
+  class="gssc-newsletters-page mx-auto flex w-full max-w-3xl flex-col gap-6 px-4 py-6 font-sans text-gssc-dark-green"
+  aria-labelledby="gssc-newsletters-heading"
+>
+  <header class="gssc-newsletters-page__header flex flex-col gap-1">
+    <h1
+      id="gssc-newsletters-heading"
+      class="gssc-newsletters-page__title m-0 font-sans text-2xl font-semibold text-gssc-dark-green"
+    >
+      Newsletters
+    </h1>
+    <p class="gssc-newsletters-page__lede m-0 font-sans text-sm font-normal text-gssc-dark-green">
+      Create and update society newsletters for the public catalog.
+    </p>
+  </header>
+
+  @if (!canEdit()) {
+    <!-- @relation(GSSC-MLLR-363, GSSC-MLLR-364, GSSC-MLLR-365, scope=range_start, role=Implementation) -->
+    <p
+      class="gssc-newsletters-unauthorized m-0 rounded-md border border-gssc-dark-red bg-gssc-light-red px-3 py-2 font-sans text-sm text-gssc-dark-red"
+      role="alert"
+    >
+      Newsletter editing is unavailable for your account.
+    </p>
+    <!-- @relation(GSSC-MLLR-363, GSSC-MLLR-364, GSSC-MLLR-365, scope=range_end, role=Implementation) -->
+  } @else {
+    <div class="gssc-newsletters-catalog-panel flex w-full flex-col gap-3">
+      <!-- @relation(GSSC-MLLR-357, GSSC-MLLR-358, GSSC-MLLR-359, scope=range_start, role=Implementation) -->
+      <div class="gssc-newsletters-catalog-actions flex flex-wrap items-center gap-3">
+        <button
+          type="button"
+          class="gssc-newsletters-new inline-flex cursor-pointer items-center justify-center rounded-md border border-gssc-dark-green bg-gssc-light-green px-3 py-2 font-sans text-sm font-normal text-gssc-dark-green hover:bg-gssc-gray"
+          (click)="beginCreate()"
+        >
+          New Newsletter
+        </button>
+      </div>
+      <!-- @relation(GSSC-MLLR-357, GSSC-MLLR-358, GSSC-MLLR-359, scope=range_end, role=Implementation) -->
+
+      <!-- @relation(GSSC-MLLR-354, GSSC-MLLR-355, GSSC-MLLR-356, scope=range_start, role=Implementation) -->
+      <div class="gssc-newsletters-catalog flex w-full flex-col gap-2" aria-live="polite">
+        @if (loading() && entries().length === 0) {
+          <p class="gssc-newsletters-catalog__status m-0 font-sans text-sm text-gssc-dark-green">
+            Loading newsletters…
+          </p>
+        } @else if (loadError()) {
+          <p class="gssc-newsletters-catalog__error m-0 font-sans text-sm text-gssc-dark-green">
+            Catalog unavailable.
+          </p>
+        } @else if (entries().length === 0) {
+          <p class="gssc-newsletters-catalog__empty m-0 font-sans text-sm text-gssc-dark-green">
+            No newsletters yet. Create one to publish it to the public catalog.
+          </p>
+        } @else {
+          <ul class="gssc-newsletters-catalog__list m-0 flex list-none flex-col gap-2 p-0">
+            @for (entry of entries(); track entry.cuid) {
+              <li class="gssc-newsletters-catalog__item m-0 p-0">
+                <button
+                  type="button"
+                  class="gssc-newsletters-catalog__entry flex w-full cursor-pointer items-center rounded-md border border-gssc-gray px-3 py-2 text-left font-sans text-sm text-gssc-dark-green hover:bg-gssc-gray"
+                  [class.bg-gssc-light-green]="selectedCuid() === entry.cuid"
+                  [attr.aria-pressed]="selectedCuid() === entry.cuid"
+                  (click)="selectEntry(entry)"
+                >
+                  {{ catalogLabel(entry) }}
+                </button>
+              </li>
+            }
+          </ul>
+        }
+      </div>
+      <!-- @relation(GSSC-MLLR-354, GSSC-MLLR-355, GSSC-MLLR-356, scope=range_end, role=Implementation) -->
+    </div>
+
+    <!-- @relation(GSSC-MLLR-360, GSSC-MLLR-361, GSSC-MLLR-362, scope=range_start, role=Implementation) -->
+    <gssc-editor
+      class="gssc-newsletters-editor block w-full"
+      [resourceId]="resourceId()"
+      [permitted]="canEdit()"
+      [title]="editorTitle()"
+      (saved)="onEditorSaved()"
+      (cancelled)="onEditorCancelled()"
+    >
+      <gssc-form-text-field
+        label="Volume"
+        name="volume"
+        [(value)]="volume"
+        [enabled]="canEdit()"
+        controlId="gssc-newsletter-volume"
+        [required]="true"
+      />
+      <gssc-form-text-field
+        label="Number"
+        name="number"
+        [(value)]="number"
+        [enabled]="canEdit()"
+        controlId="gssc-newsletter-number"
+        [required]="true"
+      />
+      <gssc-form-text-field
+        label="Month"
+        name="month"
+        [(value)]="month"
+        [enabled]="canEdit()"
+        controlId="gssc-newsletter-month"
+        [required]="true"
+      />
+      <gssc-form-text-field
+        label="Year"
+        name="year"
+        [(value)]="year"
+        [enabled]="canEdit()"
+        controlId="gssc-newsletter-year"
+        [required]="true"
+      />
+      <gssc-form-text-field
+        label="File Path"
+        name="filePath"
+        [(value)]="filePath"
+        [enabled]="canEdit()"
+        controlId="gssc-newsletter-file-path"
+        [required]="true"
+      />
+      <gssc-form-text-field
+        label="Keywords"
+        name="keywords"
+        [(value)]="keywords"
+        [enabled]="canEdit()"
+        controlId="gssc-newsletter-keywords"
+      />
+    </gssc-editor>
+    <!-- @relation(GSSC-MLLR-360, GSSC-MLLR-361, GSSC-MLLR-362, scope=range_end, role=Implementation) -->
+
+    @if (saveError()) {
+      <p class="gssc-newsletters-save-error m-0 font-sans text-sm text-gssc-dark-red" role="alert">
+        {{ saveError() }}
+      </p>
+    }
+  }
+</section>
+<!-- @relation(GSSC-MLLR-351, GSSC-MLLR-352, GSSC-MLLR-353, scope=range_end, role=Implementation) -->

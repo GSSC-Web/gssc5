@@ -16,6 +16,7 @@ type AccountView = {
   username?: string;
   isAdmin?: boolean;
   isUserMod?: boolean;
+  isNewsletterEditor?: boolean;
 };
 
 export type LoginCredentials = {
@@ -45,6 +46,8 @@ export class MemberSession {
   readonly isAdmin = signal(false);
   /** True when the hydrated account is a user moderator (administrators included by backend flags). */
   readonly isUserMod = signal(false);
+  /** True when the hydrated account may mutate society newsletters (administrators also may). */
+  readonly isNewsletterEditor = signal(false);
   /** True after the first challenge/hydrate attempt finishes (success or fail). */
   readonly ready = signal(false);
 
@@ -161,6 +164,7 @@ export class MemberSession {
     this.isAdmin.set(user.isAdmin === true);
     // Administrators are user moderators for FE role gates (admin ⊃ userMod).
     this.isUserMod.set(user.isAdmin === true || user.isUserMod === true);
+    this.isNewsletterEditor.set(user.isNewsletterEditor === true);
     this.setSession(displayNameFromAccount(user));
   }
 
@@ -169,6 +173,7 @@ export class MemberSession {
     this.cuid.set('');
     this.isAdmin.set(false);
     this.isUserMod.set(false);
+    this.isNewsletterEditor.set(false);
     writeStored(NAME_KEY, null);
     writeStored(LEGACY_TOKEN_KEY, null);
     this.loggedIn.set(false);

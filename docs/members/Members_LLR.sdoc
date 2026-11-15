@@ -91,7 +91,8 @@ GSSC5-92 Members Directory + Search owns GSSC-MLLR-202 through GSSC-MLLR-214 (ex
 GSSC5-93 Page/Section Content Editor owns GSSC-MLLR-261 through GSSC-MLLR-286 (page selector, section list, section editor host, preview, save/cancel/permission behaviors).
 GSSC5-89 Member Dashboard Page owns GSSC-MLLR-231 through GSSC-MLLR-239.
 GSSC5-94 Announcements Editor owns GSSC-MLLR-291 through GSSC-MLLR-307 (page, catalog, Generic Editor host, create/modify/publish behaviors; reuses GSSC5-84/85; consumes GSSC5-68 /announcements).
-Wave coordination: GSSC5-92 directory 202–214 (band through 230), GSSC5-89 dashboard 231–239, GSSC5-93 page/section 261–286, GSSC5-94 announcements 291–307, GSSC5-95 events editor ~321+ — do not collide.
+GSSC5-96 Newsletters Editor owns GSSC-MLLR-351 through GSSC-MLLR-373 (exact end 373; band 351–380 reserved so parallel Wave editors do not collide).
+Wave coordination: GSSC5-92 directory 202–214 (band through 230), GSSC5-89 dashboard 231–239, GSSC5-93 page/section 261–286, GSSC5-94 announcements 291–307, GSSC5-95 events editor ~321+, GSSC5-96 newsletters 351–373 — do not collide.
 GSSC-MLLR-33 through GSSC-MLLR-39 remain free for later claimants.
 Do not reuse numbers already claimed by another ticket.
 <<<
@@ -5645,6 +5646,495 @@ REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-38
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-NEWSLETTERS-EDITOR
+TITLE: Newsletters Editor
+
+[[SECTION]]
+UID: GSSC-MLLR-NEWSLETTERS-PAGE
+TITLE: Newsletters Page
+
+[REQUIREMENT]
+UID: GSSC-MLLR-351
+TITLE: Semantic
+STATEMENT: >>>
+The Member Frontend Newsletters Page SHALL present newsletter authoring for a logged-in viewer, loading the society newsletter catalog from the Unified Backend and hosting create and modify controls for authorized members.
+<<<
+RATIONALE: >>>
+One authenticated page hosts newsletter catalog selection and the Generic Editor used to create or change catalog entries.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-96
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-49
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-50
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-51
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-352
+TITLE: Syntactic
+STATEMENT: >>>
+The Newsletters Page SHALL stack a page heading, the newsletter catalog, the new-newsletter control, and the newsletter editor vertically in the page content area as one column when the viewer is authorized.
+<<<
+RATIONALE: >>>
+A single vertical stack keeps catalog selection above the editor without competing side panels.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-96
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-49
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-353
+TITLE: Lexical
+STATEMENT: >>>
+The Newsletters Page SHALL use the Member Frontend sans-serif typeface and dark-green theme color for its heading and supporting text.
+<<<
+RATIONALE: >>>
+Newsletter authoring shares Member Frontend brand type and color.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-96
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-49
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-NEWSLETTER-CATALOG
+TITLE: Newsletter Catalog
+
+[REQUIREMENT]
+UID: GSSC-MLLR-354
+TITLE: Semantic
+STATEMENT: >>>
+The Newsletter Catalog SHALL list society newsletters from the Unified Backend and SHALL let an authorized member select an existing newsletter to load into the newsletter editor for modification.
+<<<
+RATIONALE: >>>
+Catalog selection is how members open an existing issue for correction without knowing programming identifiers.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-96
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-51
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-355
+TITLE: Syntactic
+STATEMENT: >>>
+The Newsletter Catalog SHALL present selectable newsletter entries in a single vertical list that stretches to the Newsletters Page content width above the newsletter editor.
+<<<
+RATIONALE: >>>
+A vertical list keeps issues scannable and aligned with the editor below.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-96
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-51
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-356
+TITLE: Lexical
+STATEMENT: >>>
+The Newsletter Catalog SHALL use dark-green theme text for entry labels and a light-green theme highlight on the selected entry.
+<<<
+RATIONALE: >>>
+Quiet brand styling keeps the catalog readable beside the editor.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-96
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-51
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-NEWSLETTER-NEW-CONTROL
+TITLE: New Newsletter Control
+
+[REQUIREMENT]
+UID: GSSC-MLLR-357
+TITLE: Semantic
+STATEMENT: >>>
+The New Newsletter Control SHALL clear the newsletter editor to empty create fields so an authorized member can enter a new newsletter without programming knowledge.
+<<<
+RATIONALE: >>>
+Explicit create mode starts a new catalog entry distinct from modifying a selected issue.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-96
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-49
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-358
+TITLE: Syntactic
+STATEMENT: >>>
+The New Newsletter Control SHALL sit with the Newsletter Catalog actions above the newsletter editor as an activatable control.
+<<<
+RATIONALE: >>>
+Placing create beside the catalog keeps authoring choices together before the field editor.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-96
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-49
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-359
+TITLE: Lexical
+STATEMENT: >>>
+The New Newsletter Control SHALL use the Member Frontend sans-serif typeface, dark-green theme text, and a light-green theme fill on its activatable surface.
+<<<
+RATIONALE: >>>
+Shared action styling matches other Member Frontend primary controls.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-96
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-49
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-NEWSLETTER-EDITOR
+TITLE: Newsletter Editor
+
+[REQUIREMENT]
+UID: GSSC-MLLR-360
+TITLE: Semantic
+STATEMENT: >>>
+The Newsletter Editor SHALL host the Generic Editor with volume, number, month, year, file path, and keywords fields for the selected or new newsletter, accepting those values from the authorized member and sending create or modify outputs to the Unified Backend on Save.
+<<<
+RATIONALE: >>>
+Generic Editor supplies exclusive edit, Save, and Cancel; newsletter fields are the society catalog identity and content pointer.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-96
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-49
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-50
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-51
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-24
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-361
+TITLE: Syntactic
+STATEMENT: >>>
+The Newsletter Editor SHALL place its Generic Editor below the catalog and new-newsletter control, stretching to the Newsletters Page content width with fields stacked in the Generic Editor field area.
+<<<
+RATIONALE: >>>
+Stacking fields in the shared editor shell keeps create and modify on one surface.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-96
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-49
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-24
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-362
+TITLE: Lexical
+STATEMENT: >>>
+The Newsletter Editor SHALL use shared Member Frontend form-field primitives for its volume, number, month, year, file path, and keywords fields inside the Generic Editor chrome.
+<<<
+RATIONALE: >>>
+Reusing form primitives keeps newsletter fields consistent with other member forms.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-96
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-49
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-24
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-NEWSLETTER-UNAUTHORIZED
+TITLE: Newsletter Unauthorized Notice
+
+[REQUIREMENT]
+UID: GSSC-MLLR-363
+TITLE: Semantic
+STATEMENT: >>>
+When a logged-in member who is not authorized to edit newsletters opens the Newsletters Page, the Member Frontend SHALL refuse create and modify controls and SHALL show that newsletter editing is unavailable.
+<<<
+RATIONALE: >>>
+Newsletter mutations require administrator or newsletter-editor authorization; unauthorized members need a clear refusal.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-96
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-49
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-364
+TITLE: Syntactic
+STATEMENT: >>>
+The Newsletter Unauthorized Notice SHALL appear in the Newsletters Page content area in place of the catalog and newsletter editor when the viewer is not authorized.
+<<<
+RATIONALE: >>>
+Replacing the authoring surface prevents partial edit chrome for unauthorized viewers.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-96
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-49
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-365
+TITLE: Lexical
+STATEMENT: >>>
+The Newsletter Unauthorized Notice SHALL use the Member Frontend sans-serif typeface and dark-red theme text on a light-red theme background.
+<<<
+RATIONALE: >>>
+Alert styling matches other Member Frontend refusal surfaces.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-96
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-49
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-NEWSLETTERS-BEHAVIOR
+TITLE: Newsletters Access And Behavior
+
+[REQUIREMENT]
+UID: GSSC-MLLR-366
+TITLE: Newsletters Authentication
+STATEMENT: >>>
+The Member Frontend SHALL open the Newsletters Page only for a logged-in member and SHALL redirect a logged-out visitor who requests newsletters to the Login Page.
+<<<
+RATIONALE: >>>
+Newsletter authoring is authenticated content; route guards keep logged-out visitors on login.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-96
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-49
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-3
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-367
+TITLE: Newsletter Editor Authorization
+STATEMENT: >>>
+The Member Frontend SHALL treat a logged-in administrator or newsletter editor as authorized to create, publish, and modify newsletters on the Newsletters Page.
+<<<
+RATIONALE: >>>
+Unified Backend newsletter mutations allow administrators and newsletter editors; the Member Frontend mirrors that gate.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-96
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-49
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-50
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-51
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-368
+TITLE: Newsletter Creation Persist
+STATEMENT: >>>
+When Save succeeds on the Newsletter Editor for a new newsletter, the Member Frontend SHALL create that newsletter on the Unified Backend using the editor volume, number, month, year, file path, and keywords values.
+<<<
+RATIONALE: >>>
+Create without programming knowledge means the Generic Editor Save writes a new catalog entry through the Unified Backend.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-96
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-49
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-369
+TITLE: Newsletter Publication Persist
+STATEMENT: >>>
+When the Member Frontend successfully creates or modifies a newsletter through the Newsletter Editor, that newsletter SHALL be available to the Public Frontend newsletter catalog without a separate draft step.
+<<<
+RATIONALE: >>>
+Publication is the successful catalog persist; the society catalog has no draft flag.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-96
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-50
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-370
+TITLE: Newsletter Modification Persist
+STATEMENT: >>>
+When Save succeeds on the Newsletter Editor for an existing newsletter, the Member Frontend SHALL modify that newsletter on the Unified Backend using the changed editor field values.
+<<<
+RATIONALE: >>>
+Modification without programming knowledge means Generic Editor Save patches the selected catalog entry.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-96
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-51
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-371
+TITLE: Newsletter Catalog Load
+STATEMENT: >>>
+When the Newsletters Page opens for an authorized member, the Member Frontend SHALL load the newsletter catalog from the Unified Backend into the Newsletter Catalog.
+<<<
+RATIONALE: >>>
+Catalog load supplies the issues a member can select for modification.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-96
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-51
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-372
+TITLE: Newsletter Editor Cancel
+STATEMENT: >>>
+When Cancel is activated on the Newsletter Editor, the Member Frontend SHALL restore the editor fields to the last loaded or saved newsletter values without writing to the Unified Backend.
+<<<
+RATIONALE: >>>
+Cancel discard keeps accidental edits from persisting.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-96
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-51
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-24
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-373
+TITLE: Newsletter Catalog Selection Load
+STATEMENT: >>>
+When an authorized member selects a Newsletter Catalog entry, the Member Frontend SHALL load that newsletter's volume, number, month, year, file path, and keywords into the Newsletter Editor.
+<<<
+RATIONALE: >>>
+Selection must populate the editor before modification.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-96
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-51
   ROLE: Refines
 
 [[/SECTION]]
