@@ -86,6 +86,8 @@ GSSC5-83 Member Generic Sections (display) owns GSSC-MLLR-96 through GSSC-MLLR-1
 GSSC5-100 Hide Header/Footer when logged out owns GSSC-MLLR-32 (App Root chrome gate; also CHANGE_DRIVER on GSSC-MLLR-1).
 GSSC5-90 Account Self-Service and GSSC5-91 Admin Account Management share GSSC-MLLR-125 through GSSC-MLLR-158 (same Account Page).
 GSSC5-85 Contact-row / Form Primitives owns GSSC-MLLR-159 through GSSC-MLLR-179 (Contact Row + form-field building blocks).
+GSSC5-84 Generic Editor Module owns GSSC-MLLR-180 through GSSC-MLLR-201 (editor shell, actions, contention, session behaviors; composes GSSC5-85 form fields).
+Next contiguous free block starts at GSSC-MLLR-202 (coordinate parallel tickets such as GSSC5-92 before minting).
 GSSC-MLLR-33 through GSSC-MLLR-39 remain free for later claimants.
 Do not reuse numbers already claimed by another ticket.
 <<<
@@ -3800,6 +3802,459 @@ REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-61
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-GENERIC-EDITOR
+TITLE: Generic Editor
+
+[[SECTION]]
+UID: GSSC-MLLR-EDITOR-SHELL
+TITLE: Editor Shell
+
+[REQUIREMENT]
+UID: GSSC-MLLR-180
+TITLE: Semantic
+STATEMENT: >>>
+The GSSC Website Member Frontend Generic Editor Shell SHALL place an Editor Field Area for projected editable controls, and when the editor is available for modification SHALL place Save and Cancel controls, so a member with the necessary permissions can modify editable contents without programming knowledge.
+<<<
+RATIONALE: >>>
+The Shell is the shared placement surface Wave 7 content editors reuse. Field chrome comes from shared form primitives; the Shell owns layout, actions, and edit session feedback.
+<<<
+COMMENT: >>>
+Derived for GSSC5-84. Hosts project GSSC5-85 form-field primitives into the Field Area.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-84
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-24
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-181
+TITLE: Syntactic
+STATEMENT: >>>
+The Editor Shell SHALL fill the width of its page content area, stack the optional title, contention message when shown, Field Area, and action controls vertically, and keep spacing between those regions.
+<<<
+RATIONALE: >>>
+Full-width vertical stacking keeps the editor readable as the viewport resizes and separates feedback, fields, and actions.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-84
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-24
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-182
+TITLE: Lexical
+STATEMENT: >>>
+The Editor Shell SHALL use the white theme token for its background, the gray theme token for its border, the dark-green theme token for its default text, and a sans-serif typeface.
+<<<
+RATIONALE: >>>
+White background and organization palette tokens keep the editor aligned with Member Frontend chrome.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-84
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-24
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-EDITOR-FIELD-AREA
+TITLE: Editor Field Area
+
+[REQUIREMENT]
+UID: GSSC-MLLR-183
+TITLE: Semantic
+STATEMENT: >>>
+The Editor Field Area SHALL place the editable controls the host projects into the Generic Editor, including shared form-field primitives when the host supplies them.
+<<<
+RATIONALE: >>>
+Content editors differ in field catalogs; the Field Area is the composition slot so Wave 7 hosts reuse one shell with GSSC5-85 form chrome.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-84
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-24
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-184
+TITLE: Syntactic
+STATEMENT: >>>
+The Editor Field Area SHALL fill the width of the Editor Shell and stack projected controls in a vertical column.
+<<<
+RATIONALE: >>>
+A full-width column keeps projected fields ordered and readable inside the shell.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-84
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-24
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-185
+TITLE: Lexical
+STATEMENT: >>>
+The Editor Field Area SHALL keep small vertical spacing between projected controls.
+<<<
+RATIONALE: >>>
+Spacing between fields avoids crowding without owning field chrome (field chrome is GSSC5-85).
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-84
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-24
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-EDITOR-SAVE
+TITLE: Editor Save Control
+
+[REQUIREMENT]
+UID: GSSC-MLLR-186
+TITLE: Semantic
+STATEMENT: >>>
+The Editor Save Control SHALL request persistence of the editor's editable contents when the editor is available for modification and those contents have unsaved changes, and SHALL remain inactive when there are no unsaved changes.
+<<<
+RATIONALE: >>>
+Save is the member-facing write affordance; the host performs the backend write. Inactive Save prevents empty writes.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-84
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-24
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-187
+TITLE: Syntactic
+STATEMENT: >>>
+The Editor Save Control SHALL appear in the Editor Shell action row after the Cancel Control.
+<<<
+RATIONALE: >>>
+Cancel-before-Save keeps destructive discard to the left of commit, matching Member Frontend form action order.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-84
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-24
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-188
+TITLE: Lexical
+STATEMENT: >>>
+The Editor Save Control SHALL use the light-green theme token for its background, the dark-green theme token for its border and label, a sans-serif typeface, and the label Save.
+<<<
+RATIONALE: >>>
+Light-green fill matches Member Frontend primary submit chrome.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-84
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-24
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-EDITOR-CANCEL
+TITLE: Editor Cancel Control
+
+[REQUIREMENT]
+UID: GSSC-MLLR-189
+TITLE: Semantic
+STATEMENT: >>>
+The Editor Cancel Control SHALL request discard of unsaved changes when the editor is available for modification, without requesting persistence.
+<<<
+RATIONALE: >>>
+Cancel lets the member abandon an edit. The host restores baseline values.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-84
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-24
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-190
+TITLE: Syntactic
+STATEMENT: >>>
+The Editor Cancel Control SHALL appear in the Editor Shell action row before the Save Control.
+<<<
+RATIONALE: >>>
+Pairing Cancel with Save in one action row keeps discard and commit discoverable together.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-84
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-24
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-191
+TITLE: Lexical
+STATEMENT: >>>
+The Editor Cancel Control SHALL use the white theme token for its background, the dark-green theme token for its border and label, a sans-serif typeface, and the label Cancel.
+<<<
+RATIONALE: >>>
+White fill distinguishes discard from the light-green Save control.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-84
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-24
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-EDITOR-CONTENTION
+TITLE: Editor Contention Unavailable
+
+[REQUIREMENT]
+UID: GSSC-MLLR-192
+TITLE: Semantic
+STATEMENT: >>>
+When another member already holds modification of the same editable resource, the Generic Editor SHALL show that the resource is unavailable for modification and SHALL omit Save and Cancel controls for that second member.
+<<<
+RATIONALE: >>>
+Exclusive edit needs clear contention feedback so the second member does not believe changes were accepted.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-84
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-24
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-42
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-193
+TITLE: Syntactic
+STATEMENT: >>>
+The Editor Contention Unavailable message SHALL appear above the Editor Field Area inside the Editor Shell.
+<<<
+RATIONALE: >>>
+Placing the message above fields makes the blocked state visible before the member interacts with controls.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-84
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-24
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-194
+TITLE: Lexical
+STATEMENT: >>>
+The Editor Contention Unavailable message SHALL use the light-red theme token for its background, the dark-red theme token for its border and text, and a sans-serif typeface.
+<<<
+RATIONALE: >>>
+Red alert chrome matches Member Frontend unavailable and invalid feedback.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-84
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-24
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-EDITOR-BEHAVIORS
+TITLE: Editor Behaviors
+
+[REQUIREMENT]
+UID: GSSC-MLLR-195
+TITLE: Permission Gate
+STATEMENT: >>>
+When the host indicates the member lacks permission to modify the resource, the Generic Editor SHALL not offer Save or Cancel and SHALL treat projected fields as not available for modification.
+<<<
+RATIONALE: >>>
+MHLR-24 limits editing to members with the necessary permissions. The host supplies permission; the Shell enforces the gate.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-84
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-24
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-196
+TITLE: Exclusive Resource Edit
+STATEMENT: >>>
+The Generic Editor SHALL acquire exclusive modification of the resource identified to that editor instance before offering Save and Cancel for that resource.
+<<<
+RATIONALE: >>>
+Exclusive edit of a given page or section prevents lost changes when two members target the same resource.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-84
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-24
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-41
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-197
+TITLE: Concurrent Different Resource Edits
+STATEMENT: >>>
+The Member Frontend SHALL allow Generic Editor instances for different resource identities to offer modification at the same time.
+<<<
+RATIONALE: >>>
+Simultaneous editing of different pages or sections must not serialize across the membership.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-84
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-24
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-40
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-198
+TITLE: Contention Block
+STATEMENT: >>>
+When exclusive modification of a resource is already held, a second Generic Editor for that same resource SHALL not acquire modification and SHALL present the Contention Unavailable state.
+<<<
+RATIONALE: >>>
+Contention block pairs with exclusive edit so the second editor cannot write.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-84
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-24
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-42
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-199
+TITLE: Save Persistence
+STATEMENT: >>>
+When Save succeeds from an available Generic Editor with unsaved changes, the editor SHALL notify the host to persist editable contents and SHALL clear the unsaved-change state.
+<<<
+RATIONALE: >>>
+The Shell does not own domain APIs; notifying the host keeps Wave 7 writers pluggable while clearing dirty state after a requested save.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-84
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-24
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-200
+TITLE: Cancel Discard
+STATEMENT: >>>
+When Cancel is activated on an available Generic Editor, the editor SHALL notify the host to discard unsaved changes and SHALL clear the unsaved-change state without requesting persistence.
+<<<
+RATIONALE: >>>
+Discard without write lets the host restore baseline values.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-84
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-24
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-201
+TITLE: Dirty Change Tracking
+STATEMENT: >>>
+The Generic Editor SHALL treat projected field input as unsaved changes while the editor is available for modification, and SHALL use that unsaved-change state to enable Save.
+<<<
+RATIONALE: >>>
+Tracking dirty state from projected form controls (including GSSC5-85 primitives) keeps Save inactive until the member edits.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-84
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-24
   ROLE: Refines
 
 [[/SECTION]]

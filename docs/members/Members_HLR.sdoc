@@ -575,8 +575,11 @@ RATIONALE: >>>
 Member content and public-page editing PIRs require modification without programming knowledge. A shared generic editor is the Member Frontend capability those editors reuse. Field-level editing rules are low-level.
 <<<
 DERIVED: True
-CHANGE_DRIVER: GSSC5-11
-REVIEW_STATUS: Changed
+CHANGE_DRIVER: >>>
+GSSC5-11
+GSSC5-84
+<<<
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-MHLR-25
