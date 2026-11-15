@@ -628,7 +628,10 @@ RATIONALE: >>>
 The Member Frontend home page is the dashboard after login.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-11
+CHANGE_DRIVER: >>>
+GSSC5-11
+GSSC5-89
+<<<
 REVIEW_STATUS: Changed
 RELATIONS:
 - TYPE: Parent
@@ -645,7 +648,10 @@ RATIONALE: >>>
 The dashboard is the Member Frontend home page. Its modifiable contents come from the Unified Backend. This requirement presents those contents and does not set their structure.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-11
+CHANGE_DRIVER: >>>
+GSSC5-11
+GSSC5-89
+<<<
 REVIEW_STATUS: Changed
 RELATIONS:
 - TYPE: Parent
@@ -662,7 +668,10 @@ RATIONALE: >>>
 No Member Frontend PIR separately requires dashboard editing. Authorized members need to keep dashboard contents current without developer intervention, consistent with other Member Frontend content editing.
 <<<
 DERIVED: True
-CHANGE_DRIVER: GSSC5-11
+CHANGE_DRIVER: >>>
+GSSC5-11
+GSSC5-89
+<<<
 REVIEW_STATUS: Changed
 
 [[/SECTION]]

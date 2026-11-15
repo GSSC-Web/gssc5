@@ -1,27 +1,32 @@
-<section class="mx-auto flex w-full max-w-3xl flex-col gap-3">
-  <h1 class="text-2xl font-medium text-gssc-dark-green sm:text-3xl">Members area</h1>
-  <p class="text-sm text-gssc-dark-brown sm:text-base">
-    Signed-in members use this app. Session comes from the Login Token cookie.
-  </p>
-  <p class="text-sm text-gssc-dark-green">
-    <a class="underline" routerLink="/announcements">Announcements editor</a>
-  </p>
-  <p class="text-sm text-gssc-black" data-slot="backend-status">{{ backendMessage() }}</p>
-  <gssc-section [contents]="demoContents" />
+<!-- @relation(GSSC-MLLR-231, GSSC-MLLR-232, GSSC-MLLR-233, scope=range_start, role=Implementation) -->
+<div class="gssc-dashboard-page flex w-full flex-col gap-4 p-4 font-sans text-gssc-dark-green">
+  <!-- @relation(GSSC-MLLR-234, GSSC-MLLR-235, GSSC-MLLR-236, scope=range_start, role=Implementation) -->
+  @if (sectionViews().length > 0) {
+    <div class="gssc-dashboard-page__sections flex w-full flex-col gap-4">
+      @for (view of sectionViews(); track view.viewKey) {
+        <div class="gssc-dashboard-page__section flex w-full flex-col gap-3">
+          <gssc-section-from-cuid [cuid]="view.cuid" />
 
-  <gssc-editor
-    resourceId="home-editor-demo"
-    title="Generic editor preview"
-    (saved)="onEditorSaved()"
-    (cancelled)="onEditorCancelled()"
-  >
-    <gssc-form-text-field label="Header" [(value)]="editorHeader" />
-    <gssc-form-text-field label="Body" [(value)]="editorBody" />
-    <gssc-form-select-field
-      label="Image Position"
-      [options]="imagePositionOptions"
-      [(value)]="editorImagePosition"
-    />
-  </gssc-editor>
-  <p class="text-sm text-gssc-dark-brown" data-slot="editor-status">{{ editorStatus() }}</p>
-</section>
+          <!-- @relation(GSSC-MLLR-237, GSSC-MLLR-238, GSSC-MLLR-239, scope=range_start, role=Implementation) -->
+          @if (canModify()) {
+            <gssc-dashboard-section-editor
+              [cuid]="view.cuid"
+              (saved)="onSectionSaved(view.cuid)"
+              (failed)="onSectionSaveFailed()"
+              (cancelled)="onSectionCancelled()"
+            />
+          }
+          <!-- @relation(GSSC-MLLR-237, GSSC-MLLR-238, GSSC-MLLR-239, scope=range_end, role=Implementation) -->
+        </div>
+      }
+    </div>
+  }
+  <!-- @relation(GSSC-MLLR-234, GSSC-MLLR-235, GSSC-MLLR-236, scope=range_end, role=Implementation) -->
+
+  @if (saveStatus()) {
+    <p class="m-0 text-sm text-gssc-dark-brown" data-slot="dashboard-save-status">
+      {{ saveStatus() }}
+    </p>
+  }
+</div>
+<!-- @relation(GSSC-MLLR-231, GSSC-MLLR-232, GSSC-MLLR-233, scope=range_end, role=Implementation) -->
