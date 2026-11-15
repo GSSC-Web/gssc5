@@ -1,0 +1,100 @@
+<!-- @relation(GSSC-MLLR-381, GSSC-MLLR-382, GSSC-MLLR-383, scope=range_start, role=Implementation) -->
+<section
+  class="gssc-publications-page mx-auto flex w-full max-w-3xl flex-col gap-4 font-sans"
+  data-slot="publications-page"
+>
+  <h1
+    class="gssc-publications-page__heading m-0 font-sans text-2xl font-medium text-gssc-dark-green sm:text-3xl"
+    data-slot="publications-heading"
+  >
+    Publications
+  </h1>
+
+  @if (loadError()) {
+    <p class="m-0 text-sm text-gssc-dark-red" data-slot="publications-load-error">
+      {{ loadError() }}
+    </p>
+  }
+
+  <div class="flex flex-col gap-3" data-slot="publications-catalog-block">
+    <div class="flex flex-wrap items-center gap-3">
+      <h2 class="m-0 text-lg font-semibold text-gssc-dark-green">Catalog</h2>
+      @if (permitted()) {
+        <!-- @relation(GSSC-MLLR-387, GSSC-MLLR-388, GSSC-MLLR-389, scope=range_start, role=Implementation) -->
+        <button
+          type="button"
+          class="gssc-publications-page__create inline-flex cursor-pointer items-center justify-center rounded-md border border-gssc-dark-green bg-gssc-light-green px-3 py-2 font-sans text-sm font-normal text-gssc-dark-green hover:bg-gssc-gray"
+          data-slot="publications-create"
+          (click)="startCreate()"
+        >
+          New publication
+        </button>
+        <!-- @relation(GSSC-MLLR-387, GSSC-MLLR-388, GSSC-MLLR-389, scope=range_end, role=Implementation) -->
+      }
+    </div>
+
+    <!-- @relation(GSSC-MLLR-384, GSSC-MLLR-385, GSSC-MLLR-386, scope=range_start, role=Implementation) -->
+    <ul
+      class="gssc-publications-page__list m-0 flex list-none flex-col gap-1 p-0"
+      data-slot="publications-list"
+    >
+      @for (entry of entries(); track entry.cuid) {
+        <li>
+          <button
+            type="button"
+            class="gssc-publications-page__list-item w-full cursor-pointer rounded-md border border-transparent px-3 py-2 text-start font-sans text-sm text-gssc-dark-green hover:border-gssc-gray hover:bg-gssc-white"
+            [class.border-gssc-dark-green]="selectedCuid() === entry.cuid && !isCreating()"
+            [attr.data-cuid]="entry.cuid"
+            (click)="selectEntry(entry)"
+          >
+            {{ entry.title }}
+          </button>
+        </li>
+      } @empty {
+        <li class="px-3 py-2 font-sans text-sm text-gssc-dark-brown" data-slot="publications-empty">
+          No publications yet.
+        </li>
+      }
+    </ul>
+    <!-- @relation(GSSC-MLLR-384, GSSC-MLLR-385, GSSC-MLLR-386, scope=range_end, role=Implementation) -->
+  </div>
+
+  @if (editorOpen()) {
+    <gssc-editor
+      [resourceId]="resourceId()"
+      [permitted]="permitted()"
+      [title]="editorTitle()"
+      (saved)="onSaved()"
+      (cancelled)="onCancelled()"
+    >
+      <gssc-form-text-field label="Title" [(value)]="title" [enabled]="permitted()" [required]="true" />
+      <gssc-form-text-field
+        label="Reference Link"
+        [(value)]="referenceLink"
+        [enabled]="permitted()"
+        [required]="true"
+      />
+      <gssc-form-text-field label="Description" [(value)]="description" [enabled]="permitted()" />
+    </gssc-editor>
+
+    @if (permitted() && selectedCuid() && !isCreating()) {
+      <!-- @relation(GSSC-MLLR-390, GSSC-MLLR-391, GSSC-MLLR-392, scope=range_start, role=Implementation) -->
+      <button
+        type="button"
+        class="gssc-publications-page__delete inline-flex cursor-pointer items-center justify-center self-start rounded-md border border-gssc-dark-red bg-gssc-white px-3 py-2 font-sans text-sm font-normal text-gssc-dark-red hover:bg-gssc-light-red"
+        data-slot="publications-delete"
+        (click)="onDelete()"
+      >
+        Delete publication
+      </button>
+      <!-- @relation(GSSC-MLLR-390, GSSC-MLLR-391, GSSC-MLLR-392, scope=range_end, role=Implementation) -->
+    }
+  }
+
+  @if (statusMessage()) {
+    <p class="m-0 text-sm text-gssc-dark-brown" data-slot="publications-status">
+      {{ statusMessage() }}
+    </p>
+  }
+</section>
+<!-- @relation(GSSC-MLLR-381, GSSC-MLLR-382, GSSC-MLLR-383, scope=range_end, role=Implementation) -->

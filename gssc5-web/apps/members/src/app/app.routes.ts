@@ -7,6 +7,8 @@ import { HomePage } from './pages/home/home';
 import { LoginPage } from './pages/login/login';
 import { NewslettersPage } from './pages/newsletters/newsletters';
 import { PageSectionEditorPage } from './pages/page-section-editor/page-section-editor';
+import { PublicationsPage } from './pages/publications/publications';
+import { ResearchToolsPage } from './pages/research-tools/research-tools';
 import {
   redirectIfAuthenticatedGuard,
   requireAuthGuard,
@@ -67,6 +69,18 @@ export const routes: Routes = [
     canActivate: [requireAuthGuard],
   },
   // @relation(GSSC-MLLR-366, scope=range_end, role=Implementation)
+  {
+    path: 'publications',
+    pathMatch: 'full',
+    component: PublicationsPage,
+    canActivate: [requireAuthGuard],
+  },
+  {
+    path: 'research-tools',
+    pathMatch: 'full',
+    component: ResearchToolsPage,
+    canActivate: [requireAuthGuard],
+  },
   {
     path: '',
     pathMatch: 'full',

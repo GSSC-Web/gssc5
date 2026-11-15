@@ -93,7 +93,8 @@ GSSC5-89 Member Dashboard Page owns GSSC-MLLR-231 through GSSC-MLLR-239.
 GSSC5-94 Announcements Editor owns GSSC-MLLR-291 through GSSC-MLLR-307 (page, catalog, Generic Editor host, create/modify/publish behaviors; reuses GSSC5-84/85; consumes GSSC5-68 /announcements).
 GSSC5-96 Newsletters Editor owns GSSC-MLLR-351 through GSSC-MLLR-373 (exact end 373; band 351–380 reserved so parallel Wave editors do not collide).
 GSSC5-95 Events Editor owns GSSC-MLLR-321 through GSSC-MLLR-346 (events page, catalog, create/publish/modify host; composes GSSC5-84 Generic Editor + GSSC5-85 form fields; uses GSSC5-69 /events APIs).
-Wave coordination: GSSC5-92 directory 202–214 (band through 230), GSSC5-89 dashboard 231–239, GSSC5-93 page/section 261–286, GSSC5-94 announcements 291–307, GSSC5-95 events 321–346, GSSC5-96 newsletters 351–373 — do not collide.
+GSSC5-97 Publications/Tools Editors owns GSSC-MLLR-381 through GSSC-MLLR-414 (publications catalog editor 381–397; research tools catalog editor 398–414). Composes GSSC5-84 Generic Editor and GSSC5-85 form fields; does not re-claim 180–201.
+Wave coordination: GSSC5-92 directory 202–214 (band through 230), GSSC5-89 dashboard 231–239, GSSC5-93 page/section 261–286, GSSC5-94 announcements 291–307, GSSC5-95 events 321–346, GSSC5-96 newsletters 351–373, GSSC5-97 publications/tools 381–414 — do not collide.
 GSSC-MLLR-33 through GSSC-MLLR-39 remain free for later claimants.
 Do not reuse numbers already claimed by another ticket.
 <<<
@@ -6698,6 +6699,717 @@ RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-24
   ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-PUBLICATIONS-TOOLS-EDITORS
+TITLE: Publications and Research Tools Editors
+
+[[SECTION]]
+UID: GSSC-MLLR-PUBLICATIONS-EDITOR
+TITLE: Publications Catalog Editor
+
+[[SECTION]]
+UID: GSSC-MLLR-PUBLICATIONS-EDITOR-PAGE
+TITLE: Publications Editor Page
+
+[REQUIREMENT]
+UID: GSSC-MLLR-381
+TITLE: Semantic
+STATEMENT: >>>
+The Member Frontend Publications Editor Page SHALL present a publications catalog list, a create control when modification is permitted, and a Generic Editor host for the selected publication with title, reference link, and optional description fields.
+<<<
+RATIONALE: >>>
+One page hosts catalog browsing and Generic Editor composition so authorized members maintain publications without programming knowledge.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-97
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-52
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-53
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-382
+TITLE: Syntactic
+STATEMENT: >>>
+The Publications Editor Page SHALL stack the catalog list, create control, and Generic Editor host vertically in the page content area.
+<<<
+RATIONALE: >>>
+A vertical stack keeps the catalog and editor readable without competing side content.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-97
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-52
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-53
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-383
+TITLE: Lexical
+STATEMENT: >>>
+The Publications Editor Page SHALL use the Member Frontend sans-serif typeface and dark-green theme color for the page heading.
+<<<
+RATIONALE: >>>
+Publications editing shares Member Frontend brand type and color.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-97
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-52
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-53
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-PUBLICATIONS-CATALOG-LIST
+TITLE: Publications Catalog List
+
+[REQUIREMENT]
+UID: GSSC-MLLR-384
+TITLE: Semantic
+STATEMENT: >>>
+The Publications Catalog List SHALL present each publication title from the Unified Backend publications catalog, and when a title is selected SHALL place that publication into the Generic Editor host.
+<<<
+RATIONALE: >>>
+Selecting from the catalog opens the matching entry for review or modification.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-97
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-52
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-53
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-385
+TITLE: Syntactic
+STATEMENT: >>>
+The Publications Catalog List SHALL appear above the Generic Editor host as a vertical list of selectable titles.
+<<<
+RATIONALE: >>>
+Placing the list above the editor keeps selection and fields in one reading order.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-97
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-52
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-53
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-386
+TITLE: Lexical
+STATEMENT: >>>
+The Publications Catalog List SHALL use the Member Frontend sans-serif typeface and dark-green theme color for title text.
+<<<
+RATIONALE: >>>
+Catalog titles match Member Frontend brand type and color.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-97
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-52
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-53
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-PUBLICATIONS-CREATE-CONTROL
+TITLE: Publications Create Control
+
+[REQUIREMENT]
+UID: GSSC-MLLR-387
+TITLE: Semantic
+STATEMENT: >>>
+When publication modification is permitted, the Publications Create Control SHALL start a new publication in the Generic Editor host with empty title, reference link, and description fields.
+<<<
+RATIONALE: >>>
+Create starts a blank catalog entry before persistence.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-97
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-53
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-388
+TITLE: Syntactic
+STATEMENT: >>>
+The Publications Create Control SHALL appear with the catalog list above the Generic Editor host.
+<<<
+RATIONALE: >>>
+Create stays near the list so members can add an entry without leaving the page.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-97
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-53
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-389
+TITLE: Lexical
+STATEMENT: >>>
+The Publications Create Control SHALL use the Member Frontend sans-serif typeface, dark-green theme color for label text, and light-green theme color for the control background.
+<<<
+RATIONALE: >>>
+Create shares primary action chrome with other Member Frontend controls.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-97
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-53
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-PUBLICATIONS-DELETE-CONTROL
+TITLE: Publications Delete Control
+
+[REQUIREMENT]
+UID: GSSC-MLLR-390
+TITLE: Semantic
+STATEMENT: >>>
+When publication modification is permitted and an existing publication is selected, the Publications Delete Control SHALL remove that publication from the Unified Backend publications catalog.
+<<<
+RATIONALE: >>>
+Authorized members remove obsolete catalog entries without programming knowledge.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-97
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-53
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-391
+TITLE: Syntactic
+STATEMENT: >>>
+The Publications Delete Control SHALL appear with the Generic Editor host for the selected existing publication.
+<<<
+RATIONALE: >>>
+Delete stays with the open entry so removal targets the selected publication.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-97
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-53
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-392
+TITLE: Lexical
+STATEMENT: >>>
+The Publications Delete Control SHALL use the Member Frontend sans-serif typeface and dark-red theme color for its label text.
+<<<
+RATIONALE: >>>
+Delete uses destructive accent color so it is distinct from Save and Cancel.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-97
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-53
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-PUBLICATIONS-EDITOR-BEHAVIOR
+TITLE: Publications Editor Behavior
+
+[REQUIREMENT]
+UID: GSSC-MLLR-393
+TITLE: Semantic
+STATEMENT: >>>
+The Publications Editor Page SHALL permit create, save, and delete only when the logged-in member is an administrator or a publication editor, and SHALL withhold those modification controls otherwise.
+<<<
+RATIONALE: >>>
+Publication catalog writes match Unified Backend publication-editor authorization. An administrator is a publication editor for this gate.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-97
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-53
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-394
+TITLE: Semantic
+STATEMENT: >>>
+When the Publications Editor Page opens, it SHALL load the publications catalog from the Unified Backend into the Publications Catalog List.
+<<<
+RATIONALE: >>>
+The list reflects current catalog entries before the member selects or creates.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-97
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-52
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-395
+TITLE: Semantic
+STATEMENT: >>>
+When Save succeeds on the Publications Generic Editor host for a new publication, the Member Frontend SHALL create the entry in the Unified Backend publications catalog; when Save succeeds for an existing publication, it SHALL update that entry with the editor field values.
+<<<
+RATIONALE: >>>
+Save persists title, reference link, and optional description through the publications catalog API.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-97
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-53
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-396
+TITLE: Semantic
+STATEMENT: >>>
+When Cancel is activated on the Publications Generic Editor host, the Member Frontend SHALL restore the selected publication field values to the last loaded or saved baseline without requesting persistence.
+<<<
+RATIONALE: >>>
+Cancel discards unsaved edits while keeping the catalog unchanged.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-97
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-53
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-397
+TITLE: Semantic
+STATEMENT: >>>
+After a successful publications create, update, or delete, the Publications Editor Page SHALL refresh the Publications Catalog List from the Unified Backend.
+<<<
+RATIONALE: >>>
+The list stays aligned with persisted catalog state after mutations.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-97
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-52
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-53
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-RESEARCH-TOOLS-EDITOR
+TITLE: Research Tools Catalog Editor
+
+[[SECTION]]
+UID: GSSC-MLLR-RESEARCH-TOOLS-EDITOR-PAGE
+TITLE: Research Tools Editor Page
+
+[REQUIREMENT]
+UID: GSSC-MLLR-398
+TITLE: Semantic
+STATEMENT: >>>
+The Member Frontend Research Tools Editor Page SHALL present a research tools catalog list, a create control when modification is permitted, and a Generic Editor host for the selected research tool with title and reference link fields.
+<<<
+RATIONALE: >>>
+One page hosts catalog browsing and Generic Editor composition so authorized members maintain research tools without programming knowledge.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-97
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-54
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-399
+TITLE: Syntactic
+STATEMENT: >>>
+The Research Tools Editor Page SHALL stack the catalog list, create control, and Generic Editor host vertically in the page content area.
+<<<
+RATIONALE: >>>
+A vertical stack keeps the catalog and editor readable without competing side content.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-97
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-54
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-400
+TITLE: Lexical
+STATEMENT: >>>
+The Research Tools Editor Page SHALL use the Member Frontend sans-serif typeface and dark-green theme color for the page heading.
+<<<
+RATIONALE: >>>
+Research tools editing shares Member Frontend brand type and color.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-97
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-54
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-RESEARCH-TOOLS-CATALOG-LIST
+TITLE: Research Tools Catalog List
+
+[REQUIREMENT]
+UID: GSSC-MLLR-401
+TITLE: Semantic
+STATEMENT: >>>
+The Research Tools Catalog List SHALL present each research tool title from the Unified Backend research tools catalog, and when a title is selected SHALL place that research tool into the Generic Editor host.
+<<<
+RATIONALE: >>>
+Selecting from the catalog opens the matching entry for review or modification.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-97
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-54
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-402
+TITLE: Syntactic
+STATEMENT: >>>
+The Research Tools Catalog List SHALL appear above the Generic Editor host as a vertical list of selectable titles.
+<<<
+RATIONALE: >>>
+Placing the list above the editor keeps selection and fields in one reading order.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-97
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-54
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-403
+TITLE: Lexical
+STATEMENT: >>>
+The Research Tools Catalog List SHALL use the Member Frontend sans-serif typeface and dark-green theme color for title text.
+<<<
+RATIONALE: >>>
+Catalog titles match Member Frontend brand type and color.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-97
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-54
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-RESEARCH-TOOLS-CREATE-CONTROL
+TITLE: Research Tools Create Control
+
+[REQUIREMENT]
+UID: GSSC-MLLR-404
+TITLE: Semantic
+STATEMENT: >>>
+When research tools modification is permitted, the Research Tools Create Control SHALL start a new research tool in the Generic Editor host with empty title and reference link fields.
+<<<
+RATIONALE: >>>
+Create starts a blank catalog entry before persistence.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-97
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-54
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-405
+TITLE: Syntactic
+STATEMENT: >>>
+The Research Tools Create Control SHALL appear with the catalog list above the Generic Editor host.
+<<<
+RATIONALE: >>>
+Create stays near the list so members can add an entry without leaving the page.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-97
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-54
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-406
+TITLE: Lexical
+STATEMENT: >>>
+The Research Tools Create Control SHALL use the Member Frontend sans-serif typeface, dark-green theme color for label text, and light-green theme color for the control background.
+<<<
+RATIONALE: >>>
+Create shares primary action chrome with other Member Frontend controls.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-97
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-54
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-RESEARCH-TOOLS-DELETE-CONTROL
+TITLE: Research Tools Delete Control
+
+[REQUIREMENT]
+UID: GSSC-MLLR-407
+TITLE: Semantic
+STATEMENT: >>>
+When research tools modification is permitted and an existing research tool is selected, the Research Tools Delete Control SHALL remove that research tool from the Unified Backend research tools catalog.
+<<<
+RATIONALE: >>>
+Authorized members remove obsolete catalog entries without programming knowledge.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-97
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-54
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-408
+TITLE: Syntactic
+STATEMENT: >>>
+The Research Tools Delete Control SHALL appear with the Generic Editor host for the selected existing research tool.
+<<<
+RATIONALE: >>>
+Delete stays with the open entry so removal targets the selected research tool.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-97
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-54
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-409
+TITLE: Lexical
+STATEMENT: >>>
+The Research Tools Delete Control SHALL use the Member Frontend sans-serif typeface and dark-red theme color for its label text.
+<<<
+RATIONALE: >>>
+Delete uses destructive accent color so it is distinct from Save and Cancel.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-97
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-54
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-RESEARCH-TOOLS-EDITOR-BEHAVIOR
+TITLE: Research Tools Editor Behavior
+
+[REQUIREMENT]
+UID: GSSC-MLLR-410
+TITLE: Semantic
+STATEMENT: >>>
+The Research Tools Editor Page SHALL permit create, save, and delete only when the logged-in member is an administrator or a tool editor, and SHALL withhold those modification controls otherwise.
+<<<
+RATIONALE: >>>
+Research tools catalog writes match Unified Backend tool-editor authorization. An administrator is a tool editor for this gate.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-97
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-54
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-411
+TITLE: Semantic
+STATEMENT: >>>
+When the Research Tools Editor Page opens, it SHALL load the research tools catalog from the Unified Backend into the Research Tools Catalog List.
+<<<
+RATIONALE: >>>
+The list reflects current catalog entries before the member selects or creates.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-97
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-54
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-412
+TITLE: Semantic
+STATEMENT: >>>
+When Save succeeds on the Research Tools Generic Editor host for a new research tool, the Member Frontend SHALL create the entry in the Unified Backend research tools catalog; when Save succeeds for an existing research tool, it SHALL update that entry with the editor field values.
+<<<
+RATIONALE: >>>
+Save persists title and reference link through the research tools catalog API.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-97
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-54
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-413
+TITLE: Semantic
+STATEMENT: >>>
+When Cancel is activated on the Research Tools Generic Editor host, the Member Frontend SHALL restore the selected research tool field values to the last loaded or saved baseline without requesting persistence.
+<<<
+RATIONALE: >>>
+Cancel discards unsaved edits while keeping the catalog unchanged.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-97
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-54
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-414
+TITLE: Semantic
+STATEMENT: >>>
+After a successful research tools create, update, or delete, the Research Tools Editor Page SHALL refresh the Research Tools Catalog List from the Unified Backend.
+<<<
+RATIONALE: >>>
+The list stays aligned with persisted catalog state after mutations.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-97
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-54
+  ROLE: Refines
+
+[[/SECTION]]
 
 [[/SECTION]]
 

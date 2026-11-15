@@ -17,6 +17,8 @@ type AccountView = {
   isAdmin?: boolean;
   isUserMod?: boolean;
   isNewsletterEditor?: boolean;
+  isPublicationEditor?: boolean;
+  isToolEditor?: boolean;
 };
 
 export type LoginCredentials = {
@@ -48,6 +50,10 @@ export class MemberSession {
   readonly isUserMod = signal(false);
   /** True when the hydrated account may mutate society newsletters (administrators also may). */
   readonly isNewsletterEditor = signal(false);
+  /** True when the hydrated account may edit the publications catalog (administrators included). */
+  readonly isPublicationEditor = signal(false);
+  /** True when the hydrated account may edit the research tools catalog (administrators included). */
+  readonly isToolEditor = signal(false);
   /** True after the first challenge/hydrate attempt finishes (success or fail). */
   readonly ready = signal(false);
 
@@ -165,6 +171,11 @@ export class MemberSession {
     // Administrators are user moderators for FE role gates (admin ⊃ userMod).
     this.isUserMod.set(user.isAdmin === true || user.isUserMod === true);
     this.isNewsletterEditor.set(user.isNewsletterEditor === true);
+    // Administrators cover publication/tool editor gates (admin ⊃ editor roles).
+    this.isPublicationEditor.set(
+      user.isAdmin === true || user.isPublicationEditor === true,
+    );
+    this.isToolEditor.set(user.isAdmin === true || user.isToolEditor === true);
     this.setSession(displayNameFromAccount(user));
   }
 
@@ -174,6 +185,8 @@ export class MemberSession {
     this.isAdmin.set(false);
     this.isUserMod.set(false);
     this.isNewsletterEditor.set(false);
+    this.isPublicationEditor.set(false);
+    this.isToolEditor.set(false);
     writeStored(NAME_KEY, null);
     writeStored(LEGACY_TOKEN_KEY, null);
     this.loggedIn.set(false);
