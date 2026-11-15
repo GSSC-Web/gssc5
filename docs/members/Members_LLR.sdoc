@@ -87,7 +87,8 @@ GSSC5-100 Hide Header/Footer when logged out owns GSSC-MLLR-32 (App Root chrome 
 GSSC5-90 Account Self-Service and GSSC5-91 Admin Account Management share GSSC-MLLR-125 through GSSC-MLLR-158 (same Account Page).
 GSSC5-85 Contact-row / Form Primitives owns GSSC-MLLR-159 through GSSC-MLLR-179 (Contact Row + form-field building blocks).
 GSSC5-84 Generic Editor Module owns GSSC-MLLR-180 through GSSC-MLLR-201 (editor shell, actions, contention, session behaviors; composes GSSC5-85 form fields).
-Next contiguous free block starts at GSSC-MLLR-202 (coordinate parallel tickets such as GSSC5-92 before minting).
+GSSC5-92 Members Directory + Search owns GSSC-MLLR-202 through GSSC-MLLR-214 (exact end 214; band 202–230 reserved for directory so parallel Wave tickets do not mint below 231).
+Parallel Wave tickets (GSSC5-89, 93–97) start at GSSC-MLLR-231 and above.
 GSSC-MLLR-33 through GSSC-MLLR-39 remain free for later claimants.
 Do not reuse numbers already claimed by another ticket.
 <<<
@@ -4255,6 +4256,300 @@ REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-24
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-DIRECTORY
+TITLE: Members Directory And Search
+
+[[SECTION]]
+UID: GSSC-MLLR-DIRECTORY-PAGE
+TITLE: Directory Page
+
+[REQUIREMENT]
+UID: GSSC-MLLR-202
+TITLE: Semantic
+STATEMENT: >>>
+The Member Frontend Directory Page SHALL present a members directory for a logged-in viewer, loading fellow members from the Unified Backend and showing search controls with a results list of those members.
+<<<
+RATIONALE: >>>
+One authenticated page hosts collaboration directory browsing and search for logged-in members.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-92
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-55
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-58
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-203
+TITLE: Syntactic
+STATEMENT: >>>
+The Directory Page SHALL place a page heading above a two-region body that keeps the directory search filter bar to the left of the directory results on medium and larger viewports, and stacks the filter bar above the results on narrower viewports.
+<<<
+RATIONALE: >>>
+A static left filter bar keeps criteria visible while the member scans matching contacts on the right.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-92
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-55
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-204
+TITLE: Lexical
+STATEMENT: >>>
+The Directory Page SHALL use the Member Frontend sans-serif typeface and dark-green theme color for its heading and supporting text.
+<<<
+RATIONALE: >>>
+Directory shares Member Frontend brand type and color.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-92
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-55
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-DIRECTORY-SEARCH
+TITLE: Directory Search
+
+[REQUIREMENT]
+UID: GSSC-MLLR-205
+TITLE: Semantic
+STATEMENT: >>>
+The Directory Search SHALL accept first name, last name, email, phone, city, and state criteria from the viewer and SHALL update the directory results from the Unified Backend as those criteria change, without requiring a separate search submit control.
+<<<
+RATIONALE: >>>
+Live filtering lets members refine the list as they type; the Unified Backend applies matching.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-92
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-57
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-59
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-206
+TITLE: Syntactic
+STATEMENT: >>>
+The Directory Search SHALL appear as a static left-side filter bar with its criteria fields stacked in a single column and a Clear control under those fields.
+<<<
+RATIONALE: >>>
+A single-column left bar keeps filters scannable and fixed beside the results list.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-92
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-57
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-207
+TITLE: Lexical
+STATEMENT: >>>
+The Directory Search SHALL use shared Member Frontend form-field primitives for its criteria fields and dark-green theme text on its Clear control.
+<<<
+RATIONALE: >>>
+Reusing form primitives keeps directory search chrome consistent with other member forms; Clear is the only filter action.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-92
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-57
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-61
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-DIRECTORY-RESULTS
+TITLE: Directory Results
+
+[REQUIREMENT]
+UID: GSSC-MLLR-208
+TITLE: Semantic
+STATEMENT: >>>
+The Directory Results SHALL present one Contact Row for each member returned by the Unified Backend for the current directory load or search.
+<<<
+RATIONALE: >>>
+Contact Row is the shared presentation for a person's name and available contact methods in the directory.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-92
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-55
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-56
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-25
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-209
+TITLE: Syntactic
+STATEMENT: >>>
+The Directory Results SHALL stack Contact Rows in a single vertical list in the region to the right of the Directory Search filter bar, stretching to fill the remaining Directory Page content width.
+<<<
+RATIONALE: >>>
+Results sit beside filters so the member can scan matches without losing the filter context.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-92
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-55
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-210
+TITLE: Lexical
+STATEMENT: >>>
+The Directory Results SHALL separate Contact Rows with a light gray theme border and use the dark-green theme color for status and empty-state messages.
+<<<
+RATIONALE: >>>
+Quiet separators and brand text keep the list readable without competing chrome.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-92
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-55
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-DIRECTORY-BEHAVIOR
+TITLE: Directory Access And Behavior
+
+[REQUIREMENT]
+UID: GSSC-MLLR-211
+TITLE: Directory Authentication
+STATEMENT: >>>
+The Member Frontend SHALL open the Directory Page only for a logged-in member and SHALL redirect a logged-out visitor who requests the directory to the Login Page.
+<<<
+RATIONALE: >>>
+The members directory is authenticated content; route guards keep logged-out visitors on login.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-92
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-55
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-3
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-212
+TITLE: Directory Load And Filter
+STATEMENT: >>>
+When the Directory Page opens with empty search criteria, the Member Frontend SHALL load the unfiltered members list from the Unified Backend, and whenever the viewer changes one or more criteria, the Member Frontend SHALL reload the list using those criteria as Unified Backend query filters without a separate search submit step.
+<<<
+RATIONALE: >>>
+Empty criteria show the full collaboration or registered list; live criteria changes narrow it through the existing users list API.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-92
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-55
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-57
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-59
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-213
+TITLE: Directory Available Contact Methods
+STATEMENT: >>>
+Each Directory Results Contact Row SHALL present only the contact methods included on that member's Unified Backend list entry for the current viewer.
+<<<
+RATIONALE: >>>
+The Unified Backend already applies directory visibility; the frontend shows what the projection includes rather than inventing additional contacts.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-92
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-56
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-25
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-214
+TITLE: Administrator Registered Members View
+STATEMENT: >>>
+When the logged-in viewer is an administrator, the Directory Page SHALL present the registered members directory heading and the Unified Backend registered-member list for that administrator, including administrator directory search through the same search controls.
+<<<
+RATIONALE: >>>
+Administrators use the same directory surface; the backend projection supplies the fuller registered-member view while search stays shared.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-92
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-58
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-59
   ROLE: Refines
 
 [[/SECTION]]
