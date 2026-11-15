@@ -1,5 +1,3 @@
-import { createHash } from "node:crypto";
-
 import { Cookie, t } from "elysia";
 
 import type { Prisma, PrismaClient, User } from "../generated/prisma/client";
@@ -32,7 +30,7 @@ export type LoginSessionOutcome<TUser> =
 
 /** Hash used when storing a Login Token in durable login_tokens rows. */
 export function hashLoginToken(token: string): string {
-  return createHash("sha256").update(token).digest("hex");
+  return Bun.CryptoHasher.hash("sha256", token, "hex") as string;
 }
 
 /** Resolve the Login Token from Elysia's cookie jar. */

@@ -1,4 +1,3 @@
-import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 
 import { Type, type Static } from "@sinclair/typebox";
@@ -133,14 +132,16 @@ function normalizeConfigValue(key: string, value: string): string {
 }
 
 function readEnvFile(envFile: string): Record<string, string> {
-  let text: string;
+  const file = Bun.file(envFile);
+  // Missing and empty both report size 0. `Bun.file(...).text()` is async;
+  // keep loadConfig sync for request-path callers via Bun.mmap of the same path.
+  if (file.size === 0) return {};
   try {
-    text = readFileSync(envFile, "utf8");
+    return parseEnv(new TextDecoder().decode(Bun.mmap(envFile)));
   } catch (error) {
     if (isNotFound(error)) return {};
     throw error;
   }
-  return parseEnv(text);
 }
 
 function parseEnv(text: string): Record<string, string> {

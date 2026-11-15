@@ -1,6 +1,4 @@
 // Password service checks. Each assertion is limited to that requirement's statement.
-import { createHash } from "node:crypto";
-
 import { afterEach, beforeAll, beforeEach, expect, setSystemTime, test } from "bun:test";
 
 import { loadConfig } from "../config";
@@ -415,7 +413,7 @@ test("GSSC-BLLR-238 Password Recovery Token Hash Stored", async () => {
   expect(recoveryToken.length).toBeGreaterThan(0);
   const rows = await recoveryRows();
   expect(rows.length).toBe(1);
-  expect(rows[0]?.tokenHash).toBe(createHash("sha256").update(recoveryToken).digest("hex"));
+  expect(rows[0]?.tokenHash).toBe(Bun.CryptoHasher.hash("sha256", recoveryToken, "hex"));
 });
 // @relation(GSSC-BLLR-238, scope=range_end, role=Test)
 
