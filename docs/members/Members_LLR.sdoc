@@ -88,9 +88,9 @@ GSSC5-90 Account Self-Service and GSSC5-91 Admin Account Management share GSSC-M
 GSSC5-85 Contact-row / Form Primitives owns GSSC-MLLR-159 through GSSC-MLLR-179 (Contact Row + form-field building blocks).
 GSSC5-84 Generic Editor Module owns GSSC-MLLR-180 through GSSC-MLLR-201 (editor shell, actions, contention, session behaviors; composes GSSC5-85 form fields).
 GSSC5-92 Members Directory + Search owns GSSC-MLLR-202 through GSSC-MLLR-214 (exact end 214; band 202–230 reserved for directory so parallel Wave tickets do not mint below 231).
+GSSC5-89 Member Dashboard Page owns GSSC-MLLR-231 through GSSC-MLLR-239.
 GSSC5-94 Announcements Editor owns GSSC-MLLR-291 through GSSC-MLLR-307 (page, catalog, Generic Editor host, create/modify/publish behaviors; reuses GSSC5-84/85; consumes GSSC5-68 /announcements).
-Wave coordination: GSSC5-92 directory 202–214 (band through 230), GSSC5-93 page/section editor ~261+, GSSC5-94 announcements 291–307, GSSC5-95 events editor ~321+ — do not collide.
-Parallel Wave tickets (GSSC5-89, 93–97) otherwise start at GSSC-MLLR-231 and above where not claimed above.
+Wave coordination: GSSC5-92 directory 202–214 (band through 230), GSSC5-89 dashboard 231–239, GSSC5-93 page/section editor ~261+, GSSC5-94 announcements 291–307, GSSC5-95 events editor ~321+ — do not collide.
 GSSC-MLLR-33 through GSSC-MLLR-39 remain free for later claimants.
 Do not reuse numbers already claimed by another ticket.
 <<<
@@ -4915,6 +4915,204 @@ RELATIONS:
   ROLE: Refines
 - TYPE: Parent
   VALUE: GSSC-MHLR-45
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-DASHBOARD
+TITLE: Member Dashboard
+
+[[SECTION]]
+UID: GSSC-MLLR-DASHBOARD-PAGE
+TITLE: Dashboard Page
+
+[REQUIREMENT]
+UID: GSSC-MLLR-231
+TITLE: Semantic
+STATEMENT: >>>
+The GSSC Website Member Frontend Dashboard Page SHALL be the Member Frontend home page for a logged-in member at the root path, and SHALL present that member's dashboard contents from the Unified Backend.
+<<<
+RATIONALE: >>>
+The dashboard is the Member Frontend home after login. Root-path placement matches Header and redirect destinations that open the dashboard.
+<<<
+COMMENT: >>>
+GSSC5-89. Route authentication is owned by Route Guards (GSSC5-88). Binding tag for dashboard sections is software-owned; requirements stay tag-agnostic.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-89
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-26
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-27
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-232
+TITLE: Syntactic
+STATEMENT: >>>
+The Dashboard Page SHALL occupy the full width of the Page Outlet contents and SHALL stack its dashboard contents vertically as one column.
+<<<
+RATIONALE: >>>
+A single full-width column keeps dashboard sections readable without competing side chrome.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-89
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-26
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-233
+TITLE: Lexical
+STATEMENT: >>>
+The Dashboard Page SHALL use the Member Frontend sans-serif typeface and dark-green theme color for page text, without independent page chrome beyond its contents.
+<<<
+RATIONALE: >>>
+Dashboard presentation shares Member Frontend brand type and color; section look stays with Section From CUID and the Generic Editor Module.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-89
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-26
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-DASHBOARD-SECTIONS
+TITLE: Dashboard Dynamic Sections
+
+[REQUIREMENT]
+UID: GSSC-MLLR-234
+TITLE: Semantic
+STATEMENT: >>>
+The GSSC Website Member Frontend Dashboard Page SHALL retrieve the sections tagged for the dashboard from the Unified Backend and place each retrieved section through the Section From CUID.
+<<<
+RATIONALE: >>>
+Tagged dashboard sections are the modifiable page Contents. Retrieving them from the Unified Backend keeps wording backend-authored. Section From CUID places each section through the Section Container.
+<<<
+COMMENT: >>>
+GSSC5-89. Binding tag is software-owned; requirements stay tag-agnostic. Visibility follows each section's optional display window. Logged-in retrieval includes member-only sections the Unified Backend exposes to the session.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-89
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-27
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-235
+TITLE: Syntactic
+STATEMENT: >>>
+The Dashboard Dynamic Sections SHALL place those sections at full width in the Page Outlet in the Unified Backend's section order, and SHALL omit the section list when the Unified Backend provides no such sections.
+<<<
+RATIONALE: >>>
+Backend section order is the display order; the page does not invent a separate ordering scheme. Omitting an empty list avoids blank chrome when content is absent.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-89
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-27
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-236
+TITLE: Lexical
+STATEMENT: >>>
+The Dashboard Dynamic Sections SHALL present Section Header, Section Body, and Section Resources through the Section From CUID presentation, without independent lexical chrome of their own.
+<<<
+RATIONALE: >>>
+Dashboard sections reuse Section From CUID so they share the look of other Member Frontend sections.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-89
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-27
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-DASHBOARD-MODIFICATION
+TITLE: Dashboard Section Modification
+
+[REQUIREMENT]
+UID: GSSC-MLLR-237
+TITLE: Semantic
+STATEMENT: >>>
+When the logged-in member has the necessary permissions, the Dashboard Page SHALL host a Generic Editor for each dashboard section so that member can change that section's header, body, and image position without programming knowledge; Save SHALL persist those values to the Unified Backend for that section; Cancel SHALL discard unsaved changes for that section; and after a successful Save the page SHALL refresh that section's displayed Contents.
+<<<
+RATIONALE: >>>
+Authorized members keep dashboard wording current through the shared Generic Editor Module. Persistence stays with the Unified Backend section update. Refreshing display after Save keeps the read-only section view aligned with saved Contents.
+<<<
+COMMENT: >>>
+GSSC5-89. Necessary permissions are those the Unified Backend accepts for section modification. The Member Frontend omits editors when the member lacks that authority. Wave 7 content editors remain the broader authoring surfaces for other page kinds.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-89
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-28
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-238
+TITLE: Syntactic
+STATEMENT: >>>
+Each Dashboard Section Modification editor SHALL appear at full width directly below the corresponding dashboard section display, and the Dashboard Page SHALL omit modification editors when the logged-in member does not have the necessary permissions or when there are no dashboard sections.
+<<<
+RATIONALE: >>>
+Placing the editor under its section keeps modification paired with the Contents being changed. Omitting unauthorized or empty editors avoids unused chrome.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-89
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-28
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-239
+TITLE: Lexical
+STATEMENT: >>>
+Dashboard Section Modification SHALL present editable fields and actions through the Generic Editor Module and shared form-field primitives, without independent editor chrome of its own.
+<<<
+RATIONALE: >>>
+Reuse of the Generic Editor Module and form primitives keeps dashboard modification consistent with other Member Frontend editing surfaces.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-89
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-28
   ROLE: Refines
 
 [[/SECTION]]
