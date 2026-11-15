@@ -94,7 +94,8 @@ GSSC5-94 Announcements Editor owns GSSC-MLLR-291 through GSSC-MLLR-307 (page, ca
 GSSC5-96 Newsletters Editor owns GSSC-MLLR-351 through GSSC-MLLR-373 (exact end 373; band 351–380 reserved so parallel Wave editors do not collide).
 GSSC5-95 Events Editor owns GSSC-MLLR-321 through GSSC-MLLR-346 (events page, catalog, create/publish/modify host; composes GSSC5-84 Generic Editor + GSSC5-85 form fields; uses GSSC5-69 /events APIs).
 GSSC5-97 Publications/Tools Editors owns GSSC-MLLR-381 through GSSC-MLLR-414 (publications catalog editor 381–397; research tools catalog editor 398–414). Composes GSSC5-84 Generic Editor and GSSC5-85 form fields; does not re-claim 180–201.
-Wave coordination: GSSC5-92 directory 202–214 (band through 230), GSSC5-89 dashboard 231–239, GSSC5-93 page/section 261–286, GSSC5-94 announcements 291–307, GSSC5-95 events 321–346, GSSC5-96 newsletters 351–373, GSSC5-97 publications/tools 381–414 — do not collide.
+GSSC5-101 Account Page Refinement owns GSSC-MLLR-415 through GSSC-MLLR-428 (collapsible sections, submit validation, Enter-to-submit, account photo upload with polished Choose Photo control, password current/previous rejection); also CHANGE_DRIVER on GSSC-MLLR-146.
+Wave coordination: GSSC5-92 directory 202–214 (band through 230), GSSC5-89 dashboard 231–239, GSSC5-93 page/section 261–286, GSSC5-94 announcements 291–307, GSSC5-95 events 321–346, GSSC5-96 newsletters 351–373, GSSC5-97 publications/tools 381–414, GSSC5-101 account refinement 415–428 — do not collide.
 GSSC-MLLR-33 through GSSC-MLLR-39 remain free for later claimants.
 Do not reuse numbers already claimed by another ticket.
 <<<
@@ -3107,16 +3108,17 @@ TITLE: Account Photo and Username
 UID: GSSC-MLLR-146
 TITLE: Semantic
 STATEMENT: >>>
-The Account Photo and Username controls SHALL present the loaded account's photo reference and username for editing when the viewer may change them.
+The Account Photo and Username controls SHALL present a preview of the loaded account's photo, a file upload control for choosing a new photo (not a free-text photo path), and the username for editing when the viewer may change them.
 <<<
 RATIONALE: >>>
-Photo and username identify the account on the left of Account Information.
+Photo and username identify the account on the left of Account Information. The photo is chosen as a file and previewed rather than typed as a path.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: >>>
 GSSC5-90
 GSSC5-91
+GSSC5-101
 <<<
 REVIEW_STATUS: Approved
 RELATIONS:
@@ -3383,6 +3385,282 @@ RELATIONS:
   ROLE: Refines
 - TYPE: Parent
   VALUE: GSSC-MHLR-34
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-ACCOUNT-SECTIONS-COLLAPSE
+TITLE: Account Section Collapse
+
+[REQUIREMENT]
+UID: GSSC-MLLR-415
+TITLE: Semantic
+STATEMENT: >>>
+The Account Page SHALL let the viewer collapse and expand each of the Member Information, Account Information, and Password Change sections independently.
+<<<
+RATIONALE: >>>
+Collapsible sections keep long account forms manageable without removing any section.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-101
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-74
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-416
+TITLE: Syntactic
+STATEMENT: >>>
+Each Account Page section SHALL start expanded by default and SHALL place a collapse control with the section heading.
+<<<
+RATIONALE: >>>
+Expanded-by-default preserves the prior full-form view; the heading control toggles visibility of that section's body.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-101
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-74
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-417
+TITLE: Lexical
+STATEMENT: >>>
+Account section headings and collapse affordances SHALL use the Member Frontend sans-serif typeface and dark-green theme color.
+<<<
+RATIONALE: >>>
+Collapse chrome matches the rest of the Account Page.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-101
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-74
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-ACCOUNT-SUBMIT-VALIDATION
+TITLE: Account Submit Validation
+
+[REQUIREMENT]
+UID: GSSC-MLLR-418
+TITLE: Semantic
+STATEMENT: >>>
+When the viewer attempts to submit Member Information or Account Information, the Account Page SHALL refuse submission if any required field is empty or any format-validated field is invalid, including email, phone, Zip, Zip Extension, and state.
+<<<
+RATIONALE: >>>
+Client-side checks prevent incomplete or malformed account updates from being sent.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-101
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-75
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-419
+TITLE: Semantic
+STATEMENT: >>>
+When submission is refused for empty required or invalid format fields, the Account Page SHALL present each failing field with a red invalid appearance.
+<<<
+RATIONALE: >>>
+Red fields show which inputs must be corrected before retrying submit.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-101
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-75
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-420
+TITLE: Lexical
+STATEMENT: >>>
+Invalid account form fields SHALL use the Member Frontend dark-red border and light-red field background.
+<<<
+RATIONALE: >>>
+Dark-red and light-red tokens match other Member Frontend invalid field chrome.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-101
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-75
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-ACCOUNT-PHOTO-UPLOAD
+TITLE: Account Photo Upload
+
+[REQUIREMENT]
+UID: GSSC-MLLR-421
+TITLE: Semantic
+STATEMENT: >>>
+When the Account Information Section is submitted with a newly chosen photo file, the Member Frontend SHALL upload that file to the Unified Backend account-photos store for the loaded account cuid and then save the returned photo path on the account.
+<<<
+RATIONALE: >>>
+Photo bytes are stored under the account's cuid in the dedicated account-photos directory; the account record holds that path for later display.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-101
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-76
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-422
+TITLE: Semantic
+STATEMENT: >>>
+When the viewer presses Enter while focus is in a field of the Member Information, Account Information, or Password Change section, the Account Page SHALL submit that section the same way as activating that section's submit control.
+<<<
+RATIONALE: >>>
+Enter-to-submit matches other Member Frontend forms and speeds account edits.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-101
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-75
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-423
+TITLE: Syntactic
+STATEMENT: >>>
+Each Account Page section body SHALL be a form whose submit control is a submit-type button for that section.
+<<<
+RATIONALE: >>>
+Native form submit wiring makes Enter activate the correct section without custom key handlers on every field.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-101
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-75
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-424
+TITLE: Semantic
+STATEMENT: >>>
+The Account Photo control SHALL show a preview of the current or newly chosen account photo and SHALL present a Choose Photo control that opens a file selection for a replacement photo, without exposing a raw browser file-input chrome as the primary control, and SHALL crop that preview to a square by trimming rather than distorting the image.
+<<<
+RATIONALE: >>>
+Preview and a styled choose action replace free-text photo path editing and avoid unstyled native file UI; square crop keeps avatar framing consistent.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-101
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-76
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-425
+TITLE: Syntactic
+STATEMENT: >>>
+The Account Photo preview and Choose Photo control SHALL share one floating-label Account Photo field in the left column of Account Information, with a left-aligned square preview that crops the image to fill that square and the Choose Photo control with selected file name stacked below that preview.
+<<<
+RATIONALE: >>>
+One field keeps photo chrome consistent with other Account Information inputs; square crop shows a stable avatar without distorting the image; stacking choose controls under the preview matches the prior photo interaction order.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-101
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-76
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-426
+TITLE: Lexical
+STATEMENT: >>>
+The Account Photo field, square preview frame, floating Account Photo label, Choose Photo control, and file-name text SHALL use the Member Frontend sans-serif typeface with dark-green label and control chrome and light-green fill on Choose Photo.
+<<<
+RATIONALE: >>>
+Photo controls share Account Page form and primary-action styling.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-101
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-76
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-PASSWORD-REJECT-RULES
+TITLE: Password Rejection Rules
+
+[REQUIREMENT]
+UID: GSSC-MLLR-427
+TITLE: Semantic
+STATEMENT: >>>
+The Password Change Section SHALL refuse submission when any password criterion is unmet or when the new password equals the current password, and SHALL present the password fields with a red invalid appearance.
+<<<
+RATIONALE: >>>
+Unmet criteria and reuse of the current password must not produce a password change request.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-101
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-77
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-428
+TITLE: Semantic
+STATEMENT: >>>
+When the Unified Backend rejects a password change because the new password matches a previous password, the Password Change Section SHALL refuse success and SHALL present the password fields with a red invalid appearance.
+<<<
+RATIONALE: >>>
+Previous-password reuse is enforced by the backend; the Account Page surfaces that failure on the password fields.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-101
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-77
   ROLE: Refines
 
 [[/SECTION]]

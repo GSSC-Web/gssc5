@@ -3,12 +3,17 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import {
   accountApi,
+  AccountFieldKey,
   AccountRecord,
+  accountPhotoUrl,
   evaluatePasswordCriteria,
+  MemberFieldKey,
   PASSWORD_MIN_LENGTH,
   passwordCriteriaSatisfied,
   PrivilegeKey,
   SITE_PRIVILEGES,
+  validateAccountInfoFields,
+  validateMemberInfoFields,
 } from '../../services/account-api';
 import { MemberSession } from '../../services/member-session';
 
@@ -121,6 +126,33 @@ export class AccountPage implements OnInit {
   readonly isAdminViewer = signal(false);
   readonly canChangePassword = signal(true);
 
+  // @relation(GSSC-MLLR-415, GSSC-MLLR-416, scope=range_start, role=Implementation)
+  readonly memberSectionOpen = signal(true);
+  readonly accountSectionOpen = signal(true);
+  readonly passwordSectionOpen = signal(true);
+
+  toggleMemberSection(): void {
+    this.memberSectionOpen.update((open) => !open);
+  }
+
+  toggleAccountSection(): void {
+    this.accountSectionOpen.update((open) => !open);
+  }
+
+  togglePasswordSection(): void {
+    this.passwordSectionOpen.update((open) => !open);
+  }
+  // @relation(GSSC-MLLR-415, GSSC-MLLR-416, scope=range_end, role=Implementation)
+
+  readonly memberInvalid = signal<ReadonlySet<MemberFieldKey>>(new Set());
+  readonly accountInvalid = signal<ReadonlySet<AccountFieldKey>>(new Set());
+  readonly passwordInvalid = signal(false);
+
+  readonly photoPreviewUrl = signal<string | null>(null);
+  readonly photoFileLabel = signal('No file chosen');
+  private pendingPhotoFile: File | null = null;
+  private localPreviewObjectUrl: string | null = null;
+
   memberInfo = emptyMemberInfo();
   accountInfo = emptyAccountInfo();
   private loadedMemberInfo = emptyMemberInfo();
@@ -134,7 +166,6 @@ export class AccountPage implements OnInit {
     evaluatePasswordCriteria(this.newPasswordSignal(), this.confirmPasswordSignal()),
   );
 
-  // Signals mirrored from ngModel fields for live criteria.
   private readonly newPasswordSignal = signal('');
   private readonly confirmPasswordSignal = signal('');
 
@@ -142,26 +173,62 @@ export class AccountPage implements OnInit {
     void this.bootstrap();
   }
 
+  // @relation(GSSC-MLLR-420, scope=range_start, role=Implementation)
+  fieldInvalid(key: MemberFieldKey | AccountFieldKey): boolean {
+    if (key === 'username') return this.accountInvalid().has('username');
+    return this.memberInvalid().has(key as MemberFieldKey);
+  }
+  // @relation(GSSC-MLLR-420, scope=range_end, role=Implementation)
+
   onNewPasswordInput(value: string): void {
     this.newPassword = value;
     this.newPasswordSignal.set(value);
+    this.passwordInvalid.set(false);
   }
 
   onConfirmPasswordInput(value: string): void {
     this.confirmPassword = value;
     this.confirmPasswordSignal.set(value);
+    this.passwordInvalid.set(false);
   }
+
+  // @relation(GSSC-MLLR-424, GSSC-MLLR-425, scope=range_start, role=Implementation)
+  onPhotoSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0] ?? null;
+    this.pendingPhotoFile = file;
+    if (this.localPreviewObjectUrl) {
+      URL.revokeObjectURL(this.localPreviewObjectUrl);
+      this.localPreviewObjectUrl = null;
+    }
+    if (file) {
+      this.localPreviewObjectUrl = URL.createObjectURL(file);
+      this.photoPreviewUrl.set(this.localPreviewObjectUrl);
+      this.photoFileLabel.set(file.name);
+    } else {
+      this.photoPreviewUrl.set(accountPhotoUrl(this.accountInfo.accountPhoto));
+      this.photoFileLabel.set('No file chosen');
+    }
+  }
+  // @relation(GSSC-MLLR-424, GSSC-MLLR-425, scope=range_end, role=Implementation)
 
   // @relation(GSSC-MLLR-133, scope=range_start, role=Implementation)
   resetMemberInfo(): void {
     this.memberInfo = { ...this.loadedMemberInfo };
     this.memberMessage.set('');
+    this.memberInvalid.set(new Set());
   }
   // @relation(GSSC-MLLR-133, scope=range_end, role=Implementation)
 
-  // @relation(GSSC-MLLR-134, scope=range_start, role=Implementation)
+  // @relation(GSSC-MLLR-134, GSSC-MLLR-418, GSSC-MLLR-419, scope=range_start, role=Implementation)
   async submitMemberInfo(): Promise<void> {
     if (this.memberSubmitting() || this.unavailable()) return;
+    const failed = validateMemberInfoFields(this.memberInfo);
+    this.memberInvalid.set(failed);
+    if (failed.size > 0) {
+      this.memberMessage.set('Fix the highlighted fields before submitting.');
+      return;
+    }
     this.memberSubmitting.set(true);
     this.memberMessage.set('');
     try {
@@ -179,18 +246,43 @@ export class AccountPage implements OnInit {
       this.memberSubmitting.set(false);
     }
   }
-  // @relation(GSSC-MLLR-134, scope=range_end, role=Implementation)
+  // @relation(GSSC-MLLR-134, GSSC-MLLR-418, GSSC-MLLR-419, scope=range_end, role=Implementation)
 
-  // @relation(GSSC-MLLR-141, scope=range_start, role=Implementation)
+  // @relation(GSSC-MLLR-141, GSSC-MLLR-421, GSSC-MLLR-426, scope=range_start, role=Implementation)
   async submitAccountInfo(): Promise<void> {
     if (this.accountSubmitting() || this.unavailable()) return;
+    const failed = validateAccountInfoFields(this.accountInfo);
+    this.accountInvalid.set(failed);
+    if (failed.size > 0) {
+      this.accountMessage.set('Fix the highlighted fields before submitting.');
+      return;
+    }
     this.accountSubmitting.set(true);
     this.accountMessage.set('');
     try {
+      if (this.pendingPhotoFile) {
+        const uploaded = await accountApi.uploadAccountPhoto(
+          this.pendingPhotoFile,
+          this.targetCuid(),
+        );
+        if (uploaded.error || !uploaded.data) {
+          this.accountMessage.set('Account photo could not be uploaded.');
+          return;
+        }
+        this.accountInfo.accountPhoto = uploaded.data.cuid;
+        this.pendingPhotoFile = null;
+        this.photoFileLabel.set('No file chosen');
+        if (this.localPreviewObjectUrl) {
+          URL.revokeObjectURL(this.localPreviewObjectUrl);
+          this.localPreviewObjectUrl = null;
+        }
+        this.photoPreviewUrl.set(accountPhotoUrl(uploaded.data.cuid));
+      }
       const body = accountInfoBody(
         this.accountInfo,
         this.canEditMembership(),
         this.isAdminViewer(),
+        this.isOwnAccount(),
       );
       const { error } = await accountApi.updateUser(this.targetCuid(), body);
       if (error) {
@@ -208,25 +300,38 @@ export class AccountPage implements OnInit {
       this.accountSubmitting.set(false);
     }
   }
-  // @relation(GSSC-MLLR-141, scope=range_end, role=Implementation)
+  // @relation(GSSC-MLLR-141, GSSC-MLLR-421, GSSC-MLLR-426, scope=range_end, role=Implementation)
 
-  // @relation(GSSC-MLLR-149, GSSC-MLLR-158, scope=range_start, role=Implementation)
+  // @relation(GSSC-MLLR-149, GSSC-MLLR-158, GSSC-MLLR-427, GSSC-MLLR-428, scope=range_start, role=Implementation)
   async submitPasswordChange(): Promise<void> {
     if (this.passwordSubmitting() || !this.canChangePassword()) return;
     const criteria = evaluatePasswordCriteria(this.newPassword, this.confirmPassword);
-    if (!passwordCriteriaSatisfied(criteria) || !this.currentPassword) {
-      this.passwordMessage.set('Password does not meet the required criteria.');
+    const equalsCurrent =
+      this.currentPassword.length > 0 && this.newPassword === this.currentPassword;
+    if (!passwordCriteriaSatisfied(criteria) || !this.currentPassword || equalsCurrent) {
+      this.passwordInvalid.set(true);
+      this.passwordMessage.set(
+        equalsCurrent
+          ? 'New password must differ from the current password.'
+          : 'Password does not meet the required criteria.',
+      );
       return;
     }
     this.passwordSubmitting.set(true);
     this.passwordMessage.set('');
+    this.passwordInvalid.set(false);
     try {
       const { error } = await accountApi.changePassword({
         currentPassword: this.currentPassword,
         newPassword: this.newPassword,
       });
       if (error) {
-        this.passwordMessage.set('Password could not be changed.');
+        this.passwordInvalid.set(true);
+        this.passwordMessage.set(
+          error.status === 422
+            ? 'New password must differ from the current and previous passwords.'
+            : 'Password could not be changed.',
+        );
         return;
       }
       this.currentPassword = '';
@@ -239,7 +344,7 @@ export class AccountPage implements OnInit {
       this.passwordSubmitting.set(false);
     }
   }
-  // @relation(GSSC-MLLR-149, GSSC-MLLR-158, scope=range_end, role=Implementation)
+  // @relation(GSSC-MLLR-149, GSSC-MLLR-158, GSSC-MLLR-427, GSSC-MLLR-428, scope=range_end, role=Implementation)
 
   activePrivilegeLabels(): string[] {
     return SITE_PRIVILEGES.filter((p) => this.accountInfo[p.key]).map((p) => p.label);
@@ -281,7 +386,6 @@ export class AccountPage implements OnInit {
 
     this.targetCuid.set(cuid);
     this.isOwnAccount.set(isOwn);
-    // Owner UX: membership status/position editable when viewer is admin|userMod; else grayed.
     this.canEditMembership.set(viewerIsUserMod);
     this.isAdminViewer.set(viewerIsAdmin);
     this.canChangePassword.set(isOwn);
@@ -309,6 +413,16 @@ export class AccountPage implements OnInit {
     this.accountInfo = { ...info };
     this.loadedMemberInfo = { ...member };
     this.loadedAccountInfo = { ...info };
+    this.pendingPhotoFile = null;
+    this.photoFileLabel.set('No file chosen');
+    if (this.localPreviewObjectUrl) {
+      URL.revokeObjectURL(this.localPreviewObjectUrl);
+      this.localPreviewObjectUrl = null;
+    }
+    this.photoPreviewUrl.set(accountPhotoUrl(info.accountPhoto));
+    this.memberInvalid.set(new Set());
+    this.accountInvalid.set(new Set());
+    this.passwordInvalid.set(false);
   }
 }
 
@@ -386,17 +500,26 @@ function memberInfoBody(form: MemberInfoForm): Record<string, string | boolean |
   };
 }
 
-function accountInfoBody(
+/**
+ * Build Account Information POST body.
+ * Backend `buildPatch` requires string values for text fields (empty string clears
+ * clearable fields); `null` for `accountPhoto` yields 422. Self-edits must not
+ * send `membershipStatus` (always rejected) or `position` unless the viewer is admin.
+ */
+export function accountInfoBody(
   form: AccountInfoForm,
   canEditMembership: boolean,
   isAdminViewer: boolean,
-): Record<string, string | boolean | null> {
-  const body: Record<string, string | boolean | null> = {
+  isOwnAccount: boolean,
+): Record<string, string | boolean> {
+  const body: Record<string, string | boolean> = {
     username: form.username,
+    accountPhoto: form.accountPhoto,
   };
-  // accountPhoto is not yet writable on the users API; keep the control for UX.
-  if (canEditMembership) {
+  if (canEditMembership && !isOwnAccount) {
     body['membershipStatus'] = form.membershipStatus;
+    body['position'] = form.position;
+  } else if (isAdminViewer && isOwnAccount) {
     body['position'] = form.position;
   }
   if (isAdminViewer) {

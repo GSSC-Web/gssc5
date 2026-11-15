@@ -8732,6 +8732,120 @@ RELATIONS:
 [[/SECTION]]
 
 [[SECTION]]
+UID: GSSC-BLLR-ACCOUNT-PHOTOS
+TITLE: Account Photos Store
+
+[REQUIREMENT]
+UID: GSSC-BLLR-453
+TITLE: Account Photos Directory On Init
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL create the account-photos directory under the file storage root on startup when that directory is missing, and SHALL keep a corresponding account-photos folder entry for uploads.
+<<<
+RATIONALE: >>>
+Account photos have a dedicated store separate from general file uploads.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-101
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-207
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-454
+TITLE: Account Photo GET With Session
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL allow GET of a file in the account-photos store when the request carries a valid login session token.
+<<<
+RATIONALE: >>>
+Logged-in members may retrieve account photos for account and directory views.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-101
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-133
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-455
+TITLE: Account Photo GET With Position
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL allow GET of a file in the account-photos store without a login session token when a user stores that photo and has a non-empty position.
+<<<
+RATIONALE: >>>
+Public leadership display needs leader photos without requiring a member session.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-101
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-133
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-456
+TITLE: Account Photo Upload
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL accept an authenticated multipart upload into the account-photos store for a target user cuid, store that photo under a name and path derived from that user cuid, and return that user cuid and path.
+<<<
+RATIONALE: >>>
+Naming by user cuid prevents photo collisions across accounts and keeps the account path stable.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-101
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-31
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-457
+TITLE: Account Photo On User Record
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL project and accept updates to the Account Photo field on a user account for callers permitted to view or modify that account.
+<<<
+RATIONALE: >>>
+The users table stores the Account Photo path returned from the account-photos store.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-101
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-155
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-458
+TITLE: Account Photo Overwrite By User Cuid
+STATEMENT: >>>
+When an authenticated upload targets a user cuid that already has a photo in the account-photos store, the GSSC Website Unified Backend SHALL overwrite that stored photo rather than creating a second photo for the same user.
+<<<
+RATIONALE: >>>
+One photo per user cuid keeps storage and account paths collision-free.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-101
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-31
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
 UID: GSSC-BLLR-MAIL-CONFIGURATION
 TITLE: Mail Configuration
 

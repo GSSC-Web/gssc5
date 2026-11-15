@@ -15,17 +15,36 @@
   } @else {
     <!-- @relation(GSSC-MLLR-130, GSSC-MLLR-131, GSSC-MLLR-132, scope=range_start, role=Implementation) -->
     <section class="gssc-account-member-info flex flex-col gap-4 font-sans" aria-labelledby="gssc-account-member-heading">
-      <h2
-        id="gssc-account-member-heading"
-        class="gssc-account-member-info__heading m-0 font-sans text-xl font-semibold text-gssc-dark-green"
+      <!-- @relation(GSSC-MLLR-417, scope=range_start, role=Implementation) -->
+      <button
+        type="button"
+        class="gssc-account-member-info__toggle flex w-full cursor-pointer items-center justify-between border-0 bg-transparent p-0 text-start"
+        (click)="toggleMemberSection()"
+        [attr.aria-expanded]="memberSectionOpen()"
       >
-        Member Information
-      </h2>
+        <h2
+          id="gssc-account-member-heading"
+          class="gssc-account-member-info__heading m-0 font-sans text-xl font-semibold text-gssc-dark-green"
+        >
+          Member Information
+        </h2>
+        <span class="gssc-account-section-chevron font-sans text-sm text-gssc-dark-green" aria-hidden="true">{{ memberSectionOpen() ? '▾' : '▸' }}</span>
+      </button>
+      <!-- @relation(GSSC-MLLR-417, scope=range_end, role=Implementation) -->
 
+      @if (memberSectionOpen()) {
+      <!-- @relation(GSSC-MLLR-422, GSSC-MLLR-423, scope=range_start, role=Implementation) -->
+      <form class="gssc-account-member-info__form flex flex-col gap-4" (ngSubmit)="submitMemberInfo()" novalidate>
       <div class="gssc-account-member-info__columns grid gap-6 md:grid-cols-2">
         <!-- @relation(GSSC-MLLR-135, GSSC-MLLR-136, GSSC-MLLR-137, scope=range_start, role=Implementation) -->
         <div class="gssc-account-name-contact flex flex-col gap-4 font-sans text-gssc-dark-green">
-          <div class="gssc-field relative flex min-w-0 flex-col rounded-md border border-gssc-dark-green bg-gssc-white font-sans">
+          <div
+            class="gssc-field relative flex min-w-0 flex-col rounded-md border font-sans"
+            [class.border-gssc-dark-green]="!fieldInvalid('firstName')"
+            [class.border-gssc-dark-red]="fieldInvalid('firstName')"
+            [class.bg-gssc-white]="!fieldInvalid('firstName')"
+            [class.bg-gssc-light-red]="fieldInvalid('firstName')"
+          >
             <label class="absolute -top-2 start-2 bg-inherit px-1 text-xs font-extralight italic text-gssc-dark-green" for="gssc-account-first-name">First Name&nbsp;*</label>
             <input id="gssc-account-first-name" class="gssc-account-name-contact__first-name min-w-0 border-0 bg-transparent px-2 py-2 font-sans text-sm outline-none text-gssc-dark-green" name="firstName" [(ngModel)]="memberInfo.firstName" required />
           </div>
@@ -33,15 +52,33 @@
             <label class="absolute -top-2 start-2 bg-inherit px-1 text-xs font-extralight italic text-gssc-dark-green" for="gssc-account-middle-name">Middle Name</label>
             <input id="gssc-account-middle-name" class="gssc-account-name-contact__middle-name min-w-0 border-0 bg-transparent px-2 py-2 font-sans text-sm outline-none text-gssc-dark-green" name="middleName" [(ngModel)]="memberInfo.middleName" />
           </div>
-          <div class="gssc-field relative flex min-w-0 flex-col rounded-md border border-gssc-dark-green bg-gssc-white font-sans">
+          <div
+            class="gssc-field relative flex min-w-0 flex-col rounded-md border font-sans"
+            [class.border-gssc-dark-green]="!fieldInvalid('lastName')"
+            [class.border-gssc-dark-red]="fieldInvalid('lastName')"
+            [class.bg-gssc-white]="!fieldInvalid('lastName')"
+            [class.bg-gssc-light-red]="fieldInvalid('lastName')"
+          >
             <label class="absolute -top-2 start-2 bg-inherit px-1 text-xs font-extralight italic text-gssc-dark-green" for="gssc-account-last-name">Last Name&nbsp;*</label>
             <input id="gssc-account-last-name" class="gssc-account-name-contact__last-name min-w-0 border-0 bg-transparent px-2 py-2 font-sans text-sm outline-none text-gssc-dark-green" name="lastName" [(ngModel)]="memberInfo.lastName" required />
           </div>
-          <div class="gssc-field relative flex min-w-0 flex-col rounded-md border border-gssc-dark-green bg-gssc-white font-sans">
+          <div
+            class="gssc-field relative flex min-w-0 flex-col rounded-md border font-sans"
+            [class.border-gssc-dark-green]="!fieldInvalid('primaryEmail')"
+            [class.border-gssc-dark-red]="fieldInvalid('primaryEmail')"
+            [class.bg-gssc-white]="!fieldInvalid('primaryEmail')"
+            [class.bg-gssc-light-red]="fieldInvalid('primaryEmail')"
+          >
             <label class="absolute -top-2 start-2 bg-inherit px-1 text-xs font-extralight italic text-gssc-dark-green" for="gssc-account-primary-email">Primary Email&nbsp;*</label>
             <input id="gssc-account-primary-email" class="gssc-account-name-contact__primary-email min-w-0 border-0 bg-transparent px-2 py-2 font-sans text-sm outline-none text-gssc-dark-green" name="primaryEmail" type="email" [(ngModel)]="memberInfo.primaryEmail" required />
           </div>
-          <div class="gssc-field relative flex min-w-0 flex-col rounded-md border border-gssc-dark-green bg-gssc-white font-sans">
+          <div
+            class="gssc-field relative flex min-w-0 flex-col rounded-md border font-sans"
+            [class.border-gssc-dark-green]="!fieldInvalid('secondaryEmail')"
+            [class.border-gssc-dark-red]="fieldInvalid('secondaryEmail')"
+            [class.bg-gssc-white]="!fieldInvalid('secondaryEmail')"
+            [class.bg-gssc-light-red]="fieldInvalid('secondaryEmail')"
+          >
             <label class="absolute -top-2 start-2 bg-inherit px-1 text-xs font-extralight italic text-gssc-dark-green" for="gssc-account-secondary-email">Secondary Email</label>
             <input id="gssc-account-secondary-email" class="gssc-account-name-contact__secondary-email min-w-0 border-0 bg-transparent px-2 py-2 font-sans text-sm outline-none text-gssc-dark-green" name="secondaryEmail" type="email" [(ngModel)]="memberInfo.secondaryEmail" />
           </div>
@@ -49,11 +86,23 @@
             <input type="checkbox" name="secondaryEmailDisplay" [(ngModel)]="memberInfo.secondaryEmailDisplay" />
             Show Secondary Email In Directory
           </label>
-          <div class="gssc-field relative flex min-w-0 flex-col rounded-md border border-gssc-dark-green bg-gssc-white font-sans">
+          <div
+            class="gssc-field relative flex min-w-0 flex-col rounded-md border font-sans"
+            [class.border-gssc-dark-green]="!fieldInvalid('primaryPhone')"
+            [class.border-gssc-dark-red]="fieldInvalid('primaryPhone')"
+            [class.bg-gssc-white]="!fieldInvalid('primaryPhone')"
+            [class.bg-gssc-light-red]="fieldInvalid('primaryPhone')"
+          >
             <label class="absolute -top-2 start-2 bg-inherit px-1 text-xs font-extralight italic text-gssc-dark-green" for="gssc-account-primary-phone">Primary Phone&nbsp;*</label>
             <input id="gssc-account-primary-phone" class="gssc-account-name-contact__primary-phone min-w-0 border-0 bg-transparent px-2 py-2 font-sans text-sm outline-none text-gssc-dark-green" name="primaryPhone" [(ngModel)]="memberInfo.primaryPhone" required />
           </div>
-          <div class="gssc-field relative flex min-w-0 flex-col rounded-md border border-gssc-dark-green bg-gssc-white font-sans">
+          <div
+            class="gssc-field relative flex min-w-0 flex-col rounded-md border font-sans"
+            [class.border-gssc-dark-green]="!fieldInvalid('secondaryPhone')"
+            [class.border-gssc-dark-red]="fieldInvalid('secondaryPhone')"
+            [class.bg-gssc-white]="!fieldInvalid('secondaryPhone')"
+            [class.bg-gssc-light-red]="fieldInvalid('secondaryPhone')"
+          >
             <label class="absolute -top-2 start-2 bg-inherit px-1 text-xs font-extralight italic text-gssc-dark-green" for="gssc-account-secondary-phone">Secondary Phone</label>
             <input id="gssc-account-secondary-phone" class="gssc-account-name-contact__secondary-phone min-w-0 border-0 bg-transparent px-2 py-2 font-sans text-sm outline-none text-gssc-dark-green" name="secondaryPhone" [(ngModel)]="memberInfo.secondaryPhone" />
           </div>
@@ -61,7 +110,13 @@
             <input type="checkbox" name="secondaryPhoneDisplay" [(ngModel)]="memberInfo.secondaryPhoneDisplay" />
             Show Secondary Phone In Directory
           </label>
-          <div class="gssc-field relative flex min-w-0 flex-col rounded-md border border-gssc-dark-green bg-gssc-white font-sans">
+          <div
+            class="gssc-field relative flex min-w-0 flex-col rounded-md border font-sans"
+            [class.border-gssc-dark-green]="!fieldInvalid('preferredContactMethod')"
+            [class.border-gssc-dark-red]="fieldInvalid('preferredContactMethod')"
+            [class.bg-gssc-white]="!fieldInvalid('preferredContactMethod')"
+            [class.bg-gssc-light-red]="fieldInvalid('preferredContactMethod')"
+          >
             <label class="absolute -top-2 start-2 bg-inherit px-1 text-xs font-extralight italic text-gssc-dark-green" for="gssc-account-preferred-contact">Preferred Contact&nbsp;*</label>
             <select id="gssc-account-preferred-contact" class="gssc-account-name-contact__preferred-contact min-w-0 border-0 bg-transparent px-2 py-2 font-sans text-sm outline-none text-gssc-dark-green" name="preferredContactMethod" [(ngModel)]="memberInfo.preferredContactMethod" required>
               <option value="Email">Email</option>
@@ -74,7 +129,13 @@
 
         <!-- @relation(GSSC-MLLR-138, GSSC-MLLR-139, GSSC-MLLR-140, scope=range_start, role=Implementation) -->
         <div class="gssc-account-addresses flex flex-col gap-4 font-sans text-gssc-dark-green">
-          <div class="gssc-field relative flex min-w-0 flex-col rounded-md border border-gssc-dark-green bg-gssc-white font-sans">
+          <div
+            class="gssc-field relative flex min-w-0 flex-col rounded-md border font-sans"
+            [class.border-gssc-dark-green]="!fieldInvalid('homeLine1')"
+            [class.border-gssc-dark-red]="fieldInvalid('homeLine1')"
+            [class.bg-gssc-white]="!fieldInvalid('homeLine1')"
+            [class.bg-gssc-light-red]="fieldInvalid('homeLine1')"
+          >
             <label class="absolute -top-2 start-2 bg-inherit px-1 text-xs font-extralight italic text-gssc-dark-green" for="gssc-account-home-line1">Home Line 1&nbsp;*</label>
             <input id="gssc-account-home-line1" class="gssc-account-addresses__home-line1 min-w-0 border-0 bg-transparent px-2 py-2 font-sans text-sm outline-none text-gssc-dark-green" name="homeLine1" [(ngModel)]="memberInfo.homeLine1" required />
           </div>
@@ -86,21 +147,45 @@
             <label class="absolute -top-2 start-2 bg-inherit px-1 text-xs font-extralight italic text-gssc-dark-green" for="gssc-account-home-line3">Home Line 3</label>
             <input id="gssc-account-home-line3" class="gssc-account-addresses__home-line3 min-w-0 border-0 bg-transparent px-2 py-2 font-sans text-sm outline-none text-gssc-dark-green" name="homeLine3" [(ngModel)]="memberInfo.homeLine3" />
           </div>
-          <div class="gssc-field relative flex min-w-0 flex-col rounded-md border border-gssc-dark-green bg-gssc-white font-sans">
+          <div
+            class="gssc-field relative flex min-w-0 flex-col rounded-md border font-sans"
+            [class.border-gssc-dark-green]="!fieldInvalid('homeCity')"
+            [class.border-gssc-dark-red]="fieldInvalid('homeCity')"
+            [class.bg-gssc-white]="!fieldInvalid('homeCity')"
+            [class.bg-gssc-light-red]="fieldInvalid('homeCity')"
+          >
             <label class="absolute -top-2 start-2 bg-inherit px-1 text-xs font-extralight italic text-gssc-dark-green" for="gssc-account-home-city">Home City&nbsp;*</label>
             <input id="gssc-account-home-city" class="gssc-account-addresses__home-city min-w-0 border-0 bg-transparent px-2 py-2 font-sans text-sm outline-none text-gssc-dark-green" name="homeCity" [(ngModel)]="memberInfo.homeCity" required />
           </div>
-          <div class="gssc-field relative flex min-w-0 flex-col rounded-md border border-gssc-dark-green bg-gssc-white font-sans">
+          <div
+            class="gssc-field relative flex min-w-0 flex-col rounded-md border font-sans"
+            [class.border-gssc-dark-green]="!fieldInvalid('homeState')"
+            [class.border-gssc-dark-red]="fieldInvalid('homeState')"
+            [class.bg-gssc-white]="!fieldInvalid('homeState')"
+            [class.bg-gssc-light-red]="fieldInvalid('homeState')"
+          >
             <label class="absolute -top-2 start-2 bg-inherit px-1 text-xs font-extralight italic text-gssc-dark-green" for="gssc-account-home-state">Home State&nbsp;*</label>
             <input id="gssc-account-home-state" class="gssc-account-addresses__home-state min-w-0 border-0 bg-transparent px-2 py-2 font-sans text-sm outline-none text-gssc-dark-green" name="homeState" [(ngModel)]="memberInfo.homeState" required />
           </div>
           <div class="gssc-account-addresses__home-zip-row flex min-w-0 items-center gap-2">
-            <div class="gssc-field relative flex min-w-0 flex-1 flex-col rounded-md border border-gssc-dark-green bg-gssc-white font-sans">
+            <div
+              class="gssc-field relative flex min-w-0 flex-1 flex-col rounded-md border font-sans"
+              [class.border-gssc-dark-green]="!fieldInvalid('homeZip')"
+              [class.border-gssc-dark-red]="fieldInvalid('homeZip')"
+              [class.bg-gssc-white]="!fieldInvalid('homeZip')"
+              [class.bg-gssc-light-red]="fieldInvalid('homeZip')"
+            >
               <label class="absolute -top-2 start-2 bg-inherit px-1 text-xs font-extralight italic text-gssc-dark-green" for="gssc-account-home-zip">Zip&nbsp;*</label>
               <input id="gssc-account-home-zip" class="gssc-account-addresses__home-zip min-w-0 border-0 bg-transparent px-2 py-2 font-sans text-sm outline-none text-gssc-dark-green" name="homeZip" [(ngModel)]="memberInfo.homeZip" required />
             </div>
             <span class="gssc-account-addresses__zip-plus shrink-0 font-sans text-sm text-gssc-dark-green" aria-hidden="true">+</span>
-            <div class="gssc-field relative flex min-w-0 flex-1 flex-col rounded-md border border-gssc-dark-green bg-gssc-white font-sans">
+            <div
+              class="gssc-field relative flex min-w-0 flex-1 flex-col rounded-md border font-sans"
+              [class.border-gssc-dark-green]="!fieldInvalid('homeZipExtension')"
+              [class.border-gssc-dark-red]="fieldInvalid('homeZipExtension')"
+              [class.bg-gssc-white]="!fieldInvalid('homeZipExtension')"
+              [class.bg-gssc-light-red]="fieldInvalid('homeZipExtension')"
+            >
               <label class="absolute -top-2 start-2 bg-inherit px-1 text-xs font-extralight italic text-gssc-dark-green" for="gssc-account-home-zip-ext">Zip Extension</label>
               <input id="gssc-account-home-zip-ext" class="gssc-account-addresses__home-zip-ext min-w-0 border-0 bg-transparent px-2 py-2 font-sans text-sm outline-none text-gssc-dark-green" name="homeZipExtension" [(ngModel)]="memberInfo.homeZipExtension" />
             </div>
@@ -112,7 +197,13 @@
               <option value="redacted">Redacted</option>
             </select>
           </div>
-          <div class="gssc-field relative flex min-w-0 flex-col rounded-md border border-gssc-dark-green bg-gssc-white font-sans">
+          <div
+            class="gssc-field relative flex min-w-0 flex-col rounded-md border font-sans"
+            [class.border-gssc-dark-green]="!fieldInvalid('mailingLine1')"
+            [class.border-gssc-dark-red]="fieldInvalid('mailingLine1')"
+            [class.bg-gssc-white]="!fieldInvalid('mailingLine1')"
+            [class.bg-gssc-light-red]="fieldInvalid('mailingLine1')"
+          >
             <label class="absolute -top-2 start-2 bg-inherit px-1 text-xs font-extralight italic text-gssc-dark-green" for="gssc-account-mail-line1">Mailing Line 1&nbsp;*</label>
             <input id="gssc-account-mail-line1" class="gssc-account-addresses__mail-line1 min-w-0 border-0 bg-transparent px-2 py-2 font-sans text-sm outline-none text-gssc-dark-green" name="mailingLine1" [(ngModel)]="memberInfo.mailingLine1" required />
           </div>
@@ -124,21 +215,45 @@
             <label class="absolute -top-2 start-2 bg-inherit px-1 text-xs font-extralight italic text-gssc-dark-green" for="gssc-account-mail-line3">Mailing Line 3</label>
             <input id="gssc-account-mail-line3" class="gssc-account-addresses__mail-line3 min-w-0 border-0 bg-transparent px-2 py-2 font-sans text-sm outline-none text-gssc-dark-green" name="mailingLine3" [(ngModel)]="memberInfo.mailingLine3" />
           </div>
-          <div class="gssc-field relative flex min-w-0 flex-col rounded-md border border-gssc-dark-green bg-gssc-white font-sans">
+          <div
+            class="gssc-field relative flex min-w-0 flex-col rounded-md border font-sans"
+            [class.border-gssc-dark-green]="!fieldInvalid('mailingCity')"
+            [class.border-gssc-dark-red]="fieldInvalid('mailingCity')"
+            [class.bg-gssc-white]="!fieldInvalid('mailingCity')"
+            [class.bg-gssc-light-red]="fieldInvalid('mailingCity')"
+          >
             <label class="absolute -top-2 start-2 bg-inherit px-1 text-xs font-extralight italic text-gssc-dark-green" for="gssc-account-mail-city">Mailing City&nbsp;*</label>
             <input id="gssc-account-mail-city" class="gssc-account-addresses__mail-city min-w-0 border-0 bg-transparent px-2 py-2 font-sans text-sm outline-none text-gssc-dark-green" name="mailingCity" [(ngModel)]="memberInfo.mailingCity" required />
           </div>
-          <div class="gssc-field relative flex min-w-0 flex-col rounded-md border border-gssc-dark-green bg-gssc-white font-sans">
+          <div
+            class="gssc-field relative flex min-w-0 flex-col rounded-md border font-sans"
+            [class.border-gssc-dark-green]="!fieldInvalid('mailingState')"
+            [class.border-gssc-dark-red]="fieldInvalid('mailingState')"
+            [class.bg-gssc-white]="!fieldInvalid('mailingState')"
+            [class.bg-gssc-light-red]="fieldInvalid('mailingState')"
+          >
             <label class="absolute -top-2 start-2 bg-inherit px-1 text-xs font-extralight italic text-gssc-dark-green" for="gssc-account-mail-state">Mailing State&nbsp;*</label>
             <input id="gssc-account-mail-state" class="gssc-account-addresses__mail-state min-w-0 border-0 bg-transparent px-2 py-2 font-sans text-sm outline-none text-gssc-dark-green" name="mailingState" [(ngModel)]="memberInfo.mailingState" required />
           </div>
           <div class="gssc-account-addresses__mail-zip-row flex min-w-0 items-center gap-2">
-            <div class="gssc-field relative flex min-w-0 flex-1 flex-col rounded-md border border-gssc-dark-green bg-gssc-white font-sans">
+            <div
+              class="gssc-field relative flex min-w-0 flex-1 flex-col rounded-md border font-sans"
+              [class.border-gssc-dark-green]="!fieldInvalid('mailingZip')"
+              [class.border-gssc-dark-red]="fieldInvalid('mailingZip')"
+              [class.bg-gssc-white]="!fieldInvalid('mailingZip')"
+              [class.bg-gssc-light-red]="fieldInvalid('mailingZip')"
+            >
               <label class="absolute -top-2 start-2 bg-inherit px-1 text-xs font-extralight italic text-gssc-dark-green" for="gssc-account-mail-zip">Zip&nbsp;*</label>
               <input id="gssc-account-mail-zip" class="gssc-account-addresses__mail-zip min-w-0 border-0 bg-transparent px-2 py-2 font-sans text-sm outline-none text-gssc-dark-green" name="mailingZip" [(ngModel)]="memberInfo.mailingZip" required />
             </div>
             <span class="gssc-account-addresses__zip-plus shrink-0 font-sans text-sm text-gssc-dark-green" aria-hidden="true">+</span>
-            <div class="gssc-field relative flex min-w-0 flex-1 flex-col rounded-md border border-gssc-dark-green bg-gssc-white font-sans">
+            <div
+              class="gssc-field relative flex min-w-0 flex-1 flex-col rounded-md border font-sans"
+              [class.border-gssc-dark-green]="!fieldInvalid('mailingZipExtension')"
+              [class.border-gssc-dark-red]="fieldInvalid('mailingZipExtension')"
+              [class.bg-gssc-white]="!fieldInvalid('mailingZipExtension')"
+              [class.bg-gssc-light-red]="fieldInvalid('mailingZipExtension')"
+            >
               <label class="absolute -top-2 start-2 bg-inherit px-1 text-xs font-extralight italic text-gssc-dark-green" for="gssc-account-mail-zip-ext">Zip Extension</label>
               <input id="gssc-account-mail-zip-ext" class="gssc-account-addresses__mail-zip-ext min-w-0 border-0 bg-transparent px-2 py-2 font-sans text-sm outline-none text-gssc-dark-green" name="mailingZipExtension" [(ngModel)]="memberInfo.mailingZipExtension" />
             </div>
@@ -156,10 +271,9 @@
           Reset
         </button>
         <button
-          type="button"
+          type="submit"
           class="gssc-account-member-info__submit inline-flex cursor-pointer items-center justify-center rounded-md border border-gssc-dark-green bg-gssc-light-green px-3 py-2 font-sans text-sm text-gssc-dark-green hover:bg-gssc-gray disabled:cursor-not-allowed disabled:opacity-60"
           [disabled]="memberSubmitting()"
-          (click)="submitMemberInfo()"
         >
           Submit
         </button>
@@ -167,27 +281,90 @@
       @if (memberMessage()) {
         <p class="gssc-account-member-info__message m-0 font-sans text-sm" role="status">{{ memberMessage() }}</p>
       }
+      </form>
+      <!-- @relation(GSSC-MLLR-422, GSSC-MLLR-423, scope=range_end, role=Implementation) -->
+      }
     </section>
     <!-- @relation(GSSC-MLLR-130, GSSC-MLLR-131, GSSC-MLLR-132, scope=range_end, role=Implementation) -->
 
     <!-- @relation(GSSC-MLLR-141, GSSC-MLLR-142, GSSC-MLLR-143, GSSC-MLLR-144, GSSC-MLLR-145, scope=range_start, role=Implementation) -->
     <section class="gssc-account-account-info flex flex-col gap-4 font-sans" aria-labelledby="gssc-account-account-heading">
-      <h2
-        id="gssc-account-account-heading"
-        class="gssc-account-account-info__heading m-0 font-sans text-xl font-semibold text-gssc-dark-green"
+      <button
+        type="button"
+        class="gssc-account-account-info__toggle flex w-full cursor-pointer items-center justify-between border-0 bg-transparent p-0 text-start"
+        (click)="toggleAccountSection()"
+        [attr.aria-expanded]="accountSectionOpen()"
       >
-        Account Information
-      </h2>
+        <h2
+          id="gssc-account-account-heading"
+          class="gssc-account-account-info__heading m-0 font-sans text-xl font-semibold text-gssc-dark-green"
+        >
+          Account Information
+        </h2>
+        <span class="gssc-account-section-chevron font-sans text-sm text-gssc-dark-green" aria-hidden="true">{{ accountSectionOpen() ? '▾' : '▸' }}</span>
+      </button>
 
+      @if (accountSectionOpen()) {
+      <!-- @relation(GSSC-MLLR-422, GSSC-MLLR-423, scope=range_start, role=Implementation) -->
+      <form class="gssc-account-account-info__form flex flex-col gap-4" (ngSubmit)="submitAccountInfo()" novalidate>
       <div class="gssc-account-account-info__columns grid gap-6 md:grid-cols-2">
         <div class="gssc-account-account-info__left flex flex-col gap-4 font-sans text-gssc-dark-green">
           <!-- @relation(GSSC-MLLR-146, GSSC-MLLR-147, GSSC-MLLR-148, scope=range_start, role=Implementation) -->
           <div class="gssc-account-photo-username flex flex-col gap-4 font-sans text-gssc-dark-green">
-            <div class="gssc-field relative flex min-w-0 flex-col rounded-md border border-gssc-dark-green bg-gssc-white font-sans">
-              <label class="absolute -top-2 start-2 bg-inherit px-1 text-xs font-extralight italic text-gssc-dark-green" for="gssc-account-photo">Account Photo</label>
-              <input id="gssc-account-photo" class="gssc-account-photo-username__photo min-w-0 border-0 bg-transparent px-2 py-2 font-sans text-sm outline-none text-gssc-dark-green" name="accountPhoto" [(ngModel)]="accountInfo.accountPhoto" />
+            <!-- @relation(GSSC-MLLR-424, GSSC-MLLR-425, GSSC-MLLR-426, scope=range_start, role=Implementation) -->
+            <div
+              class="gssc-field gssc-account-photo-username__picker gssc-account-photo-username__preview-wrap relative flex min-w-0 flex-col rounded-md border border-gssc-dark-green bg-gssc-white font-sans text-gssc-dark-green"
+            >
+              <span class="gssc-account-photo-username__file-label absolute -top-2 start-2 bg-inherit px-1 text-xs font-extralight italic text-gssc-dark-green">
+                Account Photo
+              </span>
+              <input
+                id="gssc-account-photo"
+                class="gssc-account-photo-username__photo sr-only"
+                name="accountPhoto"
+                type="file"
+                accept="image/*"
+                (change)="onPhotoSelected($event)"
+              />
+              <div class="flex flex-col items-start gap-3 px-2 py-2">
+                <div
+                  class="gssc-account-photo-username__preview-frame size-40 shrink-0 overflow-hidden rounded-md border border-gssc-dark-green bg-gssc-gray"
+                >
+                  @if (photoPreviewUrl()) {
+                    <img
+                      class="gssc-account-photo-username__preview size-full object-cover object-center"
+                      [src]="photoPreviewUrl()"
+                      alt="Account photo preview"
+                    />
+                  } @else {
+                    <p
+                      class="gssc-account-photo-username__preview-empty m-0 flex size-full items-center justify-center p-2 text-center font-sans text-sm text-gssc-dark-brown"
+                    >
+                      No account photo
+                    </p>
+                  }
+                </div>
+                <div class="flex min-w-0 flex-wrap items-center gap-3">
+                  <label
+                    for="gssc-account-photo"
+                    class="gssc-account-photo-username__choose inline-flex w-fit cursor-pointer items-center justify-center rounded-md border border-gssc-dark-green bg-gssc-light-green px-3 py-1.5 font-sans text-sm text-gssc-dark-green hover:bg-gssc-gray"
+                  >
+                    Choose Photo
+                  </label>
+                  <span class="gssc-account-photo-username__file-name truncate font-sans text-sm text-gssc-dark-brown">
+                    {{ photoFileLabel() }}
+                  </span>
+                </div>
+              </div>
             </div>
-            <div class="gssc-field relative flex min-w-0 flex-col rounded-md border border-gssc-dark-green bg-gssc-white font-sans">
+            <!-- @relation(GSSC-MLLR-424, GSSC-MLLR-425, GSSC-MLLR-426, scope=range_end, role=Implementation) -->
+            <div
+            class="gssc-field relative flex min-w-0 flex-col rounded-md border font-sans"
+            [class.border-gssc-dark-green]="!fieldInvalid('username')"
+            [class.border-gssc-dark-red]="fieldInvalid('username')"
+            [class.bg-gssc-white]="!fieldInvalid('username')"
+            [class.bg-gssc-light-red]="fieldInvalid('username')"
+          >
               <label class="absolute -top-2 start-2 bg-inherit px-1 text-xs font-extralight italic text-gssc-dark-green" for="gssc-account-username">Username&nbsp;*</label>
               <input id="gssc-account-username" class="gssc-account-photo-username__username min-w-0 border-0 bg-transparent px-2 py-2 font-sans text-sm outline-none text-gssc-dark-green" name="username" [(ngModel)]="accountInfo.username" required />
             </div>
@@ -239,6 +416,7 @@
                       type="checkbox"
                       class="gssc-account-privileges__switch"
                       [attr.data-privilege]="priv.key"
+                      [name]="priv.key"
                       [ngModel]="privilegeChecked(priv.key)"
                       (ngModelChange)="setPrivilege(priv.key, $event)"
                     />
@@ -261,10 +439,9 @@
 
       <div class="gssc-account-account-info__actions flex flex-wrap gap-3">
         <button
-          type="button"
+          type="submit"
           class="gssc-account-account-info__submit inline-flex cursor-pointer items-center justify-center rounded-md border border-gssc-dark-green bg-gssc-light-green px-3 py-2 font-sans text-sm text-gssc-dark-green hover:bg-gssc-gray disabled:cursor-not-allowed disabled:opacity-60"
           [disabled]="accountSubmitting()"
-          (click)="submitAccountInfo()"
         >
           Submit
         </button>
@@ -272,22 +449,42 @@
       @if (accountMessage()) {
         <p class="gssc-account-account-info__message m-0 font-sans text-sm" role="status">{{ accountMessage() }}</p>
       }
+      </form>
+      <!-- @relation(GSSC-MLLR-422, GSSC-MLLR-423, scope=range_end, role=Implementation) -->
+      }
     </section>
     <!-- @relation(GSSC-MLLR-141, GSSC-MLLR-142, GSSC-MLLR-143, GSSC-MLLR-144, GSSC-MLLR-145, scope=range_end, role=Implementation) -->
 
     <!-- @relation(GSSC-MLLR-149, GSSC-MLLR-150, GSSC-MLLR-151, GSSC-MLLR-158, scope=range_start, role=Implementation) -->
     <section class="gssc-account-password flex flex-col gap-4 font-sans" aria-labelledby="gssc-account-password-heading">
-      <h2
-        id="gssc-account-password-heading"
-        class="gssc-account-password__heading m-0 font-sans text-xl font-semibold text-gssc-dark-green"
+      <button
+        type="button"
+        class="gssc-account-password__toggle flex w-full cursor-pointer items-center justify-between border-0 bg-transparent p-0 text-start"
+        (click)="togglePasswordSection()"
+        [attr.aria-expanded]="passwordSectionOpen()"
       >
-        Password Change
-      </h2>
+        <h2
+          id="gssc-account-password-heading"
+          class="gssc-account-password__heading m-0 font-sans text-xl font-semibold text-gssc-dark-green"
+        >
+          Password Change
+        </h2>
+        <span class="gssc-account-section-chevron font-sans text-sm text-gssc-dark-green" aria-hidden="true">{{ passwordSectionOpen() ? '▾' : '▸' }}</span>
+      </button>
 
+      @if (passwordSectionOpen()) {
+      <!-- @relation(GSSC-MLLR-422, GSSC-MLLR-423, scope=range_start, role=Implementation) -->
+      <form class="gssc-account-password__form flex flex-col gap-4" (ngSubmit)="submitPasswordChange()" novalidate>
       <div class="gssc-account-password__columns grid gap-6 md:grid-cols-2">
         <!-- @relation(GSSC-MLLR-152, GSSC-MLLR-153, GSSC-MLLR-154, scope=range_start, role=Implementation) -->
         <div class="gssc-account-password-fields flex flex-col gap-4 font-sans text-gssc-dark-green">
-          <div class="gssc-field relative flex min-w-0 flex-col rounded-md border border-gssc-dark-green bg-gssc-white font-sans">
+          <div
+            class="gssc-field relative flex min-w-0 flex-col rounded-md border font-sans"
+            [class.border-gssc-dark-green]="!passwordInvalid()"
+            [class.border-gssc-dark-red]="passwordInvalid()"
+            [class.bg-gssc-white]="!passwordInvalid()"
+            [class.bg-gssc-light-red]="passwordInvalid()"
+          >
             <label class="absolute -top-2 start-2 bg-inherit px-1 text-xs font-extralight italic text-gssc-dark-green" for="gssc-account-current-password">Current Password&nbsp;*</label>
             <input
               id="gssc-account-current-password"
@@ -300,7 +497,13 @@
               required
             />
           </div>
-          <div class="gssc-field relative flex min-w-0 flex-col rounded-md border border-gssc-dark-green bg-gssc-white font-sans">
+          <div
+            class="gssc-field relative flex min-w-0 flex-col rounded-md border font-sans"
+            [class.border-gssc-dark-green]="!passwordInvalid()"
+            [class.border-gssc-dark-red]="passwordInvalid()"
+            [class.bg-gssc-white]="!passwordInvalid()"
+            [class.bg-gssc-light-red]="passwordInvalid()"
+          >
             <label class="absolute -top-2 start-2 bg-inherit px-1 text-xs font-extralight italic text-gssc-dark-green" for="gssc-account-new-password">New Password&nbsp;*</label>
             <input
               id="gssc-account-new-password"
@@ -314,7 +517,13 @@
               required
             />
           </div>
-          <div class="gssc-field relative flex min-w-0 flex-col rounded-md border border-gssc-dark-green bg-gssc-white font-sans">
+          <div
+            class="gssc-field relative flex min-w-0 flex-col rounded-md border font-sans"
+            [class.border-gssc-dark-green]="!passwordInvalid()"
+            [class.border-gssc-dark-red]="passwordInvalid()"
+            [class.bg-gssc-white]="!passwordInvalid()"
+            [class.bg-gssc-light-red]="passwordInvalid()"
+          >
             <label class="absolute -top-2 start-2 bg-inherit px-1 text-xs font-extralight italic text-gssc-dark-green" for="gssc-account-confirm-password">Confirm Password&nbsp;*</label>
             <input
               id="gssc-account-confirm-password"
@@ -417,16 +626,18 @@
 
       <div class="gssc-account-password__actions flex flex-wrap gap-3">
         <button
-          type="button"
+          type="submit"
           class="gssc-account-password__submit inline-flex cursor-pointer items-center justify-center rounded-md border border-gssc-dark-green bg-gssc-light-green px-3 py-2 font-sans text-sm text-gssc-dark-green hover:bg-gssc-gray disabled:cursor-not-allowed disabled:opacity-60"
           [disabled]="passwordSubmitting() || !canChangePassword()"
-          (click)="submitPasswordChange()"
         >
           Change Password
         </button>
       </div>
       @if (passwordMessage()) {
         <p class="gssc-account-password__message m-0 font-sans text-sm" role="status">{{ passwordMessage() }}</p>
+      }
+      </form>
+      <!-- @relation(GSSC-MLLR-422, GSSC-MLLR-423, scope=range_end, role=Implementation) -->
       }
     </section>
     <!-- @relation(GSSC-MLLR-149, GSSC-MLLR-150, GSSC-MLLR-151, GSSC-MLLR-158, scope=range_end, role=Implementation) -->

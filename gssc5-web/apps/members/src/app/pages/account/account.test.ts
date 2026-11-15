@@ -4,7 +4,7 @@ import { routes } from '../../app.routes';
 import { accountApi } from '../../services/account-api';
 import { MemberSession, memberSessionApi } from '../../services/member-session';
 import { nativeElement, setupMembersComponent } from '../../../test-harness';
-import { AccountPage } from './account';
+import { AccountPage, accountInfoBody } from './account';
 
 function okResponse(data: unknown, status = 200) {
   return {
@@ -73,6 +73,7 @@ async function setupAccount(options?: {
     accountGet: accountApi.getUser,
     accountUpdate: accountApi.updateUser,
     changePassword: accountApi.changePassword,
+    uploadAccountPhoto: accountApi.uploadAccountPhoto,
   };
 
   try {
@@ -112,6 +113,10 @@ async function setupAccount(options?: {
     okResponse(null, 204)) as typeof accountApi.updateUser;
   accountApi.changePassword = (async () =>
     okResponse(null, 204)) as typeof accountApi.changePassword;
+  accountApi.uploadAccountPhoto = (async () => ({
+    data: { cuid: 'photo_1', path: 'account-photos/photo_1' },
+    error: null,
+  })) as typeof accountApi.uploadAccountPhoto;
 
   const url = options?.url ?? '/account';
   const cuidParam = url.startsWith('/accounts/')
@@ -161,6 +166,7 @@ async function setupAccount(options?: {
       accountApi.getUser = originals.accountGet;
       accountApi.updateUser = originals.accountUpdate;
       accountApi.changePassword = originals.changePassword;
+      accountApi.uploadAccountPhoto = originals.uploadAccountPhoto;
     },
   };
 }
@@ -535,7 +541,12 @@ test('GSSC-MLLR-148 Lexical', async () => {
   try {
     const block = root.querySelector<HTMLElement>('.gssc-account-photo-username')!;
     expect(block.classList.contains('font-sans') || block.parentElement?.classList.contains('font-sans')).toBe(true);
-    expect(root.querySelector('label[for="gssc-account-photo"]')!.textContent).toContain('Account Photo');
+    expect(root.querySelector('.gssc-account-photo-username__file-label')!.textContent).toContain(
+      'Account Photo',
+    );
+    expect(root.querySelector('.gssc-account-photo-username__choose')!.textContent).toContain(
+      'Choose Photo',
+    );
     const usernameLabel = root.querySelector('label[for="gssc-account-username"]')!;
     expect(usernameLabel.textContent).toContain('Username');
     expect(usernameLabel.textContent).toContain('*');
@@ -697,3 +708,300 @@ test('GSSC-MLLR-158 Semantic', async () => {
   }
 });
 // @relation(GSSC-MLLR-158, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-415, scope=range_start, role=Test)
+test('GSSC-MLLR-415 Semantic', async () => {
+  const { page, restore } = await setupAccount();
+  try {
+    expect(page.memberSectionOpen()).toBe(true);
+    page.toggleMemberSection();
+    expect(page.memberSectionOpen()).toBe(false);
+    page.toggleAccountSection();
+    expect(page.accountSectionOpen()).toBe(false);
+    page.togglePasswordSection();
+    expect(page.passwordSectionOpen()).toBe(false);
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-415, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-416, scope=range_start, role=Test)
+test('GSSC-MLLR-416 Syntactic', async () => {
+  const { root, page, restore } = await setupAccount();
+  try {
+    expect(page.memberSectionOpen()).toBe(true);
+    expect(page.accountSectionOpen()).toBe(true);
+    expect(page.passwordSectionOpen()).toBe(true);
+    expect(root.querySelector('.gssc-account-member-info__toggle')).not.toBeNull();
+    expect(root.querySelector('.gssc-account-account-info__toggle')).not.toBeNull();
+    expect(root.querySelector('.gssc-account-password__toggle')).not.toBeNull();
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-416, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-417, scope=range_start, role=Test)
+test('GSSC-MLLR-417 Lexical', async () => {
+  const { root, restore } = await setupAccount();
+  try {
+    const heading = root.querySelector<HTMLElement>('.gssc-account-member-info__heading')!;
+    expect(heading.classList.contains('font-sans')).toBe(true);
+    expect(heading.classList.contains('text-gssc-dark-green')).toBe(true);
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-417, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-418, scope=range_start, role=Test)
+test('GSSC-MLLR-418 Semantic', async () => {
+  const { page, restore } = await setupAccount();
+  try {
+    let called = false;
+    accountApi.updateUser = (async () => {
+      called = true;
+      return okResponse(null, 204) as never;
+    }) as typeof accountApi.updateUser;
+    page.memberInfo.firstName = '';
+    page.memberInfo.primaryEmail = 'not-an-email';
+    await page.submitMemberInfo();
+    expect(called).toBe(false);
+    expect(page.memberInvalid().has('firstName')).toBe(true);
+    expect(page.memberInvalid().has('primaryEmail')).toBe(true);
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-418, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-419, scope=range_start, role=Test)
+test('GSSC-MLLR-419 Semantic', async () => {
+  const { page, fixture, root, restore } = await setupAccount();
+  try {
+    page.memberInfo.homeZip = '12';
+    await page.submitMemberInfo();
+    fixture.detectChanges();
+    expect(page.fieldInvalid('homeZip')).toBe(true);
+    const zipField = root.querySelector('#gssc-account-home-zip')!.closest('.gssc-field')!;
+    expect(zipField.classList.contains('border-gssc-dark-red')).toBe(true);
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-419, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-420, scope=range_start, role=Test)
+test('GSSC-MLLR-420 Lexical', async () => {
+  const { page, fixture, root, restore } = await setupAccount();
+  try {
+    page.memberInfo.lastName = '';
+    await page.submitMemberInfo();
+    fixture.detectChanges();
+    const field = root.querySelector('#gssc-account-last-name')!.closest('.gssc-field')!;
+    expect(field.classList.contains('border-gssc-dark-red')).toBe(true);
+    expect(field.classList.contains('bg-gssc-light-red')).toBe(true);
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-420, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-421, scope=range_start, role=Test)
+test('GSSC-MLLR-421 Semantic', async () => {
+  const { page, restore } = await setupAccount();
+  try {
+    let uploadedFor = '';
+    let savedPhoto: string | null = null;
+    accountApi.uploadAccountPhoto = (async (_file, userCuid) => {
+      uploadedFor = userCuid;
+      return {
+        data: { cuid: userCuid, path: `account-photos/${userCuid}` },
+        error: null,
+      };
+    }) as typeof accountApi.uploadAccountPhoto;
+    accountApi.updateUser = (async (_cuid, body) => {
+      savedPhoto = (body as { accountPhoto?: string }).accountPhoto ?? null;
+      return okResponse(null, 204) as never;
+    }) as typeof accountApi.updateUser;
+    const input = document.createElement('input');
+    Object.defineProperty(input, 'files', {
+      value: [new File(['x'], 'face.png', { type: 'image/png' })],
+    });
+    page.onPhotoSelected({ target: input } as unknown as Event);
+    await page.submitAccountInfo();
+    expect(uploadedFor).toBe('user_1');
+    expect(savedPhoto).toBe('user_1');
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-421, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-422, scope=range_start, role=Test)
+test('GSSC-MLLR-422 Semantic', async () => {
+  const { page, root, restore } = await setupAccount();
+  try {
+    let memberCalls = 0;
+    accountApi.updateUser = (async () => {
+      memberCalls += 1;
+      return okResponse(null, 204) as never;
+    }) as typeof accountApi.updateUser;
+    const form = root.querySelector<HTMLFormElement>('.gssc-account-member-info__form')!;
+    form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+    await page.submitMemberInfo();
+    expect(memberCalls).toBeGreaterThan(0);
+    expect(root.querySelector('.gssc-account-account-info__form')).not.toBeNull();
+    expect(root.querySelector('.gssc-account-password__form')).not.toBeNull();
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-422, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-423, scope=range_start, role=Test)
+test('GSSC-MLLR-423 Syntactic', async () => {
+  const { root, restore } = await setupAccount();
+  try {
+    expect(
+      root.querySelector<HTMLButtonElement>('.gssc-account-member-info__submit')!.type,
+    ).toBe('submit');
+    expect(
+      root.querySelector<HTMLButtonElement>('.gssc-account-account-info__submit')!.type,
+    ).toBe('submit');
+    expect(
+      root.querySelector<HTMLButtonElement>('.gssc-account-password__submit')!.type,
+    ).toBe('submit');
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-423, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-424, scope=range_start, role=Test)
+test('GSSC-MLLR-424 Semantic', async () => {
+  const { page, fixture, root, restore } = await setupAccount();
+  try {
+    const field = root.querySelector('.gssc-account-photo-username__picker')!;
+    expect(field.querySelector('.gssc-account-photo-username__preview-frame')).not.toBeNull();
+    expect(field.querySelector('.gssc-account-photo-username__preview-empty')).not.toBeNull();
+    expect(field.querySelector('.gssc-account-photo-username__choose')).not.toBeNull();
+    expect(
+      root.querySelector<HTMLInputElement>('.gssc-account-photo-username__photo')!.type,
+    ).toBe('file');
+    expect(
+      root.querySelector('.gssc-account-photo-username__photo')!.classList.contains('sr-only'),
+    ).toBe(true);
+    page.photoPreviewUrl.set('http://localhost:3000/account-photos/user_1');
+    fixture.detectChanges();
+    const img = root.querySelector('.gssc-account-photo-username__preview')!;
+    expect(img.classList.contains('object-cover')).toBe(true);
+    expect(img.classList.contains('object-center')).toBe(true);
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-424, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-425, scope=range_start, role=Test)
+test('GSSC-MLLR-425 Syntactic', async () => {
+  const { root, restore } = await setupAccount();
+  try {
+    const field = root.querySelector('.gssc-account-photo-username__picker')!;
+    expect(field.classList.contains('gssc-field')).toBe(true);
+    const frame = field.querySelector('.gssc-account-photo-username__preview-frame')!;
+    const choose = field.querySelector('.gssc-account-photo-username__choose')!;
+    expect(frame.classList.contains('size-40')).toBe(true);
+    expect(frame.classList.contains('shrink-0')).toBe(true);
+    expect(
+      frame.compareDocumentPosition(choose) & Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+    expect(field.querySelector('.gssc-account-photo-username__file-name')).not.toBeNull();
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-425, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-426, scope=range_start, role=Test)
+test('GSSC-MLLR-426 Lexical', async () => {
+  const { root, restore } = await setupAccount();
+  try {
+    const choose = root.querySelector('.gssc-account-photo-username__choose')!;
+    expect(choose.classList.contains('font-sans')).toBe(true);
+    expect(choose.classList.contains('text-gssc-dark-green')).toBe(true);
+    expect(choose.classList.contains('bg-gssc-light-green')).toBe(true);
+    const floating = root.querySelector('.gssc-account-photo-username__file-label')!;
+    expect(floating.classList.contains('text-gssc-dark-green')).toBe(true);
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-426, scope=range_end, role=Test)
+
+test('accountInfoBody sends empty-string accountPhoto and omits self membershipStatus', () => {
+  const body = accountInfoBody(
+    {
+      accountPhoto: '',
+      username: 'ada',
+      membershipStatus: 'Active',
+      position: 'President',
+      isAdmin: false,
+      isUserMod: true,
+      isToolEditor: false,
+      isPublicationEditor: false,
+      isNewsletterEditor: false,
+    },
+    true,
+    false,
+    true,
+  );
+  expect(body['accountPhoto']).toBe('');
+  expect(Object.prototype.hasOwnProperty.call(body, 'membershipStatus')).toBe(false);
+  expect(Object.prototype.hasOwnProperty.call(body, 'position')).toBe(false);
+});
+
+// @relation(GSSC-MLLR-427, scope=range_start, role=Test)
+test('GSSC-MLLR-427 Semantic', async () => {
+  const { page, restore } = await setupAccount();
+  try {
+    let called = false;
+    accountApi.changePassword = (async () => {
+      called = true;
+      return okResponse(null, 204) as never;
+    }) as typeof accountApi.changePassword;
+    page.currentPassword = 'OldPass1!';
+    page.onNewPasswordInput('OldPass1!');
+    page.onConfirmPasswordInput('OldPass1!');
+    await page.submitPasswordChange();
+    expect(called).toBe(false);
+    expect(page.passwordInvalid()).toBe(true);
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-427, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-428, scope=range_start, role=Test)
+test('GSSC-MLLR-428 Semantic', async () => {
+  const { page, restore } = await setupAccount();
+  try {
+    accountApi.changePassword = (async () => ({
+      data: null,
+      error: { status: 422, value: 'Invalid' },
+      response: new Response(null, { status: 422 }),
+      status: 422,
+      headers: new Headers(),
+    })) as typeof accountApi.changePassword;
+    page.currentPassword = 'OldPass1!';
+    page.onNewPasswordInput('NewPass1!');
+    page.onConfirmPasswordInput('NewPass1!');
+    await page.submitPasswordChange();
+    expect(page.passwordInvalid()).toBe(true);
+    expect(page.passwordMessage()).toContain('previous');
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-428, scope=range_end, role=Test)

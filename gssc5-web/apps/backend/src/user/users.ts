@@ -49,6 +49,9 @@ const userSelect = {
   // @relation(GSSC-BLLR-275, GSSC-BLLR-277, GSSC-BLLR-278, scope=range_start, role=Implementation)
   position: true,
   // @relation(GSSC-BLLR-275, GSSC-BLLR-277, GSSC-BLLR-278, scope=range_end, role=Implementation)
+  // @relation(GSSC-BLLR-457, scope=range_start, role=Implementation)
+  accountPhoto: true,
+  // @relation(GSSC-BLLR-457, scope=range_end, role=Implementation)
   // @relation(GSSC-BLLR-54, GSSC-BLLR-100, scope=range_end, role=Implementation)
 } as const;
 
@@ -89,6 +92,7 @@ type AccountView = {
   isNewsletterEditor?: boolean;
   membershipStatus?: string | null;
   position?: string | null;
+  accountPhoto?: string | null;
 };
 
 type Session = { failure: LoginSessionFailure } | { user: StoredUser };
@@ -132,6 +136,7 @@ const PublicUser = t.Object({
   isNewsletterEditor: t.Optional(UserPlain.properties.isNewsletterEditor),
   membershipStatus: t.Optional(UserPlain.properties.membershipStatus),
   position: t.Optional(UserPlain.properties.position),
+  accountPhoto: t.Optional(UserPlain.properties.accountPhoto),
 });
 
 /**
@@ -213,6 +218,7 @@ const CLEARABLE_TEXT = new Set([
   "mailingZipExtension",
   "membershipStatus",
   "position",
+  "accountPhoto",
 ]);
 
 const WRITABLE_TEXT = new Set<string>([
@@ -459,6 +465,9 @@ function project(user: StoredUser, caller: StoredUser): AccountView {
   // @relation(GSSC-BLLR-277, GSSC-BLLR-278, scope=range_start, role=Implementation)
   if (canSee(caller, user, "position")) view.position = user.position;
   // @relation(GSSC-BLLR-277, GSSC-BLLR-278, scope=range_end, role=Implementation)
+  // @relation(GSSC-BLLR-457, scope=range_start, role=Implementation)
+  if (canSee(caller, user, "accountPhoto")) view.accountPhoto = user.accountPhoto;
+  // @relation(GSSC-BLLR-457, scope=range_end, role=Implementation)
   return view;
 }
 
@@ -474,6 +483,9 @@ function canSee(caller: StoredUser, user: StoredUser, field: string): boolean {
     return true;
   }
   if (caller.id === user.id || caller.isAdmin || caller.isUserMod) return true;
+  // @relation(GSSC-BLLR-457, scope=range_start, role=Implementation)
+  if (field === "accountPhoto") return true;
+  // @relation(GSSC-BLLR-457, scope=range_end, role=Implementation)
   if (field === "primaryEmail") {
     return user.preferredContactMethod === "Email" || user.preferredContactMethod === "None";
   }
@@ -691,6 +703,9 @@ function assignText(data: Prisma.UserUpdateInput, key: string, value: string | n
     case "mailingZip":
     case "mailingZipExtension":
       data[key] = value;
+      return;
+    case "accountPhoto":
+      data.accountPhoto = value;
       return;
     case "username":
       if (value !== null) data.username = value;
