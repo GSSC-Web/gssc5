@@ -451,7 +451,7 @@ GSSC5-82
 REVIEW_STATUS: Approved
 
 [REQUIREMENT]
-UID: GSSC-MHLR-60
+UID: GSSC-MHLR-70
 TITLE: Footer Phone Number
 STATEMENT: >>>
 The GSSC Website Member Frontend Footer SHALL include the society's phone number.
@@ -464,7 +464,7 @@ CHANGE_DRIVER: GSSC5-82
 REVIEW_STATUS: Approved
 
 [REQUIREMENT]
-UID: GSSC-MHLR-61
+UID: GSSC-MHLR-71
 TITLE: Footer Email Address
 STATEMENT: >>>
 The GSSC Website Member Frontend Footer SHALL include the society's email address.
@@ -477,7 +477,7 @@ CHANGE_DRIVER: GSSC5-82
 REVIEW_STATUS: Approved
 
 [REQUIREMENT]
-UID: GSSC-MHLR-62
+UID: GSSC-MHLR-72
 TITLE: Footer Postal Address
 STATEMENT: >>>
 The GSSC Website Member Frontend Footer SHALL include the society's postal address.
@@ -490,7 +490,7 @@ CHANGE_DRIVER: GSSC5-82
 REVIEW_STATUS: Approved
 
 [REQUIREMENT]
-UID: GSSC-MHLR-63
+UID: GSSC-MHLR-73
 TITLE: Footer Contact
 STATEMENT: >>>
 The GSSC Website Member Frontend Footer SHALL offer a Contact control that opens a contact overlay for drafting a message to the organization.
