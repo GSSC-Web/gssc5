@@ -1363,6 +1363,40 @@ RELATIONS:
 UID: GSSC-PHLR-CALENDAR-PAGE
 TITLE: Calendar Page Requirements
 
+[REQUIREMENT]
+UID: GSSC-PHLR-137
+TITLE: Public Calendar on Calendar Page
+STATEMENT: >>>
+The calendar page SHALL present the Public Calendar month view.
+<<<
+RATIONALE: >>>
+The Public Calendar module is the month-view surface for society events. This requirement places that calendar on the calendar page and does not redefine month selectors, day cells, event chips, or event detail overlay behavior.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-17
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-5
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-138
+TITLE: Calendar Page Notices
+STATEMENT: >>>
+The calendar page SHALL place public sections tagged for the calendar page as miscellaneous notices when the Unified Backend provides such sections, and omit those notices when none are provided.
+<<<
+RATIONALE: >>>
+Optional notice content mirrors other public pages that load tagged sections beside page-specific UI. This requirement does not set notice wording.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-17
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-5
+  ROLE: Refines
+
 [[/SECTION]]
 
 [[SECTION]]

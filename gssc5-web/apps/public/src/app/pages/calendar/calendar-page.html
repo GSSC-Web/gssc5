@@ -1,0 +1,15 @@
+<!-- @relation(GSSC-PLLR-321, GSSC-PLLR-322, GSSC-PLLR-324, GSSC-PLLR-325, GSSC-PLLR-327, GSSC-PLLR-328, scope=range_start, role=Implementation) -->
+<div
+  class="gssc-calendar-page flex w-full flex-col gap-4 p-4 font-sans text-gssc-dark-green"
+>
+  @if (noticeCuids().length > 0) {
+    <div class="gssc-calendar-page__notices flex w-full flex-col gap-4">
+      @for (cuid of noticeCuids(); track cuid) {
+        <gssc-section-from-cuid [cuid]="cuid" />
+      }
+    </div>
+  }
+
+  <gssc-calendar class="gssc-calendar-page__calendar w-full" />
+</div>
+<!-- @relation(GSSC-PLLR-321, GSSC-PLLR-322, GSSC-PLLR-324, GSSC-PLLR-325, GSSC-PLLR-327, GSSC-PLLR-328, scope=range_end, role=Implementation) -->
