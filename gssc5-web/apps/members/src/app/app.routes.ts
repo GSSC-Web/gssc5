@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { AccountPage } from './pages/account/account';
+import { DirectoryPage } from './pages/directory/directory';
 import { HomePage } from './pages/home/home';
 import { LoginPage } from './pages/login/login';
 import {
@@ -26,6 +27,14 @@ export const routes: Routes = [
     component: AccountPage,
     canActivate: [requireAuthGuard],
   },
+  // @relation(GSSC-MLLR-211, scope=range_start, role=Implementation)
+  {
+    path: 'directory',
+    pathMatch: 'full',
+    component: DirectoryPage,
+    canActivate: [requireAuthGuard],
+  },
+  // @relation(GSSC-MLLR-211, scope=range_end, role=Implementation)
   {
     path: '',
     pathMatch: 'full',
