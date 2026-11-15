@@ -1,12 +1,14 @@
 <!-- @relation(GSSC-MLLR-1, scope=range_start, role=Implementation) -->
 <div class="gssc-app-root flex min-h-dvh flex-col bg-gssc-white">
-  <!-- @relation(GSSC-MLLR-4, scope=range_start, role=Implementation) -->
-  <!-- @relation(GSSC-MLLR-5, GSSC-MLLR-6, scope=range_start, role=Implementation) -->
-  <div class="gssc-header-host sticky top-0 z-[1] text-inherit font-[inherit]" data-slot="header">
-    <gssc-header />
-  </div>
-  <!-- @relation(GSSC-MLLR-5, GSSC-MLLR-6, scope=range_end, role=Implementation) -->
-  <!-- @relation(GSSC-MLLR-4, scope=range_end, role=Implementation) -->
+  @if (loggedIn()) {
+    <!-- @relation(GSSC-MLLR-4, scope=range_start, role=Implementation) -->
+    <!-- @relation(GSSC-MLLR-5, GSSC-MLLR-6, scope=range_start, role=Implementation) -->
+    <div class="gssc-header-host sticky top-0 z-[1] text-inherit font-[inherit]" data-slot="header">
+      <gssc-header />
+    </div>
+    <!-- @relation(GSSC-MLLR-5, GSSC-MLLR-6, scope=range_end, role=Implementation) -->
+    <!-- @relation(GSSC-MLLR-4, scope=range_end, role=Implementation) -->
+  }
 
   <!-- @relation(GSSC-MLLR-10, scope=range_start, role=Implementation) -->
   <!-- @relation(GSSC-MLLR-11, GSSC-MLLR-12, scope=range_start, role=Implementation) -->
@@ -16,15 +18,17 @@
   <!-- @relation(GSSC-MLLR-11, GSSC-MLLR-12, scope=range_end, role=Implementation) -->
   <!-- @relation(GSSC-MLLR-10, scope=range_end, role=Implementation) -->
 
-  <!-- @relation(GSSC-MLLR-7, scope=range_start, role=Implementation) -->
-  <!-- @relation(GSSC-MLLR-8, GSSC-MLLR-9, scope=range_start, role=Implementation) -->
-  <div
-    class="gssc-footer-host mt-auto block w-full text-inherit font-[inherit]"
-    data-slot="footer"
-  >
-    <gssc-footer />
-  </div>
-  <!-- @relation(GSSC-MLLR-8, GSSC-MLLR-9, scope=range_end, role=Implementation) -->
-  <!-- @relation(GSSC-MLLR-7, scope=range_end, role=Implementation) -->
+  @if (loggedIn()) {
+    <!-- @relation(GSSC-MLLR-7, scope=range_start, role=Implementation) -->
+    <!-- @relation(GSSC-MLLR-8, GSSC-MLLR-9, scope=range_start, role=Implementation) -->
+    <div
+      class="gssc-footer-host mt-auto block w-full text-inherit font-[inherit]"
+      data-slot="footer"
+    >
+      <gssc-footer />
+    </div>
+    <!-- @relation(GSSC-MLLR-8, GSSC-MLLR-9, scope=range_end, role=Implementation) -->
+    <!-- @relation(GSSC-MLLR-7, scope=range_end, role=Implementation) -->
+  }
 </div>
 <!-- @relation(GSSC-MLLR-1, scope=range_end, role=Implementation) -->

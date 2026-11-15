@@ -83,7 +83,8 @@ GSSC5-87 Logout / Session Service owns GSSC-MLLR-67 through GSSC-MLLR-71.
 GSSC5-86 Login Page owns GSSC-MLLR-72 through GSSC-MLLR-91.
 GSSC5-88 Route Guards & Redirects owns GSSC-MLLR-92 through GSSC-MLLR-95.
 GSSC5-83 Member Generic Sections (display) owns GSSC-MLLR-96 through GSSC-MLLR-124.
-GSSC-MLLR-32 through GSSC-MLLR-39 remain free for later claimants.
+GSSC5-100 Hide Header/Footer when logged out owns GSSC-MLLR-32 (App Root chrome gate; also CHANGE_DRIVER on GSSC-MLLR-1).
+GSSC-MLLR-33 through GSSC-MLLR-39 remain free for later claimants.
 Do not reuse numbers already claimed by another ticket.
 <<<
 
@@ -101,14 +102,17 @@ TITLE: App Root
 UID: GSSC-MLLR-1
 TITLE: Semantic
 STATEMENT: >>>
-The GSSC Website Member Frontend App Root SHALL contain a Header host, a Page Outlet, and a Footer host.
+The GSSC Website Member Frontend App Root SHALL contain a Page Outlet. When the member is logged in, the App Root SHALL also contain a Header host and a Footer host.
 <<<
 RATIONALE: >>>
-The App Root composes those subelements so Header, the active Member Frontend view, and Footer share one shell. Header and Footer contents are separate requirements.
+The App Root composes those subelements so Header, the active Member Frontend view, and Footer share one shell for authenticated contents. Header and Footer contents are separate requirements. Logged-out states omit Header and Footer hosts so the login experience is not wrapped in authenticated chrome.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-79
+CHANGE_DRIVER: >>>
+GSSC5-79
+GSSC5-100
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -335,6 +339,36 @@ REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-13
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-APP-ROOT-CHROME-GATE
+TITLE: Authenticated Chrome Gate
+
+[REQUIREMENT]
+UID: GSSC-MLLR-32
+TITLE: Semantic
+STATEMENT: >>>
+When the member is not logged in, the GSSC Website Member Frontend App Root SHALL omit the Header host and the Footer host.
+<<<
+RATIONALE: >>>
+Authenticated Member Frontend views share Header and Footer. Logged-out states, including the login experience, must not show that authenticated chrome.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-100
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-13
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-15
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-20
   ROLE: Refines
 
 [[/SECTION]]

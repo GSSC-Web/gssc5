@@ -90,11 +90,24 @@ test('members harness mounts App shell', async () => {
 // @relation(GSSC-MLLR-1, scope=range_start, role=Test)
 test('GSSC-MLLR-1 Semantic', async () => {
   const { root } = await setupApp('/');
-  expect(root.querySelector('[data-slot="header"]')).not.toBeNull();
   expect(root.querySelector('router-outlet')).not.toBeNull();
+  expect(root.querySelector('[data-slot="header"]')).not.toBeNull();
   expect(root.querySelector('[data-slot="footer"]')).not.toBeNull();
+  expect(root.querySelector('gssc-header')).not.toBeNull();
+  expect(root.querySelector('gssc-footer')).not.toBeNull();
 });
 // @relation(GSSC-MLLR-1, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-32, scope=range_start, role=Test)
+test('GSSC-MLLR-32 Semantic', async () => {
+  const { root } = await setupApp('/login', { loggedIn: false });
+  expect(root.querySelector('router-outlet')).not.toBeNull();
+  expect(root.querySelector('[data-slot="header"]')).toBeNull();
+  expect(root.querySelector('[data-slot="footer"]')).toBeNull();
+  expect(root.querySelector('gssc-header')).toBeNull();
+  expect(root.querySelector('gssc-footer')).toBeNull();
+});
+// @relation(GSSC-MLLR-32, scope=range_end, role=Test)
 
 // @relation(GSSC-MLLR-2, scope=range_start, role=Test)
 test('GSSC-MLLR-2 Syntactic', async () => {
