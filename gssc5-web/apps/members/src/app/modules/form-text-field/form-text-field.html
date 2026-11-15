@@ -1,0 +1,26 @@
+<!-- @relation(GSSC-MLLR-168, GSSC-MLLR-169, GSSC-MLLR-170, scope=range_start, role=Implementation) -->
+<div
+  class="gssc-form-text-field relative flex min-w-0 w-full flex-col rounded-md border border-gssc-dark-green bg-gssc-white font-sans"
+  [class.bg-gssc-gray]="!enabled()"
+>
+  <label
+    class="gssc-form-text-field__label absolute -top-2 start-2 bg-inherit px-1 font-sans text-xs font-extralight italic text-gssc-dark-green"
+    [attr.for]="resolvedId()"
+  >
+    {{ label() }}@if (required()) {
+      <span aria-hidden="true">&nbsp;*</span>
+    }
+  </label>
+  <input
+    class="gssc-form-text-field__control min-w-0 border-0 bg-transparent px-2 py-2 font-sans text-sm outline-none text-gssc-dark-green"
+    [id]="resolvedId()"
+    [type]="inputType()"
+    [disabled]="!enabled()"
+    [required]="required()"
+    [attr.name]="name()"
+    [attr.autocomplete]="autocomplete()"
+    [value]="value()"
+    (input)="onInput($any($event.target).value)"
+  />
+</div>
+<!-- @relation(GSSC-MLLR-168, GSSC-MLLR-169, GSSC-MLLR-170, scope=range_end, role=Implementation) -->
