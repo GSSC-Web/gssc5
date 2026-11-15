@@ -84,6 +84,7 @@ GSSC5-86 Login Page owns GSSC-MLLR-72 through GSSC-MLLR-91.
 GSSC5-88 Route Guards & Redirects owns GSSC-MLLR-92 through GSSC-MLLR-95.
 GSSC5-83 Member Generic Sections (display) owns GSSC-MLLR-96 through GSSC-MLLR-124.
 GSSC5-100 Hide Header/Footer when logged out owns GSSC-MLLR-32 (App Root chrome gate; also CHANGE_DRIVER on GSSC-MLLR-1).
+GSSC5-90 Account Self-Service and GSSC5-91 Admin Account Management share GSSC-MLLR-125 through GSSC-MLLR-158 (same Account Page).
 GSSC-MLLR-33 through GSSC-MLLR-39 remain free for later claimants.
 Do not reuse numbers already claimed by another ticket.
 <<<
@@ -2514,3 +2515,866 @@ RELATIONS:
 
 [[/SECTION]]
 
+[[SECTION]]
+UID: GSSC-MLLR-ACCOUNT-FORMS
+TITLE: Account Forms
+
+[[SECTION]]
+UID: GSSC-MLLR-ACCOUNT-PAGE
+TITLE: Account Page
+
+[REQUIREMENT]
+UID: GSSC-MLLR-125
+TITLE: Semantic
+STATEMENT: >>>
+The Member Frontend Account Page SHALL present three form sections in order: Member Information, Account Information, and Password Change, and SHALL load the account identified by the page path from the Unified Backend for a logged-in viewer.
+<<<
+RATIONALE: >>>
+Self-service and administrator account management share one Account Page so the experience stays consistent.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: >>>
+GSSC5-90
+GSSC5-91
+<<<
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-29
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-34
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-126
+TITLE: Syntactic
+STATEMENT: >>>
+The Account Page SHALL stack the three form sections vertically in the page content area as one column of sections.
+<<<
+RATIONALE: >>>
+A single vertical stack keeps each section's two-column layout readable without competing side content.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: >>>
+GSSC5-90
+GSSC5-91
+<<<
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-29
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-34
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-127
+TITLE: Lexical
+STATEMENT: >>>
+The Account Page SHALL use the Member Frontend sans-serif typeface and dark-green theme color for section headings.
+<<<
+RATIONALE: >>>
+Account management shares Member Frontend brand type and color.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: >>>
+GSSC5-90
+GSSC5-91
+<<<
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-29
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-34
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-ACCOUNT-ACCESS
+TITLE: Account Access
+
+[REQUIREMENT]
+UID: GSSC-MLLR-128
+TITLE: Semantic
+STATEMENT: >>>
+The Member Frontend SHALL open the logged-in member's own Account Page at the own-account path and SHALL open a selected member's Account Page at the managed-account path when the viewer is a user moderator.
+<<<
+RATIONALE: >>>
+Own-account and managed-account paths share the Account Page. An administrator is a user moderator.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: >>>
+GSSC5-90
+GSSC5-91
+<<<
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-29
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-34
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-129
+TITLE: Semantic
+STATEMENT: >>>
+When a logged-in member who is not a user moderator opens the managed-account path for another member, the Member Frontend SHALL refuse that Account Page and show that the account is unavailable.
+<<<
+RATIONALE: >>>
+Ordinary members manage only their own account. Account management of others is limited to user moderators.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-91
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-34
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-MEMBER-INFORMATION-SECTION
+TITLE: Member Information Section
+
+[REQUIREMENT]
+UID: GSSC-MLLR-130
+TITLE: Semantic
+STATEMENT: >>>
+The Member Information Section SHALL present editable name fields, contact fields, and address fields for the loaded account, with a collective reset control and a collective submit control for that section.
+<<<
+RATIONALE: >>>
+Member Information is the first Account Page section and saves as one unit.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: >>>
+GSSC5-90
+GSSC5-91
+<<<
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-30
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-31
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-35
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-36
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-131
+TITLE: Syntactic
+STATEMENT: >>>
+The Member Information Section SHALL place name and contact fields in a left column and address fields in a right column, with the reset and submit controls for that section below those columns.
+<<<
+RATIONALE: >>>
+Left name/contact and right addresses match the owner Account Page layout.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: >>>
+GSSC5-90
+GSSC5-91
+<<<
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-30
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-31
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-35
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-36
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-132
+TITLE: Lexical
+STATEMENT: >>>
+The Member Information Section SHALL use the Member Frontend sans-serif typeface and dark-green labels on white field chrome.
+<<<
+RATIONALE: >>>
+Section fields match other Member Frontend forms.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: >>>
+GSSC5-90
+GSSC5-91
+<<<
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-30
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-31
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-35
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-36
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-133
+TITLE: Semantic
+STATEMENT: >>>
+The Member Information reset control SHALL restore that section's fields to the last loaded account values without writing to the Unified Backend.
+<<<
+RATIONALE: >>>
+Reset discards unsaved Member Information edits.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: >>>
+GSSC5-90
+GSSC5-91
+<<<
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-31
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-36
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-134
+TITLE: Semantic
+STATEMENT: >>>
+The Member Information submit control SHALL write that section's name, contact, address, and directory-visibility fields to the Unified Backend for the loaded account when the viewer is permitted to change them.
+<<<
+RATIONALE: >>>
+Submit persists Member Information, including contact display preferences used by the members directory.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: >>>
+GSSC5-90
+GSSC5-91
+<<<
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-31
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-33
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-36
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-NAME-CONTACT-COLUMN
+TITLE: Name and Contact Column
+
+[REQUIREMENT]
+UID: GSSC-MLLR-135
+TITLE: Semantic
+STATEMENT: >>>
+The Name and Contact Column SHALL present first name, middle name, last name, primary email, secondary email, primary phone, secondary phone, preferred contact method, and the directory display choices for secondary email and secondary phone.
+<<<
+RATIONALE: >>>
+Name and contact live together on the left of Member Information.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: >>>
+GSSC5-90
+GSSC5-91
+<<<
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-30
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-31
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-33
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-136
+TITLE: Syntactic
+STATEMENT: >>>
+The Name and Contact Column SHALL stack its fields vertically in the left column of the Member Information Section.
+<<<
+RATIONALE: >>>
+A vertical stack keeps name and contact readable beside addresses.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: >>>
+GSSC5-90
+GSSC5-91
+<<<
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-30
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-31
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-137
+TITLE: Lexical
+STATEMENT: >>>
+The Name and Contact Column SHALL use the Member Frontend sans-serif typeface and dark-green label color, SHALL present capitalized field names, and SHALL place an asterisk after each required field name.
+<<<
+RATIONALE: >>>
+Column fields share Member Frontend form styling. Capitalized names and required asterisks match owner Account Page chrome.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: >>>
+GSSC5-90
+GSSC5-91
+<<<
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-30
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-31
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-ADDRESSES-COLUMN
+TITLE: Addresses Column
+
+[REQUIREMENT]
+UID: GSSC-MLLR-138
+TITLE: Semantic
+STATEMENT: >>>
+The Addresses Column SHALL present home address lines, city, state, Zip, Zip Extension, home address display preference, and the corresponding mailing address fields.
+<<<
+RATIONALE: >>>
+Addresses occupy the right column of Member Information.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: >>>
+GSSC5-90
+GSSC5-91
+<<<
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-30
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-31
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-139
+TITLE: Syntactic
+STATEMENT: >>>
+The Addresses Column SHALL stack its fields vertically in the right column of the Member Information Section, and SHALL place Zip and Zip Extension on the same row with a plus sign between them for home and for mailing.
+<<<
+RATIONALE: >>>
+A vertical stack keeps address parts ordered beside name and contact. Zip and Zip Extension share one row per owner Account Page layout.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: >>>
+GSSC5-90
+GSSC5-91
+<<<
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-30
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-31
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-140
+TITLE: Lexical
+STATEMENT: >>>
+The Addresses Column SHALL use the Member Frontend sans-serif typeface and dark-green label color, SHALL present capitalized field names, and SHALL place an asterisk after each required field name.
+<<<
+RATIONALE: >>>
+Address fields share Member Frontend form styling. Capitalized names and required asterisks match owner Account Page chrome.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: >>>
+GSSC5-90
+GSSC5-91
+<<<
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-30
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-31
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-ACCOUNT-INFORMATION-SECTION
+TITLE: Account Information Section
+
+[REQUIREMENT]
+UID: GSSC-MLLR-141
+TITLE: Semantic
+STATEMENT: >>>
+The Account Information Section SHALL present account photo and username on the left, membership status and position with role-gated editability, and privileges on the right, with a submit control that writes permitted Account Information fields to the Unified Backend.
+<<<
+RATIONALE: >>>
+Account Information is the second Account Page section.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: >>>
+GSSC5-90
+GSSC5-91
+<<<
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-30
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-31
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-35
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-36
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-142
+TITLE: Syntactic
+STATEMENT: >>>
+The Account Information Section SHALL place photo, username, membership status, and position in a left column and privileges in a right column, with the section submit control below those columns.
+<<<
+RATIONALE: >>>
+Left identity fields and right privileges match the owner Account Page layout.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: >>>
+GSSC5-90
+GSSC5-91
+<<<
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-30
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-31
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-35
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-36
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-143
+TITLE: Lexical
+STATEMENT: >>>
+The Account Information Section SHALL use the Member Frontend sans-serif typeface and dark-green labels, and SHALL present read-only membership status and position with grayed field chrome when those fields are not editable.
+<<<
+RATIONALE: >>>
+Grayed chrome signals non-editable membership fields for ordinary members.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: >>>
+GSSC5-90
+GSSC5-91
+<<<
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-31
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-36
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-144
+TITLE: Semantic
+STATEMENT: >>>
+The Account Information Section SHALL make membership status and position editable when the viewer is a user moderator, and SHALL show those fields read-only otherwise.
+<<<
+RATIONALE: >>>
+User moderators may change membership status and position. An administrator is a user moderator.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: >>>
+GSSC5-90
+GSSC5-91
+<<<
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-31
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-36
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-145
+TITLE: Semantic
+STATEMENT: >>>
+When the viewer is an administrator, the Account Information Section SHALL present a switch for each site privilege; when the viewer is not an administrator, that section SHALL list only the loaded account's active privileges and SHALL omit inactive privileges and privilege switches.
+<<<
+RATIONALE: >>>
+Privilege switches are administrator-only. Non-administrators see active privileges as a list.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: >>>
+GSSC5-90
+GSSC5-91
+<<<
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-31
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-36
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-ACCOUNT-PHOTO-USERNAME
+TITLE: Account Photo and Username
+
+[REQUIREMENT]
+UID: GSSC-MLLR-146
+TITLE: Semantic
+STATEMENT: >>>
+The Account Photo and Username controls SHALL present the loaded account's photo reference and username for editing when the viewer may change them.
+<<<
+RATIONALE: >>>
+Photo and username identify the account on the left of Account Information.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: >>>
+GSSC5-90
+GSSC5-91
+<<<
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-31
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-36
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-147
+TITLE: Syntactic
+STATEMENT: >>>
+The Account Photo and Username controls SHALL appear above membership status and position in the left column of the Account Information Section.
+<<<
+RATIONALE: >>>
+Photo and username lead the left identity column.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: >>>
+GSSC5-90
+GSSC5-91
+<<<
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-31
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-36
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-148
+TITLE: Lexical
+STATEMENT: >>>
+The Account Photo and Username controls SHALL use the Member Frontend sans-serif typeface and dark-green label color, SHALL present capitalized field names, and SHALL place an asterisk after the Username field name.
+<<<
+RATIONALE: >>>
+These controls share Member Frontend form styling. Capitalized names and the Username required asterisk match owner Account Page chrome.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: >>>
+GSSC5-90
+GSSC5-91
+<<<
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-31
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-36
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-PASSWORD-CHANGE-SECTION
+TITLE: Password Change Section
+
+[REQUIREMENT]
+UID: GSSC-MLLR-149
+TITLE: Semantic
+STATEMENT: >>>
+The Password Change Section SHALL present password entry fields on the left and a live criteria list on the right, and SHALL submit a password change for the logged-in member's own account to the Unified Backend when the criteria are satisfied.
+<<<
+RATIONALE: >>>
+Password Change is the third Account Page section and applies to the viewer's own password.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-90
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-32
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-150
+TITLE: Syntactic
+STATEMENT: >>>
+The Password Change Section SHALL place password entry fields in a left column and the criteria list in a right column.
+<<<
+RATIONALE: >>>
+Left fields and right criteria match the owner Account Page layout.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-90
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-32
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-151
+TITLE: Lexical
+STATEMENT: >>>
+The Password Change Section SHALL use the Member Frontend sans-serif typeface, dark-green labels, and distinct valid versus invalid presentation for each criterion.
+<<<
+RATIONALE: >>>
+Criteria flip from invalid to valid as the new password fulfills each rule.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-90
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-32
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-PASSWORD-FIELDS
+TITLE: Password Fields
+
+[REQUIREMENT]
+UID: GSSC-MLLR-152
+TITLE: Semantic
+STATEMENT: >>>
+The Password Fields SHALL accept the current password, a new password, and a confirmation of that new password.
+<<<
+RATIONALE: >>>
+Current password authenticates the change. New password and confirmation are the pair the criteria list validates for matching.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-90
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-32
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-153
+TITLE: Syntactic
+STATEMENT: >>>
+The Password Fields SHALL stack vertically in the left column of the Password Change Section.
+<<<
+RATIONALE: >>>
+Stacking keeps current, new, and confirmation ordered beside the criteria list.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-90
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-32
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-154
+TITLE: Lexical
+STATEMENT: >>>
+The Password Fields SHALL use the Member Frontend sans-serif typeface and dark-green label color on white field chrome, SHALL present capitalized field names, and SHALL place an asterisk after each password field name.
+<<<
+RATIONALE: >>>
+Password fields share Member Frontend form styling. Capitalized names and required asterisks match owner Account Page chrome.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-90
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-32
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-PASSWORD-CRITERIA
+TITLE: Password Criteria
+
+[REQUIREMENT]
+UID: GSSC-MLLR-155
+TITLE: Semantic
+STATEMENT: >>>
+The Password Criteria list SHALL report whether the new password and confirmation match, meet the minimum length, include a lowercase letter, include an uppercase letter, include a number, and include a special character, updating each criterion as those fields change.
+<<<
+RATIONALE: >>>
+Live criteria guide a valid password replacement before submit.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-90
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-32
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-156
+TITLE: Syntactic
+STATEMENT: >>>
+The Password Criteria list SHALL stack its six criteria vertically in the right column of the Password Change Section.
+<<<
+RATIONALE: >>>
+A vertical list keeps each rule visible beside the password fields.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-90
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-32
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-157
+TITLE: Lexical
+STATEMENT: >>>
+The Password Criteria list SHALL present a fulfilled criterion in the Member Frontend dark-green theme color with a checkmark icon before the criterion text, and an unfulfilled criterion in the Member Frontend dark-red theme color with an X icon before the criterion text.
+<<<
+RATIONALE: >>>
+Color and icon flip show which rules still block submit.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-90
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-32
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-ACCOUNT-PASSWORD-SCOPE
+TITLE: Password Change Scope
+
+[REQUIREMENT]
+UID: GSSC-MLLR-158
+TITLE: Semantic
+STATEMENT: >>>
+When the Account Page is showing another member's account, the Password Change Section SHALL remain visible and SHALL disable password submission for that other account.
+<<<
+RATIONALE: >>>
+The shared layout keeps three sections on managed accounts, while password change applies only to the logged-in member's own password.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: >>>
+GSSC5-90
+GSSC5-91
+<<<
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-32
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-34
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]

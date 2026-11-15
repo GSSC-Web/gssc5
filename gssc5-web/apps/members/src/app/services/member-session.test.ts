@@ -50,9 +50,12 @@ async function setupSession(options?: {
 
   memberSessionApi.getUser = (async () =>
     okResponse({
+      cuid: 'user_1',
       firstName: 'Ada',
       lastName: 'Lovelace',
       username: 'ada',
+      isAdmin: false,
+      isUserMod: false,
     })) as typeof memberSessionApi.getUser;
 
   memberSessionApi.login = (async () => okResponse({ status: 'ok' })) as typeof memberSessionApi.login;

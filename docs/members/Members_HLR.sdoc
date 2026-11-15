@@ -660,14 +660,17 @@ TITLE: Own Account
 UID: GSSC-MHLR-29
 TITLE: Own Account Access
 STATEMENT: >>>
-The GSSC Website Member Frontend SHALL let a logged-in member open that member's own account.
+The GSSC Website Member Frontend SHALL let a logged-in member open that member's own account on an Account Page that presents Member Information, Account Information, and Password Change sections.
 <<<
 RATIONALE: >>>
-Members manage their own accounts from the Member Frontend.
+Members manage their own accounts from the Member Frontend. The shared three-section Account Page is the self-service surface.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-11
-REVIEW_STATUS: Changed
+CHANGE_DRIVER: >>>
+GSSC5-11
+GSSC5-90
+<<<
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-10
@@ -677,14 +680,17 @@ RELATIONS:
 UID: GSSC-MHLR-30
 TITLE: Own Account View
 STATEMENT: >>>
-The GSSC Website Member Frontend SHALL let a logged-in member view that member's own account information.
+The GSSC Website Member Frontend SHALL let a logged-in member view that member's own account information in the Member Information and Account Information sections of the Account Page.
 <<<
 RATIONALE: >>>
-A member can see the account information held for that member. Which fields appear is low-level.
+A member can see the account information held for that member. Section layout and field sets are low-level.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-11
-REVIEW_STATUS: Changed
+CHANGE_DRIVER: >>>
+GSSC5-11
+GSSC5-90
+<<<
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-10
@@ -694,14 +700,17 @@ RELATIONS:
 UID: GSSC-MHLR-31
 TITLE: Own Account Modification
 STATEMENT: >>>
-The GSSC Website Member Frontend SHALL let a logged-in member modify the account information that member is permitted to change.
+The GSSC Website Member Frontend SHALL let a logged-in member modify the Member Information and Account Information that member is permitted to change, including name, contact, addresses, account photo, and username, and SHALL gray membership status and position when that member is not a user moderator.
 <<<
 RATIONALE: >>>
-Self-service account management includes changing permitted fields. Which fields a member may change is low-level and follows Unified Backend rules.
+Self-service account management includes changing permitted fields. Membership status and position stay read-only for ordinary members. Permission switches belong to administrator account management.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-11
-REVIEW_STATUS: Changed
+CHANGE_DRIVER: >>>
+GSSC5-11
+GSSC5-90
+<<<
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-10
@@ -711,14 +720,17 @@ RELATIONS:
 UID: GSSC-MHLR-32
 TITLE: Own Password Change
 STATEMENT: >>>
-The GSSC Website Member Frontend SHALL let a logged-in member change that member's own password.
+The GSSC Website Member Frontend SHALL let a logged-in member change that member's own password from the Password Change section, with live criteria that report matching confirmation, minimum length, lowercase, uppercase, number, and special character.
 <<<
 RATIONALE: >>>
-No Member Frontend PIR names password change. Own-account management includes replacing the password used for login. Password recovery flows that do not require a logged-in Member Frontend session are outside this requirement.
+No Member Frontend PIR names password change. Own-account management includes replacing the password used for login. Live criteria guide a valid replacement. Password recovery flows that do not require a logged-in Member Frontend session are outside this requirement.
 <<<
 DERIVED: True
-CHANGE_DRIVER: GSSC5-11
-REVIEW_STATUS: Changed
+CHANGE_DRIVER: >>>
+GSSC5-11
+GSSC5-90
+<<<
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-MHLR-33
@@ -730,8 +742,11 @@ RATIONALE: >>>
 The members directory shows contact information members make available. Own-account management is where a member controls that availability.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-11
-REVIEW_STATUS: Changed
+CHANGE_DRIVER: >>>
+GSSC5-11
+GSSC5-90
+<<<
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-10
@@ -750,14 +765,17 @@ TITLE: Administrator Account Management
 UID: GSSC-MHLR-34
 TITLE: Administrator Account Management Access
 STATEMENT: >>>
-The GSSC Website Member Frontend SHALL let an authorized administrator open member account management.
+The GSSC Website Member Frontend SHALL let a user moderator open a selected member's Account Page that presents the same Member Information, Account Information, and Password Change sections used for own-account management.
 <<<
 RATIONALE: >>>
-Authorized administrators manage member accounts from the Member Frontend.
+User moderators manage member accounts from the Member Frontend. An administrator is a user moderator. Sharing the Account Page layout keeps self-service and management visually consistent.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-11
-REVIEW_STATUS: Changed
+CHANGE_DRIVER: >>>
+GSSC5-11
+GSSC5-91
+<<<
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-11
@@ -767,14 +785,17 @@ RELATIONS:
 UID: GSSC-MHLR-35
 TITLE: Administrator Account View
 STATEMENT: >>>
-The GSSC Website Member Frontend SHALL let an authorized administrator view a selected member's account information.
+The GSSC Website Member Frontend SHALL let a user moderator view a selected member's account information in the Member Information and Account Information sections.
 <<<
 RATIONALE: >>>
-Administrators need to inspect member accounts. Which fields appear is low-level.
+User moderators need to inspect member accounts. An administrator is a user moderator. Which fields appear is low-level.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-11
-REVIEW_STATUS: Changed
+CHANGE_DRIVER: >>>
+GSSC5-11
+GSSC5-91
+<<<
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-11
@@ -784,14 +805,17 @@ RELATIONS:
 UID: GSSC-MHLR-36
 TITLE: Administrator Account Modification
 STATEMENT: >>>
-The GSSC Website Member Frontend SHALL let an authorized administrator modify a selected member's account information that administrator is permitted to change.
+The GSSC Website Member Frontend SHALL let a user moderator modify a selected member's Member Information and Account Information that moderator is permitted to change, including editable membership status and position, and SHALL let an administrator set every site privilege with switches while a non-administrator viewer sees only the selected member's active privileges as a list.
 <<<
 RATIONALE: >>>
-Administrator account management includes changing permitted fields on another member's account. Which fields and permissions apply is low-level.
+User moderator account management includes changing permitted fields on another member's account. Privilege switches are administrator-only. An administrator is a user moderator for membership status and position.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-11
-REVIEW_STATUS: Changed
+CHANGE_DRIVER: >>>
+GSSC5-11
+GSSC5-91
+<<<
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-11

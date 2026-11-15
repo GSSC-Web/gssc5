@@ -66,6 +66,14 @@
   content: "\f0142";
 }
 
+.nf-fa-check:before {
+  content: "\f00c";
+}
+
+.nf-fa-times:before {
+  content: "\f00d";
+}
+
 /*
  * Outermost site layer: white background, sans-serif default.
  * Preflight already zeros margins/borders; do not restate those here.
