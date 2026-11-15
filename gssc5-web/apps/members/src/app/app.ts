@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Footer } from './modules/footer/footer';
 import { Header } from './modules/header/header';
+import { MemberSession } from './services/member-session';
 
 @Component({
   imports: [RouterOutlet, Header, Footer],
@@ -14,4 +15,11 @@ import { Header } from './modules/header/header';
   styleUrl: './app.css',
   templateUrl: './app.html',
 })
-export class App {}
+export class App {
+  private readonly memberSession = inject(MemberSession);
+
+  /** Shell chrome (Header/Footer hosts) is shown only while logged in. */
+  // @relation(GSSC-MLLR-32, scope=range_start, role=Implementation)
+  readonly loggedIn = this.memberSession.loggedIn;
+  // @relation(GSSC-MLLR-32, scope=range_end, role=Implementation)
+}
