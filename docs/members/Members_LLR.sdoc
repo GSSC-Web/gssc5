@@ -94,7 +94,7 @@ GSSC5-94 Announcements Editor owns GSSC-MLLR-291 through GSSC-MLLR-307 (page, ca
 GSSC5-96 Newsletters Editor owns GSSC-MLLR-351 through GSSC-MLLR-373 (exact end 373; band 351–380 reserved so parallel Wave editors do not collide).
 GSSC5-95 Events Editor owns GSSC-MLLR-321 through GSSC-MLLR-346 (events page, catalog, create/publish/modify host; composes GSSC5-84 Generic Editor + GSSC5-85 form fields; uses GSSC5-69 /events APIs).
 GSSC5-97 Publications/Tools Editors owns GSSC-MLLR-381 through GSSC-MLLR-414 (publications catalog editor 381–397; research tools catalog editor 398–414). Composes GSSC5-84 Generic Editor and GSSC5-85 form fields; does not re-claim 180–201.
-GSSC5-101 Account Page Refinement owns GSSC-MLLR-415 through GSSC-MLLR-428 (collapsible sections, submit validation, account photo upload, password current/previous rejection); also CHANGE_DRIVER on GSSC-MLLR-146.
+GSSC5-101 Account Page Refinement owns GSSC-MLLR-415 through GSSC-MLLR-428 (collapsible sections, submit validation, Enter-to-submit, account photo upload with polished Choose Photo control, password current/previous rejection); also CHANGE_DRIVER on GSSC-MLLR-146.
 Wave coordination: GSSC5-92 directory 202–214 (band through 230), GSSC5-89 dashboard 231–239, GSSC5-93 page/section 261–286, GSSC5-94 announcements 291–307, GSSC5-95 events 321–346, GSSC5-96 newsletters 351–373, GSSC5-97 publications/tools 381–414, GSSC5-101 account refinement 415–428 — do not collide.
 GSSC-MLLR-33 through GSSC-MLLR-39 remain free for later claimants.
 Do not reuse numbers already claimed by another ticket.
@@ -3517,10 +3517,10 @@ TITLE: Account Photo Upload
 UID: GSSC-MLLR-421
 TITLE: Semantic
 STATEMENT: >>>
-When the Account Information Section is submitted with a newly chosen photo file, the Member Frontend SHALL upload that file to the Unified Backend account-photos store and then save the returned photo path on the account.
+When the Account Information Section is submitted with a newly chosen photo file, the Member Frontend SHALL upload that file to the Unified Backend account-photos store for the loaded account cuid and then save the returned photo path on the account.
 <<<
 RATIONALE: >>>
-Photo bytes are stored in the dedicated account-photos directory; the account record holds the path for later display.
+Photo bytes are stored under the account's cuid in the dedicated account-photos directory; the account record holds that path for later display.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
@@ -3532,13 +3532,49 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
+UID: GSSC-MLLR-422
+TITLE: Semantic
+STATEMENT: >>>
+When the viewer presses Enter while focus is in a field of the Member Information, Account Information, or Password Change section, the Account Page SHALL submit that section the same way as activating that section's submit control.
+<<<
+RATIONALE: >>>
+Enter-to-submit matches other Member Frontend forms and speeds account edits.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-101
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-75
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-423
+TITLE: Syntactic
+STATEMENT: >>>
+Each Account Page section body SHALL be a form whose submit control is a submit-type button for that section.
+<<<
+RATIONALE: >>>
+Native form submit wiring makes Enter activate the correct section without custom key handlers on every field.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-101
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-75
+  ROLE: Refines
+
+[REQUIREMENT]
 UID: GSSC-MLLR-424
 TITLE: Semantic
 STATEMENT: >>>
-The Account Photo control SHALL show a preview of the current or newly chosen account photo and SHALL accept a file selection for a replacement photo.
+The Account Photo control SHALL show a preview of the current or newly chosen account photo and SHALL present a Choose Photo control that opens a file selection for a replacement photo, without exposing a raw browser file-input chrome as the primary control.
 <<<
 RATIONALE: >>>
-Preview and file upload replace free-text photo path editing.
+Preview and a styled choose action replace free-text photo path editing and avoid unstyled native file UI.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
@@ -3553,10 +3589,10 @@ RELATIONS:
 UID: GSSC-MLLR-425
 TITLE: Syntactic
 STATEMENT: >>>
-The Account Photo preview SHALL appear above the file selection control in the left column of Account Information.
+The Account Photo preview SHALL appear in a bordered preview frame above a floating-label Account Photo picker that contains the Choose Photo control and the selected file name, in the left column of Account Information.
 <<<
 RATIONALE: >>>
-Preview-first stacking makes the current image obvious before choosing a replacement.
+Preview-first stacking and floating-label chrome match other Account Information fields.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
@@ -3571,10 +3607,10 @@ RELATIONS:
 UID: GSSC-MLLR-426
 TITLE: Lexical
 STATEMENT: >>>
-The Account Photo preview and file control SHALL use the Member Frontend sans-serif typeface and dark-green label color.
+The Account Photo preview frame, floating Account Photo label, Choose Photo control, and file-name text SHALL use the Member Frontend sans-serif typeface with dark-green label and control chrome and light-green fill on Choose Photo.
 <<<
 RATIONALE: >>>
-Photo controls share Account Page form styling.
+Photo controls share Account Page form and primary-action styling.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test

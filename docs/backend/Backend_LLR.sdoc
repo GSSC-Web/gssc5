@@ -8793,10 +8793,10 @@ RELATIONS:
 UID: GSSC-BLLR-456
 TITLE: Account Photo Upload
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL accept an authenticated multipart upload into the account-photos store and return the stored photo cuid and path.
+The GSSC Website Unified Backend SHALL accept an authenticated multipart upload into the account-photos store for a target user cuid, store that photo under a name and path derived from that user cuid, and return that user cuid and path.
 <<<
 RATIONALE: >>>
-Members upload replacement photos into the dedicated store before saving the path on the account.
+Naming by user cuid prevents photo collisions across accounts and keeps the account path stable.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
@@ -8823,6 +8823,24 @@ REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-155
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-458
+TITLE: Account Photo Overwrite By User Cuid
+STATEMENT: >>>
+When an authenticated upload targets a user cuid that already has a photo in the account-photos store, the GSSC Website Unified Backend SHALL overwrite that stored photo rather than creating a second photo for the same user.
+<<<
+RATIONALE: >>>
+One photo per user cuid keeps storage and account paths collision-free.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-101
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-31
   ROLE: Refines
 
 [[/SECTION]]

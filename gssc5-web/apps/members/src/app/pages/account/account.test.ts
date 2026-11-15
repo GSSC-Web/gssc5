@@ -4,7 +4,7 @@ import { routes } from '../../app.routes';
 import { accountApi } from '../../services/account-api';
 import { MemberSession, memberSessionApi } from '../../services/member-session';
 import { nativeElement, setupMembersComponent } from '../../../test-harness';
-import { AccountPage } from './account';
+import { AccountPage, accountInfoBody } from './account';
 
 function okResponse(data: unknown, status = 200) {
   return {
@@ -541,7 +541,12 @@ test('GSSC-MLLR-148 Lexical', async () => {
   try {
     const block = root.querySelector<HTMLElement>('.gssc-account-photo-username')!;
     expect(block.classList.contains('font-sans') || block.parentElement?.classList.contains('font-sans')).toBe(true);
-    expect(root.querySelector('label[for="gssc-account-photo"]')!.textContent).toContain('Account Photo');
+    expect(root.querySelector('.gssc-account-photo-username__file-label')!.textContent).toContain(
+      'Account Photo',
+    );
+    expect(root.querySelector('.gssc-account-photo-username__choose')!.textContent).toContain(
+      'Choose Photo',
+    );
     const usernameLabel = root.querySelector('label[for="gssc-account-username"]')!;
     expect(usernameLabel.textContent).toContain('Username');
     expect(usernameLabel.textContent).toContain('*');
@@ -807,11 +812,14 @@ test('GSSC-MLLR-420 Lexical', async () => {
 test('GSSC-MLLR-421 Semantic', async () => {
   const { page, restore } = await setupAccount();
   try {
-    let uploaded = false;
+    let uploadedFor = '';
     let savedPhoto: string | null = null;
-    accountApi.uploadAccountPhoto = (async () => {
-      uploaded = true;
-      return { data: { cuid: 'photo_new', path: 'account-photos/photo_new' }, error: null };
+    accountApi.uploadAccountPhoto = (async (_file, userCuid) => {
+      uploadedFor = userCuid;
+      return {
+        data: { cuid: userCuid, path: `account-photos/${userCuid}` },
+        error: null,
+      };
     }) as typeof accountApi.uploadAccountPhoto;
     accountApi.updateUser = (async (_cuid, body) => {
       savedPhoto = (body as { accountPhoto?: string }).accountPhoto ?? null;
@@ -823,23 +831,67 @@ test('GSSC-MLLR-421 Semantic', async () => {
     });
     page.onPhotoSelected({ target: input } as unknown as Event);
     await page.submitAccountInfo();
-    expect(uploaded).toBe(true);
-    expect(savedPhoto).toBe('photo_new');
+    expect(uploadedFor).toBe('user_1');
+    expect(savedPhoto).toBe('user_1');
   } finally {
     restore();
   }
 });
 // @relation(GSSC-MLLR-421, scope=range_end, role=Test)
 
+// @relation(GSSC-MLLR-422, scope=range_start, role=Test)
+test('GSSC-MLLR-422 Semantic', async () => {
+  const { page, root, restore } = await setupAccount();
+  try {
+    let memberCalls = 0;
+    accountApi.updateUser = (async () => {
+      memberCalls += 1;
+      return okResponse(null, 204) as never;
+    }) as typeof accountApi.updateUser;
+    const form = root.querySelector<HTMLFormElement>('.gssc-account-member-info__form')!;
+    form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+    await page.submitMemberInfo();
+    expect(memberCalls).toBeGreaterThan(0);
+    expect(root.querySelector('.gssc-account-account-info__form')).not.toBeNull();
+    expect(root.querySelector('.gssc-account-password__form')).not.toBeNull();
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-422, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-423, scope=range_start, role=Test)
+test('GSSC-MLLR-423 Syntactic', async () => {
+  const { root, restore } = await setupAccount();
+  try {
+    expect(
+      root.querySelector<HTMLButtonElement>('.gssc-account-member-info__submit')!.type,
+    ).toBe('submit');
+    expect(
+      root.querySelector<HTMLButtonElement>('.gssc-account-account-info__submit')!.type,
+    ).toBe('submit');
+    expect(
+      root.querySelector<HTMLButtonElement>('.gssc-account-password__submit')!.type,
+    ).toBe('submit');
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-423, scope=range_end, role=Test)
+
 // @relation(GSSC-MLLR-424, scope=range_start, role=Test)
 test('GSSC-MLLR-424 Semantic', async () => {
   const { root, restore } = await setupAccount();
   try {
-    expect(root.querySelector('.gssc-account-photo-username__photo')).not.toBeNull();
+    expect(root.querySelector('.gssc-account-photo-username__preview-frame')).not.toBeNull();
+    expect(root.querySelector('.gssc-account-photo-username__preview-empty')).not.toBeNull();
+    expect(root.querySelector('.gssc-account-photo-username__choose')).not.toBeNull();
     expect(
       root.querySelector<HTMLInputElement>('.gssc-account-photo-username__photo')!.type,
     ).toBe('file');
-    expect(root.querySelector('.gssc-account-photo-username__preview-empty')).not.toBeNull();
+    expect(
+      root.querySelector('.gssc-account-photo-username__photo')!.classList.contains('sr-only'),
+    ).toBe(true);
   } finally {
     restore();
   }
@@ -851,11 +903,13 @@ test('GSSC-MLLR-425 Syntactic', async () => {
   const { root, restore } = await setupAccount();
   try {
     const wrap = root.querySelector('.gssc-account-photo-username__preview-wrap')!;
-    const preview = wrap.querySelector('.gssc-account-photo-username__preview-empty')!;
-    const file = wrap.querySelector('.gssc-account-photo-username__photo')!;
+    const frame = wrap.querySelector('.gssc-account-photo-username__preview-frame')!;
+    const picker = wrap.querySelector('.gssc-account-photo-username__picker')!;
     expect(
-      preview.compareDocumentPosition(file) & Node.DOCUMENT_POSITION_FOLLOWING,
+      frame.compareDocumentPosition(picker) & Node.DOCUMENT_POSITION_FOLLOWING,
     ).toBeTruthy();
+    expect(picker.querySelector('.gssc-account-photo-username__choose')).not.toBeNull();
+    expect(picker.querySelector('.gssc-account-photo-username__file-name')).not.toBeNull();
   } finally {
     restore();
   }
@@ -866,16 +920,39 @@ test('GSSC-MLLR-425 Syntactic', async () => {
 test('GSSC-MLLR-426 Lexical', async () => {
   const { root, restore } = await setupAccount();
   try {
-    const label = root.querySelector('label[for="gssc-account-photo"]')!;
-    expect(label.classList.contains('font-sans') || label.className.includes('font-sans')).toBe(
-      true,
-    );
-    expect(label.classList.contains('text-gssc-dark-green')).toBe(true);
+    const choose = root.querySelector('.gssc-account-photo-username__choose')!;
+    expect(choose.classList.contains('font-sans')).toBe(true);
+    expect(choose.classList.contains('text-gssc-dark-green')).toBe(true);
+    expect(choose.classList.contains('bg-gssc-light-green')).toBe(true);
+    const floating = root.querySelector('.gssc-account-photo-username__file-label')!;
+    expect(floating.classList.contains('text-gssc-dark-green')).toBe(true);
   } finally {
     restore();
   }
 });
 // @relation(GSSC-MLLR-426, scope=range_end, role=Test)
+
+test('accountInfoBody sends empty-string accountPhoto and omits self membershipStatus', () => {
+  const body = accountInfoBody(
+    {
+      accountPhoto: '',
+      username: 'ada',
+      membershipStatus: 'Active',
+      position: 'President',
+      isAdmin: false,
+      isUserMod: true,
+      isToolEditor: false,
+      isPublicationEditor: false,
+      isNewsletterEditor: false,
+    },
+    true,
+    false,
+    true,
+  );
+  expect(body['accountPhoto']).toBe('');
+  expect(Object.prototype.hasOwnProperty.call(body, 'membershipStatus')).toBe(false);
+  expect(Object.prototype.hasOwnProperty.call(body, 'position')).toBe(false);
+});
 
 // @relation(GSSC-MLLR-427, scope=range_start, role=Test)
 test('GSSC-MLLR-427 Semantic', async () => {

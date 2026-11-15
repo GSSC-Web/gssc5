@@ -54,12 +54,16 @@ export const accountApi = {
     backend.users({ cuid }).post(body as never),
   changePassword: (body: { currentPassword: string; newPassword: string }) =>
     backend.password.change.post(body),
-  uploadAccountPhoto: async (file: File): Promise<{
+  uploadAccountPhoto: async (
+    file: File,
+    userCuid: string,
+  ): Promise<{
     data: AccountPhotoUploadResult | null;
     error: { status: number; value: unknown } | null;
   }> => {
     const form = new FormData();
     form.append('file', file, file.name);
+    form.append('userCuid', userCuid);
     const response = await fetch(`${ACCOUNT_PHOTOS_ORIGIN}/account-photos`, {
       method: 'POST',
       body: form,

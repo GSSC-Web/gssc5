@@ -149,6 +149,7 @@ export class AccountPage implements OnInit {
   readonly passwordInvalid = signal(false);
 
   readonly photoPreviewUrl = signal<string | null>(null);
+  readonly photoFileLabel = signal('No file chosen');
   private pendingPhotoFile: File | null = null;
   private localPreviewObjectUrl: string | null = null;
 
@@ -203,8 +204,10 @@ export class AccountPage implements OnInit {
     if (file) {
       this.localPreviewObjectUrl = URL.createObjectURL(file);
       this.photoPreviewUrl.set(this.localPreviewObjectUrl);
+      this.photoFileLabel.set(file.name);
     } else {
       this.photoPreviewUrl.set(accountPhotoUrl(this.accountInfo.accountPhoto));
+      this.photoFileLabel.set('No file chosen');
     }
   }
   // @relation(GSSC-MLLR-424, GSSC-MLLR-425, scope=range_end, role=Implementation)
@@ -258,13 +261,17 @@ export class AccountPage implements OnInit {
     this.accountMessage.set('');
     try {
       if (this.pendingPhotoFile) {
-        const uploaded = await accountApi.uploadAccountPhoto(this.pendingPhotoFile);
+        const uploaded = await accountApi.uploadAccountPhoto(
+          this.pendingPhotoFile,
+          this.targetCuid(),
+        );
         if (uploaded.error || !uploaded.data) {
           this.accountMessage.set('Account photo could not be uploaded.');
           return;
         }
         this.accountInfo.accountPhoto = uploaded.data.cuid;
         this.pendingPhotoFile = null;
+        this.photoFileLabel.set('No file chosen');
         if (this.localPreviewObjectUrl) {
           URL.revokeObjectURL(this.localPreviewObjectUrl);
           this.localPreviewObjectUrl = null;
@@ -275,6 +282,7 @@ export class AccountPage implements OnInit {
         this.accountInfo,
         this.canEditMembership(),
         this.isAdminViewer(),
+        this.isOwnAccount(),
       );
       const { error } = await accountApi.updateUser(this.targetCuid(), body);
       if (error) {
@@ -406,6 +414,7 @@ export class AccountPage implements OnInit {
     this.loadedMemberInfo = { ...member };
     this.loadedAccountInfo = { ...info };
     this.pendingPhotoFile = null;
+    this.photoFileLabel.set('No file chosen');
     if (this.localPreviewObjectUrl) {
       URL.revokeObjectURL(this.localPreviewObjectUrl);
       this.localPreviewObjectUrl = null;
@@ -491,17 +500,26 @@ function memberInfoBody(form: MemberInfoForm): Record<string, string | boolean |
   };
 }
 
-function accountInfoBody(
+/**
+ * Build Account Information POST body.
+ * Backend `buildPatch` requires string values for text fields (empty string clears
+ * clearable fields); `null` for `accountPhoto` yields 422. Self-edits must not
+ * send `membershipStatus` (always rejected) or `position` unless the viewer is admin.
+ */
+export function accountInfoBody(
   form: AccountInfoForm,
   canEditMembership: boolean,
   isAdminViewer: boolean,
-): Record<string, string | boolean | null> {
-  const body: Record<string, string | boolean | null> = {
+  isOwnAccount: boolean,
+): Record<string, string | boolean> {
+  const body: Record<string, string | boolean> = {
     username: form.username,
-    accountPhoto: form.accountPhoto === '' ? null : form.accountPhoto,
+    accountPhoto: form.accountPhoto,
   };
-  if (canEditMembership) {
+  if (canEditMembership && !isOwnAccount) {
     body['membershipStatus'] = form.membershipStatus;
+    body['position'] = form.position;
+  } else if (isAdminViewer && isOwnAccount) {
     body['position'] = form.position;
   }
   if (isAdminViewer) {

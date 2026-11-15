@@ -26,7 +26,7 @@ const AccountPhotoCreated = t.Object({
   path: t.String(),
 });
 
-type SessionUser = { id: string };
+type SessionUser = { id: string; isAdmin: boolean; isUserMod: boolean };
 
 type Session =
   | { failure: "missing" | "unknown" | "logged-out" | "expired" }
@@ -39,7 +39,11 @@ function runtimePrisma() {
 }
 
 async function openSession(cookie: CookieJar): Promise<Session> {
-  return resolveLoginSessionUser(runtimePrisma(), cookie, { id: true });
+  return resolveLoginSessionUser(runtimePrisma(), cookie, {
+    id: true,
+    isAdmin: true,
+    isUserMod: true,
+  });
 }
 
 /** Absolute FS directory for account photos under FILE_STORAGE_ROOT. */
@@ -91,20 +95,34 @@ export async function ensureAccountPhotosFolder(): Promise<string> {
 }
 // @relation(GSSC-BLLR-453, scope=range_end, role=Implementation)
 
-function sanitizeFileName(name: string): string | null {
-  const trimmed = name.trim();
-  if (trimmed.length === 0) return null;
-  if (trimmed.includes("/") || trimmed.includes("\\") || trimmed.includes("\0")) {
-    return null;
-  }
-  if (trimmed === "." || trimmed === "..") return null;
-  return trimmed;
+function storageKeyForUser(userCuid: string): string {
+  return `${ACCOUNT_PHOTOS_DIR}/${userCuid}`;
 }
 
-async function loadAccountPhotoFile(cuid: string) {
+async function loadAccountPhotoByUserCuid(userCuid: string) {
   const prisma = runtimePrisma();
+  const folderId = await ensureAccountPhotosFolder();
+  const byName = await prisma.storedFileEntry.findFirst({
+    where: {
+      name: userCuid,
+      kind: "file",
+      parentId: folderId,
+      deletedAt: null,
+    },
+    select: {
+      id: true,
+      name: true,
+      kind: true,
+      parentId: true,
+      storageKey: true,
+      mimeType: true,
+      deletedAt: true,
+    },
+  });
+  if (byName !== null) return byName;
+  // Legacy: entry id was the path token before cuid-named photos.
   return prisma.storedFileEntry.findUnique({
-    where: { id: cuid },
+    where: { id: userCuid },
     select: {
       id: true,
       name: true,
@@ -126,18 +144,18 @@ async function isAccountPhotoEntry(parentId: string | null): Promise<boolean> {
 
 /**
  * GET allowed when the caller has a valid login session, or when some user
- * stores this photo cuid and has a non-empty position (leadership display).
+ * stores this photo (or owns the cuid-named photo) and has a non-empty position.
  */
 // @relation(GSSC-BLLR-454, GSSC-BLLR-455, scope=range_start, role=Implementation)
 export async function canGetAccountPhoto(
-  fileCuid: string,
+  photoKey: string,
   session: Session,
 ): Promise<boolean> {
   if ("user" in session) return true;
   const prisma = runtimePrisma();
   const owner = await prisma.user.findFirst({
     where: {
-      accountPhoto: fileCuid,
+      OR: [{ accountPhoto: photoKey }, { id: photoKey }],
       NOT: [{ position: null }, { position: "" }],
     },
     select: { id: true },
@@ -145,6 +163,11 @@ export async function canGetAccountPhoto(
   return owner !== null;
 }
 // @relation(GSSC-BLLR-454, GSSC-BLLR-455, scope=range_end, role=Implementation)
+
+function canUploadForUser(sessionUser: SessionUser, targetUserCuid: string): boolean {
+  if (sessionUser.id === targetUserCuid) return true;
+  return sessionUser.isAdmin || sessionUser.isUserMod;
+}
 
 export const accountPhotos = new Elysia({ prefix: "/account-photos" })
   .guard({ cookie: loginTokenCookie })
@@ -164,54 +187,87 @@ export const accountPhotos = new Elysia({ prefix: "/account-photos" })
         return statusFn(400, { error: "missing file" });
       }
 
-      const providedName =
-        typeof body.name === "string" && body.name.length > 0
-          ? body.name
-          : upload.name;
-      const name = sanitizeFileName(providedName ?? "photo.bin");
-      if (name === null) return statusFn(400, { error: "invalid name" });
+      const targetUserCuid =
+        typeof body.userCuid === "string" && body.userCuid.trim().length > 0
+          ? body.userCuid.trim()
+          : session.user.id;
+      if (!canUploadForUser(session.user, targetUserCuid)) {
+        return statusFn(403, { error: "forbidden" });
+      }
+
+      const prisma = runtimePrisma();
+      const target = await prisma.user.findUnique({
+        where: { id: targetUserCuid },
+        select: { id: true },
+      });
+      if (target === null) return statusFn(404, { error: "user not found" });
 
       const folderId = await ensureAccountPhotosFolder();
       const bytes = new Uint8Array(await upload.arrayBuffer());
-      const prisma = runtimePrisma();
+      const storageKey = storageKeyForUser(targetUserCuid);
+      const mimeType = upload.type || null;
 
-      // @relation(GSSC-BLLR-456, scope=range_start, role=Implementation)
-      const created = await prisma.storedFileEntry.create({
-        data: {
-          name,
+      // @relation(GSSC-BLLR-456, GSSC-BLLR-458, scope=range_start, role=Implementation)
+      const existing = await prisma.storedFileEntry.findFirst({
+        where: {
+          name: targetUserCuid,
           kind: "file",
           parentId: folderId,
-          storageKey: "pending",
-          mimeType: upload.type || null,
+          deletedAt: null,
+        },
+        select: { id: true },
+      });
+
+      if (existing !== null) {
+        const written = await writeStoredBytes(storageKey, bytes);
+        if (written === null) {
+          return statusFn(500, { error: "storage write failed" });
+        }
+        await prisma.storedFileEntry.update({
+          where: { id: existing.id },
+          data: {
+            storageKey,
+            mimeType,
+            sizeBytes: bytes.byteLength,
+          },
+        });
+        return { cuid: targetUserCuid, path: storageKey };
+      }
+
+      const created = await prisma.storedFileEntry.create({
+        data: {
+          name: targetUserCuid,
+          kind: "file",
+          parentId: folderId,
+          storageKey,
+          mimeType,
           sizeBytes: bytes.byteLength,
           isPublic: false,
           readRoles: JSON.stringify(["member"]),
           writeRoles: JSON.stringify(["member"]),
         },
       });
-      const storageKey = `${ACCOUNT_PHOTOS_DIR}/${created.id}`;
       const written = await writeStoredBytes(storageKey, bytes);
       if (written === null) {
         await prisma.storedFileEntry.delete({ where: { id: created.id } });
         return statusFn(500, { error: "storage write failed" });
       }
-      await prisma.storedFileEntry.update({
-        where: { id: created.id },
-        data: { storageKey },
-      });
-      // @relation(GSSC-BLLR-456, scope=range_end, role=Implementation)
+      // @relation(GSSC-BLLR-456, GSSC-BLLR-458, scope=range_end, role=Implementation)
 
-      return { cuid: created.id, path: storageKey };
+      return { cuid: targetUserCuid, path: storageKey };
     },
     {
       body: t.Object({
         file: t.File(),
+        userCuid: t.Optional(t.String()),
         name: t.Optional(t.String()),
       }),
       response: {
         200: AccountPhotoCreated,
         400: t.Object({ error: t.String() }),
         401: t.Object({ error: t.String() }),
+        403: t.Object({ error: t.String() }),
+        404: t.Object({ error: t.String() }),
         500: t.Object({ error: t.String() }),
       },
     },
@@ -220,7 +276,7 @@ export const accountPhotos = new Elysia({ prefix: "/account-photos" })
     "/:cuid",
     async ({ params, cookie, status: statusFn }) => {
       const session = await openSession(cookie);
-      const row = await loadAccountPhotoFile(params.cuid);
+      const row = await loadAccountPhotoByUserCuid(params.cuid);
       if (row === null || row.deletedAt !== null) {
         return statusFn(404, { error: "not found" });
       }
@@ -231,7 +287,7 @@ export const accountPhotos = new Elysia({ prefix: "/account-photos" })
         return statusFn(404, { error: "not found" });
       }
       // @relation(GSSC-BLLR-454, GSSC-BLLR-455, scope=range_start, role=Implementation)
-      if (!(await canGetAccountPhoto(row.id, session))) {
+      if (!(await canGetAccountPhoto(params.cuid, session))) {
         return statusFn(403, { error: "forbidden" });
       }
       // @relation(GSSC-BLLR-454, GSSC-BLLR-455, scope=range_end, role=Implementation)

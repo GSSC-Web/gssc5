@@ -33,6 +33,8 @@
       <!-- @relation(GSSC-MLLR-417, scope=range_end, role=Implementation) -->
 
       @if (memberSectionOpen()) {
+      <!-- @relation(GSSC-MLLR-422, GSSC-MLLR-423, scope=range_start, role=Implementation) -->
+      <form class="gssc-account-member-info__form flex flex-col gap-4" (ngSubmit)="submitMemberInfo()" novalidate>
       <div class="gssc-account-member-info__columns grid gap-6 md:grid-cols-2">
         <!-- @relation(GSSC-MLLR-135, GSSC-MLLR-136, GSSC-MLLR-137, scope=range_start, role=Implementation) -->
         <div class="gssc-account-name-contact flex flex-col gap-4 font-sans text-gssc-dark-green">
@@ -269,10 +271,9 @@
           Reset
         </button>
         <button
-          type="button"
+          type="submit"
           class="gssc-account-member-info__submit inline-flex cursor-pointer items-center justify-center rounded-md border border-gssc-dark-green bg-gssc-light-green px-3 py-2 font-sans text-sm text-gssc-dark-green hover:bg-gssc-gray disabled:cursor-not-allowed disabled:opacity-60"
           [disabled]="memberSubmitting()"
-          (click)="submitMemberInfo()"
         >
           Submit
         </button>
@@ -280,6 +281,8 @@
       @if (memberMessage()) {
         <p class="gssc-account-member-info__message m-0 font-sans text-sm" role="status">{{ memberMessage() }}</p>
       }
+      </form>
+      <!-- @relation(GSSC-MLLR-422, GSSC-MLLR-423, scope=range_end, role=Implementation) -->
       }
     </section>
     <!-- @relation(GSSC-MLLR-130, GSSC-MLLR-131, GSSC-MLLR-132, scope=range_end, role=Implementation) -->
@@ -302,30 +305,53 @@
       </button>
 
       @if (accountSectionOpen()) {
+      <!-- @relation(GSSC-MLLR-422, GSSC-MLLR-423, scope=range_start, role=Implementation) -->
+      <form class="gssc-account-account-info__form flex flex-col gap-4" (ngSubmit)="submitAccountInfo()" novalidate>
       <div class="gssc-account-account-info__columns grid gap-6 md:grid-cols-2">
         <div class="gssc-account-account-info__left flex flex-col gap-4 font-sans text-gssc-dark-green">
           <!-- @relation(GSSC-MLLR-146, GSSC-MLLR-147, GSSC-MLLR-148, scope=range_start, role=Implementation) -->
           <div class="gssc-account-photo-username flex flex-col gap-4 font-sans text-gssc-dark-green">
             <!-- @relation(GSSC-MLLR-424, GSSC-MLLR-425, GSSC-MLLR-426, scope=range_start, role=Implementation) -->
-            <div class="gssc-account-photo-username__preview-wrap flex flex-col gap-2 font-sans text-gssc-dark-green">
-              @if (photoPreviewUrl()) {
-                <img
-                  class="gssc-account-photo-username__preview max-h-40 w-auto max-w-full rounded-md border border-gssc-dark-green object-contain"
-                  [src]="photoPreviewUrl()"
-                  alt="Account photo preview"
+            <div class="gssc-account-photo-username__preview-wrap flex flex-col gap-3 font-sans text-gssc-dark-green">
+              <div
+                class="gssc-account-photo-username__preview-frame flex min-h-40 w-full items-center justify-center overflow-hidden rounded-md border border-gssc-dark-green bg-gssc-white p-2"
+              >
+                @if (photoPreviewUrl()) {
+                  <img
+                    class="gssc-account-photo-username__preview max-h-40 w-auto max-w-full object-contain"
+                    [src]="photoPreviewUrl()"
+                    alt="Account photo preview"
+                  />
+                } @else {
+                  <p class="gssc-account-photo-username__preview-empty m-0 font-sans text-sm text-gssc-dark-brown">
+                    No account photo
+                  </p>
+                }
+              </div>
+              <div class="gssc-field gssc-account-photo-username__picker relative flex min-w-0 flex-col rounded-md border border-gssc-dark-green bg-gssc-white font-sans">
+                <span class="gssc-account-photo-username__file-label absolute -top-2 start-2 bg-inherit px-1 text-xs font-extralight italic text-gssc-dark-green">
+                  Account Photo
+                </span>
+                <input
+                  id="gssc-account-photo"
+                  class="gssc-account-photo-username__photo sr-only"
+                  name="accountPhoto"
+                  type="file"
+                  accept="image/*"
+                  (change)="onPhotoSelected($event)"
                 />
-              } @else {
-                <p class="gssc-account-photo-username__preview-empty m-0 font-sans text-sm text-gssc-dark-brown">No account photo</p>
-              }
-              <label class="gssc-account-photo-username__file-label font-sans text-xs font-extralight italic text-gssc-dark-green" for="gssc-account-photo">Account Photo</label>
-              <input
-                id="gssc-account-photo"
-                class="gssc-account-photo-username__photo min-w-0 font-sans text-sm text-gssc-dark-green"
-                name="accountPhoto"
-                type="file"
-                accept="image/*"
-                (change)="onPhotoSelected($event)"
-              />
+                <div class="flex flex-wrap items-center gap-3 px-2 py-2">
+                  <label
+                    for="gssc-account-photo"
+                    class="gssc-account-photo-username__choose inline-flex cursor-pointer items-center justify-center rounded-md border border-gssc-dark-green bg-gssc-light-green px-3 py-1.5 font-sans text-sm text-gssc-dark-green hover:bg-gssc-gray"
+                  >
+                    Choose Photo
+                  </label>
+                  <span class="gssc-account-photo-username__file-name min-w-0 flex-1 truncate font-sans text-sm text-gssc-dark-brown">
+                    {{ photoFileLabel() }}
+                  </span>
+                </div>
+              </div>
             </div>
             <!-- @relation(GSSC-MLLR-424, GSSC-MLLR-425, GSSC-MLLR-426, scope=range_end, role=Implementation) -->
             <div
@@ -386,6 +412,7 @@
                       type="checkbox"
                       class="gssc-account-privileges__switch"
                       [attr.data-privilege]="priv.key"
+                      [name]="priv.key"
                       [ngModel]="privilegeChecked(priv.key)"
                       (ngModelChange)="setPrivilege(priv.key, $event)"
                     />
@@ -408,10 +435,9 @@
 
       <div class="gssc-account-account-info__actions flex flex-wrap gap-3">
         <button
-          type="button"
+          type="submit"
           class="gssc-account-account-info__submit inline-flex cursor-pointer items-center justify-center rounded-md border border-gssc-dark-green bg-gssc-light-green px-3 py-2 font-sans text-sm text-gssc-dark-green hover:bg-gssc-gray disabled:cursor-not-allowed disabled:opacity-60"
           [disabled]="accountSubmitting()"
-          (click)="submitAccountInfo()"
         >
           Submit
         </button>
@@ -419,6 +445,8 @@
       @if (accountMessage()) {
         <p class="gssc-account-account-info__message m-0 font-sans text-sm" role="status">{{ accountMessage() }}</p>
       }
+      </form>
+      <!-- @relation(GSSC-MLLR-422, GSSC-MLLR-423, scope=range_end, role=Implementation) -->
       }
     </section>
     <!-- @relation(GSSC-MLLR-141, GSSC-MLLR-142, GSSC-MLLR-143, GSSC-MLLR-144, GSSC-MLLR-145, scope=range_end, role=Implementation) -->
@@ -441,6 +469,8 @@
       </button>
 
       @if (passwordSectionOpen()) {
+      <!-- @relation(GSSC-MLLR-422, GSSC-MLLR-423, scope=range_start, role=Implementation) -->
+      <form class="gssc-account-password__form flex flex-col gap-4" (ngSubmit)="submitPasswordChange()" novalidate>
       <div class="gssc-account-password__columns grid gap-6 md:grid-cols-2">
         <!-- @relation(GSSC-MLLR-152, GSSC-MLLR-153, GSSC-MLLR-154, scope=range_start, role=Implementation) -->
         <div class="gssc-account-password-fields flex flex-col gap-4 font-sans text-gssc-dark-green">
@@ -592,10 +622,9 @@
 
       <div class="gssc-account-password__actions flex flex-wrap gap-3">
         <button
-          type="button"
+          type="submit"
           class="gssc-account-password__submit inline-flex cursor-pointer items-center justify-center rounded-md border border-gssc-dark-green bg-gssc-light-green px-3 py-2 font-sans text-sm text-gssc-dark-green hover:bg-gssc-gray disabled:cursor-not-allowed disabled:opacity-60"
           [disabled]="passwordSubmitting() || !canChangePassword()"
-          (click)="submitPasswordChange()"
         >
           Change Password
         </button>
@@ -603,6 +632,8 @@
       @if (passwordMessage()) {
         <p class="gssc-account-password__message m-0 font-sans text-sm" role="status">{{ passwordMessage() }}</p>
       }
+      </form>
+      <!-- @relation(GSSC-MLLR-422, GSSC-MLLR-423, scope=range_end, role=Implementation) -->
       }
     </section>
     <!-- @relation(GSSC-MLLR-149, GSSC-MLLR-150, GSSC-MLLR-151, GSSC-MLLR-158, scope=range_end, role=Implementation) -->
