@@ -1093,7 +1093,7 @@ Authorized members create newsletters that appear on the Public Frontend.
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-11
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-54
@@ -1103,14 +1103,17 @@ RELATIONS:
 UID: GSSC-MHLR-50
 TITLE: Newsletter Publication
 STATEMENT: >>>
-The GSSC Website Member Frontend SHALL let an authorized member publish a newsletter on the Public Frontend without programming knowledge and without developer intervention.
+The GSSC Website Member Frontend SHALL let an authorized member publish a newsletter on the Public Frontend without programming knowledge and without developer intervention by persisting that newsletter so the Public Frontend catalog can present it.
 <<<
 RATIONALE: >>>
-Authorized members publish newsletters so the Public Frontend can present them.
+Authorized members publish newsletters so the Public Frontend can present them. The society newsletter catalog has no separate draft state; a successful persist is publication to that catalog.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-11
-REVIEW_STATUS: Changed
+CHANGE_DRIVER: >>>
+GSSC5-11
+GSSC5-96
+<<<
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-54
@@ -1127,7 +1130,7 @@ No Member Frontend PIR separately requires newsletter edits after create. Author
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-11
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [[/SECTION]]
 

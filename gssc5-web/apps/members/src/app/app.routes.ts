@@ -4,6 +4,7 @@ import { AnnouncementsEditorPage } from './pages/announcements-editor/announceme
 import { DirectoryPage } from './pages/directory/directory';
 import { HomePage } from './pages/home/home';
 import { LoginPage } from './pages/login/login';
+import { NewslettersPage } from './pages/newsletters/newsletters';
 import { PageSectionEditorPage } from './pages/page-section-editor/page-section-editor';
 import {
   redirectIfAuthenticatedGuard,
@@ -49,6 +50,14 @@ export const routes: Routes = [
     component: AnnouncementsEditorPage,
     canActivate: [requireAuthGuard],
   },
+  // @relation(GSSC-MLLR-366, scope=range_start, role=Implementation)
+  {
+    path: 'newsletters',
+    pathMatch: 'full',
+    component: NewslettersPage,
+    canActivate: [requireAuthGuard],
+  },
+  // @relation(GSSC-MLLR-366, scope=range_end, role=Implementation)
   {
     path: '',
     pathMatch: 'full',
