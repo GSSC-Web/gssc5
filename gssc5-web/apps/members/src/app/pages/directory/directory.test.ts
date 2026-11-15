@@ -141,11 +141,13 @@ test('GSSC-MLLR-203 Syntactic', async () => {
   const { root, restore } = await setupDirectory();
   try {
     const page = root.querySelector<HTMLElement>('.gssc-directory-page')!;
-    expect(page.classList.contains('flex-col')).toBe(true);
+    const body = root.querySelector<HTMLElement>('.gssc-directory-page__body')!;
     const header = root.querySelector('.gssc-directory-page__header')!;
     const search = root.querySelector('.gssc-directory-search')!;
     const results = root.querySelector('.gssc-directory-results')!;
-    expect(header.compareDocumentPosition(search) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(page.classList.contains('flex-col')).toBe(true);
+    expect(body.classList.contains('md:flex-row')).toBe(true);
+    expect(header.compareDocumentPosition(body) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     expect(search.compareDocumentPosition(results) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   } finally {
     restore();
@@ -169,6 +171,16 @@ test('GSSC-MLLR-204 Lexical', async () => {
 });
 // @relation(GSSC-MLLR-204, scope=range_end, role=Test)
 
+async function settleFilters(
+  fixture: Awaited<ReturnType<typeof setupMembersComponent<DirectoryPage>>>,
+): Promise<void> {
+  fixture.detectChanges();
+  await fixture.whenStable();
+  await Promise.resolve();
+  fixture.detectChanges();
+  await fixture.whenStable();
+}
+
 // @relation(GSSC-MLLR-205, scope=range_start, role=Test)
 test('GSSC-MLLR-205 Semantic', async () => {
   const { root, page, listCalls, fixture, restore } = await setupDirectory();
@@ -179,17 +191,16 @@ test('GSSC-MLLR-205 Semantic', async () => {
     expect(root.querySelector('#gssc-directory-phone')).not.toBeNull();
     expect(root.querySelector('#gssc-directory-city')).not.toBeNull();
     expect(root.querySelector('#gssc-directory-state')).not.toBeNull();
+    expect(root.querySelector('.gssc-directory-search__submit')).toBeNull();
 
+    listCalls.length = 0;
     page.firstName.set('Grace');
     page.lastName.set('Hopper');
     page.email.set('grace@example.com');
     page.phone.set('555');
     page.homeCity.set('Arlington');
     page.homeState.set('VA');
-    listCalls.length = 0;
-    await page.search();
-    fixture.detectChanges();
-    await fixture.whenStable();
+    await settleFilters(fixture);
     expect(listCalls.at(-1)).toEqual({
       firstName: 'Grace',
       lastName: 'Hopper',
@@ -208,12 +219,15 @@ test('GSSC-MLLR-205 Semantic', async () => {
 test('GSSC-MLLR-206 Syntactic', async () => {
   const { root, restore } = await setupDirectory();
   try {
+    const search = root.querySelector<HTMLElement>('.gssc-directory-search')!;
     const fields = root.querySelector<HTMLElement>('.gssc-directory-search__fields')!;
     const actions = root.querySelector<HTMLElement>('.gssc-directory-search__actions')!;
-    expect(fields.classList.contains('grid')).toBe(true);
-    expect(fields.classList.contains('sm:grid-cols-2')).toBe(true);
+    expect(search.tagName).toBe('ASIDE');
+    expect(search.classList.contains('sticky')).toBe(true);
+    expect(fields.classList.contains('flex-col')).toBe(true);
+    expect(fields.classList.contains('sm:grid-cols-2')).toBe(false);
     expect(fields.compareDocumentPosition(actions) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
-    expect(root.querySelector('.gssc-directory-search__submit')).not.toBeNull();
+    expect(root.querySelector('.gssc-directory-search__submit')).toBeNull();
     expect(root.querySelector('.gssc-directory-search__clear')).not.toBeNull();
   } finally {
     restore();
@@ -226,10 +240,9 @@ test('GSSC-MLLR-207 Lexical', async () => {
   const { root, restore } = await setupDirectory();
   try {
     expect(root.querySelectorAll('gssc-form-text-field').length).toBe(6);
-    const submit = root.querySelector<HTMLElement>('.gssc-directory-search__submit')!;
     const clear = root.querySelector<HTMLElement>('.gssc-directory-search__clear')!;
-    expect(submit.classList.contains('text-gssc-dark-green')).toBe(true);
     expect(clear.classList.contains('text-gssc-dark-green')).toBe(true);
+    expect(root.querySelector('.gssc-directory-search__submit')).toBeNull();
   } finally {
     restore();
   }
@@ -253,7 +266,9 @@ test('GSSC-MLLR-208 Semantic', async () => {
 test('GSSC-MLLR-209 Syntactic', async () => {
   const { root, restore } = await setupDirectory();
   try {
+    const results = root.querySelector<HTMLElement>('.gssc-directory-results')!;
     const list = root.querySelector<HTMLElement>('.gssc-directory-results__list')!;
+    expect(results.classList.contains('flex-1')).toBe(true);
     expect(list.classList.contains('flex-col')).toBe(true);
     expect(list.classList.contains('flex')).toBe(true);
     expect(list.querySelectorAll('.gssc-directory-results__item').length).toBe(2);
@@ -297,17 +312,14 @@ test('GSSC-MLLR-212 Directory Load And Filter', async () => {
   const { listCalls, page, fixture, restore } = await setupDirectory();
   try {
     expect(listCalls[0]).toEqual({});
-    page.firstName.set('Grace');
     listCalls.length = 0;
-    await page.search();
-    fixture.detectChanges();
-    await fixture.whenStable();
+    page.firstName.set('Grace');
+    await settleFilters(fixture);
     expect(listCalls.at(-1)).toEqual({ firstName: 'Grace' });
 
     listCalls.length = 0;
     await page.clearSearch();
-    fixture.detectChanges();
-    await fixture.whenStable();
+    await settleFilters(fixture);
     expect(page.firstName()).toBe('');
     expect(listCalls.at(-1)).toEqual({});
   } finally {
@@ -344,11 +356,9 @@ test('GSSC-MLLR-214 Administrator Registered Members View', async () => {
   try {
     expect(textContent(root, '.gssc-directory-page__title')).toBe('Registered Members');
     expect(textContent(root, '.gssc-directory-page__lede')).toContain('registered membership');
-    page.lastName.set('Hopper');
     listCalls.length = 0;
-    await page.search();
-    fixture.detectChanges();
-    await fixture.whenStable();
+    page.lastName.set('Hopper');
+    await settleFilters(fixture);
     expect(listCalls.at(-1)).toEqual({ lastName: 'Hopper' });
   } finally {
     restore();

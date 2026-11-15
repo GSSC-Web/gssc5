@@ -1,4 +1,4 @@
-import { Component, inject, model, OnInit, signal } from '@angular/core';
+import { Component, effect, inject, model, OnInit, signal } from '@angular/core';
 import { ContactRow } from '../../modules/contact-row/contact-row';
 import { FormTextField } from '../../modules/form-text-field/form-text-field';
 import type { AccountRecord } from '../../services/account-api';
@@ -17,6 +17,8 @@ import { MemberSession } from '../../services/member-session';
 })
 export class DirectoryPage implements OnInit {
   private readonly memberSession = inject(MemberSession);
+  private readonly filtersReady = signal(false);
+  private reloadGeneration = 0;
 
   readonly firstName = model('');
   readonly lastName = model('');
@@ -34,9 +36,26 @@ export class DirectoryPage implements OnInit {
   readonly isAdministrator = this.memberSession.isAdmin;
   // @relation(GSSC-MLLR-214, scope=range_end, role=Implementation)
 
+  constructor() {
+    // @relation(GSSC-MLLR-212, scope=range_start, role=Implementation)
+    effect(() => {
+      if (!this.filtersReady()) return;
+      const filters: DirectorySearchFilters = {
+        firstName: this.firstName(),
+        lastName: this.lastName(),
+        email: this.email(),
+        phone: this.phone(),
+        homeCity: this.homeCity(),
+        homeState: this.homeState(),
+      };
+      void this.reload(filters);
+    });
+    // @relation(GSSC-MLLR-212, scope=range_end, role=Implementation)
+  }
+
   async ngOnInit(): Promise<void> {
     await this.memberSession.whenReady();
-    await this.reload();
+    this.filtersReady.set(true);
   }
 
   // @relation(GSSC-MLLR-213, scope=range_start, role=Implementation)
@@ -45,10 +64,6 @@ export class DirectoryPage implements OnInit {
   }
   // @relation(GSSC-MLLR-213, scope=range_end, role=Implementation)
 
-  async search(): Promise<void> {
-    await this.reload();
-  }
-
   async clearSearch(): Promise<void> {
     this.firstName.set('');
     this.lastName.set('');
@@ -56,23 +71,15 @@ export class DirectoryPage implements OnInit {
     this.phone.set('');
     this.homeCity.set('');
     this.homeState.set('');
-    await this.reload();
   }
 
-  // @relation(GSSC-MLLR-212, scope=range_start, role=Implementation)
-  private async reload(): Promise<void> {
+  private async reload(filters: DirectorySearchFilters): Promise<void> {
+    const generation = ++this.reloadGeneration;
     this.loading.set(true);
     this.loadError.set(false);
-    const filters: DirectorySearchFilters = {
-      firstName: this.firstName(),
-      lastName: this.lastName(),
-      email: this.email(),
-      phone: this.phone(),
-      homeCity: this.homeCity(),
-      homeState: this.homeState(),
-    };
     try {
       const { data, error } = await directoryApi.listUsers(toDirectoryQuery(filters));
+      if (generation !== this.reloadGeneration) return;
       if (error || !Array.isArray(data)) {
         this.entries.set([]);
         this.loadError.set(true);
@@ -80,11 +87,13 @@ export class DirectoryPage implements OnInit {
       }
       this.entries.set(data as AccountRecord[]);
     } catch {
+      if (generation !== this.reloadGeneration) return;
       this.entries.set([]);
       this.loadError.set(true);
     } finally {
-      this.loading.set(false);
+      if (generation === this.reloadGeneration) {
+        this.loading.set(false);
+      }
     }
   }
-  // @relation(GSSC-MLLR-212, scope=range_end, role=Implementation)
 }

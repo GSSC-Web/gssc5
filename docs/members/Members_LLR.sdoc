@@ -4295,10 +4295,10 @@ RELATIONS:
 UID: GSSC-MLLR-203
 TITLE: Syntactic
 STATEMENT: >>>
-The Directory Page SHALL stack a page heading, the directory search form, and the directory results list vertically in the page content area as one column.
+The Directory Page SHALL place a page heading above a two-region body that keeps the directory search filter bar to the left of the directory results on medium and larger viewports, and stacks the filter bar above the results on narrower viewports.
 <<<
 RATIONALE: >>>
-A single vertical stack keeps search above results without competing side panels.
+A static left filter bar keeps criteria visible while the member scans matching contacts on the right.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -4337,10 +4337,10 @@ TITLE: Directory Search
 UID: GSSC-MLLR-205
 TITLE: Semantic
 STATEMENT: >>>
-The Directory Search SHALL accept first name, last name, email, phone, city, and state criteria from the viewer and SHALL refresh the directory results from the Unified Backend using those criteria when the viewer searches.
+The Directory Search SHALL accept first name, last name, email, phone, city, and state criteria from the viewer and SHALL update the directory results from the Unified Backend as those criteria change, without requiring a separate search submit control.
 <<<
 RATIONALE: >>>
-Search fields cover the common ways members locate fellow members; the Unified Backend applies matching.
+Live filtering lets members refine the list as they type; the Unified Backend applies matching.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -4358,10 +4358,10 @@ RELATIONS:
 UID: GSSC-MLLR-206
 TITLE: Syntactic
 STATEMENT: >>>
-The Directory Search SHALL place its criteria fields in a responsive grid above Search and Clear actions, with the fields filling the Directory Page content width.
+The Directory Search SHALL appear as a static left-side filter bar with its criteria fields stacked in a single column and a Clear control under those fields.
 <<<
 RATIONALE: >>>
-A grid keeps criteria scannable on wide viewports while stacking on narrow ones; actions sit under the fields.
+A single-column left bar keeps filters scannable and fixed beside the results list.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -4376,10 +4376,10 @@ RELATIONS:
 UID: GSSC-MLLR-207
 TITLE: Lexical
 STATEMENT: >>>
-The Directory Search SHALL use shared Member Frontend form-field primitives for its criteria fields and dark-green theme text on its Search and Clear actions.
+The Directory Search SHALL use shared Member Frontend form-field primitives for its criteria fields and dark-green theme text on its Clear control.
 <<<
 RATIONALE: >>>
-Reusing form primitives keeps directory search chrome consistent with other member forms.
+Reusing form primitives keeps directory search chrome consistent with other member forms; Clear is the only filter action.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -4427,10 +4427,10 @@ RELATIONS:
 UID: GSSC-MLLR-209
 TITLE: Syntactic
 STATEMENT: >>>
-The Directory Results SHALL stack Contact Rows in a single vertical list that stretches to the Directory Page content width.
+The Directory Results SHALL stack Contact Rows in a single vertical list in the region to the right of the Directory Search filter bar, stretching to fill the remaining Directory Page content width.
 <<<
 RATIONALE: >>>
-A vertical list keeps entries scannable and aligned with the search form above.
+Results sit beside filters so the member can scan matches without losing the filter context.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -4490,10 +4490,10 @@ RELATIONS:
 UID: GSSC-MLLR-212
 TITLE: Directory Load And Filter
 STATEMENT: >>>
-When the Directory Page opens with empty search criteria, the Member Frontend SHALL load the unfiltered members list from the Unified Backend, and when the viewer searches with one or more criteria, the Member Frontend SHALL reload the list using those criteria as Unified Backend query filters.
+When the Directory Page opens with empty search criteria, the Member Frontend SHALL load the unfiltered members list from the Unified Backend, and whenever the viewer changes one or more criteria, the Member Frontend SHALL reload the list using those criteria as Unified Backend query filters without a separate search submit step.
 <<<
 RATIONALE: >>>
-Empty criteria show the full collaboration or registered list; filled criteria narrow it through the existing users list API.
+Empty criteria show the full collaboration or registered list; live criteria changes narrow it through the existing users list API.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
