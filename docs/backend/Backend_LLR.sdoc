@@ -7939,7 +7939,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-BLLR-402
+UID: GSSC-BLLR-423
 TITLE: Page Data Image File
 STATEMENT: >>>
 The GSSC Website Unified Backend SHALL store an optional image file path string on each page data table entry for sections, announcements, and event details, identifying a stored file for retrieval like other backend-stored files.
@@ -7957,7 +7957,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-BLLR-403
+UID: GSSC-BLLR-424
 TITLE: Page Data Image Position
 STATEMENT: >>>
 The GSSC Website Unified Backend SHALL store an optional image position on each page data table entry for sections, announcements, and event details as one of none, left, or right.

@@ -718,8 +718,8 @@ test("GSSC-BLLR-401 Page Data End Date", async () => {
 // @relation(GSSC-BLLR-401, scope=range_end, role=Test)
 
 
-// @relation(GSSC-BLLR-402, scope=range_start, role=Test)
-test("GSSC-BLLR-402 Page Data Image File", async () => {
+// @relation(GSSC-BLLR-423, scope=range_start, role=Test)
+test("GSSC-BLLR-423 Page Data Image File", async () => {
   const section = await db().pageDataEntry.create({
     data: {
       datatype: "section",
@@ -746,10 +746,10 @@ test("GSSC-BLLR-402 Page Data Image File", async () => {
     imageFile: "dir/file-name.png",
   });
 });
-// @relation(GSSC-BLLR-402, scope=range_end, role=Test)
+// @relation(GSSC-BLLR-423, scope=range_end, role=Test)
 
-// @relation(GSSC-BLLR-403, scope=range_start, role=Test)
-test("GSSC-BLLR-403 Page Data Image Position", async () => {
+// @relation(GSSC-BLLR-424, scope=range_start, role=Test)
+test("GSSC-BLLR-424 Page Data Image Position", async () => {
   const left = await db().pageDataEntry.create({
     data: {
       datatype: "section",
@@ -786,7 +786,7 @@ test("GSSC-BLLR-403 Page Data Image Position", async () => {
     imagePosition: "right",
   });
 });
-// @relation(GSSC-BLLR-403, scope=range_end, role=Test)
+// @relation(GSSC-BLLR-424, scope=range_end, role=Test)
 
 // @relation(GSSC-BLLR-339, scope=range_start, role=Test)
 test("GSSC-BLLR-339 Page Entry Index", async () => {
