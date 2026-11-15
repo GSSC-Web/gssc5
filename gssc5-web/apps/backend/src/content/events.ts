@@ -3,16 +3,26 @@ import { Elysia, t } from "elysia";
 import { loadConfig } from "../config";
 import { getPrisma } from "../db";
 import { EventPlain } from "../generated/prismabox/Event";
+import { PageDataEntryPlain } from "../generated/prismabox/PageDataEntry";
 import { loginTokenCookie } from "../user/login-session";
 import {
   hasPerm,
+  isImagePosition,
   openSession,
   parseStringArray,
   PERM_USER_MOD,
   trimStrings,
   uniqueTags,
+  type ImagePosition,
 } from "./helpers";
 
+const ImagePositionWire = t.Union([
+  t.Literal("none"),
+  t.Literal("left"),
+  t.Literal("right"),
+]);
+
+/** Catalog + linked page_data details for calendar assembly (GSSC5-30). */
 const EventEntry = t.Object({
   cuid: EventPlain.properties.id,
   name: EventPlain.properties.name,
@@ -27,6 +37,17 @@ const EventEntry = t.Object({
   location: EventPlain.properties.location,
   isPublic: EventPlain.properties.isPublic,
   pageDataCuid: EventPlain.properties.pageDataId,
+  header: PageDataEntryPlain.properties.header,
+  body: PageDataEntryPlain.properties.body,
+  resources: t.Array(t.String()),
+  startMonth: PageDataEntryPlain.properties.startMonth,
+  startDay: PageDataEntryPlain.properties.startDay,
+  startYear: PageDataEntryPlain.properties.startYear,
+  endMonth: PageDataEntryPlain.properties.endMonth,
+  endDay: PageDataEntryPlain.properties.endDay,
+  endYear: PageDataEntryPlain.properties.endYear,
+  imageFile: PageDataEntryPlain.properties.imageFile,
+  imagePosition: t.Union([ImagePositionWire, t.Null()]),
 });
 
 const EventCreateBody = t.Object(
@@ -75,6 +96,20 @@ const EventUpdateBody = t.Object(
   { additionalProperties: true },
 );
 
+type EventDetailsRow = {
+  header: string | null;
+  body: string;
+  resources: string;
+  startMonth: number | null;
+  startDay: number | null;
+  startYear: number | null;
+  endMonth: number | null;
+  endDay: number | null;
+  endYear: number | null;
+  imageFile: string | null;
+  imagePosition: string | null;
+};
+
 type EventRow = {
   id: string;
   name: string;
@@ -89,7 +124,13 @@ type EventRow = {
   location: string;
   isPublic: boolean;
   pageDataId: string;
+  pageData: EventDetailsRow;
 };
+
+function wireImagePosition(value: string | null): ImagePosition | null {
+  if (value === null) return null;
+  return isImagePosition(value) ? value : null;
+}
 
 function toEntry(row: EventRow) {
   return {
@@ -106,8 +147,21 @@ function toEntry(row: EventRow) {
     location: row.location,
     isPublic: row.isPublic,
     pageDataCuid: row.pageDataId,
+    header: row.pageData.header,
+    body: row.pageData.body,
+    resources: parseStringArray(row.pageData.resources),
+    startMonth: row.pageData.startMonth,
+    startDay: row.pageData.startDay,
+    startYear: row.pageData.startYear,
+    endMonth: row.pageData.endMonth,
+    endDay: row.pageData.endDay,
+    endYear: row.pageData.endYear,
+    imageFile: row.pageData.imageFile,
+    imagePosition: wireImagePosition(row.pageData.imagePosition),
   };
 }
+
+const eventWithDetails = { pageData: true } as const;
 
 /** Webpage events catalog + details page_data (GSSC5-69). */
 export const events = new Elysia({
@@ -131,6 +185,7 @@ export const events = new Elysia({
       const rows = await prisma.event.findMany({
         where: loggedIn ? {} : { isPublic: true },
         orderBy: [{ year: "asc" }, { month: "asc" }, { day: "asc" }],
+        include: eventWithDetails,
       });
       // @relation(GSSC-BLLR-412, GSSC-BLLR-413, scope=range_end, role=Implementation)
 
@@ -151,7 +206,10 @@ export const events = new Elysia({
       const session = await openSession(cookie);
       const loggedIn = !("failure" in session);
       const prisma = getPrisma(loadConfig().DATABASE_URL);
-      const row = await prisma.event.findUnique({ where: { id: params.cuid } });
+      const row = await prisma.event.findUnique({
+        where: { id: params.cuid },
+        include: eventWithDetails,
+      });
       if (!row) return status(404, "Not Found" as const);
 
       // @relation(GSSC-BLLR-416, scope=range_start, role=Implementation)
@@ -256,6 +314,7 @@ export const events = new Elysia({
             deletePerm,
             pageDataId: details.id,
           },
+          include: eventWithDetails,
         });
       });
       return status(201, toEntry(created));
@@ -366,12 +425,15 @@ export const events = new Elysia({
             data: detailsData,
           });
         }
-        if (Object.keys(eventData).length === 0) {
-          return existing;
+        if (Object.keys(eventData).length > 0) {
+          await tx.event.update({
+            where: { id: existing.id },
+            data: eventData,
+          });
         }
-        return tx.event.update({
+        return tx.event.findUniqueOrThrow({
           where: { id: existing.id },
-          data: eventData,
+          include: eventWithDetails,
         });
       });
       return status(200, toEntry(updated));

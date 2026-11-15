@@ -447,9 +447,20 @@ test("GSSC-BLLR-414 event list entry fields and date order", async () => {
     duration: "1 hour",
     location: "Office",
     isPublic: true,
+    header: "Public",
+    body: "pub",
+    startMonth: 5,
+    startDay: 1,
+    startYear: 2027,
+    endMonth: 5,
+    endDay: 1,
+    endYear: 2027,
   });
   expect(typeof entry.cuid).toBe("string");
   expect(typeof entry.pageDataCuid).toBe("string");
+  expect(Array.isArray(entry.resources)).toBe(true);
+  expect("imageFile" in entry).toBe(true);
+  expect("imagePosition" in entry).toBe(true);
   const years = entries.map((e) => e.year as number);
   expect([...years].sort((a, b) => a - b)).toEqual(years);
 });
@@ -463,7 +474,20 @@ test("GSSC-BLLR-415 public get returns a public event", async () => {
   });
   const { status, body } = await getJson(`/events/${pub!.id}`);
   expect(status).toBe(200);
-  expect((body as { name: string }).name).toBe("Public Tour");
+  const entry = body as {
+    name: string;
+    header: string;
+    body: string;
+    resources: unknown;
+    startMonth: number;
+    imageFile: string | null;
+  };
+  expect(entry.name).toBe("Public Tour");
+  expect(entry.header).toBe("Public");
+  expect(entry.body).toBe("pub");
+  expect(Array.isArray(entry.resources)).toBe(true);
+  expect(entry.startMonth).toBe(5);
+  expect("imageFile" in entry).toBe(true);
 });
 // @relation(GSSC-BLLR-415, scope=range_end, role=Test)
 
@@ -486,7 +510,10 @@ test("GSSC-BLLR-417 authenticated get returns members-only event", async () => {
   });
   const { status, body } = await getJson(`/events/${priv!.id}`, memberTok);
   expect(status).toBe(200);
-  expect((body as { name: string }).name).toBe("Members Meeting");
+  const entry = body as { name: string; header: string; body: string };
+  expect(entry.name).toBe("Members Meeting");
+  expect(entry.header).toBe("Private");
+  expect(entry.body).toBe("priv");
 });
 // @relation(GSSC-BLLR-417, scope=range_end, role=Test)
 

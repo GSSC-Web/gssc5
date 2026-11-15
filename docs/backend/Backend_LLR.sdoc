@@ -7283,14 +7283,17 @@ RELATIONS:
 UID: GSSC-BLLR-414
 TITLE: Event List Entry Fields
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL include cuid, name, month, day, year, announcement start month, announcement start day, announcement start year, time, duration, location, isPublic flag, and page data cuid in each event list entry, ordered by year, then month, then day ascending.
+The GSSC Website Unified Backend SHALL include cuid, name, month, day, year, announcement start month, announcement start day, announcement start year, time, duration, location, isPublic flag, page data cuid, and linked details header, body, resources, start month, start day, start year, end month, end day, end year, image file, and image position in each event list entry, ordered by year, then month, then day ascending.
 <<<
 RATIONALE: >>>
-List entries carry the fields needed for calendar assembly without a second fetch for summary data.
+List entries carry the fields needed for calendar assembly without a second fetch for summary data, including the event span and section-like detail fields stored on the linked page data row.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-69
+CHANGE_DRIVER: >>>
+GSSC5-69
+GSSC5-30
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -7355,14 +7358,17 @@ TITLE: GET
 UID: GSSC-BLLR-415
 TITLE: Public Event Get
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return a public event by cuid in the path to an unauthenticated caller, including cuid, name, month, day, year, announcement start month, day, and year, time, duration, location, isPublic flag, and page data cuid.
+The GSSC Website Unified Backend SHALL return a public event by cuid in the path to an unauthenticated caller, including cuid, name, month, day, year, announcement start month, day, and year, time, duration, location, isPublic flag, page data cuid, and linked details header, body, resources, start month, day, and year, end month, day, and year, image file, and image position.
 <<<
 RATIONALE: >>>
-Path cuid identifies one public event for calendar or detail assembly.
+Path cuid identifies one public event for calendar or detail assembly, including linked page data detail fields.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-69
+CHANGE_DRIVER: >>>
+GSSC5-69
+GSSC5-30
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -7391,14 +7397,17 @@ RELATIONS:
 UID: GSSC-BLLR-417
 TITLE: Authenticated Event Get
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return any event by cuid in the path to a logged-in member, including cuid, name, month, day, year, announcement start month, day, and year, time, duration, location, isPublic flag, and page data cuid.
+The GSSC Website Unified Backend SHALL return any event by cuid in the path to a logged-in member, including cuid, name, month, day, year, announcement start month, day, and year, time, duration, location, isPublic flag, page data cuid, and linked details header, body, resources, start month, day, and year, end month, day, and year, image file, and image position.
 <<<
 RATIONALE: >>>
-A logged-in member can load public or members-only events by cuid.
+A logged-in member can load public or members-only events by cuid with linked page data detail fields.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-69
+CHANGE_DRIVER: >>>
+GSSC5-69
+GSSC5-30
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent

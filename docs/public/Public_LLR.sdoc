@@ -2344,6 +2344,552 @@ RELATIONS:
 [[/SECTION]]
 
 [[SECTION]]
+UID: GSSC-PLLR-CALENDAR
+TITLE: Public Calendar
+
+[[SECTION]]
+UID: GSSC-PLLR-CALENDAR-ELEMENT
+TITLE: Public Calendar
+
+[REQUIREMENT]
+UID: GSSC-PLLR-284
+TITLE: Semantic
+STATEMENT: >>>
+The GSSC Website Public Frontend Public Calendar SHALL present a visual month calendar for a selected calendar month and year, retrieve public calendar events from the Unified Backend events list, host previous and next month selectors and day cells with selectable event chips, and open the Event Detail Overlay when a visitor selects an event chip.
+<<<
+RATIONALE: >>>
+The Public Calendar is the month-view surface for society events. Backend list fields supply placement and detail contents. Overlay Contents are separate requirements.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-30
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-12
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-285
+TITLE: Syntactic
+STATEMENT: >>>
+The Public Calendar SHALL fill the width of its host, place month selectors above a week-row day grid, and keep the Event Detail Overlay layered above the calendar when open.
+<<<
+RATIONALE: >>>
+Chrome above the grid keeps navigation available while the month fills the host. Overlay layering matches other public overlays.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-30
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-12
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-286
+TITLE: Lexical
+STATEMENT: >>>
+The Public Calendar SHALL use a white background, the dark-green theme token for default text, the gray theme token for grid borders, and a sans-serif typeface.
+<<<
+RATIONALE: >>>
+Theme tokens keep the calendar aligned with the public shell. A fuller calendar color role map is not set yet beyond these token choices.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-30
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-12
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-CALENDAR-MONTH-SELECTORS
+TITLE: Month Selectors
+
+[REQUIREMENT]
+UID: GSSC-PLLR-287
+TITLE: Semantic
+STATEMENT: >>>
+The Month Selectors SHALL move the Public Calendar to the previous calendar month when the visitor activates Previous, move to the next calendar month when the visitor activates Next, and display the currently selected month and year.
+<<<
+RATIONALE: >>>
+Previous and Next let visitors browse months without leaving the calendar. The label identifies the visible month.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-30
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-12
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-288
+TITLE: Syntactic
+STATEMENT: >>>
+The Month Selectors SHALL sit above the day grid with Previous on the left, the month and year label centered, and Next on the right.
+<<<
+RATIONALE: >>>
+A single chrome row keeps month navigation discoverable and balanced above the grid.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-30
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-12
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-289
+TITLE: Lexical
+STATEMENT: >>>
+The Month Selectors SHALL use the dark-green theme token for control and label text and a sans-serif typeface.
+<<<
+RATIONALE: >>>
+Dark-green sans-serif controls match other public interactive chrome.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-30
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-12
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-CALENDAR-DAY
+TITLE: Calendar Day
+
+[REQUIREMENT]
+UID: GSSC-PLLR-290
+TITLE: Semantic
+STATEMENT: >>>
+Each Calendar Day SHALL display that day's day-of-month number and host selectable event chips for each event whose inclusive start-to-end span includes that day.
+<<<
+RATIONALE: >>>
+Day cells are where visitors see and select events that fall on that date, including multi-day spans.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-30
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-12
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-291
+TITLE: Syntactic
+STATEMENT: >>>
+Calendar Days SHALL form week rows from Sunday through Saturday for the visible month, and days that fall outside the visible month SHALL remain in the grid in a visually distinct presentation.
+<<<
+RATIONALE: >>>
+A Sunday-start week grid matches common month calendars. Outside-month padding completes the week rows without implying those days belong to the selected month.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-30
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-12
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-292
+TITLE: Lexical
+STATEMENT: >>>
+Calendar Day numbers in the visible month SHALL use the dark-green theme token, and outside-month day numbers SHALL use the gray theme token.
+<<<
+RATIONALE: >>>
+Muted outside-month numbers keep focus on the selected month while preserving grid structure.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-30
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-12
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-CALENDAR-EVENT-CHIP
+TITLE: Calendar Event Chip
+
+[REQUIREMENT]
+UID: GSSC-PLLR-293
+TITLE: Semantic
+STATEMENT: >>>
+A Calendar Event Chip SHALL present the event title, SHALL be selectable to open that event's detail overlay, SHALL appear on each day included in the event's inclusive span, and SHALL repeat the event title on each week-row segment when the span crosses multiple week rows.
+<<<
+RATIONALE: >>>
+Chips mark events on the grid. Repeating the title on each week-row segment keeps multi-week spans readable without forcing the visitor to track a single bar across rows.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-30
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-12
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-294
+TITLE: Syntactic
+STATEMENT: >>>
+Calendar Event Chips SHALL sit inside the Calendar Day cells for the days they cover, with one titled segment per week row that the event span intersects.
+<<<
+RATIONALE: >>>
+Per-day placement keeps chips aligned to dates; per-week-row segments carry the repeated title across weeks.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-30
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-12
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-295
+TITLE: Lexical
+STATEMENT: >>>
+A Calendar Event Chip SHALL use the light-green or cream theme token for its background and the dark-green theme token for its text.
+<<<
+RATIONALE: >>>
+Light chip backgrounds keep titles readable on the white calendar without competing with day numbers.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-30
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-12
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-CALENDAR-EVENT-DETAIL-OVERLAY
+TITLE: Event Detail Overlay
+
+[REQUIREMENT]
+UID: GSSC-PLLR-296
+TITLE: Semantic
+STATEMENT: >>>
+When an event is selected, the Event Detail Overlay SHALL present that event's title, content, optional featured image, and references, and SHALL dismiss when the visitor activates the dismiss control or presses Escape, and SHALL not dismiss when the visitor activates the backdrop.
+<<<
+RATIONALE: >>>
+The overlay shows section-like event details without leaving the calendar. Escape and an explicit dismiss control match other public overlays; backdrop clicks do not dismiss.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-30
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-12
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-297
+TITLE: Syntactic
+STATEMENT: >>>
+The Event Detail Overlay SHALL cover the viewport above the Public Calendar, present a dialog panel that fills the viewport below small breakpoints, and limit that panel to at most three-quarters of the viewport width and height at small breakpoints and above.
+<<<
+RATIONALE: >>>
+Fullscreen on narrow viewports and a capped panel on larger viewports match the Prompt Overlay chrome pattern.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-30
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-12
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-298
+TITLE: Lexical
+STATEMENT: >>>
+The Event Detail Overlay SHALL use the gray theme token at one-quarter opacity for its backdrop, a white panel background, and the dark-green theme token for panel border and default text.
+<<<
+RATIONALE: >>>
+Shared overlay tokens keep dismissible dialogs visually consistent across the public frontend.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-30
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-12
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-CALENDAR-EVENT-DETAIL-TITLE
+TITLE: Event Detail Title
+
+[REQUIREMENT]
+UID: GSSC-PLLR-299
+TITLE: Semantic
+STATEMENT: >>>
+The Event Detail Title SHALL display the selected event's title.
+<<<
+RATIONALE: >>>
+The title identifies the event in the overlay. Which field supplies the title when both a details header and a catalog name exist is a software choice that prefers a non-empty details header.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-30
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-12
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-300
+TITLE: Syntactic
+STATEMENT: >>>
+The Event Detail Title SHALL appear at the top of the Event Detail Overlay panel contents, before the featured image, body, and references.
+<<<
+RATIONALE: >>>
+Leading with the title matches generic section reading order.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-30
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-12
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-301
+TITLE: Lexical
+STATEMENT: >>>
+The Event Detail Title SHALL use a semibold weight and the dark-green theme token for its text color, at a size one and one-half times the Event Detail Content text size.
+<<<
+RATIONALE: >>>
+Matching Section Header emphasis keeps event details familiar beside generic sections.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-30
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-12
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-CALENDAR-EVENT-DETAIL-CONTENT
+TITLE: Event Detail Content
+
+[REQUIREMENT]
+UID: GSSC-PLLR-302
+TITLE: Semantic
+STATEMENT: >>>
+The Event Detail Content SHALL display the selected event's body content.
+<<<
+RATIONALE: >>>
+Body content is the primary prose of the event details, parallel to a Section Body.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-30
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-12
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-303
+TITLE: Syntactic
+STATEMENT: >>>
+The Event Detail Content SHALL appear after the Event Detail Title and beside or below the featured image when that image is placed.
+<<<
+RATIONALE: >>>
+Reading order keeps title first and pairs body text with optional imagery like generic sections.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-30
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-12
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-304
+TITLE: Lexical
+STATEMENT: >>>
+The Event Detail Content SHALL use a normal weight, a base text size, and the black theme token for its text color.
+<<<
+RATIONALE: >>>
+Body copy stays neutral black so the dark-green title remains the emphasis.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-30
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-12
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-CALENDAR-EVENT-DETAIL-IMAGE
+TITLE: Event Detail Image
+
+[REQUIREMENT]
+UID: GSSC-PLLR-305
+TITLE: Semantic
+STATEMENT: >>>
+The Event Detail Image SHALL present the featured image from the selected event when that event includes an image file and an image position of left or right; SHALL omit the featured image when the image position is none even if an image file is present; and SHALL omit the featured image when the event lacks an image file or lacks an image position.
+<<<
+RATIONALE: >>>
+Optional featured imagery follows the same rules as Section Featured Image so event details stay consistent with generic sections.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-30
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-12
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-306
+TITLE: Syntactic
+STATEMENT: >>>
+When the Event Detail Image is placed, it SHALL appear on the left of the Event Detail Content when the image position is left and on the right of the Event Detail Content when the image position is right at medium and larger viewports; at viewports smaller than medium, it SHALL appear between the Event Detail Title and the Event Detail Content; and it SHALL never occupy more than three-fifths of the overlay content width or more than two-fifths of its parent container.
+<<<
+RATIONALE: >>>
+Side placement and size caps mirror Section Featured Image so overlays do not invent a second image layout.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-30
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-12
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-307
+TITLE: Lexical
+STATEMENT: >>>
+The Event Detail Image SHALL keep the full image visible within its size caps without cropping, without adding independent border or background chrome beyond the Event Detail Overlay panel.
+<<<
+RATIONALE: >>>
+Keeping the full image visible preserves the asset inside the width and parent size limits.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-30
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-12
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-CALENDAR-EVENT-DETAIL-REFERENCES
+TITLE: Event Detail References
+
+[REQUIREMENT]
+UID: GSSC-PLLR-308
+TITLE: Semantic
+STATEMENT: >>>
+The Event Detail References SHALL present each reference from the selected event as a link named with that reference, and SHALL omit the references strip when the event has no references.
+<<<
+RATIONALE: >>>
+References parallel Section Resource Buttons so visitors can open related links from the overlay.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-30
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-12
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-309
+TITLE: Syntactic
+STATEMENT: >>>
+When present, the Event Detail References SHALL appear below the Event Detail Content in a left-aligned horizontal strip of equal controls.
+<<<
+RATIONALE: >>>
+A strip below the body matches the Section resources placement pattern in a compact overlay.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-30
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-12
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-310
+TITLE: Lexical
+STATEMENT: >>>
+Each Event Detail Reference control SHALL use the dark-green theme token for its border and text, a white background, and a sans-serif typeface.
+<<<
+RATIONALE: >>>
+Dark-green bordered links read as secondary actions within the white overlay panel.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-30
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-12
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
 UID: GSSC-PLLR-ERROR
 TITLE: Public Error Container
 
