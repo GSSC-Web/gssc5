@@ -88,7 +88,9 @@ GSSC5-90 Account Self-Service and GSSC5-91 Admin Account Management share GSSC-M
 GSSC5-85 Contact-row / Form Primitives owns GSSC-MLLR-159 through GSSC-MLLR-179 (Contact Row + form-field building blocks).
 GSSC5-84 Generic Editor Module owns GSSC-MLLR-180 through GSSC-MLLR-201 (editor shell, actions, contention, session behaviors; composes GSSC5-85 form fields).
 GSSC5-92 Members Directory + Search owns GSSC-MLLR-202 through GSSC-MLLR-214 (exact end 214; band 202–230 reserved for directory so parallel Wave tickets do not mint below 231).
-Parallel Wave tickets (GSSC5-89, 93–97) start at GSSC-MLLR-231 and above.
+GSSC5-94 Announcements Editor owns GSSC-MLLR-291 through GSSC-MLLR-307 (page, catalog, Generic Editor host, create/modify/publish behaviors; reuses GSSC5-84/85; consumes GSSC5-68 /announcements).
+Wave coordination: GSSC5-92 directory 202–214 (band through 230), GSSC5-93 page/section editor ~261+, GSSC5-94 announcements 291–307, GSSC5-95 events editor ~321+ — do not collide.
+Parallel Wave tickets (GSSC5-89, 93–97) otherwise start at GSSC-MLLR-231 and above where not claimed above.
 GSSC-MLLR-33 through GSSC-MLLR-39 remain free for later claimants.
 Do not reuse numbers already claimed by another ticket.
 <<<
@@ -4550,6 +4552,369 @@ RELATIONS:
   ROLE: Refines
 - TYPE: Parent
   VALUE: GSSC-MHLR-59
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-ANNOUNCEMENTS-EDITOR
+TITLE: Announcements Editor
+
+[[SECTION]]
+UID: GSSC-MLLR-ANNOUNCEMENTS-EDITOR-PAGE
+TITLE: Announcements Editor Page
+
+[REQUIREMENT]
+UID: GSSC-MLLR-291
+TITLE: Semantic
+STATEMENT: >>>
+The Announcements Editor Page SHALL place an Announcement Catalog and an Announcement Editor that uses the Member Frontend Generic Editor so an authorized member can create, publish, and modify announcements without programming knowledge and without developer intervention.
+<<<
+RATIONALE: >>>
+PIR-16 requires member announcement editing. The page composes the shared Generic Editor with announcement-specific fields and the Unified Backend announcement APIs.
+<<<
+COMMENT: >>>
+Derived for GSSC5-94. Backend announcement routes are GSSC5-68 on master (GET/POST/PATCH/DELETE /announcements).
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-94
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-43
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-44
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-45
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-292
+TITLE: Syntactic
+STATEMENT: >>>
+The Announcements Editor Page SHALL fill the width of the page content area up to a readable maximum, stack the page heading, Catalog, Editor, and status feedback vertically, and keep spacing between those regions.
+<<<
+RATIONALE: >>>
+Vertical stacking keeps catalog selection and editor fields readable as the viewport resizes.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-94
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-43
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-293
+TITLE: Lexical
+STATEMENT: >>>
+The Announcements Editor Page SHALL use a sans-serif typeface, the dark-green theme token for the page heading, and the white theme token for the outermost page background.
+<<<
+RATIONALE: >>>
+Page chrome matches other Member Frontend authenticated pages.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-94
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-43
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-ANNOUNCEMENT-CATALOG
+TITLE: Announcement Catalog
+
+[REQUIREMENT]
+UID: GSSC-MLLR-294
+TITLE: Semantic
+STATEMENT: >>>
+The Announcement Catalog SHALL list existing announcements available to the signed-in member, offer a control to start creating a new announcement, and select which announcement the Announcement Editor loads for modification.
+<<<
+RATIONALE: >>>
+Members need to choose create versus edit before the Generic Editor shows announcement fields.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-94
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-43
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-45
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-295
+TITLE: Syntactic
+STATEMENT: >>>
+The Announcement Catalog SHALL place the create control and the announcement list above the Announcement Editor, fill the page content width, and keep the list scrollable when it grows taller than a short viewport band.
+<<<
+RATIONALE: >>>
+Catalog above the editor keeps selection separate from field editing and avoids pushing actions off-screen on long lists.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-94
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-43
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-296
+TITLE: Lexical
+STATEMENT: >>>
+The Announcement Catalog SHALL use a sans-serif typeface, the dark-green theme token for list text, the light-green theme token for the selected list entry background, and the gray theme token for the catalog border.
+<<<
+RATIONALE: >>>
+Selected-row highlight and organization palette tokens keep the catalog aligned with Member Frontend chrome.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-94
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-43
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-ANNOUNCEMENT-EDITOR-HOST
+TITLE: Announcement Editor
+
+[REQUIREMENT]
+UID: GSSC-MLLR-297
+TITLE: Semantic
+STATEMENT: >>>
+The Announcement Editor SHALL host the Member Frontend Generic Editor with projected Header, Body, Publication Target, and when creating a new announcement Content Template fields, so the member edits announcement contents and publication without programming knowledge.
+<<<
+RATIONALE: >>>
+Wave 7 editors reuse the Generic Editor shell; announcement-specific fields are projected into the Field Area.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-94
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-43
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-44
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-45
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-24
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-298
+TITLE: Syntactic
+STATEMENT: >>>
+The Announcement Editor SHALL place the Generic Editor below the Announcement Catalog, fill the page content width, and stack projected fields inside the Generic Editor Field Area.
+<<<
+RATIONALE: >>>
+Editor below catalog matches the page create/edit workflow.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-94
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-45
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-299
+TITLE: Lexical
+STATEMENT: >>>
+The Announcement Editor SHALL rely on the Generic Editor and shared form-field primitives for field chrome, using organization theme tokens already required by those modules.
+<<<
+RATIONALE: >>>
+Host pages do not restyle the shared editor shell or form primitives.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-94
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-24
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-ANNOUNCEMENT-EDITOR-BEHAVIORS
+TITLE: Announcement Editor Behaviors
+
+[REQUIREMENT]
+UID: GSSC-MLLR-300
+TITLE: Catalog Load
+STATEMENT: >>>
+When the Announcements Editor Page opens for a signed-in member, the Announcement Catalog SHALL load announcement headers from the Unified Backend announcements list for that member.
+<<<
+RATIONALE: >>>
+Authenticated list retrieval is the GSSC5-68 member announcement list contract.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-94
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-45
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-301
+TITLE: Create Announcement
+STATEMENT: >>>
+When Save succeeds on the Announcement Editor in create mode with a selected Content Template and non-empty Body, the Member Frontend SHALL create the announcement through the Unified Backend announcements create contract and then show that announcement in the Catalog for further modification.
+<<<
+RATIONALE: >>>
+Creation without developer intervention uses the existing announcements POST API and template identity required by that API.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-94
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-43
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-302
+TITLE: Modify Announcement
+STATEMENT: >>>
+When Save succeeds on the Announcement Editor for an existing announcement, the Member Frontend SHALL write the Header and Body through the Unified Backend announcements modify contract for that announcement.
+<<<
+RATIONALE: >>>
+Authorized members correct announcements after create without developer intervention.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-94
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-45
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-303
+TITLE: Publish Announcement
+STATEMENT: >>>
+When the member sets Publication Target on the Announcement Editor and Save persists that choice, the Member Frontend SHALL publish the announcement so Member Frontend only maps to not public, and Public Frontend or both map to public, using the Unified Backend announcements modify visibility contract.
+<<<
+RATIONALE: >>>
+MHLR publication targets Public, Member, or both; the GSSC5-68 wire visibility flag is isPublic, which distinguishes members-only from public (also visible to members).
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-94
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-44
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-304
+TITLE: Cancel Discard
+STATEMENT: >>>
+When Cancel is activated on the Announcement Editor, the Member Frontend SHALL restore Header, Body, Publication Target, and Content Template fields to the last loaded or last saved baseline without writing to the Unified Backend.
+<<<
+RATIONALE: >>>
+Cancel must discard unsaved announcement edits.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-94
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-45
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-305
+TITLE: Template Required For Create
+STATEMENT: >>>
+While the Announcement Editor is in create mode, the Member Frontend SHALL require a Content Template selection before Save can create the announcement, and SHALL load available templates from the Unified Backend templates list for the signed-in member.
+<<<
+RATIONALE: >>>
+Announcement create on the Unified Backend requires a template identity.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-94
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-43
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-306
+TITLE: Editor Mode Selection
+STATEMENT: >>>
+Selecting an announcement in the Catalog SHALL load that announcement into the Announcement Editor for modification, and activating create SHALL clear the editor into create mode with a distinct exclusive-edit resource identity until creation succeeds.
+<<<
+RATIONALE: >>>
+Create and modify are different editor modes sharing one Generic Editor host; exclusive edit keys must not collide across drafts and stored announcements.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-94
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-43
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-45
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-307
+TITLE: Persistence Feedback
+STATEMENT: >>>
+When create or modify fails because the Unified Backend rejects the request, the Announcements Editor Page SHALL show that the announcement was not saved and SHALL leave the editor fields available for correction when the member remains permitted to edit.
+<<<
+RATIONALE: >>>
+Permission and validation failures must be visible without implying a successful write.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-94
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-43
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-45
   ROLE: Refines
 
 [[/SECTION]]
