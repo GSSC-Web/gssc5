@@ -3711,6 +3711,66 @@ RELATIONS:
   VALUE: GSSC-PIR-50
   ROLE: Refines
 
+[REQUIREMENT]
+UID: GSSC-BHLR-218
+TITLE: Event Creation
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL accept creation of an event by a logged-in member who has the necessary create permission, including that event's details page data entry.
+<<<
+RATIONALE: >>>
+New events are stored with a linked page data entry for details. Which request fields are required or optional, and which permission rules apply, are low-level.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-69
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-59
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-219
+TITLE: Event Modification
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL accept modification of an event by a logged-in member who has the necessary permissions, including that event's details page data entry.
+<<<
+RATIONALE: >>>
+An authenticated member with the necessary permissions can change an event and its details. These permissions are separate from the permissions that allow deletion. Which fields may change are low-level. This requirement does not name those permissions.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-69
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-59
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-220
+TITLE: Event Deletion
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL accept deletion of an event by a logged-in member who has the necessary permissions, including that event's details page data entry.
+<<<
+RATIONALE: >>>
+An authenticated member with the necessary permissions can delete an event and its details. Those permissions are separate from the permissions that allow modification. This requirement does not name those permissions.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-69
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-59
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
+  ROLE: Refines
+
 [[/SECTION]]
 
 [[/SECTION]]
