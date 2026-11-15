@@ -2139,13 +2139,16 @@ TITLE: Generic Announcements
 UID: GSSC-BHLR-142
 TITLE: Public Announcement List
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL provide a list of public announcement data entries upon request, as a list of headers.
+The GSSC Website Unified Backend SHALL provide a list of public announcements upon request.
 <<<
 RATIONALE: >>>
-A caller can request the public announcements and receive each announcement's headers. A public announcement is a page data table entry for an announcement whose audience is public. Members-only entries are outside this list.
+A caller can browse public announcements without a login. Members-only announcements are outside this list. Which fields appear in each list entry and how entries are ordered are low-level. List filters are a separate requirement. Upcoming public events in their announcement window are a separate requirement.
 <<<
-DERIVED: False
-CHANGE_DRIVER: GSSC5-12
+DERIVED: True
+CHANGE_DRIVER: >>>
+GSSC5-12
+GSSC5-68
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -2156,13 +2159,16 @@ RELATIONS:
 UID: GSSC-BHLR-143
 TITLE: Public Announcement Data
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL provide a public announcement's data upon request, including that announcement's headers, bodies, and resources.
+The GSSC Website Unified Backend SHALL provide a public announcement's data upon request by announcement cuid in the path.
 <<<
 RATIONALE: >>>
-A caller can request one public announcement and receive its headers, bodies, and resources together. Members-only announcements are outside this request.
+Path cuid identifies one public announcement. Members-only announcements are outside this request. Which fields the response includes is low-level.
 <<<
-DERIVED: False
-CHANGE_DRIVER: GSSC5-12
+DERIVED: True
+CHANGE_DRIVER: >>>
+GSSC5-12
+GSSC5-68
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -2173,13 +2179,16 @@ RELATIONS:
 UID: GSSC-BHLR-144
 TITLE: Authenticated Announcement List
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL provide a list of the public and members-only announcement data entries upon request from a logged-in member, as a list of headers.
+The GSSC Website Unified Backend SHALL provide a list of public and members-only announcements upon request from a logged-in member.
 <<<
 RATIONALE: >>>
-An authenticated member can request every announcement and receive each announcement's headers.
+An authenticated member can browse every announcement. Which fields appear in each list entry and how entries are ordered are low-level. List filters are a separate requirement. Upcoming events in their announcement window are a separate requirement.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-12
+CHANGE_DRIVER: >>>
+GSSC5-12
+GSSC5-68
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -2196,13 +2205,16 @@ RELATIONS:
 UID: GSSC-BHLR-145
 TITLE: Authenticated Announcement Data
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL provide any announcement's data upon request from a logged-in member, including that announcement's headers, bodies, and resources.
+The GSSC Website Unified Backend SHALL provide any announcement's data upon request from a logged-in member by announcement cuid in the path.
 <<<
 RATIONALE: >>>
-An authenticated member can request any one announcement, public or members-only, and receive its headers, bodies, and resources together.
+An authenticated member can load any one announcement, public or members-only, by path cuid. Which fields the response includes is low-level.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-12
+CHANGE_DRIVER: >>>
+GSSC5-12
+GSSC5-68
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -2219,13 +2231,16 @@ RELATIONS:
 UID: GSSC-BHLR-146
 TITLE: Announcement Modification
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL accept modification of an announcement by a logged-in member who has the necessary permissions, including that announcement's headers, bodies, and resources.
+The GSSC Website Unified Backend SHALL accept modification of an announcement by a logged-in member who has the necessary permissions.
 <<<
 RATIONALE: >>>
-An authenticated member with the necessary permissions can change an announcement. The change includes that announcement's headers, bodies, and resources. These permissions are separate from the permissions that allow deletion. This requirement does not name those permissions.
+An authenticated member with the necessary permissions can change an announcement. These permissions are separate from the permissions that allow deletion. Which fields may change and any further permission rules are low-level. This requirement does not name those permissions.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-12
+CHANGE_DRIVER: >>>
+GSSC5-12
+GSSC5-68
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -2248,7 +2263,10 @@ RATIONALE: >>>
 An authenticated member with the necessary permissions can delete an announcement. Those permissions are separate from the permissions that allow modification. This requirement does not name those permissions.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-12
+CHANGE_DRIVER: >>>
+GSSC5-12
+GSSC5-68
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -2262,16 +2280,55 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
+UID: GSSC-BHLR-221
+TITLE: Announcement Creation
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL accept creation of an announcement by a logged-in member who has the necessary create permission, using a content template.
+<<<
+RATIONALE: >>>
+New announcements are created from a template. Which request fields are required or optional, and which values the template supplies, are low-level.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-68
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-34
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-37
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-222
+TITLE: Announcement List Filters
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL accept filtering of announcement lists.
+<<<
+RATIONALE: >>>
+Filters let callers narrow the catalog without requiring a full scan in every case. Which filter keys and match rules apply are low-level.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-68
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
 UID: GSSC-BHLR-147
 TITLE: Public Announcement Events
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL include the data for each upcoming public event that is within that event's announcement window when it provides public announcements upon request.
+The GSSC Website Unified Backend SHALL include each upcoming public event that is within that event's announcement window when it provides the public announcement list upon request.
 <<<
 RATIONALE: >>>
-A public announcement request also returns that event's data. A public event is an event whose audience is public. The announcement window begins on the event's announcement start date. This requirement does not set when the window ends, and it does not define upcoming apart from that window. Members-only events are outside this request.
+A public announcement list also returns that event's data. A public event is an event whose audience is public. Until a separate Event table supplies an announcement-window start, page-data event entries use their stored calendar span for upcoming eligibility. Members-only events are outside this request.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-12
+CHANGE_DRIVER: >>>
+GSSC5-12
+GSSC5-68
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -2282,13 +2339,16 @@ RELATIONS:
 UID: GSSC-BHLR-148
 TITLE: Authenticated Announcement Events
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL include the data for each upcoming event that is within that event's announcement window when it provides announcements upon request from a logged-in member.
+The GSSC Website Unified Backend SHALL include each upcoming event that is within that event's announcement window when it provides the announcement list upon request from a logged-in member.
 <<<
 RATIONALE: >>>
-An authenticated member's announcement request also returns that event's data, whether the event is public or members-only. The announcement window begins on the event's announcement start date. This requirement does not set when the window ends, and it does not define upcoming apart from that window.
+An authenticated member's announcement list also returns that event's data, whether the event is public or members-only. Until a separate Event table supplies an announcement-window start, page-data event entries use their stored calendar span for upcoming eligibility.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-12
+CHANGE_DRIVER: >>>
+GSSC5-12
+GSSC5-68
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
