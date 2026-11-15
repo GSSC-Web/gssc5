@@ -1,2 +1,1105 @@
 [DOCUMENT]
 TITLE: Members High Level Requirements
+UID: GSSC-MEMBERS-HIGH-LEVEL-REQUIREMENTS
+VERSION: 5.0.0
+
+[GRAMMAR]
+ELEMENTS:
+- TAG: TEXT
+  FIELDS:
+  - TITLE: UID
+    TYPE: String
+    REQUIRED: False
+  - TITLE: STATEMENT
+    TYPE: String
+    REQUIRED: True
+- TAG: SECTION
+  PROPERTIES:
+    IS_COMPOSITE: True
+    PREFIX: None
+    VIEW_STYLE: Narrative
+  FIELDS:
+  - TITLE: UID
+    TYPE: String
+    REQUIRED: False
+  - TITLE: TITLE
+    TYPE: String
+    REQUIRED: True
+- TAG: REQUIREMENT
+  PROPERTIES:
+    PREFIX: GSSC-MHLR-
+    VIEW_STYLE: Table
+  FIELDS:
+  - TITLE: UID
+    TYPE: String
+    REQUIRED: True
+  - TITLE: TITLE
+    TYPE: String
+    REQUIRED: True
+  - TITLE: STATEMENT
+    TYPE: String
+    REQUIRED: True
+  - TITLE: RATIONALE
+    TYPE: String
+    REQUIRED: True
+  - TITLE: COMMENT
+    TYPE: String
+    REQUIRED: False
+  - TITLE: DERIVED
+    TYPE: SingleChoice(True, False)
+    REQUIRED: True
+  - TITLE: CHANGE_DRIVER
+    TYPE: String
+    REQUIRED: True
+  - TITLE: REVIEW_STATUS
+    TYPE: SingleChoice(Changed, Approved, Baselined)
+    REQUIRED: True
+  RELATIONS:
+  - TYPE: Parent
+    ROLE: Refines
+    REVERSE_ROLE: Refined By
+
+[[SECTION]]
+UID: GSSC-MHLR-INTRODUCTION
+TITLE: Introduction
+
+[TEXT]
+UID: GSSC-MHLR-INTRO-PURPOSE
+STATEMENT: >>>
+These Member High Level Requirements refine Member Frontend Platform Integration Requirements into Member Frontend functionality. This document is a rough draft for v5.0.1 Member Frontend scope. REVIEW_STATUS values are Changed, not Baselined. Refinement continues under a separate Kaneo ticket.
+<<<
+
+[TEXT]
+UID: GSSC-MHLR-INTRO-SCOPE
+STATEMENT: >>>
+In-scope for this rough draft: authentication and session guards; application shell (root, header, footer, generic sections, generic editor, contact-row primitives); dashboard; content editors for public pages and sections, announcements, events, newsletters, and publications/tools; account self-service and administrator account management; members directory and search.
+<<<
+
+[TEXT]
+UID: GSSC-MHLR-INTRO-ELECTIONS-OUT
+STATEMENT: >>>
+Out of v5.0.1 for this draft: elections (GSSC-PIR-13). Do not treat election HLRs as in-scope for v5.0.1. GSSC-PIR-13 remains an Approved PIR for a later release; this document does not invent election HLRs.
+<<<
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MHLR-APPLICATION
+TITLE: Application Requirements
+
+[[SECTION]]
+UID: GSSC-MHLR-MEMBER-FRONTEND
+TITLE: Member Frontend
+
+[REQUIREMENT]
+UID: GSSC-MHLR-1
+TITLE: Member Frontend Application
+STATEMENT: >>>
+The GSSC Website SHALL have a members-only frontend application.
+<<<
+RATIONALE: >>>
+This is the Member Frontend. The other Member requirements describe that application. The Public Frontend is a separate application.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-21
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MHLR-2
+TITLE: Members-Only Subdomain
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL be served on the members-only subdomain.
+<<<
+RATIONALE: >>>
+The Member Frontend is the application on the members-only subdomain. This requirement does not set the subdomain name. The Public Frontend is on the public-facing primary domain.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-21
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MHLR-AUTHENTICATION
+TITLE: Authentication Requirements
+
+[[SECTION]]
+UID: GSSC-MHLR-LOGIN
+TITLE: Login
+
+[REQUIREMENT]
+UID: GSSC-MHLR-3
+TITLE: Login Required
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL require a member to log in before accessing Member Frontend contents other than the login experience.
+<<<
+RATIONALE: >>>
+Members-only contents are available only after login. The login experience itself remains reachable without a prior login so a member can authenticate.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-32
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MHLR-4
+TITLE: Login Credentials
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL accept a member's username and password for login.
+<<<
+RATIONALE: >>>
+No Member Frontend PIR names the credentials a member enters. Login requires the member to supply a username and password. Credential verification is performed by the Unified Backend.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-MHLR-5
+TITLE: Login Success
+STATEMENT: >>>
+When login succeeds, the GSSC Website Member Frontend SHALL treat the member as logged in for subsequent Member Frontend access.
+<<<
+RATIONALE: >>>
+A successful login has to establish a usable Member Frontend session. The Unified Backend issues and retains the Login Token; the Member Frontend consumes that session rather than minting its own token.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-MHLR-6
+TITLE: Login Failure
+STATEMENT: >>>
+When login fails, the GSSC Website Member Frontend SHALL leave the visitor logged out and show that login did not succeed.
+<<<
+RATIONALE: >>>
+A failed login must not grant Member Frontend contents. Feedback tells the visitor that authentication did not succeed without exposing Unified Backend internals.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MHLR-SESSION
+TITLE: Session
+
+[REQUIREMENT]
+UID: GSSC-MHLR-7
+TITLE: Session Challenge
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL determine whether a visitor is logged in by challenging the Unified Backend Login Token session.
+<<<
+RATIONALE: >>>
+No Member Frontend PIR requires a session challenge. The Member Frontend relies on the Unified Backend Login Token cookie and challenge rather than storing a raw login token itself.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-MHLR-8
+TITLE: Invalid Session
+STATEMENT: >>>
+When the Login Token session is invalid or absent, the GSSC Website Member Frontend SHALL treat the visitor as logged out.
+<<<
+RATIONALE: >>>
+An invalid or missing session must not grant Member Frontend contents. The visitor is treated as logged out until a later login succeeds.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-MHLR-9
+TITLE: Logout
+STATEMENT: >>>
+When a logged-in member chooses logout, the GSSC Website Member Frontend SHALL end that member's Login Token session and leave the visitor logged out.
+<<<
+RATIONALE: >>>
+No Member Frontend PIR requires logout. A logged-in member needs a way to end the session. Logout ends the Unified Backend Login Token session for that member.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MHLR-GUARDS
+TITLE: Guards and Redirects
+
+[REQUIREMENT]
+UID: GSSC-MHLR-10
+TITLE: Unauthenticated Redirect
+STATEMENT: >>>
+When a logged-out visitor requests Member Frontend contents other than the login experience, the GSSC Website Member Frontend SHALL redirect that visitor to the login experience.
+<<<
+RATIONALE: >>>
+Login is required before contents. A logged-out visitor who requests protected contents is sent to login rather than shown those contents.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-32
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MHLR-11
+TITLE: Post-Login Destination
+STATEMENT: >>>
+When login succeeds after an unauthenticated redirect, the GSSC Website Member Frontend SHALL take the member to the Member Frontend destination that member originally requested when that destination is still available, otherwise to the dashboard.
+<<<
+RATIONALE: >>>
+No Member Frontend PIR requires a post-login destination. Returning the member to the requested destination avoids forcing a detour through the dashboard when a deep link was the reason for login. The dashboard is the fallback home page.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-MHLR-12
+TITLE: Authenticated Login Redirect
+STATEMENT: >>>
+When a logged-in member requests the login experience, the GSSC Website Member Frontend SHALL redirect that member away from the login experience to the dashboard.
+<<<
+RATIONALE: >>>
+A member who is already logged in does not need the login experience. The dashboard is the Member Frontend home page.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MHLR-SHELL
+TITLE: Application Shell Requirements
+
+[[SECTION]]
+UID: GSSC-MHLR-ROOT
+TITLE: Root
+
+[REQUIREMENT]
+UID: GSSC-MHLR-13
+TITLE: Application Root
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL provide a root layout that hosts the Header, the active Member Frontend view, and the Footer for authenticated contents.
+<<<
+RATIONALE: >>>
+No Member Frontend PIR requires a root layout. Authenticated Member Frontend views share a common shell so header and footer placement stay consistent across pages.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-MHLR-14
+TITLE: Common Page Errors
+STATEMENT: >>>
+Unless otherwise specified, a Member Frontend view SHALL display error contents when an error occurs.
+<<<
+RATIONALE: >>>
+No Member Frontend PIR allocates how a view presents an error. A Member Frontend view displays the error contents so the member sees the error that occurred.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MHLR-HEADER
+TITLE: Header
+
+[REQUIREMENT]
+UID: GSSC-MHLR-15
+TITLE: Header Presence
+STATEMENT: >>>
+Unless otherwise specified, an authenticated Member Frontend view SHALL include the Header at the top of the view.
+<<<
+RATIONALE: >>>
+No Member Frontend PIR allocates placement of the Header. This is the default placement of the Header on authenticated Member Frontend views.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-MHLR-16
+TITLE: Header Logo
+STATEMENT: >>>
+The GSSC Website Member Frontend Header SHALL include the GSSC Logo.
+<<<
+RATIONALE: >>>
+No Member Frontend PIR requires a logo. The Public Frontend Header includes the GSSC Logo. The Member Frontend Header keeps that brand signal for logged-in members.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-MHLR-17
+TITLE: Header Greeting
+STATEMENT: >>>
+The GSSC Website Member Frontend Header SHALL greet the logged-in member.
+<<<
+RATIONALE: >>>
+No Member Frontend PIR requires a greeting. The Header shows the logged-in member that the Member Frontend recognizes them.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-MHLR-18
+TITLE: Header Logout
+STATEMENT: >>>
+The GSSC Website Member Frontend Header SHALL offer logout to the logged-in member.
+<<<
+RATIONALE: >>>
+Logout ends the member's session. Placing logout in the Header keeps that control available from authenticated views.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-MHLR-19
+TITLE: Header Navigation
+STATEMENT: >>>
+The GSSC Website Member Frontend Header SHALL provide navigation to the dashboard and to the Member Frontend areas the logged-in member is permitted to open.
+<<<
+RATIONALE: >>>
+No Member Frontend PIR requires header navigation. Logged-in members need a consistent way to reach the dashboard and other Member Frontend areas their permissions allow.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MHLR-FOOTER
+TITLE: Footer
+
+[REQUIREMENT]
+UID: GSSC-MHLR-20
+TITLE: Footer Presence
+STATEMENT: >>>
+Unless otherwise specified, an authenticated Member Frontend view SHALL include the Footer at the bottom of the view.
+<<<
+RATIONALE: >>>
+No Member Frontend PIR allocates placement of the Footer. This is the default placement of the Footer on authenticated Member Frontend views.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-MHLR-21
+TITLE: Footer Organization Name
+STATEMENT: >>>
+The GSSC Website Member Frontend Footer SHALL include the full name of the Genealogical Society of Stanislaus County.
+<<<
+RATIONALE: >>>
+No Member Frontend PIR requires the organization's name in the Footer. The Public Frontend Footer includes the society's full name. The Member Frontend Footer keeps that full name.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-MHLR-22
+TITLE: Footer Copyright
+STATEMENT: >>>
+The GSSC Website Member Frontend Footer SHALL include a copyright statement.
+<<<
+RATIONALE: >>>
+No Member Frontend PIR requires a copyright statement. The Public Frontend Footer includes a copyright statement. The Member Frontend Footer keeps a copyright statement and does not set its wording.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MHLR-GENERIC-PRIMITIVES
+TITLE: Generic Primitives
+
+[REQUIREMENT]
+UID: GSSC-MHLR-23
+TITLE: Generic Section Display
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL provide a generic section display that presents a section's contents to a logged-in member.
+<<<
+RATIONALE: >>>
+No Member Frontend PIR names a generic section display. Page and content editing reuse a shared section presentation so members see section contents consistently without programming knowledge.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-MHLR-24
+TITLE: Generic Editor
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL provide a generic editor that lets a member with the necessary permissions modify editable contents without programming knowledge.
+<<<
+RATIONALE: >>>
+Member content and public-page editing PIRs require modification without programming knowledge. A shared generic editor is the Member Frontend capability those editors reuse. Field-level editing rules are low-level.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-MHLR-25
+TITLE: Contact Row Primitive
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL provide a contact-row primitive that presents a person's name and the contact methods made available for that person.
+<<<
+RATIONALE: >>>
+No Member Frontend PIR names a contact-row primitive. Account views and the members directory reuse a shared contact presentation for names and contact methods.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MHLR-DASHBOARD
+TITLE: Dashboard Requirements
+
+[REQUIREMENT]
+UID: GSSC-MHLR-26
+TITLE: Dashboard Home Page
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL use the dashboard as its home page for a logged-in member.
+<<<
+RATIONALE: >>>
+The Member Frontend home page is the dashboard after login.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-56
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MHLR-27
+TITLE: Dashboard Contents
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL present the dashboard contents provided for the logged-in member.
+<<<
+RATIONALE: >>>
+The dashboard is the Member Frontend home page. Its modifiable contents come from the Unified Backend. This requirement presents those contents and does not set their structure.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-56
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MHLR-28
+TITLE: Dashboard Modification
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL let a member with the necessary permissions modify the dashboard contents without programming knowledge.
+<<<
+RATIONALE: >>>
+No Member Frontend PIR separately requires dashboard editing. Authorized members need to keep dashboard contents current without developer intervention, consistent with other Member Frontend content editing.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MHLR-ACCOUNTS
+TITLE: Account Requirements
+
+[[SECTION]]
+UID: GSSC-MHLR-OWN-ACCOUNT
+TITLE: Own Account
+
+[REQUIREMENT]
+UID: GSSC-MHLR-29
+TITLE: Own Account Access
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL let a logged-in member open that member's own account.
+<<<
+RATIONALE: >>>
+Members manage their own accounts from the Member Frontend.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-10
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MHLR-30
+TITLE: Own Account View
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL let a logged-in member view that member's own account information.
+<<<
+RATIONALE: >>>
+A member can see the account information held for that member. Which fields appear is low-level.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-10
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MHLR-31
+TITLE: Own Account Modification
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL let a logged-in member modify the account information that member is permitted to change.
+<<<
+RATIONALE: >>>
+Self-service account management includes changing permitted fields. Which fields a member may change is low-level and follows Unified Backend rules.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-10
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MHLR-32
+TITLE: Own Password Change
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL let a logged-in member change that member's own password.
+<<<
+RATIONALE: >>>
+No Member Frontend PIR names password change. Own-account management includes replacing the password used for login. Password recovery flows that do not require a logged-in Member Frontend session are outside this requirement.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-MHLR-33
+TITLE: Own Directory Contact Visibility
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL let a logged-in member choose which of that member's contact methods are available to fellow members in the members directory.
+<<<
+RATIONALE: >>>
+The members directory shows contact information members make available. Own-account management is where a member controls that availability.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-10
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-12
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MHLR-ADMIN-ACCOUNTS
+TITLE: Administrator Account Management
+
+[REQUIREMENT]
+UID: GSSC-MHLR-34
+TITLE: Administrator Account Management Access
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL let an authorized administrator open member account management.
+<<<
+RATIONALE: >>>
+Authorized administrators manage member accounts from the Member Frontend.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-11
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MHLR-35
+TITLE: Administrator Account View
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL let an authorized administrator view a selected member's account information.
+<<<
+RATIONALE: >>>
+Administrators need to inspect member accounts. Which fields appear is low-level.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-11
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MHLR-36
+TITLE: Administrator Account Modification
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL let an authorized administrator modify a selected member's account information that administrator is permitted to change.
+<<<
+RATIONALE: >>>
+Administrator account management includes changing permitted fields on another member's account. Which fields and permissions apply is low-level.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-11
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MHLR-37
+TITLE: Administrator Account Creation
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL let an authorized administrator create a member account.
+<<<
+RATIONALE: >>>
+No Member Frontend PIR names account creation. Administrator account management includes adding a registered member so that member can later log in.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MHLR-CONTENT-EDITORS
+TITLE: Content Editor Requirements
+
+[[SECTION]]
+UID: GSSC-MHLR-PAGE-SECTION-EDITORS
+TITLE: Pages and Sections
+
+[REQUIREMENT]
+UID: GSSC-MHLR-38
+TITLE: Public Page Modification
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL let a member with the necessary permissions modify a public page without programming knowledge.
+<<<
+RATIONALE: >>>
+Authorized members keep public pages current without developer intervention.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-20
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MHLR-39
+TITLE: Public Section Modification
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL let a member with the necessary permissions modify a section of a public page, including publication sections, without programming knowledge.
+<<<
+RATIONALE: >>>
+Authorized members keep public page sections current without developer intervention. Publications are included as sections of public pages.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-20
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MHLR-40
+TITLE: Concurrent Different Page Edits
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL let members with the necessary permissions modify different public pages or sections at the same time.
+<<<
+RATIONALE: >>>
+Simultaneous editing of different pages or sections keeps content work from serializing across the membership.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-22
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MHLR-41
+TITLE: Exclusive Page or Section Edit
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL limit modification of a given public page or section to one user at a time.
+<<<
+RATIONALE: >>>
+The website does not resolve editing conflicts. One user at a time on a public page or section prevents lost changes.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-22
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MHLR-42
+TITLE: Edit Contention Feedback
+STATEMENT: >>>
+When another user already holds modification of a public page or section, the GSSC Website Member Frontend SHALL prevent a second user from modifying that same page or section and show that it is unavailable for modification.
+<<<
+RATIONALE: >>>
+No Member Frontend PIR requires contention feedback. Exclusive edit needs a clear outcome for the second user so that user does not believe changes were accepted.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MHLR-ANNOUNCEMENT-EDITORS
+TITLE: Announcements
+
+[REQUIREMENT]
+UID: GSSC-MHLR-43
+TITLE: Announcement Creation
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL let an authorized member create an announcement without programming knowledge and without developer intervention.
+<<<
+RATIONALE: >>>
+Authorized members create announcements for later publish.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-16
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MHLR-44
+TITLE: Announcement Publication
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL let an authorized member publish an announcement to the Public Frontend, the Member Frontend, or both, without programming knowledge and without developer intervention.
+<<<
+RATIONALE: >>>
+Announcements may target either frontend or both.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-16
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MHLR-45
+TITLE: Announcement Modification
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL let an authorized member modify an existing announcement without programming knowledge and without developer intervention.
+<<<
+RATIONALE: >>>
+No Member Frontend PIR separately requires announcement edits after create. Authorized members need to correct or update announcements without developer intervention.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MHLR-EVENT-EDITORS
+TITLE: Events
+
+[REQUIREMENT]
+UID: GSSC-MHLR-46
+TITLE: Event Creation
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL let an authorized member create an event for the Public Frontend without programming knowledge and without developer intervention.
+<<<
+RATIONALE: >>>
+Authorized members create events that appear on the Public Frontend.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-55
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MHLR-47
+TITLE: Event Publication
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL let an authorized member publish an event on the Public Frontend without programming knowledge and without developer intervention.
+<<<
+RATIONALE: >>>
+Authorized members publish events so the Public Frontend can present them.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-55
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MHLR-48
+TITLE: Event Modification
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL let an authorized member modify an existing event without programming knowledge and without developer intervention.
+<<<
+RATIONALE: >>>
+No Member Frontend PIR separately requires event edits after create. Authorized members need to correct or update events without developer intervention.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MHLR-NEWSLETTER-EDITORS
+TITLE: Newsletters
+
+[REQUIREMENT]
+UID: GSSC-MHLR-49
+TITLE: Newsletter Creation
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL let an authorized member create a newsletter for the Public Frontend without programming knowledge and without developer intervention.
+<<<
+RATIONALE: >>>
+Authorized members create newsletters that appear on the Public Frontend.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-54
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MHLR-50
+TITLE: Newsletter Publication
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL let an authorized member publish a newsletter on the Public Frontend without programming knowledge and without developer intervention.
+<<<
+RATIONALE: >>>
+Authorized members publish newsletters so the Public Frontend can present them.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-54
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MHLR-51
+TITLE: Newsletter Modification
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL let an authorized member modify an existing newsletter without programming knowledge and without developer intervention.
+<<<
+RATIONALE: >>>
+No Member Frontend PIR separately requires newsletter edits after create. Authorized members need to correct or update newsletters without developer intervention.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MHLR-PUBLICATION-EDITORS
+TITLE: Publications and Tools
+
+[REQUIREMENT]
+UID: GSSC-MHLR-52
+TITLE: Member Publications Support
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL support publications by the membership.
+<<<
+RATIONALE: >>>
+The Member Frontend is where members work with publications.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-15
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MHLR-53
+TITLE: Publication Modification
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL let a member with the necessary permissions modify a publication without programming knowledge.
+<<<
+RATIONALE: >>>
+Publications are included in public-page and section modification. This requirement states publication modification as Member Frontend functionality for publications by the membership.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-15
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-20
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MHLR-54
+TITLE: Research Tools Content Modification
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL let a member with the necessary permissions modify Research Tools page contents without programming knowledge.
+<<<
+RATIONALE: >>>
+Research Tools is a public page whose sections authorized members modify under public-page editing. This requirement names that Research Tools case for v5.0.1 Member Frontend scope.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-20
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MHLR-DIRECTORY
+TITLE: Member Directory Requirements
+
+[REQUIREMENT]
+UID: GSSC-MHLR-55
+TITLE: Members Directory
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL give a logged-in member a directory of fellow members.
+<<<
+RATIONALE: >>>
+Members collaborate using a directory of fellow members.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-12
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MHLR-56
+TITLE: Directory Contact Information
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL show, in the members directory, the contact information each fellow member makes available for collaboration within the organization.
+<<<
+RATIONALE: >>>
+Directory entries include only the contact information members choose to make available.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-12
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MHLR-57
+TITLE: Members Directory Search
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL let a logged-in member search the members directory.
+<<<
+RATIONALE: >>>
+No Member Frontend PIR requires directory search. Search makes the directory usable as membership grows. Search fields and matching rules are low-level.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-MHLR-58
+TITLE: Administrator Registered Members Directory
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL let an authorized administrator view the list of registered members of the organization.
+<<<
+RATIONALE: >>>
+Administrators need the full registered-member list, which may differ from the collaboration directory fellow members see.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-14
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MHLR-59
+TITLE: Administrator Directory Search
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL let an authorized administrator search the registered members directory.
+<<<
+RATIONALE: >>>
+No Member Frontend PIR requires administrator directory search. Search makes the registered-member list usable for administrators. Search fields and matching rules are low-level.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-11
+REVIEW_STATUS: Changed
+
+[[/SECTION]]
