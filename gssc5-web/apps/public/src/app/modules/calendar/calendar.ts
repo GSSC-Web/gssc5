@@ -141,7 +141,7 @@ export class Calendar {
     });
   }
 
-  // @relation(GSSC-PLLR-263, scope=range_start, role=Implementation)
+  // @relation(GSSC-PLLR-284, scope=range_start, role=Implementation)
   private async loadEvents(): Promise<void> {
     const entries = await this.listGet();
     this.events.set(entries === null ? [] : entries);
@@ -163,9 +163,9 @@ export class Calendar {
   protected selectEvent(event: CalendarEvent): void {
     this.selectedEvent.set(event);
   }
-  // @relation(GSSC-PLLR-263, scope=range_end, role=Implementation)
+  // @relation(GSSC-PLLR-284, scope=range_end, role=Implementation)
 
-  // @relation(GSSC-PLLR-266, scope=range_start, role=Implementation)
+  // @relation(GSSC-PLLR-287, scope=range_start, role=Implementation)
   protected goPrevMonth(): void {
     const month = this.visibleMonth();
     if (month === 1) {
@@ -185,9 +185,9 @@ export class Calendar {
       this.visibleMonth.set(month + 1);
     }
   }
-  // @relation(GSSC-PLLR-266, scope=range_end, role=Implementation)
+  // @relation(GSSC-PLLR-287, scope=range_end, role=Implementation)
 
-  // @relation(GSSC-PLLR-275, scope=range_start, role=Implementation)
+  // @relation(GSSC-PLLR-296, scope=range_start, role=Implementation)
   protected dismissOverlay(): void {
     this.selectedEvent.set(null);
   }
@@ -196,7 +196,7 @@ export class Calendar {
   protected onEscape(): void {
     if (this.selectedEvent() != null) this.dismissOverlay();
   }
-  // @relation(GSSC-PLLR-275, scope=range_end, role=Implementation)
+  // @relation(GSSC-PLLR-296, scope=range_end, role=Implementation)
 
   protected showFeaturedImage(): boolean {
     const position = this.selectedImagePosition();

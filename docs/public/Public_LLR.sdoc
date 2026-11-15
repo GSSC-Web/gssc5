@@ -1898,6 +1898,452 @@ RELATIONS:
 [[/SECTION]]
 
 [[SECTION]]
+UID: GSSC-PLLR-CAROUSEL
+TITLE: Public Carousel
+
+[[SECTION]]
+UID: GSSC-PLLR-CAROUSEL-CONTAINER
+TITLE: Carousel Container
+
+[REQUIREMENT]
+UID: GSSC-PLLR-263
+TITLE: Semantic
+STATEMENT: >>>
+The GSSC Website Public Frontend Carousel Container SHALL place each Carousel Contents item it receives as a Carousel Slide: the Slide Title when that item includes a header, the Slide Description from that item's body, the Slide Links when that item includes resources, and the Slide Graphic when that item includes an image file and a left or right image position; when more than one item is present, SHALL advance automatically from one slide to the next and SHALL allow the visitor to switch the visible slide; when the page supplies a focused item id that matches an item id, SHALL begin on that item's slide; and SHALL omit the Carousel Container when the Carousel Contents include no items.
+<<<
+RATIONALE: >>>
+The Carousel Container is the placement shell for carousel items on public pages, including home announcements when a page supplies those items as Contents. Contents are the carousel items; the Container places them. Each placed element's behavior is a separate requirement. Automatic advance and visitor switching refine the Announcements Display rotation and switching behaviors for any Contents the page supplies. A focused item id lets other chrome, such as the Announcements Bar, open a specific slide. Page assembly and Contents APIs are separate features.
+<<<
+COMMENT: >>>
+Derived for GSSC5-26. PIRs do not define the carousel Container. Item fields follow existing page-data shapes (header, body, resources, optional image file and position).
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-26
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-50
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-56
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-57
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-264
+TITLE: Syntactic
+STATEMENT: >>>
+The Carousel Container SHALL fill the width of its page content area, present one Carousel Slide at a time, place Carousel Prev at the start and Carousel Next at the end of the Container when more than one Contents item is present, omit those controls when only one item is present, animate the change when the visible slide changes, and keep internal spacing among the Slide Title, Slide Graphic when placed, Slide Description, and Slide Links within each slide.
+<<<
+RATIONALE: >>>
+Full-width single-slide presentation keeps each item readable. End controls and animated transitions make multi-item Contents reachable without crowding a single-item display. Spacing inside the slide separates title, graphic, description, and links. Page assembly chooses where Containers appear on a page.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-26
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-50
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-57
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-265
+TITLE: Lexical
+STATEMENT: >>>
+The Carousel Container SHALL use the white theme token for its background, the gray theme token for its border, and the dark-green theme token for its default text, with a sans-serif typeface.
+<<<
+RATIONALE: >>>
+White background keeps the carousel aligned with the outermost shell and Section Container. Theme tokens keep presentation in the organization palette. A fuller color role map for carousels is not set yet beyond these token choices.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-26
+REVIEW_STATUS: Approved
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-CAROUSEL-SLIDE-TITLE
+TITLE: Slide Title
+
+[REQUIREMENT]
+UID: GSSC-PLLR-266
+TITLE: Semantic
+STATEMENT: >>>
+The Slide Title SHALL display the header from the visible Carousel Contents item when that item includes a header.
+<<<
+RATIONALE: >>>
+A slide title identifies the item when Contents supply a header. Absent headers are omitted. This requirement does not set title wording.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-26
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-51
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-267
+TITLE: Syntactic
+STATEMENT: >>>
+The Slide Title SHALL appear above the Slide Description inside the visible Carousel Slide when the visible item includes a header.
+<<<
+RATIONALE: >>>
+Leading with the title keeps the item heading before the description text.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-26
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-51
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-268
+TITLE: Lexical
+STATEMENT: >>>
+The Slide Title SHALL use a semibold weight, a text size one and one-half times the Carousel Container default text size, and the dark-green theme token for its text color.
+<<<
+RATIONALE: >>>
+A larger semibold title marks the slide heading without introducing a second typeface. Dark-green keeps titles in the organization palette.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-26
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-51
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-CAROUSEL-SLIDE-DESCRIPTION
+TITLE: Slide Description
+
+[REQUIREMENT]
+UID: GSSC-PLLR-269
+TITLE: Semantic
+STATEMENT: >>>
+The Slide Description SHALL display the body from the visible Carousel Contents item.
+<<<
+RATIONALE: >>>
+The body is the descriptive text of a carousel item. This requirement does not set description wording.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-26
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-52
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-270
+TITLE: Syntactic
+STATEMENT: >>>
+The Slide Description SHALL appear below the Slide Title when a Slide Title is present and no Slide Graphic is placed; below the Slide Graphic when that graphic is placed at viewports smaller than medium; beside the Slide Graphic at medium and larger viewports when that graphic is placed; and otherwise at the start of the visible Carousel Slide.
+<<<
+RATIONALE: >>>
+Description placement mirrors Section Body beside optional featured imagery so announcement and section Contents share one reading order across viewports.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-26
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-52
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-271
+TITLE: Lexical
+STATEMENT: >>>
+The Slide Description SHALL use a normal weight, the Carousel Container default text size, and the black theme token for its text color.
+<<<
+RATIONALE: >>>
+Normal-weight black body text keeps slide descriptions readable against the white Container background.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-26
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-52
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-CAROUSEL-SLIDE-LINKS
+TITLE: Slide Links
+
+[REQUIREMENT]
+UID: GSSC-PLLR-272
+TITLE: Semantic
+STATEMENT: >>>
+The Slide Links SHALL present each resource from the visible Carousel Contents item as a hyperlink whose label and target are that resource string.
+<<<
+RATIONALE: >>>
+Existing page-data and announcement item shapes store resources as strings. Using each string as both label and target places those links without inventing a richer schema in this Container task. Separate link and resource fields are not present on the existing item shape.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-26
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-53
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-54
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-273
+TITLE: Syntactic
+STATEMENT: >>>
+The Slide Links SHALL appear below the Slide Description inside the visible Carousel Slide when the visible item includes resources, arranged as a left-aligned horizontal row that wraps as needed within the Container width.
+<<<
+RATIONALE: >>>
+Placing links after the description keeps reading order title → description → links. A wrapping horizontal row keeps multiple resources reachable without a second carousel inside the slide.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-26
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-53
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-54
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-274
+TITLE: Lexical
+STATEMENT: >>>
+Each Slide Link SHALL use a normal weight, the Carousel Container default text size, the dark-green theme token for its text and border, the white theme token for its background, and the gray theme token for its hover background.
+<<<
+RATIONALE: >>>
+Dark-green bordered link buttons match Section Resource Buttons so carousel and section Contents share one link look. Gray hover marks a link as activatable.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-26
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-53
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-54
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-CAROUSEL-SLIDE-GRAPHIC
+TITLE: Slide Graphic
+
+[REQUIREMENT]
+UID: GSSC-PLLR-275
+TITLE: Semantic
+STATEMENT: >>>
+The Slide Graphic SHALL present the featured image from the visible Carousel Contents item when that item includes an image file and an image position of left or right; SHALL omit the graphic when the image position is none even if an image file is present; and SHALL omit the graphic when the item lacks an image file or lacks an image position.
+<<<
+RATIONALE: >>>
+Optional slide imagery reuses the page-data featured image fields already used by sections. Position none suppresses display without clearing the stored file.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-26
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-55
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-276
+TITLE: Syntactic
+STATEMENT: >>>
+When the Slide Graphic is placed, it SHALL appear on the left of the Slide Description when the image position is left and on the right of the Slide Description when the image position is right at medium and larger viewports; at viewports smaller than medium, it SHALL appear between the Slide Title and the Slide Description; and it SHALL never occupy more than three-fifths of the Carousel Container width or more than two-fifths of its parent container.
+<<<
+RATIONALE: >>>
+Side placement at medium and larger viewports keeps description text beside the graphic. Narrow viewports stack the graphic between title and description for readable reading order. Size caps keep the graphic from dominating the slide. Behavior matches Section Featured Image so Contents reuse stays consistent.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-26
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-55
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-277
+TITLE: Lexical
+STATEMENT: >>>
+The Slide Graphic SHALL keep the full image visible within its size caps without cropping, without adding independent border or background chrome beyond the Carousel Container.
+<<<
+RATIONALE: >>>
+Keeping the full image visible preserves the asset inside the width and parent size limits. Container chrome stays on the Carousel Container.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-26
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-55
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-CAROUSEL-PREV
+TITLE: Carousel Prev
+
+[REQUIREMENT]
+UID: GSSC-PLLR-278
+TITLE: Semantic
+STATEMENT: >>>
+The Carousel Prev control SHALL move the Carousel Container to the previous Contents item when activated, wrapping from the first item to the last.
+<<<
+RATIONALE: >>>
+Prev lets the visitor switch slides backward. Wrapping keeps every item reachable in a continuous loop.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-26
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-57
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-279
+TITLE: Syntactic
+STATEMENT: >>>
+The Carousel Prev control SHALL appear at the start of the Carousel Container when more than one Contents item is present, and SHALL be omitted when only one item is present.
+<<<
+RATIONALE: >>>
+Placing Prev at the start marks the backward end of the carousel; a single-item display needs no switch control.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-26
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-57
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-280
+TITLE: Lexical
+STATEMENT: >>>
+The Carousel Prev control SHALL appear as a borderless rounded icon control using the dark-green theme token for its icon color and the gray theme token for its hover background.
+<<<
+RATIONALE: >>>
+A borderless rounded icon control matches other public icon buttons. Gray hover marks Prev as activatable without changing the icon color.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-26
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-57
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-CAROUSEL-NEXT
+TITLE: Carousel Next
+
+[REQUIREMENT]
+UID: GSSC-PLLR-281
+TITLE: Semantic
+STATEMENT: >>>
+The Carousel Next control SHALL move the Carousel Container to the next Contents item when activated, wrapping from the last item to the first.
+<<<
+RATIONALE: >>>
+Next lets the visitor switch slides forward. Wrapping keeps every item reachable in a continuous loop. Automatic advance uses the same forward step.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-26
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-56
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-57
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-282
+TITLE: Syntactic
+STATEMENT: >>>
+The Carousel Next control SHALL appear at the end of the Carousel Container when more than one Contents item is present, and SHALL be omitted when only one item is present.
+<<<
+RATIONALE: >>>
+Placing Next at the end marks the forward end of the carousel; a single-item display needs no switch control.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-26
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-57
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-283
+TITLE: Lexical
+STATEMENT: >>>
+The Carousel Next control SHALL appear as a borderless rounded icon control using the dark-green theme token for its icon color and the gray theme token for its hover background.
+<<<
+RATIONALE: >>>
+A borderless rounded icon control matches other public icon buttons. Gray hover marks Next as activatable without changing the icon color.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-26
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-57
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
 UID: GSSC-PLLR-CALENDAR
 TITLE: Public Calendar
 
@@ -1906,7 +2352,7 @@ UID: GSSC-PLLR-CALENDAR-ELEMENT
 TITLE: Public Calendar
 
 [REQUIREMENT]
-UID: GSSC-PLLR-263
+UID: GSSC-PLLR-284
 TITLE: Semantic
 STATEMENT: >>>
 The GSSC Website Public Frontend Public Calendar SHALL present a visual month calendar for a selected calendar month and year, retrieve public calendar events from the Unified Backend events list, host previous and next month selectors and day cells with selectable event chips, and open the Event Detail Overlay when a visitor selects an event chip.
@@ -1924,7 +2370,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-264
+UID: GSSC-PLLR-285
 TITLE: Syntactic
 STATEMENT: >>>
 The Public Calendar SHALL fill the width of its host, place month selectors above a week-row day grid, and keep the Event Detail Overlay layered above the calendar when open.
@@ -1942,7 +2388,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-265
+UID: GSSC-PLLR-286
 TITLE: Lexical
 STATEMENT: >>>
 The Public Calendar SHALL use a white background, the dark-green theme token for default text, the gray theme token for grid borders, and a sans-serif typeface.
@@ -1966,7 +2412,7 @@ UID: GSSC-PLLR-CALENDAR-MONTH-SELECTORS
 TITLE: Month Selectors
 
 [REQUIREMENT]
-UID: GSSC-PLLR-266
+UID: GSSC-PLLR-287
 TITLE: Semantic
 STATEMENT: >>>
 The Month Selectors SHALL move the Public Calendar to the previous calendar month when the visitor activates Previous, move to the next calendar month when the visitor activates Next, and display the currently selected month and year.
@@ -1984,7 +2430,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-267
+UID: GSSC-PLLR-288
 TITLE: Syntactic
 STATEMENT: >>>
 The Month Selectors SHALL sit above the day grid with Previous on the left, the month and year label centered, and Next on the right.
@@ -2002,7 +2448,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-268
+UID: GSSC-PLLR-289
 TITLE: Lexical
 STATEMENT: >>>
 The Month Selectors SHALL use the dark-green theme token for control and label text and a sans-serif typeface.
@@ -2026,7 +2472,7 @@ UID: GSSC-PLLR-CALENDAR-DAY
 TITLE: Calendar Day
 
 [REQUIREMENT]
-UID: GSSC-PLLR-269
+UID: GSSC-PLLR-290
 TITLE: Semantic
 STATEMENT: >>>
 Each Calendar Day SHALL display that day's day-of-month number and host selectable event chips for each event whose inclusive start-to-end span includes that day.
@@ -2044,7 +2490,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-270
+UID: GSSC-PLLR-291
 TITLE: Syntactic
 STATEMENT: >>>
 Calendar Days SHALL form week rows from Sunday through Saturday for the visible month, and days that fall outside the visible month SHALL remain in the grid in a visually distinct presentation.
@@ -2062,7 +2508,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-271
+UID: GSSC-PLLR-292
 TITLE: Lexical
 STATEMENT: >>>
 Calendar Day numbers in the visible month SHALL use the dark-green theme token, and outside-month day numbers SHALL use the gray theme token.
@@ -2086,7 +2532,7 @@ UID: GSSC-PLLR-CALENDAR-EVENT-CHIP
 TITLE: Calendar Event Chip
 
 [REQUIREMENT]
-UID: GSSC-PLLR-272
+UID: GSSC-PLLR-293
 TITLE: Semantic
 STATEMENT: >>>
 A Calendar Event Chip SHALL present the event title, SHALL be selectable to open that event's detail overlay, SHALL appear on each day included in the event's inclusive span, and SHALL repeat the event title on each week-row segment when the span crosses multiple week rows.
@@ -2104,7 +2550,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-273
+UID: GSSC-PLLR-294
 TITLE: Syntactic
 STATEMENT: >>>
 Calendar Event Chips SHALL sit inside the Calendar Day cells for the days they cover, with one titled segment per week row that the event span intersects.
@@ -2122,7 +2568,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-274
+UID: GSSC-PLLR-295
 TITLE: Lexical
 STATEMENT: >>>
 A Calendar Event Chip SHALL use the light-green or cream theme token for its background and the dark-green theme token for its text.
@@ -2146,7 +2592,7 @@ UID: GSSC-PLLR-CALENDAR-EVENT-DETAIL-OVERLAY
 TITLE: Event Detail Overlay
 
 [REQUIREMENT]
-UID: GSSC-PLLR-275
+UID: GSSC-PLLR-296
 TITLE: Semantic
 STATEMENT: >>>
 When an event is selected, the Event Detail Overlay SHALL present that event's title, content, optional featured image, and references, and SHALL dismiss when the visitor activates the dismiss control or presses Escape, and SHALL not dismiss when the visitor activates the backdrop.
@@ -2164,7 +2610,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-276
+UID: GSSC-PLLR-297
 TITLE: Syntactic
 STATEMENT: >>>
 The Event Detail Overlay SHALL cover the viewport above the Public Calendar, present a dialog panel that fills the viewport below small breakpoints, and limit that panel to at most three-quarters of the viewport width and height at small breakpoints and above.
@@ -2182,7 +2628,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-277
+UID: GSSC-PLLR-298
 TITLE: Lexical
 STATEMENT: >>>
 The Event Detail Overlay SHALL use the gray theme token at one-quarter opacity for its backdrop, a white panel background, and the dark-green theme token for panel border and default text.
@@ -2206,7 +2652,7 @@ UID: GSSC-PLLR-CALENDAR-EVENT-DETAIL-TITLE
 TITLE: Event Detail Title
 
 [REQUIREMENT]
-UID: GSSC-PLLR-278
+UID: GSSC-PLLR-299
 TITLE: Semantic
 STATEMENT: >>>
 The Event Detail Title SHALL display the selected event's title.
@@ -2224,7 +2670,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-279
+UID: GSSC-PLLR-300
 TITLE: Syntactic
 STATEMENT: >>>
 The Event Detail Title SHALL appear at the top of the Event Detail Overlay panel contents, before the featured image, body, and references.
@@ -2242,7 +2688,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-280
+UID: GSSC-PLLR-301
 TITLE: Lexical
 STATEMENT: >>>
 The Event Detail Title SHALL use a semibold weight and the dark-green theme token for its text color, at a size one and one-half times the Event Detail Content text size.
@@ -2266,7 +2712,7 @@ UID: GSSC-PLLR-CALENDAR-EVENT-DETAIL-CONTENT
 TITLE: Event Detail Content
 
 [REQUIREMENT]
-UID: GSSC-PLLR-281
+UID: GSSC-PLLR-302
 TITLE: Semantic
 STATEMENT: >>>
 The Event Detail Content SHALL display the selected event's body content.
@@ -2284,7 +2730,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-282
+UID: GSSC-PLLR-303
 TITLE: Syntactic
 STATEMENT: >>>
 The Event Detail Content SHALL appear after the Event Detail Title and beside or below the featured image when that image is placed.
@@ -2302,7 +2748,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-283
+UID: GSSC-PLLR-304
 TITLE: Lexical
 STATEMENT: >>>
 The Event Detail Content SHALL use a normal weight, a base text size, and the black theme token for its text color.
@@ -2326,7 +2772,7 @@ UID: GSSC-PLLR-CALENDAR-EVENT-DETAIL-IMAGE
 TITLE: Event Detail Image
 
 [REQUIREMENT]
-UID: GSSC-PLLR-284
+UID: GSSC-PLLR-305
 TITLE: Semantic
 STATEMENT: >>>
 The Event Detail Image SHALL present the featured image from the selected event when that event includes an image file and an image position of left or right; SHALL omit the featured image when the image position is none even if an image file is present; and SHALL omit the featured image when the event lacks an image file or lacks an image position.
@@ -2344,7 +2790,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-285
+UID: GSSC-PLLR-306
 TITLE: Syntactic
 STATEMENT: >>>
 When the Event Detail Image is placed, it SHALL appear on the left of the Event Detail Content when the image position is left and on the right of the Event Detail Content when the image position is right at medium and larger viewports; at viewports smaller than medium, it SHALL appear between the Event Detail Title and the Event Detail Content; and it SHALL never occupy more than three-fifths of the overlay content width or more than two-fifths of its parent container.
@@ -2362,7 +2808,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-286
+UID: GSSC-PLLR-307
 TITLE: Lexical
 STATEMENT: >>>
 The Event Detail Image SHALL keep the full image visible within its size caps without cropping, without adding independent border or background chrome beyond the Event Detail Overlay panel.
@@ -2386,7 +2832,7 @@ UID: GSSC-PLLR-CALENDAR-EVENT-DETAIL-REFERENCES
 TITLE: Event Detail References
 
 [REQUIREMENT]
-UID: GSSC-PLLR-287
+UID: GSSC-PLLR-308
 TITLE: Semantic
 STATEMENT: >>>
 The Event Detail References SHALL present each reference from the selected event as a link named with that reference, and SHALL omit the references strip when the event has no references.
@@ -2404,7 +2850,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-288
+UID: GSSC-PLLR-309
 TITLE: Syntactic
 STATEMENT: >>>
 When present, the Event Detail References SHALL appear below the Event Detail Content in a left-aligned horizontal strip of equal controls.
@@ -2422,7 +2868,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-289
+UID: GSSC-PLLR-310
 TITLE: Lexical
 STATEMENT: >>>
 Each Event Detail Reference control SHALL use the dark-green theme token for its border and text, a white background, and a sans-serif typeface.

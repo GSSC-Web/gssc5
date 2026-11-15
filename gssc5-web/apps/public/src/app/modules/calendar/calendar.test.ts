@@ -155,8 +155,8 @@ async function openEvent(
   return nativeElement(fixture);
 }
 
-// @relation(GSSC-PLLR-263, scope=range_start, role=Test)
-test('GSSC-PLLR-263 Semantic', async () => {
+// @relation(GSSC-PLLR-284, scope=range_start, role=Test)
+test('GSSC-PLLR-284 Semantic', async () => {
   let listCalls = 0;
   const { fixture, root, calendar } = await setupCalendar(
     async () => {
@@ -182,10 +182,10 @@ test('GSSC-PLLR-263 Semantic', async () => {
     'Cross Week Title',
   );
 });
-// @relation(GSSC-PLLR-263, scope=range_end, role=Test)
+// @relation(GSSC-PLLR-284, scope=range_end, role=Test)
 
-// @relation(GSSC-PLLR-264, scope=range_start, role=Test)
-test('GSSC-PLLR-264 Syntactic', async () => {
+// @relation(GSSC-PLLR-285, scope=range_start, role=Test)
+test('GSSC-PLLR-285 Syntactic', async () => {
   const { root } = await setupCalendar(async () => [], {
     visibleYear: 2026,
     visibleMonth: 3,
@@ -196,10 +196,10 @@ test('GSSC-PLLR-264 Syntactic', async () => {
   expect(host.classList.contains('w-full')).toBe(true);
   expect(selectors.compareDocumentPosition(grid) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
 });
-// @relation(GSSC-PLLR-264, scope=range_end, role=Test)
+// @relation(GSSC-PLLR-285, scope=range_end, role=Test)
 
-// @relation(GSSC-PLLR-265, scope=range_start, role=Test)
-test('GSSC-PLLR-265 Lexical', async () => {
+// @relation(GSSC-PLLR-286, scope=range_start, role=Test)
+test('GSSC-PLLR-286 Lexical', async () => {
   const { root } = await setupCalendar(async () => [], {
     visibleYear: 2026,
     visibleMonth: 3,
@@ -210,10 +210,10 @@ test('GSSC-PLLR-265 Lexical', async () => {
   expect(host.classList.contains('border-gssc-gray')).toBe(true);
   expect(host.classList.contains('font-sans')).toBe(true);
 });
-// @relation(GSSC-PLLR-265, scope=range_end, role=Test)
+// @relation(GSSC-PLLR-286, scope=range_end, role=Test)
 
-// @relation(GSSC-PLLR-266, scope=range_start, role=Test)
-test('GSSC-PLLR-266 Semantic', async () => {
+// @relation(GSSC-PLLR-287, scope=range_start, role=Test)
+test('GSSC-PLLR-287 Semantic', async () => {
   const { fixture, root, calendar } = await setupCalendar(async () => [], {
     visibleYear: 2026,
     visibleMonth: 3,
@@ -239,10 +239,10 @@ test('GSSC-PLLR-266 Semantic', async () => {
   expect(calendar.visibleMonth()).toBe(12);
   expect(calendar.visibleYear()).toBe(2025);
 });
-// @relation(GSSC-PLLR-266, scope=range_end, role=Test)
+// @relation(GSSC-PLLR-287, scope=range_end, role=Test)
 
-// @relation(GSSC-PLLR-267, scope=range_start, role=Test)
-test('GSSC-PLLR-267 Syntactic', async () => {
+// @relation(GSSC-PLLR-288, scope=range_start, role=Test)
+test('GSSC-PLLR-288 Syntactic', async () => {
   const { root } = await setupCalendar(async () => [], {
     visibleYear: 2026,
     visibleMonth: 3,
@@ -257,10 +257,10 @@ test('GSSC-PLLR-267 Syntactic', async () => {
   expect(prev.compareDocumentPosition(label) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   expect(label.compareDocumentPosition(next) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
 });
-// @relation(GSSC-PLLR-267, scope=range_end, role=Test)
+// @relation(GSSC-PLLR-288, scope=range_end, role=Test)
 
-// @relation(GSSC-PLLR-268, scope=range_start, role=Test)
-test('GSSC-PLLR-268 Lexical', async () => {
+// @relation(GSSC-PLLR-289, scope=range_start, role=Test)
+test('GSSC-PLLR-289 Lexical', async () => {
   const { root } = await setupCalendar(async () => [], {
     visibleYear: 2026,
     visibleMonth: 3,
@@ -277,10 +277,10 @@ test('GSSC-PLLR-268 Lexical', async () => {
   expect(label.classList.contains('text-gssc-dark-green')).toBe(true);
   expect(label.classList.contains('font-sans')).toBe(true);
 });
-// @relation(GSSC-PLLR-268, scope=range_end, role=Test)
+// @relation(GSSC-PLLR-289, scope=range_end, role=Test)
 
-// @relation(GSSC-PLLR-269, scope=range_start, role=Test)
-test('GSSC-PLLR-269 Semantic', async () => {
+// @relation(GSSC-PLLR-290, scope=range_start, role=Test)
+test('GSSC-PLLR-290 Semantic', async () => {
   const { root } = await setupCalendar(async () => [crossWeekEvent], {
     visibleYear: 2026,
     visibleMonth: 3,
@@ -293,10 +293,10 @@ test('GSSC-PLLR-269 Semantic', async () => {
   expect(chipTitlesOnDay(root, 16)).toEqual(['Cross Week Title']);
   expect(chipTitlesOnDay(root, 17)).toEqual([]);
 });
-// @relation(GSSC-PLLR-269, scope=range_end, role=Test)
+// @relation(GSSC-PLLR-290, scope=range_end, role=Test)
 
-// @relation(GSSC-PLLR-270, scope=range_start, role=Test)
-test('GSSC-PLLR-270 Syntactic', async () => {
+// @relation(GSSC-PLLR-291, scope=range_start, role=Test)
+test('GSSC-PLLR-291 Syntactic', async () => {
   const { root } = await setupCalendar(async () => [], {
     visibleYear: 2026,
     visibleMonth: 3,
@@ -316,10 +316,10 @@ test('GSSC-PLLR-270 Syntactic', async () => {
   expect(inside).not.toBeNull();
   expect(visibleMonthDays(2026, 3).some((d) => !d.inMonth)).toBe(true);
 });
-// @relation(GSSC-PLLR-270, scope=range_end, role=Test)
+// @relation(GSSC-PLLR-291, scope=range_end, role=Test)
 
-// @relation(GSSC-PLLR-271, scope=range_start, role=Test)
-test('GSSC-PLLR-271 Lexical', async () => {
+// @relation(GSSC-PLLR-292, scope=range_start, role=Test)
+test('GSSC-PLLR-292 Lexical', async () => {
   const { root } = await setupCalendar(async () => [], {
     visibleYear: 2026,
     visibleMonth: 3,
@@ -333,10 +333,10 @@ test('GSSC-PLLR-271 Lexical', async () => {
   expect(inMonth.classList.contains('text-gssc-dark-green')).toBe(true);
   expect(outside.classList.contains('text-gssc-gray')).toBe(true);
 });
-// @relation(GSSC-PLLR-271, scope=range_end, role=Test)
+// @relation(GSSC-PLLR-292, scope=range_end, role=Test)
 
-// @relation(GSSC-PLLR-272, scope=range_start, role=Test)
-test('GSSC-PLLR-272 Semantic', async () => {
+// @relation(GSSC-PLLR-293, scope=range_start, role=Test)
+test('GSSC-PLLR-293 Semantic', async () => {
   const { fixture, root, calendar } = await setupCalendar(async () => [crossWeekEvent], {
     visibleYear: 2026,
     visibleMonth: 3,
@@ -362,10 +362,10 @@ test('GSSC-PLLR-272 Semantic', async () => {
   await fixture.whenStable();
   expect(calendar.selectedEvent()?.cuid).toBe('evt_cross_week');
 });
-// @relation(GSSC-PLLR-272, scope=range_end, role=Test)
+// @relation(GSSC-PLLR-293, scope=range_end, role=Test)
 
-// @relation(GSSC-PLLR-273, scope=range_start, role=Test)
-test('GSSC-PLLR-273 Syntactic', async () => {
+// @relation(GSSC-PLLR-294, scope=range_start, role=Test)
+test('GSSC-PLLR-294 Syntactic', async () => {
   const { root } = await setupCalendar(async () => [crossWeekEvent], {
     visibleYear: 2026,
     visibleMonth: 3,
@@ -378,10 +378,10 @@ test('GSSC-PLLR-273 Syntactic', async () => {
   expect(cell.contains(chips!)).toBe(true);
   expect(chips!.contains(chip!)).toBe(true);
 });
-// @relation(GSSC-PLLR-273, scope=range_end, role=Test)
+// @relation(GSSC-PLLR-294, scope=range_end, role=Test)
 
-// @relation(GSSC-PLLR-274, scope=range_start, role=Test)
-test('GSSC-PLLR-274 Lexical', async () => {
+// @relation(GSSC-PLLR-295, scope=range_start, role=Test)
+test('GSSC-PLLR-295 Lexical', async () => {
   const { root } = await setupCalendar(async () => [crossWeekEvent], {
     visibleYear: 2026,
     visibleMonth: 3,
@@ -393,10 +393,10 @@ test('GSSC-PLLR-274 Lexical', async () => {
   expect(chip.classList.contains('text-gssc-dark-green')).toBe(true);
   expect(chip.classList.contains('font-sans')).toBe(true);
 });
-// @relation(GSSC-PLLR-274, scope=range_end, role=Test)
+// @relation(GSSC-PLLR-295, scope=range_end, role=Test)
 
-// @relation(GSSC-PLLR-275, scope=range_start, role=Test)
-test('GSSC-PLLR-275 Semantic', async () => {
+// @relation(GSSC-PLLR-296, scope=range_start, role=Test)
+test('GSSC-PLLR-296 Semantic', async () => {
   const { fixture, root, calendar } = await setupCalendar(async () => [crossWeekEvent], {
     visibleYear: 2026,
     visibleMonth: 3,
@@ -429,10 +429,10 @@ test('GSSC-PLLR-275 Semantic', async () => {
   await fixture.whenStable();
   expect(calendar.selectedEvent()).toBeNull();
 });
-// @relation(GSSC-PLLR-275, scope=range_end, role=Test)
+// @relation(GSSC-PLLR-296, scope=range_end, role=Test)
 
-// @relation(GSSC-PLLR-276, scope=range_start, role=Test)
-test('GSSC-PLLR-276 Syntactic', async () => {
+// @relation(GSSC-PLLR-297, scope=range_start, role=Test)
+test('GSSC-PLLR-297 Syntactic', async () => {
   const { fixture, root } = await setupCalendar(async () => [crossWeekEvent], {
     visibleYear: 2026,
     visibleMonth: 3,
@@ -447,10 +447,10 @@ test('GSSC-PLLR-276 Syntactic', async () => {
   expect(panel.classList.contains('sm:max-h-[75dvh]')).toBe(true);
   expect(panel.classList.contains('sm:max-w-[75vw]')).toBe(true);
 });
-// @relation(GSSC-PLLR-276, scope=range_end, role=Test)
+// @relation(GSSC-PLLR-297, scope=range_end, role=Test)
 
-// @relation(GSSC-PLLR-277, scope=range_start, role=Test)
-test('GSSC-PLLR-277 Lexical', async () => {
+// @relation(GSSC-PLLR-298, scope=range_start, role=Test)
+test('GSSC-PLLR-298 Lexical', async () => {
   const { fixture, root } = await setupCalendar(async () => [crossWeekEvent], {
     visibleYear: 2026,
     visibleMonth: 3,
@@ -463,10 +463,10 @@ test('GSSC-PLLR-277 Lexical', async () => {
   expect(panel.classList.contains('text-gssc-dark-green')).toBe(true);
   expect(panel.classList.contains('border-gssc-dark-green')).toBe(true);
 });
-// @relation(GSSC-PLLR-277, scope=range_end, role=Test)
+// @relation(GSSC-PLLR-298, scope=range_end, role=Test)
 
-// @relation(GSSC-PLLR-278, scope=range_start, role=Test)
-test('GSSC-PLLR-278 Semantic', async () => {
+// @relation(GSSC-PLLR-299, scope=range_start, role=Test)
+test('GSSC-PLLR-299 Semantic', async () => {
   const withHeader = sampleEvent({
     cuid: 'evt_header',
     name: 'Catalog Name',
@@ -510,10 +510,10 @@ test('GSSC-PLLR-278 Semantic', async () => {
   openRoot = await openEvent(fixture, nativeElement(fixture), 'evt_name');
   expect(textContent(openRoot, '.gssc-calendar-overlay__title')).toBe('Name Only');
 });
-// @relation(GSSC-PLLR-278, scope=range_end, role=Test)
+// @relation(GSSC-PLLR-299, scope=range_end, role=Test)
 
-// @relation(GSSC-PLLR-279, scope=range_start, role=Test)
-test('GSSC-PLLR-279 Syntactic', async () => {
+// @relation(GSSC-PLLR-300, scope=range_start, role=Test)
+test('GSSC-PLLR-300 Syntactic', async () => {
   const { fixture, root } = await setupCalendar(async () => [crossWeekEvent], {
     visibleYear: 2026,
     visibleMonth: 3,
@@ -525,10 +525,10 @@ test('GSSC-PLLR-279 Syntactic', async () => {
   expect(header.contains(title)).toBe(true);
   expect(title.compareDocumentPosition(body) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
 });
-// @relation(GSSC-PLLR-279, scope=range_end, role=Test)
+// @relation(GSSC-PLLR-300, scope=range_end, role=Test)
 
-// @relation(GSSC-PLLR-280, scope=range_start, role=Test)
-test('GSSC-PLLR-280 Lexical', async () => {
+// @relation(GSSC-PLLR-301, scope=range_start, role=Test)
+test('GSSC-PLLR-301 Lexical', async () => {
   const { fixture, root } = await setupCalendar(async () => [crossWeekEvent], {
     visibleYear: 2026,
     visibleMonth: 3,
@@ -539,10 +539,10 @@ test('GSSC-PLLR-280 Lexical', async () => {
   expect(title.classList.contains('font-semibold')).toBe(true);
   expect(title.classList.contains('text-[1.5em]')).toBe(true);
 });
-// @relation(GSSC-PLLR-280, scope=range_end, role=Test)
+// @relation(GSSC-PLLR-301, scope=range_end, role=Test)
 
-// @relation(GSSC-PLLR-281, scope=range_start, role=Test)
-test('GSSC-PLLR-281 Semantic', async () => {
+// @relation(GSSC-PLLR-302, scope=range_start, role=Test)
+test('GSSC-PLLR-302 Semantic', async () => {
   const { fixture, root } = await setupCalendar(async () => [crossWeekEvent], {
     visibleYear: 2026,
     visibleMonth: 3,
@@ -552,10 +552,10 @@ test('GSSC-PLLR-281 Semantic', async () => {
     'Spans Friday through Monday.',
   );
 });
-// @relation(GSSC-PLLR-281, scope=range_end, role=Test)
+// @relation(GSSC-PLLR-302, scope=range_end, role=Test)
 
-// @relation(GSSC-PLLR-282, scope=range_start, role=Test)
-test('GSSC-PLLR-282 Syntactic', async () => {
+// @relation(GSSC-PLLR-303, scope=range_start, role=Test)
+test('GSSC-PLLR-303 Syntactic', async () => {
   const noImage = sampleEvent({
     cuid: 'evt_body_only',
     header: 'Body Only',
@@ -582,10 +582,10 @@ test('GSSC-PLLR-282 Syntactic', async () => {
   const body = openRoot.querySelector<HTMLElement>('.gssc-calendar-overlay__body')!;
   expect(title.compareDocumentPosition(body) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
 });
-// @relation(GSSC-PLLR-282, scope=range_end, role=Test)
+// @relation(GSSC-PLLR-303, scope=range_end, role=Test)
 
-// @relation(GSSC-PLLR-283, scope=range_start, role=Test)
-test('GSSC-PLLR-283 Lexical', async () => {
+// @relation(GSSC-PLLR-304, scope=range_start, role=Test)
+test('GSSC-PLLR-304 Lexical', async () => {
   const { fixture, root } = await setupCalendar(async () => [crossWeekEvent], {
     visibleYear: 2026,
     visibleMonth: 3,
@@ -595,10 +595,10 @@ test('GSSC-PLLR-283 Lexical', async () => {
   expect(body.classList.contains('text-base')).toBe(true);
   expect(body.classList.contains('text-gssc-black')).toBe(true);
 });
-// @relation(GSSC-PLLR-283, scope=range_end, role=Test)
+// @relation(GSSC-PLLR-304, scope=range_end, role=Test)
 
-// @relation(GSSC-PLLR-284, scope=range_start, role=Test)
-test('GSSC-PLLR-284 Semantic', async () => {
+// @relation(GSSC-PLLR-305, scope=range_start, role=Test)
+test('GSSC-PLLR-305 Semantic', async () => {
   const left = sampleEvent({
     cuid: 'evt_img_left',
     header: 'Left Image',
@@ -671,10 +671,10 @@ test('GSSC-PLLR-284 Semantic', async () => {
   openRoot = await openEvent(fixture, nativeElement(fixture), 'evt_img_missing');
   expect(openRoot.querySelector('.gssc-calendar-overlay__image')).toBeNull();
 });
-// @relation(GSSC-PLLR-284, scope=range_end, role=Test)
+// @relation(GSSC-PLLR-305, scope=range_end, role=Test)
 
-// @relation(GSSC-PLLR-285, scope=range_start, role=Test)
-test('GSSC-PLLR-285 Syntactic', async () => {
+// @relation(GSSC-PLLR-306, scope=range_start, role=Test)
+test('GSSC-PLLR-306 Syntactic', async () => {
   const left = sampleEvent({
     cuid: 'evt_img_syn',
     header: 'Image Syn',
@@ -723,10 +723,10 @@ test('GSSC-PLLR-285 Syntactic', async () => {
       .classList.contains('sm:flex-row-reverse'),
   ).toBe(true);
 });
-// @relation(GSSC-PLLR-285, scope=range_end, role=Test)
+// @relation(GSSC-PLLR-306, scope=range_end, role=Test)
 
-// @relation(GSSC-PLLR-286, scope=range_start, role=Test)
-test('GSSC-PLLR-286 Lexical', async () => {
+// @relation(GSSC-PLLR-307, scope=range_start, role=Test)
+test('GSSC-PLLR-307 Lexical', async () => {
   const { fixture, root } = await setupCalendar(async () => [crossWeekEvent], {
     visibleYear: 2026,
     visibleMonth: 3,
@@ -736,10 +736,10 @@ test('GSSC-PLLR-286 Lexical', async () => {
   expect(image.classList.contains('object-contain')).toBe(true);
   expect(image.classList.contains('border')).toBe(false);
 });
-// @relation(GSSC-PLLR-286, scope=range_end, role=Test)
+// @relation(GSSC-PLLR-307, scope=range_end, role=Test)
 
-// @relation(GSSC-PLLR-287, scope=range_start, role=Test)
-test('GSSC-PLLR-287 Semantic', async () => {
+// @relation(GSSC-PLLR-308, scope=range_start, role=Test)
+test('GSSC-PLLR-308 Semantic', async () => {
   const withResources = sampleEvent({
     cuid: 'evt_res',
     header: 'With Resources',
@@ -792,10 +792,10 @@ test('GSSC-PLLR-287 Semantic', async () => {
   openRoot = await openEvent(fixture, nativeElement(fixture), 'evt_no_res');
   expect(openRoot.querySelector('.gssc-calendar-overlay__resources')).toBeNull();
 });
-// @relation(GSSC-PLLR-287, scope=range_end, role=Test)
+// @relation(GSSC-PLLR-308, scope=range_end, role=Test)
 
-// @relation(GSSC-PLLR-288, scope=range_start, role=Test)
-test('GSSC-PLLR-288 Syntactic', async () => {
+// @relation(GSSC-PLLR-309, scope=range_start, role=Test)
+test('GSSC-PLLR-309 Syntactic', async () => {
   const { fixture, root } = await setupCalendar(async () => [crossWeekEvent], {
     visibleYear: 2026,
     visibleMonth: 3,
@@ -808,10 +808,10 @@ test('GSSC-PLLR-288 Syntactic', async () => {
   );
   expect(strip.querySelectorAll('.gssc-calendar-overlay__resource').length).toBe(2);
 });
-// @relation(GSSC-PLLR-288, scope=range_end, role=Test)
+// @relation(GSSC-PLLR-309, scope=range_end, role=Test)
 
-// @relation(GSSC-PLLR-289, scope=range_start, role=Test)
-test('GSSC-PLLR-289 Lexical', async () => {
+// @relation(GSSC-PLLR-310, scope=range_start, role=Test)
+test('GSSC-PLLR-310 Lexical', async () => {
   const { fixture, root } = await setupCalendar(async () => [crossWeekEvent], {
     visibleYear: 2026,
     visibleMonth: 3,
@@ -822,7 +822,7 @@ test('GSSC-PLLR-289 Lexical', async () => {
   expect(button.classList.contains('text-gssc-dark-green')).toBe(true);
   expect(button.classList.contains('bg-gssc-white')).toBe(true);
 });
-// @relation(GSSC-PLLR-289, scope=range_end, role=Test)
+// @relation(GSSC-PLLR-310, scope=range_end, role=Test)
 
 test('calendar model span fallback and month filter', () => {
   const fallback = sampleEvent({
