@@ -1,7 +1,8 @@
+/*
+ * Member shell presentation prefers Tailwind utilities on the host / template
+ * (mirrors public GSSC5-38 / GSSC5-63). Keep this file for host-only hooks.
+ */
+
 :host {
   display: block;
-  min-height: 100dvh;
-  background-color: var(--gssc-white);
-  color: var(--gssc-black);
-  font-family: var(--font-sans);
 }
