@@ -1,11 +1,157 @@
-import { App } from "./app";
-import { nativeElement, setupMembersComponent, textContent } from "../test-harness";
+import { TestBed } from '@angular/core/testing';
+import { Router } from '@angular/router';
+import { App } from './app';
+import { routes } from './app.routes';
+import { nativeElement, setupMembersComponent } from '../test-harness';
 
-// Baseline STD hook for the members testing harness (GSSC5-80).
-// Feature LLR tests (GSSC5-79+) own @relation markers; do not test the harness itself.
-test("members harness mounts App shell", async () => {
+async function setupApp(url = '/'): Promise<{
+  fixture: Awaited<ReturnType<typeof setupMembersComponent<App>>>;
+  router: Router;
+  root: HTMLElement;
+}> {
   const fixture = await setupMembersComponent(App);
-  const root = nativeElement(fixture);
-  expect(textContent(root, '[data-slot="header"]')).toContain("Members");
-  expect(root.querySelector("router-outlet")).not.toBeNull();
+  const router = TestBed.inject(Router);
+  router.resetConfig(routes);
+  await router.navigateByUrl(url);
+  fixture.detectChanges();
+  await fixture.whenStable();
+  return { fixture, router, root: nativeElement(fixture) };
+}
+
+function hostOf(root: HTMLElement): HTMLElement {
+  return root.matches('gssc-root') ? root : (root.querySelector('gssc-root') ?? root);
+}
+
+// Baseline STD smoke for the members testing harness (GSSC5-80).
+// Feature LLR tests below own @relation markers; do not test the harness itself.
+test('members harness mounts App shell', async () => {
+  const { root } = await setupApp('/');
+  expect(root.querySelector('[data-slot="header"]')).not.toBeNull();
+  expect(root.querySelector('[data-slot="footer"]')).not.toBeNull();
+  expect(root.querySelector('router-outlet')).not.toBeNull();
 });
+
+// @relation(GSSC-MLLR-1, scope=range_start, role=Test)
+test('GSSC-MLLR-1 Semantic', async () => {
+  const { root } = await setupApp('/');
+  expect(root.querySelector('[data-slot="header"]')).not.toBeNull();
+  expect(root.querySelector('router-outlet')).not.toBeNull();
+  expect(root.querySelector('[data-slot="footer"]')).not.toBeNull();
+});
+// @relation(GSSC-MLLR-1, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-2, scope=range_start, role=Test)
+test('GSSC-MLLR-2 Syntactic', async () => {
+  const { root } = await setupApp();
+  const host = hostOf(root);
+  const appRoot = root.querySelector<HTMLElement>('.gssc-app-root')!;
+  expect(host.classList.contains('min-h-dvh')).toBe(true);
+  expect(appRoot.classList.contains('min-h-dvh')).toBe(true);
+  expect(appRoot.classList.contains('flex')).toBe(true);
+  expect(appRoot.classList.contains('flex-col')).toBe(true);
+});
+// @relation(GSSC-MLLR-2, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-3, scope=range_start, role=Test)
+test('GSSC-MLLR-3 Lexical', async () => {
+  const { root } = await setupApp();
+  const host = hostOf(root);
+  const appRoot = root.querySelector<HTMLElement>('.gssc-app-root')!;
+  expect(host.classList.contains('bg-gssc-white')).toBe(true);
+  expect(host.classList.contains('font-sans')).toBe(true);
+  expect(host.classList.contains('text-gssc-black')).toBe(true);
+  expect(appRoot.classList.contains('bg-gssc-white')).toBe(true);
+});
+// @relation(GSSC-MLLR-3, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-4, scope=range_start, role=Test)
+test('GSSC-MLLR-4 Semantic', async () => {
+  const { root } = await setupApp();
+  expect(root.querySelector('[data-slot="header"]')).not.toBeNull();
+});
+// @relation(GSSC-MLLR-4, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-5, scope=range_start, role=Test)
+test('GSSC-MLLR-5 Syntactic', async () => {
+  const { root } = await setupApp();
+  const header = root.querySelector<HTMLElement>('[data-slot="header"]')!;
+  expect(header.classList.contains('sticky')).toBe(true);
+  expect(header.classList.contains('top-0')).toBe(true);
+  expect(header.classList.contains('z-[1]')).toBe(true);
+});
+// @relation(GSSC-MLLR-5, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-6, scope=range_start, role=Test)
+test('GSSC-MLLR-6 Lexical', async () => {
+  const { root } = await setupApp();
+  const host = hostOf(root);
+  const header = root.querySelector<HTMLElement>('[data-slot="header"]')!;
+  expect(getComputedStyle(header).fontFamily).toBe(getComputedStyle(host).fontFamily);
+  expect(getComputedStyle(header).color).toBe(getComputedStyle(host).color);
+});
+// @relation(GSSC-MLLR-6, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-7, scope=range_start, role=Test)
+test('GSSC-MLLR-7 Semantic', async () => {
+  const { root } = await setupApp();
+  expect(root.querySelector('[data-slot="footer"]')).not.toBeNull();
+});
+// @relation(GSSC-MLLR-7, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-8, scope=range_start, role=Test)
+test('GSSC-MLLR-8 Syntactic', async () => {
+  const { root } = await setupApp();
+  const children = [...root.querySelector('.gssc-app-root')!.children];
+  expect(children.at(-1)?.getAttribute('data-slot')).toBe('footer');
+});
+// @relation(GSSC-MLLR-8, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-9, scope=range_start, role=Test)
+test('GSSC-MLLR-9 Lexical', async () => {
+  const { root } = await setupApp();
+  const host = hostOf(root);
+  const footer = root.querySelector<HTMLElement>('[data-slot="footer"]')!;
+  expect(getComputedStyle(footer).fontFamily).toBe(getComputedStyle(host).fontFamily);
+  expect(getComputedStyle(footer).color).toBe(getComputedStyle(host).color);
+});
+// @relation(GSSC-MLLR-9, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-10, scope=range_start, role=Test)
+test('GSSC-MLLR-10 Semantic', async () => {
+  const { root } = await setupApp('/');
+  expect(root.querySelector('router-outlet')).not.toBeNull();
+  expect(root.querySelector('gssc-home-page')).not.toBeNull();
+});
+// @relation(GSSC-MLLR-10, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-11, scope=range_start, role=Test)
+test('GSSC-MLLR-11 Syntactic', async () => {
+  const { root } = await setupApp('/');
+  const appRoot = root.querySelector('.gssc-app-root')!;
+  const header = appRoot.querySelector('[data-slot="header"]')!;
+  const footer = appRoot.querySelector('[data-slot="footer"]')!;
+  const page = appRoot.querySelector<HTMLElement>('.gssc-page')!;
+  const outlet = page.querySelector('router-outlet')!;
+  expect(header.compareDocumentPosition(outlet) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  expect(outlet.compareDocumentPosition(footer) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  expect(page.classList.contains('flex-auto')).toBe(true);
+});
+// @relation(GSSC-MLLR-11, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-12, scope=range_start, role=Test)
+test('GSSC-MLLR-12 Lexical', async () => {
+  const { root } = await setupApp();
+  const host = hostOf(root);
+  const page = root.querySelector<HTMLElement>('.gssc-page')!;
+  expect(getComputedStyle(page).fontFamily).toBe(getComputedStyle(host).fontFamily);
+  expect(getComputedStyle(page).color).toBe(getComputedStyle(host).color);
+});
+// @relation(GSSC-MLLR-12, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-13, scope=range_start, role=Test)
+test('GSSC-MLLR-13 Home Page Route', async () => {
+  const { router, root } = await setupApp('/');
+  expect(router.url.split('?')[0]).toBe('/');
+  expect(root.querySelector('gssc-home-page')).not.toBeNull();
+});
+// @relation(GSSC-MLLR-13, scope=range_end, role=Test)

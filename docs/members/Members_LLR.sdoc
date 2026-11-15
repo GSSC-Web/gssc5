@@ -62,8 +62,299 @@ ELEMENTS:
     ROLE: Refines
     REVERSE_ROLE: Refined By
 
+[[SECTION]]
+UID: GSSC-MLLR-INTRODUCTION
+TITLE: Introduction
+
 [TEXT]
 UID: GSSC-MLLR-INTRO-FRAMEWORK
 STATEMENT: >>>
-GSSC5-80 scaffolds this Members LLR document and the members Vitest harness. It claims no GSSC-MLLR-* requirement UIDs (mirrors public GSSC5-39: no testing-framework LLRs). Sequential GSSC-MLLR-1+ are reserved for feature tickets starting with GSSC5-79 Member FE Root + Router.
+GSSC5-80 scaffolds this Members LLR document and the members Vitest harness. It claims no GSSC-MLLR-* requirement UIDs (mirrors public GSSC5-39: no testing-framework LLRs).
 <<<
+
+[TEXT]
+UID: GSSC-MLLR-INTRO-UID-BLOCKS
+STATEMENT: >>>
+UID allocation for this document (coordinate parallel tickets before minting):
+GSSC5-79 Member FE Root + Router owns GSSC-MLLR-1 through GSSC-MLLR-13.
+Later Member FE tickets continue from GSSC-MLLR-14 and above.
+Do not reuse numbers already claimed by another ticket.
+<<<
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-APP-ROOT
+TITLE: Member App Root
+
+[[SECTION]]
+UID: GSSC-MLLR-APP-ROOT-ELEMENT
+TITLE: App Root
+
+[REQUIREMENT]
+UID: GSSC-MLLR-1
+TITLE: Semantic
+STATEMENT: >>>
+The GSSC Website Member Frontend App Root SHALL contain a Header host, a Page Outlet, and a Footer host.
+<<<
+RATIONALE: >>>
+The App Root composes those subelements so Header, the active Member Frontend view, and Footer share one shell. Header and Footer contents are separate requirements.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-79
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-13
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-2
+TITLE: Syntactic
+STATEMENT: >>>
+The GSSC Website Member Frontend App Root SHALL fill the entire viewport.
+<<<
+RATIONALE: >>>
+The App Root is the outermost shell of the Member Frontend page. Filling the viewport gives Header, page content, and Footer a full-page layout that resizes with the viewport.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-79
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-13
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-3
+TITLE: Lexical
+STATEMENT: >>>
+The GSSC Website Member Frontend App Root SHALL use the white theme token for its background and the sans-serif theme font for its text.
+<<<
+RATIONALE: >>>
+The outermost Member Frontend layer uses a white background and a sans-serif default. Theme tokens supply those values.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-79
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-13
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-HEADER-HOST
+TITLE: Header Host
+
+[REQUIREMENT]
+UID: GSSC-MLLR-4
+TITLE: Semantic
+STATEMENT: >>>
+The Header host SHALL hold the Member Frontend Header.
+<<<
+RATIONALE: >>>
+The App Root supplies a host so Header implementation mounts in the Member Frontend shell. Header contents are separate requirements.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-79
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-13
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-15
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-5
+TITLE: Syntactic
+STATEMENT: >>>
+The Header host SHALL stick to the top of the viewport while the member scrolls.
+<<<
+RATIONALE: >>>
+Authenticated Member Frontend views keep the Header at the top. Sticking the host keeps that top placement as the member scrolls.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-79
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-15
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-6
+TITLE: Lexical
+STATEMENT: >>>
+The Header host SHALL inherit the App Root font and text color theme tokens.
+<<<
+RATIONALE: >>>
+The Header host is an empty mount for Header contents. It inherits App Root type tokens so the shell stays consistent until Header paints its own presentation. Independent Header host colors are not set yet.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-79
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-15
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-FOOTER-HOST
+TITLE: Footer Host
+
+[REQUIREMENT]
+UID: GSSC-MLLR-7
+TITLE: Semantic
+STATEMENT: >>>
+The Footer host SHALL hold the Member Frontend Footer.
+<<<
+RATIONALE: >>>
+The App Root supplies a host so Footer implementation mounts in the Member Frontend shell. Footer contents are separate requirements.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-79
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-13
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-20
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-8
+TITLE: Syntactic
+STATEMENT: >>>
+The Footer host SHALL sit at the bottom of the App Root.
+<<<
+RATIONALE: >>>
+Authenticated Member Frontend views place the Footer at the bottom. The host anchors that placement in the App Root.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-79
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-20
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-9
+TITLE: Lexical
+STATEMENT: >>>
+The Footer host SHALL inherit the App Root font and text color theme tokens.
+<<<
+RATIONALE: >>>
+The Footer host is an empty mount for Footer contents. It inherits App Root type tokens so the shell stays consistent until Footer paints its own presentation. Independent Footer host colors are not set yet.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-79
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-20
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-PAGE-OUTLET
+TITLE: Page Outlet
+
+[REQUIREMENT]
+UID: GSSC-MLLR-10
+TITLE: Semantic
+STATEMENT: >>>
+The Page Outlet SHALL render the active Member Frontend page.
+<<<
+RATIONALE: >>>
+Member Frontend pages mount through the Page Outlet so each page shares the App Root shell. Page contents are separate requirements.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-79
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-13
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-11
+TITLE: Syntactic
+STATEMENT: >>>
+The Page Outlet SHALL sit between the Header host and the Footer host and SHALL grow to fill the remaining App Root space.
+<<<
+RATIONALE: >>>
+Placing the outlet between the hosts and letting it grow keeps Header and Footer at the edges while page content uses the middle of the shell as the viewport resizes.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-79
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-13
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-12
+TITLE: Lexical
+STATEMENT: >>>
+The Page Outlet SHALL inherit the App Root font and text color theme tokens.
+<<<
+RATIONALE: >>>
+The Page Outlet is a mount for page contents. It inherits App Root type tokens so pages share the shell defaults until a page sets its own presentation. Independent Page Outlet colors are not set yet.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-79
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-13
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-ROUTER
+TITLE: Member Router
+
+[REQUIREMENT]
+UID: GSSC-MLLR-13
+TITLE: Home Page Route
+STATEMENT: >>>
+The GSSC Website Member Frontend Router SHALL open the Member Frontend home page at the root path.
+<<<
+RATIONALE: >>>
+The Member Frontend home page for a logged-in member is the dashboard destination. This route places that home page at the root path so navigation and redirects share one entry.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-79
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-26
+  ROLE: Refines
+
+[[/SECTION]]

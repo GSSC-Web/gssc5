@@ -1,14 +1,30 @@
-<div class="flex min-h-dvh flex-col bg-gssc-white text-gssc-black font-sans">
-  <header
-    class="sticky top-0 z-10 border-b border-gssc-light-green bg-gssc-white px-4 py-3 sm:px-6"
-    data-slot="header"
-  >
-    <p class="text-sm font-semibold tracking-wide text-gssc-dark-green sm:text-base">
-      Members
-    </p>
-  </header>
+<!-- @relation(GSSC-MLLR-1, scope=range_start, role=Implementation) -->
+<div class="gssc-app-root flex min-h-dvh flex-col bg-gssc-white">
+  <!-- @relation(GSSC-MLLR-4, scope=range_start, role=Implementation) -->
+  <!-- @relation(GSSC-MLLR-5, GSSC-MLLR-6, scope=range_start, role=Implementation) -->
+  <div class="gssc-header-host sticky top-0 z-[1] text-inherit font-[inherit]" data-slot="header">
+    <!-- Member Header chrome lands in GSSC5-81 -->
+  </div>
+  <!-- @relation(GSSC-MLLR-5, GSSC-MLLR-6, scope=range_end, role=Implementation) -->
+  <!-- @relation(GSSC-MLLR-4, scope=range_end, role=Implementation) -->
 
-  <main class="relative flex flex-1 flex-col px-4 py-6 sm:px-6" data-slot="page">
+  <!-- @relation(GSSC-MLLR-10, scope=range_start, role=Implementation) -->
+  <!-- @relation(GSSC-MLLR-11, GSSC-MLLR-12, scope=range_start, role=Implementation) -->
+  <main class="gssc-page relative flex-auto text-inherit font-[inherit]" data-slot="page">
     <router-outlet />
   </main>
+  <!-- @relation(GSSC-MLLR-11, GSSC-MLLR-12, scope=range_end, role=Implementation) -->
+  <!-- @relation(GSSC-MLLR-10, scope=range_end, role=Implementation) -->
+
+  <!-- @relation(GSSC-MLLR-7, scope=range_start, role=Implementation) -->
+  <!-- @relation(GSSC-MLLR-8, GSSC-MLLR-9, scope=range_start, role=Implementation) -->
+  <div
+    class="gssc-footer-host mt-auto block w-full text-inherit font-[inherit]"
+    data-slot="footer"
+  >
+    <!-- Member Footer chrome lands in GSSC5-82 -->
+  </div>
+  <!-- @relation(GSSC-MLLR-8, GSSC-MLLR-9, scope=range_end, role=Implementation) -->
+  <!-- @relation(GSSC-MLLR-7, scope=range_end, role=Implementation) -->
 </div>
+<!-- @relation(GSSC-MLLR-1, scope=range_end, role=Implementation) -->
