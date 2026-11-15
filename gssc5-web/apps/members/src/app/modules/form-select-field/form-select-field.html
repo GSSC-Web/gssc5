@@ -1,0 +1,28 @@
+<!-- @relation(GSSC-MLLR-171, GSSC-MLLR-172, GSSC-MLLR-173, scope=range_start, role=Implementation) -->
+<div
+  class="gssc-form-select-field relative flex min-w-0 w-full flex-col rounded-md border border-gssc-dark-green bg-gssc-white font-sans"
+  [class.bg-gssc-gray]="!enabled()"
+>
+  <label
+    class="gssc-form-select-field__label absolute -top-2 start-2 bg-inherit px-1 font-sans text-xs font-extralight italic text-gssc-dark-green"
+    [attr.for]="resolvedId()"
+  >
+    {{ label() }}@if (required()) {
+      <span aria-hidden="true">&nbsp;*</span>
+    }
+  </label>
+  <select
+    class="gssc-form-select-field__control min-w-0 border-0 bg-transparent px-2 py-2 font-sans text-sm outline-none text-gssc-dark-green"
+    [id]="resolvedId()"
+    [disabled]="!enabled()"
+    [required]="required()"
+    [attr.name]="name()"
+    [value]="value()"
+    (change)="onChange($any($event.target).value)"
+  >
+    @for (option of options(); track option.value) {
+      <option [value]="option.value">{{ option.label }}</option>
+    }
+  </select>
+</div>
+<!-- @relation(GSSC-MLLR-171, GSSC-MLLR-172, GSSC-MLLR-173, scope=range_end, role=Implementation) -->

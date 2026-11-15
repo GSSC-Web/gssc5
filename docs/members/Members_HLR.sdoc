@@ -588,7 +588,23 @@ RATIONALE: >>>
 No Member Frontend PIR names a contact-row primitive. Account views and the members directory reuse a shared contact presentation for names and contact methods.
 <<<
 DERIVED: True
-CHANGE_DRIVER: GSSC5-11
+CHANGE_DRIVER: >>>
+GSSC5-11
+GSSC5-85
+<<<
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-MHLR-61
+TITLE: Form Field Primitives
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL provide shared form-field primitives for labeled text entry, labeled selection, a zip-and-extension row, and a password-criteria list that member forms reuse without reimplementing field chrome.
+<<<
+RATIONALE: >>>
+No Member Frontend PIR names form-field primitives. Account forms, directory search, and editors need consistent field chrome (floating labels, required markers, zip-plus-extension, password criteria icons).
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-85
 REVIEW_STATUS: Changed
 
 [[/SECTION]]

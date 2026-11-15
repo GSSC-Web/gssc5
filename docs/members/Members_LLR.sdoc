@@ -85,6 +85,7 @@ GSSC5-88 Route Guards & Redirects owns GSSC-MLLR-92 through GSSC-MLLR-95.
 GSSC5-83 Member Generic Sections (display) owns GSSC-MLLR-96 through GSSC-MLLR-124.
 GSSC5-100 Hide Header/Footer when logged out owns GSSC-MLLR-32 (App Root chrome gate; also CHANGE_DRIVER on GSSC-MLLR-1).
 GSSC5-90 Account Self-Service and GSSC5-91 Admin Account Management share GSSC-MLLR-125 through GSSC-MLLR-158 (same Account Page).
+GSSC5-85 Contact-row / Form Primitives owns GSSC-MLLR-159 through GSSC-MLLR-179 (Contact Row + form-field building blocks).
 GSSC-MLLR-33 through GSSC-MLLR-39 remain free for later claimants.
 Do not reuse numbers already claimed by another ticket.
 <<<
@@ -3373,6 +3374,432 @@ RELATIONS:
   ROLE: Refines
 - TYPE: Parent
   VALUE: GSSC-MHLR-34
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-CONTACT-FORM-PRIMITIVES
+TITLE: Contact Row And Form Primitives
+
+[[SECTION]]
+UID: GSSC-MLLR-CONTACT-ROW
+TITLE: Contact Row
+
+[REQUIREMENT]
+UID: GSSC-MLLR-159
+TITLE: Semantic
+STATEMENT: >>>
+The Member Frontend Contact Row SHALL present a person's display name and the contact methods supplied for that person.
+<<<
+RATIONALE: >>>
+Directory listings and other member surfaces reuse one contact presentation so name and available methods stay consistent.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-85
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-25
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-160
+TITLE: Syntactic
+STATEMENT: >>>
+The Contact Row SHALL lay out the display name above the contact methods in one vertical column that stretches to the width of its parent.
+<<<
+RATIONALE: >>>
+Name-first stacking keeps each directory entry scannable; full parent width lets the row sit in list and card hosts without fixed side margins.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-85
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-25
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-161
+TITLE: Lexical
+STATEMENT: >>>
+The Contact Row SHALL use the Member Frontend sans-serif typeface and the dark-green theme color for its text, with no independent border or background chrome beyond its parent surface.
+<<<
+RATIONALE: >>>
+Matching shell text tokens keeps contact rows visually quiet inside directory and account hosts.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-85
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-25
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-CONTACT-ROW-NAME
+TITLE: Contact Row Name
+
+[REQUIREMENT]
+UID: GSSC-MLLR-162
+TITLE: Semantic
+STATEMENT: >>>
+The Contact Row Name SHALL display the person's display name supplied to the Contact Row.
+<<<
+RATIONALE: >>>
+The name is the primary identity signal for a directory entry or shared contact presentation.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-85
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-25
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-163
+TITLE: Syntactic
+STATEMENT: >>>
+The Contact Row Name SHALL appear at the start of the Contact Row, above the Contact Row Methods.
+<<<
+RATIONALE: >>>
+Leading with the name keeps methods subordinate and readable in a list.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-85
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-25
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-164
+TITLE: Lexical
+STATEMENT: >>>
+The Contact Row Name SHALL use a semibold weight and the dark-green theme color.
+<<<
+RATIONALE: >>>
+Semibold dark-green name text stands out from method links without introducing a separate accent.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-85
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-25
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-CONTACT-ROW-METHODS
+TITLE: Contact Row Methods
+
+[REQUIREMENT]
+UID: GSSC-MLLR-165
+TITLE: Semantic
+STATEMENT: >>>
+The Contact Row Methods SHALL present each supplied contact method as an activatable link when a destination is available for that method, and as plain text when no destination is available.
+<<<
+RATIONALE: >>>
+Email and phone values become actionable when destinations exist; plain text covers methods that are display-only.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-85
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-25
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-166
+TITLE: Syntactic
+STATEMENT: >>>
+The Contact Row Methods SHALL appear below the Contact Row Name as a vertical list of methods.
+<<<
+RATIONALE: >>>
+Stacking methods under the name keeps each entry compact in directory rows.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-85
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-25
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-167
+TITLE: Lexical
+STATEMENT: >>>
+The Contact Row Methods SHALL use a normal weight and the dark-green theme color for method text and links.
+<<<
+RATIONALE: >>>
+Normal-weight dark-green keeps methods readable and secondary to the semibold name.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-85
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-25
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-FORM-TEXT-FIELD
+TITLE: Form Text Field
+
+[REQUIREMENT]
+UID: GSSC-MLLR-168
+TITLE: Semantic
+STATEMENT: >>>
+The Member Frontend Form Text Field SHALL accept a text value from the member, present a Title Case floating label for that field, and mark a required field with a trailing asterisk on the label.
+<<<
+RATIONALE: >>>
+Account and editor forms share this chrome so required markers and Title Case labels stay consistent across member surfaces.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-85
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-61
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-169
+TITLE: Syntactic
+STATEMENT: >>>
+The Form Text Field SHALL place its floating label on the top edge of the field border and stretch the control to the width of its parent.
+<<<
+RATIONALE: >>>
+Floating labels on the border match existing member form chrome and keep stacked fields aligned.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-85
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-61
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-170
+TITLE: Lexical
+STATEMENT: >>>
+The Form Text Field SHALL use a rounded border in the dark-green theme color on a white background, with an extralight italic dark-green floating label and sans-serif dark-green control text.
+<<<
+RATIONALE: >>>
+Matching account form field chrome keeps primitives interchangeable with polished account pages.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-85
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-61
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-FORM-SELECT-FIELD
+TITLE: Form Select Field
+
+[REQUIREMENT]
+UID: GSSC-MLLR-171
+TITLE: Semantic
+STATEMENT: >>>
+The Member Frontend Form Select Field SHALL let the member choose one option from a supplied option list, present a Title Case floating label for that field, and mark a required field with a trailing asterisk on the label.
+<<<
+RATIONALE: >>>
+Select fields share text-field chrome so preferred-contact and similar choices stay visually consistent.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-85
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-61
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-172
+TITLE: Syntactic
+STATEMENT: >>>
+The Form Select Field SHALL place its floating label on the top edge of the field border and stretch the control to the width of its parent.
+<<<
+RATIONALE: >>>
+Matching text-field placement keeps mixed form columns aligned.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-85
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-61
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-173
+TITLE: Lexical
+STATEMENT: >>>
+The Form Select Field SHALL use a rounded border in the dark-green theme color on a white background, with an extralight italic dark-green floating label and sans-serif dark-green control text.
+<<<
+RATIONALE: >>>
+Shared lexical chrome with the Form Text Field keeps selection controls visually identical to text entry.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-85
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-61
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-FORM-ZIP-EXT-ROW
+TITLE: Form Zip Extension Row
+
+[REQUIREMENT]
+UID: GSSC-MLLR-174
+TITLE: Semantic
+STATEMENT: >>>
+The Member Frontend Form Zip Extension Row SHALL present a Zip field and a Zip Extension field on one row with a plus separator between them, and SHALL mark a required Zip field with a trailing asterisk on its label.
+<<<
+RATIONALE: >>>
+Owner account polish keeps postal zip and extension paired with a plus so members enter both parts without separate rows.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-85
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-61
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-175
+TITLE: Syntactic
+STATEMENT: >>>
+The Form Zip Extension Row SHALL place Zip and Zip Extension side by side with the plus separator between them and SHALL stretch the pair to the width of its parent.
+<<<
+RATIONALE: >>>
+A single row keeps address columns compact while both fields remain editable.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-85
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-61
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-176
+TITLE: Lexical
+STATEMENT: >>>
+The Form Zip Extension Row SHALL use the same floating-label field chrome as the Form Text Field for each zip control, with a sans-serif dark-green plus separator.
+<<<
+RATIONALE: >>>
+Shared field chrome plus a quiet separator matches the polished account address rows.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-85
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-61
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-FORM-PASSWORD-CRITERIA
+TITLE: Form Password Criteria
+
+[REQUIREMENT]
+UID: GSSC-MLLR-177
+TITLE: Semantic
+STATEMENT: >>>
+The Member Frontend Form Password Criteria SHALL present each supplied password rule with a satisfied or unsatisfied state icon before the rule text.
+<<<
+RATIONALE: >>>
+Password change surfaces need live criteria feedback; check and times icons communicate pass and fail without relying on color alone.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-85
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-61
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-178
+TITLE: Syntactic
+STATEMENT: >>>
+The Form Password Criteria SHALL list rules vertically with the state icon immediately before each rule's text.
+<<<
+RATIONALE: >>>
+A vertical checklist keeps every rule visible while the member types a new password.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-85
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-61
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-179
+TITLE: Lexical
+STATEMENT: >>>
+The Form Password Criteria SHALL use the dark-green theme color when a rule is satisfied and the dark-red theme color when a rule is unsatisfied, with check and times symbol icons before each rule.
+<<<
+RATIONALE: >>>
+Green check and red times match owner account password polish and keep pass/fail states unmistakable.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-85
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-61
   ROLE: Refines
 
 [[/SECTION]]

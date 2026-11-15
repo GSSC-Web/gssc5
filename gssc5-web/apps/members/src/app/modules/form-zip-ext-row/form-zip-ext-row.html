@@ -1,0 +1,25 @@
+<!-- @relation(GSSC-MLLR-174, GSSC-MLLR-175, GSSC-MLLR-176, scope=range_start, role=Implementation) -->
+<div class="gssc-form-zip-ext-row flex min-w-0 w-full items-center gap-2">
+  <gssc-form-text-field
+    class="gssc-form-zip-ext-row__zip min-w-0 flex-1"
+    label="Zip"
+    [required]="zipRequired()"
+    [enabled]="enabled()"
+    [controlId]="zipControlId()"
+    [name]="zipName()"
+    [(value)]="zip"
+  />
+  <span class="gssc-form-zip-ext-row__plus shrink-0 font-sans text-sm text-gssc-dark-green" aria-hidden="true"
+    >+</span
+  >
+  <gssc-form-text-field
+    class="gssc-form-zip-ext-row__ext min-w-0 flex-1"
+    label="Zip Extension"
+    [required]="false"
+    [enabled]="enabled()"
+    [controlId]="zipExtControlId()"
+    [name]="zipExtName()"
+    [(value)]="zipExtension"
+  />
+</div>
+<!-- @relation(GSSC-MLLR-174, GSSC-MLLR-175, GSSC-MLLR-176, scope=range_end, role=Implementation) -->
