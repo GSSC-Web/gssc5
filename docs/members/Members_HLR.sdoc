@@ -66,7 +66,7 @@ TITLE: Introduction
 [TEXT]
 UID: GSSC-MHLR-INTRO-PURPOSE
 STATEMENT: >>>
-These Member High Level Requirements refine Member Frontend Platform Integration Requirements into Member Frontend functionality. This document is a rough draft for v5.0.1 Member Frontend scope. REVIEW_STATUS values are Changed, not Baselined. Refinement continues under a separate Kaneo ticket.
+These Member High Level Requirements refine Member Frontend Platform Integration Requirements into Member Frontend functionality. This document is a rough draft for v5.0.1 Member Frontend scope. REVIEW_STATUS values are Changed, not Baselined, except where a Wave ticket Approves the HLR slice it refines. Broad HLR refinement continues under GSSC5-78; Wave tickets may refine in-scope shell HLRs in the same PR (for example Footer under GSSC5-82).
 <<<
 
 [TEXT]
@@ -412,34 +412,43 @@ RATIONALE: >>>
 No Member Frontend PIR allocates placement of the Footer. This is the default placement of the Footer on authenticated Member Frontend views.
 <<<
 DERIVED: True
-CHANGE_DRIVER: GSSC5-11
-REVIEW_STATUS: Changed
+CHANGE_DRIVER: >>>
+GSSC5-11
+GSSC5-82
+<<<
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-MHLR-21
 TITLE: Footer Organization Name
 STATEMENT: >>>
-The GSSC Website Member Frontend Footer SHALL include the full name of the Genealogical Society of Stanislaus County.
+The GSSC Website Member Frontend Footer SHALL include the full name of the Genealogical Society of Stanislaus County, without substituting the society acronym for that full name.
 <<<
 RATIONALE: >>>
-No Member Frontend PIR requires the organization's name in the Footer. The Public Frontend Footer includes the society's full name. The Member Frontend Footer keeps that full name.
+No Member Frontend PIR requires the organization's name in the Footer. The Public Frontend Footer includes the society's full name. The Member Frontend Footer keeps that full name in every layout and does not replace it with the acronym.
 <<<
 DERIVED: True
-CHANGE_DRIVER: GSSC5-11
-REVIEW_STATUS: Changed
+CHANGE_DRIVER: >>>
+GSSC5-11
+GSSC5-82
+<<<
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-MHLR-22
 TITLE: Footer Copyright
 STATEMENT: >>>
-The GSSC Website Member Frontend Footer SHALL include a copyright statement.
+The GSSC Website Member Frontend Footer SHALL include a copyright statement for the Genealogical Society of Stanislaus County.
 <<<
 RATIONALE: >>>
-No Member Frontend PIR requires a copyright statement. The Public Frontend Footer includes a copyright statement. The Member Frontend Footer keeps a copyright statement and does not set its wording.
+No Member Frontend PIR requires a copyright statement. The Public Frontend Footer includes a copyright statement. The Member Frontend Footer keeps a copyright statement for the society and does not set its exact wording.
 <<<
 DERIVED: True
-CHANGE_DRIVER: GSSC5-11
-REVIEW_STATUS: Changed
+CHANGE_DRIVER: >>>
+GSSC5-11
+GSSC5-82
+<<<
+REVIEW_STATUS: Approved
 
 [[/SECTION]]
 

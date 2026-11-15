@@ -11,8 +11,8 @@ tags: [frontend, members, angular, auth]
 - App: `gssc5-web/apps/members` (Angular + Tailwind + Eden Treaty).
 - Shell uses Tailwind utilities + shared `gssc-*` theme tokens in `src/styles.css` (aligned with public); no Angular CLI welcome scaffold or custom `@media` CSS.
 - Layout under `src/app/`: `pages/`, `services/` (and `modules/` when shared UI exists). Eden Treaty client: `services/backend.ts`.
-- App Root + Router (GSSC5-79 / GSSC-MLLR-1..13): `app.html` hosts empty Header/Footer mounts + Page Outlet; root path mounts the home placeholder (`pages/home/`). Header/footer chrome, auth, and feature pages are later waves (GSSC5-81+).
-- StrictDoc UID blocks in `docs/members/Members_LLR.sdoc`: GSSC5-80 claims no MLLRs; GSSC5-79 owns **GSSC-MLLR-1..13**; later tickets continue from **GSSC-MLLR-14+**.
+- App Root + Router (GSSC5-79 / GSSC-MLLR-1..13): `app.html` hosts Header/Footer mounts + Page Outlet; root path mounts the home placeholder (`pages/home/`). Header chrome is GSSC5-81; Footer chrome is GSSC5-82 (`modules/footer/`); auth and feature pages are later waves.
+- StrictDoc UID blocks in `docs/members/Members_LLR.sdoc`: GSSC5-80 claims no MLLRs; GSSC5-79 owns **GSSC-MLLR-1..13**; GSSC5-81 Header reserves **GSSC-MLLR-14+** for Header chrome; GSSC5-82 Footer owns **GSSC-MLLR-40..48** (do not overlap).
 - Backend client uses credentialed `fetch` so the HttpOnly Login Token cookie is sent (`gssc_login_token` issued by backend).
 - Auth consumption only — members FE does not mint or persist raw login tokens; session comes from cookie + backend challenge.
 - Build/test via mise under the members app (`mise` tasks in `gssc5-web` / app `mise.toml`).

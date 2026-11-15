@@ -77,7 +77,8 @@ UID: GSSC-MLLR-INTRO-UID-BLOCKS
 STATEMENT: >>>
 UID allocation for this document (coordinate parallel tickets before minting):
 GSSC5-79 Member FE Root + Router owns GSSC-MLLR-1 through GSSC-MLLR-13.
-Later Member FE tickets continue from GSSC-MLLR-14 and above.
+GSSC5-81 Member Header reserves GSSC-MLLR-14 and the contiguous Header chrome block above that (do not overlap Footer).
+GSSC5-82 Member Footer owns GSSC-MLLR-40 through GSSC-MLLR-48.
 Do not reuse numbers already claimed by another ticket.
 <<<
 
@@ -356,5 +357,197 @@ RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-26
   ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-MEMBER-FOOTER
+TITLE: Member Footer
+
+[[SECTION]]
+UID: GSSC-MLLR-FOOTER
+TITLE: Footer
+
+[REQUIREMENT]
+UID: GSSC-MLLR-40
+TITLE: Semantic
+STATEMENT: >>>
+The GSSC Website Member Frontend Footer SHALL contain the Footer Organization Name and the Footer Copyright.
+<<<
+RATIONALE: >>>
+The Footer presents society identity and copyright together in the Member Frontend shell. Each element's behavior is a separate requirement.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-82
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-20
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-21
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-22
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-41
+TITLE: Syntactic
+STATEMENT: >>>
+The Footer SHALL fill the Footer host across the full width of the App Root.
+<<<
+RATIONALE: >>>
+Authenticated Member Frontend views place the Footer at the bottom of the page. Filling the Footer host keeps that Footer edge-to-edge as the viewport resizes.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-82
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-20
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-42
+TITLE: Lexical
+STATEMENT: >>>
+The Footer SHALL use the black theme token for its background and the white theme token for its default text color.
+<<<
+RATIONALE: >>>
+Black and white theme tokens set a high-contrast Footer chrome. A fuller color role map for the Footer is not set yet beyond these token choices.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-82
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-20
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-FOOTER-ORG-NAME
+TITLE: Footer Organization Name
+
+[REQUIREMENT]
+UID: GSSC-MLLR-43
+TITLE: Semantic
+STATEMENT: >>>
+The Footer Organization Name SHALL display the full name of the Genealogical Society of Stanislaus County.
+<<<
+RATIONALE: >>>
+The Footer shows the society's full name so members can identify the organization. The acronym is not used in place of that full name.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-82
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-21
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-44
+TITLE: Syntactic
+STATEMENT: >>>
+The Footer Organization Name SHALL appear at the start of the Footer content.
+<<<
+RATIONALE: >>>
+Leading with the organization name identifies the Footer before the copyright statement.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-82
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-21
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-45
+TITLE: Lexical
+STATEMENT: >>>
+The Footer Organization Name SHALL use a semibold weight and the white theme token for its text color.
+<<<
+RATIONALE: >>>
+Semibold white text distinguishes the organization name within the Footer. A fuller type scale is not set yet beyond this weight and token choice.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-82
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-21
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-FOOTER-COPYRIGHT
+TITLE: Footer Copyright
+
+[REQUIREMENT]
+UID: GSSC-MLLR-46
+TITLE: Semantic
+STATEMENT: >>>
+The Footer Copyright SHALL display a copyright statement for the Genealogical Society of Stanislaus County.
+<<<
+RATIONALE: >>>
+The Footer shows a copyright statement so members see the society's rights notice. Exact wording is not set by this requirement.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-82
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-22
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-47
+TITLE: Syntactic
+STATEMENT: >>>
+The Footer Copyright SHALL appear after the Footer Organization Name in the Footer.
+<<<
+RATIONALE: >>>
+Placing the copyright after the organization name keeps identity first and the rights notice second.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-82
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-22
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-48
+TITLE: Lexical
+STATEMENT: >>>
+The Footer Copyright SHALL use a normal weight and the white theme token for its text color.
+<<<
+RATIONALE: >>>
+Normal-weight white text keeps the copyright readable on the Footer background without competing with the organization name. A fuller type scale is not set yet beyond this weight and token choice.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-82
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-22
+  ROLE: Refines
+
+[[/SECTION]]
 
 [[/SECTION]]
