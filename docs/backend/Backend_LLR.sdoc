@@ -5832,7 +5832,7 @@ UID: GSSC-BLLR-ANNOUNCEMENTS-COLLECTION-GET
 TITLE: GET
 
 [REQUIREMENT]
-UID: GSSC-BLLR-423
+UID: GSSC-BLLR-438
 TITLE: Public Announcement List
 STATEMENT: >>>
 The GSSC Website Unified Backend SHALL return only public announcements when listing announcements without a valid Login Token.
@@ -5850,7 +5850,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-BLLR-424
+UID: GSSC-BLLR-439
 TITLE: Authenticated Announcement List
 STATEMENT: >>>
 The GSSC Website Unified Backend SHALL return public and members-only announcements when listing announcements for a logged-in member.
@@ -5868,7 +5868,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-BLLR-425
+UID: GSSC-BLLR-440
 TITLE: Announcement List Entry Fields
 STATEMENT: >>>
 The GSSC Website Unified Backend SHALL include header, body, tags, cuid, index, and start and end calendar fields in each announcement list entry, and SHALL return included events in a separate events array beside the announcements array.
@@ -5886,7 +5886,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-BLLR-426
+UID: GSSC-BLLR-441
 TITLE: Announcement List Index Order
 STATEMENT: >>>
 The GSSC Website Unified Backend SHALL order announcement list results by index ascending.
@@ -5904,7 +5904,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-BLLR-427
+UID: GSSC-BLLR-442
 TITLE: Announcement List Filters
 STATEMENT: >>>
 The GSSC Website Unified Backend SHALL accept announcement-list query filters for header, body, tag, cuid, and content, matching header, body, tag, and content as a case-insensitive substring, matching content against the header or the body, and matching cuid exactly.
@@ -5918,11 +5918,11 @@ CHANGE_DRIVER: GSSC5-68
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-BHLR-219
+  VALUE: GSSC-BHLR-222
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-BLLR-433
+UID: GSSC-BLLR-448
 TITLE: Public Announcement Events
 STATEMENT: >>>
 The GSSC Website Unified Backend SHALL include each upcoming public event in the public announcement list response when today's calendar date is on or after that event's announcement-window start and on or before that event's date.
@@ -5940,7 +5940,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-BLLR-434
+UID: GSSC-BLLR-449
 TITLE: Authenticated Announcement Events
 STATEMENT: >>>
 The GSSC Website Unified Backend SHALL include each upcoming public or members-only event in the authenticated announcement list response when today's calendar date is on or after that event's announcement-window start and on or before that event's date.
@@ -5964,7 +5964,7 @@ UID: GSSC-BLLR-ANNOUNCEMENTS-COLLECTION-POST
 TITLE: POST
 
 [REQUIREMENT]
-UID: GSSC-BLLR-431
+UID: GSSC-BLLR-446
 TITLE: Announcement Creation
 STATEMENT: >>>
 The GSSC Website Unified Backend SHALL create an announcement from a template for a logged-in member who has create permission on that template, requiring a body and a template cuid, accepting optional header, resources, tags, and index, storing isPublic and permission values from the template, and storing tags as the template tags plus the requested tags.
@@ -5978,11 +5978,11 @@ CHANGE_DRIVER: GSSC5-68
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-BHLR-218
+  VALUE: GSSC-BHLR-221
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-BLLR-432
+UID: GSSC-BLLR-447
 TITLE: Announcement Creation Forbidden
 STATEMENT: >>>
 The GSSC Website Unified Backend SHALL reject announcement creation without storing an announcement when the caller lacks create permission on the template.
@@ -5996,7 +5996,7 @@ CHANGE_DRIVER: GSSC5-68
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-BHLR-218
+  VALUE: GSSC-BHLR-221
   ROLE: Refines
 
 [[/SECTION]]
@@ -6012,7 +6012,7 @@ UID: GSSC-BLLR-ANNOUNCEMENTS-ITEM-GET
 TITLE: GET
 
 [REQUIREMENT]
-UID: GSSC-BLLR-428
+UID: GSSC-BLLR-443
 TITLE: Public Announcement Get
 STATEMENT: >>>
 The GSSC Website Unified Backend SHALL return a public announcement by cuid in the path to an unauthenticated caller, including header, body, resources, tags, index, and start and end calendar fields.
@@ -6030,7 +6030,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-BLLR-429
+UID: GSSC-BLLR-444
 TITLE: Public Announcement Get Rejects Private
 STATEMENT: >>>
 The GSSC Website Unified Backend SHALL reject an unauthenticated request for a members-only announcement by cuid.
@@ -6048,7 +6048,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-BLLR-430
+UID: GSSC-BLLR-445
 TITLE: Authenticated Announcement Get
 STATEMENT: >>>
 The GSSC Website Unified Backend SHALL return any announcement by cuid in the path to a logged-in member, including header, body, resources, tags, index, and start and end calendar fields.
@@ -6072,7 +6072,7 @@ UID: GSSC-BLLR-ANNOUNCEMENTS-ITEM-PATCH
 TITLE: PATCH
 
 [REQUIREMENT]
-UID: GSSC-BLLR-435
+UID: GSSC-BLLR-450
 TITLE: Announcement Modification
 STATEMENT: >>>
 The GSSC Website Unified Backend SHALL accept modification of header, body, resources, tags, and index on an announcement by a logged-in member who has modify permission on that announcement.
@@ -6090,7 +6090,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-BLLR-436
+UID: GSSC-BLLR-451
 TITLE: Announcement IsPublic Modification
 STATEMENT: >>>
 The GSSC Website Unified Backend SHALL accept an isPublic change on an announcement only when the caller has create, modify, and delete permission on that announcement.
@@ -6114,7 +6114,7 @@ UID: GSSC-BLLR-ANNOUNCEMENTS-ITEM-DELETE
 TITLE: DELETE
 
 [REQUIREMENT]
-UID: GSSC-BLLR-437
+UID: GSSC-BLLR-452
 TITLE: Announcement Deletion
 STATEMENT: >>>
 The GSSC Website Unified Backend SHALL delete an announcement by cuid for a logged-in member who has delete permission on that announcement.

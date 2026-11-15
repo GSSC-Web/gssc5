@@ -115,7 +115,7 @@ export const announcement = new Elysia({
       const loggedIn = !("failure" in session);
       const prisma = getPrisma(loadConfig().DATABASE_URL);
 
-      // @relation(GSSC-BLLR-423, GSSC-BLLR-424, scope=range_start, role=Implementation)
+      // @relation(GSSC-BLLR-438, GSSC-BLLR-439, scope=range_start, role=Implementation)
       const announcementRows = await prisma.pageDataEntry.findMany({
         where: {
           datatype: "announcement",
@@ -123,9 +123,9 @@ export const announcement = new Elysia({
         },
         orderBy: { index: "asc" },
       });
-      // @relation(GSSC-BLLR-423, GSSC-BLLR-424, scope=range_end, role=Implementation)
+      // @relation(GSSC-BLLR-438, GSSC-BLLR-439, scope=range_end, role=Implementation)
 
-      // @relation(GSSC-BLLR-433, GSSC-BLLR-434, scope=range_start, role=Implementation)
+      // @relation(GSSC-BLLR-448, GSSC-BLLR-449, scope=range_start, role=Implementation)
       const eventRows = await prisma.event.findMany({
         where: loggedIn ? {} : { isPublic: true },
         orderBy: [{ year: "asc" }, { month: "asc" }, { day: "asc" }],
@@ -134,18 +134,18 @@ export const announcement = new Elysia({
       const inWindowEvents = eventRows.filter((row) =>
         isUpcomingInAnnouncementWindow(row, today),
       );
-      // @relation(GSSC-BLLR-433, GSSC-BLLR-434, scope=range_end, role=Implementation)
+      // @relation(GSSC-BLLR-448, GSSC-BLLR-449, scope=range_end, role=Implementation)
 
-      // @relation(GSSC-BLLR-427, scope=range_start, role=Implementation)
+      // @relation(GSSC-BLLR-442, scope=range_start, role=Implementation)
       const filtered = applyAnnouncementFilters(announcementRows, query);
-      // @relation(GSSC-BLLR-427, scope=range_end, role=Implementation)
+      // @relation(GSSC-BLLR-442, scope=range_end, role=Implementation)
 
-      // @relation(GSSC-BLLR-425, GSSC-BLLR-426, scope=range_start, role=Implementation)
+      // @relation(GSSC-BLLR-440, GSSC-BLLR-441, scope=range_start, role=Implementation)
       return status(200, {
         announcements: filtered.map((row) => toAnnouncementListEntry(row)),
         events: inWindowEvents.map((row) => toIncludedEventEntry(row)),
       });
-      // @relation(GSSC-BLLR-425, GSSC-BLLR-426, scope=range_end, role=Implementation)
+      // @relation(GSSC-BLLR-440, GSSC-BLLR-441, scope=range_end, role=Implementation)
     },
     {
       query: t.Object({
@@ -172,13 +172,13 @@ export const announcement = new Elysia({
       });
       if (!row) return status(404, "Not Found" as const);
 
-      // @relation(GSSC-BLLR-429, scope=range_start, role=Implementation)
+      // @relation(GSSC-BLLR-444, scope=range_start, role=Implementation)
       if (!row.isPublic && !loggedIn) return status(403, "Forbidden" as const);
-      // @relation(GSSC-BLLR-429, scope=range_end, role=Implementation)
+      // @relation(GSSC-BLLR-444, scope=range_end, role=Implementation)
 
-      // @relation(GSSC-BLLR-428, GSSC-BLLR-430, scope=range_start, role=Implementation)
+      // @relation(GSSC-BLLR-443, GSSC-BLLR-445, scope=range_start, role=Implementation)
       return status(200, toAnnouncementDetail(row));
-      // @relation(GSSC-BLLR-428, GSSC-BLLR-430, scope=range_end, role=Implementation)
+      // @relation(GSSC-BLLR-443, GSSC-BLLR-445, scope=range_end, role=Implementation)
     },
     {
       params: t.Object({ cuid: t.String({ minLength: 1 }) }),
@@ -205,11 +205,11 @@ export const announcement = new Elysia({
       const template = await prisma.contentTemplate.findUnique({ where: { id: templateId } });
       if (!template) return status(404, "Not Found" as const);
 
-      // @relation(GSSC-BLLR-432, scope=range_start, role=Implementation)
+      // @relation(GSSC-BLLR-447, scope=range_start, role=Implementation)
       if (!hasPerm(session.user, template.createPerm)) {
         return status(403, "Forbidden" as const);
       }
-      // @relation(GSSC-BLLR-432, scope=range_end, role=Implementation)
+      // @relation(GSSC-BLLR-447, scope=range_end, role=Implementation)
 
       const header = body.header === undefined ? null : body.header;
       const resources = body.resources ?? [];
@@ -217,7 +217,7 @@ export const announcement = new Elysia({
       const index = body.index ?? 0;
       const tags = uniqueTags([...parseStringArray(template.tags), ...requestTags]);
 
-      // @relation(GSSC-BLLR-431, scope=range_start, role=Implementation)
+      // @relation(GSSC-BLLR-446, scope=range_start, role=Implementation)
       const created = await prisma.pageDataEntry.create({
         data: {
           datatype: "announcement",
@@ -234,7 +234,7 @@ export const announcement = new Elysia({
         },
       });
       return status(201, toAnnouncementDetail(created));
-      // @relation(GSSC-BLLR-431, scope=range_end, role=Implementation)
+      // @relation(GSSC-BLLR-446, scope=range_end, role=Implementation)
     },
     {
       body: AnnouncementCreateBody,
@@ -261,7 +261,7 @@ export const announcement = new Elysia({
 
       const wantsIsPublic = body.isPublic !== undefined;
       if (wantsIsPublic) {
-        // @relation(GSSC-BLLR-436, scope=range_start, role=Implementation)
+        // @relation(GSSC-BLLR-451, scope=range_start, role=Implementation)
         if (
           !hasPerm(session.user, row.createPerm) ||
           !hasPerm(session.user, row.modifyPerm) ||
@@ -269,7 +269,7 @@ export const announcement = new Elysia({
         ) {
           return status(403, "Forbidden" as const);
         }
-        // @relation(GSSC-BLLR-436, scope=range_end, role=Implementation)
+        // @relation(GSSC-BLLR-451, scope=range_end, role=Implementation)
       } else {
         if (!hasPerm(session.user, row.modifyPerm)) {
           return status(403, "Forbidden" as const);
@@ -292,13 +292,13 @@ export const announcement = new Elysia({
       if (body.index !== undefined) data.index = body.index;
       if (wantsIsPublic) data.isPublic = body.isPublic;
 
-      // @relation(GSSC-BLLR-435, scope=range_start, role=Implementation)
+      // @relation(GSSC-BLLR-450, scope=range_start, role=Implementation)
       const updated = await prisma.pageDataEntry.update({
         where: { id: row.id },
         data,
       });
       return status(200, toAnnouncementDetail(updated));
-      // @relation(GSSC-BLLR-435, scope=range_end, role=Implementation)
+      // @relation(GSSC-BLLR-450, scope=range_end, role=Implementation)
     },
     {
       params: t.Object({ cuid: t.String({ minLength: 1 }) }),
@@ -324,13 +324,13 @@ export const announcement = new Elysia({
       });
       if (!row) return status(404, "Not Found" as const);
 
-      // @relation(GSSC-BLLR-437, scope=range_start, role=Implementation)
+      // @relation(GSSC-BLLR-452, scope=range_start, role=Implementation)
       if (!hasPerm(session.user, row.deletePerm)) {
         return status(403, "Forbidden" as const);
       }
       await prisma.pageDataEntry.delete({ where: { id: row.id } });
       return status(204, undefined);
-      // @relation(GSSC-BLLR-437, scope=range_end, role=Implementation)
+      // @relation(GSSC-BLLR-452, scope=range_end, role=Implementation)
     },
     {
       params: t.Object({ cuid: t.String({ minLength: 1 }) }),

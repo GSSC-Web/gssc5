@@ -260,8 +260,8 @@ function farPast(): { month: number; day: number; year: number } {
   return { month: now.getMonth() + 1, day: now.getDate(), year: now.getFullYear() - 2 };
 }
 
-// @relation(GSSC-BLLR-423, scope=range_start, role=Test)
-test("GSSC-BLLR-423 Public Announcement List", async () => {
+// @relation(GSSC-BLLR-438, scope=range_start, role=Test)
+test("GSSC-BLLR-438 Public Announcement List", async () => {
   await seedAnnouncement({ body: "public ann", isPublic: true, header: "Pub", index: 1 });
   await seedAnnouncement({ body: "private ann", isPublic: false, header: "Priv", index: 2 });
 
@@ -271,10 +271,10 @@ test("GSSC-BLLR-423 Public Announcement List", async () => {
   expect(list.some((entry) => entry.body === "public ann")).toBe(true);
   expect(list.some((entry) => entry.body === "private ann")).toBe(false);
 });
-// @relation(GSSC-BLLR-423, scope=range_end, role=Test)
+// @relation(GSSC-BLLR-438, scope=range_end, role=Test)
 
-// @relation(GSSC-BLLR-424, scope=range_start, role=Test)
-test("GSSC-BLLR-424 Authenticated Announcement List", async () => {
+// @relation(GSSC-BLLR-439, scope=range_start, role=Test)
+test("GSSC-BLLR-439 Authenticated Announcement List", async () => {
   await seedAnnouncement({ body: "auth-public-ann", isPublic: true, index: 10 });
   await seedAnnouncement({ body: "auth-private-ann", isPublic: false, index: 11 });
 
@@ -284,10 +284,10 @@ test("GSSC-BLLR-424 Authenticated Announcement List", async () => {
   expect(list.some((entry) => entry.body === "auth-public-ann")).toBe(true);
   expect(list.some((entry) => entry.body === "auth-private-ann")).toBe(true);
 });
-// @relation(GSSC-BLLR-424, scope=range_end, role=Test)
+// @relation(GSSC-BLLR-439, scope=range_end, role=Test)
 
-// @relation(GSSC-BLLR-425, scope=range_start, role=Test)
-test("GSSC-BLLR-425 Announcement List Entry Fields", async () => {
+// @relation(GSSC-BLLR-440, scope=range_start, role=Test)
+test("GSSC-BLLR-440 Announcement List Entry Fields", async () => {
   const row = await seedAnnouncement({
     header: "Fields",
     body: "field body ann",
@@ -313,10 +313,10 @@ test("GSSC-BLLR-425 Announcement List Entry Fields", async () => {
     endYear: null,
   });
 });
-// @relation(GSSC-BLLR-425, scope=range_end, role=Test)
+// @relation(GSSC-BLLR-440, scope=range_end, role=Test)
 
-// @relation(GSSC-BLLR-426, scope=range_start, role=Test)
-test("GSSC-BLLR-426 Announcement List Index Order", async () => {
+// @relation(GSSC-BLLR-441, scope=range_start, role=Test)
+test("GSSC-BLLR-441 Announcement List Index Order", async () => {
   const stamp = `ann-order-${Date.now()}`;
   await seedAnnouncement({ body: `${stamp}-c`, isPublic: true, index: 30, tags: [stamp] });
   await seedAnnouncement({ body: `${stamp}-a`, isPublic: true, index: 10, tags: [stamp] });
@@ -328,10 +328,10 @@ test("GSSC-BLLR-426 Announcement List Index Order", async () => {
   expect(list.map((entry) => entry.body)).toEqual([`${stamp}-a`, `${stamp}-b`, `${stamp}-c`]);
   expect(list.map((entry) => entry.index)).toEqual([10, 20, 30]);
 });
-// @relation(GSSC-BLLR-426, scope=range_end, role=Test)
+// @relation(GSSC-BLLR-441, scope=range_end, role=Test)
 
-// @relation(GSSC-BLLR-427, scope=range_start, role=Test)
-test("GSSC-BLLR-427 Announcement List Filters", async () => {
+// @relation(GSSC-BLLR-442, scope=range_start, role=Test)
+test("GSSC-BLLR-442 Announcement List Filters", async () => {
   const stamp = `ann-filt-${Date.now()}`;
   const row = await seedAnnouncement({
     header: `Alpha ${stamp}`,
@@ -369,10 +369,10 @@ test("GSSC-BLLR-427 Announcement List Filters", async () => {
   );
   expect(listAnnouncements(byContentBody.body).map((e) => e.cuid)).toContain(row.id);
 });
-// @relation(GSSC-BLLR-427, scope=range_end, role=Test)
+// @relation(GSSC-BLLR-442, scope=range_end, role=Test)
 
-// @relation(GSSC-BLLR-428, scope=range_start, role=Test)
-test("GSSC-BLLR-428 Public Announcement Get", async () => {
+// @relation(GSSC-BLLR-443, scope=range_start, role=Test)
+test("GSSC-BLLR-443 Public Announcement Get", async () => {
   const row = await seedAnnouncement({
     header: "Get Pub",
     body: "get public ann",
@@ -399,18 +399,18 @@ test("GSSC-BLLR-428 Public Announcement Get", async () => {
     endYear: null,
   });
 });
-// @relation(GSSC-BLLR-428, scope=range_end, role=Test)
+// @relation(GSSC-BLLR-443, scope=range_end, role=Test)
 
-// @relation(GSSC-BLLR-429, scope=range_start, role=Test)
-test("GSSC-BLLR-429 Public Announcement Get Rejects Private", async () => {
+// @relation(GSSC-BLLR-444, scope=range_start, role=Test)
+test("GSSC-BLLR-444 Public Announcement Get Rejects Private", async () => {
   const row = await seedAnnouncement({ body: "hidden ann", isPublic: false });
   const { status } = await getJson(`/announcements/${row.id}`);
   expect(status).toBe(403);
 });
-// @relation(GSSC-BLLR-429, scope=range_end, role=Test)
+// @relation(GSSC-BLLR-444, scope=range_end, role=Test)
 
-// @relation(GSSC-BLLR-430, scope=range_start, role=Test)
-test("GSSC-BLLR-430 Authenticated Announcement Get", async () => {
+// @relation(GSSC-BLLR-445, scope=range_start, role=Test)
+test("GSSC-BLLR-445 Authenticated Announcement Get", async () => {
   const row = await seedAnnouncement({
     header: "Mem",
     body: "member get ann",
@@ -437,10 +437,10 @@ test("GSSC-BLLR-430 Authenticated Announcement Get", async () => {
     endYear: null,
   });
 });
-// @relation(GSSC-BLLR-430, scope=range_end, role=Test)
+// @relation(GSSC-BLLR-445, scope=range_end, role=Test)
 
-// @relation(GSSC-BLLR-431, scope=range_start, role=Test)
-test("GSSC-BLLR-431 Announcement Creation", async () => {
+// @relation(GSSC-BLLR-446, scope=range_start, role=Test)
+test("GSSC-BLLR-446 Announcement Creation", async () => {
   const { status, body } = await sendJson(
     "POST",
     "/announcements",
@@ -477,10 +477,10 @@ test("GSSC-BLLR-431 Announcement Creation", async () => {
   expect(stored?.deletePerm).toBe(MEMBER_PERM);
   expect(stored?.templateId).toBe(publicTemplateId);
 });
-// @relation(GSSC-BLLR-431, scope=range_end, role=Test)
+// @relation(GSSC-BLLR-446, scope=range_end, role=Test)
 
-// @relation(GSSC-BLLR-432, scope=range_start, role=Test)
-test("GSSC-BLLR-432 Announcement Creation Forbidden", async () => {
+// @relation(GSSC-BLLR-447, scope=range_start, role=Test)
+test("GSSC-BLLR-447 Announcement Creation Forbidden", async () => {
   const before = await db().pageDataEntry.count({ where: { datatype: "announcement" } });
   const { status } = await sendJson(
     "POST",
@@ -492,10 +492,10 @@ test("GSSC-BLLR-432 Announcement Creation Forbidden", async () => {
   const after = await db().pageDataEntry.count({ where: { datatype: "announcement" } });
   expect(after).toBe(before);
 });
-// @relation(GSSC-BLLR-432, scope=range_end, role=Test)
+// @relation(GSSC-BLLR-447, scope=range_end, role=Test)
 
-// @relation(GSSC-BLLR-433, scope=range_start, role=Test)
-test("GSSC-BLLR-433 Public Announcement Events", async () => {
+// @relation(GSSC-BLLR-448, scope=range_start, role=Test)
+test("GSSC-BLLR-448 Public Announcement Events", async () => {
   const stamp = `ann-ev-pub-${Date.now()}`;
   const future = farFuture();
   const past = farPast();
@@ -554,10 +554,10 @@ test("GSSC-BLLR-433 Public Announcement Events", async () => {
   expect(events.some((e) => e.name === `${stamp}-private`)).toBe(false);
   expect(events.some((e) => e.name === `${stamp}-not-yet`)).toBe(false);
 });
-// @relation(GSSC-BLLR-433, scope=range_end, role=Test)
+// @relation(GSSC-BLLR-448, scope=range_end, role=Test)
 
-// @relation(GSSC-BLLR-434, scope=range_start, role=Test)
-test("GSSC-BLLR-434 Authenticated Announcement Events", async () => {
+// @relation(GSSC-BLLR-449, scope=range_start, role=Test)
+test("GSSC-BLLR-449 Authenticated Announcement Events", async () => {
   const stamp = `ann-ev-auth-${Date.now()}`;
   const future = farFuture();
   const today = new Date();
@@ -584,10 +584,10 @@ test("GSSC-BLLR-434 Authenticated Announcement Events", async () => {
   expect(authList.status).toBe(200);
   expect(listEvents(authList.body).some((e) => e.cuid === privateUpcoming.id)).toBe(true);
 });
-// @relation(GSSC-BLLR-434, scope=range_end, role=Test)
+// @relation(GSSC-BLLR-449, scope=range_end, role=Test)
 
-// @relation(GSSC-BLLR-435, scope=range_start, role=Test)
-test("GSSC-BLLR-435 Announcement Modification", async () => {
+// @relation(GSSC-BLLR-450, scope=range_start, role=Test)
+test("GSSC-BLLR-450 Announcement Modification", async () => {
   const row = await seedAnnouncement({
     body: "before",
     isPublic: true,
@@ -623,10 +623,10 @@ test("GSSC-BLLR-435 Announcement Modification", async () => {
     endYear: null,
   });
 });
-// @relation(GSSC-BLLR-435, scope=range_end, role=Test)
+// @relation(GSSC-BLLR-450, scope=range_end, role=Test)
 
-// @relation(GSSC-BLLR-436, scope=range_start, role=Test)
-test("GSSC-BLLR-436 Announcement IsPublic Modification", async () => {
+// @relation(GSSC-BLLR-451, scope=range_start, role=Test)
+test("GSSC-BLLR-451 Announcement IsPublic Modification", async () => {
   const allowed = await seedAnnouncement({
     body: "flip",
     isPublic: true,
@@ -661,10 +661,10 @@ test("GSSC-BLLR-436 Announcement IsPublic Modification", async () => {
   );
   expect(bad.status).toBe(403);
 });
-// @relation(GSSC-BLLR-436, scope=range_end, role=Test)
+// @relation(GSSC-BLLR-451, scope=range_end, role=Test)
 
-// @relation(GSSC-BLLR-437, scope=range_start, role=Test)
-test("GSSC-BLLR-437 Announcement Deletion", async () => {
+// @relation(GSSC-BLLR-452, scope=range_start, role=Test)
+test("GSSC-BLLR-452 Announcement Deletion", async () => {
   const allowed = await seedAnnouncement({
     body: "delete-me-ann",
     isPublic: true,
@@ -694,7 +694,7 @@ test("GSSC-BLLR-437 Announcement Deletion", async () => {
   expect(bad.status).toBe(403);
   expect(await db().pageDataEntry.findUnique({ where: { id: denied.id } })).not.toBeNull();
 });
-// @relation(GSSC-BLLR-437, scope=range_end, role=Test)
+// @relation(GSSC-BLLR-452, scope=range_end, role=Test)
 
 // Sanity: section routes do not surface announcement datatype rows.
 test("announcement datatype isolated from /sections", async () => {

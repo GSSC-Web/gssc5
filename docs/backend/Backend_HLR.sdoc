@@ -2280,7 +2280,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-BHLR-218
+UID: GSSC-BHLR-221
 TITLE: Announcement Creation
 STATEMENT: >>>
 The GSSC Website Unified Backend SHALL accept creation of an announcement by a logged-in member who has the necessary create permission, using a content template.
@@ -2303,7 +2303,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-BHLR-219
+UID: GSSC-BHLR-222
 TITLE: Announcement List Filters
 STATEMENT: >>>
 The GSSC Website Unified Backend SHALL accept filtering of announcement lists.
