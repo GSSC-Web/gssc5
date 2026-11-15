@@ -19,6 +19,12 @@ const SectionListEntry = t.Object({
   body: PageDataEntryPlain.properties.body,
   tags: t.Array(t.String()),
   index: PageDataEntryPlain.properties.index,
+  startMonth: PageDataEntryPlain.properties.startMonth,
+  startDay: PageDataEntryPlain.properties.startDay,
+  startYear: PageDataEntryPlain.properties.startYear,
+  endMonth: PageDataEntryPlain.properties.endMonth,
+  endDay: PageDataEntryPlain.properties.endDay,
+  endYear: PageDataEntryPlain.properties.endYear,
 });
 
 /**
@@ -32,6 +38,12 @@ const SectionDetail = t.Object({
   resources: t.Array(t.String()),
   tags: t.Array(t.String()),
   index: PageDataEntryPlain.properties.index,
+  startMonth: PageDataEntryPlain.properties.startMonth,
+  startDay: PageDataEntryPlain.properties.startDay,
+  startYear: PageDataEntryPlain.properties.startYear,
+  endMonth: PageDataEntryPlain.properties.endMonth,
+  endDay: PageDataEntryPlain.properties.endDay,
+  endYear: PageDataEntryPlain.properties.endYear,
 });
 
 /**
@@ -103,6 +115,12 @@ export const section = new Elysia({
           body: row.body,
           tags: parseStringArray(row.tags),
           index: row.index,
+          startMonth: row.startMonth,
+          startDay: row.startDay,
+          startYear: row.startYear,
+          endMonth: row.endMonth,
+          endDay: row.endDay,
+          endYear: row.endYear,
         })),
       );
       // @relation(GSSC-BLLR-322, GSSC-BLLR-323, scope=range_end, role=Implementation)
@@ -344,5 +362,11 @@ function toSectionDetail(row: EntryRow) {
     resources: parseStringArray(row.resources),
     tags: parseStringArray(row.tags),
     index: row.index,
+    startMonth: row.startMonth,
+    startDay: row.startDay,
+    startYear: row.startYear,
+    endMonth: row.endMonth,
+    endDay: row.endDay,
+    endYear: row.endYear,
   };
 }

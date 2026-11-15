@@ -7,6 +7,15 @@ import {
   type BackendSectionData,
 } from './section-from-cuid';
 
+const unsetBounds = {
+  startMonth: null,
+  startDay: null,
+  startYear: null,
+  endMonth: null,
+  endDay: null,
+  endYear: null,
+} as const;
+
 const sampleBackend: BackendSectionData = {
   cuid: 'section_cuid_demo',
   header: 'Society Purpose',
@@ -14,6 +23,7 @@ const sampleBackend: BackendSectionData = {
   resources: ['https://www.google.com', '/research-tools/guide'],
   tags: ['home'],
   index: 1,
+  ...unsetBounds,
 };
 
 const bodyOnlyBackend: BackendSectionData = {
@@ -23,6 +33,7 @@ const bodyOnlyBackend: BackendSectionData = {
   resources: [],
   tags: [],
   index: 2,
+  ...unsetBounds,
 };
 
 async function setupSectionFromCuid(
@@ -80,6 +91,25 @@ test('GSSC-PLLR-153 Syntactic', async () => {
   expect(absent.querySelector('.gssc-section')).toBeNull();
 });
 // @relation(GSSC-PLLR-153, scope=range_end, role=Test)
+
+// @relation(GSSC-PLLR-258, scope=range_start, role=Test)
+test('GSSC-PLLR-258 Semantic', async () => {
+  const outside: BackendSectionData = {
+    ...sampleBackend,
+    startMonth: 1,
+    startDay: 1,
+    startYear: 2099,
+    endMonth: 1,
+    endDay: 31,
+    endYear: 2099,
+  };
+  const { root: hidden } = await setupSectionFromCuid('section_cuid_demo', async () => outside);
+  expect(hidden.querySelector('gssc-section')).toBeNull();
+
+  const { root: shown } = await setupSectionFromCuid('section_cuid_demo', async () => sampleBackend);
+  expect(shown.querySelector('gssc-section')).not.toBeNull();
+});
+// @relation(GSSC-PLLR-258, scope=range_end, role=Test)
 
 // @relation(GSSC-PLLR-154, scope=range_start, role=Test)
 test('GSSC-PLLR-154 Lexical', async () => {

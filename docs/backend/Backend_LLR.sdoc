@@ -5571,15 +5571,18 @@ RELATIONS:
 UID: GSSC-BLLR-322
 TITLE: Section List Entry Fields
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL include header, body, tags, cuid, and index in each section list entry.
+The GSSC Website Unified Backend SHALL include header, body, tags, cuid, index, start month, start day, start year, end month, end day, and end year in each section list entry.
 <<<
 RATIONALE: >>>
-List entries carry the fields needed for page assembly without a second fetch for summary data.
+List entries carry the fields needed for page assembly without a second fetch for summary data, including optional display-window bounds.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-37
-REVIEW_STATUS: Approved
+CHANGE_DRIVER: >>>
+GSSC5-37
+GSSC5-67
+<<<
+REVIEW_STATUS: Changed
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-135
@@ -5679,15 +5682,18 @@ TITLE: GET
 UID: GSSC-BLLR-324
 TITLE: Public Section Get
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return a public section by cuid in the path to an unauthenticated caller, including header, body, resources, tags, and index.
+The GSSC Website Unified Backend SHALL return a public section by cuid in the path to an unauthenticated caller, including header, body, resources, tags, index, start month, start day, start year, end month, end day, and end year.
 <<<
 RATIONALE: >>>
-Path cuid identifies one public section for assembly.
+Path cuid identifies one public section for assembly, including optional display-window bounds.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-37
-REVIEW_STATUS: Approved
+CHANGE_DRIVER: >>>
+GSSC5-37
+GSSC5-67
+<<<
+REVIEW_STATUS: Changed
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-136
@@ -5715,15 +5721,18 @@ RELATIONS:
 UID: GSSC-BLLR-326
 TITLE: Authenticated Section Get
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return any section by cuid in the path to a logged-in member, including header, body, resources, tags, and index.
+The GSSC Website Unified Backend SHALL return any section by cuid in the path to a logged-in member, including header, body, resources, tags, index, start month, start day, start year, end month, end day, and end year.
 <<<
 RATIONALE: >>>
-A logged-in member can load public or members-only sections by cuid.
+A logged-in member can load public or members-only sections by cuid, including optional display-window bounds.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-37
-REVIEW_STATUS: Approved
+CHANGE_DRIVER: >>>
+GSSC5-37
+GSSC5-67
+<<<
+REVIEW_STATUS: Changed
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-138

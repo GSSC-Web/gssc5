@@ -7,6 +7,7 @@ import {
   signal,
 } from '@angular/core';
 import { backend } from '../../services/backend';
+import { isSectionVisibleOn } from '../../services/section-display-window';
 import { Section, type SectionContents, type SectionResource } from '../section/section';
 
 /** Public section payload from Unified Backend GET /sections/{cuid}. */
@@ -17,6 +18,12 @@ export type BackendSectionData = {
   resources: string[];
   tags: string[];
   index: number;
+  startMonth: number | null;
+  startDay: number | null;
+  startYear: number | null;
+  endMonth: number | null;
+  endDay: number | null;
+  endYear: number | null;
 };
 
 export type SectionBackendGet = (cuid: string) => Promise<BackendSectionData | null>;
@@ -83,10 +90,14 @@ export class SectionFromCuid {
 
   private async load(cuid: string): Promise<void> {
     const generation = ++this.loadGeneration;
-    // @relation(GSSC-PLLR-152, scope=range_start, role=Implementation)
+    // @relation(GSSC-PLLR-152, GSSC-PLLR-258, scope=range_start, role=Implementation)
     const data = await this.backendGet(cuid);
     if (generation !== this.loadGeneration) return;
-    this.contents.set(data === null ? null : sectionContentsFromBackend(data));
-    // @relation(GSSC-PLLR-152, scope=range_end, role=Implementation)
+    if (data === null || !isSectionVisibleOn(data)) {
+      this.contents.set(null);
+      return;
+    }
+    this.contents.set(sectionContentsFromBackend(data));
+    // @relation(GSSC-PLLR-152, GSSC-PLLR-258, scope=range_end, role=Implementation)
   }
 }

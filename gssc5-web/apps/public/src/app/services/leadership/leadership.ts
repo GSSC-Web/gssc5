@@ -1,6 +1,7 @@
 import { InjectionToken } from '@angular/core';
 import type { ContactCardContents } from '../../modules/contact-card-large/contact-card-large';
 import { backend } from '../backend';
+import { filterSectionsVisibleOn } from '../section-display-window';
 
 /** Backend tag that binds public Leadership Intro sections to this page. */
 export const LEADERSHIP_INTRO_TAG = 'leadership';
@@ -23,6 +24,12 @@ export type LeadershipSectionListEntry = {
   body: string;
   tags: string[];
   index: number;
+  startMonth: number | null;
+  startDay: number | null;
+  startYear: number | null;
+  endMonth: number | null;
+  endDay: number | null;
+  endYear: number | null;
 };
 
 export type LeadershipListGet = () => Promise<LeadershipEntry[]>;
@@ -67,7 +74,7 @@ async function defaultLeadershipSectionListByTag(
     if (result.error || result.data === null || result.data === undefined) {
       return [];
     }
-    return result.data;
+    return filterSectionsVisibleOn(result.data);
   } catch {
     return [];
   }

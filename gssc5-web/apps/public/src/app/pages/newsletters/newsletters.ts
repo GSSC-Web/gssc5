@@ -10,6 +10,7 @@ import { DomSanitizer, type SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SectionFromCuid } from '../../modules/section-from-cuid/section-from-cuid';
 import { backend } from '../../services/backend';
+import { filterSectionsVisibleOn } from '../../services/section-display-window';
 import {
   catalogVolumes,
   catalogYears,
@@ -33,6 +34,12 @@ export type NewsletterSectionListEntry = {
   body: string;
   tags: string[];
   index: number;
+  startMonth: number | null;
+  startDay: number | null;
+  startYear: number | null;
+  endMonth: number | null;
+  endDay: number | null;
+  endYear: number | null;
 };
 
 export type NewsletterSectionListByTag = (
@@ -101,7 +108,7 @@ async function defaultNewsletterSectionListByTag(
     if (result.error || result.data === null || result.data === undefined) {
       return [];
     }
-    return result.data;
+    return filterSectionsVisibleOn(result.data);
   } catch {
     return [];
   }

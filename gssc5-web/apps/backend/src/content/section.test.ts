@@ -272,6 +272,12 @@ test("GSSC-BLLR-322 Section List Entry Fields", async () => {
     body: "field body",
     tags: ["t1"],
     index: 42,
+    startMonth: null,
+    startDay: null,
+    startYear: null,
+    endMonth: null,
+    endDay: null,
+    endYear: null,
   });
 });
 // @relation(GSSC-BLLR-322, scope=range_end, role=Test)
@@ -311,6 +317,12 @@ test("GSSC-BLLR-324 Public Section Get", async () => {
     resources: ["r1"],
     tags: ["g"],
     index: 5,
+    startMonth: null,
+    startDay: null,
+    startYear: null,
+    endMonth: null,
+    endDay: null,
+    endYear: null,
   });
 });
 // @relation(GSSC-BLLR-324, scope=range_end, role=Test)
@@ -343,6 +355,12 @@ test("GSSC-BLLR-326 Authenticated Section Get", async () => {
     resources: ["x"],
     tags: ["m"],
     index: 7,
+    startMonth: null,
+    startDay: null,
+    startYear: null,
+    endMonth: null,
+    endDay: null,
+    endYear: null,
   });
 });
 // @relation(GSSC-BLLR-326, scope=range_end, role=Test)
@@ -482,6 +500,12 @@ test("GSSC-BLLR-330 Section Modification", async () => {
     resources: ["r2"],
     tags: ["new"],
     index: 8,
+    startMonth: null,
+    startDay: null,
+    startYear: null,
+    endMonth: null,
+    endDay: null,
+    endYear: null,
   });
 });
 // @relation(GSSC-BLLR-330, scope=range_end, role=Test)

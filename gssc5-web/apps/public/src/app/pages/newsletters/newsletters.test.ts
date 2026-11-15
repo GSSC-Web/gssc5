@@ -50,6 +50,15 @@ const fixtureCatalog: NewsletterCatalogEntry[] = [
   },
 ];
 
+const unsetBounds = {
+  startMonth: null,
+  startDay: null,
+  startYear: null,
+  endMonth: null,
+  endDay: null,
+  endYear: null,
+} as const;
+
 const fixtureIntro: NewsletterSectionListEntry[] = [
   {
     cuid: 'intro-b',
@@ -57,6 +66,7 @@ const fixtureIntro: NewsletterSectionListEntry[] = [
     body: 'b',
     tags: ['newsletter'],
     index: 2,
+    ...unsetBounds,
   },
   {
     cuid: 'intro-a',
@@ -64,6 +74,7 @@ const fixtureIntro: NewsletterSectionListEntry[] = [
     body: 'a',
     tags: ['newsletter'],
     index: 1,
+    ...unsetBounds,
   },
 ];
 
