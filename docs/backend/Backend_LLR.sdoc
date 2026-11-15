@@ -8988,14 +8988,17 @@ RELATIONS:
 UID: GSSC-BLLR-458
 TITLE: Account Photo Overwrite By User Cuid
 STATEMENT: >>>
-When an authenticated upload targets a user cuid that already has a photo in the account-photos store, the GSSC Website Unified Backend SHALL overwrite that stored photo rather than creating a second photo for the same user.
+When an authenticated upload targets a user cuid that already has a photo, the GSSC Website Unified Backend SHALL store the replacement under that user cuid in the account-photos store and SHALL delete the prior photo for that user—including any prior stored-file entry that user's Account Photo field referenced—rather than retaining a second photo.
 <<<
 RATIONALE: >>>
-One photo per user cuid keeps storage and account paths collision-free.
+One current photo per user keeps storage and account paths collision-free; replacing a photo must not leave the previous file behind.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-101
+CHANGE_DRIVER: >>>
+GSSC5-101
+GSSC5-102
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
