@@ -5,4 +5,20 @@
   </p>
   <p class="text-sm text-gssc-black" data-slot="backend-status">{{ backendMessage() }}</p>
   <gssc-section [contents]="demoContents" />
+
+  <gssc-editor
+    resourceId="home-editor-demo"
+    title="Generic editor preview"
+    (saved)="onEditorSaved()"
+    (cancelled)="onEditorCancelled()"
+  >
+    <gssc-form-text-field label="Header" [(value)]="editorHeader" />
+    <gssc-form-text-field label="Body" [(value)]="editorBody" />
+    <gssc-form-select-field
+      label="Image Position"
+      [options]="imagePositionOptions"
+      [(value)]="editorImagePosition"
+    />
+  </gssc-editor>
+  <p class="text-sm text-gssc-dark-brown" data-slot="editor-status">{{ editorStatus() }}</p>
 </section>

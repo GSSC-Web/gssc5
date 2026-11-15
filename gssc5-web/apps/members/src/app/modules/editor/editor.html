@@ -1,0 +1,56 @@
+<!-- @relation(GSSC-MLLR-180, GSSC-MLLR-181, GSSC-MLLR-182, scope=range_start, role=Implementation) -->
+<section
+  class="gssc-editor flex w-full flex-col gap-4 border border-gssc-gray bg-gssc-white px-4 py-5 font-sans text-gssc-dark-green"
+  [attr.data-resource-id]="resourceId()"
+  [attr.data-editing]="editing() ? 'true' : 'false'"
+  [attr.data-unavailable]="unavailable() ? 'true' : 'false'"
+>
+  @if (title()) {
+    <h2 class="gssc-editor__title m-0 text-[1.5em] font-semibold text-gssc-dark-green">
+      {{ title() }}
+    </h2>
+  }
+
+  @if (unavailable()) {
+    <!-- @relation(GSSC-MLLR-192, GSSC-MLLR-193, GSSC-MLLR-194, scope=range_start, role=Implementation) -->
+    <p
+      class="gssc-editor__unavailable m-0 rounded-md border border-gssc-dark-red bg-gssc-light-red px-3 py-2 font-sans text-sm text-gssc-dark-red"
+      role="alert"
+    >
+      This content is unavailable for modification because another member is already editing it.
+    </p>
+    <!-- @relation(GSSC-MLLR-192, GSSC-MLLR-193, GSSC-MLLR-194, scope=range_end, role=Implementation) -->
+  }
+
+  <!-- @relation(GSSC-MLLR-183, GSSC-MLLR-184, GSSC-MLLR-185, scope=range_start, role=Implementation) -->
+  <div class="gssc-editor__fields flex w-full flex-col gap-2">
+    <ng-content />
+  </div>
+  <!-- @relation(GSSC-MLLR-183, GSSC-MLLR-184, GSSC-MLLR-185, scope=range_end, role=Implementation) -->
+
+  @if (editing()) {
+    <div class="gssc-editor__actions flex flex-wrap items-center gap-3">
+      <!-- @relation(GSSC-MLLR-189, GSSC-MLLR-190, GSSC-MLLR-191, scope=range_start, role=Implementation) -->
+      <button
+        type="button"
+        class="gssc-editor__cancel inline-flex cursor-pointer items-center justify-center rounded-md border border-gssc-dark-green bg-gssc-white px-3 py-2 font-sans text-sm font-normal text-gssc-dark-green hover:bg-gssc-gray"
+        (click)="onCancel()"
+      >
+        Cancel
+      </button>
+      <!-- @relation(GSSC-MLLR-189, GSSC-MLLR-190, GSSC-MLLR-191, scope=range_end, role=Implementation) -->
+
+      <!-- @relation(GSSC-MLLR-186, GSSC-MLLR-187, GSSC-MLLR-188, scope=range_start, role=Implementation) -->
+      <button
+        type="button"
+        class="gssc-editor__save inline-flex cursor-pointer items-center justify-center rounded-md border border-gssc-dark-green bg-gssc-light-green px-3 py-2 font-sans text-sm font-normal text-gssc-dark-green hover:bg-gssc-gray disabled:cursor-not-allowed disabled:opacity-60"
+        [disabled]="!canSave()"
+        (click)="onSave()"
+      >
+        Save
+      </button>
+      <!-- @relation(GSSC-MLLR-186, GSSC-MLLR-187, GSSC-MLLR-188, scope=range_end, role=Implementation) -->
+    </div>
+  }
+</section>
+<!-- @relation(GSSC-MLLR-180, GSSC-MLLR-181, GSSC-MLLR-182, scope=range_end, role=Implementation) -->
