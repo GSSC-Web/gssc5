@@ -5583,7 +5583,7 @@ GSSC5-37
 GSSC5-67
 GSSC5-74
 <<<
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-135
@@ -5646,7 +5646,7 @@ CHANGE_DRIVER: >>>
 GSSC5-37
 GSSC5-74
 <<<
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-184
@@ -5698,7 +5698,7 @@ GSSC5-37
 GSSC5-67
 GSSC5-74
 <<<
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-136
@@ -5738,7 +5738,7 @@ GSSC5-37
 GSSC5-67
 GSSC5-74
 <<<
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-138
@@ -5765,7 +5765,7 @@ CHANGE_DRIVER: >>>
 GSSC5-37
 GSSC5-74
 <<<
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-139
@@ -7704,7 +7704,7 @@ Featured imagery for page data entries reuses the same stored-file identity patt
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-74
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-185
@@ -7722,7 +7722,7 @@ Position controls whether and on which side a featured image appears when a file
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-74
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-185

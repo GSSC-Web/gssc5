@@ -1416,7 +1416,7 @@ CHANGE_DRIVER: >>>
 GSSC5-25
 GSSC5-74
 <<<
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-PLLR-84
@@ -1433,7 +1433,7 @@ CHANGE_DRIVER: >>>
 GSSC5-25
 GSSC5-74
 <<<
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-PLLR-85
@@ -1515,7 +1515,7 @@ Optional featured imagery appears only when both a file and a side position are 
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-74
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-PLLR-261
@@ -1529,7 +1529,7 @@ Side placement at medium and larger viewports keeps body text beside the image. 
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-74
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-PLLR-262
@@ -1543,7 +1543,7 @@ Keeping the full image visible preserves the asset inside the width and parent s
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-74
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [[/SECTION]]
 
@@ -1580,7 +1580,7 @@ CHANGE_DRIVER: >>>
 GSSC5-25
 GSSC5-74
 <<<
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-PLLR-91
@@ -1812,7 +1812,7 @@ CHANGE_DRIVER: >>>
 GSSC5-50
 GSSC5-74
 <<<
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-136
@@ -1851,7 +1851,7 @@ CHANGE_DRIVER: >>>
 GSSC5-50
 GSSC5-74
 <<<
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-136
