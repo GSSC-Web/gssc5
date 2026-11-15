@@ -1917,11 +1917,8 @@ The Public Calendar is the month-view surface for society events. Backend list f
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-30
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
-- TYPE: Parent
-  VALUE: GSSC-PIR-5
-  ROLE: Refines
 - TYPE: Parent
   VALUE: GSSC-PHLR-12
   ROLE: Refines
@@ -1938,10 +1935,10 @@ Chrome above the grid keeps navigation available while the month fills the host.
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-30
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-PIR-5
+  VALUE: GSSC-PHLR-12
   ROLE: Refines
 
 [REQUIREMENT]
@@ -1956,10 +1953,10 @@ Theme tokens keep the calendar aligned with the public shell. A fuller calendar 
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-30
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-PIR-5
+  VALUE: GSSC-PHLR-12
   ROLE: Refines
 
 [[/SECTION]]
@@ -1980,10 +1977,10 @@ Previous and Next let visitors browse months without leaving the calendar. The l
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-30
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-PIR-5
+  VALUE: GSSC-PHLR-12
   ROLE: Refines
 
 [REQUIREMENT]
@@ -1998,10 +1995,10 @@ A single chrome row keeps month navigation discoverable and balanced above the g
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-30
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-PIR-5
+  VALUE: GSSC-PHLR-12
   ROLE: Refines
 
 [REQUIREMENT]
@@ -2016,10 +2013,10 @@ Dark-green sans-serif controls match other public interactive chrome.
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-30
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-PIR-5
+  VALUE: GSSC-PHLR-12
   ROLE: Refines
 
 [[/SECTION]]
@@ -2040,10 +2037,10 @@ Day cells are where visitors see and select events that fall on that date, inclu
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-30
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-PIR-5
+  VALUE: GSSC-PHLR-12
   ROLE: Refines
 
 [REQUIREMENT]
@@ -2058,10 +2055,10 @@ A Sunday-start week grid matches common month calendars. Outside-month padding c
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-30
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-PIR-5
+  VALUE: GSSC-PHLR-12
   ROLE: Refines
 
 [REQUIREMENT]
@@ -2076,10 +2073,10 @@ Muted outside-month numbers keep focus on the selected month while preserving gr
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-30
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-PIR-5
+  VALUE: GSSC-PHLR-12
   ROLE: Refines
 
 [[/SECTION]]
@@ -2100,10 +2097,10 @@ Chips mark events on the grid. Repeating the title on each week-row segment keep
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-30
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-PIR-5
+  VALUE: GSSC-PHLR-12
   ROLE: Refines
 
 [REQUIREMENT]
@@ -2118,10 +2115,10 @@ Per-day placement keeps chips aligned to dates; per-week-row segments carry the 
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-30
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-PIR-5
+  VALUE: GSSC-PHLR-12
   ROLE: Refines
 
 [REQUIREMENT]
@@ -2136,10 +2133,10 @@ Light chip backgrounds keep titles readable on the white calendar without compet
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-30
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-PIR-5
+  VALUE: GSSC-PHLR-12
   ROLE: Refines
 
 [[/SECTION]]
@@ -2160,10 +2157,10 @@ The overlay shows section-like event details without leaving the calendar. Escap
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-30
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-PIR-5
+  VALUE: GSSC-PHLR-12
   ROLE: Refines
 
 [REQUIREMENT]
@@ -2178,10 +2175,10 @@ Fullscreen on narrow viewports and a capped panel on larger viewports match the 
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-30
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-PIR-5
+  VALUE: GSSC-PHLR-12
   ROLE: Refines
 
 [REQUIREMENT]
@@ -2196,10 +2193,10 @@ Shared overlay tokens keep dismissible dialogs visually consistent across the pu
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-30
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-PIR-5
+  VALUE: GSSC-PHLR-12
   ROLE: Refines
 
 [[/SECTION]]
@@ -2220,10 +2217,10 @@ The title identifies the event in the overlay. Which field supplies the title wh
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-30
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-PIR-5
+  VALUE: GSSC-PHLR-12
   ROLE: Refines
 
 [REQUIREMENT]
@@ -2238,10 +2235,10 @@ Leading with the title matches generic section reading order.
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-30
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-PIR-5
+  VALUE: GSSC-PHLR-12
   ROLE: Refines
 
 [REQUIREMENT]
@@ -2256,10 +2253,10 @@ Matching Section Header emphasis keeps event details familiar beside generic sec
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-30
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-PIR-5
+  VALUE: GSSC-PHLR-12
   ROLE: Refines
 
 [[/SECTION]]
@@ -2280,10 +2277,10 @@ Body content is the primary prose of the event details, parallel to a Section Bo
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-30
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-PIR-5
+  VALUE: GSSC-PHLR-12
   ROLE: Refines
 
 [REQUIREMENT]
@@ -2298,10 +2295,10 @@ Reading order keeps title first and pairs body text with optional imagery like g
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-30
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-PIR-5
+  VALUE: GSSC-PHLR-12
   ROLE: Refines
 
 [REQUIREMENT]
@@ -2316,10 +2313,10 @@ Body copy stays neutral black so the dark-green title remains the emphasis.
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-30
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-PIR-5
+  VALUE: GSSC-PHLR-12
   ROLE: Refines
 
 [[/SECTION]]
@@ -2340,10 +2337,10 @@ Optional featured imagery follows the same rules as Section Featured Image so ev
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-30
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-PIR-5
+  VALUE: GSSC-PHLR-12
   ROLE: Refines
 
 [REQUIREMENT]
@@ -2358,10 +2355,10 @@ Side placement and size caps mirror Section Featured Image so overlays do not in
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-30
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-PIR-5
+  VALUE: GSSC-PHLR-12
   ROLE: Refines
 
 [REQUIREMENT]
@@ -2376,10 +2373,10 @@ Keeping the full image visible preserves the asset inside the width and parent s
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-30
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-PIR-5
+  VALUE: GSSC-PHLR-12
   ROLE: Refines
 
 [[/SECTION]]
@@ -2400,10 +2397,10 @@ References parallel Section Resource Buttons so visitors can open related links 
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-30
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-PIR-5
+  VALUE: GSSC-PHLR-12
   ROLE: Refines
 
 [REQUIREMENT]
@@ -2418,10 +2415,10 @@ A strip below the body matches the Section resources placement pattern in a comp
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-30
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-PIR-5
+  VALUE: GSSC-PHLR-12
   ROLE: Refines
 
 [REQUIREMENT]
@@ -2436,10 +2433,10 @@ Dark-green bordered links read as secondary actions within the white overlay pan
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-30
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-PIR-5
+  VALUE: GSSC-PHLR-12
   ROLE: Refines
 
 [[/SECTION]]
