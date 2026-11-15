@@ -195,7 +195,8 @@ model ContentTemplate {
 // Sections, announcements, and event details share one table (GSSC-BHLR-185 / 187).
 // Generic start/end calendar bounds (GSSC5-67): display windows for announcements/sections;
 // event span (single-day ⇒ start equals end).
-// @relation(GSSC-BLLR-338, GSSC-BLLR-339, GSSC-BLLR-400, GSSC-BLLR-401, scope=range_start, role=Implementation)
+// Optional featured image file + position (GSSC5-74).
+// @relation(GSSC-BLLR-338, GSSC-BLLR-339, GSSC-BLLR-400, GSSC-BLLR-401, GSSC-BLLR-423, GSSC-BLLR-424, scope=range_start, role=Implementation)
 model PageDataEntry {
   id         String           @id @default(cuid())
   /// "section" | "announcement" | "event"
@@ -219,6 +220,10 @@ model PageDataEntry {
   endMonth   Int?
   endDay     Int?
   endYear    Int?
+  /// StoredFileEntry cuid (directory+filename retrieval via /files)
+  imageFile  String?
+  /// "none" | "left" | "right"
+  imagePosition String?
   templateId String?
   template   ContentTemplate? @relation(fields: [templateId], references: [id], onDelete: SetNull)
   event      Event?
@@ -226,7 +231,7 @@ model PageDataEntry {
   @@index([datatype, index])
   @@map("page_data")
 }
-// @relation(GSSC-BLLR-338, GSSC-BLLR-339, GSSC-BLLR-400, GSSC-BLLR-401, scope=range_end, role=Implementation)
+// @relation(GSSC-BLLR-338, GSSC-BLLR-339, GSSC-BLLR-400, GSSC-BLLR-401, GSSC-BLLR-423, GSSC-BLLR-424, scope=range_end, role=Implementation)
 
 // Events catalog (GSSC-BHLR-125–133 / GSSC5-69).
 // Event date maps onto linked page_data start/end; announcement start stays on this row.

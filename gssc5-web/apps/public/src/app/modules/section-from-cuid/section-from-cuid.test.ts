@@ -14,6 +14,8 @@ const unsetBounds = {
   endMonth: null,
   endDay: null,
   endYear: null,
+  imageFile: null,
+  imagePosition: null,
 } as const;
 
 const sampleBackend: BackendSectionData = {
@@ -77,6 +79,17 @@ test('GSSC-PLLR-152 Semantic', async () => {
   expect(mapped.header).toBeNull();
   expect(mapped.body).toBe(bodyOnlyBackend.body);
   expect(mapped.resources).toBeNull();
+  expect(mapped.imageFile).toBeNull();
+  expect(mapped.imagePosition).toBeNull();
+
+  const withImage: BackendSectionData = {
+    ...sampleBackend,
+    imageFile: 'feat-cuid',
+    imagePosition: 'left',
+  };
+  const mappedImage = sectionContentsFromBackend(withImage);
+  expect(mappedImage.imageFile).toBe('feat-cuid');
+  expect(mappedImage.imagePosition).toBe('left');
 });
 // @relation(GSSC-PLLR-152, scope=range_end, role=Test)
 

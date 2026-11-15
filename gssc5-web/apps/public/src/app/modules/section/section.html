@@ -13,11 +13,32 @@
     <!-- @relation(GSSC-PLLR-86, GSSC-PLLR-87, GSSC-PLLR-88, scope=range_end, role=Implementation) -->
   }
 
-  <!-- @relation(GSSC-PLLR-89, GSSC-PLLR-90, GSSC-PLLR-91, scope=range_start, role=Implementation) -->
-  <div class="gssc-section__body m-0 text-base font-normal text-gssc-black">
-    {{ contents().body }}
-  </div>
-  <!-- @relation(GSSC-PLLR-89, GSSC-PLLR-90, GSSC-PLLR-91, scope=range_end, role=Implementation) -->
+  @if (showFeaturedImage()) {
+    <!-- @relation(GSSC-PLLR-260, GSSC-PLLR-261, GSSC-PLLR-262, scope=range_start, role=Implementation) -->
+    <!-- @relation(GSSC-PLLR-89, GSSC-PLLR-90, GSSC-PLLR-91, scope=range_start, role=Implementation) -->
+    <div
+      class="gssc-section__media flex w-full flex-col gap-4 sm:flex-row sm:items-start"
+      [class.sm:flex-row-reverse]="contents().imagePosition === 'right'"
+      [attr.data-image-position]="contents().imagePosition"
+    >
+      <img
+        class="gssc-section__image max-h-[40%] max-w-[60%] object-contain self-start"
+        [src]="featuredImageUrl()"
+        alt=""
+      />
+      <div class="gssc-section__body m-0 min-w-0 flex-1 text-base font-normal text-gssc-black">
+        {{ contents().body }}
+      </div>
+    </div>
+    <!-- @relation(GSSC-PLLR-89, GSSC-PLLR-90, GSSC-PLLR-91, scope=range_end, role=Implementation) -->
+    <!-- @relation(GSSC-PLLR-260, GSSC-PLLR-261, GSSC-PLLR-262, scope=range_end, role=Implementation) -->
+  } @else {
+    <!-- @relation(GSSC-PLLR-89, GSSC-PLLR-90, GSSC-PLLR-91, scope=range_start, role=Implementation) -->
+    <div class="gssc-section__body m-0 text-base font-normal text-gssc-black">
+      {{ contents().body }}
+    </div>
+    <!-- @relation(GSSC-PLLR-89, GSSC-PLLR-90, GSSC-PLLR-91, scope=range_end, role=Implementation) -->
+  }
 
   @if (hasResources(contents())) {
     <!-- @relation(GSSC-PLLR-92, GSSC-PLLR-93, GSSC-PLLR-94, scope=range_start, role=Implementation) -->

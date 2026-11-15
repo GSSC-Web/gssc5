@@ -5571,16 +5571,17 @@ RELATIONS:
 UID: GSSC-BLLR-322
 TITLE: Section List Entry Fields
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL include header, body, tags, cuid, index, start month, start day, start year, end month, end day, and end year in each section list entry.
+The GSSC Website Unified Backend SHALL include header, body, tags, cuid, index, start month, start day, start year, end month, end day, end year, optional image file, and optional image position in each section list entry.
 <<<
 RATIONALE: >>>
-List entries carry the fields needed for page assembly without a second fetch for summary data, including optional display-window bounds.
+List entries carry the fields needed for page assembly without a second fetch for summary data, including optional display-window bounds and featured image fields.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: >>>
 GSSC5-37
 GSSC5-67
+GSSC5-74
 <<<
 REVIEW_STATUS: Approved
 RELATIONS:
@@ -5634,14 +5635,17 @@ TITLE: POST
 UID: GSSC-BLLR-328
 TITLE: Section Creation
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL create a section from a template for a logged-in member who has create permission on that template, requiring a body and a template cuid, accepting optional header, resources, tags, and index, storing isPublic and permission values from the template, and storing tags as the template tags plus the requested tags.
+The GSSC Website Unified Backend SHALL create a section from a template for a logged-in member who has create permission on that template, requiring a body and a template cuid, accepting optional header, resources, tags, index, image file, and image position, storing isPublic and permission values from the template, and storing tags as the template tags plus the requested tags.
 <<<
 RATIONALE: >>>
-Creation uses a template for audience and permissions while accepting caller content and order fields.
+Creation uses a template for audience and permissions while accepting caller content, order, and optional featured image fields.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-37
+CHANGE_DRIVER: >>>
+GSSC5-37
+GSSC5-74
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -5682,16 +5686,17 @@ TITLE: GET
 UID: GSSC-BLLR-324
 TITLE: Public Section Get
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return a public section by cuid in the path to an unauthenticated caller, including header, body, resources, tags, index, start month, start day, start year, end month, end day, and end year.
+The GSSC Website Unified Backend SHALL return a public section by cuid in the path to an unauthenticated caller, including header, body, resources, tags, index, start month, start day, start year, end month, end day, end year, optional image file, and optional image position.
 <<<
 RATIONALE: >>>
-Path cuid identifies one public section for assembly, including optional display-window bounds.
+Path cuid identifies one public section for assembly, including optional display-window bounds and featured image fields.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: >>>
 GSSC5-37
 GSSC5-67
+GSSC5-74
 <<<
 REVIEW_STATUS: Approved
 RELATIONS:
@@ -5721,16 +5726,17 @@ RELATIONS:
 UID: GSSC-BLLR-326
 TITLE: Authenticated Section Get
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return any section by cuid in the path to a logged-in member, including header, body, resources, tags, index, start month, start day, start year, end month, end day, and end year.
+The GSSC Website Unified Backend SHALL return any section by cuid in the path to a logged-in member, including header, body, resources, tags, index, start month, start day, start year, end month, end day, end year, optional image file, and optional image position.
 <<<
 RATIONALE: >>>
-A logged-in member can load public or members-only sections by cuid, including optional display-window bounds.
+A logged-in member can load public or members-only sections by cuid, including optional display-window bounds and featured image fields.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: >>>
 GSSC5-37
 GSSC5-67
+GSSC5-74
 <<<
 REVIEW_STATUS: Approved
 RELATIONS:
@@ -5748,14 +5754,17 @@ TITLE: PATCH
 UID: GSSC-BLLR-330
 TITLE: Section Modification
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL accept modification of header, body, resources, tags, and index on a section by a logged-in member who has modify permission on that section.
+The GSSC Website Unified Backend SHALL accept modification of header, body, resources, tags, index, image file, and image position on a section by a logged-in member who has modify permission on that section.
 <<<
 RATIONALE: >>>
-Modify permission gates content and order updates.
+Modify permission gates content, order, and optional featured image updates.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-37
+CHANGE_DRIVER: >>>
+GSSC5-37
+GSSC5-74
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -7923,6 +7932,42 @@ The end date ends a limited display window for announcements and sections, and e
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-67
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-185
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-423
+TITLE: Page Data Image File
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store an optional image file path string on each page data table entry for sections, announcements, and event details, identifying a stored file for retrieval like other backend-stored files.
+<<<
+RATIONALE: >>>
+Featured imagery for page data entries reuses the same stored-file identity pattern as newsletter issue files so callers retrieve bytes through existing file storage.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-74
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-185
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-424
+TITLE: Page Data Image Position
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store an optional image position on each page data table entry for sections, announcements, and event details as one of none, left, or right.
+<<<
+RATIONALE: >>>
+Position controls whether and on which side a featured image appears when a file is present. None suppresses display even when a file is stored.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-74
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent

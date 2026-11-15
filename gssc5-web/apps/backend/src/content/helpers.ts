@@ -44,8 +44,18 @@ export type EntryRow = {
   endMonth: number | null;
   endDay: number | null;
   endYear: number | null;
+  imageFile: string | null;
+  imagePosition: string | null;
   templateId: string | null;
 };
+
+/** Featured-image side for page_data entries (GSSC5-74). */
+export const IMAGE_POSITIONS = ["none", "left", "right"] as const;
+export type ImagePosition = (typeof IMAGE_POSITIONS)[number];
+
+export function isImagePosition(value: string): value is ImagePosition {
+  return (IMAGE_POSITIONS as readonly string[]).includes(value);
+}
 
 export async function openSession(cookie: CookieJar): Promise<Session> {
   return resolveLoginSessionUser(getPrisma(loadConfig().DATABASE_URL), cookie, {
