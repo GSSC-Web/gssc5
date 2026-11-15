@@ -793,15 +793,16 @@ TITLE: Administrator Account Management
 UID: GSSC-MHLR-34
 TITLE: Administrator Account Management Access
 STATEMENT: >>>
-The GSSC Website Member Frontend SHALL let a user moderator open a selected member's Account Page that presents the same Member Information, Account Information, and Password Change sections used for own-account management.
+The GSSC Website Member Frontend SHALL let a user moderator open a selected member's Account Page that presents the same Member Information and Account Information sections used for own-account management. Password Change SHALL appear only on the logged-in viewer's own Account Page. An administrator SHALL also receive Password History Reset on any Account Page that administrator opens.
 <<<
 RATIONALE: >>>
-User moderators manage member accounts from the Member Frontend. An administrator is a user moderator. Sharing the Account Page layout keeps self-service and management visually consistent.
+User moderators manage member accounts from the Member Frontend. An administrator is a user moderator. Sharing Member and Account Information keeps self-service and management visually consistent, while password change stays self-service-only and password-history reset stays an administrator action.
 <<<
 DERIVED: False
 CHANGE_DRIVER: >>>
 GSSC5-11
 GSSC5-91
+GSSC5-102
 <<<
 REVIEW_STATUS: Approved
 RELATIONS:

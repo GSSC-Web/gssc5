@@ -125,11 +125,24 @@ export class AccountPage implements OnInit {
   readonly canEditMembership = signal(false);
   readonly isAdminViewer = signal(false);
   readonly canChangePassword = signal(true);
+  /** Administrators may clear retained past password hashes for the loaded account. */
+  readonly canResetPasswordHistory = signal(false);
+  readonly passwordHistoryResetting = signal(false);
 
   // @relation(GSSC-MLLR-415, GSSC-MLLR-416, scope=range_start, role=Implementation)
   readonly memberSectionOpen = signal(true);
   readonly accountSectionOpen = signal(true);
   readonly passwordSectionOpen = signal(true);
+
+  /** Password Change and/or Password History Reset share one collapsible section. */
+  readonly showPasswordSection = computed(
+    () => this.canChangePassword() || this.canResetPasswordHistory(),
+  );
+
+  passwordSectionHeading(): string {
+    if (this.canChangePassword()) return 'Password Change';
+    return 'Password History Reset';
+  }
 
   toggleMemberSection(): void {
     this.memberSectionOpen.update((open) => !open);
@@ -378,6 +391,28 @@ export class AccountPage implements OnInit {
   }
   // @relation(GSSC-MLLR-149, GSSC-MLLR-158, GSSC-MLLR-427, GSSC-MLLR-428, scope=range_end, role=Implementation)
 
+  // @relation(GSSC-MLLR-438, GSSC-MLLR-439, GSSC-MLLR-440, scope=range_start, role=Implementation)
+  async submitPasswordHistoryReset(): Promise<void> {
+    if (this.passwordHistoryResetting() || !this.canResetPasswordHistory()) return;
+    const cuid = this.targetCuid().trim();
+    if (!cuid) return;
+    this.passwordHistoryResetting.set(true);
+    this.passwordMessage.set('');
+    try {
+      const { error } = await accountApi.clearPasswordHistory(cuid);
+      if (error) {
+        this.passwordMessage.set('Password history could not be reset.');
+        return;
+      }
+      this.passwordMessage.set('Password history reset.');
+    } catch {
+      this.passwordMessage.set('Password history could not be reset.');
+    } finally {
+      this.passwordHistoryResetting.set(false);
+    }
+  }
+  // @relation(GSSC-MLLR-438, GSSC-MLLR-439, GSSC-MLLR-440, scope=range_end, role=Implementation)
+
   activePrivilegeLabels(): string[] {
     return SITE_PRIVILEGES.filter((p) => this.accountInfo[p.key]).map((p) => p.label);
   }
@@ -420,7 +455,10 @@ export class AccountPage implements OnInit {
     this.isOwnAccount.set(isOwn);
     this.canEditMembership.set(viewerIsUserMod);
     this.isAdminViewer.set(viewerIsAdmin);
+    // @relation(GSSC-MLLR-158, GSSC-MLLR-438, scope=range_start, role=Implementation)
     this.canChangePassword.set(isOwn);
+    this.canResetPasswordHistory.set(viewerIsAdmin);
+    // @relation(GSSC-MLLR-158, GSSC-MLLR-438, scope=range_end, role=Implementation)
 
     try {
       const { data, error } = await accountApi.getUser(cuid);

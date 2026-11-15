@@ -73,6 +73,7 @@ async function setupAccount(options?: {
     accountGet: accountApi.getUser,
     accountUpdate: accountApi.updateUser,
     changePassword: accountApi.changePassword,
+    clearPasswordHistory: accountApi.clearPasswordHistory,
     uploadAccountPhoto: accountApi.uploadAccountPhoto,
   };
 
@@ -113,6 +114,8 @@ async function setupAccount(options?: {
     okResponse(null, 204)) as typeof accountApi.updateUser;
   accountApi.changePassword = (async () =>
     okResponse(null, 204)) as typeof accountApi.changePassword;
+  accountApi.clearPasswordHistory = (async () =>
+    okResponse(null, 204)) as typeof accountApi.clearPasswordHistory;
   accountApi.uploadAccountPhoto = (async () => ({
     data: { cuid: 'photo_1', path: 'account-photos/photo_1' },
     error: null,
@@ -166,6 +169,7 @@ async function setupAccount(options?: {
       accountApi.getUser = originals.accountGet;
       accountApi.updateUser = originals.accountUpdate;
       accountApi.changePassword = originals.changePassword;
+      accountApi.clearPasswordHistory = originals.clearPasswordHistory;
       accountApi.uploadAccountPhoto = originals.uploadAccountPhoto;
     },
   };
@@ -692,22 +696,133 @@ test('GSSC-MLLR-157 Lexical', async () => {
 
 // @relation(GSSC-MLLR-158, scope=range_start, role=Test)
 test('GSSC-MLLR-158 Semantic', async () => {
-  const { root, page, restore } = await setupAccount({
+  const managed = await setupAccount({
     url: '/accounts/user_2',
     viewer: { cuid: 'admin_1', isAdmin: true, isUserMod: true },
     account: { ...sampleAccount, cuid: 'user_2' },
   });
   try {
-    expect(root.querySelector('.gssc-account-password')).not.toBeNull();
-    expect(page.canChangePassword()).toBe(false);
-    expect(
-      root.querySelector<HTMLButtonElement>('.gssc-account-password__submit')!.disabled,
-    ).toBe(true);
+    expect(managed.page.canChangePassword()).toBe(false);
+    expect(managed.root.querySelector('.gssc-account-password__form')).toBeNull();
+    expect(managed.root.querySelector('.gssc-account-password__submit')).toBeNull();
+  } finally {
+    managed.restore();
+  }
+
+  const own = await setupAccount({
+    url: '/account',
+    viewer: { cuid: 'user_1', isAdmin: false, isUserMod: false },
+  });
+  try {
+    expect(own.page.canChangePassword()).toBe(true);
+    expect(own.root.querySelector('.gssc-account-password__form')).not.toBeNull();
+    expect(own.root.querySelector('.gssc-account-password__submit')).not.toBeNull();
+  } finally {
+    own.restore();
+  }
+});
+// @relation(GSSC-MLLR-158, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-438, scope=range_start, role=Test)
+test('GSSC-MLLR-438 Semantic', async () => {
+  const clearCalls: string[] = [];
+
+  const other = await setupAccount({
+    url: '/accounts/user_2',
+    viewer: { cuid: 'admin_1', isAdmin: true, isUserMod: true },
+    account: { ...sampleAccount, cuid: 'user_2' },
+  });
+  try {
+    accountApi.clearPasswordHistory = (async (cuid: string) => {
+      clearCalls.push(cuid);
+      return okResponse(null, 204);
+    }) as typeof accountApi.clearPasswordHistory;
+    expect(other.page.canResetPasswordHistory()).toBe(true);
+    expect(other.root.querySelector('.gssc-account-password-history__reset')).not.toBeNull();
+    expect(other.root.querySelector('.gssc-account-password__form')).toBeNull();
+    other.root.querySelector<HTMLButtonElement>('.gssc-account-password-history__reset')!.click();
+    await other.fixture.whenStable();
+    expect(clearCalls).toEqual(['user_2']);
+    expect(other.page.passwordMessage()).toBe('Password history reset.');
+  } finally {
+    other.restore();
+  }
+
+  const ownAdmin = await setupAccount({
+    url: '/account',
+    viewer: { cuid: 'admin_1', isAdmin: true, isUserMod: true },
+    account: { ...sampleAccount, cuid: 'admin_1' },
+  });
+  try {
+    expect(ownAdmin.page.canChangePassword()).toBe(true);
+    expect(ownAdmin.page.canResetPasswordHistory()).toBe(true);
+    expect(ownAdmin.root.querySelector('.gssc-account-password__form')).not.toBeNull();
+    expect(ownAdmin.root.querySelector('.gssc-account-password-history__reset')).not.toBeNull();
+  } finally {
+    ownAdmin.restore();
+  }
+
+  const plain = await setupAccount();
+  try {
+    expect(plain.page.canResetPasswordHistory()).toBe(false);
+    expect(plain.root.querySelector('.gssc-account-password-history__reset')).toBeNull();
+  } finally {
+    plain.restore();
+  }
+});
+// @relation(GSSC-MLLR-438, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-439, scope=range_start, role=Test)
+test('GSSC-MLLR-439 Syntactic', async () => {
+  const both = await setupAccount({
+    url: '/account',
+    viewer: { cuid: 'admin_1', isAdmin: true, isUserMod: true },
+    account: { ...sampleAccount, cuid: 'admin_1' },
+  });
+  try {
+    const form = both.root.querySelector('.gssc-account-password__form')!;
+    const reset = both.root.querySelector('.gssc-account-password-history__reset')!;
+    expect(form.compareDocumentPosition(reset) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  } finally {
+    both.restore();
+  }
+
+  const onlyReset = await setupAccount({
+    url: '/accounts/user_2',
+    viewer: { cuid: 'admin_1', isAdmin: true, isUserMod: true },
+    account: { ...sampleAccount, cuid: 'user_2' },
+  });
+  try {
+    expect(onlyReset.root.querySelector('.gssc-account-password__heading')?.textContent?.trim()).toBe(
+      'Password History Reset',
+    );
+    expect(onlyReset.root.querySelector('.gssc-account-password__form')).toBeNull();
+    expect(onlyReset.root.querySelector('.gssc-account-password-history__reset')).not.toBeNull();
+  } finally {
+    onlyReset.restore();
+  }
+});
+// @relation(GSSC-MLLR-439, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-440, scope=range_start, role=Test)
+test('GSSC-MLLR-440 Lexical', async () => {
+  const { root, restore } = await setupAccount({
+    url: '/accounts/user_2',
+    viewer: { cuid: 'admin_1', isAdmin: true, isUserMod: true },
+    account: { ...sampleAccount, cuid: 'user_2' },
+  });
+  try {
+    const reset = root.querySelector<HTMLButtonElement>('.gssc-account-password-history__reset')!;
+    expect(reset.textContent?.trim()).toBe('Password History Reset');
+    expect(reset.classList.contains('bg-gssc-light-green')).toBe(true);
+    expect(reset.classList.contains('text-gssc-dark-green')).toBe(true);
+    expect(reset.classList.contains('rounded-md')).toBe(true);
+    expect(reset.classList.contains('hover:bg-gssc-gray')).toBe(true);
   } finally {
     restore();
   }
 });
-// @relation(GSSC-MLLR-158, scope=range_end, role=Test)
+// @relation(GSSC-MLLR-440, scope=range_end, role=Test)
 
 // @relation(GSSC-MLLR-415, scope=range_start, role=Test)
 test('GSSC-MLLR-415 Semantic', async () => {

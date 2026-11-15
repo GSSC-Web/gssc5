@@ -492,7 +492,8 @@
     </section>
     <!-- @relation(GSSC-MLLR-141, GSSC-MLLR-142, GSSC-MLLR-143, GSSC-MLLR-144, GSSC-MLLR-145, scope=range_end, role=Implementation) -->
 
-    <!-- @relation(GSSC-MLLR-149, GSSC-MLLR-150, GSSC-MLLR-151, GSSC-MLLR-158, scope=range_start, role=Implementation) -->
+    <!-- @relation(GSSC-MLLR-149, GSSC-MLLR-150, GSSC-MLLR-151, GSSC-MLLR-158, GSSC-MLLR-438, GSSC-MLLR-439, GSSC-MLLR-440, scope=range_start, role=Implementation) -->
+    @if (showPasswordSection()) {
     <section class="gssc-account-password flex flex-col gap-4 font-sans" aria-labelledby="gssc-account-password-heading">
       <button
         type="button"
@@ -504,12 +505,13 @@
           id="gssc-account-password-heading"
           class="gssc-account-password__heading m-0 font-sans text-xl font-semibold text-gssc-dark-green"
         >
-          Password Change
+          {{ passwordSectionHeading() }}
         </h2>
         <span class="gssc-account-section-chevron font-sans text-sm text-gssc-dark-green" aria-hidden="true">{{ passwordSectionOpen() ? '▾' : '▸' }}</span>
       </button>
 
       @if (passwordSectionOpen()) {
+      @if (canChangePassword()) {
       <!-- @relation(GSSC-MLLR-422, GSSC-MLLR-423, scope=range_start, role=Implementation) -->
       <form class="gssc-account-password__form flex flex-col gap-4" (ngSubmit)="submitPasswordChange()" novalidate>
       <div class="gssc-account-password__columns grid gap-6 md:grid-cols-2">
@@ -670,14 +672,30 @@
           Change Password
         </button>
       </div>
-      @if (passwordMessage()) {
-        <p class="gssc-account-password__message m-0 font-sans text-sm" role="status">{{ passwordMessage() }}</p>
-      }
       </form>
       <!-- @relation(GSSC-MLLR-422, GSSC-MLLR-423, scope=range_end, role=Implementation) -->
       }
+
+      @if (canResetPasswordHistory()) {
+        <div class="gssc-account-password-history flex flex-col gap-3">
+          <button
+            type="button"
+            class="gssc-account-password-history__reset inline-flex cursor-pointer items-center justify-center rounded-md border border-gssc-dark-green bg-gssc-light-green px-3 py-2 font-sans text-sm text-gssc-dark-green hover:bg-gssc-gray disabled:cursor-not-allowed disabled:opacity-60"
+            (click)="submitPasswordHistoryReset()"
+            [disabled]="passwordHistoryResetting()"
+          >
+            Password History Reset
+          </button>
+        </div>
+      }
+
+      @if (passwordMessage()) {
+        <p class="gssc-account-password__message m-0 font-sans text-sm" role="status">{{ passwordMessage() }}</p>
+      }
+      }
     </section>
-    <!-- @relation(GSSC-MLLR-149, GSSC-MLLR-150, GSSC-MLLR-151, GSSC-MLLR-158, scope=range_end, role=Implementation) -->
+    }
+    <!-- @relation(GSSC-MLLR-149, GSSC-MLLR-150, GSSC-MLLR-151, GSSC-MLLR-158, GSSC-MLLR-438, GSSC-MLLR-439, GSSC-MLLR-440, scope=range_end, role=Implementation) -->
   }
 </section>
 <!-- @relation(GSSC-MLLR-125, GSSC-MLLR-126, GSSC-MLLR-127, scope=range_end, role=Implementation) -->

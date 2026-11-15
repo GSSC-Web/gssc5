@@ -97,7 +97,8 @@ GSSC5-95 Events Editor owns GSSC-MLLR-321 through GSSC-MLLR-346 (events page, ca
 GSSC5-97 Publications/Tools Editors owns GSSC-MLLR-381 through GSSC-MLLR-414 (publications catalog editor 381–397; research tools catalog editor 398–414). Composes GSSC5-84 Generic Editor and GSSC5-85 form fields; does not re-claim 180–201.
 GSSC5-101 Account Page Refinement owns GSSC-MLLR-415 through GSSC-MLLR-428 (collapsible sections, submit validation, Enter-to-submit, account photo upload with polished Choose Photo control, password current/previous rejection); also CHANGE_DRIVER on GSSC-MLLR-146.
 GSSC5-103 Account Mailing Equals Home owns GSSC-MLLR-429 through GSSC-MLLR-437 (exact end 437); HLR GSSC-MHLR-78.
-Wave coordination: GSSC5-92 directory 202–214, GSSC5-102 directory refinement 215–230, GSSC5-89 dashboard 231–239, GSSC5-93 page/section 261–286, GSSC5-94 announcements 291–307, GSSC5-95 events 321–346, GSSC5-96 newsletters 351–373, GSSC5-97 publications/tools 381–414, GSSC5-101 account refinement 415–428, GSSC5-103 mailing-equals-home 429–437 — do not collide.
+GSSC5-102 also owns GSSC-MLLR-438 through GSSC-MLLR-440 (Password History Reset on Account Page) and CHANGE_DRIVER on GSSC-MLLR-125 / GSSC-MLLR-158 / GSSC-MHLR-34.
+Wave coordination: GSSC5-92 directory 202–214, GSSC5-102 directory refinement 215–230, GSSC5-89 dashboard 231–239, GSSC5-93 page/section 261–286, GSSC5-94 announcements 291–307, GSSC5-95 events 321–346, GSSC5-96 newsletters 351–373, GSSC5-97 publications/tools 381–414, GSSC5-101 account refinement 415–428, GSSC5-103 mailing-equals-home 429–437, GSSC5-102 password-history-reset 438–440 — do not collide.
 GSSC-MLLR-33 through GSSC-MLLR-39 remain free for later claimants.
 Do not reuse numbers already claimed by another ticket.
 <<<
@@ -2540,16 +2541,17 @@ TITLE: Account Page
 UID: GSSC-MLLR-125
 TITLE: Semantic
 STATEMENT: >>>
-The Member Frontend Account Page SHALL present three form sections in order: Member Information, Account Information, and Password Change, and SHALL load the account identified by the page path from the Unified Backend for a logged-in viewer.
+The Member Frontend Account Page SHALL present Member Information and Account Information sections in that order, SHALL present the Password Change section when the page shows the logged-in viewer's own account, SHALL present Password History Reset when the logged-in viewer is an administrator, and SHALL load the account identified by the page path from the Unified Backend for a logged-in viewer.
 <<<
 RATIONALE: >>>
-Self-service and administrator account management share one Account Page so the experience stays consistent.
+Self-service and administrator account management share one Account Page so the experience stays consistent, while password change stays limited to the viewer's own account and password-history reset stays limited to administrators.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: >>>
 GSSC5-90
 GSSC5-91
+GSSC5-102
 <<<
 REVIEW_STATUS: Approved
 RELATIONS:
@@ -3369,22 +3371,86 @@ TITLE: Password Change Scope
 UID: GSSC-MLLR-158
 TITLE: Semantic
 STATEMENT: >>>
-When the Account Page is showing another member's account, the Password Change Section SHALL remain visible and SHALL disable password submission for that other account.
+When the Account Page is showing another member's account, the Password Change Section SHALL not be presented. When the Account Page is showing the logged-in viewer's own account, the Password Change Section SHALL be presented and SHALL accept password submission for that own account.
 <<<
 RATIONALE: >>>
-The shared layout keeps three sections on managed accounts, while password change applies only to the logged-in member's own password.
+Password change applies only to the logged-in member's own password; managed accounts omit the Password Change fields.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: >>>
 GSSC5-90
 GSSC5-91
+GSSC5-102
 <<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-32
   ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-34
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-ACCOUNT-PASSWORD-HISTORY-RESET
+TITLE: Password History Reset
+
+[REQUIREMENT]
+UID: GSSC-MLLR-438
+TITLE: Semantic
+STATEMENT: >>>
+When the logged-in viewer is an administrator, the Account Page SHALL present a Password History Reset control for the loaded account that clears that account's retained past password hashes through the Unified Backend clear-passwords transaction, whether the page shows the administrator's own account or another member's account.
+<<<
+RATIONALE: >>>
+Administrators need to clear password history so a member can reuse a prior password after an assisted reset, without changing the current password hash from this control.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-102
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-34
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-32
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-439
+TITLE: Syntactic
+STATEMENT: >>>
+The Password History Reset control SHALL appear in the Account Page password section below the Password Change fields when those fields are present, or as the sole content of that section when Password Change is not presented.
+<<<
+RATIONALE: >>>
+Keeping password actions in one section preserves the vertical Account Page stack while swapping Password Change for Password History Reset on managed accounts.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-102
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-34
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-440
+TITLE: Lexical
+STATEMENT: >>>
+The Password History Reset control SHALL present the visible label Password History Reset on a filled rounded control that uses the dark-green theme color and a hover color change.
+<<<
+RATIONALE: >>>
+A labeled admin action matches other Account Page submit controls without introducing a separate accent.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-102
+REVIEW_STATUS: Approved
+RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-34
   ROLE: Refines
