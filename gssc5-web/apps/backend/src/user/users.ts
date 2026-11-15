@@ -645,7 +645,15 @@ function matchesOne(user: StoredUser, caller: StoredUser, name: string, needle: 
   // @relation(GSSC-BLLR-464, scope=range_end, role=Implementation)
   // @relation(GSSC-BLLR-465, scope=range_start, role=Implementation)
   if (name === "address") {
-    return includes(user.homeCity, needle) || includes(user.homeState, needle);
+    return (
+      (canSee(caller, user, "homeCity") && includes(user.homeCity, needle)) ||
+      (canSee(caller, user, "homeState") && includes(user.homeState, needle)) ||
+      (canSee(caller, user, "homeLine1") && includes(user.homeLine1, needle)) ||
+      (canSee(caller, user, "homeLine2") && includes(user.homeLine2, needle)) ||
+      (canSee(caller, user, "homeLine3") && includes(user.homeLine3, needle)) ||
+      (canSee(caller, user, "homeZip") && includes(user.homeZip, needle)) ||
+      (canSee(caller, user, "homeZipExtension") && includes(user.homeZipExtension, needle))
+    );
   }
   // @relation(GSSC-BLLR-465, scope=range_end, role=Implementation)
   if (!canSee(caller, user, name)) return false;

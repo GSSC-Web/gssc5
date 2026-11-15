@@ -23,10 +23,12 @@
     </p>
   </header>
 
-  <div class="gssc-directory-page__body flex w-full flex-col gap-6 md:flex-row md:items-start md:gap-8">
+  <div
+    class="gssc-directory-page__body flex w-full flex-col gap-6 md:min-h-[calc(100dvh-8rem)] md:flex-row md:items-stretch md:gap-8"
+  >
     <!-- @relation(GSSC-MLLR-205, GSSC-MLLR-206, GSSC-MLLR-207, scope=range_start, role=Implementation) -->
     <aside
-      class="gssc-directory-search sticky top-4 flex w-full shrink-0 flex-col gap-3 rounded-md bg-gssc-cream p-3 md:w-56 md:max-w-xs"
+      class="gssc-directory-search sticky top-0 flex w-full shrink-0 flex-col gap-3 bg-gssc-light-brown p-3 md:w-56 md:max-w-xs md:min-h-full"
       aria-label="Directory filters"
     >
       <div class="gssc-directory-search__fields flex w-full flex-col gap-3">

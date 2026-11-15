@@ -66,6 +66,18 @@
   content: "\f0142";
 }
 
+.nf-md-pencil:before {
+  content: "\f03eb";
+}
+
+.nf-md-delete:before {
+  content: "\f01b4";
+}
+
+.nf-md-delete_restore:before {
+  content: "\f0819";
+}
+
 .nf-fa-check:before {
   content: "\f00c";
 }

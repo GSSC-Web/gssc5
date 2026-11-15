@@ -4827,10 +4827,10 @@ RELATIONS:
 UID: GSSC-MLLR-206
 TITLE: Syntactic
 STATEMENT: >>>
-The Directory Search SHALL appear as a static left-side filter bar with its criteria fields stacked in a single column, a Clear control under those fields, and a filter-area background distinct from the directory results region.
+The Directory Search SHALL appear as a static left-side filter bar with its criteria fields stacked in a single column, a Clear control under those fields, and a filter-area background that is distinct from the directory results region and that extends to the bottom of the viewport.
 <<<
 RATIONALE: >>>
-A single-column left bar keeps filters scannable and fixed beside the results list. A distinct filter background separates controls from contact results.
+A single-column left bar keeps filters scannable and fixed beside the results list. A full-height filter background separates controls from contact results down the viewport.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -4848,10 +4848,10 @@ RELATIONS:
 UID: GSSC-MLLR-207
 TITLE: Lexical
 STATEMENT: >>>
-The Directory Search SHALL use shared Member Frontend form-field primitives for its criteria fields, dark-green theme text on its Clear control, and a light-theme surface background token for the filter area that is distinct from the page and results backgrounds.
+The Directory Search SHALL use shared Member Frontend form-field primitives for its criteria fields, dark-green theme text on its Clear control, and the light-brown theme token for the filter-area background that is distinct from the page and results backgrounds.
 <<<
 RATIONALE: >>>
-Reusing form primitives keeps directory search chrome consistent with other member forms; Clear is the only filter action. The filter surface token keeps the bar visually separate from results without inventing a second theme.
+Reusing form primitives keeps directory search chrome consistent with other member forms; Clear is the only filter action. Light-brown keeps the filter rail visually separate from results without inventing a second theme.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -5142,10 +5142,10 @@ RELATIONS:
 UID: GSSC-MLLR-220
 TITLE: Lexical
 STATEMENT: >>>
-The Directory Entry Edit Control SHALL use the Member Frontend sans-serif typeface and dark-green theme text for its label.
+The Directory Entry Edit Control SHALL present an edit icon in the dark-green theme color, with an accessible name of Edit and no visible word label.
 <<<
 RATIONALE: >>>
-Edit chrome matches other member primary text actions.
+An edit icon keeps the action compact on the card while remaining recognizable and labeled for assistive technology.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -5166,7 +5166,7 @@ TITLE: Directory Entry Soft-Delete Control
 UID: GSSC-MLLR-221
 TITLE: Semantic
 STATEMENT: >>>
-When the logged-in viewer is an administrator, each directory contact card SHALL present a soft-delete control that soft-deletes that listed member when the member is not soft-deleted, or undeletes that member when the member is soft-deleted, with a label that matches the current soft-delete state.
+When the logged-in viewer is an administrator, each directory contact card SHALL present a soft-delete control that soft-deletes that listed member when the member is not soft-deleted, or undeletes that member when the member is soft-deleted, with an icon and accessible name that match the current soft-delete state.
 <<<
 RATIONALE: >>>
 Administrators restore or remove members from ordinary directory visibility without leaving the list.
@@ -5202,10 +5202,10 @@ RELATIONS:
 UID: GSSC-MLLR-223
 TITLE: Lexical
 STATEMENT: >>>
-The Directory Entry Soft-Delete Control SHALL use the Member Frontend sans-serif typeface and a label of soft-delete or undelete that matches the member's current soft-delete state.
+The Directory Entry Soft-Delete Control SHALL present a delete icon when the member is not soft-deleted and a delete-restore icon when the member is soft-deleted, each in the dark-green theme color, with an accessible name of Soft-delete or Undelete that matches that state and with no visible word label.
 <<<
 RATIONALE: >>>
-The label tells the administrator which action the control will take for that row.
+Delete and restore icons keep soft-delete actions compact while the accessible name states which action the control will take.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -5283,10 +5283,10 @@ RELATIONS:
 UID: GSSC-MLLR-227
 TITLE: Address Criterion Backend Filter
 STATEMENT: >>>
-When the viewer supplies an Address criterion, the Member Frontend SHALL search home address only by sending that criterion as the Unified Backend address filter.
+When the viewer supplies an Address criterion, the Member Frontend SHALL search home address only—including home lines, city, state, and zip fields subject to Unified Backend visibility—by sending that criterion as the Unified Backend address filter.
 <<<
 RATIONALE: >>>
-Address search covers home locality and does not query mailing address fields.
+Address search covers viewable home address parts and does not query mailing address fields.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test

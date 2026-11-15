@@ -2328,6 +2328,22 @@ test("GSSC-BLLR-465 User List Address Filter", async () => {
   const byState = await listEntries(admin.token, { address: "PHONESTATE" });
   expect(idsOf(byState)).toContain(phoneMember.id);
 
+  const byLine = await listEntries(emailMember.token, { address: "email home line one" });
+  expect(idsOf(byLine)).toContain(emailMember.id);
+
+  const byZip = await listEntries(admin.token, { address: "95354" });
+  expect(idsOf(byZip)).toContain(emailMember.id);
+
+  const byZipExt = await listEntries(admin.token, { address: "0101" });
+  expect(idsOf(byZipExt)).toContain(emailMember.id);
+
+  const redactedLine = String(redactedMember.values.homeLine1 ?? "");
+  const peerByRedactedLine = await listEntries(emailMember.token, { address: redactedLine });
+  expect(idsOf(peerByRedactedLine)).not.toContain(redactedMember.id);
+
+  const adminByRedactedLine = await listEntries(admin.token, { address: redactedLine });
+  expect(idsOf(adminByRedactedLine)).toContain(redactedMember.id);
+
   const mailNeedle = String(emailMember.values.mailCity ?? "");
   if (mailNeedle.length > 0) {
     const mailingOnly = await listEntries(admin.token, { address: mailNeedle });

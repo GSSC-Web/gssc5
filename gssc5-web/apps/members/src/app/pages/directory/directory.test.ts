@@ -257,7 +257,11 @@ test('GSSC-MLLR-206 Syntactic', async () => {
     expect(fields.compareDocumentPosition(actions) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     expect(root.querySelector('.gssc-directory-search__submit')).toBeNull();
     expect(root.querySelector('.gssc-directory-search__clear')).not.toBeNull();
-    expect(search.classList.contains('bg-gssc-cream')).toBe(true);
+    const body = root.querySelector<HTMLElement>('.gssc-directory-page__body')!;
+    expect(search.classList.contains('bg-gssc-light-brown')).toBe(true);
+    expect(search.classList.contains('md:min-h-full')).toBe(true);
+    expect(body.classList.contains('md:min-h-[calc(100dvh-8rem)]')).toBe(true);
+    expect(body.classList.contains('md:items-stretch')).toBe(true);
     expect(results.classList.contains('bg-gssc-white')).toBe(true);
   } finally {
     restore();
@@ -273,9 +277,9 @@ test('GSSC-MLLR-207 Lexical', async () => {
     const clear = root.querySelector<HTMLElement>('.gssc-directory-search__clear')!;
     expect(clear.classList.contains('text-gssc-dark-green')).toBe(true);
     expect(root.querySelector('.gssc-directory-search__submit')).toBeNull();
-    expect(root.querySelector('.gssc-directory-search')!.classList.contains('bg-gssc-cream')).toBe(
-      true,
-    );
+    expect(
+      root.querySelector('.gssc-directory-search')!.classList.contains('bg-gssc-light-brown'),
+    ).toBe(true);
   } finally {
     restore();
   }
@@ -462,7 +466,8 @@ test('GSSC-MLLR-218 Semantic', async () => {
     const edit = member.root.querySelector<HTMLAnchorElement>('.gssc-contact-row__edit')!;
     expect(edit).not.toBeNull();
     expect(edit.getAttribute('href')).toBe('/accounts/user_2');
-    expect(edit.textContent?.trim()).toBe('Edit');
+    expect(edit.getAttribute('aria-label')).toBe('Edit');
+    expect(edit.querySelector('.nf-md-pencil')).not.toBeNull();
   } finally {
     member.restore();
   }
@@ -510,8 +515,10 @@ test('GSSC-MLLR-220 Lexical', async () => {
   });
   try {
     const edit = root.querySelector<HTMLElement>('.gssc-contact-row__edit')!;
-    expect(edit.classList.contains('font-sans')).toBe(true);
     expect(edit.classList.contains('text-gssc-dark-green')).toBe(true);
+    expect(edit.getAttribute('aria-label')).toBe('Edit');
+    expect(edit.querySelector('.nf-md-pencil')).not.toBeNull();
+    expect(edit.textContent?.replace(/\s/g, '')).toBe('');
   } finally {
     restore();
   }
@@ -527,8 +534,10 @@ test('GSSC-MLLR-221 Semantic', async () => {
   try {
     const buttons = [...admin.root.querySelectorAll('.gssc-contact-row__soft-delete')];
     expect(buttons.length).toBe(2);
-    expect(buttons[0].textContent?.trim()).toBe('Soft-delete');
-    expect(buttons[1].textContent?.trim()).toBe('Undelete');
+    expect(buttons[0].getAttribute('aria-label')).toBe('Soft-delete');
+    expect(buttons[0].querySelector('.nf-md-delete')).not.toBeNull();
+    expect(buttons[1].getAttribute('aria-label')).toBe('Undelete');
+    expect(buttons[1].querySelector('.nf-md-delete_restore')).not.toBeNull();
   } finally {
     admin.restore();
   }
@@ -567,9 +576,13 @@ test('GSSC-MLLR-223 Lexical', async () => {
   });
   try {
     const soft = root.querySelectorAll('.gssc-contact-row__soft-delete');
-    expect(soft[0].classList.contains('font-sans')).toBe(true);
-    expect(soft[0].textContent?.trim()).toBe('Soft-delete');
-    expect(soft[1].textContent?.trim()).toBe('Undelete');
+    expect(soft[0].classList.contains('text-gssc-dark-green')).toBe(true);
+    expect(soft[0].getAttribute('aria-label')).toBe('Soft-delete');
+    expect(soft[0].querySelector('.nf-md-delete')).not.toBeNull();
+    expect(soft[0].textContent?.replace(/\s/g, '')).toBe('');
+    expect(soft[1].getAttribute('aria-label')).toBe('Undelete');
+    expect(soft[1].querySelector('.nf-md-delete_restore')).not.toBeNull();
+    expect(soft[1].textContent?.replace(/\s/g, '')).toBe('');
   } finally {
     restore();
   }

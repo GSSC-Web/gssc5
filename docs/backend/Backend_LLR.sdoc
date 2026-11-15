@@ -2728,10 +2728,10 @@ RELATIONS:
 UID: GSSC-BLLR-465
 TITLE: User List Address Filter
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL match an address filter to a case-insensitive substring of Home Address city or Home Address state only, without matching that filter against mailing address fields.
+The GSSC Website Unified Backend SHALL match an address filter to a case-insensitive substring of any Home Address field the caller may view for that user—line 1, line 2, line 3, city, state, zip code, or zip extension—without matching that filter against mailing address fields.
 <<<
 RATIONALE: >>>
-Directory address search covers home locality only. Mailing address is not a directory address criterion.
+Directory address search covers the home address the viewer is allowed to see. Mailing address is not a directory address criterion. Redacted home street and zip stay out of the match for ordinary viewers.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test

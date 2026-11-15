@@ -98,22 +98,31 @@
 
   @if (showEdit() || showSoftDelete()) {
     <!-- @relation(GSSC-MLLR-218, GSSC-MLLR-219, GSSC-MLLR-220, GSSC-MLLR-221, GSSC-MLLR-222, GSSC-MLLR-223, scope=range_start, role=Implementation) -->
-    <div class="gssc-contact-row__actions flex shrink-0 flex-col items-end gap-1">
+    <div class="gssc-contact-row__actions flex shrink-0 flex-col items-end gap-2">
       @if (showEdit() && editHref()) {
         <a
-          class="gssc-contact-row__edit font-sans text-sm font-normal text-gssc-dark-green underline-offset-2 hover:underline"
+          class="gssc-contact-row__edit inline-flex items-center justify-center text-gssc-dark-green no-underline"
           [routerLink]="editHref()!"
+          aria-label="Edit"
+          title="Edit"
         >
-          Edit
+          <i class="nf nf-md-pencil text-base leading-none" aria-hidden="true"></i>
         </a>
       }
       @if (showSoftDelete()) {
         <button
           type="button"
-          class="gssc-contact-row__soft-delete cursor-pointer border-0 bg-transparent p-0 font-sans text-sm font-normal text-gssc-dark-green underline-offset-2 hover:underline"
+          class="gssc-contact-row__soft-delete inline-flex cursor-pointer items-center justify-center border-0 bg-transparent p-0 text-gssc-dark-green"
           (click)="onSoftDeleteClick()"
+          [attr.aria-label]="isDeleted() ? 'Undelete' : 'Soft-delete'"
+          [attr.title]="isDeleted() ? 'Undelete' : 'Soft-delete'"
         >
-          {{ isDeleted() ? 'Undelete' : 'Soft-delete' }}
+          <i
+            class="nf text-base leading-none"
+            [class.nf-md-delete_restore]="isDeleted()"
+            [class.nf-md-delete]="!isDeleted()"
+            aria-hidden="true"
+          ></i>
         </button>
       }
     </div>
