@@ -1,0 +1,97 @@
+<!-- @relation(GSSC-MLLR-96, GSSC-MLLR-97, scope=range_start, role=Implementation) -->
+<!-- @relation(GSSC-MLLR-98, scope=range_start, role=Implementation) -->
+<section
+  class="gssc-section flex w-full flex-col gap-4 border border-gssc-gray bg-gssc-white px-4 py-5 font-sans text-gssc-dark-green"
+>
+  <!-- @relation(GSSC-MLLR-98, scope=range_end, role=Implementation) -->
+
+  @if (hasHeader(contents())) {
+    <!-- @relation(GSSC-MLLR-99, GSSC-MLLR-100, GSSC-MLLR-101, scope=range_start, role=Implementation) -->
+    <h2 class="gssc-section__header m-0 text-[1.5em] font-semibold text-gssc-dark-green">
+      {{ contents().header }}
+    </h2>
+    <!-- @relation(GSSC-MLLR-99, GSSC-MLLR-100, GSSC-MLLR-101, scope=range_end, role=Implementation) -->
+  }
+
+  @if (showFeaturedImage()) {
+    <!-- @relation(GSSC-MLLR-102, GSSC-MLLR-103, GSSC-MLLR-104, scope=range_start, role=Implementation) -->
+    <!-- @relation(GSSC-MLLR-105, GSSC-MLLR-106, GSSC-MLLR-107, scope=range_start, role=Implementation) -->
+    <div
+      class="gssc-section__media flex w-full flex-col gap-4 sm:flex-row sm:items-start"
+      [class.sm:flex-row-reverse]="contents().imagePosition === 'right'"
+      [attr.data-image-position]="contents().imagePosition"
+    >
+      <img
+        class="gssc-section__image max-h-[40%] max-w-[60%] object-contain self-start"
+        [src]="featuredImageUrl()"
+        alt=""
+      />
+      <div class="gssc-section__body m-0 min-w-0 flex-1 text-base font-normal text-gssc-black">
+        {{ contents().body }}
+      </div>
+    </div>
+    <!-- @relation(GSSC-MLLR-105, GSSC-MLLR-106, GSSC-MLLR-107, scope=range_end, role=Implementation) -->
+    <!-- @relation(GSSC-MLLR-102, GSSC-MLLR-103, GSSC-MLLR-104, scope=range_end, role=Implementation) -->
+  } @else {
+    <!-- @relation(GSSC-MLLR-105, GSSC-MLLR-106, GSSC-MLLR-107, scope=range_start, role=Implementation) -->
+    <div class="gssc-section__body m-0 text-base font-normal text-gssc-black">
+      {{ contents().body }}
+    </div>
+    <!-- @relation(GSSC-MLLR-105, GSSC-MLLR-106, GSSC-MLLR-107, scope=range_end, role=Implementation) -->
+  }
+
+  @if (hasResources(contents())) {
+    <!-- @relation(GSSC-MLLR-108, GSSC-MLLR-109, GSSC-MLLR-110, scope=range_start, role=Implementation) -->
+    <div
+      #resourcesHost
+      class="gssc-section__resources flex w-full items-center gap-2"
+      [attr.data-carousel]="isCarousel() ? 'true' : 'false'"
+    >
+      @if (isCarousel()) {
+        <!-- @relation(GSSC-MLLR-115, GSSC-MLLR-116, scope=range_start, role=Implementation) -->
+        <button
+          type="button"
+          class="gssc-section__resources-prev inline-flex size-8 shrink-0 cursor-pointer items-center justify-center rounded border-0 bg-transparent p-0 text-gssc-dark-green hover:bg-gssc-gray"
+          aria-label="Previous resources"
+          (click)="stepPrev()"
+        >
+          <i class="nf nf-md-chevron_left text-base leading-none" aria-hidden="true"></i>
+        </button>
+        <!-- @relation(GSSC-MLLR-115, GSSC-MLLR-116, scope=range_end, role=Implementation) -->
+      }
+
+      <div class="gssc-section__viewport min-w-0 flex-1 overflow-hidden">
+        <div
+          class="gssc-section__track flex items-stretch justify-start gap-2 transition-transform duration-200 ease-[ease] in-data-[carousel=false]:w-full"
+          [style.transform]="trackTransform()"
+        >
+          @for (resource of trackResources(); track $index + ':' + resource.href + ':' + resource.name) {
+            <!-- @relation(GSSC-MLLR-111, GSSC-MLLR-112, GSSC-MLLR-113, scope=range_start, role=Implementation) -->
+            <a
+              class="gssc-section__resource inline-flex h-11 shrink-0 items-center justify-center border border-gssc-dark-green bg-gssc-white px-2 text-center font-normal text-gssc-dark-green no-underline hover:bg-gssc-gray in-data-[carousel=false]:w-[8.5rem] in-data-[carousel=false]:flex-none"
+              [style.width.px]="isCarousel() ? carouselButtonWidthPx() : null"
+              [href]="resource.href"
+              >{{ resource.name }}</a
+            >
+            <!-- @relation(GSSC-MLLR-111, GSSC-MLLR-112, GSSC-MLLR-113, scope=range_end, role=Implementation) -->
+          }
+        </div>
+      </div>
+
+      @if (isCarousel()) {
+        <!-- @relation(GSSC-MLLR-118, GSSC-MLLR-119, scope=range_start, role=Implementation) -->
+        <button
+          type="button"
+          class="gssc-section__resources-next inline-flex size-8 shrink-0 cursor-pointer items-center justify-center rounded border-0 bg-transparent p-0 text-gssc-dark-green hover:bg-gssc-gray"
+          aria-label="Next resources"
+          (click)="stepNext()"
+        >
+          <i class="nf nf-md-chevron_right text-base leading-none" aria-hidden="true"></i>
+        </button>
+        <!-- @relation(GSSC-MLLR-118, GSSC-MLLR-119, scope=range_end, role=Implementation) -->
+      }
+    </div>
+    <!-- @relation(GSSC-MLLR-108, GSSC-MLLR-109, GSSC-MLLR-110, scope=range_end, role=Implementation) -->
+  }
+</section>
+<!-- @relation(GSSC-MLLR-96, GSSC-MLLR-97, scope=range_end, role=Implementation) -->
