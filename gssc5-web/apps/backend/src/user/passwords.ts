@@ -1,5 +1,3 @@
-import { createHash, randomBytes } from "node:crypto";
-
 import { Elysia, t } from "elysia";
 
 import { loadConfig, type Config } from "../config";
@@ -7,6 +5,7 @@ import { getPrisma } from "../db";
 import type { PrismaClient, User } from "../generated/prisma/client";
 import { getMailTransporter } from "../mail";
 import {
+  hashLoginToken,
   loginTokenCookie,
   resolveLoginSessionUser,
   type CookieJar,
@@ -102,12 +101,12 @@ export const passwords = new Elysia({
       const expiresAt = new Date(
         issuedAt.getTime() + config.PASSWORD_RECOVERY_LIFETIME_DAYS * MILLISECONDS_PER_DAY,
       );
-      const recoveryToken = randomBytes(32).toString("base64url");
+      const recoveryToken = randomToken();
 
       // @relation(GSSC-BLLR-238, GSSC-BLLR-239, GSSC-BLLR-245, GSSC-BLLR-253, scope=range_start, role=Implementation)
       const stored = await prisma.passwordRecoveryToken.create({
         data: {
-          tokenHash: hashToken(recoveryToken),
+          tokenHash: hashLoginToken(recoveryToken),
           userId: user.id,
           primaryEmail: user.primaryEmail,
           issuedAt,
@@ -147,7 +146,7 @@ export const passwords = new Elysia({
 
       // @relation(GSSC-BLLR-254, GSSC-BLLR-255, GSSC-BLLR-256, GSSC-BLLR-257, scope=range_start, role=Implementation)
       const row = await prisma.passwordRecoveryToken.findUnique({
-        where: { tokenHash: hashToken(body.recoveryToken) },
+        where: { tokenHash: hashLoginToken(body.recoveryToken) },
         include: { user: true },
       });
       if (!row) return status(403, "Forbidden");
@@ -290,6 +289,6 @@ function trimStrings(value: unknown): void {
   }
 }
 
-function hashToken(token: string): string {
-  return createHash("sha256").update(token).digest("hex");
+function randomToken(): string {
+  return Buffer.from(crypto.getRandomValues(new Uint8Array(32))).toString("base64url");
 }

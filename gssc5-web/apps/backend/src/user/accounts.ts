@@ -1,5 +1,3 @@
-import { randomBytes } from "node:crypto";
-
 import { Elysia, t } from "elysia";
 
 import { loadConfig, type Config } from "../config";
@@ -87,7 +85,7 @@ export const accounts = new Elysia({
       const issuedAt = new Date();
       const maxAgeSeconds = Math.floor(config.LOGIN_TOKEN_LIFETIME_DAYS * SECONDS_PER_DAY);
       const expiresAt = new Date(issuedAt.getTime() + maxAgeSeconds * 1000);
-      const token = randomBytes(32).toString("base64url");
+      const token = randomToken();
       await prisma.loginToken.create({
         data: {
           tokenHash: hashLoginToken(token),
@@ -132,19 +130,19 @@ export const accounts = new Elysia({
   )
   .post(
     "/challenge",
-    async ({ cookie }) => {
+    async ({ cookie, status }) => {
       const { prisma } = runtime();
       const token = loginTokenFromCookie(cookie);
 
       // @relation(GSSC-BLLR-9, GSSC-BLLR-12, GSSC-BLLR-318, GSSC-BLLR-399, scope=range_start, role=Implementation)
-      if (!token) return { status: "invalid" as const };
+      if (!token) return status(200, { status: "invalid" as const });
       const row = await prisma.loginToken.findUnique({
         where: { tokenHash: hashLoginToken(token) },
       });
       if (classifyLoginTokenRow(row) !== "ok" || !row) {
-        return { status: "invalid" as const };
+        return status(200, { status: "invalid" as const });
       }
-      return { status: "valid" as const, cuid: row.userId };
+      return status(200, { status: "valid" as const, cuid: row.userId });
       // @relation(GSSC-BLLR-9, GSSC-BLLR-12, GSSC-BLLR-318, GSSC-BLLR-399, scope=range_end, role=Implementation)
     },
     {
@@ -227,4 +225,8 @@ function trimStrings(value: unknown): void {
     const item = (value as Record<string, unknown>)[key];
     if (typeof item === "string") (value as Record<string, unknown>)[key] = item.trim();
   }
+}
+
+function randomToken(): string {
+  return Buffer.from(crypto.getRandomValues(new Uint8Array(32))).toString("base64url");
 }
