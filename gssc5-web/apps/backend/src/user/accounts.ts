@@ -17,8 +17,6 @@ import {
 
 const SECONDS_PER_DAY = 24 * 60 * 60;
 
-const emailPattern = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
-
 // @relation(GSSC-BLLR-1, GSSC-BLLR-2, GSSC-BLLR-3, scope=range_start, role=Implementation)
 const LoginBody = t.Union(
   [
@@ -28,7 +26,7 @@ const LoginBody = t.Union(
     }),
     t.Object({
       password: t.String(),
-      primaryEmail: t.String({ minLength: 1, pattern: emailPattern }),
+      primaryEmail: t.String({ format: "email" }),
     }),
   ],
   { error: "A login accepts a username or a primary email." },

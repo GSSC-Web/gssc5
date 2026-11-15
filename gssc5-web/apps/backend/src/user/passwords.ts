@@ -20,8 +20,6 @@ const ALLOWED = new Set([
   ...SPECIALS,
 ]);
 
-const emailPattern = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
-
 // @relation(GSSC-BLLR-225, scope=range_start, role=Implementation)
 const ChangeBody = t.Object({
   currentPassword: t.String(),
@@ -31,14 +29,14 @@ const ChangeBody = t.Object({
 
 // @relation(GSSC-BLLR-235, scope=range_start, role=Implementation)
 const RecoveryRequestBody = t.Object({
-  email: t.String({ minLength: 1, pattern: emailPattern }),
+  email: t.String({ format: "email" }),
 });
 // @relation(GSSC-BLLR-235, scope=range_end, role=Implementation)
 
 // @relation(GSSC-BLLR-240, scope=range_start, role=Implementation)
 const RecoverBody = t.Object({
   recoveryToken: t.String(),
-  primaryEmail: t.String({ minLength: 1, pattern: emailPattern }),
+  primaryEmail: t.String({ format: "email" }),
   newPassword: t.String(),
 });
 // @relation(GSSC-BLLR-240, scope=range_end, role=Implementation)
