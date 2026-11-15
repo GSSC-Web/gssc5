@@ -3722,7 +3722,7 @@ New events are stored with a linked page data entry for details. Which request f
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-69
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-59
@@ -3742,7 +3742,7 @@ An authenticated member with the necessary permissions can change an event and i
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-69
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-59
@@ -3762,7 +3762,7 @@ An authenticated member with the necessary permissions can delete an event and i
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-69
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-59
