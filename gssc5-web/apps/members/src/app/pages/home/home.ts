@@ -1,4 +1,5 @@
 import { Component, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { Editor } from '../../modules/editor/editor';
 import { FormSelectField } from '../../modules/form-select-field/form-select-field';
 import { FormTextField } from '../../modules/form-text-field/form-text-field';
@@ -18,7 +19,7 @@ const demoSection: SectionContents = {
 /** Temporary Wave 3 host for generic editor (GSSC5-84); Wave 7 content editors replace later. */
 @Component({
   selector: 'gssc-home-page',
-  imports: [Section, Editor, FormTextField, FormSelectField],
+  imports: [RouterLink, Section, Editor, FormTextField, FormSelectField],
   templateUrl: './home.html',
 })
 export class HomePage {

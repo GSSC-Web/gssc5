@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { AccountPage } from './pages/account/account';
+import { AnnouncementsEditorPage } from './pages/announcements-editor/announcements-editor';
 import { DirectoryPage } from './pages/directory/directory';
 import { HomePage } from './pages/home/home';
 import { LoginPage } from './pages/login/login';
@@ -35,6 +36,12 @@ export const routes: Routes = [
     canActivate: [requireAuthGuard],
   },
   // @relation(GSSC-MLLR-211, scope=range_end, role=Implementation)
+  {
+    path: 'announcements',
+    pathMatch: 'full',
+    component: AnnouncementsEditorPage,
+    canActivate: [requireAuthGuard],
+  },
   {
     path: '',
     pathMatch: 'full',
