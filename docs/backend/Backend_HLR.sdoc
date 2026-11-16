@@ -2974,7 +2974,7 @@ Public and members site search overlays and search pages need a shared search se
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-106
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-1
@@ -2994,7 +2994,7 @@ Owner-locked public corpus covers navigation labels, section-like page data the 
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-106
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BHLR-233
@@ -3007,7 +3007,7 @@ Members search expands the corpus under session rules. Directory display names a
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-106
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-12
@@ -3027,7 +3027,7 @@ Quick overlays and full search pages need a stable result shape for display and 
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-106
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BHLR-235
@@ -3040,7 +3040,7 @@ Quick overlay calls need a short list; full search pages may request a larger se
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-106
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BHLR-236
@@ -3053,7 +3053,7 @@ Full search pages narrow results by result kind. Which kind values exist are low
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-106
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [[/SECTION]]
 
