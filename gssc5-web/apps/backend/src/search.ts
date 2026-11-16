@@ -46,7 +46,17 @@ const SearchResultEntry = t.Object({
   title: t.String(),
   snippet: t.String(),
   href: t.String(),
-  kind: t.Union(SEARCH_KINDS.map((kind) => t.Literal(kind))),
+  // Explicit tuple — `.map(t.Literal)` widens to `never` under tsc.
+  kind: t.Union([
+    t.Literal("site-tree"),
+    t.Literal("section"),
+    t.Literal("announcement"),
+    t.Literal("event"),
+    t.Literal("publication"),
+    t.Literal("research-tool"),
+    t.Literal("newsletter"),
+    t.Literal("directory"),
+  ]),
 });
 
 type Session =
