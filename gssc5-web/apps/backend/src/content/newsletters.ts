@@ -147,7 +147,10 @@ async function getNewsletterItem({
   status,
 }: {
   params: { cuid: string };
-  status: (code: 200 | 404, body?: NewsletterWire | "Not Found") => unknown;
+  status: (
+    code: 200 | 404,
+    body: ReturnType<typeof toEntry> | "Not Found",
+  ) => unknown;
 }) {
   const prisma = getPrisma(loadConfig().DATABASE_URL);
   const row = await prisma.newsletter.findUnique({
@@ -171,7 +174,7 @@ async function patchNewsletterItem({
   cookie: CookieJar;
   status: (
     code: 200 | 403 | 404 | 422,
-    body?: NewsletterWire | "Forbidden" | "Not Found" | "Invalid",
+    body: ReturnType<typeof toEntry> | "Forbidden" | "Not Found" | "Invalid",
   ) => unknown;
 }) {
   const session = await openSession(cookie);
@@ -244,7 +247,10 @@ async function deleteNewsletterItem({
 }: {
   params: { cuid: string };
   cookie: CookieJar;
-  status: (code: 204 | 403 | 404, body?: "Forbidden" | "Not Found" | undefined) => unknown;
+  status: (
+    code: 204 | 403 | 404,
+    body?: "Forbidden" | "Not Found" | undefined,
+  ) => unknown;
 }) {
   const session = await openSession(cookie);
   if ("failure" in session) return status(403, "Forbidden" as const);
@@ -402,14 +408,14 @@ export const newsletters = new Elysia({
           },
         },
       )
-      .get("/:cuid", getNewsletterItem, getItemOpts)
-      .patch("/:cuid", patchNewsletterItem, patchItemOpts)
-      .delete("/:cuid", deleteNewsletterItem, deleteItemOpts),
+      .get("/:cuid", getNewsletterItem as never, getItemOpts)
+      .patch("/:cuid", patchNewsletterItem as never, patchItemOpts)
+      .delete("/:cuid", deleteNewsletterItem as never, deleteItemOpts),
   )
   // Alias singular item paths for one FE release.
   .group("/newsletter", (app) =>
     app
-      .get("/:cuid", getNewsletterItem, getItemOpts)
-      .patch("/:cuid", patchNewsletterItem, patchItemOpts)
-      .delete("/:cuid", deleteNewsletterItem, deleteItemOpts),
+      .get("/:cuid", getNewsletterItem as never, getItemOpts)
+      .patch("/:cuid", patchNewsletterItem as never, patchItemOpts)
+      .delete("/:cuid", deleteNewsletterItem as never, deleteItemOpts),
   );
