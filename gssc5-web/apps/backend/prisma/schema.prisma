@@ -312,6 +312,41 @@ model Newsletter {
 }
 // @relation(GSSC-BLLR-395, scope=range_end, role=Implementation)
 
+// Site trees per frontend (GSSC5-40 / BHLR-225..230).
+// @relation(GSSC-BLLR-483, GSSC-BHLR-225, scope=range_start, role=Implementation)
+model SiteTree {
+  id       String         @id @default(cuid())
+  /// "public" | "members"
+  /// @prismabox.options{ minLength: 1 }
+  frontend String         @unique
+  nodes    SiteTreeNode[]
+
+  @@map("site_trees")
+}
+// @relation(GSSC-BLLR-483, GSSC-BHLR-225, scope=range_end, role=Implementation)
+
+// @relation(GSSC-BLLR-484, GSSC-BHLR-226, GSSC-BHLR-230, scope=range_start, role=Implementation)
+model SiteTreeNode {
+  id         String         @id @default(cuid())
+  treeId     String
+  tree       SiteTree       @relation(fields: [treeId], references: [id], onDelete: Cascade)
+  parentId   String?
+  parent     SiteTreeNode?  @relation("SiteTreeNodeHierarchy", fields: [parentId], references: [id], onDelete: Cascade)
+  children   SiteTreeNode[] @relation("SiteTreeNodeHierarchy")
+  /// @prismabox.options{ minLength: 1 }
+  label      String
+  /// Frontend menu destination path hint (not a registered route).
+  /// @prismabox.options{ minLength: 1 }
+  path       String
+  sortOrder  Int
+  /// Optional tag for sitemap/search corpus later.
+  sectionTag String?
+
+  @@index([treeId, parentId, sortOrder])
+  @@map("site_tree_nodes")
+}
+// @relation(GSSC-BLLR-484, GSSC-BHLR-226, GSSC-BHLR-230, scope=range_end, role=Implementation)
+
 // Local file storage metadata + DB ACLs (GSSC5-71).
 // @relation(GSSC-BLLR-366, scope=range_start, role=Implementation)
 model StoredFileEntry {

@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 
 import { loadConfig } from "./config";
 import { createPrisma } from "./db";
+import { seedSiteTrees } from "./content/site-trees";
 
 const backendRoot = fileURLToPath(new URL("..", import.meta.url));
 
@@ -26,6 +27,7 @@ export async function prepareDevDatabase(
 ): Promise<void> {
   deployMigrations(databaseUrl);
   await seedWebsiteKvs(databaseUrl);
+  await seedSiteTrees(databaseUrl);
 }
 
 /** Upsert society contact KVS keys used by the public Footer. */
