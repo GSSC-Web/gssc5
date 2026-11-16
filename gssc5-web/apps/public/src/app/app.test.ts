@@ -322,6 +322,14 @@ test('GSSC-PLLR-14 Newsletters Page Route', async () => {
 });
 // @relation(GSSC-PLLR-14, scope=range_end, role=Test)
 
+// @relation(GSSC-PLLR-329, scope=range_start, role=Test)
+test('GSSC-PLLR-329 Sitemap Page Route', async () => {
+  const { router, root } = await setupApp('/sitemap');
+  expect(router.url).toBe('/sitemap');
+  expect(root.querySelector('gssc-sitemap-page')).not.toBeNull();
+});
+// @relation(GSSC-PLLR-329, scope=range_end, role=Test)
+
 // @relation(GSSC-PLLR-16, scope=range_start, role=Test)
 test('GSSC-PLLR-16 Syntactic', async () => {
   const { fixture, announcements, root } = await setupApp('/membership');

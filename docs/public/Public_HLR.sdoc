@@ -512,6 +512,19 @@ DERIVED: True
 CHANGE_DRIVER: GSSC5-10
 REVIEW_STATUS: Approved
 
+[REQUIREMENT]
+UID: GSSC-PHLR-140
+TITLE: Footer Sitemap Link
+STATEMENT: >>>
+The GSSC Website Public Frontend Footer SHALL include a link that opens the public sitemap page.
+<<<
+RATIONALE: >>>
+No Public Frontend PIR requires a sitemap link. A dedicated sitemap page aids accessibility by listing site destinations outside the Header Navigation Menu. This requirement places that access in the Footer and does not set the link's label.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-41
+REVIEW_STATUS: Approved
+
 [[/SECTION]]
 
 [[SECTION]]
@@ -2359,6 +2372,25 @@ RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-8
   ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PHLR-SITEMAP-PAGE
+TITLE: Sitemap Page Requirements
+
+[REQUIREMENT]
+UID: GSSC-PHLR-139
+TITLE: Public Sitemap Page
+STATEMENT: >>>
+The GSSC Website Public Frontend SHALL provide a public sitemap page that presents the full Public site tree.
+<<<
+RATIONALE: >>>
+No Public Frontend PIR requires a sitemap page. Presenting the full Public site tree on a dedicated page gives visitors an accessibility-oriented listing of public destinations beyond the Header Navigation Menu. This requirement does not set tree labels or nesting depth.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-41
+REVIEW_STATUS: Approved
 
 [[/SECTION]]
 
