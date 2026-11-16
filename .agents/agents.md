@@ -9,8 +9,9 @@ GSSC 5.0 is a from-scratch rebuild of the Genealogical Society of Stanislaus Cou
 | Path | Role |
 | --- | --- |
 | `docs/` | StrictDoc requirements and docs tooling |
+| `docs/planning/` | Wave grooming matrices and architecture proposals (land on `master`) |
 | `gssc5-web/` | Bun apps: backend (Elysia), public + members (Angular) |
-| `.agents/` | Agent guidelines, skills, profiles, tasks, memories |
+| `.agents/` | Agent guidelines, skills, profiles, tasks, memories, workflows |
 
 Scoped routers (domain detail only): `docs/AGENTS.md`, `gssc5-web/AGENTS.md`.
 
@@ -33,7 +34,7 @@ Scoped routers (domain detail only): `docs/AGENTS.md`, `gssc5-web/AGENTS.md`.
 ## Kaneo board (project GSSC5)
 
 - Open PR → status **Ready for Review** (`in-review`).
-- **Done** only on merge to **master** with Fix Version **v5.0.0** (use **Future** until then).
+- **Done** only on merge to **master** with the task's Fix Version set (current navigation wave: **v5.0.2**; use **Future** until a wave pulls the ticket).
 - DoR Satisfied only when Definition of Ready is met; DoD Satisfied only when Done.
 - Integration-only land ≠ Done.
 - Wire MCP via `.agents/mcp.json` (placeholders only): Kaneo + **GSSC-LangGraph**.
