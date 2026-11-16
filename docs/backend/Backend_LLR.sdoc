@@ -7639,6 +7639,372 @@ RELATIONS:
 
 [[/SECTION]]
 
+[[SECTION]]
+UID: GSSC-BLLR-SITE-TREES-CATEGORY
+TITLE: Site Trees
+
+[[SECTION]]
+UID: GSSC-BLLR-SITE-TREES-COLLECTION
+TITLE: /site-trees/{frontend}
+
+[[SECTION]]
+UID: GSSC-BLLR-SITE-TREES-COLLECTION-GET
+TITLE: GET
+
+[REQUIREMENT]
+UID: GSSC-BLLR-467
+TITLE: Site Tree Get
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL return the nested site tree for the frontend named in the path, including each node's label, destination path, sort order, and children.
+<<<
+RATIONALE: >>>
+Frontends assemble navigation and sitemaps from one nested response per frontend.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-40
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-227
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-BHLR-228
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-468
+TITLE: Site Tree Get Unknown Frontend
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL reject a site tree get when the frontend name in the path is not public and is not members.
+<<<
+RATIONALE: >>>
+Only the public and members frontends have site trees.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-40
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-225
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-SITE-TREES-COLLECTION-POST
+TITLE: POST
+
+[REQUIREMENT]
+UID: GSSC-BLLR-469
+TITLE: Site Tree Node Creation
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL create a site tree node for an administrator, requiring a label, a destination path, and a sort order, and accepting an optional parent node in the same tree.
+<<<
+RATIONALE: >>>
+Administrators add menu nodes under an existing tree. An omitted parent places the node as a direct child of that tree's root.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-40
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-229
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-BHLR-226
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-470
+TITLE: Site Tree Node Creation Forbidden
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL reject site tree node creation without storing a node when the caller is not an administrator.
+<<<
+RATIONALE: >>>
+Only administrators maintain site trees in this wave.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-40
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-229
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-SITE-TREES-ITEM
+TITLE: /site-trees/{frontend}/nodes/{nodeId}
+
+[[SECTION]]
+UID: GSSC-BLLR-SITE-TREES-ITEM-PATCH
+TITLE: PATCH
+
+[REQUIREMENT]
+UID: GSSC-BLLR-471
+TITLE: Site Tree Node Modification
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL modify a site tree node by node identity for an administrator, accepting updates to label, destination path, sort order, and parent node within the same tree.
+<<<
+RATIONALE: >>>
+Administrators reorder and relabel menu nodes without a members tree-editor UI.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-40
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-229
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-BHLR-226
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-472
+TITLE: Site Tree Node Modification Forbidden
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL reject site tree node modification without changing the node when the caller is not an administrator.
+<<<
+RATIONALE: >>>
+Only administrators maintain site trees in this wave.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-40
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-229
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-SITE-TREES-ITEM-DELETE
+TITLE: DELETE
+
+[REQUIREMENT]
+UID: GSSC-BLLR-473
+TITLE: Site Tree Node Deletion
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL delete a site tree node by node identity for an administrator, including that node's descendant nodes.
+<<<
+RATIONALE: >>>
+Removing a branch removes its descendants so the tree stays consistent.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-40
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-229
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-474
+TITLE: Site Tree Node Deletion Forbidden
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL reject site tree node deletion without deleting the node when the caller is not an administrator.
+<<<
+RATIONALE: >>>
+Only administrators maintain site trees in this wave.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-40
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-229
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[REQUIREMENT]
+UID: GSSC-BLLR-475
+TITLE: Site Tree Seed
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL seed the public and members site trees so each tree's nodes match the current public routes and members header and editor destinations available at seed time.
+<<<
+RATIONALE: >>>
+Seeded trees give frontends a usable menu without a tree-editor UI. Exact node lists follow the routes and destinations present when the seed runs.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-40
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-225
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-BHLR-230
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-SITE-SEARCH-CATEGORY
+TITLE: Site Search
+
+[[SECTION]]
+UID: GSSC-BLLR-SITE-SEARCH-COLLECTION
+TITLE: /search
+
+[[SECTION]]
+UID: GSSC-BLLR-SITE-SEARCH-COLLECTION-GET
+TITLE: GET
+
+[REQUIREMENT]
+UID: GSSC-BLLR-476
+TITLE: Site Search Query Parameters
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL accept a query string, a frontend name, an optional result limit, and an optional kind filter when listing site search results.
+<<<
+RATIONALE: >>>
+Quick overlays and full search pages share one search listing shaped by those parameters.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-106
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-231
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-BHLR-235
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-BHLR-236
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-477
+TITLE: Public Site Search Without Login
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL return public-frontend site search results for an unauthenticated caller when the frontend name is public.
+<<<
+RATIONALE: >>>
+Public search does not require a member session.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-106
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-232
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-478
+TITLE: Members Site Search Login Required
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL reject members-frontend site search when the Login Token HTTP cookie is missing or is not a valid Login Token.
+<<<
+RATIONALE: >>>
+Members corpus includes session-gated content. The Login Token is taken from the HTTP cookie.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-106
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-233
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-479
+TITLE: Site Search Result Projection
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL include a title, a snippet, a destination path, and a kind in each site search result entry.
+<<<
+RATIONALE: >>>
+Frontends render and navigate from this projection without a second fetch for summary fields.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-106
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-234
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-480
+TITLE: Site Search Empty Query
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL return an empty site search result list when the query string is empty.
+<<<
+RATIONALE: >>>
+An empty query has no match criteria. Callers receive an empty list rather than the full corpus.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-106
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-231
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-481
+TITLE: Public Site Search Corpus Match
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL match a public-frontend site search query as a case-insensitive substring against site-tree labels and destination paths, publicly visible page-data headers and bodies, and titles and searchable text fields of publications, research tools, newsletters, events, and announcements.
+<<<
+RATIONALE: >>>
+Owner-locked public corpus is searched with one substring rule across those sources.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-106
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-232
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-482
+TITLE: Members Site Search Corpus Match
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL match a members-frontend site search query as a case-insensitive substring against members-visible site-tree labels and destination paths, page-data headers and bodies the caller may view, catalog entries the caller may view, and directory display names the caller may view.
+<<<
+RATIONALE: >>>
+Members search applies the same substring rule under session visibility rules, including directory names when permitted.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-106
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-233
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[/SECTION]]
+
 [[/SECTION]]
 
 [[/SECTION]]
@@ -8746,6 +9112,48 @@ REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-216
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-SITE-TREES-STORAGE
+TITLE: Site Trees
+
+[REQUIREMENT]
+UID: GSSC-BLLR-483
+TITLE: Site Trees Table
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store each site tree as a row with a stable identity and a frontend name that is unique among site trees.
+<<<
+RATIONALE: >>>
+One stored tree per frontend. Frontend name distinguishes the public tree from the members tree.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-40
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-225
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-484
+TITLE: Site Tree Nodes Table
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store each site tree node as a row with a stable identity, the owning site tree identity, an optional parent node identity in that tree, a label, a destination path, and a sort order among siblings.
+<<<
+RATIONALE: >>>
+Node rows are the source of truth for menu hierarchy and destination hints. Site trees do not overload page-data tags for this purpose.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-40
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-226
   ROLE: Refines
 
 [[/SECTION]]

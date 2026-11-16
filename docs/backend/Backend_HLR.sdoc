@@ -2857,6 +2857,204 @@ TITLE: Members Dedicated Content
 UID: GSSC-BHLR-SITE-TREES
 TITLE: Site Trees
 
+[REQUIREMENT]
+UID: GSSC-BHLR-225
+TITLE: Site Tree Per Frontend
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store one hierarchical site tree for the public frontend and one hierarchical site tree for the members frontend.
+<<<
+RATIONALE: >>>
+Each frontend needs its own menu tree. Public and members destinations differ at the root and below.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-40
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-1
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-21
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-226
+TITLE: Site Tree Node Contents
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL store each site tree node with a label, a destination path, a sort order among siblings, and an optional parent node within the same tree.
+<<<
+RATIONALE: >>>
+Labels and ordered children drive navigation menus and dropdowns. Destination path identifies the frontend page for that node. Optional parent forms the hierarchy.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-40
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-BHLR-227
+TITLE: Public Site Tree Provision
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL provide the public frontend site tree upon request as a nested tree whose root represents the public home.
+<<<
+RATIONALE: >>>
+The public frontend builds procedural navigation and sitemap from this tree. Nesting preserves parent and child relationships in one response.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-40
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-1
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-228
+TITLE: Members Site Tree Provision
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL provide the members frontend site tree upon request as a nested tree whose root represents the members dashboard.
+<<<
+RATIONALE: >>>
+The members frontend builds procedural navigation and sitemap from this tree. Nesting preserves parent and child relationships in one response.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-40
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-21
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-56
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-229
+TITLE: Site Tree Modification
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL accept creation, modification, and deletion of site tree nodes by an administrator.
+<<<
+RATIONALE: >>>
+Administrators maintain menu structure without a members tree-editor UI in this wave. Exact request fields are low-level.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-40
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-230
+TITLE: Site Tree Destination Paths
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL treat each site tree node destination path as a frontend menu destination hint, without registering frontend application routes from site tree data.
+<<<
+RATIONALE: >>>
+Menus consume path hints. Frontend routers remain owned by each frontend application.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-40
+REVIEW_STATUS: Changed
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BHLR-SITE-SEARCH
+TITLE: Site Search
+
+[REQUIREMENT]
+UID: GSSC-BHLR-231
+TITLE: Site Search Provision
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL provide site search results for a query string and a named frontend upon request.
+<<<
+RATIONALE: >>>
+Public and members site search overlays and search pages need a shared search service keyed by frontend.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-106
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-1
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-21
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-232
+TITLE: Public Site Search Corpus
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL include, when searching for the public frontend, site-tree labels and destination paths, publicly visible page-data headers and bodies, and the publications, research tools, newsletters, events, and announcements catalogs.
+<<<
+RATIONALE: >>>
+Owner-locked public corpus covers navigation labels, section-like page data the public may see, and main catalogs. Cemetery and War Veterans dedicated search stay out of this requirement.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-106
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-BHLR-233
+TITLE: Members Site Search Corpus
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL include, when a logged-in member searches for the members frontend, members-visible site-tree labels and destination paths, page-data headers and bodies that member may view, catalogs that member may view, and directory display names when that member may view those names.
+<<<
+RATIONALE: >>>
+Members search expands the corpus under session rules. Directory display names are included only when permitted for that caller.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-106
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-12
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-234
+TITLE: Site Search Result Fields
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL include a title, a snippet, a destination path, and a kind for each site search result.
+<<<
+RATIONALE: >>>
+Quick overlays and full search pages need a stable result shape for display and navigation.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-106
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-BHLR-235
+TITLE: Site Search Result Limit
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL accept a limit on how many site search results a request returns.
+<<<
+RATIONALE: >>>
+Quick overlay calls need a short list; full search pages may request a larger set. Exact default and maximum are low-level.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-106
+REVIEW_STATUS: Changed
+
+[REQUIREMENT]
+UID: GSSC-BHLR-236
+TITLE: Site Search Kind Filter
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL accept filtering of site search results by kind.
+<<<
+RATIONALE: >>>
+Full search pages narrow results by result kind. Which kind values exist are low-level.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-106
+REVIEW_STATUS: Changed
+
 [[/SECTION]]
 
 [[/SECTION]]
