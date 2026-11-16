@@ -116,3 +116,25 @@ export function trimStrings(value: unknown): void {
     if (typeof item === "string") (value as Record<string, unknown>)[key] = item.trim();
   }
 }
+
+/** Case-insensitive substring match for catalog list filters. */
+export function includesInsensitive(haystack: string, needle: string): boolean {
+  return haystack.toLowerCase().includes(needle.toLowerCase());
+}
+
+/**
+ * Allowlist query keys for list GET filters. Unknown key → `"invalid"` (422).
+ * Empty query returns `{}` and keeps today's unfiltered list.
+ */
+export function parseKnownQuery(
+  query: Record<string, string>,
+  allowed: ReadonlySet<string>,
+): Record<string, string> | "invalid" {
+  const out: Record<string, string> = {};
+  for (const [key, value] of Object.entries(query)) {
+    const name = key.trim();
+    if (!allowed.has(name)) return "invalid";
+    out[name] = value;
+  }
+  return out;
+}

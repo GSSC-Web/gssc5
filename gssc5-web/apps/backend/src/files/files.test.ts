@@ -183,7 +183,7 @@ test("GSSC-BLLR-366 Stored File Entries Table", async () => {
     { name: "meta-folder", writeRoles: ["publicationEditor"] },
     adminTok,
   );
-  expect(folder.status).toBe(200);
+  expect(folder.status).toBe(201);
   const cuid = (folder.body as { cuid: string }).cuid;
   const rows = await app.sql.query(
     `SELECT id, name, kind, parentId, isPublic, readRoles, writeRoles, deletedAt FROM stored_file_entries WHERE id = '${cuid}'`,
@@ -206,14 +206,14 @@ test("GSSC-BLLR-367 File ACL Role Tokens", async () => {
     },
     adminTok,
   );
-  expect(ok.status).toBe(200);
+  expect(ok.status).toBe(201);
   const bad = await sendJson(
     "POST",
     "/files",
     { name: "bad-role", writeRoles: ["notARole"] },
     adminTok,
   );
-  expect(bad.status).toBe(400);
+  expect(bad.status).toBe(422);
 });
 // @relation(GSSC-BLLR-367, scope=range_end, role=Test)
 
@@ -230,7 +230,7 @@ test("GSSC-BLLR-368 File ACL Inheritance on Create", async () => {
     },
     adminTok,
   );
-  expect(parent.status).toBe(200);
+  expect(parent.status).toBe(201);
   const parentCuid = (parent.body as { cuid: string }).cuid;
   const child = await sendJson(
     "POST",
@@ -238,7 +238,7 @@ test("GSSC-BLLR-368 File ACL Inheritance on Create", async () => {
     { name: "inherit-child", parent: parentCuid },
     editorTok,
   );
-  expect(child.status).toBe(200);
+  expect(child.status).toBe(201);
   const body = child.body as {
     isPublic: boolean;
     readRoles: string[];
@@ -270,7 +270,7 @@ test("GSSC-BLLR-369 File ACL Non-Loosening Enforcement", async () => {
     { name: "looser-public", parent: parentCuid, isPublic: true },
     editorTok,
   );
-  expect(looserPublic.status).toBe(400);
+  expect(looserPublic.status).toBe(422);
   const looserRead = await sendJson(
     "POST",
     "/files",
@@ -281,7 +281,7 @@ test("GSSC-BLLR-369 File ACL Non-Loosening Enforcement", async () => {
     },
     editorTok,
   );
-  expect(looserRead.status).toBe(400);
+  expect(looserRead.status).toBe(422);
 });
 // @relation(GSSC-BLLR-369, scope=range_end, role=Test)
 
@@ -293,12 +293,12 @@ test("GSSC-BLLR-370 Soft-Delete Marker Retention", async () => {
     {},
     adminTok,
   );
-  expect(uploaded.status).toBe(200);
+  expect(uploaded.status).toBe(201);
   const cuid = (uploaded.body as { cuid: string }).cuid;
   const storagePath = path.join(loadConfig().FILE_STORAGE_ROOT, cuid);
   await access(storagePath);
   const deleted = await sendJson("DELETE", `/files/${cuid}`, {}, adminTok);
-  expect(deleted.status).toBe(200);
+  expect(deleted.status).toBe(204);
   await access(storagePath);
   const rows = await app.sql.query(
     `SELECT deletedAt FROM stored_file_entries WHERE id = '${cuid}'`,
@@ -383,7 +383,7 @@ test("GSSC-BLLR-375 Folder Creation", async () => {
     { name: "created-folder", writeRoles: ["publicationEditor"] },
     adminTok,
   );
-  expect(created.status).toBe(200);
+  expect(created.status).toBe(201);
   const body = created.body as {
     cuid: string;
     name: string;
@@ -409,7 +409,7 @@ test("GSSC-BLLR-376 Folder Creation Forbidden", async () => {
 // @relation(GSSC-BLLR-377, scope=range_start, role=Test)
 test("GSSC-BLLR-377 File Upload", async () => {
   const uploaded = await uploadFile("newsletter.pdf", "%PDF-1.4 demo", {}, adminTok);
-  expect(uploaded.status).toBe(200);
+  expect(uploaded.status).toBe(201);
   const body = uploaded.body as {
     cuid: string;
     name: string;
@@ -476,8 +476,8 @@ test("GSSC-BLLR-381 File Soft Deletion", async () => {
   const uploaded = await uploadFile("soft.pdf", "%PDF-soft", {}, adminTok);
   const cuid = (uploaded.body as { cuid: string }).cuid;
   const deleted = await sendJson("DELETE", `/files/${cuid}`, {}, adminTok);
-  expect(deleted.status).toBe(200);
-  expect((deleted.body as { ok: boolean }).ok).toBe(true);
+  expect(deleted.status).toBe(204);
+  // 204 empty body
   await access(path.join(loadConfig().FILE_STORAGE_ROOT, cuid));
 });
 // @relation(GSSC-BLLR-381, scope=range_end, role=Test)
@@ -513,7 +513,7 @@ test("GSSC-BLLR-383 Administrator File ACL Bypass", async () => {
     { name: "admin-child", parent: cuid },
     adminTok,
   );
-  expect(child.status).toBe(200);
+  expect(child.status).toBe(201);
 });
 // @relation(GSSC-BLLR-383, scope=range_end, role=Test)
 
@@ -575,7 +575,7 @@ test("GSSC-BLLR-386 Role File Write Access", async () => {
     { parent: parentCuid },
     editorTok,
   );
-  expect(allowed.status).toBe(200);
+  expect(allowed.status).toBe(201);
   const denied = await uploadFile(
     "member-write.pdf",
     "%PDF-member",

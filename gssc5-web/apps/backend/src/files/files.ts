@@ -25,6 +25,9 @@ import {
   readStoredFile,
   writeStoredBytes,
 } from "./storage";
+import { includesInsensitive, parseKnownQuery } from "../content/helpers";
+
+const FILE_LIST_FILTERS = new Set(["parent", "name", "cuid", "kind", "isPublic"]);
 
 const FileListEntry = t.Object({
   cuid: t.String(),
@@ -157,20 +160,23 @@ export const files = new Elysia({ prefix: "/files" })
   .get(
     "/",
     async ({ query, cookie, status: statusFn }) => {
+      const filters = parseKnownQuery(query, FILE_LIST_FILTERS);
+      if (filters === "invalid") return statusFn(422, "Invalid" as const);
+
       const session = await openSession(cookie);
       const user = sessionUser(session);
-      const parent = await resolveParent(query.parent ?? null);
+      const parent = await resolveParent(filters.parent ?? null);
       if (parent.kind === "missing" || parent.kind === "deleted") {
-        return statusFn(404, { error: "parent not found" });
+        return statusFn(404, "Not Found" as const);
       }
       if (parent.kind === "not-folder") {
-        return statusFn(400, { error: "parent is not a folder" });
+        return statusFn(422, "Invalid" as const);
       }
       const parentAcl =
         parent.kind === "root" ? parent.inherit : parent.acl;
       // @relation(GSSC-BLLR-373, scope=range_start, role=Implementation)
       if (!canReadEntry(parentAcl, user)) {
-        return statusFn(403, { error: "forbidden" });
+        return statusFn(403, "Forbidden" as const);
       }
       // @relation(GSSC-BLLR-373, scope=range_end, role=Implementation)
 
@@ -183,19 +189,37 @@ export const files = new Elysia({ prefix: "/files" })
       });
       // @relation(GSSC-BLLR-371, GSSC-BLLR-372, scope=range_end, role=Implementation)
 
-      return rows
-        .filter((row) => canReadEntry(entryAcl(row), user))
-        .map(toListEntry);
+      return statusFn(
+        200,
+        rows
+          .filter((row) => canReadEntry(entryAcl(row), user))
+          .map(toListEntry)
+          .filter((entry) => {
+            if (filters.cuid !== undefined && entry.cuid !== filters.cuid) return false;
+            if (filters.name !== undefined && !includesInsensitive(entry.name, filters.name)) {
+              return false;
+            }
+            if (filters.kind !== undefined && entry.kind !== filters.kind) return false;
+            if (filters.isPublic !== undefined) {
+              const want =
+                filters.isPublic === "true"
+                  ? true
+                  : filters.isPublic === "false"
+                    ? false
+                    : null;
+              if (want === null || entry.isPublic !== want) return false;
+            }
+            return true;
+          }),
+      );
     },
     {
-      query: t.Object({
-        parent: t.Optional(t.String()),
-      }),
+      query: t.Record(t.String(), t.String()),
       response: {
         200: t.Array(FileListEntry),
-        400: t.Object({ error: t.String() }),
-        403: t.Object({ error: t.String() }),
-        404: t.Object({ error: t.String() }),
+        403: t.Literal("Forbidden"),
+        404: t.Literal("Not Found"),
+        422: t.Literal("Invalid"),
       },
     },
   )
@@ -204,7 +228,7 @@ export const files = new Elysia({ prefix: "/files" })
     async ({ body, cookie, status: statusFn }) => {
       const session = await openSession(cookie);
       const user = sessionUser(session);
-      if (user === null) return statusFn(401, { error: "unauthorized" });
+      if (user === null) return statusFn(403, "Forbidden" as const);
 
       const record =
         body === undefined || body === null
@@ -212,13 +236,13 @@ export const files = new Elysia({ prefix: "/files" })
           : typeof body === "object" && !Array.isArray(body)
             ? (body as Record<string, unknown>)
             : "malformed";
-      if (record === null) return statusFn(400, { error: "missing body" });
-      if (record === "malformed") return statusFn(400, { error: "malformed body" });
+      if (record === null) return statusFn(422, "Invalid" as const);
+      if (record === "malformed") return statusFn(422, "Invalid" as const);
 
       const nameRaw = record.name;
-      if (typeof nameRaw !== "string") return statusFn(400, { error: "invalid name" });
+      if (typeof nameRaw !== "string") return statusFn(422, "Invalid" as const);
       const name = sanitizeFileName(nameRaw);
-      if (name === null) return statusFn(400, { error: "invalid name" });
+      if (name === null) return statusFn(422, "Invalid" as const);
 
       const parentId =
         typeof record.parent === "string" && record.parent.length > 0
@@ -226,23 +250,23 @@ export const files = new Elysia({ prefix: "/files" })
           : null;
       const parent = await resolveParent(parentId);
       if (parent.kind === "missing" || parent.kind === "deleted") {
-        return statusFn(404, { error: "parent not found" });
+        return statusFn(404, "Not Found" as const);
       }
       if (parent.kind === "not-folder") {
-        return statusFn(400, { error: "parent is not a folder" });
+        return statusFn(422, "Invalid" as const);
       }
       const writeAcl = parent.kind === "root" ? parent.inherit : parent.acl;
       const inheritFrom = parent.kind === "root" ? parent.inherit : parent.acl;
       const ceiling = parent.kind === "root" ? parent.ceiling : parent.acl;
       // @relation(GSSC-BLLR-376, scope=range_start, role=Implementation)
       if (!canWriteEntry(writeAcl, user)) {
-        return statusFn(403, { error: "forbidden" });
+        return statusFn(403, "Forbidden" as const);
       }
       // @relation(GSSC-BLLR-376, scope=range_end, role=Implementation)
 
       const acl = resolveAclOverride(inheritFrom, ceiling, record);
-      if (acl === "invalid") return statusFn(400, { error: "invalid acl" });
-      if (acl === "looser") return statusFn(400, { error: "acl looser than parent" });
+      if (acl === "invalid") return statusFn(422, "Invalid" as const);
+      if (acl === "looser") return statusFn(422, "Invalid" as const);
 
       const prisma = getPrisma(loadConfig().DATABASE_URL);
       // @relation(GSSC-BLLR-375, scope=range_start, role=Implementation)
@@ -257,7 +281,7 @@ export const files = new Elysia({ prefix: "/files" })
         },
       });
       // @relation(GSSC-BLLR-375, scope=range_end, role=Implementation)
-      return toListEntry(created);
+      return statusFn(201, toListEntry(created));
     },
     {
       body: t.Object({
@@ -268,11 +292,10 @@ export const files = new Elysia({ prefix: "/files" })
         writeRoles: t.Optional(t.Array(t.String())),
       }),
       response: {
-        200: FileListEntry,
-        400: t.Object({ error: t.String() }),
-        401: t.Object({ error: t.String() }),
-        403: t.Object({ error: t.String() }),
-        404: t.Object({ error: t.String() }),
+        201: FileListEntry,
+        403: t.Literal("Forbidden"),
+        404: t.Literal("Not Found"),
+        422: t.Literal("Invalid"),
       },
     },
   )
@@ -281,11 +304,11 @@ export const files = new Elysia({ prefix: "/files" })
     async ({ body, cookie, status: statusFn }) => {
       const session = await openSession(cookie);
       const user = sessionUser(session);
-      if (user === null) return statusFn(401, { error: "unauthorized" });
+      if (user === null) return statusFn(403, "Forbidden" as const);
 
       const upload = body.file;
       if (upload === undefined || upload === null) {
-        return statusFn(400, { error: "missing file" });
+        return statusFn(422, "Invalid" as const);
       }
 
       const providedName =
@@ -293,7 +316,7 @@ export const files = new Elysia({ prefix: "/files" })
           ? body.name
           : upload.name;
       const name = sanitizeFileName(providedName ?? "upload.bin");
-      if (name === null) return statusFn(400, { error: "invalid name" });
+      if (name === null) return statusFn(422, "Invalid" as const);
 
       const parentId =
         typeof body.parent === "string" && body.parent.length > 0
@@ -301,17 +324,17 @@ export const files = new Elysia({ prefix: "/files" })
           : null;
       const parent = await resolveParent(parentId);
       if (parent.kind === "missing" || parent.kind === "deleted") {
-        return statusFn(404, { error: "parent not found" });
+        return statusFn(404, "Not Found" as const);
       }
       if (parent.kind === "not-folder") {
-        return statusFn(400, { error: "parent is not a folder" });
+        return statusFn(422, "Invalid" as const);
       }
       const writeAcl = parent.kind === "root" ? parent.inherit : parent.acl;
       const inheritFrom = parent.kind === "root" ? parent.inherit : parent.acl;
       const ceiling = parent.kind === "root" ? parent.ceiling : parent.acl;
       // @relation(GSSC-BLLR-378, scope=range_start, role=Implementation)
       if (!canWriteEntry(writeAcl, user)) {
-        return statusFn(403, { error: "forbidden" });
+        return statusFn(403, "Forbidden" as const);
       }
       // @relation(GSSC-BLLR-378, scope=range_end, role=Implementation)
 
@@ -321,19 +344,19 @@ export const files = new Elysia({ prefix: "/files" })
         try {
           overrideBody.readRoles = JSON.parse(String(body.readRoles));
         } catch {
-          return statusFn(400, { error: "invalid acl" });
+          return statusFn(422, "Invalid" as const);
         }
       }
       if (body.writeRoles !== undefined) {
         try {
           overrideBody.writeRoles = JSON.parse(String(body.writeRoles));
         } catch {
-          return statusFn(400, { error: "invalid acl" });
+          return statusFn(422, "Invalid" as const);
         }
       }
       const acl = resolveAclOverride(inheritFrom, ceiling, overrideBody);
-      if (acl === "invalid") return statusFn(400, { error: "invalid acl" });
-      if (acl === "looser") return statusFn(400, { error: "acl looser than parent" });
+      if (acl === "invalid") return statusFn(422, "Invalid" as const);
+      if (acl === "looser") return statusFn(422, "Invalid" as const);
 
       const bytes = new Uint8Array(await upload.arrayBuffer());
       await ensureStorageRoot();
@@ -357,14 +380,14 @@ export const files = new Elysia({ prefix: "/files" })
       const written = await writeStoredBytes(storageKey, bytes);
       if (written === null) {
         await prisma.storedFileEntry.delete({ where: { id: created.id } });
-        return statusFn(500, { error: "storage write failed" });
+        return statusFn(500, "Invalid" as const);
       }
       const updated = await prisma.storedFileEntry.update({
         where: { id: created.id },
         data: { storageKey },
       });
       // @relation(GSSC-BLLR-377, scope=range_end, role=Implementation)
-      return toListEntry(updated);
+      return statusFn(201, toListEntry(updated));
     },
     {
       body: t.Object({
@@ -376,12 +399,11 @@ export const files = new Elysia({ prefix: "/files" })
         writeRoles: t.Optional(t.String()),
       }),
       response: {
-        200: FileListEntry,
-        400: t.Object({ error: t.String() }),
-        401: t.Object({ error: t.String() }),
-        403: t.Object({ error: t.String() }),
-        404: t.Object({ error: t.String() }),
-        500: t.Object({ error: t.String() }),
+        201: FileListEntry,
+        403: t.Literal("Forbidden"),
+        404: t.Literal("Not Found"),
+        422: t.Literal("Invalid"),
+        500: t.Literal("Invalid"),
       },
     },
   )
@@ -393,19 +415,19 @@ export const files = new Elysia({ prefix: "/files" })
       const row = await loadEntry(params.cuid);
       // @relation(GSSC-BLLR-380, scope=range_start, role=Implementation)
       if (row === null || row.deletedAt !== null) {
-        return statusFn(404, { error: "not found" });
+        return statusFn(404, "Not Found" as const);
       }
       if (row.kind !== "file" || row.storageKey === null) {
-        return statusFn(404, { error: "not found" });
+        return statusFn(404, "Not Found" as const);
       }
       if (!canReadEntry(entryAcl(row), user)) {
-        return statusFn(403, { error: "forbidden" });
+        return statusFn(403, "Forbidden" as const);
       }
       // @relation(GSSC-BLLR-380, scope=range_end, role=Implementation)
 
       const file = readStoredFile(row.storageKey);
       if (file === null || !(await file.exists())) {
-        return statusFn(404, { error: "not found" });
+        return statusFn(404, "Not Found" as const);
       }
       // @relation(GSSC-BLLR-379, scope=range_start, role=Implementation)
       return new Response(file, {
@@ -425,15 +447,15 @@ export const files = new Elysia({ prefix: "/files" })
     async ({ params, cookie, status: statusFn }) => {
       const session = await openSession(cookie);
       const user = sessionUser(session);
-      if (user === null) return statusFn(401, { error: "unauthorized" });
+      if (user === null) return statusFn(403, "Forbidden" as const);
 
       const row = await loadEntry(params.cuid);
       if (row === null || row.deletedAt !== null) {
-        return statusFn(404, { error: "not found" });
+        return statusFn(404, "Not Found" as const);
       }
       // @relation(GSSC-BLLR-382, scope=range_start, role=Implementation)
       if (!canWriteEntry(entryAcl(row), user)) {
-        return statusFn(403, { error: "forbidden" });
+        return statusFn(403, "Forbidden" as const);
       }
       // @relation(GSSC-BLLR-382, scope=range_end, role=Implementation)
 
@@ -444,15 +466,14 @@ export const files = new Elysia({ prefix: "/files" })
         data: { deletedAt: new Date() },
       });
       // @relation(GSSC-BLLR-370, GSSC-BLLR-381, scope=range_end, role=Implementation)
-      return { ok: true as const };
+      return statusFn(204, undefined);
     },
     {
       params: t.Object({ cuid: t.String() }),
       response: {
-        200: t.Object({ ok: t.Literal(true) }),
-        401: t.Object({ error: t.String() }),
-        403: t.Object({ error: t.String() }),
-        404: t.Object({ error: t.String() }),
+        204: t.Void(),
+        403: t.Literal("Forbidden"),
+        404: t.Literal("Not Found"),
       },
     },
   );

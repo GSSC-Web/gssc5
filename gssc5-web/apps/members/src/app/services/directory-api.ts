@@ -23,7 +23,7 @@ type SoftDeleteResult = {
 };
 
 type SoftDeleteRoutes = {
-  'soft-delete': { post: (body?: Record<string, never>) => Promise<SoftDeleteResult> };
+  delete: () => Promise<SoftDeleteResult>;
   undelete: { post: (body?: Record<string, never>) => Promise<SoftDeleteResult> };
 };
 
@@ -31,7 +31,7 @@ export const directoryApi = {
   listUsers: (query: Record<string, string> = {}) =>
     backend.users.get({ query }),
   softDeleteUser: (cuid: string) =>
-    (backend.users({ cuid }) as unknown as SoftDeleteRoutes)['soft-delete'].post({}),
+    (backend.users({ cuid }) as unknown as SoftDeleteRoutes).delete(),
   undeleteUser: (cuid: string) =>
     (backend.users({ cuid }) as unknown as SoftDeleteRoutes).undelete.post({}),
 };

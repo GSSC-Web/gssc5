@@ -500,7 +500,7 @@ function fieldsBody(fields: Partial<Record<Concept, unknown>>): Record<string, u
 }
 
 async function call(
-  method: "GET" | "POST",
+  method: "GET" | "POST" | "PATCH" | "DELETE",
   pathname: string,
   token: string | undefined,
   fields?: Partial<Record<Concept, unknown>>,
@@ -2273,10 +2273,10 @@ test("GSSC-BLLR-459 User Soft-Delete Marker", async () => {
 // @relation(GSSC-BLLR-460, GSSC-BLLR-461, GSSC-BLLR-462, GSSC-BLLR-463, GSSC-BLLR-466, scope=range_start, role=Test)
 test("GSSC-BLLR-460 User List Omits Soft-Deleted", async () => {
   await withRow(mutable.id, async () => {
-    const forbidden = await call("POST", `/users/${encodeURIComponent(mutable.id)}/soft-delete`, emailMember.token);
+    const forbidden = await call("DELETE", `/users/${encodeURIComponent(mutable.id)}`, emailMember.token);
     expect(forbidden.status).toBe(403);
 
-    const deleted = await call("POST", `/users/${encodeURIComponent(mutable.id)}/soft-delete`, admin.token);
+    const deleted = await call("DELETE", `/users/${encodeURIComponent(mutable.id)}`, admin.token);
     expect(deleted.status).toBe(204);
 
     const memberList = await listEntries(emailMember.token);
@@ -2301,6 +2301,11 @@ test("GSSC-BLLR-460 User List Omits Soft-Deleted", async () => {
     expect(idsOf(after)).toContain(mutable.id);
     const adminAfter = (await listEntries(admin.token)).find((entry) => entry["cuid"] === mutable.id);
     expect(adminAfter?.["deletedAt"] ?? null).toBeNull();
+
+    // Alias soft-delete path still works during migration.
+    const alias = await call("POST", `/users/${encodeURIComponent(mutable.id)}/soft-delete`, admin.token);
+    expect(alias.status).toBe(204);
+    await call("POST", `/users/${encodeURIComponent(mutable.id)}/undelete`, admin.token);
   });
 });
 // @relation(GSSC-BLLR-460, GSSC-BLLR-461, GSSC-BLLR-462, GSSC-BLLR-463, GSSC-BLLR-466, scope=range_end, role=Test)

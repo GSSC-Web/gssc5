@@ -6869,14 +6869,17 @@ RELATIONS:
 UID: GSSC-BLLR-396
 TITLE: Newsletters Keyword Filter
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL, when a keyword query is provided, limit the newsletter list to entries whose keywords include that keyword case-insensitively as a substring.
+The GSSC Website Unified Backend SHALL accept optional newsletter list query keys keyword, cuid, volume, number, year, month, and content; apply them with AND semantics; reject unknown query keys; and when keyword or content is provided, match keywords (and for content also volume and number as text) case-insensitively as a substring, with cuid and numeric fields matched exactly.
 <<<
 RATIONALE: >>>
-Keywords support catalog search without a separate FE search surface.
+Shared catalog list-filter style supports keyword search and aligned optional filters without a separate FE search surface.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-20
+CHANGE_DRIVER: >>>
+GSSC5-20
+GSSC5-104
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -6931,7 +6934,7 @@ RELATIONS:
 
 [[SECTION]]
 UID: GSSC-BLLR-NEWSLETTER-ITEM
-TITLE: /newsletter/{cuid}
+TITLE: /newsletters/{cuid}
 
 [[SECTION]]
 UID: GSSC-BLLR-NEWSLETTER-ITEM-GET
