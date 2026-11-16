@@ -11,6 +11,7 @@ import { section } from "./content/section";
 import { template } from "./content/template";
 import { files } from "./files/files";
 import { kvs } from "./kvs";
+import { search } from "./search";
 import { accountPhotos } from "./user/account-photos";
 import { accounts } from "./user/accounts";
 import { leadership } from "./user/leadership";
@@ -56,6 +57,7 @@ export const app = new Elysia({ normalize: false })
   .use(publications)
   .use(newsletters)
   .use(files)
+  .use(search)
   .get("/", () => ({
     status: "ok" as const,
     name: "GSSC5 Backend",
@@ -82,6 +84,7 @@ export const app = new Elysia({ normalize: false })
         "leadership",
         "account-photos",
         "password",
+        "search",
       ],
       listFilters: true,
       openapi: "/openapi",
