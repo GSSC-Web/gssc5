@@ -1,6 +1,6 @@
 import { defineConfig, devices } from '@playwright/test';
 
-/** Package root (`gssc5-web/apps/e2e`). */
+/** Package root (`gssc5-web/test`). */
 const e2eRoot = __dirname;
 const isCI = !!process.env.CI;
 

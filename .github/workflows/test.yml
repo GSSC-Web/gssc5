@@ -16,7 +16,7 @@ concurrency:
 # - backend    ← gssc5-web/apps/backend/**, gssc5-web/{package.json,bun.lock}, root mise.toml, this workflow
 # - public     ← gssc5-web/apps/public/** + backend (types/API dep) + shared lock/mise/workflow
 # - members    ← gssc5-web/apps/members/** + backend (types/API dep) + shared lock/mise/workflow
-# - e2e        ← gssc5-web/apps/e2e/** + public/members/backend + shared lock/mise/workflow
+# - e2e        ← gssc5-web/test/** + public/members/backend + shared lock/mise/workflow
 # Shared lockfiles / mise / CI YAML force the broader web (or docs) runs; .agents-only PRs skip all test jobs.
 
 jobs:
@@ -66,7 +66,7 @@ jobs:
               - 'mise.toml'
               - '.github/workflows/test.yml'
             e2e:
-              - 'gssc5-web/apps/e2e/**'
+              - 'gssc5-web/test/**'
               - 'gssc5-web/apps/public/**'
               - 'gssc5-web/apps/members/**'
               - 'gssc5-web/apps/backend/**'
@@ -204,7 +204,7 @@ jobs:
 
       - name: Install Playwright Chromium
         run: mise exec -- bunx --bun playwright install --with-deps chromium
-        working-directory: gssc5-web/apps/e2e
+        working-directory: gssc5-web/test
 
       - name: Run Playwright integration smokes
         # Starts backend + public + members via playwright.config webServer.

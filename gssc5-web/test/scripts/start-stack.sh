@@ -3,7 +3,8 @@
 # Types/seed must already be done (`mise run //e2e:test` depends on them).
 set -euo pipefail
 
-ROOT="$(cd "$(dirname "$0")/../../../.." && pwd)"
+# Package lives at gssc5-web/test (sister of apps); scripts/ → repo root is ../../..
+ROOT="$(cd "$(dirname "$0")/../../.." && pwd)"
 cd "$ROOT"
 
 wait_url() {

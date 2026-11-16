@@ -23,13 +23,6 @@
         "typescript": "~6.0.2",
       },
     },
-    "apps/e2e": {
-      "name": "@gssc/e2e",
-      "version": "0.0.0",
-      "devDependencies": {
-        "@playwright/test": "^1.56.1",
-      },
-    },
     "apps/members": {
       "name": "@gssc/members",
       "version": "0.0.0",
@@ -84,6 +77,13 @@
         "tailwindcss": "^4.1.12",
         "typescript": "~6.0.2",
         "vitest": "^5.0.0",
+      },
+    },
+    "test": {
+      "name": "@gssc/e2e",
+      "version": "0.0.0",
+      "devDependencies": {
+        "@playwright/test": "^1.56.1",
       },
     },
   },
@@ -240,7 +240,7 @@
 
     "@gssc/backend": ["@gssc/backend@workspace:apps/backend"],
 
-    "@gssc/e2e": ["@gssc/e2e@workspace:apps/e2e"],
+    "@gssc/e2e": ["@gssc/e2e@workspace:test"],
 
     "@gssc/members": ["@gssc/members@workspace:apps/members"],
 
