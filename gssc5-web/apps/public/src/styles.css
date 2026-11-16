@@ -66,6 +66,10 @@
   content: "\f0156";
 }
 
+.nf-md-menu:before {
+  content: "\f035c";
+}
+
 .nf-md-chevron_left:before {
   content: "\f0141";
 }

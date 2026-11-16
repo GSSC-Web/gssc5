@@ -1,150 +1,424 @@
 <!-- @relation(GSSC-PLLR-46, GSSC-PLLR-47, scope=range_start, role=Implementation) -->
 <!-- @relation(GSSC-PLLR-48, scope=range_start, role=Implementation) -->
-<header
-  class="gssc-header flex w-full flex-wrap items-center gap-x-5 gap-y-3 border-b-4 border-gssc-gray bg-gssc-light-green px-4 py-3 font-sans text-gssc-dark-green"
+<div
+  #chromeHost
+  class="gssc-header relative w-full font-sans text-gssc-dark-green"
+  [attr.data-chrome-tier]="chromeTier()"
 >
   <!-- @relation(GSSC-PLLR-48, scope=range_end, role=Implementation) -->
 
-  <div class="gssc-header__identity flex min-w-0 items-center gap-3">
-    <!-- @relation(GSSC-PLLR-49, GSSC-PLLR-50, GSSC-PLLR-51, scope=range_start, role=Implementation) -->
-    <a
-      class="gssc-header__logo inline-flex shrink-0 text-gssc-dark-green"
-      routerLink="/"
-      aria-label="GSSC Logo"
+  <!-- Hidden probe: measures whether the top-level nav fits without wrapping. -->
+  <nav
+    #navProbe
+    class="gssc-header__nav-probe pointer-events-none invisible absolute start-0 top-0 -z-10 flex w-max flex-nowrap items-center gap-0 whitespace-nowrap opacity-0"
+    aria-hidden="true"
+  >
+    @for (item of navItems(); track item.cuid; let last = $last) {
+      <span class="gssc-header__nav-probe-item px-3 py-2 font-sans text-sm">{{
+        item.label
+      }}</span>
+      @if (!last) {
+        <span class="mx-1 inline-block h-4 w-px" aria-hidden="true"></span>
+      }
+    }
+  </nav>
+
+  @if (chromeTier() === 'narrow') {
+    <!-- Narrow: search left, logo centered, hamburger right -->
+    <header
+      class="gssc-header__bar gssc-header__bar--narrow grid w-full grid-cols-[auto_1fr_auto] items-center gap-x-3 border-b-4 border-gssc-gray bg-gssc-light-green px-4 py-3"
     >
-      <!-- Placeholder mark until GSSC5-46 brand artwork. -->
-      <svg
-        class="gssc-header__logo-mark block"
-        viewBox="0 0 48 48"
-        width="40"
-        height="40"
-        role="img"
-        aria-hidden="true"
-      >
-        <rect x="4" y="4" width="40" height="40" rx="6" fill="currentColor" opacity="0.15" />
-        <text
-          x="24"
-          y="30"
-          text-anchor="middle"
-          font-size="14"
-          font-weight="700"
-          fill="currentColor"
-        >
-          GSSC
-        </text>
-      </svg>
-    </a>
-    <!-- @relation(GSSC-PLLR-49, GSSC-PLLR-50, GSSC-PLLR-51, scope=range_end, role=Implementation) -->
+      <!-- @relation(GSSC-PLLR-71, scope=range_start, role=Implementation) -->
+      <div class="gssc-header__search relative flex items-center justify-self-start">
+        <ng-container *ngTemplateOutlet="searchToggle" />
+      </div>
+      <!-- @relation(GSSC-PLLR-71, scope=range_end, role=Implementation) -->
 
-    <!-- @relation(GSSC-PLLR-52, GSSC-PLLR-53, GSSC-PLLR-54, scope=range_start, role=Implementation) -->
-    <p class="gssc-header__org-name m-0 font-medium text-gssc-dark-green">
-      <span class="gssc-header__org-name--full hidden md:inline">{{
-        societyContact.organizationName()
-      }}</span>
-      <span class="gssc-header__org-name--short hidden sm:inline md:hidden">{{
-        societyContact.organizationAcronym()
-      }}</span>
-    </p>
-    <!-- @relation(GSSC-PLLR-52, GSSC-PLLR-53, GSSC-PLLR-54, scope=range_end, role=Implementation) -->
-  </div>
+      <!-- @relation(GSSC-PLLR-49, GSSC-PLLR-50, GSSC-PLLR-51, scope=range_start, role=Implementation) -->
+      <div class="gssc-header__identity flex justify-center">
+        <ng-container *ngTemplateOutlet="logo" />
+      </div>
+      <!-- @relation(GSSC-PLLR-49, GSSC-PLLR-50, GSSC-PLLR-51, scope=range_end, role=Implementation) -->
 
-  <div class="gssc-header__actions ml-auto flex flex-wrap items-center gap-0">
-    <!-- Right-side order: Login|Greeting → Contact → Search -->
-    <div class="gssc-header__account relative flex items-center">
-      @if (loggedIn()) {
-        <!-- @relation(GSSC-PLLR-61, GSSC-PLLR-62, GSSC-PLLR-63, scope=range_start, role=Implementation) -->
-        <div class="gssc-header__greeting-wrap group relative">
-          <button
-            type="button"
-            class="gssc-header__greeting cursor-pointer border-0 bg-transparent p-0 font-sans text-gssc-dark-green"
-          >
-            Hello, {{ displayName() }}
-          </button>
-          <div
-            class="gssc-header__greeting-menu invisible absolute end-0 top-full z-10 min-w-36 flex-col gap-1 border border-gssc-gray bg-gssc-white py-2 opacity-0 shadow-sm group-hover:visible group-hover:flex group-hover:opacity-100 group-focus-within:visible group-focus-within:flex group-focus-within:opacity-100"
-          >
-            <!-- @relation(GSSC-PLLR-59, GSSC-PLLR-60, scope=range_start, role=Implementation) -->
-            <button
-              type="button"
-              class="gssc-header__member-access cursor-pointer border-0 bg-transparent px-3 py-1 text-start font-sans text-gssc-dark-green"
-              (click)="openMembersApp()"
-            >
-              Members
-            </button>
-            <!-- @relation(GSSC-PLLR-59, GSSC-PLLR-60, scope=range_end, role=Implementation) -->
+      <!-- @relation(GSSC-PLLR-338, GSSC-PLLR-339, GSSC-PLLR-340, scope=range_start, role=Implementation) -->
+      <div class="justify-self-end">
+        <ng-container *ngTemplateOutlet="menuToggle" />
+      </div>
+      <!-- @relation(GSSC-PLLR-338, GSSC-PLLR-339, GSSC-PLLR-340, scope=range_end, role=Implementation) -->
+    </header>
+  } @else {
+    <!-- Wide / mid identity bar -->
+    <header
+      class="gssc-header__bar flex w-full flex-nowrap items-center gap-x-5 border-b-4 border-gssc-gray bg-gssc-light-green px-4 py-3"
+      [class.gssc-header__bar--wide]="chromeTier() === 'wide'"
+      [class.gssc-header__bar--mid]="chromeTier() === 'mid'"
+    >
+      <div class="gssc-header__identity flex min-w-0 items-center gap-3">
+        <!-- @relation(GSSC-PLLR-49, GSSC-PLLR-50, GSSC-PLLR-51, scope=range_start, role=Implementation) -->
+        <ng-container *ngTemplateOutlet="logo" />
+        <!-- @relation(GSSC-PLLR-49, GSSC-PLLR-50, GSSC-PLLR-51, scope=range_end, role=Implementation) -->
 
-            <!-- @relation(GSSC-PLLR-65, GSSC-PLLR-66, scope=range_start, role=Implementation) -->
-            <button
-              type="button"
-              class="gssc-header__logout cursor-pointer border-0 bg-transparent px-3 py-1 text-start font-sans text-gssc-dark-green"
-              (click)="logout()"
-            >
-              Logout
-            </button>
-            <!-- @relation(GSSC-PLLR-65, GSSC-PLLR-66, scope=range_end, role=Implementation) -->
-          </div>
-        </div>
-        <!-- @relation(GSSC-PLLR-61, GSSC-PLLR-62, GSSC-PLLR-63, scope=range_end, role=Implementation) -->
-      } @else {
-        <!-- @relation(GSSC-PLLR-56, GSSC-PLLR-57, scope=range_start, role=Implementation) -->
+        <!-- @relation(GSSC-PLLR-52, GSSC-PLLR-53, GSSC-PLLR-54, scope=range_start, role=Implementation) -->
+        <p class="gssc-header__org-name m-0 font-medium text-gssc-dark-green">
+          @if (chromeTier() === 'wide') {
+            <span class="gssc-header__org-name--full">{{
+              societyContact.organizationName()
+            }}</span>
+          } @else {
+            <span class="gssc-header__org-name--short">{{
+              societyContact.organizationAcronym()
+            }}</span>
+          }
+        </p>
+        <!-- @relation(GSSC-PLLR-52, GSSC-PLLR-53, GSSC-PLLR-54, scope=range_end, role=Implementation) -->
+      </div>
+
+      <div class="gssc-header__actions ml-auto flex flex-nowrap items-center gap-0">
+        <ng-container *ngTemplateOutlet="accountActions" />
+
+        <span
+          class="gssc-header__divider mx-3 inline-block h-4 w-px bg-gssc-dark-green/40"
+          aria-hidden="true"
+        ></span>
+
+        <!-- @relation(GSSC-PLLR-68, GSSC-PLLR-69, scope=range_start, role=Implementation) -->
         <button
           type="button"
-          class="gssc-header__login cursor-pointer border-0 bg-transparent p-0 font-sans text-gssc-dark-green"
-          (click)="openMembersApp()"
+          class="gssc-header__contact cursor-pointer border-0 bg-transparent p-0 font-sans text-gssc-dark-green"
+          (click)="openContact()"
         >
-          Login
+          Contact
         </button>
-        <!-- @relation(GSSC-PLLR-56, GSSC-PLLR-57, scope=range_end, role=Implementation) -->
-      }
-    </div>
+        <!-- @relation(GSSC-PLLR-68, GSSC-PLLR-69, scope=range_end, role=Implementation) -->
 
-    <span class="gssc-header__divider mx-3 inline-block h-4 w-px bg-gssc-dark-green/40" aria-hidden="true"></span>
+        <span
+          class="gssc-header__divider mx-3 inline-block h-4 w-px bg-gssc-dark-green/40"
+          aria-hidden="true"
+        ></span>
 
-    <!-- @relation(GSSC-PLLR-68, GSSC-PLLR-69, scope=range_start, role=Implementation) -->
-    <button
-      type="button"
-      class="gssc-header__contact cursor-pointer border-0 bg-transparent p-0 font-sans text-gssc-dark-green"
-      (click)="openContact()"
-    >
-      Contact
-    </button>
-    <!-- @relation(GSSC-PLLR-68, GSSC-PLLR-69, scope=range_end, role=Implementation) -->
+        <!-- @relation(GSSC-PLLR-71, GSSC-PLLR-72, scope=range_start, role=Implementation) -->
+        <div class="gssc-header__search relative flex items-center">
+          <ng-container *ngTemplateOutlet="searchToggle" />
+        </div>
+        <!-- @relation(GSSC-PLLR-71, GSSC-PLLR-72, scope=range_end, role=Implementation) -->
 
-    <span class="gssc-header__divider mx-3 inline-block h-4 w-px bg-gssc-dark-green/40" aria-hidden="true"></span>
-
-    <!-- @relation(GSSC-PLLR-71, GSSC-PLLR-72, scope=range_start, role=Implementation) -->
-    <div class="gssc-header__search relative flex items-center">
-      <button
-        type="button"
-        class="gssc-header__search-toggle inline-flex size-6 shrink-0 cursor-pointer items-center justify-center rounded border-0 bg-transparent p-0 text-gssc-dark-green hover:bg-gssc-gray"
-        [attr.aria-expanded]="searchOpen()"
-        [attr.aria-label]="searchOpen() ? 'Close search' : 'Open search'"
-        (click)="toggleSearch()"
-      >
-        @if (searchOpen()) {
-          <i
-            class="nf nf-md-close gssc-header__search-icon gssc-header__search-icon--close text-base leading-none"
+        @if (chromeTier() === 'mid') {
+          <span
+            class="gssc-header__divider mx-3 inline-block h-4 w-px bg-gssc-dark-green/40"
             aria-hidden="true"
-          ></i>
-        } @else {
-          <!-- Nerd Font glyphs; full search widget is GSSC5-47. -->
-          <i
-            class="nf nf-fa-search gssc-header__search-icon gssc-header__search-icon--open text-base leading-none"
-            aria-hidden="true"
-          ></i>
+          ></span>
+          <!-- @relation(GSSC-PLLR-338, GSSC-PLLR-339, GSSC-PLLR-340, scope=range_start, role=Implementation) -->
+          <ng-container *ngTemplateOutlet="menuToggle" />
+          <!-- @relation(GSSC-PLLR-338, GSSC-PLLR-339, GSSC-PLLR-340, scope=range_end, role=Implementation) -->
         }
-      </button>
-      @if (searchOpen()) {
+      </div>
+    </header>
+  }
+
+  @if (chromeTier() === 'wide') {
+    <!-- @relation(GSSC-PLLR-329, GSSC-PLLR-330, GSSC-PLLR-331, GSSC-PHLR-140, scope=range_start, role=Implementation) -->
+    <nav
+      class="gssc-header__nav gssc-header__nav--wide flex w-full flex-nowrap items-center border-b border-gssc-gray bg-gssc-cream px-4 py-0 font-sans text-gssc-dark-green"
+      aria-label="Public"
+    >
+      @for (item of navItems(); track item.cuid; let last = $last) {
+        <!-- @relation(GSSC-PLLR-332, GSSC-PLLR-333, GSSC-PLLR-334, scope=range_start, role=Implementation) -->
+        <div class="gssc-header__nav-item group relative">
+          <a
+            class="gssc-header__nav-link inline-flex px-3 py-2 font-sans text-sm text-gssc-dark-green no-underline"
+            [routerLink]="item.path"
+          >
+            {{ item.label }}
+          </a>
+          @if (hasChildren(item)) {
+            <!-- @relation(GSSC-PLLR-335, GSSC-PLLR-336, GSSC-PLLR-337, scope=range_start, role=Implementation) -->
+            <div
+              class="gssc-header__submenu invisible absolute start-0 top-full z-20 min-w-44 flex-col border border-gssc-gray bg-gssc-white py-1 opacity-0 shadow-sm group-hover:visible group-hover:flex group-hover:opacity-100 group-focus-within:visible group-focus-within:flex group-focus-within:opacity-100"
+            >
+              @for (child of item.children; track child.cuid) {
+                <div class="gssc-header__submenu-item group/sub relative">
+                  <a
+                    class="gssc-header__submenu-link block px-3 py-2 font-sans text-sm text-gssc-dark-green no-underline hover:bg-gssc-gray"
+                    [routerLink]="child.path"
+                  >
+                    {{ child.label }}
+                  </a>
+                  @if (hasChildren(child)) {
+                    <div
+                      class="gssc-header__submenu gssc-header__submenu--nested invisible absolute start-full top-0 z-30 min-w-44 flex-col border border-gssc-gray bg-gssc-white py-1 opacity-0 shadow-sm group-hover/sub:visible group-hover/sub:flex group-hover/sub:opacity-100 group-focus-within/sub:visible group-focus-within/sub:flex group-focus-within/sub:opacity-100"
+                    >
+                      @for (grand of child.children; track grand.cuid) {
+                        <a
+                          class="gssc-header__submenu-link block px-3 py-2 font-sans text-sm text-gssc-dark-green no-underline hover:bg-gssc-gray"
+                          [routerLink]="grand.path"
+                        >
+                          {{ grand.label }}
+                        </a>
+                      }
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+            <!-- @relation(GSSC-PLLR-335, GSSC-PLLR-336, GSSC-PLLR-337, scope=range_end, role=Implementation) -->
+          }
+        </div>
+        <!-- @relation(GSSC-PLLR-332, GSSC-PLLR-333, GSSC-PLLR-334, scope=range_end, role=Implementation) -->
+        @if (!last) {
+          <span
+            class="gssc-header__nav-divider mx-1 inline-block h-4 w-px shrink-0 bg-gssc-dark-green/40"
+            aria-hidden="true"
+          ></span>
+        }
+      }
+    </nav>
+    <!-- @relation(GSSC-PLLR-329, GSSC-PLLR-330, GSSC-PLLR-331, GSSC-PHLR-140, scope=range_end, role=Implementation) -->
+  }
+
+  @if (searchOpen()) {
+    <div
+      class="gssc-header__search-panel absolute end-4 top-full z-20 mt-1 min-w-48 border border-gssc-gray bg-gssc-white p-3 font-sans text-gssc-dark-green"
+      [class.start-4]="chromeTier() === 'narrow'"
+      [class.end-auto]="chromeTier() === 'narrow'"
+      role="search"
+    >
+      <!-- Placeholder until GSSC5-47 search widget. -->
+      <p class="gssc-header__search-placeholder m-0 text-sm">Search</p>
+    </div>
+  }
+
+  @if (menuOpen() && chromeTier() !== 'wide') {
+    <!-- @relation(GSSC-PLLR-329, GSSC-PLLR-330, GSSC-PLLR-331, GSSC-PHLR-140, scope=range_start, role=Implementation) -->
+    <div
+      class="gssc-header__menu-overlay absolute inset-x-0 top-full z-20 max-h-[70vh] overflow-y-auto border-b border-gssc-gray bg-gssc-white font-sans text-gssc-dark-green shadow-sm"
+      role="navigation"
+      aria-label="Public"
+    >
+      @if (chromeTier() === 'narrow') {
         <div
-          class="gssc-header__search-panel absolute end-0 top-full z-10 mt-2 min-w-48 border border-gssc-gray bg-gssc-white p-3 font-sans text-gssc-dark-green"
-          role="search"
+          class="gssc-header__overlay-utilities flex flex-wrap items-center gap-3 border-b border-gssc-gray px-4 py-3"
         >
-          <!-- Placeholder until GSSC5-47 search widget. -->
-          <p class="gssc-header__search-placeholder m-0 text-sm">Search</p>
+          <ng-container *ngTemplateOutlet="accountActions" />
+          <span
+            class="gssc-header__divider inline-block h-4 w-px bg-gssc-dark-green/40"
+            aria-hidden="true"
+          ></span>
+          <button
+            type="button"
+            class="gssc-header__contact cursor-pointer border-0 bg-transparent p-0 font-sans text-gssc-dark-green"
+            (click)="openContact()"
+          >
+            Contact
+          </button>
         </div>
       }
+
+      <ul class="gssc-header__overlay-list m-0 list-none p-0">
+        @for (item of navItems(); track item.cuid) {
+          <li class="gssc-header__overlay-item border-b border-gssc-gray/60">
+            <div class="flex items-center gap-2 px-4 py-2">
+              <!-- @relation(GSSC-PLLR-332, GSSC-PLLR-333, GSSC-PLLR-334, scope=range_start, role=Implementation) -->
+              <a
+                class="gssc-header__nav-link flex-auto font-sans text-gssc-dark-green no-underline"
+                [routerLink]="item.path"
+                (click)="closeMenu()"
+              >
+                {{ item.label }}
+              </a>
+              <!-- @relation(GSSC-PLLR-332, GSSC-PLLR-333, GSSC-PLLR-334, scope=range_end, role=Implementation) -->
+              @if (hasChildren(item)) {
+                <!-- @relation(GSSC-PLLR-341, GSSC-PLLR-342, GSSC-PLLR-343, scope=range_start, role=Implementation) -->
+                <button
+                  type="button"
+                  class="gssc-header__expander cursor-pointer border-0 bg-transparent px-2 py-1 font-sans text-gssc-dark-green"
+                  [attr.aria-expanded]="isExpanded(item.cuid)"
+                  [attr.aria-label]="
+                    isExpanded(item.cuid)
+                      ? 'Collapse ' + item.label
+                      : 'Expand ' + item.label
+                  "
+                  (click)="toggleExpanded(item.cuid)"
+                >
+                  {{ isExpanded(item.cuid) ? '−' : '+' }}
+                </button>
+                <!-- @relation(GSSC-PLLR-341, GSSC-PLLR-342, GSSC-PLLR-343, scope=range_end, role=Implementation) -->
+              }
+            </div>
+            @if (hasChildren(item) && isExpanded(item.cuid)) {
+              <!-- @relation(GSSC-PLLR-335, GSSC-PLLR-336, scope=range_start, role=Implementation) -->
+              <ul class="gssc-header__submenu m-0 list-none bg-gssc-cream/40 p-0">
+                @for (child of item.children; track child.cuid) {
+                  <li class="border-t border-gssc-gray/40">
+                    <div class="flex items-center gap-2 py-2 pe-4 ps-8">
+                      <a
+                        class="gssc-header__submenu-link flex-auto font-sans text-sm text-gssc-dark-green no-underline"
+                        [routerLink]="child.path"
+                        (click)="closeMenu()"
+                      >
+                        {{ child.label }}
+                      </a>
+                      @if (hasChildren(child)) {
+                        <button
+                          type="button"
+                          class="gssc-header__expander cursor-pointer border-0 bg-transparent px-2 py-1 font-sans text-gssc-dark-green"
+                          [attr.aria-expanded]="isExpanded(child.cuid)"
+                          [attr.aria-label]="
+                            isExpanded(child.cuid)
+                              ? 'Collapse ' + child.label
+                              : 'Expand ' + child.label
+                          "
+                          (click)="toggleExpanded(child.cuid)"
+                        >
+                          {{ isExpanded(child.cuid) ? '−' : '+' }}
+                        </button>
+                      }
+                    </div>
+                    @if (hasChildren(child) && isExpanded(child.cuid)) {
+                      <ul class="m-0 list-none p-0">
+                        @for (grand of child.children; track grand.cuid) {
+                          <li class="border-t border-gssc-gray/30">
+                            <a
+                              class="gssc-header__submenu-link block py-2 pe-4 ps-12 font-sans text-sm text-gssc-dark-green no-underline"
+                              [routerLink]="grand.path"
+                              (click)="closeMenu()"
+                            >
+                              {{ grand.label }}
+                            </a>
+                          </li>
+                        }
+                      </ul>
+                    }
+                  </li>
+                }
+              </ul>
+              <!-- @relation(GSSC-PLLR-335, GSSC-PLLR-336, scope=range_end, role=Implementation) -->
+            }
+          </li>
+        }
+      </ul>
     </div>
-    <!-- @relation(GSSC-PLLR-71, GSSC-PLLR-72, scope=range_end, role=Implementation) -->
-  </div>
-</header>
+    <!-- @relation(GSSC-PLLR-329, GSSC-PLLR-330, GSSC-PLLR-331, GSSC-PHLR-140, scope=range_end, role=Implementation) -->
+  }
+</div>
 <!-- @relation(GSSC-PLLR-46, GSSC-PLLR-47, scope=range_end, role=Implementation) -->
+
+<ng-template #logo>
+  <a
+    class="gssc-header__logo inline-flex shrink-0 text-gssc-dark-green"
+    routerLink="/"
+    aria-label="GSSC Logo"
+  >
+    <!-- Placeholder mark until GSSC5-46 brand artwork. -->
+    <svg
+      class="gssc-header__logo-mark block"
+      viewBox="0 0 48 48"
+      width="40"
+      height="40"
+      role="img"
+      aria-hidden="true"
+    >
+      <rect x="4" y="4" width="40" height="40" rx="6" fill="currentColor" opacity="0.15" />
+      <text
+        x="24"
+        y="30"
+        text-anchor="middle"
+        font-size="14"
+        font-weight="700"
+        fill="currentColor"
+      >
+        GSSC
+      </text>
+    </svg>
+  </a>
+</ng-template>
+
+<ng-template #searchToggle>
+  <!-- @relation(GSSC-PLLR-70, GSSC-PLLR-72, scope=range_start, role=Implementation) -->
+  <button
+    type="button"
+    class="gssc-header__search-toggle inline-flex size-6 shrink-0 cursor-pointer items-center justify-center rounded border-0 bg-transparent p-0 text-gssc-dark-green hover:bg-gssc-gray"
+    [attr.aria-expanded]="searchOpen()"
+    [attr.aria-label]="searchOpen() ? 'Close search' : 'Open search'"
+    (click)="toggleSearch()"
+  >
+    @if (searchOpen()) {
+      <i
+        class="nf nf-md-close gssc-header__search-icon gssc-header__search-icon--close text-base leading-none"
+        aria-hidden="true"
+      ></i>
+    } @else {
+      <!-- Nerd Font glyphs; full search widget is GSSC5-47. -->
+      <i
+        class="nf nf-fa-search gssc-header__search-icon gssc-header__search-icon--open text-base leading-none"
+        aria-hidden="true"
+      ></i>
+    }
+  </button>
+  <!-- @relation(GSSC-PLLR-70, GSSC-PLLR-72, scope=range_end, role=Implementation) -->
+</ng-template>
+
+<ng-template #menuToggle>
+  <button
+    type="button"
+    class="gssc-header__menu-toggle inline-flex size-6 shrink-0 cursor-pointer items-center justify-center rounded border-0 bg-transparent p-0 text-gssc-dark-green hover:bg-gssc-gray"
+    [attr.aria-expanded]="menuOpen()"
+    [attr.aria-label]="menuOpen() ? 'Close menu' : 'Open menu'"
+    (click)="toggleMenu()"
+  >
+    @if (menuOpen()) {
+      <i class="nf nf-md-close text-base leading-none" aria-hidden="true"></i>
+    } @else {
+      <i class="nf nf-md-menu text-base leading-none" aria-hidden="true"></i>
+    }
+  </button>
+</ng-template>
+
+<ng-template #accountActions>
+  <div class="gssc-header__account relative flex items-center">
+    @if (loggedIn()) {
+      <!-- @relation(GSSC-PLLR-61, GSSC-PLLR-62, GSSC-PLLR-63, scope=range_start, role=Implementation) -->
+      <div class="gssc-header__greeting-wrap group relative">
+        <button
+          type="button"
+          class="gssc-header__greeting cursor-pointer border-0 bg-transparent p-0 font-sans text-gssc-dark-green"
+        >
+          Hello, {{ displayName() }}
+        </button>
+        <div
+          class="gssc-header__greeting-menu invisible absolute end-0 top-full z-10 min-w-36 flex-col gap-1 border border-gssc-gray bg-gssc-white py-2 opacity-0 shadow-sm group-hover:visible group-hover:flex group-hover:opacity-100 group-focus-within:visible group-focus-within:flex group-focus-within:opacity-100"
+        >
+          <!-- @relation(GSSC-PLLR-59, GSSC-PLLR-60, scope=range_start, role=Implementation) -->
+          <button
+            type="button"
+            class="gssc-header__member-access cursor-pointer border-0 bg-transparent px-3 py-1 text-start font-sans text-gssc-dark-green"
+            (click)="openMembersApp()"
+          >
+            Members
+          </button>
+          <!-- @relation(GSSC-PLLR-59, GSSC-PLLR-60, scope=range_end, role=Implementation) -->
+
+          <!-- @relation(GSSC-PLLR-65, GSSC-PLLR-66, scope=range_start, role=Implementation) -->
+          <button
+            type="button"
+            class="gssc-header__logout cursor-pointer border-0 bg-transparent px-3 py-1 text-start font-sans text-gssc-dark-green"
+            (click)="logout()"
+          >
+            Logout
+          </button>
+          <!-- @relation(GSSC-PLLR-65, GSSC-PLLR-66, scope=range_end, role=Implementation) -->
+        </div>
+      </div>
+      <!-- @relation(GSSC-PLLR-61, GSSC-PLLR-62, GSSC-PLLR-63, scope=range_end, role=Implementation) -->
+    } @else {
+      <!-- @relation(GSSC-PLLR-56, GSSC-PLLR-57, scope=range_start, role=Implementation) -->
+      <button
+        type="button"
+        class="gssc-header__login cursor-pointer border-0 bg-transparent p-0 font-sans text-gssc-dark-green"
+        (click)="openMembersApp()"
+      >
+        Login
+      </button>
+      <!-- @relation(GSSC-PLLR-56, GSSC-PLLR-57, scope=range_end, role=Implementation) -->
+    }
+  </div>
+</ng-template>
