@@ -18,6 +18,7 @@ bun install
 | `apps/backend` | `@gssc/backend` | http://localhost:3000 | Bun |
 | `apps/public` | `@gssc/public` | http://localhost:4200 | Vitest |
 | `apps/members` | `@gssc/members` | http://localhost:4201 | Vitest |
+| `test` | `@gssc/e2e` | (drives 3000/4200/4201) | Playwright |
 
 The public and member frontends are Angular applications. The backend is Elysia
 on Bun. Each frontend calls the backend through Eden Treaty.
@@ -42,6 +43,17 @@ then runs `bun test`. Each frontend runs Vitest once through `ng test
 --watch=false`. The public app uses the shared harness at
 `apps/public/src/test-harness.ts` (`mise run //public:test`); see
 `apps/public/README.md` for the GSSC5-38 feature-test pattern.
+
+Playwright integration smokes live in `test/` (sister of `apps/`, not a
+product app) and are **not** part of `mise test`. Install browsers once, then
+run:
+
+```bash
+mise run //e2e:install:browsers
+mise run //e2e:test
+```
+
+See `test/README.md`.
 
 ## Production build
 
