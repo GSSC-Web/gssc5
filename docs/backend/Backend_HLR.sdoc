@@ -2868,7 +2868,7 @@ Each frontend needs its own menu tree. Public and members destinations differ at
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-40
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-1
@@ -2888,7 +2888,7 @@ Labels and ordered children drive navigation menus and dropdowns. Destination pa
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-40
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-BHLR-227
@@ -2901,7 +2901,7 @@ The public frontend builds procedural navigation and sitemap from this tree. Nes
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-40
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-1
@@ -2918,7 +2918,7 @@ The members frontend builds procedural navigation and sitemap from this tree. Ne
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-40
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-21
@@ -2938,7 +2938,7 @@ Administrators maintain menu structure without a members tree-editor UI in this 
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-40
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-50
@@ -2955,7 +2955,7 @@ Menus consume path hints. Frontend routers remain owned by each frontend applica
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-40
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [[/SECTION]]
 

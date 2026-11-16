@@ -186,7 +186,6 @@ async function ensureTree(
   if (existing && existing.nodes.length > 0) return;
 
   if (!existing) {
-    // @relation(GSSC-BLLR-475, GSSC-BHLR-225, GSSC-BHLR-230, scope=range_start, role=Implementation)
     const tree = await prisma.siteTree.create({
       data: {
         frontend,
@@ -214,12 +213,10 @@ async function ensureTree(
         })),
       });
     }
-    // @relation(GSSC-BLLR-475, GSSC-BHLR-225, GSSC-BHLR-230, scope=range_end, role=Implementation)
     return;
   }
 
   // Tree row exists but has no nodes — recreate root + children.
-  // @relation(GSSC-BLLR-475, GSSC-BHLR-225, GSSC-BHLR-230, scope=range_start, role=Implementation)
   const rootNode = await prisma.siteTreeNode.create({
     data: {
       treeId: existing.id,
@@ -240,7 +237,6 @@ async function ensureTree(
       })),
     });
   }
-  // @relation(GSSC-BLLR-475, GSSC-BHLR-225, GSSC-BHLR-230, scope=range_end, role=Implementation)
 }
 
 /** Idempotent seed: Public + Members trees matching current destinations. */
@@ -249,12 +245,14 @@ export async function seedSiteTrees(
 ): Promise<void> {
   // Force prisma against the given URL when called from prepareDevDatabase.
   getPrisma(databaseUrl);
+  // @relation(GSSC-BLLR-475, scope=range_start, role=Implementation)
   await ensureTree("public", { label: "Home", path: "/" }, PUBLIC_SEED_CHILDREN);
   await ensureTree(
     "members",
     { label: "Dashboard", path: "/" },
     MEMBERS_SEED_CHILDREN,
   );
+  // @relation(GSSC-BLLR-475, scope=range_end, role=Implementation)
 }
 
 let siteTreesReady: Promise<void> | undefined;
@@ -334,11 +332,11 @@ export const siteTrees = new Elysia({
   .get(
     "/:frontend",
     async ({ params, status: statusFn }) => {
-      // @relation(GSSC-BLLR-468, GSSC-BHLR-225, scope=range_start, role=Implementation)
+      // @relation(GSSC-BLLR-468, scope=range_start, role=Implementation)
       if (!isFrontend(params.frontend)) {
         return statusFn(422, "Invalid" as const);
       }
-      // @relation(GSSC-BLLR-468, GSSC-BHLR-225, scope=range_end, role=Implementation)
+      // @relation(GSSC-BLLR-468, scope=range_end, role=Implementation)
 
       await startSiteTrees();
 
@@ -360,18 +358,16 @@ export const siteTrees = new Elysia({
   .post(
     "/:frontend",
     async ({ params, body, cookie, status: statusFn }) => {
-      // @relation(GSSC-BLLR-468, GSSC-BHLR-225, scope=range_start, role=Implementation)
       if (!isFrontend(params.frontend)) {
         return statusFn(422, "Invalid" as const);
       }
-      // @relation(GSSC-BLLR-468, GSSC-BHLR-225, scope=range_end, role=Implementation)
 
       const session = await openSession(cookie);
       if ("failure" in session) return statusFn(403, "Forbidden" as const);
 
-      // @relation(GSSC-BLLR-470, GSSC-BHLR-229, scope=range_start, role=Implementation)
+      // @relation(GSSC-BLLR-470, scope=range_start, role=Implementation)
       if (!session.user.isAdmin) return statusFn(403, "Forbidden" as const);
-      // @relation(GSSC-BLLR-470, GSSC-BHLR-229, scope=range_end, role=Implementation)
+      // @relation(GSSC-BLLR-470, scope=range_end, role=Implementation)
 
       await startSiteTrees();
       const prisma = getPrisma(loadConfig().DATABASE_URL);
@@ -390,7 +386,7 @@ export const siteTrees = new Elysia({
       );
       if (parentId === "missing") return statusFn(422, "Invalid" as const);
 
-      // @relation(GSSC-BLLR-469, GSSC-BHLR-226, GSSC-BHLR-229, scope=range_start, role=Implementation)
+      // @relation(GSSC-BLLR-469, GSSC-BHLR-229, scope=range_start, role=Implementation)
       const created = await prisma.siteTreeNode.create({
         data: {
           treeId: tree.id,
@@ -402,7 +398,7 @@ export const siteTrees = new Elysia({
         },
       });
       return statusFn(201, toEntry(created));
-      // @relation(GSSC-BLLR-469, GSSC-BHLR-226, GSSC-BHLR-229, scope=range_end, role=Implementation)
+      // @relation(GSSC-BLLR-469, GSSC-BHLR-229, scope=range_end, role=Implementation)
     },
     {
       params: t.Object({ frontend: t.String({ minLength: 1 }) }),
@@ -419,18 +415,16 @@ export const siteTrees = new Elysia({
   .patch(
     "/:frontend/nodes/:nodeId",
     async ({ params, body, cookie, status: statusFn }) => {
-      // @relation(GSSC-BLLR-468, GSSC-BHLR-225, scope=range_start, role=Implementation)
       if (!isFrontend(params.frontend)) {
         return statusFn(422, "Invalid" as const);
       }
-      // @relation(GSSC-BLLR-468, GSSC-BHLR-225, scope=range_end, role=Implementation)
 
       const session = await openSession(cookie);
       if ("failure" in session) return statusFn(403, "Forbidden" as const);
 
-      // @relation(GSSC-BLLR-472, GSSC-BHLR-229, scope=range_start, role=Implementation)
+      // @relation(GSSC-BLLR-472, scope=range_start, role=Implementation)
       if (!session.user.isAdmin) return statusFn(403, "Forbidden" as const);
-      // @relation(GSSC-BLLR-472, GSSC-BHLR-229, scope=range_end, role=Implementation)
+      // @relation(GSSC-BLLR-472, scope=range_end, role=Implementation)
 
       await startSiteTrees();
       const prisma = getPrisma(loadConfig().DATABASE_URL);
@@ -481,13 +475,13 @@ export const siteTrees = new Elysia({
         return statusFn(422, "Invalid" as const);
       }
 
-      // @relation(GSSC-BLLR-471, GSSC-BHLR-226, GSSC-BHLR-229, scope=range_start, role=Implementation)
+      // @relation(GSSC-BLLR-471, scope=range_start, role=Implementation)
       const updated = await prisma.siteTreeNode.update({
         where: { id: node.id },
         data: patch,
       });
       return statusFn(200, toEntry(updated));
-      // @relation(GSSC-BLLR-471, GSSC-BHLR-226, GSSC-BHLR-229, scope=range_end, role=Implementation)
+      // @relation(GSSC-BLLR-471, scope=range_end, role=Implementation)
     },
     {
       params: t.Object({
@@ -507,18 +501,16 @@ export const siteTrees = new Elysia({
   .delete(
     "/:frontend/nodes/:nodeId",
     async ({ params, cookie, status: statusFn }) => {
-      // @relation(GSSC-BLLR-468, GSSC-BHLR-225, scope=range_start, role=Implementation)
       if (!isFrontend(params.frontend)) {
         return statusFn(422, "Invalid" as const);
       }
-      // @relation(GSSC-BLLR-468, GSSC-BHLR-225, scope=range_end, role=Implementation)
 
       const session = await openSession(cookie);
       if ("failure" in session) return statusFn(403, "Forbidden" as const);
 
-      // @relation(GSSC-BLLR-474, GSSC-BHLR-229, scope=range_start, role=Implementation)
+      // @relation(GSSC-BLLR-474, scope=range_start, role=Implementation)
       if (!session.user.isAdmin) return statusFn(403, "Forbidden" as const);
-      // @relation(GSSC-BLLR-474, GSSC-BHLR-229, scope=range_end, role=Implementation)
+      // @relation(GSSC-BLLR-474, scope=range_end, role=Implementation)
 
       await startSiteTrees();
       const prisma = getPrisma(loadConfig().DATABASE_URL);
@@ -534,11 +526,11 @@ export const siteTrees = new Elysia({
         return statusFn(422, "Invalid" as const);
       }
 
-      // @relation(GSSC-BLLR-473, GSSC-BHLR-229, scope=range_start, role=Implementation)
+      // @relation(GSSC-BLLR-473, scope=range_start, role=Implementation)
       // Cascade on parentId removes descendants.
       await prisma.siteTreeNode.delete({ where: { id: node.id } });
       return statusFn(204, undefined);
-      // @relation(GSSC-BLLR-473, GSSC-BHLR-229, scope=range_end, role=Implementation)
+      // @relation(GSSC-BLLR-473, scope=range_end, role=Implementation)
     },
     {
       params: t.Object({
