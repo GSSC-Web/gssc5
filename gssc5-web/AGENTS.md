@@ -31,7 +31,7 @@ Prefer running single test files when iterating (faster feedback).
 - Follow existing patterns in the codebase, or else conform to framework documentation recommendations. (see example files below)
 - Run relevant tests after making changes
 - Keep changes focused and minimal
-- Tests are permanent files, and each LLR should have a dedicated unit test. Backend: shared harness at `apps/backend/src/test-harness.ts` with `*.test.ts` beside sources. Public frontend: shared harness at `apps/public/src/test-harness.ts` with `*.test.ts` beside sources; run via `mise run //public:test`. Members frontend: shared harness at `apps/members/src/test-harness.ts` with `*.test.ts` beside sources; run via `mise run //members:test`.
+- Tests are permanent files, and each LLR should have a dedicated unit test. Backend: shared harness at `apps/backend/src/test-harness.ts` with `*.test.ts` beside sources. Public frontend: shared harness at `apps/public/src/test-harness.ts` with `*.test.ts` beside sources; run via `mise run //public:test`. Members frontend: shared harness at `apps/members/src/test-harness.ts` with `*.test.ts` beside sources; run via `mise run //members:test`. Playwright integration smokes: `apps/e2e` (`mise run //e2e:test`); does not replace unit harnesses.
 
 ## Don't
 

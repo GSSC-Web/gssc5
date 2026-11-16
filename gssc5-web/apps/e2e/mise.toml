@@ -1,0 +1,9 @@
+[tasks.test]
+description = "Run Playwright integration smokes (starts backend + public + members when not already up)"
+# Types + seed before Playwright so //backend:serve is not racing an empty generated/ tree.
+depends = ["//backend:types", "//backend:db:prepare"]
+run = "bun run test"
+
+[tasks."install:browsers"]
+description = "Install Playwright Chromium (and OS deps when needed)"
+run = "bun run install:browsers"

@@ -16,6 +16,7 @@ concurrency:
 # - backend    ← gssc5-web/apps/backend/**, gssc5-web/{package.json,bun.lock}, root mise.toml, this workflow
 # - public     ← gssc5-web/apps/public/** + backend (types/API dep) + shared lock/mise/workflow
 # - members    ← gssc5-web/apps/members/** + backend (types/API dep) + shared lock/mise/workflow
+# - e2e        ← gssc5-web/apps/e2e/** + public/members/backend + shared lock/mise/workflow
 # Shared lockfiles / mise / CI YAML force the broader web (or docs) runs; .agents-only PRs skip all test jobs.
 
 jobs:
@@ -28,6 +29,7 @@ jobs:
       backend: ${{ steps.filter.outputs.backend }}
       public: ${{ steps.filter.outputs.public }}
       members: ${{ steps.filter.outputs.members }}
+      e2e: ${{ steps.filter.outputs.e2e }}
     steps:
       - name: Check out the repository
         uses: actions/checkout@v7
@@ -57,6 +59,15 @@ jobs:
               - 'mise.toml'
               - '.github/workflows/test.yml'
             members:
+              - 'gssc5-web/apps/members/**'
+              - 'gssc5-web/apps/backend/**'
+              - 'gssc5-web/package.json'
+              - 'gssc5-web/bun.lock'
+              - 'mise.toml'
+              - '.github/workflows/test.yml'
+            e2e:
+              - 'gssc5-web/apps/e2e/**'
+              - 'gssc5-web/apps/public/**'
               - 'gssc5-web/apps/members/**'
               - 'gssc5-web/apps/backend/**'
               - 'gssc5-web/package.json'
@@ -167,3 +178,34 @@ jobs:
       - name: Run members tests
         # //members:test depends on //backend:types (Eden Treaty / workspace types).
         run: mise run //members:test
+
+  e2e:
+    name: e2e
+    needs: changes
+    if: needs.changes.outputs.e2e == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      MISE_CEILING_PATHS: ${{ github.workspace }}/..
+      CI: true
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v7
+
+      - name: Install Bun and Node
+        uses: jdx/mise-action@v5
+        with:
+          working_directory: ${{ github.workspace }}
+          experimental: true
+          install_args: bun node
+
+      - name: Install dependencies
+        run: mise exec -- bun install --frozen-lockfile --cwd=gssc5-web
+
+      - name: Install Playwright Chromium
+        run: mise exec -- bunx --bun playwright install --with-deps chromium
+        working-directory: gssc5-web/apps/e2e
+
+      - name: Run Playwright integration smokes
+        # Starts backend + public + members via playwright.config webServer.
+        run: mise run //e2e:test

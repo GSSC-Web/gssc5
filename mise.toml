@@ -5,7 +5,7 @@
 # app, `mise serve`, `mise build`, and `mise test` run only that app.
 # `mise run watch` reloads the requirements browser.
 #
-# Shorter monorepo names: //backend, //public, //members.
+# Shorter monorepo names: //backend, //public, //members, //e2e.
 
 min_version = "2026.10.0"
 monorepo_root = true
@@ -18,6 +18,7 @@ lockfile = true
 backend = "gssc5-web/apps/backend"
 public = "gssc5-web/apps/public"
 members = "gssc5-web/apps/members"
+e2e = "gssc5-web/apps/e2e"
 
 [settings]
 experimental = true
@@ -97,5 +98,5 @@ description = "Build the backend and both frontends for production. Watch one fr
 depends = ["//backend:build", "//public:build", "//members:build"]
 
 [tasks.test]
-description = "Run backend and frontend tests once. Watch one project with mise run //backend:test:watch, //public:test:watch, or //members:test:watch"
+description = "Run backend and frontend unit tests once. Watch one project with mise run //backend:test:watch, //public:test:watch, or //members:test:watch. Playwright integration: mise run //e2e:test"
 depends = ["//backend:test", "//public:test", "//members:test"]
