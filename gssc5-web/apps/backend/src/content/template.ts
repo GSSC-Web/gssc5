@@ -5,11 +5,15 @@ import { getPrisma } from "../db";
 import { ContentTemplatePlain } from "../generated/prismabox/ContentTemplate";
 import { loginTokenCookie } from "../user/login-session";
 import {
+  includesInsensitive,
+  openSession,
+  parseKnownQuery,
   parseStringArray,
   trimStrings,
-  openSession,
   type ContentTemplateRow,
 } from "./helpers";
+
+const TEMPLATE_LIST_FILTERS = new Set(["name", "cuid"]);
 
 const TemplateListEntry = t.Object({
   cuid: ContentTemplatePlain.properties.id,
@@ -70,24 +74,35 @@ export const template = new Elysia({
   })
   .get(
     "/",
-    async ({ cookie, status }) => {
+    async ({ query, cookie, status }) => {
       const session = await openSession(cookie);
       if ("failure" in session) return status(403, "Forbidden" as const);
+
+      const filters = parseKnownQuery(query, TEMPLATE_LIST_FILTERS);
+      if (filters === "invalid") return status(422, "Invalid" as const);
 
       // @relation(GSSC-BLLR-333, scope=range_start, role=Implementation)
       const prisma = getPrisma(loadConfig().DATABASE_URL);
       const rows = await prisma.contentTemplate.findMany({ orderBy: { name: "asc" } });
-      return status(
-        200,
-        rows.map((row) => ({ cuid: row.id, name: row.name })),
-      );
+      const listed = rows
+        .map((row) => ({ cuid: row.id, name: row.name }))
+        .filter((entry) => {
+          if (filters.cuid !== undefined && entry.cuid !== filters.cuid) return false;
+          if (filters.name !== undefined && !includesInsensitive(entry.name, filters.name)) {
+            return false;
+          }
+          return true;
+        });
+      return status(200, listed);
       // @relation(GSSC-BLLR-333, scope=range_end, role=Implementation)
     },
     {
+      query: t.Record(t.String(), t.String()),
       cookie: loginTokenCookie,
       response: {
         200: t.Array(TemplateListEntry),
         403: t.Literal("Forbidden"),
+        422: t.Literal("Invalid"),
       },
     },
   )

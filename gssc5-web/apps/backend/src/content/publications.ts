@@ -11,6 +11,9 @@ import {
   resolveLoginSessionUser,
   type CookieJar,
 } from "../user/login-session";
+import { includesInsensitive, parseKnownQuery } from "./helpers";
+
+const PUBLICATION_LIST_FILTERS = new Set(["title", "cuid", "content"]);
 
 /**
  * Wire entry: Prismabox scalars with intentional `cuid` (not raw `id`).
@@ -111,18 +114,36 @@ export const publications = new Elysia({
   })
   .get(
     "/",
-    async ({ status }) => {
+    async ({ query, status }) => {
+      const filters = parseKnownQuery(query, PUBLICATION_LIST_FILTERS);
+      if (filters === "invalid") return status(422, "Invalid" as const);
+
       // @relation(GSSC-BLLR-356, scope=range_start, role=Implementation)
       const prisma = getPrisma(loadConfig().DATABASE_URL);
       const rows = await prisma.publication.findMany({
         orderBy: { title: "asc" },
       });
-      return status(200, rows.map(toEntry));
+      const listed = rows.map(toEntry).filter((entry) => {
+        if (filters.cuid !== undefined && entry.cuid !== filters.cuid) return false;
+        if (filters.title !== undefined && !includesInsensitive(entry.title, filters.title)) {
+          return false;
+        }
+        if (filters.content !== undefined) {
+          const inTitle = includesInsensitive(entry.title, filters.content);
+          const inDesc = includesInsensitive(entry.description ?? "", filters.content);
+          const inLink = includesInsensitive(entry.referenceLink, filters.content);
+          if (!inTitle && !inDesc && !inLink) return false;
+        }
+        return true;
+      });
+      return status(200, listed);
       // @relation(GSSC-BLLR-356, scope=range_end, role=Implementation)
     },
     {
+      query: t.Record(t.String(), t.String()),
       response: {
         200: t.Array(PublicationEntry),
+        422: t.Literal("Invalid"),
       },
     },
   )
@@ -147,14 +168,14 @@ export const publications = new Elysia({
           description,
         },
       });
-      return status(200, toEntry(created));
+      return status(201, toEntry(created));
       // @relation(GSSC-BLLR-357, scope=range_end, role=Implementation)
     },
     {
       body: PublicationCreateBody,
       cookie: loginTokenCookie,
       response: {
-        200: PublicationEntry,
+        201: PublicationEntry,
         403: t.Literal("Forbidden"),
         422: t.Literal("Invalid"),
       },

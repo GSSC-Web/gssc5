@@ -9,7 +9,9 @@ import {
 } from "../user/login-session";
 import {
   bodyRecord,
+  includesInsensitive,
   optionalStringArray,
+  parseKnownQuery,
   parseStringArray,
   trimStrings,
 } from "./helpers";
@@ -23,6 +25,16 @@ const NewsletterEntry = t.Object({
   filePath: t.String(),
   keywords: t.Array(t.String()),
 });
+
+const NEWSLETTER_LIST_FILTERS = new Set([
+  "keyword",
+  "cuid",
+  "volume",
+  "number",
+  "year",
+  "month",
+  "content",
+]);
 
 type Session =
   | { failure: "missing" | "unknown" | "logged-out" | "expired" }
@@ -49,6 +61,8 @@ function toEntry(row: NewsletterRow) {
     keywords: parseStringArray(row.keywords),
   };
 }
+
+type NewsletterWire = ReturnType<typeof toEntry>;
 
 function canEditNewsletters(user: {
   isAdmin: boolean;
@@ -98,6 +112,27 @@ function keywordMatches(keywords: string[], needle: string): boolean {
   return keywords.some((keyword) => keyword.toLowerCase().includes(lower));
 }
 
+function matchesNewsletterFilters(
+  entry: NewsletterWire,
+  filters: Record<string, string>,
+): boolean {
+  if (filters.cuid !== undefined && entry.cuid !== filters.cuid) return false;
+  if (filters.volume !== undefined && String(entry.volume) !== filters.volume) return false;
+  if (filters.number !== undefined && String(entry.number) !== filters.number) return false;
+  if (filters.year !== undefined && String(entry.year) !== filters.year) return false;
+  if (filters.month !== undefined && String(entry.month) !== filters.month) return false;
+  if (filters.keyword !== undefined && filters.keyword.length > 0) {
+    if (!keywordMatches(entry.keywords, filters.keyword)) return false;
+  }
+  if (filters.content !== undefined) {
+    const inKeywords = keywordMatches(entry.keywords, filters.content);
+    const inVolume = includesInsensitive(String(entry.volume), filters.content);
+    const inNumber = includesInsensitive(String(entry.number), filters.content);
+    if (!inKeywords && !inVolume && !inNumber) return false;
+  }
+  return true;
+}
+
 const newestOrder = [
   { year: "desc" as const },
   { month: "desc" as const },
@@ -105,7 +140,164 @@ const newestOrder = [
   { number: "desc" as const },
 ];
 
-/** Society newsletters catalog (GSSC5-20). Collection /newsletters; item /newsletter/{cuid}. */
+const itemParams = t.Object({ cuid: t.String({ minLength: 1 }) });
+
+async function getNewsletterItem({
+  params,
+  status,
+}: {
+  params: { cuid: string };
+  status: (code: 200 | 404, body?: NewsletterWire | "Not Found") => unknown;
+}) {
+  const prisma = getPrisma(loadConfig().DATABASE_URL);
+  const row = await prisma.newsletter.findUnique({
+    where: { id: params.cuid },
+  });
+  if (!row) return status(404, "Not Found" as const);
+
+  // @relation(GSSC-BLLR-390, scope=range_start, role=Implementation)
+  return status(200, toEntry(row));
+  // @relation(GSSC-BLLR-390, scope=range_end, role=Implementation)
+}
+
+async function patchNewsletterItem({
+  params,
+  body,
+  cookie,
+  status,
+}: {
+  params: { cuid: string };
+  body: unknown;
+  cookie: CookieJar;
+  status: (
+    code: 200 | 403 | 404 | 422,
+    body?: NewsletterWire | "Forbidden" | "Not Found" | "Invalid",
+  ) => unknown;
+}) {
+  const session = await openSession(cookie);
+  if ("failure" in session) return status(403, "Forbidden" as const);
+
+  // @relation(GSSC-BLLR-392, scope=range_start, role=Implementation)
+  if (!canEditNewsletters(session.user)) {
+    return status(403, "Forbidden" as const);
+  }
+  // @relation(GSSC-BLLR-392, scope=range_end, role=Implementation)
+
+  const prisma = getPrisma(loadConfig().DATABASE_URL);
+  const existing = await prisma.newsletter.findUnique({
+    where: { id: params.cuid },
+  });
+  if (!existing) return status(404, "Not Found" as const);
+
+  const record = bodyRecord(body);
+  if (record === "malformed" || record === "missing") {
+    return status(422, "Invalid" as const);
+  }
+
+  const data: {
+    volume?: number;
+    number?: number;
+    month?: number;
+    year?: number;
+    filePath?: string;
+    keywords?: string;
+  } = {};
+
+  for (const key of ["volume", "number", "month", "year"] as const) {
+    if (Object.prototype.hasOwnProperty.call(record, key)) {
+      const value = readRequiredInteger(record, key);
+      if (value === "missing" || value === "invalid") {
+        return status(422, "Invalid" as const);
+      }
+      data[key] = value;
+    }
+  }
+  if (Object.prototype.hasOwnProperty.call(record, "filePath")) {
+    const filePath = readRequiredString(record, "filePath");
+    if (filePath === "missing" || filePath === "invalid") {
+      return status(422, "Invalid" as const);
+    }
+    data.filePath = filePath;
+  }
+  if (Object.prototype.hasOwnProperty.call(record, "keywords")) {
+    const keywords = optionalStringArray(record.keywords);
+    if (keywords === undefined || keywords === "invalid") {
+      return status(422, "Invalid" as const);
+    }
+    data.keywords = JSON.stringify(keywords);
+  }
+  if (Object.keys(data).length === 0) return status(422, "Invalid" as const);
+
+  // @relation(GSSC-BLLR-391, scope=range_start, role=Implementation)
+  const updated = await prisma.newsletter.update({
+    where: { id: existing.id },
+    data,
+  });
+  return status(200, toEntry(updated));
+  // @relation(GSSC-BLLR-391, scope=range_end, role=Implementation)
+}
+
+async function deleteNewsletterItem({
+  params,
+  cookie,
+  status,
+}: {
+  params: { cuid: string };
+  cookie: CookieJar;
+  status: (code: 204 | 403 | 404, body?: "Forbidden" | "Not Found" | undefined) => unknown;
+}) {
+  const session = await openSession(cookie);
+  if ("failure" in session) return status(403, "Forbidden" as const);
+
+  // @relation(GSSC-BLLR-394, scope=range_start, role=Implementation)
+  if (!canEditNewsletters(session.user)) {
+    return status(403, "Forbidden" as const);
+  }
+  // @relation(GSSC-BLLR-394, scope=range_end, role=Implementation)
+
+  const prisma = getPrisma(loadConfig().DATABASE_URL);
+  const existing = await prisma.newsletter.findUnique({
+    where: { id: params.cuid },
+  });
+  if (!existing) return status(404, "Not Found" as const);
+
+  // @relation(GSSC-BLLR-393, scope=range_start, role=Implementation)
+  await prisma.newsletter.delete({ where: { id: existing.id } });
+  return status(204, undefined);
+  // @relation(GSSC-BLLR-393, scope=range_end, role=Implementation)
+}
+
+const getItemOpts = {
+  params: itemParams,
+  response: {
+    200: NewsletterEntry,
+    404: t.Literal("Not Found"),
+  },
+} as const;
+
+const patchItemOpts = {
+  params: itemParams,
+  body: t.Optional(t.Unknown()),
+  cookie: loginTokenCookie,
+  response: {
+    200: NewsletterEntry,
+    403: t.Literal("Forbidden"),
+    404: t.Literal("Not Found"),
+    422: t.Literal("Invalid"),
+  },
+} as const;
+
+const deleteItemOpts = {
+  params: itemParams,
+  cookie: loginTokenCookie,
+  response: {
+    204: t.Void(),
+    403: t.Literal("Forbidden"),
+    404: t.Literal("Not Found"),
+  },
+} as const;
+
+/** Society newsletters catalog (GSSC5-20). Plural throughout; singular item path aliased one cycle. */
 export const newsletters = new Elysia({
   name: "content-newsletters",
   normalize: false,
@@ -119,6 +311,9 @@ export const newsletters = new Elysia({
       .get(
         "/",
         async ({ query, status }) => {
+          const filters = parseKnownQuery(query, NEWSLETTER_LIST_FILTERS);
+          if (filters === "invalid") return status(422, "Invalid" as const);
+
           const prisma = getPrisma(loadConfig().DATABASE_URL);
           const rows = await prisma.newsletter.findMany({
             orderBy: newestOrder,
@@ -129,21 +324,16 @@ export const newsletters = new Elysia({
           // @relation(GSSC-BLLR-387, scope=range_end, role=Implementation)
 
           // @relation(GSSC-BLLR-396, scope=range_start, role=Implementation)
-          if (query.keyword !== undefined && query.keyword.length > 0) {
-            entries = entries.filter((entry) =>
-              keywordMatches(entry.keywords, query.keyword!),
-            );
-          }
+          entries = entries.filter((entry) => matchesNewsletterFilters(entry, filters));
           // @relation(GSSC-BLLR-396, scope=range_end, role=Implementation)
 
           return status(200, entries);
         },
         {
-          query: t.Object({
-            keyword: t.Optional(t.String()),
-          }),
+          query: t.Record(t.String(), t.String()),
           response: {
             200: t.Array(NewsletterEntry),
+            422: t.Literal("Invalid"),
           },
         },
       )
@@ -199,151 +389,27 @@ export const newsletters = new Elysia({
               keywords: JSON.stringify(keywords),
             },
           });
-          return status(200, toEntry(created));
+          return status(201, toEntry(created));
           // @relation(GSSC-BLLR-388, scope=range_end, role=Implementation)
         },
         {
           body: t.Optional(t.Unknown()),
           cookie: loginTokenCookie,
           response: {
-            200: NewsletterEntry,
+            201: NewsletterEntry,
             403: t.Literal("Forbidden"),
             422: t.Literal("Invalid"),
           },
         },
-      ),
+      )
+      .get("/:cuid", getNewsletterItem, getItemOpts)
+      .patch("/:cuid", patchNewsletterItem, patchItemOpts)
+      .delete("/:cuid", deleteNewsletterItem, deleteItemOpts),
   )
+  // Alias singular item paths for one FE release.
   .group("/newsletter", (app) =>
     app
-      .get(
-        "/:cuid",
-        async ({ params, status }) => {
-          const prisma = getPrisma(loadConfig().DATABASE_URL);
-          const row = await prisma.newsletter.findUnique({
-            where: { id: params.cuid },
-          });
-          if (!row) return status(404, "Not Found" as const);
-
-          // @relation(GSSC-BLLR-390, scope=range_start, role=Implementation)
-          return status(200, toEntry(row));
-          // @relation(GSSC-BLLR-390, scope=range_end, role=Implementation)
-        },
-        {
-          params: t.Object({ cuid: t.String({ minLength: 1 }) }),
-          response: {
-            200: NewsletterEntry,
-            404: t.Literal("Not Found"),
-          },
-        },
-      )
-      .patch(
-        "/:cuid",
-        async ({ params, body, cookie, status }) => {
-          const session = await openSession(cookie);
-          if ("failure" in session) return status(403, "Forbidden" as const);
-
-          // @relation(GSSC-BLLR-392, scope=range_start, role=Implementation)
-          if (!canEditNewsletters(session.user)) {
-            return status(403, "Forbidden" as const);
-          }
-          // @relation(GSSC-BLLR-392, scope=range_end, role=Implementation)
-
-          const prisma = getPrisma(loadConfig().DATABASE_URL);
-          const existing = await prisma.newsletter.findUnique({
-            where: { id: params.cuid },
-          });
-          if (!existing) return status(404, "Not Found" as const);
-
-          const record = bodyRecord(body);
-          if (record === "malformed" || record === "missing") {
-            return status(422, "Invalid" as const);
-          }
-
-          const data: {
-            volume?: number;
-            number?: number;
-            month?: number;
-            year?: number;
-            filePath?: string;
-            keywords?: string;
-          } = {};
-
-          for (const key of ["volume", "number", "month", "year"] as const) {
-            if (Object.prototype.hasOwnProperty.call(record, key)) {
-              const value = readRequiredInteger(record, key);
-              if (value === "missing" || value === "invalid") {
-                return status(422, "Invalid" as const);
-              }
-              data[key] = value;
-            }
-          }
-          if (Object.prototype.hasOwnProperty.call(record, "filePath")) {
-            const filePath = readRequiredString(record, "filePath");
-            if (filePath === "missing" || filePath === "invalid") {
-              return status(422, "Invalid" as const);
-            }
-            data.filePath = filePath;
-          }
-          if (Object.prototype.hasOwnProperty.call(record, "keywords")) {
-            const keywords = optionalStringArray(record.keywords);
-            if (keywords === undefined || keywords === "invalid") {
-              return status(422, "Invalid" as const);
-            }
-            data.keywords = JSON.stringify(keywords);
-          }
-          if (Object.keys(data).length === 0) return status(422, "Invalid" as const);
-
-          // @relation(GSSC-BLLR-391, scope=range_start, role=Implementation)
-          const updated = await prisma.newsletter.update({
-            where: { id: existing.id },
-            data,
-          });
-          return status(200, toEntry(updated));
-          // @relation(GSSC-BLLR-391, scope=range_end, role=Implementation)
-        },
-        {
-          params: t.Object({ cuid: t.String({ minLength: 1 }) }),
-          body: t.Optional(t.Unknown()),
-          cookie: loginTokenCookie,
-          response: {
-            200: NewsletterEntry,
-            403: t.Literal("Forbidden"),
-            404: t.Literal("Not Found"),
-            422: t.Literal("Invalid"),
-          },
-        },
-      )
-      .delete(
-        "/:cuid",
-        async ({ params, cookie, status }) => {
-          const session = await openSession(cookie);
-          if ("failure" in session) return status(403, "Forbidden" as const);
-
-          // @relation(GSSC-BLLR-394, scope=range_start, role=Implementation)
-          if (!canEditNewsletters(session.user)) {
-            return status(403, "Forbidden" as const);
-          }
-          // @relation(GSSC-BLLR-394, scope=range_end, role=Implementation)
-
-          const prisma = getPrisma(loadConfig().DATABASE_URL);
-          const existing = await prisma.newsletter.findUnique({
-            where: { id: params.cuid },
-          });
-          if (!existing) return status(404, "Not Found" as const);
-
-          // @relation(GSSC-BLLR-393, scope=range_start, role=Implementation)
-          await prisma.newsletter.delete({ where: { id: existing.id } });
-          return status(204, undefined);
-          // @relation(GSSC-BLLR-393, scope=range_end, role=Implementation)
-        },
-        {
-          params: t.Object({ cuid: t.String({ minLength: 1 }) }),
-          cookie: loginTokenCookie,
-          response: {
-            204: t.Void(),
-            403: t.Literal("Forbidden"),
-            404: t.Literal("Not Found"),
-          },
-        },
-      ),
+      .get("/:cuid", getNewsletterItem, getItemOpts)
+      .patch("/:cuid", patchNewsletterItem, patchItemOpts)
+      .delete("/:cuid", deleteNewsletterItem, deleteItemOpts),
   );

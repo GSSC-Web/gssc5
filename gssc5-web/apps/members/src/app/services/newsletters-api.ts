@@ -27,10 +27,10 @@ export type NewsletterFields = {
  */
 export const newslettersApi = {
   list: () => backend.newsletters.get(),
-  get: (cuid: string) => backend.newsletter({ cuid }).get(),
+  get: (cuid: string) => backend.newsletters({ cuid }).get(),
   create: (body: NewsletterFields) => backend.newsletters.post(body),
   update: (cuid: string, body: Partial<NewsletterFields>) =>
-    backend.newsletter({ cuid }).patch(body),
+    backend.newsletters({ cuid }).patch(body),
 };
 
 /** Display label for a catalog row. */

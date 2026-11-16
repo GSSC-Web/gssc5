@@ -186,7 +186,7 @@ test("GSSC-BLLR-357 Publication Creation", async () => {
     { title, referenceLink: "https://example.org/create" },
     editorTok,
   );
-  expect(status).toBe(200);
+  expect(status).toBe(201);
   expect(body).toMatchObject({
     title,
     referenceLink: "https://example.org/create",
@@ -200,7 +200,7 @@ test("GSSC-BLLR-357 Publication Creation", async () => {
     { title: `Desc Pub ${Date.now()}`, referenceLink: "https://example.org/desc", description: "Optional blurb" },
     editorTok,
   );
-  expect(withDesc.status).toBe(200);
+  expect(withDesc.status).toBe(201);
   expect(withDesc.body).toMatchObject({
     referenceLink: "https://example.org/desc",
     description: "Optional blurb",

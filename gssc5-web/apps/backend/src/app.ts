@@ -56,6 +56,36 @@ export const app = new Elysia({ normalize: false })
   .use(publications)
   .use(newsletters)
   .use(files)
-  .get("/", () => "Hello Elysia");
+  .get("/", () => ({
+    status: "ok" as const,
+    name: "GSSC5 Backend",
+    version: "5.0.0",
+    api: {
+      auth: "cookie" as const,
+      softDelete: {
+        users: "DELETE /users/{cuid}",
+        files: "DELETE /files/{cuid}",
+      },
+    },
+    capabilities: {
+      collections: [
+        "users",
+        "sections",
+        "announcements",
+        "templates",
+        "events",
+        "research-tools",
+        "publications",
+        "newsletters",
+        "files",
+        "kvs",
+        "leadership",
+        "account-photos",
+        "password",
+      ],
+      listFilters: true,
+      openapi: "/openapi",
+    },
+  }));
 
 export type App = typeof app;

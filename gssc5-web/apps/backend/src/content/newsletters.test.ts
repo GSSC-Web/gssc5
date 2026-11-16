@@ -262,7 +262,7 @@ test("GSSC-BLLR-396 Newsletters Keyword Filter", async () => {
 test("GSSC-BLLR-388 Newsletter Creation", async () => {
   const fields = sampleFields(`create-${Date.now()}`);
   const { status, body } = await sendJson("POST", "/newsletters", fields, editorTok);
-  expect(status).toBe(200);
+  expect(status).toBe(201);
   expect(body).toMatchObject(fields);
   expect(typeof (body as NewsletterBody).cuid).toBe("string");
 
@@ -272,7 +272,7 @@ test("GSSC-BLLR-388 Newsletter Creation", async () => {
     sampleFields(`admin-${Date.now()}`),
     adminTok,
   );
-  expect(asAdmin.status).toBe(200);
+  expect(asAdmin.status).toBe(201);
 });
 // @relation(GSSC-BLLR-388, scope=range_end, role=Test)
 
@@ -344,6 +344,15 @@ test("GSSC-BLLR-390 Newsletter Get", async () => {
       keywords: JSON.stringify(["get"]),
     },
   });
+  const plural = await getJson(`/newsletters/${row.id}`);
+  expect(plural.status).toBe(200);
+  expect(plural.body).toMatchObject({
+    cuid: row.id,
+    volume: row.volume,
+    number: row.number,
+  });
+
+  // Singular alias during migration.
   const { status, body } = await getJson(`/newsletter/${row.id}`);
   expect(status).toBe(200);
   expect(body).toEqual({

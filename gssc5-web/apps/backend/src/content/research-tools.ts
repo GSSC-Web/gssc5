@@ -11,6 +11,9 @@ import {
   resolveLoginSessionUser,
   type CookieJar,
 } from "../user/login-session";
+import { includesInsensitive, parseKnownQuery } from "./helpers";
+
+const RESEARCH_TOOL_LIST_FILTERS = new Set(["title", "cuid", "content"]);
 
 /**
  * Wire entry: Prismabox scalars with intentional `cuid` (not raw `id`).
@@ -92,18 +95,35 @@ export const researchTools = new Elysia({
   })
   .get(
     "/",
-    async ({ status }) => {
+    async ({ query, status }) => {
+      const filters = parseKnownQuery(query, RESEARCH_TOOL_LIST_FILTERS);
+      if (filters === "invalid") return status(422, "Invalid" as const);
+
       // @relation(GSSC-BLLR-345, scope=range_start, role=Implementation)
       const prisma = getPrisma(loadConfig().DATABASE_URL);
       const rows = await prisma.researchTool.findMany({
         orderBy: { title: "asc" },
       });
-      return status(200, rows.map(toEntry));
+      const listed = rows.map(toEntry).filter((entry) => {
+        if (filters.cuid !== undefined && entry.cuid !== filters.cuid) return false;
+        if (filters.title !== undefined && !includesInsensitive(entry.title, filters.title)) {
+          return false;
+        }
+        if (filters.content !== undefined) {
+          const inTitle = includesInsensitive(entry.title, filters.content);
+          const inLink = includesInsensitive(entry.referenceLink, filters.content);
+          if (!inTitle && !inLink) return false;
+        }
+        return true;
+      });
+      return status(200, listed);
       // @relation(GSSC-BLLR-345, scope=range_end, role=Implementation)
     },
     {
+      query: t.Record(t.String(), t.String()),
       response: {
         200: t.Array(ResearchToolEntry),
+        422: t.Literal("Invalid"),
       },
     },
   )
@@ -122,14 +142,14 @@ export const researchTools = new Elysia({
       const created = await prisma.researchTool.create({
         data: { title: body.title, referenceLink: body.referenceLink },
       });
-      return status(200, toEntry(created));
+      return status(201, toEntry(created));
       // @relation(GSSC-BLLR-346, scope=range_end, role=Implementation)
     },
     {
       body: ResearchToolCreateBody,
       cookie: loginTokenCookie,
       response: {
-        200: ResearchToolEntry,
+        201: ResearchToolEntry,
         403: t.Literal("Forbidden"),
         422: t.Literal("Invalid"),
       },

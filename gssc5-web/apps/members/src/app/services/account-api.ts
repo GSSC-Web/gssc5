@@ -64,7 +64,7 @@ type ClearPasswordsRoutes = {
 export const accountApi = {
   getUser: (cuid: string) => backend.users({ cuid }).get(),
   updateUser: (cuid: string, body: AccountUpdateBody) =>
-    backend.users({ cuid }).post(body as never),
+    backend.users({ cuid }).patch(body as never),
   changePassword: (body: { currentPassword: string; newPassword: string }) =>
     backend.password.change.post(body),
   /** Admin/user-mod: delete retained past password hashes (BLLR-263). */

@@ -6,6 +6,7 @@ import { PageDataEntryPlain } from "../generated/prismabox/PageDataEntry";
 import { loginTokenCookie } from "../user/login-session";
 import {
   hasPerm,
+  includesInsensitive,
   isImagePosition,
   openSession,
   parseStringArray,
@@ -392,10 +393,6 @@ function applySectionFilters(
     }
     return true;
   });
-}
-
-function includesInsensitive(haystack: string, needle: string): boolean {
-  return haystack.toLowerCase().includes(needle.toLowerCase());
 }
 
 function wireImagePosition(value: string | null): ImagePosition | null {

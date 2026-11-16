@@ -7,14 +7,27 @@ import { PageDataEntryPlain } from "../generated/prismabox/PageDataEntry";
 import { loginTokenCookie } from "../user/login-session";
 import {
   hasPerm,
+  includesInsensitive,
   isImagePosition,
   openSession,
+  parseKnownQuery,
   parseStringArray,
   PERM_USER_MOD,
   trimStrings,
   uniqueTags,
   type ImagePosition,
 } from "./helpers";
+
+const EVENT_LIST_FILTERS = new Set([
+  "name",
+  "location",
+  "cuid",
+  "year",
+  "month",
+  "day",
+  "isPublic",
+  "content",
+]);
 
 const ImagePositionWire = t.Union([
   t.Literal("none"),
@@ -161,6 +174,30 @@ function toEntry(row: EventRow) {
   };
 }
 
+type EventWire = ReturnType<typeof toEntry>;
+
+function matchesEventFilters(entry: EventWire, filters: Record<string, string>): boolean {
+  if (filters.cuid !== undefined && entry.cuid !== filters.cuid) return false;
+  if (filters.name !== undefined && !includesInsensitive(entry.name, filters.name)) return false;
+  if (filters.location !== undefined && !includesInsensitive(entry.location, filters.location)) {
+    return false;
+  }
+  if (filters.year !== undefined && String(entry.year) !== filters.year) return false;
+  if (filters.month !== undefined && String(entry.month) !== filters.month) return false;
+  if (filters.day !== undefined && String(entry.day) !== filters.day) return false;
+  if (filters.isPublic !== undefined) {
+    const want =
+      filters.isPublic === "true" ? true : filters.isPublic === "false" ? false : null;
+    if (want === null || entry.isPublic !== want) return false;
+  }
+  if (filters.content !== undefined) {
+    const inHeader = includesInsensitive(entry.header ?? "", filters.content);
+    const inBody = includesInsensitive(entry.body, filters.content);
+    if (!inHeader && !inBody) return false;
+  }
+  return true;
+}
+
 const eventWithDetails = { pageData: true } as const;
 
 /** Webpage events catalog + details page_data (GSSC5-69). */
@@ -176,7 +213,10 @@ export const events = new Elysia({
   })
   .get(
     "/",
-    async ({ cookie, status }) => {
+    async ({ query, cookie, status }) => {
+      const filters = parseKnownQuery(query, EVENT_LIST_FILTERS);
+      if (filters === "invalid") return status(422, "Invalid" as const);
+
       const session = await openSession(cookie);
       const loggedIn = !("failure" in session);
 
@@ -190,13 +230,16 @@ export const events = new Elysia({
       // @relation(GSSC-BLLR-412, GSSC-BLLR-413, scope=range_end, role=Implementation)
 
       // @relation(GSSC-BLLR-414, scope=range_start, role=Implementation)
-      return status(200, rows.map(toEntry));
+      const entries = rows.map(toEntry).filter((entry) => matchesEventFilters(entry, filters));
+      return status(200, entries);
       // @relation(GSSC-BLLR-414, scope=range_end, role=Implementation)
     },
     {
+      query: t.Record(t.String(), t.String()),
       cookie: loginTokenCookie,
       response: {
         200: t.Array(EventEntry),
+        422: t.Literal("Invalid"),
       },
     },
   )

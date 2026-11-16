@@ -239,6 +239,28 @@ const WRITABLE_TEXT = new Set<string>([
 const ZIP5 = new Set(["homeZip", "mailingZip"]);
 const ZIP4 = new Set(["homeZipExtension", "mailingZipExtension"]);
 
+const softDeleteUserOpts = {
+  params: t.Object({ cuid: t.String() }),
+  cookie: loginTokenCookie,
+  response: {
+    204: t.Void(),
+    403: t.Literal("Forbidden"),
+    404: t.Literal("Not Found"),
+  },
+} as const;
+
+const updateUserOpts = {
+  params: t.Object({ cuid: t.String() }),
+  body: t.Optional(UserUpdateBody),
+  cookie: loginTokenCookie,
+  response: {
+    204: t.Void(),
+    403: t.Literal("Forbidden"),
+    404: t.Literal("Not Found"),
+    422: t.Literal("Invalid"),
+  },
+} as const;
+
 export const users = new Elysia({
   name: "users",
   prefix: "/users",
@@ -287,41 +309,8 @@ export const users = new Elysia({
   )
   .post(
     "/:cuid/soft-delete",
-    async ({ params, cookie, status }) => {
-      const session = await openSession(cookie);
-      if ("failure" in session) {
-        return status(403, "Forbidden" as const);
-      }
-      // @relation(GSSC-BLLR-463, scope=range_start, role=Implementation)
-      if (!session.user.isAdmin) {
-        return status(403, "Forbidden" as const);
-      }
-      // @relation(GSSC-BLLR-463, scope=range_end, role=Implementation)
-
-      const { prisma } = runtime();
-      const target = await prisma.user.findUnique({
-        where: { id: params.cuid },
-        select: { id: true },
-      });
-      if (!target) return status(404, "Not Found" as const);
-
-      // @relation(GSSC-BLLR-461, scope=range_start, role=Implementation)
-      await prisma.user.update({
-        where: { id: target.id },
-        data: { deletedAt: new Date() },
-      });
-      return status(204, undefined);
-      // @relation(GSSC-BLLR-461, scope=range_end, role=Implementation)
-    },
-    {
-      params: t.Object({ cuid: t.String() }),
-      cookie: loginTokenCookie,
-      response: {
-        204: t.Void(),
-        403: t.Literal("Forbidden"),
-        404: t.Literal("Not Found"),
-      },
-    },
+    softDeleteUserHandler,
+    softDeleteUserOpts,
   )
   .post(
     "/:cuid/undelete",
@@ -431,56 +420,97 @@ export const users = new Elysia({
       },
     },
   )
-  .post(
-    "/:cuid",
-    async ({ params, body, cookie, status }) => {
-      const session = await openSession(cookie);
-      if ("failure" in session) {
-        return status(403, "Forbidden" as const);
-      }
+  .patch("/:cuid", updateUserHandler, updateUserOpts)
+  .post("/:cuid", updateUserHandler, updateUserOpts)
+  .delete("/:cuid", softDeleteUserHandler, softDeleteUserOpts);
 
-      // @relation(GSSC-BLLR-57, scope=range_start, role=Implementation)
-      const { prisma, config } = runtime();
-      const target = await prisma.user.findUnique({
-        where: { id: params.cuid },
-        select: userSelect,
-      });
-      if (!target) return status(404, "Not Found" as const);
-      // @relation(GSSC-BLLR-57, scope=range_end, role=Implementation)
+async function softDeleteUserHandler({
+  params,
+  cookie,
+  status,
+}: {
+  params: { cuid: string };
+  cookie: CookieJar;
+  status: (
+    code: 204 | 403 | 404,
+    body?: "Forbidden" | "Not Found" | undefined,
+  ) => unknown;
+}) {
+  const session = await openSession(cookie);
+  if ("failure" in session) {
+    return status(403, "Forbidden" as const);
+  }
+  // @relation(GSSC-BLLR-463, scope=range_start, role=Implementation)
+  if (!session.user.isAdmin) {
+    return status(403, "Forbidden" as const);
+  }
+  // @relation(GSSC-BLLR-463, scope=range_end, role=Implementation)
 
-      // @relation(GSSC-BLLR-58, GSSC-BLLR-59, GSSC-BLLR-169, GSSC-BLLR-170, GSSC-BLLR-171, scope=range_start, role=Implementation)
-      if (authorize(session.user, target) === "forbidden") return status(403, "Forbidden" as const);
-      // @relation(GSSC-BLLR-58, GSSC-BLLR-59, GSSC-BLLR-169, GSSC-BLLR-170, GSSC-BLLR-171, scope=range_end, role=Implementation)
+  const { prisma } = runtime();
+  const target = await prisma.user.findUnique({
+    where: { id: params.cuid },
+    select: { id: true },
+  });
+  if (!target) return status(404, "Not Found" as const);
 
-      const built = buildPatch(bodyRecord(body), session.user, target, config.ADMIN_USERNAME);
-      if (built === "forbidden") return status(403, "Forbidden" as const);
-      if (built === "invalid") return status(422, "Invalid" as const);
-      if (!(await identifiersAvailable(prisma, target, built))) {
-        return status(422, "Invalid" as const);
-      }
+  // @relation(GSSC-BLLR-461, scope=range_start, role=Implementation)
+  await prisma.user.update({
+    where: { id: target.id },
+    data: { deletedAt: new Date() },
+  });
+  return status(204, undefined);
+  // @relation(GSSC-BLLR-461, scope=range_end, role=Implementation)
+}
 
-      try {
-        await saveUser(prisma, target.id, built);
-      } catch (error) {
-        if (isUniqueConflict(error) || isPrimaryEmailGuard(error)) {
-          return status(422, "Invalid" as const);
-        }
-        throw error;
-      }
-      return status(204, undefined);
-    },
-    {
-      params: t.Object({ cuid: t.String() }),
-      body: t.Optional(UserUpdateBody),
-      cookie: loginTokenCookie,
-      response: {
-        204: t.Void(),
-        403: t.Literal("Forbidden"),
-        404: t.Literal("Not Found"),
-        422: t.Literal("Invalid"),
-      },
-    },
-  );
+async function updateUserHandler({
+  params,
+  body,
+  cookie,
+  status,
+}: {
+  params: { cuid: string };
+  body: unknown;
+  cookie: CookieJar;
+  status: (
+    code: 204 | 403 | 404 | 422,
+    body?: "Forbidden" | "Not Found" | "Invalid" | undefined,
+  ) => unknown;
+}) {
+  const session = await openSession(cookie);
+  if ("failure" in session) {
+    return status(403, "Forbidden" as const);
+  }
+
+  // @relation(GSSC-BLLR-57, scope=range_start, role=Implementation)
+  const { prisma, config } = runtime();
+  const target = await prisma.user.findUnique({
+    where: { id: params.cuid },
+    select: userSelect,
+  });
+  if (!target) return status(404, "Not Found" as const);
+  // @relation(GSSC-BLLR-57, scope=range_end, role=Implementation)
+
+  // @relation(GSSC-BLLR-58, GSSC-BLLR-59, GSSC-BLLR-169, GSSC-BLLR-170, GSSC-BLLR-171, scope=range_start, role=Implementation)
+  if (authorize(session.user, target) === "forbidden") return status(403, "Forbidden" as const);
+  // @relation(GSSC-BLLR-58, GSSC-BLLR-59, GSSC-BLLR-169, GSSC-BLLR-170, GSSC-BLLR-171, scope=range_end, role=Implementation)
+
+  const built = buildPatch(bodyRecord(body), session.user, target, config.ADMIN_USERNAME);
+  if (built === "forbidden") return status(403, "Forbidden" as const);
+  if (built === "invalid") return status(422, "Invalid" as const);
+  if (!(await identifiersAvailable(prisma, target, built))) {
+    return status(422, "Invalid" as const);
+  }
+
+  try {
+    await saveUser(prisma, target.id, built);
+  } catch (error) {
+    if (isUniqueConflict(error) || isPrimaryEmailGuard(error)) {
+      return status(422, "Invalid" as const);
+    }
+    throw error;
+  }
+  return status(204, undefined);
+}
 
 function runtime(): { prisma: PrismaClient; config: Config } {
   const config = loadConfig();

@@ -51,3 +51,33 @@ test("GSSC-BLLR-3 Neither Identifier Invalidated", async () => {
   expect(response.status).toBe(422);
 });
 // @relation(GSSC-BLLR-3, scope=range_end, role=Test)
+
+test("GET / returns health/version/capabilities JSON", async () => {
+  const response = await backend(new Request("http://127.0.0.1/"));
+  expect(response.status).toBe(200);
+  const body = (await response.json()) as {
+    status: string;
+    name: string;
+    version: string;
+    api: { auth: string; softDelete: { users: string; files: string } };
+    capabilities: { listFilters: boolean; openapi: string; collections: string[] };
+  };
+  expect(body).toMatchObject({
+    status: "ok",
+    name: "GSSC5 Backend",
+    version: "5.0.0",
+    api: {
+      auth: "cookie",
+      softDelete: {
+        users: "DELETE /users/{cuid}",
+        files: "DELETE /files/{cuid}",
+      },
+    },
+    capabilities: {
+      listFilters: true,
+      openapi: "/openapi",
+    },
+  });
+  expect(body.capabilities.collections).toContain("users");
+  expect(body.capabilities.collections).toContain("newsletters");
+});

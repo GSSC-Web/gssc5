@@ -252,12 +252,12 @@ export const accountPhotos = new Elysia({ prefix: "/account-photos" })
     async ({ body, cookie, status: statusFn }) => {
       const session = await openSession(cookie);
       if (!("user" in session)) {
-        return statusFn(401, { error: "unauthorized" });
+        return statusFn(403, "Forbidden" as const);
       }
 
       const upload = body.file;
       if (upload === undefined || upload === null) {
-        return statusFn(400, { error: "missing file" });
+        return statusFn(422, "Invalid" as const);
       }
 
       const targetUserCuid =
@@ -265,7 +265,7 @@ export const accountPhotos = new Elysia({ prefix: "/account-photos" })
           ? body.userCuid.trim()
           : session.user.id;
       if (!canUploadForUser(session.user, targetUserCuid)) {
-        return statusFn(403, { error: "forbidden" });
+        return statusFn(403, "Forbidden" as const);
       }
 
       const prisma = runtimePrisma();
@@ -273,7 +273,7 @@ export const accountPhotos = new Elysia({ prefix: "/account-photos" })
         where: { id: targetUserCuid },
         select: { id: true, accountPhoto: true },
       });
-      if (target === null) return statusFn(404, { error: "user not found" });
+      if (target === null) return statusFn(404, "Not Found" as const);
 
       const folderId = await ensureAccountPhotosFolder();
       const bytes = new Uint8Array(await upload.arrayBuffer());
@@ -295,7 +295,7 @@ export const accountPhotos = new Elysia({ prefix: "/account-photos" })
       if (existing !== null) {
         const written = await writeStoredBytes(storageKey, bytes);
         if (written === null) {
-          return statusFn(500, { error: "storage write failed" });
+          return statusFn(500, "Invalid" as const);
         }
         await prisma.storedFileEntry.update({
           where: { id: existing.id },
@@ -323,7 +323,7 @@ export const accountPhotos = new Elysia({ prefix: "/account-photos" })
         const written = await writeStoredBytes(storageKey, bytes);
         if (written === null) {
           await prisma.storedFileEntry.delete({ where: { id: created.id } });
-          return statusFn(500, { error: "storage write failed" });
+          return statusFn(500, "Invalid" as const);
         }
         keepEntryId = created.id;
       }
@@ -356,11 +356,10 @@ export const accountPhotos = new Elysia({ prefix: "/account-photos" })
       }),
       response: {
         200: AccountPhotoCreated,
-        400: t.Object({ error: t.String() }),
-        401: t.Object({ error: t.String() }),
-        403: t.Object({ error: t.String() }),
-        404: t.Object({ error: t.String() }),
-        500: t.Object({ error: t.String() }),
+        403: t.Literal("Forbidden"),
+        404: t.Literal("Not Found"),
+        422: t.Literal("Invalid"),
+        500: t.Literal("Invalid"),
       },
     },
   )
@@ -370,23 +369,23 @@ export const accountPhotos = new Elysia({ prefix: "/account-photos" })
       const session = await openSession(cookie);
       const row = await loadAccountPhotoByUserCuid(params.cuid);
       if (row === null || row.deletedAt !== null) {
-        return statusFn(404, { error: "not found" });
+        return statusFn(404, "Not Found" as const);
       }
       if (row.kind !== "file" || row.storageKey === null) {
-        return statusFn(404, { error: "not found" });
+        return statusFn(404, "Not Found" as const);
       }
       if (!(await isAccountPhotoEntry(row.parentId))) {
-        return statusFn(404, { error: "not found" });
+        return statusFn(404, "Not Found" as const);
       }
       // @relation(GSSC-BLLR-454, GSSC-BLLR-455, scope=range_start, role=Implementation)
       if (!(await canGetAccountPhoto(params.cuid, session))) {
-        return statusFn(403, { error: "forbidden" });
+        return statusFn(403, "Forbidden" as const);
       }
       // @relation(GSSC-BLLR-454, GSSC-BLLR-455, scope=range_end, role=Implementation)
 
       const file = readStoredFile(row.storageKey);
       if (file === null || !(await file.exists())) {
-        return statusFn(404, { error: "not found" });
+        return statusFn(404, "Not Found" as const);
       }
       return new Response(file, {
         headers: {

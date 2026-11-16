@@ -184,7 +184,7 @@ test("GSSC-BLLR-346 Research Tool Creation", async () => {
     { title, referenceLink: "https://example.org/create" },
     editorTok,
   );
-  expect(status).toBe(200);
+  expect(status).toBe(201);
   expect(body).toMatchObject({
     title,
     referenceLink: "https://example.org/create",
