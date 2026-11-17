@@ -543,6 +543,19 @@ DERIVED: True
 CHANGE_DRIVER: GSSC5-82
 REVIEW_STATUS: Approved
 
+[REQUIREMENT]
+UID: GSSC-MHLR-79
+TITLE: Footer Sitemap Link
+STATEMENT: >>>
+The GSSC Website Member Frontend Footer SHALL include a link that opens the members sitemap page.
+<<<
+RATIONALE: >>>
+No Member Frontend PIR requires a sitemap link. A dedicated sitemap page aids accessibility by listing site destinations outside the Header Navigation Menu. This requirement places that access in the Footer and does not set the link's label.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-108
+REVIEW_STATUS: Approved
+
 [[/SECTION]]
 
 [[SECTION]]
@@ -1395,5 +1408,24 @@ RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-14
   ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MHLR-SITEMAP-PAGE
+TITLE: Sitemap Page Requirements
+
+[REQUIREMENT]
+UID: GSSC-MHLR-80
+TITLE: Members Sitemap Page
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL provide a members sitemap page that presents the full Members site tree.
+<<<
+RATIONALE: >>>
+No Member Frontend PIR requires a sitemap page. Presenting the full Members site tree on a dedicated page gives logged-in members an accessibility-oriented listing of members destinations beyond the Header Navigation Menu. This requirement does not set tree labels or nesting depth.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-108
+REVIEW_STATUS: Approved
 
 [[/SECTION]]

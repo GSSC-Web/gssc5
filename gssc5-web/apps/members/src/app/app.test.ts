@@ -228,3 +228,11 @@ test('GSSC-MLLR-13 Home Page Route', async () => {
   expect(root.querySelector('gssc-home-page')).not.toBeNull();
 });
 // @relation(GSSC-MLLR-13, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-510, scope=range_start, role=Test)
+test('GSSC-MLLR-510 Sitemap Page Route', async () => {
+  const { router, root } = await setupApp('/sitemap');
+  expect(router.url.split('?')[0]).toBe('/sitemap');
+  expect(root.querySelector('gssc-sitemap-page')).not.toBeNull();
+});
+// @relation(GSSC-MLLR-510, scope=range_end, role=Test)
