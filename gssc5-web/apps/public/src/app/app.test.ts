@@ -349,10 +349,26 @@ test('GSSC-PLLR-16 Syntactic', async () => {
 
   const appRoot = root.querySelector('.gssc-app-root')!;
   const header = appRoot.querySelector('[data-slot="header"]')!;
-  const bar = appRoot.querySelector('gssc-announcements-bar')!;
+  const barHost = appRoot.querySelector('gssc-announcements-bar')!;
   const page = appRoot.querySelector('.gssc-page')!;
-  expect(header.compareDocumentPosition(bar) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
-  expect(bar.compareDocumentPosition(page) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  expect(
+    header.compareDocumentPosition(barHost) & Node.DOCUMENT_POSITION_FOLLOWING,
+  ).toBeTruthy();
+  expect(
+    barHost.compareDocumentPosition(page) & Node.DOCUMENT_POSITION_FOLLOWING,
+  ).toBeTruthy();
+
+  const bar = barHost.querySelector<HTMLElement>('.gssc-announcements-bar')!;
+  const item = bar.querySelector<HTMLElement>('.gssc-announcements-bar__item')!;
+  const title = bar.querySelector<HTMLElement>('.gssc-announcements-bar__title')!;
+  const text = bar.querySelector<HTMLElement>('.gssc-announcements-bar__text')!;
+  expect(bar.classList.contains('w-full')).toBe(true);
+  expect(bar.classList.contains('flex-col')).toBe(true);
+  expect(item.classList.contains('w-full')).toBe(true);
+  expect(item.tagName).toBe('BUTTON');
+  expect(
+    title.compareDocumentPosition(text) & Node.DOCUMENT_POSITION_FOLLOWING,
+  ).toBeTruthy();
 
   await TestBed.inject(Router).navigateByUrl('/');
   fixture.detectChanges();
