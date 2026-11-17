@@ -53,12 +53,33 @@ export type SectionPatchBody = {
   imagePosition?: SectionImagePosition | null;
 };
 
+/** Create body for POST /sections (template required). */
+export type SectionCreateBody = {
+  body: string;
+  templateId: string;
+  header?: string | null;
+  tags?: string[];
+  resources?: string[];
+  imageFile?: string | null;
+  imagePosition?: SectionImagePosition | null;
+};
+
+/** Content template list row used when creating a section. */
+export type SectionTemplateListEntry = {
+  cuid: string;
+  name: string;
+};
+
 export type SectionsListByTag = (tag: string) => Promise<SectionListEntry[]>;
 export type SectionGetByCuid = (cuid: string) => Promise<SectionDetail | null>;
 export type SectionPatchByCuid = (
   cuid: string,
   body: SectionPatchBody,
 ) => Promise<{ ok: true; detail: SectionDetail } | { ok: false; forbidden: boolean }>;
+export type SectionCreate = (
+  body: SectionCreateBody,
+) => Promise<{ ok: true; detail: SectionDetail } | { ok: false; forbidden: boolean }>;
+export type SectionsListTemplates = () => Promise<SectionTemplateListEntry[]>;
 
 export const SECTIONS_LIST_BY_TAG = new InjectionToken<SectionsListByTag>(
   'SECTIONS_LIST_BY_TAG',
@@ -81,6 +102,19 @@ export const SECTION_PATCH_BY_CUID = new InjectionToken<SectionPatchByCuid>(
   {
     providedIn: 'root',
     factory: () => defaultSectionPatchByCuid,
+  },
+);
+
+export const SECTION_CREATE = new InjectionToken<SectionCreate>('SECTION_CREATE', {
+  providedIn: 'root',
+  factory: () => defaultSectionCreate,
+});
+
+export const SECTIONS_LIST_TEMPLATES = new InjectionToken<SectionsListTemplates>(
+  'SECTIONS_LIST_TEMPLATES',
+  {
+    providedIn: 'root',
+    factory: () => defaultSectionsListTemplates,
   },
 );
 
@@ -155,5 +189,44 @@ async function defaultSectionPatchByCuid(
     return { ok: true, detail: asSectionDetail(result.data as SectionDetail) };
   } catch {
     return { ok: false, forbidden: false };
+  }
+}
+
+async function defaultSectionCreate(
+  body: SectionCreateBody,
+): Promise<{ ok: true; detail: SectionDetail } | { ok: false; forbidden: boolean }> {
+  try {
+    const result = await backend.sections.post(body as never);
+    if (result.error) {
+      const status =
+        typeof result.error === 'object' &&
+        result.error !== null &&
+        'status' in result.error
+          ? Number((result.error as { status?: number }).status)
+          : undefined;
+      return { ok: false, forbidden: status === 403 };
+    }
+    if (result.data === null || result.data === undefined) {
+      return { ok: false, forbidden: false };
+    }
+    return { ok: true, detail: asSectionDetail(result.data as SectionDetail) };
+  } catch {
+    return { ok: false, forbidden: false };
+  }
+}
+
+async function defaultSectionsListTemplates(): Promise<SectionTemplateListEntry[]> {
+  try {
+    const result = await backend.templates.get();
+    if (result.error || result.data === null || result.data === undefined) {
+      return [];
+    }
+    const rows = Array.isArray(result.data) ? result.data : [];
+    return rows.map((row) => {
+      const entry = row as SectionTemplateListEntry;
+      return { cuid: entry.cuid, name: entry.name };
+    });
+  } catch {
+    return [];
   }
 }

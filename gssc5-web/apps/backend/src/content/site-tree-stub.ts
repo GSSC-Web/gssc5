@@ -23,9 +23,8 @@ export const SITE_TREE_STUB_NODES: readonly SiteTreeStubNode[] = [
   { frontend: "members", label: "Dashboard", path: "/" },
   { frontend: "members", label: "Account", path: "/account" },
   { frontend: "members", label: "Directory", path: "/directory" },
-  { frontend: "members", label: "Events", path: "/events" },
+  // Announcements + Events are reached via Pages / Page Data Editor (GSSC5-126).
   { frontend: "members", label: "Page Sections", path: "/page-sections" },
-  { frontend: "members", label: "Announcements", path: "/announcements" },
   { frontend: "members", label: "Newsletters", path: "/newsletters" },
   { frontend: "members", label: "Publications", path: "/publications" },
   { frontend: "members", label: "Research Tools", path: "/research-tools" },

@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, signal } from '@angular/core';
+import { Component, OnInit, computed, effect, inject, signal } from '@angular/core';
 import { Editor } from '../../modules/editor/editor';
 import { FormSelectField } from '../../modules/form-select-field/form-select-field';
 import { FormTextField } from '../../modules/form-text-field/form-text-field';
@@ -10,12 +10,17 @@ import {
 } from '../../modules/section/section';
 import {
   PUBLIC_PAGE_OPTIONS,
+  SECTION_CREATE,
   SECTION_GET_BY_CUID,
   SECTION_PATCH_BY_CUID,
   SECTIONS_LIST_BY_TAG,
+  SECTIONS_LIST_TEMPLATES,
   type SectionDetail,
   type SectionListEntry,
+  type SectionTemplateListEntry,
 } from '../../services/sections-api';
+
+const CREATE_RESOURCE_ID = 'section:new';
 
 type EditorBaseline = {
   header: string;
@@ -23,21 +28,25 @@ type EditorBaseline = {
   imagePosition: string;
   imageFile: string;
   resourcesText: string;
+  templateId: string;
 };
 
 /**
- * Page/Section Content Editor (GSSC5-93 / PIR-20): select a public page tag,
- * pick a section, edit via Generic Editor, persist with PATCH /sections/{cuid}.
+ * Page/Section Content Editor (GSSC5-93 / PIR-20; create-from-template GSSC5-126):
+ * select a public page tag, pick or create a section, edit via Generic Editor,
+ * persist with POST /sections (create) or PATCH /sections/{cuid} (edit).
  */
 @Component({
   selector: 'gssc-page-section-editor-page',
   imports: [Editor, FormTextField, FormSelectField, Section],
   templateUrl: './page-section-editor.html',
 })
-export class PageSectionEditorPage {
+export class PageSectionEditorPage implements OnInit {
   private readonly listByTag = inject(SECTIONS_LIST_BY_TAG);
   private readonly getByCuid = inject(SECTION_GET_BY_CUID);
   private readonly patchByCuid = inject(SECTION_PATCH_BY_CUID);
+  private readonly createSection = inject(SECTION_CREATE);
+  private readonly listTemplates = inject(SECTIONS_LIST_TEMPLATES);
 
   private listGeneration = 0;
   private detailGeneration = 0;
@@ -58,7 +67,13 @@ export class PageSectionEditorPage {
   /** Sections for the selected page tag, backend index order. */
   readonly sections = signal<SectionListEntry[]>([]);
 
-  /** Selected section cuid. */
+  /** Content templates available for section create. */
+  readonly templates = signal<SectionTemplateListEntry[]>([]);
+
+  /** idle | create | edit */
+  readonly mode = signal<'idle' | 'create' | 'edit'>('idle');
+
+  /** Selected section cuid (edit mode). */
   readonly selectedCuid = signal<string | null>(null);
 
   /** True while list or detail load is in flight. */
@@ -75,6 +90,7 @@ export class PageSectionEditorPage {
   readonly editorImagePosition = signal('none');
   readonly editorImageFile = signal('');
   readonly editorResourcesText = signal('');
+  readonly templateId = signal('');
 
   private baseline: EditorBaseline = {
     header: '',
@@ -82,13 +98,24 @@ export class PageSectionEditorPage {
     imagePosition: 'none',
     imageFile: '',
     resourcesText: '',
+    templateId: '',
   };
 
-  /** Resource id for exclusive edit — section cuid when selected. */
+  protected readonly templateOptions = computed(() => [
+    { value: '', label: 'Select a template…' },
+    ...this.templates().map((row) => ({ value: row.cuid, label: row.name })),
+  ]);
+
+  /** Resource id for exclusive edit — section:new while creating. */
   readonly editorResourceId = computed(() => {
+    if (this.mode() === 'create') return CREATE_RESOURCE_ID;
     const cuid = this.selectedCuid();
     return cuid != null && cuid.length > 0 ? `section:${cuid}` : 'section:none';
   });
+
+  protected readonly editorTitle = computed(() =>
+    this.mode() === 'create' ? 'New Section' : 'Edit Section',
+  );
 
   /** Live preview contents from editor fields. */
   readonly previewContents = computed<SectionContents>(() => {
@@ -106,6 +133,14 @@ export class PageSectionEditorPage {
 
   readonly hasSelection = computed(() => this.selectedCuid() != null);
 
+  protected readonly showEditor = computed(
+    () => this.mode() === 'create' || this.mode() === 'edit',
+  );
+
+  async ngOnInit(): Promise<void> {
+    await this.reloadTemplates();
+  }
+
   constructor() {
     effect(() => {
       const tag = this.selectedPageTag();
@@ -114,7 +149,7 @@ export class PageSectionEditorPage {
 
     effect(() => {
       const cuid = this.selectedCuid();
-      if (cuid == null) return;
+      if (cuid == null || this.mode() !== 'edit') return;
       void this.loadSectionDetail(cuid);
     });
   }
@@ -123,24 +158,50 @@ export class PageSectionEditorPage {
   onPageTagChange(tag: string): void {
     this.selectedPageTag.set(tag);
     this.selectedCuid.set(null);
+    this.mode.set('idle');
     this.statusMessage.set('');
     this.permitted.set(true);
     this.clearEditorFields();
   }
   // @relation(GSSC-MLLR-264, GSSC-MLLR-279, GSSC-MLLR-286, scope=range_end, role=Implementation)
 
-  // @relation(GSSC-MLLR-270, GSSC-MLLR-280, scope=range_start, role=Implementation)
+  // @relation(GSSC-MLLR-270, GSSC-MLLR-280, GSSC-MLLR-588, scope=range_start, role=Implementation)
   onSelectSection(cuid: string): void {
+    this.mode.set('edit');
     this.selectedCuid.set(cuid);
     this.statusMessage.set('');
     this.permitted.set(true);
+    this.templateId.set('');
   }
-  // @relation(GSSC-MLLR-270, GSSC-MLLR-280, scope=range_end, role=Implementation)
+  // @relation(GSSC-MLLR-270, GSSC-MLLR-280, GSSC-MLLR-588, scope=range_end, role=Implementation)
 
-  // @relation(GSSC-MLLR-281, GSSC-MLLR-283, scope=range_start, role=Implementation)
+  // @relation(GSSC-MLLR-581, GSSC-MLLR-587, GSSC-MLLR-588, scope=range_start, role=Implementation)
+  startCreate(): void {
+    if (this.selectedPageTag().length === 0) {
+      this.statusMessage.set('Choose a public page before creating a section.');
+      return;
+    }
+    this.mode.set('create');
+    this.selectedCuid.set(null);
+    this.permitted.set(true);
+    this.clearEditorFields();
+    this.statusMessage.set('Creating a new section.');
+  }
+  // @relation(GSSC-MLLR-581, GSSC-MLLR-587, GSSC-MLLR-588, scope=range_end, role=Implementation)
+
+  onTemplateChange(next: string): void {
+    this.templateId.set(next);
+  }
+
+  // @relation(GSSC-MLLR-281, GSSC-MLLR-283, GSSC-MLLR-587, GSSC-MLLR-589, GSSC-MLLR-590, scope=range_start, role=Implementation)
   async onEditorSaved(): Promise<void> {
+    if (!this.permitted()) return;
+    if (this.mode() === 'create') {
+      await this.saveCreate();
+      return;
+    }
     const cuid = this.selectedCuid();
-    if (cuid == null || !this.permitted()) return;
+    if (cuid == null) return;
 
     const body = this.editorBody().trim();
     if (body.length === 0) {
@@ -169,14 +230,54 @@ export class PageSectionEditorPage {
 
     this.applyDetail(result.detail);
     this.statusMessage.set('Saved.');
-    // Refresh list headers after save.
     const tag = this.selectedPageTag();
     if (tag.length > 0) {
       const list = await this.listByTag(tag);
       this.sections.set(list);
     }
   }
-  // @relation(GSSC-MLLR-281, GSSC-MLLR-283, scope=range_end, role=Implementation)
+
+  private async saveCreate(): Promise<void> {
+    const templateId = this.templateId().trim();
+    const body = this.editorBody().trim();
+    const pageTag = this.selectedPageTag().trim();
+    if (!templateId || !body) {
+      this.statusMessage.set('Template and body are required to create a section.');
+      return;
+    }
+    if (!pageTag) {
+      this.statusMessage.set('Choose a public page before creating a section.');
+      return;
+    }
+
+    const imageFile = this.editorImageFile().trim();
+    const result = await this.createSection({
+      body,
+      templateId,
+      header: this.editorHeader().trim() || null,
+      tags: [pageTag],
+      resources: parseResourcesText(this.editorResourcesText()).map((r) => r.href),
+      imageFile: imageFile.length > 0 ? imageFile : null,
+      imagePosition: parseImagePosition(this.editorImagePosition()),
+    });
+
+    if (!result.ok) {
+      if (result.forbidden) {
+        this.permitted.set(false);
+        this.statusMessage.set('You do not have permission to create this section.');
+      } else {
+        this.statusMessage.set('Section was not saved.');
+      }
+      return;
+    }
+
+    const list = await this.listByTag(pageTag);
+    this.sections.set(list);
+    this.onSelectSection(result.detail.cuid);
+    this.applyDetail(result.detail);
+    this.statusMessage.set('Section created.');
+  }
+  // @relation(GSSC-MLLR-281, GSSC-MLLR-283, GSSC-MLLR-587, GSSC-MLLR-589, GSSC-MLLR-590, scope=range_end, role=Implementation)
 
   // @relation(GSSC-MLLR-282, scope=range_start, role=Implementation)
   protected onEditorCancelled(): void {
@@ -185,6 +286,7 @@ export class PageSectionEditorPage {
     this.editorImagePosition.set(this.baseline.imagePosition);
     this.editorImageFile.set(this.baseline.imageFile);
     this.editorResourcesText.set(this.baseline.resourcesText);
+    this.templateId.set(this.baseline.templateId);
     this.statusMessage.set('Discarded.');
   }
   // @relation(GSSC-MLLR-282, scope=range_end, role=Implementation)
@@ -196,6 +298,13 @@ export class PageSectionEditorPage {
     if (body.length > 0) return body.slice(0, 48) + (body.length > 48 ? '…' : '');
     return entry.cuid;
   }
+
+  // @relation(GSSC-MLLR-587, scope=range_start, role=Implementation)
+  private async reloadTemplates(): Promise<void> {
+    const rows = await this.listTemplates();
+    this.templates.set(rows);
+  }
+  // @relation(GSSC-MLLR-587, scope=range_end, role=Implementation)
 
   private async loadSectionsForPage(tag: string): Promise<void> {
     const generation = ++this.listGeneration;
@@ -237,12 +346,14 @@ export class PageSectionEditorPage {
     this.editorImagePosition.set(imagePosition);
     this.editorImageFile.set(imageFile);
     this.editorResourcesText.set(resourcesText);
+    this.templateId.set('');
     this.baseline = {
       header,
       body,
       imagePosition,
       imageFile,
       resourcesText,
+      templateId: '',
     };
   }
 
@@ -252,12 +363,14 @@ export class PageSectionEditorPage {
     this.editorImagePosition.set('none');
     this.editorImageFile.set('');
     this.editorResourcesText.set('');
+    this.templateId.set('');
     this.baseline = {
       header: '',
       body: '',
       imagePosition: 'none',
       imageFile: '',
       resourcesText: '',
+      templateId: '',
     };
   }
 }

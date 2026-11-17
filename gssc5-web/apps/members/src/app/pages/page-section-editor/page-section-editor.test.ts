@@ -3,12 +3,16 @@ import { TestBed } from '@angular/core/testing';
 import { nativeElement, textContent } from '../../../test-harness';
 import { EditorSession } from '../../services/editor-session/editor-session';
 import {
+  SECTION_CREATE,
   SECTION_GET_BY_CUID,
   SECTION_PATCH_BY_CUID,
   SECTIONS_LIST_BY_TAG,
+  SECTIONS_LIST_TEMPLATES,
+  type SectionCreateBody,
   type SectionDetail,
   type SectionListEntry,
   type SectionPatchBody,
+  type SectionTemplateListEntry,
 } from '../../services/sections-api';
 import { PageSectionEditorPage } from './page-section-editor';
 
@@ -43,6 +47,11 @@ const sampleDetailB: SectionDetail = {
   resources: [],
 };
 
+const sampleTemplates: SectionTemplateListEntry[] = [
+  { cuid: 'tmpl-1', name: 'Section Template A' },
+  { cuid: 'tmpl-2', name: 'Section Template B' },
+];
+
 type Harness = {
   listByTag: (tag: string) => Promise<SectionListEntry[]>;
   getByCuid: (cuid: string) => Promise<SectionDetail | null>;
@@ -50,6 +59,10 @@ type Harness = {
     cuid: string,
     body: SectionPatchBody,
   ) => Promise<{ ok: true; detail: SectionDetail } | { ok: false; forbidden: boolean }>;
+  create: (
+    body: SectionCreateBody,
+  ) => Promise<{ ok: true; detail: SectionDetail } | { ok: false; forbidden: boolean }>;
+  listTemplates: () => Promise<SectionTemplateListEntry[]>;
 };
 
 function defaultHarness(overrides?: Partial<Harness>): Harness {
@@ -58,6 +71,18 @@ function defaultHarness(overrides?: Partial<Harness>): Harness {
     getByCuid: async (cuid: string) => {
       if (cuid === 'sec-a') return sampleDetailA;
       if (cuid === 'sec-b') return sampleDetailB;
+      if (cuid === 'sec-new') {
+        return {
+          cuid: 'sec-new',
+          header: 'Created header',
+          body: 'Created body',
+          resources: [],
+          tags: ['home'],
+          index: 2,
+          imageFile: null,
+          imagePosition: 'none',
+        };
+      }
       return null;
     },
     patchByCuid: async (cuid: string, body: SectionPatchBody) => ({
@@ -73,6 +98,20 @@ function defaultHarness(overrides?: Partial<Harness>): Harness {
         index: sampleDetailA.index,
       },
     }),
+    create: async (body: SectionCreateBody) => ({
+      ok: true,
+      detail: {
+        cuid: 'sec-new',
+        header: body.header ?? null,
+        body: body.body,
+        resources: body.resources ?? [],
+        tags: body.tags ?? ['home'],
+        index: 2,
+        imageFile: body.imageFile ?? null,
+        imagePosition: body.imagePosition ?? 'none',
+      },
+    }),
+    listTemplates: async () => sampleTemplates,
     ...overrides,
   };
 }
@@ -87,9 +126,13 @@ async function setup(overrides?: Partial<Harness>) {
       { provide: SECTIONS_LIST_BY_TAG, useValue: harness.listByTag },
       { provide: SECTION_GET_BY_CUID, useValue: harness.getByCuid },
       { provide: SECTION_PATCH_BY_CUID, useValue: harness.patchByCuid },
+      { provide: SECTION_CREATE, useValue: harness.create },
+      { provide: SECTIONS_LIST_TEMPLATES, useValue: harness.listTemplates },
     ],
   }).compileComponents();
   const fixture = TestBed.createComponent(PageSectionEditorPage);
+  fixture.detectChanges();
+  await fixture.whenStable();
   fixture.detectChanges();
   await fixture.whenStable();
   return { fixture, page: fixture.componentInstance, root: nativeElement(fixture), harness };
@@ -466,3 +509,216 @@ test('GSSC-MLLR-286 Semantic', async () => {
   expect(page.hasSelection()).toBe(true);
 });
 // @relation(GSSC-MLLR-286, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-581, scope=range_start, role=Test)
+test('GSSC-MLLR-581 Semantic', async () => {
+  const { root, fixture, page } = await setup();
+  await selectPage(fixture, 'home');
+  const createBtn = root.querySelector<HTMLButtonElement>('[data-slot="section-create"]')!;
+  expect(createBtn).toBeTruthy();
+  expect(textContent(root, '[data-slot="section-create"]')).toContain('New section');
+  createBtn.click();
+  fixture.detectChanges();
+  await fixture.whenStable();
+  expect(page.mode()).toBe('create');
+  expect(root.querySelector('gssc-editor')).toBeTruthy();
+  expect(page.editorResourceId()).toBe('section:new');
+});
+// @relation(GSSC-MLLR-581, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-582, scope=range_start, role=Test)
+test('GSSC-MLLR-582 Syntactic', async () => {
+  const { root, fixture } = await setup();
+  await selectPage(fixture, 'home');
+  const createBtn = root.querySelector('.gssc-page-section-editor__create')!;
+  expect(createBtn.className).toContain('inline-flex');
+  expect(createBtn.className).toContain('items-center');
+  expect(createBtn.className).toContain('px-3');
+});
+// @relation(GSSC-MLLR-582, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-583, scope=range_start, role=Test)
+test('GSSC-MLLR-583 Lexical', async () => {
+  const { root, fixture } = await setup();
+  await selectPage(fixture, 'home');
+  const createBtn = root.querySelector('.gssc-page-section-editor__create')!;
+  expect(createBtn.className).toContain('font-sans');
+  expect(createBtn.className).toContain('text-sm');
+  expect(createBtn.className).toContain('border-gssc-dark-green');
+  expect(createBtn.className).toContain('bg-gssc-light-green');
+  expect(createBtn.className).toContain('text-gssc-dark-green');
+});
+// @relation(GSSC-MLLR-583, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-584, scope=range_start, role=Test)
+test('GSSC-MLLR-584 Semantic', async () => {
+  const { root, fixture, page } = await setup();
+  await selectPage(fixture, 'home');
+  page.startCreate();
+  fixture.detectChanges();
+  await fixture.whenStable();
+  expect(root.querySelector('#page-section-editor-template')).toBeTruthy();
+  expect(page.templates().map((t) => t.cuid)).toEqual(['tmpl-1', 'tmpl-2']);
+});
+// @relation(GSSC-MLLR-584, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-585, scope=range_start, role=Test)
+test('GSSC-MLLR-585 Syntactic', async () => {
+  const { root, fixture, page } = await setup();
+  await selectPage(fixture, 'home');
+  page.startCreate();
+  fixture.detectChanges();
+  await fixture.whenStable();
+  const field = root.querySelector('#page-section-editor-template')!.closest(
+    '.gssc-form-select-field',
+  )!;
+  expect(field.className).toContain('w-full');
+  expect(field.className).toContain('flex');
+});
+// @relation(GSSC-MLLR-585, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-586, scope=range_start, role=Test)
+test('GSSC-MLLR-586 Lexical', async () => {
+  const { root, fixture, page } = await setup();
+  await selectPage(fixture, 'home');
+  page.startCreate();
+  fixture.detectChanges();
+  await fixture.whenStable();
+  const field = root.querySelector('#page-section-editor-template')!.closest(
+    '.gssc-form-select-field',
+  )!;
+  expect(field.className).toContain('border-gssc-dark-green');
+  expect(field.className).toContain('bg-gssc-white');
+  expect(field.className).toContain('font-sans');
+});
+// @relation(GSSC-MLLR-586, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-587, scope=range_start, role=Test)
+test('GSSC-MLLR-587 Template Required For Create', async () => {
+  const creates: SectionCreateBody[] = [];
+  const { fixture, page } = await setup({
+    create: async (body) => {
+      creates.push(body);
+      return { ok: true, detail: { ...sampleDetailA, cuid: 'sec-new', body: body.body } };
+    },
+  });
+  await selectPage(fixture, 'home');
+  page.startCreate();
+  page.editorBody.set('New body');
+  fixture.detectChanges();
+  await page.onEditorSaved();
+  expect(creates.length).toBe(0);
+  expect(page.statusMessage()).toContain('Template');
+  page.templateId.set('tmpl-1');
+  await page.onEditorSaved();
+  expect(creates.length).toBe(1);
+  expect(creates[0]!.templateId).toBe('tmpl-1');
+  expect(creates[0]!.tags).toEqual(['home']);
+});
+// @relation(GSSC-MLLR-587, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-588, scope=range_start, role=Test)
+test('GSSC-MLLR-588 Editor Mode Selection', async () => {
+  const { fixture, page } = await setup();
+  await selectPage(fixture, 'home');
+  page.startCreate();
+  expect(page.mode()).toBe('create');
+  expect(page.editorResourceId()).toBe('section:new');
+  await selectSection(fixture, 'sec-a');
+  expect(page.mode()).toBe('edit');
+  expect(page.editorResourceId()).toBe('section:sec-a');
+});
+// @relation(GSSC-MLLR-588, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-589, scope=range_start, role=Test)
+test('GSSC-MLLR-589 Create Section', async () => {
+  const creates: SectionCreateBody[] = [];
+  const { fixture, page, root } = await setup({
+    create: async (body) => {
+      creates.push(body);
+      return {
+        ok: true,
+        detail: {
+          cuid: 'sec-new',
+          header: body.header ?? null,
+          body: body.body,
+          resources: body.resources ?? [],
+          tags: body.tags ?? ['home'],
+          index: 2,
+          imageFile: null,
+          imagePosition: 'none',
+        },
+      };
+    },
+    listByTag: async (tag: string) =>
+      tag === 'home'
+        ? [
+            ...sampleList,
+            {
+              cuid: 'sec-new',
+              header: 'Created header',
+              body: 'Created body',
+              tags: ['home'],
+              index: 2,
+            },
+          ]
+        : [],
+  });
+  await selectPage(fixture, 'home');
+  page.startCreate();
+  page.templateId.set('tmpl-1');
+  page.editorHeader.set('Created header');
+  page.editorBody.set('Created body');
+  fixture.detectChanges();
+  await page.onEditorSaved();
+  fixture.detectChanges();
+  await fixture.whenStable();
+  expect(creates.length).toBe(1);
+  expect(creates[0]!.templateId).toBe('tmpl-1');
+  expect(creates[0]!.body).toBe('Created body');
+  expect(page.mode()).toBe('edit');
+  expect(page.selectedCuid()).toBe('sec-new');
+  expect(page.statusMessage()).toContain('created');
+  expect(textContent(root, '[data-slot="editor-status"]')).toContain('created');
+});
+// @relation(GSSC-MLLR-589, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-590, scope=range_start, role=Test)
+test('GSSC-MLLR-590 Persistence Feedback', async () => {
+  const { fixture, page } = await setup({
+    create: async () => ({ ok: false, forbidden: true }),
+  });
+  await selectPage(fixture, 'home');
+  page.startCreate();
+  page.templateId.set('tmpl-1');
+  page.editorBody.set('Nope');
+  await page.onEditorSaved();
+  fixture.detectChanges();
+  expect(page.permitted()).toBe(false);
+  expect(page.statusMessage()).toContain('permission');
+});
+// @relation(GSSC-MLLR-590, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-591, scope=range_start, role=Test)
+test('GSSC-MLLR-591 Members Nav Omits Announcements And Events', async () => {
+  // Announcement/event editing remains reachable via Page Data Editor kind paths
+  // (MLLR-318/319); top-level Members seed destinations omit those paths (backend
+  // site-trees seed test asserts MEMBERS_SEED_CHILDREN).
+  const { PAGE_DATA_KIND_PATHS } = await import('../page-data-editor/page-data-editor');
+  expect(PAGE_DATA_KIND_PATHS.sections).toBe('/page-sections');
+  expect(PAGE_DATA_KIND_PATHS.announcements).toBe('/announcements');
+  expect(PAGE_DATA_KIND_PATHS.events).toBe('/events');
+  // Contract mirror of members seed after GSSC5-126 (Pages entry, no A/E tabs).
+  const membersSeedTopLevelPaths = [
+    '/directory',
+    '/account',
+    '/page-sections',
+    '/newsletters',
+    '/publications',
+    '/research-tools',
+  ];
+  expect(membersSeedTopLevelPaths).toContain(PAGE_DATA_KIND_PATHS.sections);
+  expect(membersSeedTopLevelPaths).not.toContain(PAGE_DATA_KIND_PATHS.announcements);
+  expect(membersSeedTopLevelPaths).not.toContain(PAGE_DATA_KIND_PATHS.events);
+});
+// @relation(GSSC-MLLR-591, scope=range_end, role=Test)

@@ -404,18 +404,20 @@ test("GSSC-BLLR-475 Site Tree Seed", async () => {
   );
 
   expect(membersTree.root.path).toBe("/");
-  expect(collectPaths(membersTree.root)).toEqual(
+  const membersPaths = collectPaths(membersTree.root);
+  expect(membersPaths).toEqual(
     expect.arrayContaining([
       "/",
       "/directory",
       "/account",
       "/page-sections",
-      "/announcements",
-      "/events",
       "/newsletters",
       "/publications",
       "/research-tools",
     ]),
   );
+  // GSSC5-126: announcement/event editors are under Pages / PDE, not top-level seed tabs.
+  expect(membersPaths).not.toContain("/announcements");
+  expect(membersPaths).not.toContain("/events");
 });
 // @relation(GSSC-BLLR-475, scope=range_end, role=Test)
