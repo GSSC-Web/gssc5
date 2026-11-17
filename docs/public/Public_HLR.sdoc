@@ -2465,4 +2465,42 @@ REVIEW_STATUS: Approved
 
 [[/SECTION]]
 
+[[SECTION]]
+UID: GSSC-PHLR-SITE-SEARCH-OVERLAY
+TITLE: Header Search Overlay
+
+[REQUIREMENT]
+UID: GSSC-PHLR-145
+TITLE: Header Search Overlay
+STATEMENT: >>>
+When the Header Site Search presentation is open, the GSSC Website Public Frontend Header SHALL present a search overlay with text entry and a short list of matching public site results that open their destinations, and SHALL open the public search page when the visitor submits the overlay search.
+<<<
+RATIONALE: >>>
+Header Site Search (GSSC-PHLR-4) requires a way to search the site. The open presentation needs entry and quick results for immediate navigation, with submit opening the dedicated search page for richer filtering. This requirement does not set result ranking or filter options on the search page.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-47
+REVIEW_STATUS: Approved
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PHLR-SEARCH-PAGE
+TITLE: Search Page Requirements
+
+[REQUIREMENT]
+UID: GSSC-PHLR-146
+TITLE: Public Search Page
+STATEMENT: >>>
+The GSSC Website Public Frontend SHALL provide a public search page that accepts a search query, offers a result-kind filter, and presents matching public site results that open their destinations.
+<<<
+RATIONALE: >>>
+No Public Frontend PIR requires a dedicated search page. A full search page complements the Header overlay by accepting a query with richer filtering and a fuller result list. This requirement does not set cemetery or war-veterans project search.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-47
+REVIEW_STATUS: Approved
+
+[[/SECTION]]
+
 [[/SECTION]]
