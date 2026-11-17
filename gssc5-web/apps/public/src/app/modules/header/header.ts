@@ -203,6 +203,13 @@ export class Header implements OnInit, OnDestroy {
     return (item.children?.length ?? 0) > 0;
   }
 
+  /** Equal-column template for the wide Navigation Menu grid (GSSC5-121). */
+  protected wideNavGridColumns(): string {
+    const count = this.navItems().length;
+    if (count <= 0) return 'none';
+    return `repeat(${count}, minmax(0, 1fr))`;
+  }
+
   /** Test / harness hook to force a chrome tier without resize geometry. */
   setChromeTierForTest(tier: HeaderChromeTier): void {
     this.chromeTier.set(tier);
@@ -244,8 +251,17 @@ export class Header implements OnInit, OnDestroy {
       return;
     }
 
-    // Wide when the nowrap probe fits the host; otherwise mid (hamburger).
-    const fits = probe.scrollWidth <= host.clientWidth;
+    // Wide when equal-grid nowrap cells fit: host >= n × max label width.
+    const items = probe.querySelectorAll<HTMLElement>(
+      '.gssc-header__nav-probe-item',
+    );
+    const count = items.length;
+    let maxWidth = 0;
+    for (const item of items) {
+      maxWidth = Math.max(maxWidth, item.scrollWidth);
+    }
+    const fits =
+      count === 0 || maxWidth * count <= host.clientWidth;
     const next: HeaderChromeTier = fits ? 'wide' : 'mid';
     this.chromeTier.set(next);
     if (next === 'wide') this.closeMenu();

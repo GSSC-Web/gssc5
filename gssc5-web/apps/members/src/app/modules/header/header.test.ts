@@ -276,8 +276,11 @@ test('GSSC-MLLR-18 Syntactic', async () => {
 // @relation(GSSC-MLLR-19, scope=range_start, role=Test)
 test('GSSC-MLLR-19 Lexical', async () => {
   const { root } = await setupHeader();
-  const logo = root.querySelector<HTMLElement>('.gssc-header__logo')!;
-  expect(logo.classList.contains('text-gssc-dark-green')).toBe(true);
+  const mark = root.querySelector<HTMLImageElement>('.gssc-header__logo-mark')!;
+  expect(mark.tagName).toBe('IMG');
+  expect(mark.getAttribute('src')).toBe('/gssc-society-logo.png');
+  expect(mark.classList.contains('size-10')).toBe(true);
+  expect(mark.classList.contains('object-contain')).toBe(true);
 });
 // @relation(GSSC-MLLR-19, scope=range_end, role=Test)
 
@@ -483,7 +486,7 @@ test('GSSC-MLLR-442 Syntactic', async () => {
 test('GSSC-MLLR-443 Lexical', async () => {
   const { fixture, root, header } = await setupHeader({ chromeTier: 'wide' });
   const nav = root.querySelector<HTMLElement>('.gssc-header__nav--wide')!;
-  expect(nav.classList.contains('bg-gssc-cream')).toBe(true);
+  expect(nav.classList.contains('bg-gssc-white')).toBe(true);
   expect(nav.classList.contains('text-gssc-dark-green')).toBe(true);
 
   header.setChromeTierForTest('mid');
@@ -518,9 +521,15 @@ test('GSSC-MLLR-444 Semantic', async () => {
 // @relation(GSSC-MLLR-445, scope=range_start, role=Test)
 test('GSSC-MLLR-445 Syntactic', async () => {
   const { fixture, root, header } = await setupHeader({ chromeTier: 'wide' });
-  const wideNav = root.querySelector('.gssc-header__nav--wide')!;
-  expect(wideNav.classList.contains('flex-nowrap')).toBe(true);
-  expect(wideNav.querySelectorAll('.gssc-header__nav-divider').length).toBeGreaterThan(0);
+  const wideNav = root.querySelector<HTMLElement>('.gssc-header__nav--wide')!;
+  expect(wideNav.classList.contains('grid')).toBe(true);
+  expect(wideNav.querySelectorAll('.gssc-header__nav-divider').length).toBe(0);
+  const topLinks = [
+    ...wideNav.querySelectorAll<HTMLElement>(':scope > .gssc-header__nav-item > .gssc-header__nav-link'),
+  ];
+  expect(topLinks.length).toBeGreaterThan(0);
+  expect(topLinks.every((link) => link.classList.contains('whitespace-nowrap'))).toBe(true);
+  expect(wideNav.style.gridTemplateColumns).toMatch(/^repeat\(\d+, minmax\(0, 1fr\)\)$/);
 
   header.setChromeTierForTest('mid');
   fixture.detectChanges();
@@ -697,7 +706,11 @@ test('GSSC-MLLR-456 Semantic', async () => {
 // @relation(GSSC-MLLR-457, scope=range_start, role=Test)
 test('GSSC-MLLR-457 Syntactic', async () => {
   const { fixture, root, header } = await setupHeader({ chromeTier: 'wide' });
-  expect(root.querySelector('.gssc-header__identity .gssc-header__org-name')).not.toBeNull();
+  const orgName = root.querySelector<HTMLElement>(
+    '.gssc-header__identity .gssc-header__org-name',
+  )!;
+  expect(orgName).not.toBeNull();
+  expect(orgName.classList.contains('whitespace-nowrap')).toBe(true);
 
   header.setChromeTierForTest('narrow');
   fixture.detectChanges();
