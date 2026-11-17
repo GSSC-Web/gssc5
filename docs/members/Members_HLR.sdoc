@@ -980,7 +980,7 @@ CHANGE_DRIVER: >>>
 GSSC5-11
 GSSC5-119
 <<<
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [[/SECTION]]
 
@@ -1776,7 +1776,7 @@ No Member Frontend PIR requires inviting prospective members from the directory.
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-118
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-12

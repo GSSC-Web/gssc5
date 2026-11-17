@@ -1531,7 +1531,7 @@ Administrators register members who can later log in. Exact request fields and r
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-119
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-44
@@ -1551,7 +1551,7 @@ User moderators add prospective members without choosing a usable password; the 
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-118
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-50
