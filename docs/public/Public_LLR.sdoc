@@ -1729,7 +1729,7 @@ UID: GSSC-PLLR-FOOTER-SITEMAP-LINK
 TITLE: Footer Sitemap Link
 
 [REQUIREMENT]
-UID: GSSC-PLLR-330
+UID: GSSC-PLLR-345
 TITLE: Semantic
 STATEMENT: >>>
 The Footer Sitemap Link SHALL open the public sitemap page.
@@ -1743,11 +1743,11 @@ CHANGE_DRIVER: GSSC5-41
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-PHLR-140
+  VALUE: GSSC-PHLR-144
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-331
+UID: GSSC-PLLR-346
 TITLE: Syntactic
 STATEMENT: >>>
 The Footer Sitemap Link SHALL appear in the Footer below the Footer Contact control as a text control that opens the sitemap page when activated.
@@ -1761,11 +1761,11 @@ CHANGE_DRIVER: GSSC5-41
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-PHLR-140
+  VALUE: GSSC-PHLR-144
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-332
+UID: GSSC-PLLR-347
 TITLE: Lexical
 STATEMENT: >>>
 The Footer Sitemap Link SHALL use the white theme token for its text color, with no underline except on hover.
@@ -1779,7 +1779,7 @@ CHANGE_DRIVER: GSSC5-41
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-PHLR-140
+  VALUE: GSSC-PHLR-144
   ROLE: Refines
 
 [[/SECTION]]
@@ -6200,7 +6200,7 @@ UID: GSSC-PLLR-SITEMAP-PAGE-ELEMENT
 TITLE: Sitemap Page
 
 [REQUIREMENT]
-UID: GSSC-PLLR-333
+UID: GSSC-PLLR-348
 TITLE: Semantic
 STATEMENT: >>>
 The GSSC Website Public Frontend Sitemap Page SHALL retrieve the Public site tree from the Unified Backend and present that tree as a nested listing of destination labels that open their destinations.
@@ -6214,11 +6214,11 @@ CHANGE_DRIVER: GSSC5-41
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-PHLR-139
+  VALUE: GSSC-PHLR-143
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-334
+UID: GSSC-PLLR-349
 TITLE: Syntactic
 STATEMENT: >>>
 The Sitemap Page SHALL place the Public site tree listing at full width in the Page Outlet, SHALL nest each node's children under that node in the tree's order, and SHALL omit the listing when the Unified Backend provides no Public site tree.
@@ -6232,11 +6232,11 @@ CHANGE_DRIVER: GSSC5-41
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-PHLR-139
+  VALUE: GSSC-PHLR-143
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-335
+UID: GSSC-PLLR-350
 TITLE: Lexical
 STATEMENT: >>>
 The Sitemap Page SHALL use the white theme token for its background, the sans-serif typeface, and the dark-green theme token for the page heading text.
@@ -6250,7 +6250,7 @@ CHANGE_DRIVER: GSSC5-41
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-PHLR-139
+  VALUE: GSSC-PHLR-143
   ROLE: Refines
 
 [[/SECTION]]
@@ -6260,7 +6260,7 @@ UID: GSSC-PLLR-SITEMAP-ENTRY
 TITLE: Sitemap Entry
 
 [REQUIREMENT]
-UID: GSSC-PLLR-336
+UID: GSSC-PLLR-351
 TITLE: Semantic
 STATEMENT: >>>
 Each Sitemap Entry SHALL present that Public site tree node's destination label and SHALL open that node's destination when activated.
@@ -6274,11 +6274,11 @@ CHANGE_DRIVER: GSSC5-41
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-PHLR-139
+  VALUE: GSSC-PHLR-143
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-337
+UID: GSSC-PLLR-352
 TITLE: Syntactic
 STATEMENT: >>>
 Each Sitemap Entry SHALL appear as one nested list item under its parent entry when it has a parent, or under the Sitemap Page listing root when it is a root entry, and SHALL place any child entries as a nested list under that item.
@@ -6292,11 +6292,11 @@ CHANGE_DRIVER: GSSC5-41
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-PHLR-139
+  VALUE: GSSC-PHLR-143
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-338
+UID: GSSC-PLLR-353
 TITLE: Lexical
 STATEMENT: >>>
 Each Sitemap Entry SHALL use the sans-serif typeface and the dark-green theme token for its text color, with an underline.
@@ -6310,7 +6310,7 @@ CHANGE_DRIVER: GSSC5-41
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-PHLR-139
+  VALUE: GSSC-PHLR-143
   ROLE: Refines
 
 [[/SECTION]]
@@ -6592,7 +6592,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PLLR-329
+UID: GSSC-PLLR-344
 TITLE: Sitemap Page Route
 STATEMENT: >>>
 The GSSC Website Public Frontend Router SHALL open the public sitemap page at the sitemap path.
@@ -6606,7 +6606,7 @@ CHANGE_DRIVER: GSSC5-41
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-PHLR-139
+  VALUE: GSSC-PHLR-143
   ROLE: Refines
 
 [[/SECTION]]

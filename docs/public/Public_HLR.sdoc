@@ -584,7 +584,7 @@ CHANGE_DRIVER: GSSC5-10
 REVIEW_STATUS: Approved
 
 [REQUIREMENT]
-UID: GSSC-PHLR-140
+UID: GSSC-PHLR-144
 TITLE: Footer Sitemap Link
 STATEMENT: >>>
 The GSSC Website Public Frontend Footer SHALL include a link that opens the public sitemap page.
@@ -2451,7 +2451,7 @@ UID: GSSC-PHLR-SITEMAP-PAGE
 TITLE: Sitemap Page Requirements
 
 [REQUIREMENT]
-UID: GSSC-PHLR-139
+UID: GSSC-PHLR-143
 TITLE: Public Sitemap Page
 STATEMENT: >>>
 The GSSC Website Public Frontend SHALL provide a public sitemap page that presents the full Public site tree.
