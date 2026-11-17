@@ -1,9 +1,11 @@
 import { Component, computed, inject, OnInit } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { ContactOverlay } from '../../services/contact-overlay/contact-overlay';
 import { SocietyContact } from '../../services/society-contact/society-contact';
 
 @Component({
   selector: 'gssc-footer',
+  imports: [RouterLink],
   templateUrl: './footer.html',
 })
 export class Footer implements OnInit {

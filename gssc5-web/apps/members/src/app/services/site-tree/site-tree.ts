@@ -40,7 +40,7 @@ async function defaultSiteTreeGet(
 
 /**
  * Limit submenu depth beneath top-level entries.
- * depthLeft=2 keeps two submenu levels (MHLR-80 / MLLR-447).
+ * depthLeft=2 keeps two submenu levels (MHLR-82 / MLLR-447).
  */
 export function limitNavSubmenuDepth(
   nodes: SiteTreeNavNode[],
@@ -86,11 +86,11 @@ export class SiteTree {
 
   async refresh(): Promise<void> {
     const generation = ++this.loadGeneration;
-    // @relation(GSSC-MLLR-441, GSSC-MHLR-79, GSSC-MHLR-80, scope=range_start, role=Implementation)
+    // @relation(GSSC-MLLR-441, GSSC-MHLR-81, GSSC-MHLR-82, scope=range_start, role=Implementation)
     const tree = await this.getTree('members');
     if (generation !== this.loadGeneration) return;
     this.navItems.set(tree ? navItemsFromMembersTree(tree) : []);
     this.loaded.set(true);
-    // @relation(GSSC-MLLR-441, GSSC-MHLR-79, GSSC-MHLR-80, scope=range_end, role=Implementation)
+    // @relation(GSSC-MLLR-441, GSSC-MHLR-81, GSSC-MHLR-82, scope=range_end, role=Implementation)
   }
 }

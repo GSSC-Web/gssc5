@@ -153,7 +153,7 @@ export class Header implements OnInit, OnDestroy {
     }
   }
 
-  // @relation(GSSC-MHLR-81, GSSC-MLLR-15, scope=range_start, role=Implementation)
+  // @relation(GSSC-MHLR-83, GSSC-MLLR-15, scope=range_start, role=Implementation)
   private recomputeChromeTier(): void {
     if (typeof window === 'undefined') return;
     if (window.innerWidth <= NARROW_CHROME_MAX_WIDTH_PX) {
@@ -174,5 +174,5 @@ export class Header implements OnInit, OnDestroy {
     this.chromeTier.set(next);
     if (next === 'wide') this.closeMenu();
   }
-  // @relation(GSSC-MHLR-81, GSSC-MLLR-15, scope=range_end, role=Implementation)
+  // @relation(GSSC-MHLR-83, GSSC-MLLR-15, scope=range_end, role=Implementation)
 }

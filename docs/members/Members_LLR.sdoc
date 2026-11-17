@@ -97,9 +97,10 @@ GSSC5-95 Events Editor owns GSSC-MLLR-321 through GSSC-MLLR-346 (events page, ca
 GSSC5-97 Publications/Tools Editors owns GSSC-MLLR-381 through GSSC-MLLR-414 (publications catalog editor 381–397; research tools catalog editor 398–414). Composes GSSC5-84 Generic Editor and GSSC5-85 form fields; does not re-claim 180–201.
 GSSC5-101 Account Page Refinement owns GSSC-MLLR-415 through GSSC-MLLR-428 (collapsible sections, submit validation, Enter-to-submit, account photo upload with polished Choose Photo control, password current/previous rejection); also CHANGE_DRIVER on GSSC-MLLR-146.
 GSSC5-103 Account Mailing Equals Home owns GSSC-MLLR-429 through GSSC-MLLR-437 (exact end 437); HLR GSSC-MHLR-78.
-GSSC5-107 Members Navigation and Narrow Header owns GSSC-MLLR-441 through GSSC-MLLR-461 (exact end 461; Navigation Menu / Item / Submenu / Menu Toggle / Expander / Organization Name / Site Search appearance triads) and CHANGE_DRIVER updates on GSSC-MLLR-14, 15, 18, 20, 21; HLR GSSC-MHLR-79 through GSSC-MHLR-84.
+GSSC5-107 Members Navigation and Narrow Header owns GSSC-MLLR-441 through GSSC-MLLR-461 (exact end 461; Navigation Menu / Item / Submenu / Menu Toggle / Expander / Organization Name / Site Search appearance triads) and CHANGE_DRIVER updates on GSSC-MLLR-14, 15, 18, 20, 21; HLR GSSC-MHLR-81 through GSSC-MHLR-86.
 GSSC5-102 also owns GSSC-MLLR-438 through GSSC-MLLR-440 (Password History Reset on Account Page) and CHANGE_DRIVER on GSSC-MLLR-125 / GSSC-MLLR-158 / GSSC-MHLR-34.
-Wave coordination: GSSC5-92 directory 202–214, GSSC5-102 directory refinement 215–230, GSSC5-89 dashboard 231–239, GSSC5-93 page/section 261–286, GSSC5-94 announcements 291–307, GSSC5-95 events 321–346, GSSC5-96 newsletters 351–373, GSSC5-97 publications/tools 381–414, GSSC5-101 account refinement 415–428, GSSC5-103 mailing-equals-home 429–437, GSSC5-102 password-history-reset 438–440, GSSC5-107 members nav chrome 441–461 — do not collide.
+GSSC5-108 Members Sitemap Page owns GSSC-MLLR-501 through GSSC-MLLR-510 (exact end 510; band 501–520 reserved for sitemap so parallel GSSC5-107 Members nav can claim 441–500 without collision); HLR GSSC-MHLR-79 / GSSC-MHLR-80.
+Wave coordination: GSSC5-92 directory 202–214, GSSC5-102 directory refinement 215–230, GSSC5-89 dashboard 231–239, GSSC5-93 page/section 261–286, GSSC5-94 announcements 291–307, GSSC5-95 events 321–346, GSSC5-96 newsletters 351–373, GSSC5-97 publications/tools 381–414, GSSC5-101 account refinement 415–428, GSSC5-103 mailing-equals-home 429–437, GSSC5-102 password-history-reset 438–440, GSSC5-107 members nav chrome 441–461, GSSC5-108 sitemap 501–510 — do not collide.
 GSSC-MLLR-33 through GSSC-MLLR-39 remain free for later claimants.
 Do not reuse numbers already claimed by another ticket.
 <<<
@@ -413,6 +414,24 @@ RELATIONS:
   VALUE: GSSC-MHLR-26
   ROLE: Refines
 
+[REQUIREMENT]
+UID: GSSC-MLLR-510
+TITLE: Sitemap Page Route
+STATEMENT: >>>
+The GSSC Website Member Frontend Router SHALL open the members sitemap page at the sitemap path.
+<<<
+RATIONALE: >>>
+The Footer Sitemap Link reaches the members sitemap page through this route.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-108
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-80
+  ROLE: Refines
+
 [[/SECTION]]
 
 [[SECTION]]
@@ -471,7 +490,7 @@ RELATIONS:
   VALUE: GSSC-MHLR-15
   ROLE: Refines
 - TYPE: Parent
-  VALUE: GSSC-MHLR-81
+  VALUE: GSSC-MHLR-83
   ROLE: Refines
 
 [REQUIREMENT]
@@ -537,7 +556,7 @@ RELATIONS:
   VALUE: GSSC-MHLR-16
   ROLE: Refines
 - TYPE: Parent
-  VALUE: GSSC-MHLR-81
+  VALUE: GSSC-MHLR-83
   ROLE: Refines
 
 [REQUIREMENT]
@@ -588,7 +607,7 @@ RELATIONS:
   VALUE: GSSC-MHLR-19
   ROLE: Refines
 - TYPE: Parent
-  VALUE: GSSC-MHLR-79
+  VALUE: GSSC-MHLR-81
   ROLE: Refines
 
 [REQUIREMENT]
@@ -612,7 +631,7 @@ RELATIONS:
   VALUE: GSSC-MHLR-19
   ROLE: Refines
 - TYPE: Parent
-  VALUE: GSSC-MHLR-81
+  VALUE: GSSC-MHLR-83
   ROLE: Refines
 
 [REQUIREMENT]
@@ -840,7 +859,7 @@ RELATIONS:
   VALUE: GSSC-MHLR-19
   ROLE: Refines
 - TYPE: Parent
-  VALUE: GSSC-MHLR-79
+  VALUE: GSSC-MHLR-81
   ROLE: Refines
 
 [REQUIREMENT]
@@ -861,10 +880,10 @@ RELATIONS:
   VALUE: GSSC-MHLR-19
   ROLE: Refines
 - TYPE: Parent
-  VALUE: GSSC-MHLR-81
+  VALUE: GSSC-MHLR-83
   ROLE: Refines
 - TYPE: Parent
-  VALUE: GSSC-MHLR-82
+  VALUE: GSSC-MHLR-84
   ROLE: Refines
 
 [REQUIREMENT]
@@ -906,7 +925,7 @@ CHANGE_DRIVER: GSSC5-107
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-MHLR-79
+  VALUE: GSSC-MHLR-81
   ROLE: Refines
 
 [REQUIREMENT]
@@ -924,7 +943,7 @@ CHANGE_DRIVER: GSSC5-107
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-MHLR-81
+  VALUE: GSSC-MHLR-83
   ROLE: Refines
 
 [REQUIREMENT]
@@ -966,7 +985,7 @@ CHANGE_DRIVER: GSSC5-107
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-MHLR-80
+  VALUE: GSSC-MHLR-82
   ROLE: Refines
 
 [REQUIREMENT]
@@ -984,10 +1003,10 @@ CHANGE_DRIVER: GSSC5-107
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-MHLR-81
+  VALUE: GSSC-MHLR-83
   ROLE: Refines
 - TYPE: Parent
-  VALUE: GSSC-MHLR-82
+  VALUE: GSSC-MHLR-84
   ROLE: Refines
 
 [REQUIREMENT]
@@ -1005,7 +1024,7 @@ CHANGE_DRIVER: GSSC5-107
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-MHLR-82
+  VALUE: GSSC-MHLR-84
   ROLE: Refines
 
 [[/SECTION]]
@@ -1029,7 +1048,7 @@ CHANGE_DRIVER: GSSC5-107
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-MHLR-81
+  VALUE: GSSC-MHLR-83
   ROLE: Refines
 
 [REQUIREMENT]
@@ -1047,7 +1066,7 @@ CHANGE_DRIVER: GSSC5-107
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-MHLR-81
+  VALUE: GSSC-MHLR-83
   ROLE: Refines
 
 [REQUIREMENT]
@@ -1065,7 +1084,7 @@ CHANGE_DRIVER: GSSC5-107
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-MHLR-81
+  VALUE: GSSC-MHLR-83
   ROLE: Refines
 
 [[/SECTION]]
@@ -1089,7 +1108,7 @@ CHANGE_DRIVER: GSSC5-107
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-MHLR-81
+  VALUE: GSSC-MHLR-83
   ROLE: Refines
 
 [REQUIREMENT]
@@ -1107,7 +1126,7 @@ CHANGE_DRIVER: GSSC5-107
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-MHLR-81
+  VALUE: GSSC-MHLR-83
   ROLE: Refines
 
 [REQUIREMENT]
@@ -1125,7 +1144,7 @@ CHANGE_DRIVER: GSSC5-107
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-MHLR-81
+  VALUE: GSSC-MHLR-83
   ROLE: Refines
 
 [[/SECTION]]
@@ -1149,7 +1168,7 @@ CHANGE_DRIVER: GSSC5-107
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-MHLR-83
+  VALUE: GSSC-MHLR-85
   ROLE: Refines
 
 [REQUIREMENT]
@@ -1167,7 +1186,7 @@ CHANGE_DRIVER: GSSC5-107
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-MHLR-83
+  VALUE: GSSC-MHLR-85
   ROLE: Refines
 
 [REQUIREMENT]
@@ -1185,7 +1204,7 @@ CHANGE_DRIVER: GSSC5-107
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-MHLR-83
+  VALUE: GSSC-MHLR-85
   ROLE: Refines
 
 [[/SECTION]]
@@ -1209,7 +1228,7 @@ CHANGE_DRIVER: GSSC5-107
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-MHLR-84
+  VALUE: GSSC-MHLR-86
   ROLE: Refines
 
 [REQUIREMENT]
@@ -1227,10 +1246,10 @@ CHANGE_DRIVER: GSSC5-107
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-MHLR-84
+  VALUE: GSSC-MHLR-86
   ROLE: Refines
 - TYPE: Parent
-  VALUE: GSSC-MHLR-81
+  VALUE: GSSC-MHLR-83
   ROLE: Refines
 
 [REQUIREMENT]
@@ -1248,11 +1267,10 @@ CHANGE_DRIVER: GSSC5-107
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-MHLR-84
+  VALUE: GSSC-MHLR-86
   ROLE: Refines
 
 [[/SECTION]]
-
 
 [[/SECTION]]
 
@@ -1634,6 +1652,66 @@ REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-73
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-FOOTER-SITEMAP-LINK
+TITLE: Footer Sitemap Link
+
+[REQUIREMENT]
+UID: GSSC-MLLR-501
+TITLE: Semantic
+STATEMENT: >>>
+The Footer Sitemap Link SHALL open the members sitemap page.
+<<<
+RATIONALE: >>>
+The Footer provides access to the sitemap page so members can reach the full Members site tree listing without using the Header Navigation Menu.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-108
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-79
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-502
+TITLE: Syntactic
+STATEMENT: >>>
+The Footer Sitemap Link SHALL appear in the Footer below the Footer Contact control as a text control that opens the sitemap page when activated.
+<<<
+RATIONALE: >>>
+Placing the link with other Footer actions keeps sitemap access discoverable. A text control matches Contact and destination links elsewhere in the Footer.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-108
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-79
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-503
+TITLE: Lexical
+STATEMENT: >>>
+The Footer Sitemap Link SHALL use the white theme token for its text color, with no underline except on hover.
+<<<
+RATIONALE: >>>
+White text keeps the sitemap link aligned with other Footer text on the black Footer background. Underline on hover marks it as activatable without a default underline.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-108
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-79
   ROLE: Refines
 
 [[/SECTION]]
@@ -8754,6 +8832,132 @@ RELATIONS:
   ROLE: Refines
 
 [[/SECTION]]
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-SITEMAP-PAGE
+TITLE: Sitemap Page
+
+[[SECTION]]
+UID: GSSC-MLLR-SITEMAP-PAGE-ELEMENT
+TITLE: Sitemap Page
+
+[REQUIREMENT]
+UID: GSSC-MLLR-504
+TITLE: Semantic
+STATEMENT: >>>
+The GSSC Website Member Frontend Sitemap Page SHALL retrieve the Members site tree from the Unified Backend and present that tree as a nested listing of destination labels that open their destinations.
+<<<
+RATIONALE: >>>
+The page's purpose is an accessibility-oriented listing of members destinations. Labels and nesting come from the Members site tree. Omitting the listing when the tree is unavailable avoids empty chrome.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-108
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-80
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-505
+TITLE: Syntactic
+STATEMENT: >>>
+The Sitemap Page SHALL place the Members site tree listing at full width in the Page Outlet, SHALL nest each node's children under that node in the tree's order, and SHALL omit the listing when the Unified Backend provides no Members site tree.
+<<<
+RATIONALE: >>>
+Full-width placement matches other members page content. Nesting preserves parent and child relationships from the tree. Omitting an empty listing avoids blank chrome.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-108
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-80
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-506
+TITLE: Lexical
+STATEMENT: >>>
+The Sitemap Page SHALL use the white theme token for its background, the sans-serif typeface, and the dark-green theme token for the page heading text.
+<<<
+RATIONALE: >>>
+White background matches the Member Frontend shell. Sans-serif matches the default members typeface. Dark-green heading text aligns with other members page headings.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-108
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-80
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-SITEMAP-ENTRY
+TITLE: Sitemap Entry
+
+[REQUIREMENT]
+UID: GSSC-MLLR-507
+TITLE: Semantic
+STATEMENT: >>>
+Each Sitemap Entry SHALL present that Members site tree node's destination label and SHALL open that node's destination when activated.
+<<<
+RATIONALE: >>>
+Each node is a reachable destination. The label identifies the destination; activating the entry opens it.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-108
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-80
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-508
+TITLE: Syntactic
+STATEMENT: >>>
+Each Sitemap Entry SHALL appear as one nested list item under its parent entry when it has a parent, or under the Sitemap Page listing root when it is a root entry, and SHALL place any child entries as a nested list under that item.
+<<<
+RATIONALE: >>>
+Nested list items mirror the Members site tree hierarchy so members can scan parent and child destinations together.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-108
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-80
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-509
+TITLE: Lexical
+STATEMENT: >>>
+Each Sitemap Entry SHALL use the sans-serif typeface and the dark-green theme token for its text color, with an underline.
+<<<
+RATIONALE: >>>
+Sans-serif and dark-green match other members destination links. An underline marks the entry as a navigable link.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-108
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-80
+  ROLE: Refines
 
 [[/SECTION]]
 

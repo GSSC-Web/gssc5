@@ -1,0 +1,16 @@
+<!-- @relation(GSSC-MLLR-505, GSSC-MLLR-506, scope=range_start, role=Implementation) -->
+<div class="gssc-sitemap-page w-full bg-gssc-white p-4 font-sans">
+  @if (root(); as tree) {
+    <section class="gssc-sitemap-page__content w-full" aria-labelledby="gssc-sitemap-heading">
+      <h1
+        id="gssc-sitemap-heading"
+        class="gssc-sitemap-page__heading mb-4 text-xl font-semibold text-gssc-dark-green"
+      >
+        Sitemap
+      </h1>
+      <!-- Root + nested children: full Members site tree. -->
+      <gssc-sitemap-tree class="gssc-sitemap-page__tree block w-full" [nodes]="[tree]" />
+    </section>
+  }
+</div>
+<!-- @relation(GSSC-MLLR-505, GSSC-MLLR-506, scope=range_end, role=Implementation) -->
