@@ -116,4 +116,4 @@ export function monthLabel(month: number): string {
   return labels[month - 1] ?? month.toString().padStart(2, '0');
 }
 
-export { filesApiUrl } from '../../services/files-api';
+export { filesApiUrl, resolveStoredFileObjectUrl } from '../../services/files-api';

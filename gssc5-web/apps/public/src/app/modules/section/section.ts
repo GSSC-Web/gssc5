@@ -12,7 +12,7 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
-import { filesApiUrl } from '../../services/files-api';
+import { resolveStoredFileObjectUrl } from '../../services/files-api';
 
 /** One resource linked from Section Contents (FE presentation; no Contents API). */
 export type SectionResource = {
@@ -44,15 +44,7 @@ export const SECTION_FEATURED_IMAGE_RESOLVE = new InjectionToken<SectionFeatured
 );
 
 async function defaultSectionFeaturedImageResolve(imageFile: string): Promise<string | null> {
-  const url = filesApiUrl(imageFile);
-  try {
-    const response = await fetch(url, { credentials: 'include' });
-    if (!response.ok) return null;
-    const blob = await response.blob();
-    return URL.createObjectURL(blob);
-  } catch {
-    return null;
-  }
+  return resolveStoredFileObjectUrl(imageFile);
 }
 
 /** Matches `.gssc-section__resource` fit-mode width (`w-[8.5rem]` at 16px root). */
