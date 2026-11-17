@@ -83,14 +83,6 @@ export function parseStringArray(raw: string): string[] {
   }
 }
 
-/** Still used by newsletters mutation ladders (out of GSSC5-64 scope). */
-export function optionalStringArray(value: unknown): string[] | undefined | "invalid" {
-  if (value === undefined) return undefined;
-  if (!Array.isArray(value)) return "invalid";
-  if (!value.every((item) => typeof item === "string")) return "invalid";
-  return value as string[];
-}
-
 export function uniqueTags(tags: string[]): string[] {
   const seen = new Set<string>();
   const out: string[] = [];
@@ -100,13 +92,6 @@ export function uniqueTags(tags: string[]): string[] {
     out.push(tag);
   }
   return out;
-}
-
-/** Still used by newsletters mutation ladders (out of GSSC5-64 scope). */
-export function bodyRecord(body: unknown): Record<string, unknown> | "missing" | "malformed" {
-  if (body === undefined || body === null) return "missing";
-  if (typeof body !== "object" || Array.isArray(body)) return "malformed";
-  return body as Record<string, unknown>;
 }
 
 export function trimStrings(value: unknown): void {

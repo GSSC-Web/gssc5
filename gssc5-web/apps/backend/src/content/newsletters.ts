@@ -3,28 +3,20 @@ import { Elysia, t } from "elysia";
 import { loadConfig } from "../config";
 import { getPrisma } from "../db";
 import {
+  NewsletterPlain,
+  NewsletterPlainInputCreate,
+} from "../generated/prismabox/Newsletter";
+import {
   loginTokenCookie,
   resolveLoginSessionUser,
   type CookieJar,
 } from "../user/login-session";
 import {
-  bodyRecord,
   includesInsensitive,
-  optionalStringArray,
   parseKnownQuery,
   parseStringArray,
   trimStrings,
 } from "./helpers";
-
-const NewsletterEntry = t.Object({
-  cuid: t.String(),
-  volume: t.Number(),
-  number: t.Number(),
-  month: t.Number(),
-  year: t.Number(),
-  filePath: t.String(),
-  keywords: t.Array(t.String()),
-});
 
 const NEWSLETTER_LIST_FILTERS = new Set([
   "keyword",
@@ -35,6 +27,51 @@ const NEWSLETTER_LIST_FILTERS = new Set([
   "month",
   "content",
 ]);
+
+/**
+ * Wire entry: Prismabox scalars with intentional `cuid` (not raw `id`) and
+ * keywords as a string array (DB column remains a JSON string).
+ */
+const NewsletterEntry = t.Object({
+  cuid: NewsletterPlain.properties.id,
+  volume: NewsletterPlain.properties.volume,
+  number: NewsletterPlain.properties.number,
+  month: NewsletterPlain.properties.month,
+  year: NewsletterPlain.properties.year,
+  filePath: NewsletterPlain.properties.filePath,
+  keywords: t.Array(t.String()),
+});
+
+/**
+ * Create body from Prismabox create input scalars. Keywords stay a wire
+ * string[] (not Prismabox's JSON-string column). `additionalProperties: true`
+ * keeps ignored extras so auth can return 403 before a schema reject surfaces
+ * as 422.
+ */
+const NewsletterCreateBody = t.Object(
+  {
+    volume: NewsletterPlainInputCreate.properties.volume,
+    number: NewsletterPlainInputCreate.properties.number,
+    month: NewsletterPlainInputCreate.properties.month,
+    year: NewsletterPlainInputCreate.properties.year,
+    filePath: NewsletterPlainInputCreate.properties.filePath,
+    keywords: t.Array(t.String()),
+  },
+  { additionalProperties: true },
+);
+
+/** Patch body: same scalars, all optional; handler rejects empty patches. */
+const NewsletterUpdateBody = t.Object(
+  {
+    volume: t.Optional(NewsletterPlain.properties.volume),
+    number: t.Optional(NewsletterPlain.properties.number),
+    month: t.Optional(NewsletterPlain.properties.month),
+    year: t.Optional(NewsletterPlain.properties.year),
+    filePath: t.Optional(NewsletterPlain.properties.filePath),
+    keywords: t.Optional(t.Array(t.String())),
+  },
+  { additionalProperties: true },
+);
 
 type Session =
   | { failure: "missing" | "unknown" | "logged-out" | "expired" }
@@ -76,35 +113,6 @@ async function openSession(cookie: CookieJar): Promise<Session> {
     isAdmin: true,
     isNewsletterEditor: true,
   });
-}
-
-function readRequiredInteger(
-  record: Record<string, unknown>,
-  key: string,
-): number | "missing" | "invalid" {
-  if (!Object.prototype.hasOwnProperty.call(record, key)) return "missing";
-  const value = record[key];
-  if (typeof value !== "number" || !Number.isInteger(value)) return "invalid";
-  return value;
-}
-
-function readRequiredString(
-  record: Record<string, unknown>,
-  key: string,
-): string | "missing" | "invalid" {
-  if (!Object.prototype.hasOwnProperty.call(record, key)) return "missing";
-  const value = record[key];
-  if (typeof value !== "string" || value.length === 0) return "invalid";
-  return value;
-}
-
-function readRequiredKeywords(
-  record: Record<string, unknown>,
-): string[] | "missing" | "invalid" {
-  if (!Object.prototype.hasOwnProperty.call(record, "keywords")) return "missing";
-  const keywords = optionalStringArray(record.keywords);
-  if (keywords === undefined || keywords === "invalid") return "invalid";
-  return keywords;
 }
 
 function keywordMatches(keywords: string[], needle: string): boolean {
@@ -170,7 +178,14 @@ async function patchNewsletterItem({
   status,
 }: {
   params: { cuid: string };
-  body: unknown;
+  body: {
+    volume?: number;
+    number?: number;
+    month?: number;
+    year?: number;
+    filePath?: string;
+    keywords?: string[];
+  };
   cookie: CookieJar;
   status: (
     code: 200 | 403 | 404 | 422,
@@ -192,11 +207,6 @@ async function patchNewsletterItem({
   });
   if (!existing) return status(404, "Not Found" as const);
 
-  const record = bodyRecord(body);
-  if (record === "malformed" || record === "missing") {
-    return status(422, "Invalid" as const);
-  }
-
   const data: {
     volume?: number;
     number?: number;
@@ -206,29 +216,12 @@ async function patchNewsletterItem({
     keywords?: string;
   } = {};
 
-  for (const key of ["volume", "number", "month", "year"] as const) {
-    if (Object.prototype.hasOwnProperty.call(record, key)) {
-      const value = readRequiredInteger(record, key);
-      if (value === "missing" || value === "invalid") {
-        return status(422, "Invalid" as const);
-      }
-      data[key] = value;
-    }
-  }
-  if (Object.prototype.hasOwnProperty.call(record, "filePath")) {
-    const filePath = readRequiredString(record, "filePath");
-    if (filePath === "missing" || filePath === "invalid") {
-      return status(422, "Invalid" as const);
-    }
-    data.filePath = filePath;
-  }
-  if (Object.prototype.hasOwnProperty.call(record, "keywords")) {
-    const keywords = optionalStringArray(record.keywords);
-    if (keywords === undefined || keywords === "invalid") {
-      return status(422, "Invalid" as const);
-    }
-    data.keywords = JSON.stringify(keywords);
-  }
+  if (body.volume !== undefined) data.volume = body.volume;
+  if (body.number !== undefined) data.number = body.number;
+  if (body.month !== undefined) data.month = body.month;
+  if (body.year !== undefined) data.year = body.year;
+  if (body.filePath !== undefined) data.filePath = body.filePath;
+  if (body.keywords !== undefined) data.keywords = JSON.stringify(body.keywords);
   if (Object.keys(data).length === 0) return status(422, "Invalid" as const);
 
   // @relation(GSSC-BLLR-391, scope=range_start, role=Implementation)
@@ -283,7 +276,7 @@ const getItemOpts = {
 
 const patchItemOpts = {
   params: itemParams,
-  body: t.Optional(t.Unknown()),
+  body: NewsletterUpdateBody,
   cookie: loginTokenCookie,
   response: {
     200: NewsletterEntry,
@@ -309,6 +302,10 @@ export const newsletters = new Elysia({
   normalize: false,
   sanitize: (value) => value.trim(),
 })
+  .model({
+    newsletter: NewsletterPlain,
+    newsletterCreate: NewsletterPlainInputCreate,
+  })
   .onTransform(({ body }) => {
     trimStrings(body);
   })
@@ -355,51 +352,23 @@ export const newsletters = new Elysia({
           }
           // @relation(GSSC-BLLR-389, scope=range_end, role=Implementation)
 
-          const record = bodyRecord(body);
-          if (record === "malformed" || record === "missing") {
-            return status(422, "Invalid" as const);
-          }
-
-          const volume = readRequiredInteger(record, "volume");
-          const number = readRequiredInteger(record, "number");
-          const month = readRequiredInteger(record, "month");
-          const year = readRequiredInteger(record, "year");
-          const filePath = readRequiredString(record, "filePath");
-          const keywords = readRequiredKeywords(record);
-          if (
-            volume === "missing" ||
-            volume === "invalid" ||
-            number === "missing" ||
-            number === "invalid" ||
-            month === "missing" ||
-            month === "invalid" ||
-            year === "missing" ||
-            year === "invalid" ||
-            filePath === "missing" ||
-            filePath === "invalid" ||
-            keywords === "missing" ||
-            keywords === "invalid"
-          ) {
-            return status(422, "Invalid" as const);
-          }
-
           // @relation(GSSC-BLLR-388, scope=range_start, role=Implementation)
           const prisma = getPrisma(loadConfig().DATABASE_URL);
           const created = await prisma.newsletter.create({
             data: {
-              volume,
-              number,
-              month,
-              year,
-              filePath,
-              keywords: JSON.stringify(keywords),
+              volume: body.volume,
+              number: body.number,
+              month: body.month,
+              year: body.year,
+              filePath: body.filePath,
+              keywords: JSON.stringify(body.keywords),
             },
           });
           return status(201, toEntry(created));
           // @relation(GSSC-BLLR-388, scope=range_end, role=Implementation)
         },
         {
-          body: t.Optional(t.Unknown()),
+          body: NewsletterCreateBody,
           cookie: loginTokenCookie,
           response: {
             201: NewsletterEntry,
