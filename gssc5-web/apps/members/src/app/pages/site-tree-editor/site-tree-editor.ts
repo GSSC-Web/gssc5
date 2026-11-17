@@ -3,6 +3,10 @@ import { FormSelectField } from '../../modules/form-select-field/form-select-fie
 import { FormTextField } from '../../modules/form-text-field/form-text-field';
 import { MemberSession } from '../../services/member-session';
 import {
+  filterSiteTreeRootByPermissions,
+  type SiteTreePermissionFlags,
+} from '../../services/site-tree/site-tree-permissions';
+import {
   adjacentSibling,
   siteTreesApi,
   type NestedSiteTree,
@@ -26,8 +30,9 @@ const emptyBaseline = (): NodeBaseline => ({
 });
 
 /**
- * Members Site Tree Editor (GSSC5-116): admin CRUD/reorder over GSSC5-40
- * /site-trees/{frontend} for Public and Members trees.
+ * Members Site Tree Editor (GSSC5-116 / GSSC5-127): admin CRUD/reorder over
+ * GSSC5-40 /site-trees/{frontend} for Public and Members trees; Members outline
+ * hides destinations the current member cannot use.
  */
 @Component({
   selector: 'gssc-site-tree-editor-page',
@@ -42,7 +47,9 @@ export class SiteTreeEditorPage implements OnInit {
     { value: 'members', label: 'Members Frontend' },
   ];
 
+  // @relation(GSSC-MLLR-524, scope=range_start, role=Implementation)
   readonly frontend = signal<SiteTreeFrontend>('members');
+  // @relation(GSSC-MLLR-524, scope=range_end, role=Implementation)
   readonly tree = signal<NestedSiteTree | null>(null);
   readonly selectedCuid = signal<string | null>(null);
   readonly statusMessage = signal('');
@@ -57,10 +64,27 @@ export class SiteTreeEditorPage implements OnInit {
   readonly permitted = computed(() => this.memberSession.isAdmin());
   // @relation(GSSC-MLLR-521, GSSC-MLLR-537, scope=range_end, role=Implementation)
 
+  readonly permissionFlags = computed(
+    (): SiteTreePermissionFlags => ({
+      isAdmin: this.memberSession.isAdmin(),
+      isNewsletterEditor: this.memberSession.isNewsletterEditor(),
+      isPublicationEditor: this.memberSession.isPublicationEditor(),
+      isToolEditor: this.memberSession.isToolEditor(),
+    }),
+  );
+
+  // @relation(GSSC-MLLR-562, scope=range_start, role=Implementation)
   readonly outlineNodes = computed(() => {
     const loaded = this.tree();
-    return loaded ? [loaded.root] : [];
+    if (!loaded) return [];
+    if (this.frontend() !== 'members') return [loaded.root];
+    const filtered = filterSiteTreeRootByPermissions(
+      loaded.root,
+      this.permissionFlags(),
+    );
+    return filtered ? [filtered] : [];
   });
+  // @relation(GSSC-MLLR-562, scope=range_end, role=Implementation)
 
   readonly selectedNode = computed(() => {
     const cuid = this.selectedCuid();

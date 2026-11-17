@@ -39,6 +39,11 @@ test('GSSC-MLLR-171 Semantic', async () => {
   expect(label.textContent).toContain('*');
   const select = root.querySelector<HTMLSelectElement>('.gssc-form-select-field__control')!;
   expect([...select.options].map((o) => o.value)).toEqual(['Email', 'Phone', 'None']);
+  // Bound value is not the first option; the control must reflect it on first paint.
+  expect(select.value).toBe('None');
+  expect(
+    [...select.options].find((option) => option.selected)?.value,
+  ).toBe('None');
   select.value = 'Email';
   select.dispatchEvent(new Event('change'));
   fixture.detectChanges();

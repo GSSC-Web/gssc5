@@ -14,6 +14,7 @@ import {
 } from '../../services/site-search/site-search';
 import {
   SITE_TREE_GET,
+  SiteTree,
   type NestedSiteTreePayload,
   type SiteTreeNavNode,
 } from '../../services/site-tree/site-tree';
@@ -148,11 +149,15 @@ async function setupHeader(options?: {
   router.resetConfig(routes);
   const session = TestBed.inject(MemberSession);
   const societyContact = TestBed.inject(SocietyContact);
+  const siteTree = TestBed.inject(SiteTree);
   const header = fixture.componentInstance;
 
   await societyContact.refresh();
   await fixture.whenStable();
   session.ready.set(true);
+  // Nav structure tests use the full sample tree; permission filtering is
+  // covered in site-tree / site-tree-permissions unit tests (GSSC5-127).
+  session.isAdmin.set(true);
 
   if (options?.loggedIn) {
     session.setSession(options.displayName ?? 'Ada');
@@ -161,6 +166,7 @@ async function setupHeader(options?: {
     session.displayName.set('');
   }
 
+  await siteTree.refresh();
   header.setChromeTierForTest(options?.chromeTier ?? 'wide');
   fixture.detectChanges();
   await fixture.whenStable();

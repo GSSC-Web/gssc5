@@ -1,5 +1,7 @@
 import { Injectable, InjectionToken, inject, signal } from '@angular/core';
 import { backend } from '../backend';
+import { MemberSession } from '../member-session';
+import { filterSiteTreeChildrenByPermissions } from './site-tree-permissions';
 
 /** One navigation node derived from the members site tree (GSSC5-107). */
 export type SiteTreeNavNode = {
@@ -75,10 +77,11 @@ export function navItemsFromMembersTree(
   return [home, ...children];
 }
 
-/** Loads and exposes the Members Navigation Menu items (GSSC5-107). */
+/** Loads and exposes the Members Navigation Menu items (GSSC5-107 / GSSC5-127). */
 @Injectable({ providedIn: 'root' })
 export class SiteTree {
   private readonly getTree = inject(SITE_TREE_GET);
+  private readonly memberSession = inject(MemberSession);
   private loadGeneration = 0;
 
   readonly navItems = signal<SiteTreeNavNode[]>([]);
@@ -89,7 +92,30 @@ export class SiteTree {
     // @relation(GSSC-MLLR-441, GSSC-MHLR-81, GSSC-MHLR-82, scope=range_start, role=Implementation)
     const tree = await this.getTree('members');
     if (generation !== this.loadGeneration) return;
-    this.navItems.set(tree ? navItemsFromMembersTree(tree) : []);
+    if (!tree) {
+      this.navItems.set([]);
+      this.loaded.set(true);
+      return;
+    }
+    // @relation(GSSC-MLLR-562, scope=range_start, role=Implementation)
+    const flags = {
+      isAdmin: this.memberSession.isAdmin(),
+      isNewsletterEditor: this.memberSession.isNewsletterEditor(),
+      isPublicationEditor: this.memberSession.isPublicationEditor(),
+      isToolEditor: this.memberSession.isToolEditor(),
+    };
+    const gated: NestedSiteTreePayload = {
+      ...tree,
+      root: {
+        ...tree.root,
+        children: filterSiteTreeChildrenByPermissions(
+          tree.root.children ?? [],
+          flags,
+        ),
+      },
+    };
+    this.navItems.set(navItemsFromMembersTree(gated));
+    // @relation(GSSC-MLLR-562, scope=range_end, role=Implementation)
     this.loaded.set(true);
     // @relation(GSSC-MLLR-441, GSSC-MHLR-81, GSSC-MHLR-82, scope=range_end, role=Implementation)
   }

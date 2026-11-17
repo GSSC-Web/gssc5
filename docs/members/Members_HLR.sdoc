@@ -1598,13 +1598,16 @@ TITLE: Site Tree Editor Requirements
 UID: GSSC-MHLR-89
 TITLE: Site Tree Editor Page
 STATEMENT: >>>
-The GSSC Website Member Frontend SHALL provide an administrator Site Tree Editor Page that presents the Public Frontend site tree or the Members Frontend site tree from the Unified Backend and lets the administrator select a tree node for modification.
+The GSSC Website Member Frontend SHALL provide an administrator Site Tree Editor Page that presents the Public Frontend site tree or the Members Frontend site tree from the Unified Backend, keeps the selected frontend choice and the presented tree aligned from the first presentation of the page, and lets the administrator select a tree node for modification.
 <<<
 RATIONALE: >>>
-No Member Frontend PIR requires a site-tree editor. Administrators maintain navigation destinations for both frontends through the Members Frontend. Presentation of either tree and node selection are the editor entry points; create, modify, and delete behaviors are separate requirements.
+No Member Frontend PIR requires a site-tree editor. Administrators maintain navigation destinations for both frontends through the Members Frontend. Presentation of either tree and node selection are the editor entry points; create, modify, and delete behaviors are separate requirements. First-presentation alignment prevents the selector from naming one frontend while another tree is shown.
 <<<
 DERIVED: True
-CHANGE_DRIVER: GSSC5-116
+CHANGE_DRIVER: >>>
+GSSC5-116
+GSSC5-127
+<<<
 REVIEW_STATUS: Approved
 
 [REQUIREMENT]
@@ -1644,6 +1647,19 @@ Administrators remove obsolete destinations. The tree root stays so each fronten
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-116
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-MHLR-99
+TITLE: Members Site Tree Permission Visibility
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL present Members Frontend site tree nodes only when the logged-in member has permission to use the destination those nodes represent.
+<<<
+RATIONALE: >>>
+Members site tree destinations include editors and tools that not every member may use. Hiding nodes the member cannot use prevents revealing unavailable destinations such as the newsletter editor.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-127
 REVIEW_STATUS: Approved
 
 [[/SECTION]]

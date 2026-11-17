@@ -14,7 +14,7 @@ import type { SiteTreeNode } from '../../services/site-trees-api';
         <li class="gssc-site-tree-outline__item my-0.5">
           <button
             type="button"
-            class="gssc-site-tree-outline__node w-full cursor-pointer rounded-md border border-transparent px-2 py-1 text-start font-sans text-sm text-gssc-dark-green"
+            class="gssc-site-tree-outline__node w-full cursor-pointer rounded-md border border-transparent px-2 py-1 text-start font-sans text-sm text-gssc-dark-green hover:bg-gssc-gray"
             [class.bg-gssc-light-green]="selectedCuid() === node.cuid"
             [class.border-gssc-dark-green]="selectedCuid() === node.cuid"
             [attr.data-cuid]="node.cuid"

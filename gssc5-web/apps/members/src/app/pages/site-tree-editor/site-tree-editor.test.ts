@@ -177,6 +177,9 @@ async function setupEditor(options?: {
   session.ready.set(true);
   session.isAdmin.set(options?.admin !== false);
   session.isUserMod.set(options?.admin !== false);
+  session.isNewsletterEditor.set(false);
+  session.isPublicationEditor.set(false);
+  session.isToolEditor.set(false);
 
   fixture.detectChanges();
   await fixture.whenStable();
@@ -267,7 +270,18 @@ test('GSSC-MLLR-523 Lexical', async () => {
 
 // @relation(GSSC-MLLR-524, scope=range_start, role=Test)
 test('GSSC-MLLR-524 Semantic', async () => {
-  const { page, fixture, getCalls, restore } = await setupEditor();
+  const { root, page, fixture, getCalls, restore } = await setupEditor();
+  const select = root.querySelector<HTMLSelectElement>(
+    '[data-slot="site-tree-frontend-selector"] .gssc-form-select-field__control',
+  )!;
+  expect(page.frontend()).toBe('members');
+  expect(getCalls[0]).toBe('members');
+  expect(select.value).toBe('members');
+  expect(
+    [...select.options].find((option) => option.selected)?.value,
+  ).toBe('members');
+  expect(page.tree()?.root.label).toBe('Dashboard');
+
   const before = getCalls.length;
   await page.onFrontendChange('public');
   fixture.detectChanges();
@@ -276,6 +290,7 @@ test('GSSC-MLLR-524 Semantic', async () => {
   expect(page.selectedCuid()).toBeNull();
   expect(getCalls.length).toBeGreaterThan(before);
   expect(getCalls.at(-1)).toBe('public');
+  expect(select.value).toBe('public');
   restore();
 });
 // @relation(GSSC-MLLR-524, scope=range_end, role=Test)
@@ -348,6 +363,9 @@ test('GSSC-MLLR-529 Lexical', async () => {
   expect(selected.className).toContain('font-sans');
   expect(selected.className).toContain('text-gssc-dark-green');
   expect(selected.className).toContain('bg-gssc-light-green');
+  expect(selected.className).toContain('hover:bg-gssc-gray');
+  const idle = root.querySelector('.gssc-site-tree-outline__node[data-cuid="node_acct"]')!;
+  expect(idle.className).toContain('hover:bg-gssc-gray');
   restore();
 });
 // @relation(GSSC-MLLR-529, scope=range_end, role=Test)
@@ -543,3 +561,56 @@ test('GSSC-MLLR-540 Semantic', async () => {
   siteTreesApi.get = originals.get;
 });
 // @relation(GSSC-MLLR-540, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-562, scope=range_start, role=Test)
+test('GSSC-MLLR-562 Semantic', async () => {
+  const treeWithNewsletter = sampleTree('members');
+  treeWithNewsletter.root.children.push({
+    cuid: 'node_news',
+    label: 'Newsletters',
+    path: '/newsletters',
+    sortOrder: 2,
+    sectionTag: null,
+    children: [],
+  });
+
+  const denied = await setupEditor({
+    admin: false,
+    initial: treeWithNewsletter,
+  });
+  denied.fixture.detectChanges();
+  const deniedLabels = [
+    ...denied.root.querySelectorAll('.gssc-site-tree-outline__node'),
+  ].map((el) => el.textContent?.trim());
+  expect(deniedLabels).toEqual(['Dashboard', 'Directory', 'Account', 'Password']);
+  expect(deniedLabels).not.toContain('Newsletters');
+  denied.restore();
+
+  const allowed = await setupEditor({
+    admin: false,
+    initial: cloneTree(treeWithNewsletter),
+  });
+  allowed.session.isNewsletterEditor.set(true);
+  allowed.fixture.detectChanges();
+  await allowed.fixture.whenStable();
+  // Recompute outline after flag change by reloading.
+  await allowed.page.onFrontendChange('members');
+  allowed.fixture.detectChanges();
+  await allowed.fixture.whenStable();
+  const allowedLabels = [
+    ...allowed.root.querySelectorAll('.gssc-site-tree-outline__node'),
+  ].map((el) => el.textContent?.trim());
+  expect(allowedLabels).toContain('Newsletters');
+  allowed.restore();
+
+  const admin = await setupEditor({
+    admin: true,
+    initial: cloneTree(treeWithNewsletter),
+  });
+  const adminLabels = [
+    ...admin.root.querySelectorAll('.gssc-site-tree-outline__node'),
+  ].map((el) => el.textContent?.trim());
+  expect(adminLabels).toContain('Newsletters');
+  admin.restore();
+});
+// @relation(GSSC-MLLR-562, scope=range_end, role=Test)
