@@ -105,9 +105,8 @@ const PUBLIC_SEED_CHILDREN: Array<{ label: string; path: string }> = [
 const MEMBERS_SEED_CHILDREN: Array<{ label: string; path: string }> = [
   { label: "Directory", path: "/directory" },
   { label: "Account", path: "/account" },
+  // Announcements + Events editors live under Pages / Page Data Editor (GSSC5-126).
   { label: "Pages", path: "/page-sections" },
-  { label: "Announcements", path: "/announcements" },
-  { label: "Events", path: "/events" },
   { label: "Newsletters", path: "/newsletters" },
   { label: "Publications", path: "/publications" },
   { label: "Research Tools", path: "/research-tools" },

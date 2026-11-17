@@ -1162,6 +1162,26 @@ GSSC5-93
 <<<
 REVIEW_STATUS: Approved
 
+[REQUIREMENT]
+UID: GSSC-MHLR-97
+TITLE: Public Section Creation
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL let a member with the necessary permissions create a new section of a public page from a content template without programming knowledge and without developer intervention.
+<<<
+RATIONALE: >>>
+Authorized members need to add sections to public pages the same way they create announcements from templates, without waiting on developers.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-126
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-20
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-38
+  ROLE: Refines
+
 [[/SECTION]]
 
 [[SECTION]]
@@ -1670,6 +1690,23 @@ Kind switching is the unification affordance: members move among the absorbed ed
 DERIVED: True
 CHANGE_DRIVER: GSSC5-117
 REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-MHLR-98
+TITLE: Page Data Editor Navigation Entry
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL NOT present separate top-level Navigation Menu destinations for announcement editing and for event editing when those editing capabilities are available through the Page Data Editor.
+<<<
+RATIONALE: >>>
+After Page Data Editor unification, duplicate top-level Announcements and Events destinations confuse members; Pages / Page Data Editor is the entry, with in-editor kind switching for announcements and events.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-126
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-93
+  ROLE: Refines
 
 [[/SECTION]]
 

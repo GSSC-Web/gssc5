@@ -104,7 +104,8 @@ GSSC5-109 Members Site Search owns GSSC-MLLR-462 through GSSC-MLLR-483 (exact en
 GSSC5-116 Members Site Tree Editor owns GSSC-MLLR-521 through GSSC-MLLR-540 (exact end 540; band 521–560 reserved for site-tree editor); HLR GSSC-MHLR-89 through GSSC-MHLR-92.
 GSSC5-115 Members Template Editor owns GSSC-MLLR-541 through GSSC-MLLR-558 (exact end 558; band 541–580 reserved for template editor after GSSC5-116 site-tree 521–540); HLR GSSC-MHLR-95 / GSSC-MHLR-96.
 GSSC5-117 Page Data Editor Unification owns GSSC-MLLR-308 through GSSC-MLLR-320 (exact end 320; bridge band between announcements 291–307 and events 321–346); HLR GSSC-MHLR-93 / GSSC-MHLR-94; also CHANGE_DRIVER on GSSC-MLLR-345.
-Wave coordination: GSSC5-92 directory 202–214, GSSC5-102 directory refinement 215–230, GSSC5-89 dashboard 231–239, GSSC5-93 page/section 261–286, GSSC5-94 announcements 291–307, GSSC5-117 page-data unification 308–320, GSSC5-95 events 321–346, GSSC5-96 newsletters 351–373, GSSC5-97 publications/tools 381–414, GSSC5-101 account refinement 415–428, GSSC5-103 mailing-equals-home 429–437, GSSC5-102 password-history-reset 438–440, GSSC5-107 members nav chrome 441–461, GSSC5-109 members site search 462–483 (band 462–500), GSSC5-108 sitemap 501–510, GSSC5-116 site-tree editor 521–540 (band 521–560), GSSC5-115 template editor 541–558 (band 541–580) — do not collide.
+GSSC5-126 Page Data Editor section-from-template and nav cleanup owns GSSC-MLLR-581 through GSSC-MLLR-591 (exact end 591; band 581–600 reserved after template 541–580); HLR GSSC-MHLR-97 / GSSC-MHLR-98; also CHANGE_DRIVER on GSSC-MLLR-262.
+Wave coordination: GSSC5-92 directory 202–214, GSSC5-102 directory refinement 215–230, GSSC5-89 dashboard 231–239, GSSC5-93 page/section 261–286, GSSC5-94 announcements 291–307, GSSC5-117 page-data unification 308–320, GSSC5-95 events 321–346, GSSC5-96 newsletters 351–373, GSSC5-97 publications/tools 381–414, GSSC5-101 account refinement 415–428, GSSC5-103 mailing-equals-home 429–437, GSSC5-102 password-history-reset 438–440, GSSC5-107 members nav chrome 441–461, GSSC5-109 members site search 462–483 (band 462–500), GSSC5-108 sitemap 501–510, GSSC5-116 site-tree editor 521–540 (band 521–560), GSSC5-115 template editor 541–558 (band 541–580), GSSC5-126 PDE section create + nav 581–591 (band 581–600) — do not collide.
 GSSC-MLLR-33 through GSSC-MLLR-39 remain free for later claimants.
 Do not reuse numbers already claimed by another ticket.
 <<<
@@ -6582,18 +6583,24 @@ RELATIONS:
 UID: GSSC-MLLR-262
 TITLE: Syntactic
 STATEMENT: >>>
-The Page/Section Editor Page SHALL fill the page content area as a single vertical column of page selection, section list, and when a section is selected, the section editor and preview regions.
+The Page/Section Editor Page SHALL fill the page content area as a single vertical column of page selection, section list, and when creating a section or a section is selected, the section editor and preview regions.
 <<<
 RATIONALE: >>>
-A vertical stack keeps selection and editing ordered as the viewport resizes.
+A vertical stack keeps selection and editing ordered as the viewport resizes. Create mode reuses the same editor and preview stack as selection.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-93
-REVIEW_STATUS: Approved
+CHANGE_DRIVER: >>>
+GSSC5-93
+GSSC5-126
+<<<
+REVIEW_STATUS: Changed
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-38
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-97
   ROLE: Refines
 
 [REQUIREMENT]
@@ -7075,6 +7082,231 @@ RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-38
   ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-PAGE-SECTION-CREATE
+TITLE: Section Create From Template
+
+[[SECTION]]
+UID: GSSC-MLLR-PAGE-SECTION-CREATE-CONTROL
+TITLE: New Section Control
+
+[REQUIREMENT]
+UID: GSSC-MLLR-581
+TITLE: Semantic
+STATEMENT: >>>
+When a public page is selected on the Page/Section Editor Page, the Member Frontend SHALL present a New Section control that starts create mode so an authorized member can create a section for that page from a content template without programming knowledge.
+<<<
+RATIONALE: >>>
+Create must be discoverable beside the section list once a page context exists, matching announcement create affordance.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-126
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-97
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-582
+TITLE: Syntactic
+STATEMENT: >>>
+The New Section control SHALL appear in the section list region beside the Sections heading and SHALL remain full-width available within that region as the viewport resizes.
+<<<
+RATIONALE: >>>
+Placing create with the list keeps page-scoped create next to existing sections.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-126
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-97
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-583
+TITLE: Lexical
+STATEMENT: >>>
+The New Section control SHALL use a sans-serif typeface, small text size, the dark-green theme token for border and text, and the light-green theme token for its background.
+<<<
+RATIONALE: >>>
+Create controls on other Member editors use the same light-green action chrome.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-126
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-97
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-PAGE-SECTION-CREATE-TEMPLATE
+TITLE: Content Template Field
+
+[REQUIREMENT]
+UID: GSSC-MLLR-584
+TITLE: Semantic
+STATEMENT: >>>
+While the Page/Section Editor Page is in create mode, the Section Editor Host SHALL present a Content Template field that lists content templates available to the signed-in member from the Unified Backend templates list.
+<<<
+RATIONALE: >>>
+Section create on the Unified Backend requires a template identity; the field surfaces that catalog.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-126
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-97
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-585
+TITLE: Syntactic
+STATEMENT: >>>
+The Content Template field in create mode SHALL occupy the full width of the Section Editor Host field area above the Header and Body fields.
+<<<
+RATIONALE: >>>
+Template selection precedes content fields so create order matches announcement create.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-126
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-97
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-586
+TITLE: Lexical
+STATEMENT: >>>
+The Content Template field in create mode SHALL use the shared form-select field chrome with a sans-serif typeface, the dark-green theme token for its border, and the white theme token for its background.
+<<<
+RATIONALE: >>>
+Shared form primitives keep create fields consistent with other Member editors.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-126
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-97
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-PAGE-SECTION-CREATE-BEHAVIOR
+TITLE: Section Create Behavior
+
+[REQUIREMENT]
+UID: GSSC-MLLR-587
+TITLE: Template Required For Create
+STATEMENT: >>>
+While the Page/Section Editor Page is in create mode, the Member Frontend SHALL require a Content Template selection and a non-empty Body before Save can create the section, and SHALL load available templates from the Unified Backend templates list for the signed-in member.
+<<<
+RATIONALE: >>>
+Section create on the Unified Backend requires a template identity and body text.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-126
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-97
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-588
+TITLE: Editor Mode Selection
+STATEMENT: >>>
+Selecting a section in the section list SHALL load that section into the Section Editor Host for modification, and activating create SHALL clear the editor into create mode with a distinct exclusive-edit resource identity until creation succeeds.
+<<<
+RATIONALE: >>>
+Create and modify are different editor modes sharing one Generic Editor host; exclusive edit keys must not collide across drafts and stored sections.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-126
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-97
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-41
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-589
+TITLE: Create Section
+STATEMENT: >>>
+When Save succeeds on the Section Editor Host in create mode with a selected Content Template, non-empty Body, and selected public page, the Member Frontend SHALL create the section through the Unified Backend sections create contract with that template and the selected page tag, then show that section in the section list for further modification.
+<<<
+RATIONALE: >>>
+Creation without developer intervention uses the existing sections POST API, template identity, and page tag so the new section appears under the chosen public page.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-126
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-97
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-590
+TITLE: Persistence Feedback
+STATEMENT: >>>
+When create fails because the Unified Backend rejects the request, the Page/Section Editor Page SHALL show that the section was not saved or that creation is not permitted and SHALL leave the editor fields available for correction when the member remains permitted to edit.
+<<<
+RATIONALE: >>>
+Permission and validation failures must be visible without implying a successful write.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-126
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-97
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-591
+TITLE: Page Data Editor Navigation Entry
+STATEMENT: >>>
+The Member Frontend Navigation Menu SHALL NOT present separate top-level destinations for announcement editing and for event editing when those editing capabilities are available through the Page Data Editor, and SHALL keep a Pages destination that opens page section editing in that editor.
+<<<
+RATIONALE: >>>
+Duplicate Announcements and Events top-level tabs are redundant after Page Data Editor unification; Pages remains the seeded entry while kind switching reaches announcements and events.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-126
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-98
+  ROLE: Refines
+
+[[/SECTION]]
 
 [[/SECTION]]
 
