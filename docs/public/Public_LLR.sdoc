@@ -453,34 +453,40 @@ TITLE: Header
 UID: GSSC-PLLR-46
 TITLE: Semantic
 STATEMENT: >>>
-The GSSC Website Public Frontend Header SHALL present the Header Logo, the Header Organization Name when the layout permits, the Header account-access controls, the Header Contact control, and the Header Site Search control.
+The GSSC Website Public Frontend Header SHALL present the Header Logo, the Header Organization Name when the layout permits, the Header account-access controls, the Header Contact control, the Header Site Search control, and the Navigation Menu.
 <<<
 RATIONALE: >>>
 The Header composes those displayed elements in the Header host. Each element's behavior is a separate requirement.
 <<<
 COMMENT: >>>
-Proposed for owner review (GSSC5-22). REVIEW_STATUS stays Changed until owner approval.
+Navigation Menu composition added for GSSC5-45.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-22
+CHANGE_DRIVER: >>>
+GSSC5-22
+GSSC5-45
+<<<
 REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-PLLR-47
 TITLE: Syntactic
 STATEMENT: >>>
-The GSSC Website Public Frontend Header SHALL fill the Header host and arrange identity and Header actions in a horizontal bar that wraps as the viewport narrows.
+The GSSC Website Public Frontend Header SHALL fill the Header host and arrange identity, Header actions, and the Navigation Menu according to the wide, mid, or narrow chrome tier in effect.
 <<<
 RATIONALE: >>>
-The Header host already sticks to the top of the viewport. Filling that host and wrapping the bar keeps Header contents available as the page resizes.
+The Header host already sticks to the top of the viewport. Tiered chrome keeps Header contents available as the viewport and Navigation Menu width change.
 <<<
 COMMENT: >>>
-Proposed for owner review (GSSC5-22).
+Three-tier chrome replaces wrap-only Header arrangement for GSSC5-45.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-22
+CHANGE_DRIVER: >>>
+GSSC5-22
+GSSC5-45
+<<<
 REVIEW_STATUS: Approved
 
 [REQUIREMENT]
@@ -531,14 +537,17 @@ RELATIONS:
 UID: GSSC-PLLR-50
 TITLE: Syntactic
 STATEMENT: >>>
-The Header Logo SHALL appear at the start of the Header in every layout.
+The Header Logo SHALL appear at the start of the Header in wide and mid chrome, and SHALL appear centered in the Header bar in narrow chrome.
 <<<
 RATIONALE: >>>
-Leading placement keeps the logo visible whether or not the organization name also fits.
+Leading placement keeps the logo visible with the organization name in wider chrome. Narrow chrome centers the logo between Site Search and the Menu Toggle.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-22
+CHANGE_DRIVER: >>>
+GSSC5-22
+GSSC5-45
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -573,17 +582,20 @@ TITLE: Organization Name
 UID: GSSC-PLLR-52
 TITLE: Semantic
 STATEMENT: >>>
-The Header Organization Name SHALL display the society's organization name or organization acronym from the Society Contact service when the layout permits.
+The Header Organization Name SHALL display the society's organization name or organization acronym from the Society Contact service when the chrome tier permits a name.
 <<<
 RATIONALE: >>>
-The Header shows one organization-name form at a time from the Society Contact service. Which form is visible by layout width is a separate Lexical requirement.
+The Header shows one organization-name form at a time from the Society Contact service. Which form is visible by chrome tier is a separate Lexical requirement.
 <<<
 COMMENT: >>>
-Owner-approved layout bands (GSSC5-22): full name at medium and above; acronym from small up to under medium; omit below small (logo remains). Brand artwork deferred to GSSC5-46.
+GSSC5-45 chrome tiers: full name in wide; acronym in mid; omit in narrow (logo remains). Brand artwork deferred to GSSC5-46.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-22
+CHANGE_DRIVER: >>>
+GSSC5-22
+GSSC5-45
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -594,14 +606,17 @@ RELATIONS:
 UID: GSSC-PLLR-53
 TITLE: Syntactic
 STATEMENT: >>>
-The Header Organization Name SHALL appear beside the Header Logo when the layout permits a name, and SHALL be omitted from the Header when the layout does not permit a name.
+The Header Organization Name SHALL appear beside the Header Logo in wide and mid chrome, and SHALL be omitted from the Header in narrow chrome.
 <<<
 RATIONALE: >>>
-Placement beside the logo keeps identity together. Omitting the name on a narrow layout leaves the logo as the identity mark.
+Placement beside the logo keeps identity together in wider chrome. Omitting the name in narrow chrome leaves the centered logo as the identity mark.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-22
+CHANGE_DRIVER: >>>
+GSSC5-22
+GSSC5-45
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -612,14 +627,17 @@ RELATIONS:
 UID: GSSC-PLLR-54
 TITLE: Lexical
 STATEMENT: >>>
-The Header Organization Name SHALL use the sans-serif theme font, a medium font weight, and the dark-green theme token for its text color, SHALL show the organization name at medium and above, SHALL show the organization acronym from small up to under medium, and SHALL omit the name below small.
+The Header Organization Name SHALL use the sans-serif theme font, a medium font weight, and the dark-green theme token for its text color, SHALL show the organization name in wide chrome, SHALL show the organization acronym in mid chrome, and SHALL omit the name in narrow chrome.
 <<<
 RATIONALE: >>>
-Those tokens keep the name aligned with Header text. The width bands keep a readable identity mark as the viewport narrows or widens.
+Those tokens keep the name aligned with Header text. Chrome tiers keep a readable identity mark as the viewport and Navigation Menu width change.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-22
+CHANGE_DRIVER: >>>
+GSSC5-22
+GSSC5-45
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -966,14 +984,17 @@ RELATIONS:
 UID: GSSC-PLLR-71
 TITLE: Syntactic
 STATEMENT: >>>
-The Header Site Search control SHALL appear last among the Header right-side action controls, SHALL present a search icon when the search presentation is closed, and SHALL present a close icon when the search presentation is open.
+The Header Site Search control SHALL appear last among the Header right-side action controls in wide chrome, SHALL appear after Contact and before the Header Menu Toggle in mid chrome, SHALL appear at the start of the Header bar in narrow chrome, SHALL present a search icon when the search presentation is closed, and SHALL present a close icon when the search presentation is open.
 <<<
 RATIONALE: >>>
-Owner-approved right-side order ends with Site Search. Icon state shows whether search is open.
+Wide chrome keeps Site Search last among right-side actions. Mid chrome places search with actions before the Menu Toggle. Narrow chrome moves search to the leading edge so the logo can stay centered.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-22
+CHANGE_DRIVER: >>>
+GSSC5-22
+GSSC5-45
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -1003,6 +1024,321 @@ REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-4
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-NAVIGATION-MENU
+TITLE: Navigation Menu
+
+[REQUIREMENT]
+UID: GSSC-PLLR-329
+TITLE: Semantic
+STATEMENT: >>>
+The Navigation Menu SHALL present top-level entries built from the public frontend site tree, including access to the public home page and to each top-level child destination from that tree, and SHALL open each entry's destination path in the Public Frontend.
+<<<
+RATIONALE: >>>
+Procedural menu labels and destinations come from the Unified Backend site tree. Home remains reachable from the menu. Child page access requirements stay separately stated.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-45
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-5
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-10
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-137
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-330
+TITLE: Syntactic
+STATEMENT: >>>
+The Navigation Menu SHALL appear as a separate bar beneath the Header identity bar in wide chrome, SHALL appear inside an overlay opened by the Header Menu Toggle in mid and narrow chrome, and SHALL remain within the sticky Header host so open menus overlay page content without shifting layout.
+<<<
+RATIONALE: >>>
+Wide chrome keeps a dedicated navigation bar. Mid and narrow chrome collapse that bar into an overlay. Sticky overlay presentation matches the owner chrome rules.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-45
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-5
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-139
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-140
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-331
+TITLE: Lexical
+STATEMENT: >>>
+The Navigation Menu wide bar SHALL use the cream theme token for its background and the dark-green theme token for its text, and overlay Navigation Menu presentations SHALL use the white theme token for their background and the dark-green theme token for their text.
+<<<
+RATIONALE: >>>
+A light navigation bar under the Header distinguishes menu chrome from the identity bar. Overlay menus stay readable on a white surface with Header text tokens.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-45
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-5
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-NAVIGATION-ITEM
+TITLE: Navigation Item
+
+[REQUIREMENT]
+UID: GSSC-PLLR-332
+TITLE: Semantic
+STATEMENT: >>>
+Each Navigation Item SHALL display its site-tree label and, when selected, SHALL open its site-tree destination path in the Public Frontend.
+<<<
+RATIONALE: >>>
+Visitors identify destinations by the tree label and travel by the tree path hint.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-45
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-137
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-333
+TITLE: Syntactic
+STATEMENT: >>>
+Top-level Navigation Items in the wide Navigation Menu bar SHALL appear in a single horizontal row separated by vertical dividers, and Navigation Items in the mid or narrow overlay SHALL appear in a vertical list.
+<<<
+RATIONALE: >>>
+Horizontal separated items match the wide prototype. Vertical listing fits the overlay accordion.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-45
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-139
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-334
+TITLE: Lexical
+STATEMENT: >>>
+Each Navigation Item SHALL use the sans-serif theme font and the dark-green theme token for its text color.
+<<<
+RATIONALE: >>>
+Navigation text matches Header action text tokens until a fuller menu style map exists.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-45
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-5
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-NAVIGATION-SUBMENU
+TITLE: Navigation Submenu
+
+[REQUIREMENT]
+UID: GSSC-PLLR-335
+TITLE: Semantic
+STATEMENT: >>>
+A Navigation Submenu SHALL present the child Navigation Items of its parent entry, at most two submenu levels beneath a top-level entry, and SHALL omit deeper descendants from presentation.
+<<<
+RATIONALE: >>>
+Owner-locked depth keeps dropdowns and accordion expanders shallow while still exposing one nested child level under a first submenu.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-45
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-138
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-336
+TITLE: Syntactic
+STATEMENT: >>>
+In wide chrome, a Navigation Submenu SHALL open as an overlay under its parent Navigation Item on hover or keyboard focus within that item. In mid and narrow chrome, a Navigation Submenu SHALL expand and collapse in place within the overlay Navigation Menu.
+<<<
+RATIONALE: >>>
+Wide chrome uses hover dropdown overlays. Mid and narrow chrome use accordion expansion inside the menu overlay.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-45
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-139
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-140
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-337
+TITLE: Lexical
+STATEMENT: >>>
+A Navigation Submenu overlay in wide chrome SHALL use the white theme token for its background, the gray theme token for its border, and the dark-green theme token for its text.
+<<<
+RATIONALE: >>>
+Dropdown surfaces match other Header overlay panels so nested destinations stay readable over page content.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-45
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-140
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-HEADER-MENU-TOGGLE
+TITLE: Menu Toggle
+
+[REQUIREMENT]
+UID: GSSC-PLLR-338
+TITLE: Semantic
+STATEMENT: >>>
+The Header Menu Toggle SHALL open and close the overlay Navigation Menu in mid and narrow chrome, and SHALL be omitted in wide chrome.
+<<<
+RATIONALE: >>>
+The hamburger remains until wide chrome can show the full Navigation Menu bar.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-45
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-139
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-339
+TITLE: Syntactic
+STATEMENT: >>>
+The Header Menu Toggle SHALL appear at the end of the Header bar in mid and narrow chrome.
+<<<
+RATIONALE: >>>
+Trailing placement keeps the toggle discoverable next to other Header actions in mid chrome and opposite Site Search in narrow chrome.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-45
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-139
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-340
+TITLE: Lexical
+STATEMENT: >>>
+The Header Menu Toggle SHALL use the dark-green theme token for its icon color, rounded corners, and the gray theme token for its background on hover.
+<<<
+RATIONALE: >>>
+Shared icon-button chrome matches Site Search and other public icon controls.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-45
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-139
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-NAVIGATION-EXPANDER
+TITLE: Navigation Expander
+
+[REQUIREMENT]
+UID: GSSC-PLLR-341
+TITLE: Semantic
+STATEMENT: >>>
+A Navigation Expander SHALL expand and collapse the child Navigation Submenu of its Navigation Item in mid and narrow chrome when that item has children.
+<<<
+RATIONALE: >>>
+Plus and minus expanders reveal nested destinations inside the overlay without relying on hover.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-45
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-139
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-342
+TITLE: Syntactic
+STATEMENT: >>>
+A Navigation Expander SHALL appear beside its Navigation Item label in the overlay Navigation Menu and SHALL present an expanded or collapsed affordance that matches whether that item's submenu is open.
+<<<
+RATIONALE: >>>
+Visitors need a clear control next to the label to open nested entries in the vertical overlay.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-45
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-139
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-343
+TITLE: Lexical
+STATEMENT: >>>
+A Navigation Expander SHALL use the dark-green theme token for its text color and the sans-serif theme font.
+<<<
+RATIONALE: >>>
+Expander chrome stays aligned with Navigation Item text tokens.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-45
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-139
   ROLE: Refines
 
 [[/SECTION]]
