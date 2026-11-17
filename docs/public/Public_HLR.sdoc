@@ -245,8 +245,79 @@ RATIONALE: >>>
 No Public Frontend PIR requires a menu in the Header. The legacy public site presents a menu of its main pages. This requirement places that menu in the Header. Each page the menu opens is a separate requirement. The membership application from the legacy menu is not included.
 <<<
 DERIVED: True
-CHANGE_DRIVER: GSSC5-10
+CHANGE_DRIVER: >>>
+GSSC5-10
+GSSC5-45
+<<<
 REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-PHLR-137
+TITLE: Procedural Navigation From Site Tree
+STATEMENT: >>>
+The Navigation Menu SHALL present its entries from the public frontend site tree provided by the Unified Backend, using each node's label and destination path, without registering application routes from that tree.
+<<<
+RATIONALE: >>>
+Owner-locked v5.0.2 architecture builds public menus from the backend site tree. Destination paths are menu hints only; Angular routes stay separately registered.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-45
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-5
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-138
+TITLE: Navigation Submenu Depth
+STATEMENT: >>>
+The Navigation Menu SHALL present at most two levels of submenu beneath its top-level entries.
+<<<
+RATIONALE: >>>
+Owner-locked v5.0.2 chrome keeps dropdown depth shallow so menus stay usable across wide, mid, and narrow layouts.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-45
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-5
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-139
+TITLE: Header Chrome Tiers
+STATEMENT: >>>
+The GSSC Website Public Frontend Header SHALL present wide, mid, and narrow chrome: wide when the top-level Navigation Menu fits without wrapping, mid when that menu would wrap, and narrow when the viewport is very narrow.
+<<<
+RATIONALE: >>>
+Owner prototypes define three sticky chrome layouts so identity, utilities, search, and navigation remain usable as the viewport and menu width change.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-45
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-5
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PHLR-140
+TITLE: Sticky Overlay Navigation Menus
+STATEMENT: >>>
+Open Navigation Menu presentations SHALL overlay page content without shifting the page layout, and the Header chrome that hosts those presentations SHALL remain sticky with the Header host.
+<<<
+RATIONALE: >>>
+Sticky overlay menus keep navigation available while reading without pushing page content down when a menu opens.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-45
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-5
+  ROLE: Refines
 
 [REQUIREMENT]
 UID: GSSC-PHLR-10
