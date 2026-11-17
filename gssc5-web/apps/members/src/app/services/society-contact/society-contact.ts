@@ -1,18 +1,20 @@
 import { computed, Injectable, inject, signal } from '@angular/core';
 import { KvStore } from '../kv-store/kv-store';
 
-/** KVS keys for member society contact fields shown in the Footer. */
+/** KVS keys for member society contact fields shown in the Footer and Header. */
 export const SOCIETY_ORGANIZATION_NAME_KEY = 'society.organizationName';
+export const SOCIETY_ORGANIZATION_ACRONYM_KEY = 'society.organizationAcronym';
 export const SOCIETY_PHONE_KEY = 'society.phoneNumber';
 export const SOCIETY_EMAIL_KEY = 'society.emailAddress';
 export const SOCIETY_POSTAL_KEY = 'society.postalAddress';
 
-/** Member society contact fields shown in the Footer. */
+/** Member society contact fields shown in the Footer and Header chrome. */
 @Injectable({ providedIn: 'root' })
 export class SocietyContact {
   private readonly kvStore = inject(KvStore);
 
   readonly organizationName = signal('');
+  readonly organizationAcronym = signal('');
   readonly phoneNumber = signal('');
   readonly emailAddress = signal('');
   readonly postalAddress = signal('');
@@ -29,6 +31,12 @@ export class SocietyContact {
       (await this.kvStore.getValue(SOCIETY_ORGANIZATION_NAME_KEY)) ?? '',
     );
     // @relation(GSSC-MLLR-66, scope=range_end, role=Implementation)
+
+    // @relation(GSSC-MLLR-456, scope=range_start, role=Implementation)
+    this.organizationAcronym.set(
+      (await this.kvStore.getValue(SOCIETY_ORGANIZATION_ACRONYM_KEY)) ?? '',
+    );
+    // @relation(GSSC-MLLR-456, scope=range_end, role=Implementation)
 
     // @relation(GSSC-MLLR-63, scope=range_start, role=Implementation)
     this.phoneNumber.set((await this.kvStore.getValue(SOCIETY_PHONE_KEY)) ?? '');

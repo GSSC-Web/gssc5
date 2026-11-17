@@ -412,15 +412,16 @@ REVIEW_STATUS: Approved
 UID: GSSC-MHLR-19
 TITLE: Header Navigation
 STATEMENT: >>>
-The GSSC Website Member Frontend Header SHALL provide navigation to the dashboard and to the Member Frontend areas the logged-in member is permitted to open.
+The GSSC Website Member Frontend Header SHALL include a Navigation Menu.
 <<<
 RATIONALE: >>>
-No Member Frontend PIR requires header navigation. Logged-in members need a consistent way to reach the dashboard and other Member Frontend areas their permissions allow. This is Member Frontend area navigation, not a clone of the Public Frontend Header action bar.
+No Member Frontend PIR requires a menu in the Header. Logged-in members need a consistent way to reach Member Frontend destinations. Destination inventory and chrome presentation are separate requirements.
 <<<
 DERIVED: True
 CHANGE_DRIVER: >>>
 GSSC5-11
 GSSC5-81
+GSSC5-107
 <<<
 REVIEW_STATUS: Approved
 
@@ -436,6 +437,108 @@ No Member Frontend PIR places login in the Header. A logged-out visitor on the M
 DERIVED: True
 CHANGE_DRIVER: GSSC5-81
 REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-MHLR-81
+TITLE: Procedural Navigation From Site Tree
+STATEMENT: >>>
+The Navigation Menu SHALL present its entries from the members frontend site tree provided by the Unified Backend, using each node's label and destination path, without registering application routes from that tree.
+<<<
+RATIONALE: >>>
+Owner-locked v5.0.2 architecture builds member menus from the backend site tree. Destination paths are menu hints only; Angular routes stay separately registered.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-107
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-19
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MHLR-82
+TITLE: Navigation Submenu Depth
+STATEMENT: >>>
+The Navigation Menu SHALL present at most two levels of submenu beneath its top-level entries.
+<<<
+RATIONALE: >>>
+Owner-locked v5.0.2 chrome keeps dropdown depth shallow so menus stay usable across wide, mid, and narrow layouts.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-107
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-19
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MHLR-83
+TITLE: Header Chrome Tiers
+STATEMENT: >>>
+The GSSC Website Member Frontend Header SHALL present wide, mid, and narrow chrome: wide when the top-level Navigation Menu fits without wrapping, mid when that menu would wrap, and narrow when the viewport is very narrow.
+<<<
+RATIONALE: >>>
+Owner prototypes define three sticky chrome layouts so identity, account controls, search, and navigation remain usable as the viewport and menu width change.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-107
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-19
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MHLR-84
+TITLE: Sticky Overlay Navigation Menus
+STATEMENT: >>>
+Open Navigation Menu presentations SHALL overlay page content without shifting the page layout, and the Header chrome that hosts those presentations SHALL remain sticky with the Header host.
+<<<
+RATIONALE: >>>
+Sticky overlay menus keep navigation available while reading without pushing page content down when a menu opens.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-107
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-19
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MHLR-85
+TITLE: Header Organization Name
+STATEMENT: >>>
+The GSSC Website Member Frontend Header SHALL include the society's organization name when the chrome layout permits.
+<<<
+RATIONALE: >>>
+No Member Frontend PIR requires an organization name in the Header. Showing the name beside the logo mirrors Public chrome identity and keeps the society brand readable in wider layouts.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-107
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-15
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MHLR-86
+TITLE: Header Site Search
+STATEMENT: >>>
+The GSSC Website Member Frontend Header SHALL include a Site Search control.
+<<<
+RATIONALE: >>>
+No Member Frontend PIR requires Site Search in the Header. Narrow and mid chrome place a search affordance in the sticky Header; the search experience contents are separate requirements.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-107
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-15
+  ROLE: Refines
 
 [[/SECTION]]
 
