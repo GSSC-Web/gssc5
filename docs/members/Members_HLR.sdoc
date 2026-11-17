@@ -976,7 +976,10 @@ RATIONALE: >>>
 No Member Frontend PIR names account creation. Administrator account management includes adding a registered member so that member can later log in.
 <<<
 DERIVED: True
-CHANGE_DRIVER: GSSC5-11
+CHANGE_DRIVER: >>>
+GSSC5-11
+GSSC5-119
+<<<
 REVIEW_STATUS: Changed
 
 [[/SECTION]]
@@ -1755,6 +1758,29 @@ GSSC5-115
 GSSC5-128
 <<<
 REVIEW_STATUS: Approved
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MHLR-DIRECTORY-INVITE
+TITLE: Directory Member Invite
+
+[REQUIREMENT]
+UID: GSSC-MHLR-100
+TITLE: Directory Member Invite
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL let a user moderator invite a prospective member from the members directory.
+<<<
+RATIONALE: >>>
+No Member Frontend PIR requires inviting prospective members from the directory. User moderators add prospective members without assigning a usable password; an administrator is a user moderator.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-118
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-12
+  ROLE: Refines
 
 [[/SECTION]]
 
