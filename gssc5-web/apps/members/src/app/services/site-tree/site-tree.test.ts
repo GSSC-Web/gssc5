@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { MemberSession } from '../member-session';
 import {
   SITE_TREE_GET,
   SiteTree,
@@ -65,6 +66,8 @@ test('SiteTree refresh loads members nav items', async () => {
   TestBed.configureTestingModule({
     providers: [{ provide: SITE_TREE_GET, useValue: getTree }],
   });
+  const session = TestBed.inject(MemberSession);
+  session.isAdmin.set(true);
   const siteTree = TestBed.inject(SiteTree);
   await siteTree.refresh();
   expect(siteTree.loaded()).toBe(true);
@@ -72,6 +75,32 @@ test('SiteTree refresh loads members nav items', async () => {
     '/',
     '/directory',
     '/publications',
+  ]);
+});
+
+test('SiteTree refresh filters permission-gated Members nodes', async () => {
+  const getTree = async () =>
+    ({
+      frontend: 'members',
+      root: node('root', 'Dashboard', '/', [
+        node('dir', 'Directory', '/directory'),
+        node('news', 'Newsletters', '/newsletters'),
+        node('pubs', 'Publications', '/publications'),
+      ]),
+    }) satisfies NestedSiteTreePayload;
+  TestBed.configureTestingModule({
+    providers: [{ provide: SITE_TREE_GET, useValue: getTree }],
+  });
+  const session = TestBed.inject(MemberSession);
+  session.isAdmin.set(false);
+  session.isNewsletterEditor.set(false);
+  session.isPublicationEditor.set(false);
+  session.isToolEditor.set(false);
+  const siteTree = TestBed.inject(SiteTree);
+  await siteTree.refresh();
+  expect(siteTree.navItems().map((item) => item.path)).toEqual([
+    '/',
+    '/directory',
   ]);
 });
 

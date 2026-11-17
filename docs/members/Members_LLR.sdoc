@@ -102,10 +102,11 @@ GSSC5-102 also owns GSSC-MLLR-438 through GSSC-MLLR-440 (Password History Reset 
 GSSC5-108 Members Sitemap Page owns GSSC-MLLR-501 through GSSC-MLLR-510 (exact end 510; band 501–520 reserved for sitemap); HLR GSSC-MHLR-79 / GSSC-MHLR-80.
 GSSC5-109 Members Site Search owns GSSC-MLLR-462 through GSSC-MLLR-483 (exact end 483; band 462–500 reserved for site search so GSSC5-107 nav 441–461 and GSSC5-108 sitemap 501–510 stay clear); HLR GSSC-MHLR-87 / GSSC-MHLR-88.
 GSSC5-116 Members Site Tree Editor owns GSSC-MLLR-521 through GSSC-MLLR-540 (exact end 540; band 521–560 reserved for site-tree editor); HLR GSSC-MHLR-89 through GSSC-MHLR-92.
+GSSC5-127 Site Tree Editor Feedback owns GSSC-MLLR-562 (exact end 562; after GSSC5-128 template 541–561) plus CHANGE_DRIVER on GSSC-MLLR-524 and GSSC-MLLR-529; HLR GSSC-MHLR-99 and CHANGE_DRIVER on GSSC-MHLR-89.
 GSSC5-115 Members Template Editor owns GSSC-MLLR-541 through GSSC-MLLR-558 (exact end 558; band 541–580 reserved for template editor after GSSC5-116 site-tree 521–540); HLR GSSC-MHLR-95 / GSSC-MHLR-96.
 GSSC5-117 Page Data Editor Unification owns GSSC-MLLR-308 through GSSC-MLLR-320 (exact end 320; bridge band between announcements 291–307 and events 321–346); HLR GSSC-MHLR-93 / GSSC-MHLR-94; also CHANGE_DRIVER on GSSC-MLLR-345.
 GSSC5-126 Page Data Editor section-from-template and nav cleanup owns GSSC-MLLR-581 through GSSC-MLLR-591 (exact end 591; band 581–600 reserved after template 541–580); HLR GSSC-MHLR-97 / GSSC-MHLR-98; also CHANGE_DRIVER on GSSC-MLLR-262.
-Wave coordination: GSSC5-92 directory 202–214, GSSC5-102 directory refinement 215–230, GSSC5-89 dashboard 231–239, GSSC5-93 page/section 261–286, GSSC5-94 announcements 291–307, GSSC5-117 page-data unification 308–320, GSSC5-95 events 321–346, GSSC5-96 newsletters 351–373, GSSC5-97 publications/tools 381–414, GSSC5-101 account refinement 415–428, GSSC5-103 mailing-equals-home 429–437, GSSC5-102 password-history-reset 438–440, GSSC5-107 members nav chrome 441–461, GSSC5-109 members site search 462–483 (band 462–500), GSSC5-108 sitemap 501–510, GSSC5-116 site-tree editor 521–540 (band 521–560), GSSC5-115 template editor 541–558 (band 541–580), GSSC5-126 PDE section create + nav 581–591 (band 581–600) — do not collide.
+Wave coordination: GSSC5-92 directory 202–214, GSSC5-102 directory refinement 215–230, GSSC5-89 dashboard 231–239, GSSC5-93 page/section 261–286, GSSC5-94 announcements 291–307, GSSC5-117 page-data unification 308–320, GSSC5-95 events 321–346, GSSC5-96 newsletters 351–373, GSSC5-97 publications/tools 381–414, GSSC5-101 account refinement 415–428, GSSC5-103 mailing-equals-home 429–437, GSSC5-102 password-history-reset 438–440, GSSC5-107 members nav chrome 441–461, GSSC5-109 members site search 462–483 (band 462–500), GSSC5-108 sitemap 501–510, GSSC5-116 site-tree editor 521–540 (band 521–560), GSSC5-127 site-tree feedback MLLR-562 (+ CHANGE_DRIVER on 524/529; HLR MHLR-99), GSSC5-115/128 template editor 541–561 (band 541–580), GSSC5-126 PDE section create + nav 581–591 (band 581–600) — do not collide.
 GSSC-MLLR-33 through GSSC-MLLR-39 remain free for later claimants.
 Do not reuse numbers already claimed by another ticket.
 <<<
@@ -9724,14 +9725,17 @@ TITLE: Frontend Selector
 UID: GSSC-MLLR-524
 TITLE: Semantic
 STATEMENT: >>>
-The Frontend Selector SHALL let the administrator choose the Public Frontend site tree or the Members Frontend site tree, and when the choice changes the Site Tree Editor Page SHALL reload that tree from the Unified Backend and clear the current node selection.
+The Frontend Selector SHALL let the administrator choose the Public Frontend site tree or the Members Frontend site tree, SHALL present the same frontend that the Site Tree Editor Page loads on the first presentation of the page, and when the choice changes the Site Tree Editor Page SHALL reload that tree from the Unified Backend and clear the current node selection.
 <<<
 RATIONALE: >>>
-Administrators switch between the two frontend trees without leaving the editor. Clearing selection avoids editing a node that is not in the newly loaded tree.
+Administrators switch between the two frontend trees without leaving the editor. Clearing selection avoids editing a node that is not in the newly loaded tree. Matching the selector to the loaded tree on first presentation prevents a mismatched Public label over a Members tree.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-116
+CHANGE_DRIVER: >>>
+GSSC5-116
+GSSC5-127
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -9820,14 +9824,17 @@ RELATIONS:
 UID: GSSC-MLLR-529
 TITLE: Lexical
 STATEMENT: >>>
-The Tree Outline SHALL use the sans-serif typeface and the dark-green theme token for node label text, and SHALL use the light-green theme token for the selected node's background.
+The Tree Outline SHALL use the sans-serif typeface and the dark-green theme token for node label text, SHALL use the light-green theme token for the selected node's background, and SHALL use the light-gray theme token for a node's background while the pointer hovers that node.
 <<<
 RATIONALE: >>>
-Dark-green labels match other members lists. Light-green selection background marks the active node without leaving the outline region.
+Dark-green labels match other members lists. Light-green selection background marks the active node without leaving the outline region. Light-gray hover feedback makes nodes feel selectable before activation.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-116
+CHANGE_DRIVER: >>>
+GSSC5-116
+GSSC5-127
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -10084,6 +10091,30 @@ REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-89
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-SITE-TREE-PERMISSION-FILTER
+TITLE: Members Site Tree Permission Filter
+
+[REQUIREMENT]
+UID: GSSC-MLLR-562
+TITLE: Semantic
+STATEMENT: >>>
+When the Member Frontend presents the Members Frontend site tree, it SHALL omit each node whose destination the logged-in member is not permitted to use, including newsletter editor destinations when the member lacks newsletter editor permission.
+<<<
+RATIONALE: >>>
+Omitting unavailable destinations keeps Members navigation and the Site Tree Editor outline from revealing editors and tools the member cannot use.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-127
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-99
   ROLE: Refines
 
 [[/SECTION]]
