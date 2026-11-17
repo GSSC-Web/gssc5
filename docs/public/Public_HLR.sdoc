@@ -1448,7 +1448,7 @@ UID: GSSC-PHLR-CALENDAR-PAGE
 TITLE: Calendar Page Requirements
 
 [REQUIREMENT]
-UID: GSSC-PHLR-137
+UID: GSSC-PHLR-141
 TITLE: Public Calendar on Calendar Page
 STATEMENT: >>>
 The calendar page SHALL present the Public Calendar month view.
@@ -1465,7 +1465,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-PHLR-138
+UID: GSSC-PHLR-142
 TITLE: Calendar Page Notices
 STATEMENT: >>>
 The calendar page SHALL place public sections tagged for the calendar page as miscellaneous notices when the Unified Backend provides such sections, and omit those notices when none are provided.
