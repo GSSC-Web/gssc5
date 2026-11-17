@@ -186,6 +186,20 @@ test('GSSC-PLLR-90 Syntactic', async () => {
     (child) => child instanceof HTMLElement,
   );
   expect(bodyFirst[0]?.classList.contains('gssc-section__body')).toBe(true);
+
+  // Featured image placed: body shares the media row (beside at md+; stacked below header below md)
+  const { root: withImage } = await setupSection(sampleWithImageLeft);
+  const sectionKids = [...withImage.querySelector('.gssc-section')!.children].filter(
+    (child) => child instanceof HTMLElement,
+  );
+  expect(sectionKids[0]?.classList.contains('gssc-section__header')).toBe(true);
+  expect(sectionKids[1]?.classList.contains('gssc-section__media')).toBe(true);
+  const media = withImage.querySelector<HTMLElement>('.gssc-section__media')!;
+  expect(media.classList.contains('flex-col')).toBe(true);
+  expect(media.classList.contains('md:flex-row')).toBe(true);
+  const mediaKids = [...media.children];
+  expect(mediaKids[0]?.classList.contains('gssc-section__image')).toBe(true);
+  expect(mediaKids[1]?.classList.contains('gssc-section__body')).toBe(true);
 });
 // @relation(GSSC-PLLR-90, scope=range_end, role=Test)
 
@@ -496,10 +510,13 @@ test('GSSC-PLLR-261 Syntactic', async () => {
   const media = left.querySelector<HTMLElement>('.gssc-section__media')!;
   const image = left.querySelector<HTMLElement>('.gssc-section__image')!;
   expect(media.classList.contains('flex-col')).toBe(true);
-  expect(media.classList.contains('sm:flex-row')).toBe(true);
-  expect(media.classList.contains('sm:flex-row-reverse')).toBe(false);
-  expect(image.classList.contains('max-w-[60%]')).toBe(true);
-  expect(image.classList.contains('max-h-[40%]')).toBe(true);
+  expect(media.classList.contains('md:flex-row')).toBe(true);
+  expect(media.classList.contains('sm:flex-row')).toBe(false);
+  expect(media.classList.contains('md:flex-row-reverse')).toBe(false);
+  // max-w-[40%] = two-fifths of the media parent; also ≤ three-fifths Section width
+  expect(image.classList.contains('max-w-[40%]')).toBe(true);
+  expect(image.classList.contains('max-w-[60%]')).toBe(false);
+  expect(image.classList.contains('max-h-[40%]')).toBe(false);
   const children = [...media.children];
   expect(children[0]?.classList.contains('gssc-section__image')).toBe(true);
   expect(children[1]?.classList.contains('gssc-section__body')).toBe(true);
@@ -511,7 +528,8 @@ test('GSSC-PLLR-261 Syntactic', async () => {
 
   const { root: right } = await setupSection(sampleWithImageRight);
   const rightMedia = right.querySelector<HTMLElement>('.gssc-section__media')!;
-  expect(rightMedia.classList.contains('sm:flex-row-reverse')).toBe(true);
+  expect(rightMedia.classList.contains('md:flex-row-reverse')).toBe(true);
+  expect(rightMedia.classList.contains('sm:flex-row-reverse')).toBe(false);
   expect(rightMedia.getAttribute('data-image-position')).toBe('right');
 });
 // @relation(GSSC-PLLR-261, scope=range_end, role=Test)
