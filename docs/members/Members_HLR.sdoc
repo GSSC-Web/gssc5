@@ -1672,3 +1672,36 @@ CHANGE_DRIVER: GSSC5-117
 REVIEW_STATUS: Approved
 
 [[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MHLR-TEMPLATE-EDITOR
+TITLE: Content Template Editor Requirements
+
+[REQUIREMENT]
+UID: GSSC-MHLR-95
+TITLE: Content Template Catalog Support
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL support the Unified Backend content template catalog for administrators who manage templates used when creating page data entries.
+<<<
+RATIONALE: >>>
+No Member Frontend PIR requires a dedicated content template editor. Administrators need a Members surface over the existing Unified Backend template contracts so templates can be maintained without programming knowledge.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-115
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-MHLR-96
+TITLE: Content Template Modification
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL let an administrator create, modify, and remove a content template without programming knowledge.
+<<<
+RATIONALE: >>>
+Template create, visibility and permission updates, and delete are administrator responsibilities on the Unified Backend; the Member Frontend exposes those operations for day-to-day catalog maintenance.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-115
+REVIEW_STATUS: Approved
+
+[[/SECTION]]
+
