@@ -6,6 +6,26 @@ import { filterSectionsVisibleOn } from '../section-display-window/section-displ
 /** Backend tag that binds public Leadership Intro sections to this page. */
 export const LEADERSHIP_INTRO_TAG = 'leadership';
 
+const ACCOUNT_PHOTOS_ORIGIN = 'http://localhost:3000';
+
+/**
+ * Resolve a stored Account Photo identifier to the dedicated GET URL for card
+ * `<img src>` (GSSC5-124). Absolute http(s) values pass through.
+ */
+// @relation(GSSC-PLLR-376, scope=range_start, role=Implementation)
+export function accountPhotoUrl(
+  resource: string | null | undefined,
+  origin: string = ACCOUNT_PHOTOS_ORIGIN,
+): string | null {
+  if (resource === null || resource === undefined) return null;
+  const trimmed = resource.trim();
+  if (trimmed.length === 0) return null;
+  if (/^https?:\/\//i.test(trimmed)) return trimmed;
+  if (trimmed.startsWith('/account-photos/')) return `${origin}${trimmed}`;
+  return `${origin}/account-photos/${trimmed.replace(/^\/+/, '')}`;
+}
+// @relation(GSSC-PLLR-376, scope=range_end, role=Implementation)
+
 /** One entry from Unified Backend GET /leadership. */
 export type LeadershipEntry = {
   position: string;
@@ -162,10 +182,9 @@ export function cardsForRoster(
       };
     }
     const contact = preferredContact(match);
-    const photoUrl =
-      typeof match.accountPhoto === 'string' && match.accountPhoto.trim() !== ''
-        ? match.accountPhoto
-        : null;
+    // @relation(GSSC-PLLR-376, GSSC-PLLR-162, GSSC-PLLR-165, scope=range_start, role=Implementation)
+    const photoUrl = accountPhotoUrl(match.accountPhoto);
+    // @relation(GSSC-PLLR-376, GSSC-PLLR-162, GSSC-PLLR-165, scope=range_end, role=Implementation)
     return {
       name,
       title: office,
@@ -192,10 +211,9 @@ export function committeeChairCards(
     .sort((a, b) => a.position.localeCompare(b.position))
     .map((match) => {
       const contact = preferredContact(match);
-      const photoUrl =
-        typeof match.accountPhoto === 'string' && match.accountPhoto.trim() !== ''
-          ? match.accountPhoto
-          : null;
+      // @relation(GSSC-PLLR-376, GSSC-PLLR-231, scope=range_start, role=Implementation)
+      const photoUrl = accountPhotoUrl(match.accountPhoto);
+      // @relation(GSSC-PLLR-376, GSSC-PLLR-231, scope=range_end, role=Implementation)
       return {
         name: leaderDisplayName(match)!,
         title: match.position,

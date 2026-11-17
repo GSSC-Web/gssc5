@@ -22,7 +22,7 @@ const sampleLeaders: LeadershipEntry[] = [
     lastName: 'Souza',
     preferredContactMethod: 'Email',
     primaryEmail: 'president@example.com',
-    accountPhoto: 'https://example.com/karen.jpg',
+    accountPhoto: 'user_karen',
   },
   {
     position: 'Director at Large 1',
@@ -30,6 +30,7 @@ const sampleLeaders: LeadershipEntry[] = [
     lastName: 'Turley',
     preferredContactMethod: 'Phone',
     primaryPhone: '209-555-0100',
+    accountPhoto: 'https://example.com/linda.jpg',
   },
   {
     position: 'Programs',
@@ -44,6 +45,7 @@ const sampleLeaders: LeadershipEntry[] = [
     lastName: 'Byrne',
     preferredContactMethod: 'Email',
     primaryEmail: 'historian@example.com',
+    accountPhoto: 'user_judy',
   },
   {
     position: 'Budget',
@@ -240,7 +242,7 @@ test('GSSC-PLLR-162 Officers Semantic', async () => {
     president.querySelector<HTMLImageElement>('.gssc-contact-card-large__photo-img')?.getAttribute(
       'src',
     ),
-  ).toBe('https://example.com/karen.jpg');
+  ).toBe('http://localhost:3000/account-photos/user_karen');
 
   const secretary = byTitle('Secretary');
   expect(textContent(secretary, '.gssc-contact-card-large__vacant')).toBe('Vacant');
@@ -299,6 +301,11 @@ test('GSSC-PLLR-165 Directors at Large Semantic', async () => {
       'href',
     ),
   ).toBe('tel:209-555-0100');
+  expect(
+    dal1.querySelector<HTMLImageElement>('.gssc-contact-card-small__photo-img')?.getAttribute(
+      'src',
+    ),
+  ).toBe('https://example.com/linda.jpg');
 
   const vacant = [...region.querySelectorAll('gssc-contact-card-small')].find(
     (card) =>
@@ -360,6 +367,11 @@ test('GSSC-PLLR-231 Committee Chairs Semantic', async () => {
       .querySelector<HTMLAnchorElement>('.gssc-contact-card-small__contact')
       ?.getAttribute('href'),
   ).toBe('mailto:historian@example.com');
+  expect(
+    historian
+      .querySelector<HTMLImageElement>('.gssc-contact-card-small__photo-img')
+      ?.getAttribute('src'),
+  ).toBe('http://localhost:3000/account-photos/user_judy');
 
   // Officers / Directors / nameless non-fixed roles are excluded.
   expect(titles).not.toContain('President');
