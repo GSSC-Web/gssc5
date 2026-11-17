@@ -9,6 +9,7 @@ import { PublicationsPage } from './pages/publications/publications';
 import { ResearchToolsPage } from './pages/research-tools/research-tools';
 import { SearchPage } from './pages/search/search';
 import { SiteTreeEditorPage } from './pages/site-tree-editor/site-tree-editor';
+import { TemplatesPage } from './pages/templates/templates';
 import { SitemapPage } from './pages/sitemap/sitemap';
 import {
   redirectIfAuthenticatedGuard,
@@ -96,7 +97,15 @@ export const routes: Routes = [
     component: ResearchToolsPage,
     canActivate: [requireAuthGuard],
   },
-  // @relation(GSSC-MLLR-510, scope=range_start, role=Implementation)
+  // @relation(GSSC-MLLR-558, scope=range_start, role=Implementation)
+  {
+    path: 'templates',
+    pathMatch: 'full',
+    component: TemplatesPage,
+    canActivate: [requireAuthGuard],
+  },
+  // @relation(GSSC-MLLR-558, scope=range_end, role=Implementation)
+    // @relation(GSSC-MLLR-510, scope=range_start, role=Implementation)
   {
     path: 'sitemap',
     pathMatch: 'full',

@@ -102,8 +102,9 @@ GSSC5-102 also owns GSSC-MLLR-438 through GSSC-MLLR-440 (Password History Reset 
 GSSC5-108 Members Sitemap Page owns GSSC-MLLR-501 through GSSC-MLLR-510 (exact end 510; band 501–520 reserved for sitemap); HLR GSSC-MHLR-79 / GSSC-MHLR-80.
 GSSC5-109 Members Site Search owns GSSC-MLLR-462 through GSSC-MLLR-483 (exact end 483; band 462–500 reserved for site search so GSSC5-107 nav 441–461 and GSSC5-108 sitemap 501–510 stay clear); HLR GSSC-MHLR-87 / GSSC-MHLR-88.
 GSSC5-116 Members Site Tree Editor owns GSSC-MLLR-521 through GSSC-MLLR-540 (exact end 540; band 521–560 reserved for site-tree editor); HLR GSSC-MHLR-89 through GSSC-MHLR-92.
+GSSC5-115 Members Template Editor owns GSSC-MLLR-541 through GSSC-MLLR-558 (exact end 558; band 541–580 reserved for template editor after GSSC5-116 site-tree 521–540); HLR GSSC-MHLR-95 / GSSC-MHLR-96.
 GSSC5-117 Page Data Editor Unification owns GSSC-MLLR-308 through GSSC-MLLR-320 (exact end 320; bridge band between announcements 291–307 and events 321–346); HLR GSSC-MHLR-93 / GSSC-MHLR-94; also CHANGE_DRIVER on GSSC-MLLR-345.
-Wave coordination: GSSC5-92 directory 202–214, GSSC5-102 directory refinement 215–230, GSSC5-89 dashboard 231–239, GSSC5-93 page/section 261–286, GSSC5-94 announcements 291–307, GSSC5-117 page-data unification 308–320, GSSC5-95 events 321–346, GSSC5-96 newsletters 351–373, GSSC5-97 publications/tools 381–414, GSSC5-101 account refinement 415–428, GSSC5-103 mailing-equals-home 429–437, GSSC5-102 password-history-reset 438–440, GSSC5-107 members nav chrome 441–461, GSSC5-109 members site search 462–483 (band 462–500), GSSC5-108 sitemap 501–510, GSSC5-116 site-tree editor 521–540 (band 521–560) — do not collide.
+Wave coordination: GSSC5-92 directory 202–214, GSSC5-102 directory refinement 215–230, GSSC5-89 dashboard 231–239, GSSC5-93 page/section 261–286, GSSC5-94 announcements 291–307, GSSC5-117 page-data unification 308–320, GSSC5-95 events 321–346, GSSC5-96 newsletters 351–373, GSSC5-97 publications/tools 381–414, GSSC5-101 account refinement 415–428, GSSC5-103 mailing-equals-home 429–437, GSSC5-102 password-history-reset 438–440, GSSC5-107 members nav chrome 441–461, GSSC5-109 members site search 462–483 (band 462–500), GSSC5-108 sitemap 501–510, GSSC5-116 site-tree editor 521–540 (band 521–560), GSSC5-115 template editor 541–558 (band 541–580) — do not collide.
 GSSC-MLLR-33 through GSSC-MLLR-39 remain free for later claimants.
 Do not reuse numbers already claimed by another ticket.
 <<<
@@ -10115,6 +10116,375 @@ REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-93
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-TEMPLATE-EDITOR
+TITLE: Content Template Editor
+
+[[SECTION]]
+UID: GSSC-MLLR-TEMPLATE-EDITOR-PAGE
+TITLE: Content Template Editor Page
+
+[REQUIREMENT]
+UID: GSSC-MLLR-541
+TITLE: Semantic
+STATEMENT: >>>
+The Member Frontend Content Template Editor Page SHALL present a content template catalog list, a create control when modification is permitted, and a Generic Editor host for the selected template with name, visibility, tags, and create, modify, and delete permission fields.
+<<<
+RATIONALE: >>>
+One page hosts catalog browsing and Generic Editor composition so administrators maintain content templates without programming knowledge.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-115
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-95
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-96
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-542
+TITLE: Syntactic
+STATEMENT: >>>
+The Content Template Editor Page SHALL stack the catalog list, create control, and Generic Editor host vertically in the page content area.
+<<<
+RATIONALE: >>>
+A vertical stack keeps the catalog and editor readable without competing side content.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-115
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-95
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-543
+TITLE: Lexical
+STATEMENT: >>>
+The Content Template Editor Page SHALL use the Member Frontend sans-serif typeface and dark-green theme color for the page heading.
+<<<
+RATIONALE: >>>
+Template editing shares Member Frontend brand type and color.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-115
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-95
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-TEMPLATE-CATALOG-LIST
+TITLE: Content Template Catalog List
+
+[REQUIREMENT]
+UID: GSSC-MLLR-544
+TITLE: Semantic
+STATEMENT: >>>
+The Content Template Catalog List SHALL present each content template name from the Unified Backend templates catalog, and when a name is selected SHALL place that template into the Generic Editor host.
+<<<
+RATIONALE: >>>
+Selecting from the catalog opens the matching template for review or modification.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-115
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-95
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-96
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-545
+TITLE: Syntactic
+STATEMENT: >>>
+The Content Template Catalog List SHALL appear above the Generic Editor host as a vertical list of selectable names.
+<<<
+RATIONALE: >>>
+Placing the list above the editor keeps selection and fields in one reading order.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-115
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-95
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-546
+TITLE: Lexical
+STATEMENT: >>>
+Each Content Template Catalog List entry SHALL use the Member Frontend sans-serif typeface and dark-green theme color for the selectable name.
+<<<
+RATIONALE: >>>
+Catalog entries match other Members editor list styling.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-115
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-95
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-TEMPLATE-CREATE-CONTROL
+TITLE: Content Template Create Control
+
+[REQUIREMENT]
+UID: GSSC-MLLR-547
+TITLE: Semantic
+STATEMENT: >>>
+When content template modification is permitted, the Content Template Create Control SHALL start a new template in the Generic Editor host with empty name and tags fields, members-only visibility, and zero permission values.
+<<<
+RATIONALE: >>>
+Create starts a blank template before persistence.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-115
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-96
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-548
+TITLE: Syntactic
+STATEMENT: >>>
+The Content Template Create Control SHALL appear with the catalog list above the Generic Editor host.
+<<<
+RATIONALE: >>>
+Create stays near the list so administrators can add a template without leaving the page.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-115
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-96
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-549
+TITLE: Lexical
+STATEMENT: >>>
+The Content Template Create Control SHALL use the Member Frontend sans-serif typeface, dark-green text, and light-green background.
+<<<
+RATIONALE: >>>
+Create styling matches other Members catalog create controls.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-115
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-96
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-TEMPLATE-DELETE-CONTROL
+TITLE: Content Template Delete Control
+
+[REQUIREMENT]
+UID: GSSC-MLLR-550
+TITLE: Semantic
+STATEMENT: >>>
+When content template modification is permitted and an existing template is selected, the Content Template Delete Control SHALL remove that template from the Unified Backend templates catalog.
+<<<
+RATIONALE: >>>
+Administrators remove unused content templates without programming knowledge.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-115
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-96
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-551
+TITLE: Syntactic
+STATEMENT: >>>
+The Content Template Delete Control SHALL appear with the Generic Editor host for the selected existing template.
+<<<
+RATIONALE: >>>
+Delete stays with the open template so removal targets the selected entry.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-115
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-96
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-552
+TITLE: Lexical
+STATEMENT: >>>
+The Content Template Delete Control SHALL use the Member Frontend sans-serif typeface and dark-red theme color for the control label.
+<<<
+RATIONALE: >>>
+Delete styling matches other Members destructive catalog controls.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-115
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-96
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-TEMPLATE-EDITOR-BEHAVIOR
+TITLE: Content Template Editor Behavior
+
+[REQUIREMENT]
+UID: GSSC-MLLR-553
+TITLE: Semantic
+STATEMENT: >>>
+The Content Template Editor Page SHALL permit create, save, and delete only when the logged-in member is an administrator, and SHALL withhold those modification controls otherwise.
+<<<
+RATIONALE: >>>
+Content template writes match Unified Backend administrator authorization for template get, create, modify, and delete.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-115
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-96
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-554
+TITLE: Semantic
+STATEMENT: >>>
+When the Content Template Editor Page opens, it SHALL load the content template catalog from the Unified Backend into the Content Template Catalog List.
+<<<
+RATIONALE: >>>
+The list reflects current templates before the member selects or creates.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-115
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-95
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-555
+TITLE: Semantic
+STATEMENT: >>>
+When Save succeeds on the Content Template Generic Editor host for a new template, the Member Frontend SHALL create the template in the Unified Backend with the name, visibility, tags, and permission field values; when Save succeeds for an existing template, it SHALL update that template's visibility and permission values while leaving the name and tags unchanged.
+<<<
+RATIONALE: >>>
+Create captures identity and defaults; modify follows the Unified Backend contract that name and tags are create-time only.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-115
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-96
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-556
+TITLE: Semantic
+STATEMENT: >>>
+When Cancel is activated on the Content Template Generic Editor host, the Member Frontend SHALL restore the selected template field values to the last loaded or saved baseline without requesting persistence.
+<<<
+RATIONALE: >>>
+Cancel discards unsaved edits while keeping the catalog unchanged.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-115
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-96
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-557
+TITLE: Semantic
+STATEMENT: >>>
+After a successful content template create, update, or delete, the Content Template Editor Page SHALL refresh the Content Template Catalog List from the Unified Backend.
+<<<
+RATIONALE: >>>
+The list stays aligned with persisted catalog state after mutations.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-115
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-95
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-96
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-558
+TITLE: Semantic
+STATEMENT: >>>
+The Member Frontend SHALL provide a Content Template Editor Page route that requires an authenticated session and presents the Content Template Editor Page.
+<<<
+RATIONALE: >>>
+A dedicated authenticated route gives administrators a stable Members destination for template catalog maintenance.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-115
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-95
   ROLE: Refines
 
 [[/SECTION]]
