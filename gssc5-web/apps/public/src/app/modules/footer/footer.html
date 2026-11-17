@@ -57,6 +57,22 @@
       Sitemap
     </a>
     <!-- @relation(GSSC-PLLR-345, GSSC-PLLR-346, GSSC-PLLR-347, scope=range_end, role=Implementation) -->
+
+    <!-- @relation(GSSC-PLLR-379, GSSC-PLLR-380, GSSC-PLLR-381, scope=range_start, role=Implementation) -->
+    <button
+      type="button"
+      class="gssc-footer__members cursor-pointer font-normal text-gssc-white no-underline hover:underline"
+      (click)="openMembersApp()"
+    >
+      Members
+    </button>
+    <!-- @relation(GSSC-PLLR-379, GSSC-PLLR-380, GSSC-PLLR-381, scope=range_end, role=Implementation) -->
   </div>
+
+  <!-- @relation(GSSC-PLLR-376, GSSC-PLLR-377, GSSC-PLLR-378, scope=range_start, role=Implementation) -->
+  <p class="gssc-footer__copyright m-0 font-normal text-gssc-white">
+    {{ copyrightStatement() }}
+  </p>
+  <!-- @relation(GSSC-PLLR-376, GSSC-PLLR-377, GSSC-PLLR-378, scope=range_end, role=Implementation) -->
 </footer>
 <!-- @relation(GSSC-PLLR-28, GSSC-PLLR-29, scope=range_end, role=Implementation) -->

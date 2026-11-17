@@ -1369,14 +1369,17 @@ TITLE: Footer
 UID: GSSC-PLLR-28
 TITLE: Semantic
 STATEMENT: >>>
-The Public Frontend Footer SHALL contain the Organization Name, Phone Number, Email Address, Postal Address, and Contact control.
+The Public Frontend Footer SHALL contain the Organization Name, Phone Number, Email Address, Postal Address, Contact control, Footer Copyright, and Footer Members Link.
 <<<
 RATIONALE: >>>
-The Footer presents those society identity and contact elements together in the public shell. Each element's behavior is a separate requirement. Contact overlay contents are a separate feature.
+The Footer presents those society identity, contact, copyright, and Members access elements together in the public shell. Each element's behavior is a separate requirement. Contact overlay contents are a separate feature.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-23
+CHANGE_DRIVER: >>>
+GSSC5-23
+GSSC5-122
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -1386,6 +1389,9 @@ RELATIONS:
   VALUE: GSSC-PHLR-21
   ROLE: Refines
 - TYPE: Parent
+  VALUE: GSSC-PHLR-22
+  ROLE: Refines
+- TYPE: Parent
   VALUE: GSSC-PHLR-24
   ROLE: Refines
 - TYPE: Parent
@@ -1393,6 +1399,9 @@ RELATIONS:
   ROLE: Refines
 - TYPE: Parent
   VALUE: GSSC-PHLR-26
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-147
   ROLE: Refines
 
 [REQUIREMENT]
@@ -1792,6 +1801,126 @@ REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-144
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-FOOTER-COPYRIGHT
+TITLE: Footer Copyright
+
+[REQUIREMENT]
+UID: GSSC-PLLR-376
+TITLE: Semantic
+STATEMENT: >>>
+The Footer Copyright SHALL display a copyright statement for the Genealogical Society of Stanislaus County.
+<<<
+RATIONALE: >>>
+The Footer shows a copyright statement so visitors see the society's rights notice. Exact wording is not set by this requirement.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-122
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-22
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-377
+TITLE: Syntactic
+STATEMENT: >>>
+The Footer Copyright SHALL appear after the society contact details in the Footer.
+<<<
+RATIONALE: >>>
+Placing the copyright after identity and contact details keeps the rights notice at the end of the Footer.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-122
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-22
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-378
+TITLE: Lexical
+STATEMENT: >>>
+The Footer Copyright SHALL use a normal weight and the white theme token for its text color.
+<<<
+RATIONALE: >>>
+Normal-weight white text keeps the copyright readable on the Footer background without competing with the organization name.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-122
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-22
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-FOOTER-MEMBERS-LINK
+TITLE: Footer Members Link
+
+[REQUIREMENT]
+UID: GSSC-PLLR-379
+TITLE: Semantic
+STATEMENT: >>>
+The Footer Members Link SHALL open the Members Frontend when the visitor activates it.
+<<<
+RATIONALE: >>>
+The Footer provides access to the Members Frontend so visitors can reach membership login and member views without using the Header.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-122
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-147
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-380
+TITLE: Syntactic
+STATEMENT: >>>
+The Footer Members Link SHALL appear in the Footer below the Footer Sitemap Link as a text control that opens the Members Frontend when activated.
+<<<
+RATIONALE: >>>
+Placing the link with other Footer actions keeps Members access discoverable. A text control matches Contact and destination links elsewhere in the Footer.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-122
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-147
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-381
+TITLE: Lexical
+STATEMENT: >>>
+The Footer Members Link SHALL use the white theme token for its text color, with no underline except on hover.
+<<<
+RATIONALE: >>>
+White text keeps the Members link aligned with other Footer text on the black Footer background. Underline on hover marks it as activatable without a default underline.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-122
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-147
   ROLE: Refines
 
 [[/SECTION]]

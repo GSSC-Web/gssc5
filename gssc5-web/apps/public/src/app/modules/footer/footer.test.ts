@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { ContactOverlay } from '../../services/contact-overlay/contact-overlay';
+import { DEFAULT_MEMBERS_APP_ORIGIN, MembersApp } from '../../services/members-app';
 import {
   SOCIETY_EMAIL_KEY,
   SOCIETY_ORGANIZATION_ACRONYM_KEY,
@@ -46,8 +47,10 @@ async function setupFooter() {
   fixture.detectChanges();
   const societyContact = TestBed.inject(SocietyContact);
   const contactOverlay = TestBed.inject(ContactOverlay);
+  const membersApp = TestBed.inject(MembersApp);
+  membersApp.assignLocation = false;
   const root = nativeElement(fixture);
-  return { fixture, societyContact, contactOverlay, root };
+  return { fixture, societyContact, contactOverlay, membersApp, root };
 }
 
 // @relation(GSSC-PLLR-28, scope=range_start, role=Test)
@@ -58,6 +61,8 @@ test('GSSC-PLLR-28 Semantic', async () => {
   expect(root.querySelector('.gssc-footer__email')).not.toBeNull();
   expect(root.querySelector('.gssc-footer__postal')).not.toBeNull();
   expect(root.querySelector('.gssc-footer__contact')).not.toBeNull();
+  expect(root.querySelector('.gssc-footer__copyright')).not.toBeNull();
+  expect(root.querySelector('.gssc-footer__members')).not.toBeNull();
 });
 // @relation(GSSC-PLLR-28, scope=range_end, role=Test)
 
@@ -259,3 +264,71 @@ test('GSSC-PLLR-347 Lexical', async () => {
   expect(sitemap.classList.contains('hover:underline')).toBe(true);
 });
 // @relation(GSSC-PLLR-347, scope=range_end, role=Test)
+
+// @relation(GSSC-PLLR-376, scope=range_start, role=Test)
+test('GSSC-PLLR-376 Semantic', async () => {
+  const { root, societyContact } = await setupFooter();
+  const copyright = textContent(root, '.gssc-footer__copyright')!;
+  expect(copyright).toContain('©');
+  expect(copyright).toContain(String(new Date().getFullYear()));
+  expect(copyright).toContain(societyContact.organizationName());
+  expect(copyright).toContain('All Rights Reserved');
+});
+// @relation(GSSC-PLLR-376, scope=range_end, role=Test)
+
+// @relation(GSSC-PLLR-377, scope=range_start, role=Test)
+test('GSSC-PLLR-377 Syntactic', async () => {
+  const { root } = await setupFooter();
+  const footer = root.querySelector('.gssc-footer')!;
+  const details = root.querySelector('.gssc-footer__contact-details')!;
+  const copyright = root.querySelector('.gssc-footer__copyright')!;
+  expect(footer.contains(copyright)).toBe(true);
+  expect(
+    details.compareDocumentPosition(copyright) & Node.DOCUMENT_POSITION_FOLLOWING,
+  ).toBeTruthy();
+});
+// @relation(GSSC-PLLR-377, scope=range_end, role=Test)
+
+// @relation(GSSC-PLLR-378, scope=range_start, role=Test)
+test('GSSC-PLLR-378 Lexical', async () => {
+  const { root } = await setupFooter();
+  const copyright = root.querySelector<HTMLElement>('.gssc-footer__copyright')!;
+  expect(copyright.classList.contains('font-normal')).toBe(true);
+  expect(copyright.classList.contains('text-gssc-white')).toBe(true);
+});
+// @relation(GSSC-PLLR-378, scope=range_end, role=Test)
+
+// @relation(GSSC-PLLR-379, scope=range_start, role=Test)
+test('GSSC-PLLR-379 Semantic', async () => {
+  const { fixture, root, membersApp } = await setupFooter();
+  expect(membersApp.lastNavigation).toBeNull();
+  root.querySelector<HTMLButtonElement>('.gssc-footer__members')!.click();
+  fixture.detectChanges();
+  expect(membersApp.lastNavigation).toBe(DEFAULT_MEMBERS_APP_ORIGIN);
+});
+// @relation(GSSC-PLLR-379, scope=range_end, role=Test)
+
+// @relation(GSSC-PLLR-380, scope=range_start, role=Test)
+test('GSSC-PLLR-380 Syntactic', async () => {
+  const { root } = await setupFooter();
+  const details = root.querySelector('.gssc-footer__contact-details')!;
+  const sitemap = root.querySelector('.gssc-footer__sitemap')!;
+  const members = root.querySelector('.gssc-footer__members')!;
+  expect(details.contains(members)).toBe(true);
+  expect(
+    sitemap.compareDocumentPosition(members) & Node.DOCUMENT_POSITION_FOLLOWING,
+  ).toBeTruthy();
+  expect(members.tagName).toBe('BUTTON');
+  expect(members.textContent?.trim()).toBe('Members');
+});
+// @relation(GSSC-PLLR-380, scope=range_end, role=Test)
+
+// @relation(GSSC-PLLR-381, scope=range_start, role=Test)
+test('GSSC-PLLR-381 Lexical', async () => {
+  const { root } = await setupFooter();
+  const members = root.querySelector<HTMLElement>('.gssc-footer__members')!;
+  expect(members.classList.contains('text-gssc-white')).toBe(true);
+  expect(members.classList.contains('no-underline')).toBe(true);
+  expect(members.classList.contains('hover:underline')).toBe(true);
+});
+// @relation(GSSC-PLLR-381, scope=range_end, role=Test)

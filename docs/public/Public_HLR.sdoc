@@ -596,6 +596,19 @@ DERIVED: True
 CHANGE_DRIVER: GSSC5-41
 REVIEW_STATUS: Approved
 
+[REQUIREMENT]
+UID: GSSC-PHLR-147
+TITLE: Footer Members Link
+STATEMENT: >>>
+The GSSC Website Public Frontend Footer SHALL include a link that opens the Members Frontend.
+<<<
+RATIONALE: >>>
+No Public Frontend PIR requires a Members Frontend link in the Footer. The Header already offers Member Access. This requirement places a Footer path to the Members Frontend so visitors can reach membership login and member views without using the Header, and does not set the link's label.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-122
+REVIEW_STATUS: Approved
+
 [[/SECTION]]
 
 [[SECTION]]

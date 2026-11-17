@@ -659,6 +659,19 @@ DERIVED: True
 CHANGE_DRIVER: GSSC5-108
 REVIEW_STATUS: Approved
 
+[REQUIREMENT]
+UID: GSSC-MHLR-101
+TITLE: Footer Home Link
+STATEMENT: >>>
+The GSSC Website Member Frontend Footer SHALL include a link that opens the Members home dashboard.
+<<<
+RATIONALE: >>>
+No Member Frontend PIR requires a home link in the Footer. Members may leave the dashboard for other authenticated views. This requirement places Footer access back to the Members home dashboard and does not set the link's label.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-123
+REVIEW_STATUS: Approved
+
 [[/SECTION]]
 
 [[SECTION]]
