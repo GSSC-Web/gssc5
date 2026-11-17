@@ -5,6 +5,7 @@ import { EditorSession } from '../../services/editor-session/editor-session';
 import { EventRecord, eventsApi } from '../../services/events-api';
 import { MemberSession, memberSessionApi } from '../../services/member-session';
 import { nativeElement, textContent } from '../../../test-harness';
+import { PageDataEditorPage } from '../page-data-editor/page-data-editor';
 import { EventsPage } from './events';
 
 function okResponse(data: unknown, status = 200) {
@@ -602,7 +603,8 @@ test('GSSC-MLLR-344 Event Editor Permission', async () => {
 test('GSSC-MLLR-345 Events Page Route', () => {
   const eventsRoute = routes.find((route) => route.path === 'events');
   expect(eventsRoute).toBeTruthy();
-  expect(eventsRoute?.component).toBe(EventsPage);
+  expect(eventsRoute?.component).toBe(PageDataEditorPage);
+  expect(eventsRoute?.data?.['kind']).toBe('events');
   expect(eventsRoute?.canActivate).toEqual(expect.arrayContaining([expect.any(Function)]));
 });
 // @relation(GSSC-MLLR-345, scope=range_end, role=Test)

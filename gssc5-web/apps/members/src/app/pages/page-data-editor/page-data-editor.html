@@ -1,0 +1,56 @@
+<!-- @relation(GSSC-MLLR-308, GSSC-MLLR-309, GSSC-MLLR-310, scope=range_start, role=Implementation) -->
+<section
+  class="gssc-page-data-editor mx-auto flex w-full max-w-4xl flex-col gap-5 bg-gssc-white px-4 py-5 font-sans text-gssc-dark-green"
+  data-slot="page-data-editor"
+>
+  <header class="gssc-page-data-editor__intro flex flex-col gap-1">
+    <h1 class="gssc-page-data-editor__title m-0 text-[1.75em] font-semibold text-gssc-dark-green">
+      Page Data Editor
+    </h1>
+    <p class="gssc-page-data-editor__lead m-0 text-sm text-gssc-dark-brown">
+      Edit page sections, announcements, and events from one place.
+    </p>
+  </header>
+
+  <!-- @relation(GSSC-MLLR-311, GSSC-MLLR-312, GSSC-MLLR-313, scope=range_start, role=Implementation) -->
+  <nav
+    class="gssc-page-data-editor__kinds flex w-full flex-wrap gap-2 border-b border-gssc-gray pb-3"
+    data-slot="page-data-kind-switcher"
+    aria-label="Page data kind"
+  >
+    @for (entry of kinds; track entry.id) {
+      <button
+        type="button"
+        class="gssc-page-data-editor__kind inline-flex cursor-pointer items-center justify-center rounded-md border border-gssc-dark-green bg-gssc-white px-3 py-1.5 font-sans text-sm text-gssc-dark-green hover:bg-gssc-light-green"
+        [class.bg-gssc-light-green]="kind() === entry.id"
+        [attr.aria-pressed]="kind() === entry.id"
+        [attr.data-kind]="entry.id"
+        (click)="selectKind(entry.id)"
+      >
+        {{ entry.label }}
+      </button>
+    }
+  </nav>
+  <!-- @relation(GSSC-MLLR-311, GSSC-MLLR-312, GSSC-MLLR-313, scope=range_end, role=Implementation) -->
+
+  <!-- @relation(GSSC-MLLR-314, GSSC-MLLR-315, GSSC-MLLR-316, scope=range_start, role=Implementation) -->
+  <div
+    class="gssc-page-data-editor__panel w-full"
+    data-slot="page-data-kind-panel"
+    [attr.data-active-kind]="kind()"
+  >
+    @switch (kind()) {
+      @case ('sections') {
+        <gssc-page-section-editor-page />
+      }
+      @case ('announcements') {
+        <gssc-announcements-editor-page />
+      }
+      @case ('events') {
+        <gssc-events-page />
+      }
+    }
+  </div>
+  <!-- @relation(GSSC-MLLR-314, GSSC-MLLR-315, GSSC-MLLR-316, scope=range_end, role=Implementation) -->
+</section>
+<!-- @relation(GSSC-MLLR-308, GSSC-MLLR-309, GSSC-MLLR-310, scope=range_end, role=Implementation) -->

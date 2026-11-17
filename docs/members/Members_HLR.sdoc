@@ -1630,3 +1630,45 @@ CHANGE_DRIVER: GSSC5-116
 REVIEW_STATUS: Approved
 
 [[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MHLR-PAGE-DATA-EDITOR
+TITLE: Page Data Editor Requirements
+
+[REQUIREMENT]
+UID: GSSC-MHLR-93
+TITLE: Page Data Editor Unification
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL provide one Page Data Editor surface that presents public page section editing, announcement editing, and event editing for a logged-in member with the necessary permissions.
+<<<
+RATIONALE: >>>
+Separate announcement and event editor destinations duplicated chrome around the shared Generic Editor. One Page Data Editor keeps section, announcement, and event authoring discoverable together while reusing those existing editing capabilities.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-117
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-38
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-43
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-46
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MHLR-94
+TITLE: Page Data Kind Selection
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL let a logged-in member switch the Page Data Editor among section editing, announcement editing, and event editing without leaving that editor surface.
+<<<
+RATIONALE: >>>
+Kind switching is the unification affordance: members move among the absorbed editor entry points without hunting separate destinations.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-117
+REVIEW_STATUS: Approved
+
+[[/SECTION]]

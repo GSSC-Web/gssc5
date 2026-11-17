@@ -102,7 +102,8 @@ GSSC5-102 also owns GSSC-MLLR-438 through GSSC-MLLR-440 (Password History Reset 
 GSSC5-108 Members Sitemap Page owns GSSC-MLLR-501 through GSSC-MLLR-510 (exact end 510; band 501–520 reserved for sitemap); HLR GSSC-MHLR-79 / GSSC-MHLR-80.
 GSSC5-109 Members Site Search owns GSSC-MLLR-462 through GSSC-MLLR-483 (exact end 483; band 462–500 reserved for site search so GSSC5-107 nav 441–461 and GSSC5-108 sitemap 501–510 stay clear); HLR GSSC-MHLR-87 / GSSC-MHLR-88.
 GSSC5-116 Members Site Tree Editor owns GSSC-MLLR-521 through GSSC-MLLR-540 (exact end 540; band 521–560 reserved for site-tree editor); HLR GSSC-MHLR-89 through GSSC-MHLR-92.
-Wave coordination: GSSC5-92 directory 202–214, GSSC5-102 directory refinement 215–230, GSSC5-89 dashboard 231–239, GSSC5-93 page/section 261–286, GSSC5-94 announcements 291–307, GSSC5-95 events 321–346, GSSC5-96 newsletters 351–373, GSSC5-97 publications/tools 381–414, GSSC5-101 account refinement 415–428, GSSC5-103 mailing-equals-home 429–437, GSSC5-102 password-history-reset 438–440, GSSC5-107 members nav chrome 441–461, GSSC5-109 members site search 462–483 (band 462–500), GSSC5-108 sitemap 501–510, GSSC5-116 site-tree editor 521–540 (band 521–560) — do not collide.
+GSSC5-117 Page Data Editor Unification owns GSSC-MLLR-308 through GSSC-MLLR-320 (exact end 320; bridge band between announcements 291–307 and events 321–346); HLR GSSC-MHLR-93 / GSSC-MHLR-94; also CHANGE_DRIVER on GSSC-MLLR-345.
+Wave coordination: GSSC5-92 directory 202–214, GSSC5-102 directory refinement 215–230, GSSC5-89 dashboard 231–239, GSSC5-93 page/section 261–286, GSSC5-94 announcements 291–307, GSSC5-117 page-data unification 308–320, GSSC5-95 events 321–346, GSSC5-96 newsletters 351–373, GSSC5-97 publications/tools 381–414, GSSC5-101 account refinement 415–428, GSSC5-103 mailing-equals-home 429–437, GSSC5-102 password-history-reset 438–440, GSSC5-107 members nav chrome 441–461, GSSC5-109 members site search 462–483 (band 462–500), GSSC5-108 sitemap 501–510, GSSC5-116 site-tree editor 521–540 (band 521–560) — do not collide.
 GSSC-MLLR-33 through GSSC-MLLR-39 remain free for later claimants.
 Do not reuse numbers already claimed by another ticket.
 <<<
@@ -8086,14 +8087,17 @@ RELATIONS:
 UID: GSSC-MLLR-345
 TITLE: Events Page Route
 STATEMENT: >>>
-The Member Frontend SHALL expose the Events Page at the path /events for logged-in members and SHALL redirect logged-out visitors to login.
+The Member Frontend SHALL expose the Events Page at the path /events for logged-in members within the Page Data Editor and SHALL redirect logged-out visitors to login.
 <<<
 RATIONALE: >>>
-A stable path lets authorized members open the events editor; auth guards already protect member routes.
+A stable path lets authorized members open the events editor; auth guards already protect member routes. GSSC5-117 hosts that path inside the unified Page Data Editor while keeping the /events entry.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-95
+CHANGE_DRIVER: >>>
+GSSC5-95
+GSSC5-117
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -9847,6 +9851,270 @@ REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-89
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-PAGE-DATA-EDITOR
+TITLE: Page Data Editor
+
+[[SECTION]]
+UID: GSSC-MLLR-PAGE-DATA-EDITOR-SHELL
+TITLE: Page Data Editor Shell
+
+[REQUIREMENT]
+UID: GSSC-MLLR-308
+TITLE: Semantic
+STATEMENT: >>>
+The Page Data Editor Shell SHALL present a Page Data Editor title, a short lead describing unified page-data editing, a kind switcher, and a kind panel host for the active editing kind.
+<<<
+RATIONALE: >>>
+The shell is the shared chrome that absorbs the former separate editor destinations into one Member Frontend surface.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-117
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-93
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-309
+TITLE: Syntactic
+STATEMENT: >>>
+The Page Data Editor Shell SHALL occupy the page content width as a vertical stack with the title and lead above the kind switcher and the kind panel host below the kind switcher.
+<<<
+RATIONALE: >>>
+A vertical stack keeps kind selection above the active editor so members always see which kind is active before editing fields.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-117
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-93
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-310
+TITLE: Lexical
+STATEMENT: >>>
+The Page Data Editor Shell SHALL use a white background, sans-serif type, dark-green title text, and dark-brown lead text.
+<<<
+RATIONALE: >>>
+Shell chrome matches Member Frontend editor pages so unification does not introduce a separate visual language.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-117
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-93
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-PAGE-DATA-KIND-SWITCHER
+TITLE: Kind Switcher
+
+[REQUIREMENT]
+UID: GSSC-MLLR-311
+TITLE: Semantic
+STATEMENT: >>>
+The Kind Switcher SHALL present controls for Sections, Announcements, and Events and SHALL identify which kind is currently selected.
+<<<
+RATIONALE: >>>
+Explicit kind controls are the member-facing absorb of the former separate editor entry points.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-117
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-94
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-312
+TITLE: Syntactic
+STATEMENT: >>>
+The Kind Switcher SHALL appear as a horizontal wrapping row of controls under the Page Data Editor lead and above the kind panel host.
+<<<
+RATIONALE: >>>
+A horizontal switcher keeps all three kinds visible without competing with the editor panel.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-117
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-94
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-313
+TITLE: Lexical
+STATEMENT: >>>
+Each Kind Switcher control SHALL use sans-serif dark-green text, a dark-green border, a white default background, and a light-green hover background.
+<<<
+RATIONALE: >>>
+Kind controls reuse Member Frontend interactive chrome so unification stays visually consistent with other editors.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-117
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-94
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-PAGE-DATA-KIND-PANEL
+TITLE: Kind Panel Host
+
+[REQUIREMENT]
+UID: GSSC-MLLR-314
+TITLE: Semantic
+STATEMENT: >>>
+The Kind Panel Host SHALL present the section editor when Sections is selected, the announcements editor when Announcements is selected, and the events editor when Events is selected.
+<<<
+RATIONALE: >>>
+Hosting the existing kind editors inside one panel preserves Done GSSC5-93/94/95 capabilities while unifying entry.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-117
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-93
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-315
+TITLE: Syntactic
+STATEMENT: >>>
+The Kind Panel Host SHALL span the full content width of the Page Data Editor Shell below the Kind Switcher.
+<<<
+RATIONALE: >>>
+Full-width hosting keeps each kind editor usable without a side-by-side layout that would shrink field areas.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-117
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-93
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-316
+TITLE: Lexical
+STATEMENT: >>>
+The Kind Panel Host SHALL not introduce a distinct background color of its own beyond the Page Data Editor Shell background.
+<<<
+RATIONALE: >>>
+The host is a layout container; kind editors supply their own presentation.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-117
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-93
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-PAGE-DATA-KIND-BEHAVIOR
+TITLE: Kind Selection Behavior
+
+[REQUIREMENT]
+UID: GSSC-MLLR-317
+TITLE: Sections Kind Selection
+STATEMENT: >>>
+When the member selects Sections in the Kind Switcher, the Member Frontend SHALL present section editing in the Kind Panel Host and SHALL use the /page-sections path for that kind.
+<<<
+RATIONALE: >>>
+Keeping /page-sections as the Sections kind path preserves seeded site-tree destinations while unifying chrome.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-117
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-94
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-318
+TITLE: Announcements Kind Selection
+STATEMENT: >>>
+When the member selects Announcements in the Kind Switcher, the Member Frontend SHALL present announcement editing in the Kind Panel Host and SHALL use the /announcements path for that kind.
+<<<
+RATIONALE: >>>
+Absorbing the announcements editor into the Page Data Editor keeps the /announcements entry while removing a separate top-level editor shell.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-117
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-94
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-319
+TITLE: Events Kind Selection
+STATEMENT: >>>
+When the member selects Events in the Kind Switcher, the Member Frontend SHALL present event editing in the Kind Panel Host and SHALL use the /events path for that kind.
+<<<
+RATIONALE: >>>
+Absorbing the events editor into the Page Data Editor keeps the /events entry while removing a separate top-level editor shell.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-117
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-94
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-320
+TITLE: Canonical Page Data Path
+STATEMENT: >>>
+The Member Frontend SHALL expose a /page-data path that opens the Page Data Editor at the Sections kind.
+<<<
+RATIONALE: >>>
+A canonical Page Data Editor path gives a single bookmark for the unified surface while kind-specific paths remain valid.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-117
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-93
   ROLE: Refines
 
 [[/SECTION]]
