@@ -3022,6 +3022,132 @@ RELATIONS:
 
 [[/SECTION]]
 
+[[SECTION]]
+UID: GSSC-BLLR-USER-LIST-POST
+TITLE: POST
+
+[REQUIREMENT]
+UID: GSSC-BLLR-485
+TITLE: User Creation
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL create a member account for an administrator, requiring a Username, a Primary Email, and a password, accepting optional First Name and Last Name, and returning the created user in the same field projection as a user list entry for that administrator.
+<<<
+RATIONALE: >>>
+Administrators register members who can later log in. The response matches the list projection the directory already consumes.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-119
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-237
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-486
+TITLE: User Creation Forbidden
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL reject member account creation without storing a user when the caller is not an administrator.
+<<<
+RATIONALE: >>>
+Only administrators create member accounts with a chosen password.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-119
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-237
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-487
+TITLE: User Creation Invalid Or Duplicate
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL reject member account creation without storing a user when required fields are missing or invalid, or when the Username or Primary Email already belongs to a stored user.
+<<<
+RATIONALE: >>>
+Invalid or colliding identity fields must not create a second account.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-119
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-237
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-USER-INVITE
+TITLE: /users/invite
+
+[[SECTION]]
+UID: GSSC-BLLR-USER-INVITE-POST
+TITLE: POST
+
+[REQUIREMENT]
+UID: GSSC-BLLR-488
+TITLE: User Invitation
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL create a member account for a user moderator invite, requiring a Primary Email, accepting optional Username, First Name, and Last Name, storing an unusable random password hash for that account, sending an invitation message to that Primary Email that includes a password-recovery-style token stored in the password recovery tokens table, and returning the created user in the same field projection as a user list entry for that caller.
+<<<
+RATIONALE: >>>
+User moderators add prospective members who set a usable password through the recovery-style token. An administrator is a user moderator. Reusing recovery token storage keeps invite completion on the existing recovery path.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-118
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-238
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-489
+TITLE: User Invitation Forbidden
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL reject a member account invite without storing a user when the caller is not a user moderator.
+<<<
+RATIONALE: >>>
+Only user moderators invite prospective members; an administrator is a user moderator.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-118
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-238
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-490
+TITLE: User Invitation Invalid Or Duplicate
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL reject a member account invite without storing a user when the Primary Email is missing or invalid, or when the Primary Email or an included Username already belongs to a stored user.
+<<<
+RATIONALE: >>>
+Invalid or colliding identity fields must not create a second invited account.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-118
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-238
+  ROLE: Refines
+
+[[/SECTION]]
+
 [[/SECTION]]
 
 [[SECTION]]

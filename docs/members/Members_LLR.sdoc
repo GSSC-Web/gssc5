@@ -106,7 +106,9 @@ GSSC5-127 Site Tree Editor Feedback owns GSSC-MLLR-562 (exact end 562; after GSS
 GSSC5-115 Members Template Editor owns GSSC-MLLR-541 through GSSC-MLLR-558 (exact end 558; band 541–580 reserved for template editor after GSSC5-116 site-tree 521–540); HLR GSSC-MHLR-95 / GSSC-MHLR-96.
 GSSC5-117 Page Data Editor Unification owns GSSC-MLLR-308 through GSSC-MLLR-320 (exact end 320; bridge band between announcements 291–307 and events 321–346); HLR GSSC-MHLR-93 / GSSC-MHLR-94; also CHANGE_DRIVER on GSSC-MLLR-345.
 GSSC5-126 Page Data Editor section-from-template and nav cleanup owns GSSC-MLLR-581 through GSSC-MLLR-591 (exact end 591; band 581–600 reserved after template 541–580); HLR GSSC-MHLR-97 / GSSC-MHLR-98; also CHANGE_DRIVER on GSSC-MLLR-262.
-Wave coordination: GSSC5-92 directory 202–214, GSSC5-102 directory refinement 215–230, GSSC5-89 dashboard 231–239, GSSC5-93 page/section 261–286, GSSC5-94 announcements 291–307, GSSC5-117 page-data unification 308–320, GSSC5-95 events 321–346, GSSC5-96 newsletters 351–373, GSSC5-97 publications/tools 381–414, GSSC5-101 account refinement 415–428, GSSC5-103 mailing-equals-home 429–437, GSSC5-102 password-history-reset 438–440, GSSC5-107 members nav chrome 441–461, GSSC5-109 members site search 462–483 (band 462–500), GSSC5-108 sitemap 501–510, GSSC5-116 site-tree editor 521–540 (band 521–560), GSSC5-127 site-tree feedback MLLR-562 (+ CHANGE_DRIVER on 524/529; HLR MHLR-99), GSSC5-115/128 template editor 541–561 (band 541–580), GSSC5-126 PDE section create + nav 581–591 (band 581–600) — do not collide.
+GSSC5-118 Directory Invite Member owns GSSC-MLLR-601 through GSSC-MLLR-608 (exact end 608; band 601–620 reserved for directory invite after GSSC5-126 band 581–600); HLR GSSC-MHLR-100.
+GSSC5-119 Directory Create Member owns GSSC-MLLR-621 through GSSC-MLLR-628 (exact end 628; band 621–640 reserved for directory create after invite 601–620); HLR GSSC-MHLR-37 (CHANGE_DRIVER append; create LLRs parent GSSC-MHLR-37).
+Wave coordination: GSSC5-92 directory 202–214, GSSC5-102 directory refinement 215–230, GSSC5-89 dashboard 231–239, GSSC5-93 page/section 261–286, GSSC5-94 announcements 291–307, GSSC5-117 page-data unification 308–320, GSSC5-95 events 321–346, GSSC5-96 newsletters 351–373, GSSC5-97 publications/tools 381–414, GSSC5-101 account refinement 415–428, GSSC5-103 mailing-equals-home 429–437, GSSC5-102 password-history-reset 438–440, GSSC5-107 members nav chrome 441–461, GSSC5-109 members site search 462–483 (band 462–500), GSSC5-108 sitemap 501–510, GSSC5-116 site-tree editor 521–540 (band 521–560), GSSC5-127 site-tree feedback MLLR-562 (+ CHANGE_DRIVER on 524/529; HLR MHLR-99), GSSC5-115/128 template editor 541–561 (band 541–580), GSSC5-126 PDE section create + nav 581–591 (band 581–600), GSSC5-118 directory invite 601–608 (band 601–620), GSSC5-119 directory create 621–628 (band 621–640) — do not collide.
 GSSC-MLLR-33 through GSSC-MLLR-39 remain free for later claimants.
 Do not reuse numbers already claimed by another ticket.
 <<<
@@ -10811,6 +10813,342 @@ REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-96
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-DIRECTORY-INVITE
+TITLE: Directory Member Invite
+
+[[SECTION]]
+UID: GSSC-MLLR-DIRECTORY-INVITE-CONTROL
+TITLE: Directory Invite Member Control
+
+[REQUIREMENT]
+UID: GSSC-MLLR-601
+TITLE: Semantic
+STATEMENT: >>>
+When the logged-in viewer is a user moderator, the Directory Page SHALL present an Invite Member control that opens the Directory Invite Form for inviting a prospective member.
+<<<
+RATIONALE: >>>
+User moderators invite prospective members from the directory without leaving the list; an administrator is a user moderator.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-118
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-100
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-602
+TITLE: Syntactic
+STATEMENT: >>>
+The Directory Invite Member Control SHALL sit in the Directory Page header actions near the page heading, not on each directory contact card.
+<<<
+RATIONALE: >>>
+Invite is a page-level action for adding a prospective member, not a per-contact management control.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-118
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-100
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-603
+TITLE: Lexical
+STATEMENT: >>>
+The Directory Invite Member Control SHALL use the Member Frontend sans-serif typeface, dark-green text, and light-green background, with a visible label of Invite Member.
+<<<
+RATIONALE: >>>
+Invite styling matches other Members catalog create-style controls while remaining labeled in the directory header.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-118
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-100
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-DIRECTORY-INVITE-FORM
+TITLE: Directory Invite Form
+
+[REQUIREMENT]
+UID: GSSC-MLLR-604
+TITLE: Semantic
+STATEMENT: >>>
+The Directory Invite Form SHALL accept a required Primary Email and optional Username, First Name, and Last Name for the prospective member being invited.
+<<<
+RATIONALE: >>>
+Primary Email is required to deliver the invitation; username and name parts may be supplied when known.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-118
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-100
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-605
+TITLE: Syntactic
+STATEMENT: >>>
+The Directory Invite Form SHALL appear with the Directory Page header actions when the Invite Member control is activated, as a stacked set of fields above a submit control.
+<<<
+RATIONALE: >>>
+The form stays with the page-level invite action so the moderator completes the invite without opening a contact card.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-118
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-100
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-606
+TITLE: Lexical
+STATEMENT: >>>
+The Directory Invite Form SHALL use shared Member Frontend form-field primitives for its fields and the Member Frontend sans-serif typeface with dark-green theme color for field labels and the submit control.
+<<<
+RATIONALE: >>>
+Invite fields match other Members account and directory form styling.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-118
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-100
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-DIRECTORY-INVITE-BEHAVIOR
+TITLE: Directory Invite Behavior
+
+[REQUIREMENT]
+UID: GSSC-MLLR-607
+TITLE: Invite Persists And Refreshes
+STATEMENT: >>>
+When a user moderator submits a valid Directory Invite Form, the Member Frontend SHALL persist the invite through the Unified Backend invite, refresh the directory results, and clear or close the Directory Invite Form.
+<<<
+RATIONALE: >>>
+The list reflects the invited member after the backend accepts the invite, and the form resets for the next invite.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-118
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-100
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-608
+TITLE: Invite Hidden Without User Moderator
+STATEMENT: >>>
+When the logged-in viewer is not a user moderator, the Directory Page SHALL withhold the Invite Member control and the Directory Invite Form.
+<<<
+RATIONALE: >>>
+Ordinary members browse the directory without inviting prospective members.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-118
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-100
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-DIRECTORY-CREATE
+TITLE: Directory Member Create
+
+[[SECTION]]
+UID: GSSC-MLLR-DIRECTORY-CREATE-CONTROL
+TITLE: Directory Create Member Control
+
+[REQUIREMENT]
+UID: GSSC-MLLR-621
+TITLE: Semantic
+STATEMENT: >>>
+When the logged-in viewer is an administrator, the Directory Page SHALL present a Create Member control that opens the Directory Create Form for creating a member account.
+<<<
+RATIONALE: >>>
+Administrators register members from the directory with a chosen password without leaving the list.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-119
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-37
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-622
+TITLE: Syntactic
+STATEMENT: >>>
+The Directory Create Member Control SHALL sit in the Directory Page header actions near the page heading, not on each directory contact card.
+<<<
+RATIONALE: >>>
+Create is a page-level action for adding a registered member, not a per-contact management control.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-119
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-37
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-623
+TITLE: Lexical
+STATEMENT: >>>
+The Directory Create Member Control SHALL use the Member Frontend sans-serif typeface, dark-green text, and light-green background, with a visible label of Create Member.
+<<<
+RATIONALE: >>>
+Create styling matches other Members catalog create-style controls while remaining labeled in the directory header.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-119
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-37
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-DIRECTORY-CREATE-FORM
+TITLE: Directory Create Form
+
+[REQUIREMENT]
+UID: GSSC-MLLR-624
+TITLE: Semantic
+STATEMENT: >>>
+The Directory Create Form SHALL accept a Username, a Primary Email, a password, a First Name, and a Last Name for the member account being created.
+<<<
+RATIONALE: >>>
+Administrator account creation needs identity, contact, password, and name fields before persistence.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-119
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-37
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-625
+TITLE: Syntactic
+STATEMENT: >>>
+The Directory Create Form SHALL appear with the Directory Page header actions when the Create Member control is activated, as a stacked set of fields above a submit control.
+<<<
+RATIONALE: >>>
+The form stays with the page-level create action so the administrator completes creation without opening a contact card.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-119
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-37
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-626
+TITLE: Lexical
+STATEMENT: >>>
+The Directory Create Form SHALL use shared Member Frontend form-field primitives for its fields and the Member Frontend sans-serif typeface with dark-green theme color for field labels and the submit control.
+<<<
+RATIONALE: >>>
+Create fields match other Members account and directory form styling.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-119
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-37
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-DIRECTORY-CREATE-BEHAVIOR
+TITLE: Directory Create Behavior
+
+[REQUIREMENT]
+UID: GSSC-MLLR-627
+TITLE: Create Persists And Refreshes
+STATEMENT: >>>
+When an administrator submits a valid Directory Create Form, the Member Frontend SHALL persist the new member account through the Unified Backend create and refresh the directory results.
+<<<
+RATIONALE: >>>
+The list reflects the created member after the backend accepts the account.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-119
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-37
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-628
+TITLE: Create Hidden Without Administrator
+STATEMENT: >>>
+When the logged-in viewer is not an administrator, the Directory Page SHALL withhold the Create Member control and the Directory Create Form.
+<<<
+RATIONALE: >>>
+Only administrators create member accounts with a chosen password from the directory.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-119
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-37
   ROLE: Refines
 
 [[/SECTION]]

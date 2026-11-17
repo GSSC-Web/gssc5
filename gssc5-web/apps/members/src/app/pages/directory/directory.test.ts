@@ -60,6 +60,8 @@ async function setupDirectory(options?: {
   listCalls: Array<Record<string, string>>;
   softDeleteCalls: string[];
   undeleteCalls: string[];
+  inviteCalls: unknown[];
+  createCalls: unknown[];
   restore: () => void;
 }> {
   const originals = {
@@ -68,6 +70,8 @@ async function setupDirectory(options?: {
     listUsers: directoryApi.listUsers,
     softDeleteUser: directoryApi.softDeleteUser,
     undeleteUser: directoryApi.undeleteUser,
+    inviteUser: directoryApi.inviteUser,
+    createUser: directoryApi.createUser,
   };
 
   try {
@@ -93,6 +97,8 @@ async function setupDirectory(options?: {
   const listCalls: Array<Record<string, string>> = [];
   const softDeleteCalls: string[] = [];
   const undeleteCalls: string[] = [];
+  const inviteCalls: unknown[] = [];
+  const createCalls: unknown[] = [];
   directoryApi.listUsers = (async (query: Record<string, string> = {}) => {
     listCalls.push({ ...query });
     if (options?.listError) {
@@ -116,6 +122,16 @@ async function setupDirectory(options?: {
     undeleteCalls.push(cuid);
     return okResponse(null, 204);
   }) as typeof directoryApi.undeleteUser;
+
+  directoryApi.inviteUser = (async (body) => {
+    inviteCalls.push(body);
+    return okResponse({ cuid: 'invited_1' }, 201);
+  }) as typeof directoryApi.inviteUser;
+
+  directoryApi.createUser = (async (body) => {
+    createCalls.push(body);
+    return okResponse({ cuid: 'created_1' }, 201);
+  }) as typeof directoryApi.createUser;
 
   TestBed.resetTestingModule();
   const fixture = await setupMembersComponent(DirectoryPage, {
@@ -144,12 +160,16 @@ async function setupDirectory(options?: {
     listCalls,
     softDeleteCalls,
     undeleteCalls,
+    inviteCalls,
+    createCalls,
     restore: () => {
       memberSessionApi.challenge = originals.challenge;
       memberSessionApi.getUser = originals.getUser;
       directoryApi.listUsers = originals.listUsers;
       directoryApi.softDeleteUser = originals.softDeleteUser;
       directoryApi.undeleteUser = originals.undeleteUser;
+      directoryApi.inviteUser = originals.inviteUser;
+      directoryApi.createUser = originals.createUser;
     },
   };
 }
@@ -723,3 +743,339 @@ test('GSSC-MLLR-230 Lexical', async () => {
   }
 });
 // @relation(GSSC-MLLR-230, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-601, scope=range_start, role=Test)
+test('GSSC-MLLR-601 Semantic', async () => {
+  const mod = await setupDirectory({ viewer: { cuid: 'mod_1', isUserMod: true } });
+  try {
+    const invite = mod.root.querySelector<HTMLButtonElement>('[data-slot="directory-invite"]')!;
+    expect(invite).not.toBeNull();
+    expect(invite.textContent?.trim()).toBe('Invite Member');
+    invite.click();
+    mod.fixture.detectChanges();
+    expect(mod.root.querySelector('[data-slot="directory-invite-form"]')).not.toBeNull();
+  } finally {
+    mod.restore();
+  }
+});
+// @relation(GSSC-MLLR-601, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-602, scope=range_start, role=Test)
+test('GSSC-MLLR-602 Syntactic', async () => {
+  const { root, restore } = await setupDirectory({ viewer: { cuid: 'mod_1', isUserMod: true } });
+  try {
+    const header = root.querySelector('.gssc-directory-page__header')!;
+    const actions = root.querySelector('.gssc-directory-page__header-actions')!;
+    const invite = root.querySelector('[data-slot="directory-invite"]')!;
+    const title = root.querySelector('.gssc-directory-page__title')!;
+    expect(header.contains(actions)).toBe(true);
+    expect(actions.contains(invite)).toBe(true);
+    expect(title.compareDocumentPosition(invite) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(root.querySelector('.gssc-contact-row [data-slot="directory-invite"]')).toBeNull();
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-602, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-603, scope=range_start, role=Test)
+test('GSSC-MLLR-603 Lexical', async () => {
+  const { root, restore } = await setupDirectory({ viewer: { cuid: 'mod_1', isUserMod: true } });
+  try {
+    const invite = root.querySelector<HTMLElement>('[data-slot="directory-invite"]')!;
+    expect(invite.classList.contains('font-sans')).toBe(true);
+    expect(invite.classList.contains('bg-gssc-light-green')).toBe(true);
+    expect(invite.classList.contains('text-gssc-dark-green')).toBe(true);
+    expect(invite.textContent?.trim()).toBe('Invite Member');
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-603, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-604, scope=range_start, role=Test)
+test('GSSC-MLLR-604 Semantic', async () => {
+  const { root, page, fixture, restore } = await setupDirectory({
+    viewer: { cuid: 'mod_1', isUserMod: true },
+  });
+  try {
+    page.openInviteForm();
+    fixture.detectChanges();
+    expect(root.querySelector('#gssc-directory-invite-primary-email')).not.toBeNull();
+    expect(root.querySelector('#gssc-directory-invite-username')).not.toBeNull();
+    expect(root.querySelector('#gssc-directory-invite-first-name')).not.toBeNull();
+    expect(root.querySelector('#gssc-directory-invite-last-name')).not.toBeNull();
+    expect(
+      root.querySelector('#gssc-directory-invite-primary-email')?.hasAttribute('required'),
+    ).toBe(true);
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-604, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-605, scope=range_start, role=Test)
+test('GSSC-MLLR-605 Syntactic', async () => {
+  const { root, page, fixture, restore } = await setupDirectory({
+    viewer: { cuid: 'mod_1', isUserMod: true },
+  });
+  try {
+    page.openInviteForm();
+    fixture.detectChanges();
+    const header = root.querySelector('.gssc-directory-page__header')!;
+    const form = root.querySelector<HTMLElement>('[data-slot="directory-invite-form"]')!;
+    const submit = root.querySelector('[data-slot="directory-invite-submit"]')!;
+    expect(header.contains(form)).toBe(true);
+    expect(form.classList.contains('flex-col')).toBe(true);
+    expect(form.lastElementChild).toBe(submit);
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-605, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-606, scope=range_start, role=Test)
+test('GSSC-MLLR-606 Lexical', async () => {
+  const { root, page, fixture, restore } = await setupDirectory({
+    viewer: { cuid: 'mod_1', isUserMod: true },
+  });
+  try {
+    page.openInviteForm();
+    fixture.detectChanges();
+    const form = root.querySelector<HTMLElement>('[data-slot="directory-invite-form"]')!;
+    const label = form.querySelector('.gssc-form-text-field__label')!;
+    const submit = root.querySelector<HTMLElement>('[data-slot="directory-invite-submit"]')!;
+    expect(form.querySelector('gssc-form-text-field')).not.toBeNull();
+    expect(label.classList.contains('font-sans')).toBe(true);
+    expect(label.classList.contains('text-gssc-dark-green')).toBe(true);
+    expect(submit.classList.contains('font-sans')).toBe(true);
+    expect(submit.classList.contains('text-gssc-dark-green')).toBe(true);
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-606, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-607, scope=range_start, role=Test)
+test('GSSC-MLLR-607 Invite Persists And Refreshes', async () => {
+  const { root, page, fixture, listCalls, inviteCalls, restore } = await setupDirectory({
+    viewer: { cuid: 'mod_1', isUserMod: true },
+  });
+  try {
+    page.openInviteForm();
+    fixture.detectChanges();
+    page.invitePrimaryEmail.set('new@example.com');
+    page.inviteUsername.set('newbie');
+    page.inviteFirstName.set('New');
+    page.inviteLastName.set('Member');
+    listCalls.length = 0;
+    await page.submitInvite();
+    await settleFilters(fixture);
+    expect(inviteCalls).toEqual([
+      {
+        primaryEmail: 'new@example.com',
+        username: 'newbie',
+        firstName: 'New',
+        lastName: 'Member',
+      },
+    ]);
+    expect(listCalls.length).toBeGreaterThan(0);
+    expect(page.inviteFormOpen()).toBe(false);
+    expect(root.querySelector('[data-slot="directory-invite-form"]')).toBeNull();
+    expect(page.invitePrimaryEmail()).toBe('');
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-607, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-608, scope=range_start, role=Test)
+test('GSSC-MLLR-608 Invite Hidden Without User Moderator', async () => {
+  const plain = await setupDirectory({ viewer: { cuid: 'user_1', isUserMod: false } });
+  try {
+    expect(plain.root.querySelector('[data-slot="directory-invite"]')).toBeNull();
+    expect(plain.root.querySelector('[data-slot="directory-invite-form"]')).toBeNull();
+    expect(plain.root.querySelector('[data-slot="directory-create"]')).toBeNull();
+  } finally {
+    plain.restore();
+  }
+
+  const mod = await setupDirectory({ viewer: { cuid: 'mod_1', isUserMod: true } });
+  try {
+    expect(mod.root.querySelector('[data-slot="directory-invite"]')).not.toBeNull();
+    expect(mod.root.querySelector('[data-slot="directory-create"]')).toBeNull();
+  } finally {
+    mod.restore();
+  }
+});
+// @relation(GSSC-MLLR-608, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-621, scope=range_start, role=Test)
+test('GSSC-MLLR-621 Semantic', async () => {
+  const admin = await setupDirectory({ viewer: { cuid: 'admin_1', isAdmin: true } });
+  try {
+    const create = admin.root.querySelector<HTMLButtonElement>('[data-slot="directory-create"]')!;
+    expect(create).not.toBeNull();
+    expect(create.textContent?.trim()).toBe('Create Member');
+    expect(admin.root.querySelector('[data-slot="directory-invite"]')).not.toBeNull();
+    create.click();
+    admin.fixture.detectChanges();
+    expect(admin.root.querySelector('[data-slot="directory-create-form"]')).not.toBeNull();
+  } finally {
+    admin.restore();
+  }
+});
+// @relation(GSSC-MLLR-621, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-622, scope=range_start, role=Test)
+test('GSSC-MLLR-622 Syntactic', async () => {
+  const { root, restore } = await setupDirectory({ viewer: { cuid: 'admin_1', isAdmin: true } });
+  try {
+    const header = root.querySelector('.gssc-directory-page__header')!;
+    const actions = root.querySelector('.gssc-directory-page__header-actions')!;
+    const create = root.querySelector('[data-slot="directory-create"]')!;
+    const title = root.querySelector('.gssc-directory-page__title')!;
+    expect(header.contains(actions)).toBe(true);
+    expect(actions.contains(create)).toBe(true);
+    expect(title.compareDocumentPosition(create) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(root.querySelector('.gssc-contact-row [data-slot="directory-create"]')).toBeNull();
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-622, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-623, scope=range_start, role=Test)
+test('GSSC-MLLR-623 Lexical', async () => {
+  const { root, restore } = await setupDirectory({ viewer: { cuid: 'admin_1', isAdmin: true } });
+  try {
+    const create = root.querySelector<HTMLElement>('[data-slot="directory-create"]')!;
+    expect(create.classList.contains('font-sans')).toBe(true);
+    expect(create.classList.contains('bg-gssc-light-green')).toBe(true);
+    expect(create.classList.contains('text-gssc-dark-green')).toBe(true);
+    expect(create.textContent?.trim()).toBe('Create Member');
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-623, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-624, scope=range_start, role=Test)
+test('GSSC-MLLR-624 Semantic', async () => {
+  const { root, page, fixture, restore } = await setupDirectory({
+    viewer: { cuid: 'admin_1', isAdmin: true },
+  });
+  try {
+    page.openCreateForm();
+    fixture.detectChanges();
+    expect(root.querySelector('#gssc-directory-create-username')).not.toBeNull();
+    expect(root.querySelector('#gssc-directory-create-primary-email')).not.toBeNull();
+    expect(root.querySelector('#gssc-directory-create-password')).not.toBeNull();
+    expect(root.querySelector('#gssc-directory-create-first-name')).not.toBeNull();
+    expect(root.querySelector('#gssc-directory-create-last-name')).not.toBeNull();
+    expect(
+      root.querySelector<HTMLInputElement>('#gssc-directory-create-password')!.type,
+    ).toBe('password');
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-624, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-625, scope=range_start, role=Test)
+test('GSSC-MLLR-625 Syntactic', async () => {
+  const { root, page, fixture, restore } = await setupDirectory({
+    viewer: { cuid: 'admin_1', isAdmin: true },
+  });
+  try {
+    page.openCreateForm();
+    fixture.detectChanges();
+    const header = root.querySelector('.gssc-directory-page__header')!;
+    const form = root.querySelector<HTMLElement>('[data-slot="directory-create-form"]')!;
+    const submit = root.querySelector('[data-slot="directory-create-submit"]')!;
+    expect(header.contains(form)).toBe(true);
+    expect(form.classList.contains('flex-col')).toBe(true);
+    expect(form.lastElementChild).toBe(submit);
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-625, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-626, scope=range_start, role=Test)
+test('GSSC-MLLR-626 Lexical', async () => {
+  const { root, page, fixture, restore } = await setupDirectory({
+    viewer: { cuid: 'admin_1', isAdmin: true },
+  });
+  try {
+    page.openCreateForm();
+    fixture.detectChanges();
+    const form = root.querySelector<HTMLElement>('[data-slot="directory-create-form"]')!;
+    const label = form.querySelector('.gssc-form-text-field__label')!;
+    const submit = root.querySelector<HTMLElement>('[data-slot="directory-create-submit"]')!;
+    expect(form.querySelector('gssc-form-text-field')).not.toBeNull();
+    expect(label.classList.contains('font-sans')).toBe(true);
+    expect(label.classList.contains('text-gssc-dark-green')).toBe(true);
+    expect(submit.classList.contains('font-sans')).toBe(true);
+    expect(submit.classList.contains('text-gssc-dark-green')).toBe(true);
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-626, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-627, scope=range_start, role=Test)
+test('GSSC-MLLR-627 Create Persists And Refreshes', async () => {
+  const { root, page, fixture, listCalls, createCalls, restore } = await setupDirectory({
+    viewer: { cuid: 'admin_1', isAdmin: true },
+  });
+  try {
+    page.openCreateForm();
+    fixture.detectChanges();
+    page.createUsername.set('brandnew');
+    page.createPrimaryEmail.set('brand@example.com');
+    page.createPassword.set('Secret1!');
+    page.createFirstName.set('Brand');
+    page.createLastName.set('New');
+    listCalls.length = 0;
+    await page.submitCreate();
+    await settleFilters(fixture);
+    expect(createCalls).toEqual([
+      {
+        username: 'brandnew',
+        primaryEmail: 'brand@example.com',
+        password: 'Secret1!',
+        firstName: 'Brand',
+        lastName: 'New',
+      },
+    ]);
+    expect(listCalls.length).toBeGreaterThan(0);
+    expect(page.createFormOpen()).toBe(false);
+    expect(root.querySelector('[data-slot="directory-create-form"]')).toBeNull();
+    expect(page.createUsername()).toBe('');
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-627, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-628, scope=range_start, role=Test)
+test('GSSC-MLLR-628 Create Hidden Without Administrator', async () => {
+  const mod = await setupDirectory({ viewer: { cuid: 'mod_1', isUserMod: true } });
+  try {
+    expect(mod.root.querySelector('[data-slot="directory-create"]')).toBeNull();
+    expect(mod.root.querySelector('[data-slot="directory-create-form"]')).toBeNull();
+    expect(mod.root.querySelector('[data-slot="directory-invite"]')).not.toBeNull();
+  } finally {
+    mod.restore();
+  }
+
+  const plain = await setupDirectory({ viewer: { cuid: 'user_1', isUserMod: false } });
+  try {
+    expect(plain.root.querySelector('[data-slot="directory-create"]')).toBeNull();
+    expect(plain.root.querySelector('[data-slot="directory-invite"]')).toBeNull();
+  } finally {
+    plain.restore();
+  }
+});
+// @relation(GSSC-MLLR-628, scope=range_end, role=Test)

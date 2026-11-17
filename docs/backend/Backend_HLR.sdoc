@@ -1523,6 +1523,43 @@ RELATIONS:
 [[/SECTION]]
 
 [REQUIREMENT]
+UID: GSSC-BHLR-237
+TITLE: Administrator Member Account Creation
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL let an administrator create a member account with a username, a Primary Email, a password, and optional name fields.
+<<<
+RATIONALE: >>>
+Administrators register members who can later log in. Exact request fields and response projection are low-level.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-119
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-44
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-238
+TITLE: Member Account Invitation
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL let a user moderator invite a prospective member by Primary Email, create that member account with an unusable password hash, and send an invitation message that includes a password-recovery-style token.
+<<<
+RATIONALE: >>>
+User moderators add prospective members without choosing a usable password; the invitee sets a password through the recovery-style token. An administrator is a user moderator. Exact request fields and response projection are low-level.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-118
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-50
+  ROLE: Refines
+
+[REQUIREMENT]
 UID: GSSC-BHLR-81
 TITLE: Permission Modification
 STATEMENT: >>>

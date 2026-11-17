@@ -3,17 +3,45 @@
   class="gssc-directory-page mx-auto flex w-full max-w-5xl flex-col gap-4 px-4 py-6 font-sans text-gssc-dark-green"
   aria-labelledby="gssc-directory-heading"
 >
-  <header class="gssc-directory-page__header flex flex-col gap-1">
-    <h1
-      id="gssc-directory-heading"
-      class="gssc-directory-page__title m-0 font-sans text-2xl font-semibold text-gssc-dark-green"
-    >
-      @if (isAdministrator()) {
-        Registered Members
-      } @else {
-        Members Directory
-      }
-    </h1>
+  <header class="gssc-directory-page__header flex flex-col gap-3">
+    <div class="gssc-directory-page__heading-row flex flex-wrap items-center gap-3">
+      <h1
+        id="gssc-directory-heading"
+        class="gssc-directory-page__title m-0 font-sans text-2xl font-semibold text-gssc-dark-green"
+      >
+        @if (isAdministrator()) {
+          Registered Members
+        } @else {
+          Members Directory
+        }
+      </h1>
+      <div class="gssc-directory-page__header-actions flex flex-wrap items-center gap-3">
+        <!-- @relation(GSSC-MLLR-601, GSSC-MLLR-602, GSSC-MLLR-603, GSSC-MLLR-608, scope=range_start, role=Implementation) -->
+        @if (isUserMod()) {
+          <button
+            type="button"
+            class="gssc-directory-page__invite inline-flex cursor-pointer items-center justify-center rounded-md border border-gssc-dark-green bg-gssc-light-green px-3 py-2 font-sans text-sm font-normal text-gssc-dark-green hover:bg-gssc-gray"
+            data-slot="directory-invite"
+            (click)="openInviteForm()"
+          >
+            Invite Member
+          </button>
+        }
+        <!-- @relation(GSSC-MLLR-601, GSSC-MLLR-602, GSSC-MLLR-603, GSSC-MLLR-608, scope=range_end, role=Implementation) -->
+        <!-- @relation(GSSC-MLLR-621, GSSC-MLLR-622, GSSC-MLLR-623, GSSC-MLLR-628, scope=range_start, role=Implementation) -->
+        @if (isAdministrator()) {
+          <button
+            type="button"
+            class="gssc-directory-page__create inline-flex cursor-pointer items-center justify-center rounded-md border border-gssc-dark-green bg-gssc-light-green px-3 py-2 font-sans text-sm font-normal text-gssc-dark-green hover:bg-gssc-gray"
+            data-slot="directory-create"
+            (click)="openCreateForm()"
+          >
+            Create Member
+          </button>
+        }
+        <!-- @relation(GSSC-MLLR-621, GSSC-MLLR-622, GSSC-MLLR-623, GSSC-MLLR-628, scope=range_end, role=Implementation) -->
+      </div>
+    </div>
     <p class="gssc-directory-page__lede m-0 font-sans text-sm font-normal text-gssc-dark-green">
       @if (isAdministrator()) {
         Search and browse the organization's registered membership.
@@ -21,6 +49,107 @@
         Find fellow members and the contact information they make available.
       }
     </p>
+
+    <!-- @relation(GSSC-MLLR-604, GSSC-MLLR-605, GSSC-MLLR-606, scope=range_start, role=Implementation) -->
+    @if (isUserMod() && inviteFormOpen()) {
+      <form
+        class="gssc-directory-invite-form flex w-full max-w-md flex-col gap-3 font-sans text-gssc-dark-green"
+        data-slot="directory-invite-form"
+        (submit)="submitInvite($event)"
+        novalidate
+      >
+        <gssc-form-text-field
+          label="Primary Email"
+          name="invitePrimaryEmail"
+          inputType="email"
+          [(value)]="invitePrimaryEmail"
+          controlId="gssc-directory-invite-primary-email"
+          [required]="true"
+        />
+        <gssc-form-text-field
+          label="Username"
+          name="inviteUsername"
+          [(value)]="inviteUsername"
+          controlId="gssc-directory-invite-username"
+        />
+        <gssc-form-text-field
+          label="First Name"
+          name="inviteFirstName"
+          [(value)]="inviteFirstName"
+          controlId="gssc-directory-invite-first-name"
+        />
+        <gssc-form-text-field
+          label="Last Name"
+          name="inviteLastName"
+          [(value)]="inviteLastName"
+          controlId="gssc-directory-invite-last-name"
+        />
+        <button
+          type="submit"
+          class="gssc-directory-invite-form__submit inline-flex w-fit cursor-pointer items-center justify-center rounded-md border border-gssc-dark-green bg-gssc-light-green px-3 py-2 font-sans text-sm font-normal text-gssc-dark-green hover:bg-gssc-gray disabled:cursor-not-allowed disabled:opacity-60"
+          data-slot="directory-invite-submit"
+          [disabled]="inviteSubmitting()"
+        >
+          Invite
+        </button>
+      </form>
+    }
+    <!-- @relation(GSSC-MLLR-604, GSSC-MLLR-605, GSSC-MLLR-606, scope=range_end, role=Implementation) -->
+
+    <!-- @relation(GSSC-MLLR-624, GSSC-MLLR-625, GSSC-MLLR-626, scope=range_start, role=Implementation) -->
+    @if (isAdministrator() && createFormOpen()) {
+      <form
+        class="gssc-directory-create-form flex w-full max-w-md flex-col gap-3 font-sans text-gssc-dark-green"
+        data-slot="directory-create-form"
+        (submit)="submitCreate($event)"
+        novalidate
+      >
+        <gssc-form-text-field
+          label="Username"
+          name="createUsername"
+          [(value)]="createUsername"
+          controlId="gssc-directory-create-username"
+          [required]="true"
+        />
+        <gssc-form-text-field
+          label="Primary Email"
+          name="createPrimaryEmail"
+          inputType="email"
+          [(value)]="createPrimaryEmail"
+          controlId="gssc-directory-create-primary-email"
+          [required]="true"
+        />
+        <gssc-form-text-field
+          label="Password"
+          name="createPassword"
+          inputType="password"
+          [(value)]="createPassword"
+          controlId="gssc-directory-create-password"
+          [required]="true"
+        />
+        <gssc-form-text-field
+          label="First Name"
+          name="createFirstName"
+          [(value)]="createFirstName"
+          controlId="gssc-directory-create-first-name"
+        />
+        <gssc-form-text-field
+          label="Last Name"
+          name="createLastName"
+          [(value)]="createLastName"
+          controlId="gssc-directory-create-last-name"
+        />
+        <button
+          type="submit"
+          class="gssc-directory-create-form__submit inline-flex w-fit cursor-pointer items-center justify-center rounded-md border border-gssc-dark-green bg-gssc-light-green px-3 py-2 font-sans text-sm font-normal text-gssc-dark-green hover:bg-gssc-gray disabled:cursor-not-allowed disabled:opacity-60"
+          data-slot="directory-create-submit"
+          [disabled]="createSubmitting()"
+        >
+          Create
+        </button>
+      </form>
+    }
+    <!-- @relation(GSSC-MLLR-624, GSSC-MLLR-625, GSSC-MLLR-626, scope=range_end, role=Implementation) -->
   </header>
 
   <div

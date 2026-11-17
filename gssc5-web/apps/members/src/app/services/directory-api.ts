@@ -11,25 +11,52 @@ export type DirectorySearchFilters = {
   address?: string;
 };
 
+/** Body for Unified Backend POST /users/invite. */
+export type DirectoryInviteBody = {
+  primaryEmail: string;
+  username?: string;
+  firstName?: string;
+  lastName?: string;
+};
+
+/** Body for Unified Backend POST /users. */
+export type DirectoryCreateBody = {
+  username: string;
+  primaryEmail: string;
+  password: string;
+  firstName?: string;
+  lastName?: string;
+};
+
 /**
- * Treaty calls for members directory list/search and soft-delete.
+ * Treaty calls for members directory list/search, invite, create, and soft-delete.
  * Mutable object so unit tests can stub without fighting Eden proxies.
  */
-/** Minimal Treaty-shaped result used by soft-delete / undelete callers. */
-type SoftDeleteResult = {
+/** Minimal Treaty-shaped result used by mutation callers. */
+type MutationResult = {
   data: unknown;
   error: { status?: number; value?: unknown } | null;
   status?: number;
 };
 
 type SoftDeleteRoutes = {
-  delete: () => Promise<SoftDeleteResult>;
-  undelete: { post: (body?: Record<string, never>) => Promise<SoftDeleteResult> };
+  delete: () => Promise<MutationResult>;
+  undelete: { post: (body?: Record<string, never>) => Promise<MutationResult> };
+};
+
+/** Collection routes not always present on Eden users typing (invite / create). */
+type UsersCollectionRoutes = {
+  post: (body: DirectoryCreateBody) => Promise<MutationResult>;
+  invite: { post: (body: DirectoryInviteBody) => Promise<MutationResult> };
 };
 
 export const directoryApi = {
   listUsers: (query: Record<string, string> = {}) =>
     backend.users.get({ query }),
+  inviteUser: (body: DirectoryInviteBody) =>
+    (backend.users as unknown as UsersCollectionRoutes).invite.post(body),
+  createUser: (body: DirectoryCreateBody) =>
+    (backend.users as unknown as UsersCollectionRoutes).post(body),
   softDeleteUser: (cuid: string) =>
     (backend.users({ cuid }) as unknown as SoftDeleteRoutes).delete(),
   undeleteUser: (cuid: string) =>

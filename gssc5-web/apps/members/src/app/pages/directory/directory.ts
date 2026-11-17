@@ -8,6 +8,8 @@ import {
   directoryPhotoUrl,
   toContactRowContents,
   toDirectoryQuery,
+  type DirectoryCreateBody,
+  type DirectoryInviteBody,
   type DirectorySearchFilters,
 } from '../../services/directory-api';
 import { MemberSession } from '../../services/member-session';
@@ -38,6 +40,21 @@ export class DirectoryPage implements OnInit {
 
   /** True when the viewer may open another member's Account Page (admin ⊃ userMod). */
   readonly isUserMod = this.memberSession.isUserMod;
+
+  readonly inviteFormOpen = signal(false);
+  readonly invitePrimaryEmail = model('');
+  readonly inviteUsername = model('');
+  readonly inviteFirstName = model('');
+  readonly inviteLastName = model('');
+  readonly inviteSubmitting = signal(false);
+
+  readonly createFormOpen = signal(false);
+  readonly createUsername = model('');
+  readonly createPrimaryEmail = model('');
+  readonly createPassword = model('');
+  readonly createFirstName = model('');
+  readonly createLastName = model('');
+  readonly createSubmitting = signal(false);
 
   constructor() {
     // @relation(GSSC-MLLR-212, GSSC-MLLR-226, GSSC-MLLR-227, scope=range_start, role=Implementation)
@@ -84,6 +101,78 @@ export class DirectoryPage implements OnInit {
     this.address.set('');
   }
 
+  openInviteForm(): void {
+    if (!this.isUserMod()) return;
+    this.createFormOpen.set(false);
+    this.inviteFormOpen.set(true);
+  }
+
+  openCreateForm(): void {
+    if (!this.isAdministrator()) return;
+    this.inviteFormOpen.set(false);
+    this.createFormOpen.set(true);
+  }
+
+  // @relation(GSSC-MLLR-607, scope=range_start, role=Implementation)
+  async submitInvite(event?: Event): Promise<void> {
+    event?.preventDefault();
+    if (!this.isUserMod() || this.inviteSubmitting()) return;
+    const primaryEmail = this.invitePrimaryEmail().trim();
+    if (!primaryEmail) return;
+
+    const body: DirectoryInviteBody = { primaryEmail };
+    const username = this.inviteUsername().trim();
+    const firstName = this.inviteFirstName().trim();
+    const lastName = this.inviteLastName().trim();
+    if (username) body.username = username;
+    if (firstName) body.firstName = firstName;
+    if (lastName) body.lastName = lastName;
+
+    this.inviteSubmitting.set(true);
+    try {
+      const { error } = await directoryApi.inviteUser(body);
+      if (error) return;
+      await this.reload(this.currentFilters());
+      this.clearInviteForm();
+      this.inviteFormOpen.set(false);
+    } catch {
+      // leave form open; caller can retry
+    } finally {
+      this.inviteSubmitting.set(false);
+    }
+  }
+  // @relation(GSSC-MLLR-607, scope=range_end, role=Implementation)
+
+  // @relation(GSSC-MLLR-627, scope=range_start, role=Implementation)
+  async submitCreate(event?: Event): Promise<void> {
+    event?.preventDefault();
+    if (!this.isAdministrator() || this.createSubmitting()) return;
+    const username = this.createUsername().trim();
+    const primaryEmail = this.createPrimaryEmail().trim();
+    const password = this.createPassword();
+    if (!username || !primaryEmail || !password) return;
+
+    const body: DirectoryCreateBody = { username, primaryEmail, password };
+    const firstName = this.createFirstName().trim();
+    const lastName = this.createLastName().trim();
+    if (firstName) body.firstName = firstName;
+    if (lastName) body.lastName = lastName;
+
+    this.createSubmitting.set(true);
+    try {
+      const { error } = await directoryApi.createUser(body);
+      if (error) return;
+      await this.reload(this.currentFilters());
+      this.clearCreateForm();
+      this.createFormOpen.set(false);
+    } catch {
+      // leave form open; caller can retry
+    } finally {
+      this.createSubmitting.set(false);
+    }
+  }
+  // @relation(GSSC-MLLR-627, scope=range_end, role=Implementation)
+
   // @relation(GSSC-MLLR-224, GSSC-MLLR-225, scope=range_start, role=Implementation)
   async onSoftDelete(entry: AccountRecord): Promise<void> {
     try {
@@ -105,6 +194,21 @@ export class DirectoryPage implements OnInit {
     }
   }
   // @relation(GSSC-MLLR-224, GSSC-MLLR-225, scope=range_end, role=Implementation)
+
+  private clearInviteForm(): void {
+    this.invitePrimaryEmail.set('');
+    this.inviteUsername.set('');
+    this.inviteFirstName.set('');
+    this.inviteLastName.set('');
+  }
+
+  private clearCreateForm(): void {
+    this.createUsername.set('');
+    this.createPrimaryEmail.set('');
+    this.createPassword.set('');
+    this.createFirstName.set('');
+    this.createLastName.set('');
+  }
 
   private currentFilters(): DirectorySearchFilters {
     return {
