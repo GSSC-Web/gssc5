@@ -12,6 +12,11 @@ import {
 import { NgTemplateOutlet } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { MemberSession } from '../../services/member-session';
+import {
+  QUICK_SEARCH_LIMIT,
+  SITE_SEARCH_GET,
+  type SiteSearchResult,
+} from '../../services/site-search/site-search';
 import { SocietyContact } from '../../services/society-contact/society-contact';
 import {
   SiteTree,
@@ -32,12 +37,16 @@ export type HeaderChromeTier = 'wide' | 'mid' | 'narrow';
 export class Header implements OnInit, OnDestroy {
   private readonly memberSession = inject(MemberSession);
   private readonly siteTree = inject(SiteTree);
+  private readonly siteSearchGet = inject(SITE_SEARCH_GET);
   private readonly router = inject(Router);
   protected readonly societyContact = inject(SocietyContact);
+  private quickSearchGeneration = 0;
 
   readonly loggedIn = this.memberSession.loggedIn;
   readonly displayName = this.memberSession.displayName;
   readonly searchOpen = signal(false);
+  readonly searchQuery = signal('');
+  readonly quickResults = signal<SiteSearchResult[]>([]);
   readonly menuOpen = signal(false);
   readonly chromeTier = signal<HeaderChromeTier>('wide');
   readonly expandedIds = signal<ReadonlySet<string>>(new Set());
@@ -83,11 +92,16 @@ export class Header implements OnInit, OnDestroy {
 
   // @relation(GSSC-MLLR-459, scope=range_start, role=Implementation)
   protected toggleSearch(): void {
-    this.searchOpen.update((open) => !open);
+    this.searchOpen.update((open) => {
+      const next = !open;
+      if (!next) this.resetSearchOverlay();
+      return next;
+    });
   }
 
   protected closeSearch(): void {
     this.searchOpen.set(false);
+    this.resetSearchOverlay();
   }
 
   @HostListener('document:keydown.escape')
@@ -96,6 +110,48 @@ export class Header implements OnInit, OnDestroy {
     if (this.menuOpen()) this.closeMenu();
   }
   // @relation(GSSC-MLLR-459, scope=range_end, role=Implementation)
+
+  // @relation(GSSC-MLLR-462, GSSC-MLLR-465, scope=range_start, role=Implementation)
+  protected onSearchQueryInput(value: string): void {
+    this.searchQuery.set(value);
+    void this.refreshQuickResults(value);
+  }
+
+  protected async onSearchSubmit(event: Event): Promise<void> {
+    event.preventDefault();
+    const q = this.searchQuery().trim();
+    this.closeSearch();
+    await this.router.navigate(['/search'], {
+      queryParams: { q: q || null },
+    });
+  }
+
+  protected async onQuickResultActivate(entry: SiteSearchResult): Promise<void> {
+    this.closeSearch();
+    await this.router.navigateByUrl(entry.href);
+  }
+
+  private async refreshQuickResults(rawQuery: string): Promise<void> {
+    const generation = ++this.quickSearchGeneration;
+    const q = rawQuery.trim();
+    if (q.length === 0) {
+      if (generation === this.quickSearchGeneration) this.quickResults.set([]);
+      return;
+    }
+    const rows = await this.siteSearchGet({
+      q,
+      limit: QUICK_SEARCH_LIMIT,
+    });
+    if (generation !== this.quickSearchGeneration) return;
+    this.quickResults.set(rows ?? []);
+  }
+
+  private resetSearchOverlay(): void {
+    this.quickSearchGeneration += 1;
+    this.searchQuery.set('');
+    this.quickResults.set([]);
+  }
+  // @relation(GSSC-MLLR-462, GSSC-MLLR-465, scope=range_end, role=Implementation)
 
   // @relation(GSSC-MLLR-450, scope=range_start, role=Implementation)
   protected toggleMenu(): void {

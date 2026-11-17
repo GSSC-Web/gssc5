@@ -163,15 +163,54 @@
   }
 
   @if (searchOpen()) {
+    <!-- @relation(GSSC-MLLR-462, GSSC-MLLR-463, GSSC-MLLR-464, scope=range_start, role=Implementation) -->
     <div
-      class="gssc-header__search-panel absolute end-4 top-full z-20 mt-1 min-w-48 border border-gssc-gray bg-gssc-white p-3 font-sans text-gssc-dark-green"
+      class="gssc-header__search-panel absolute end-4 top-full z-20 mt-1 min-w-64 max-w-sm border border-gssc-gray bg-gssc-white p-3 font-sans text-gssc-dark-green"
       [class.start-4]="chromeTier() === 'narrow'"
       [class.end-auto]="chromeTier() === 'narrow'"
       role="search"
     >
-      <!-- Placeholder until GSSC5-109 search widget. -->
-      <p class="gssc-header__search-placeholder m-0 text-sm">Search</p>
+      <form class="gssc-header__search-form flex flex-col gap-2" (submit)="onSearchSubmit($event)">
+        <!-- @relation(GSSC-MLLR-465, GSSC-MLLR-466, GSSC-MLLR-467, scope=range_start, role=Implementation) -->
+        <input
+          class="gssc-header__search-query w-full border border-gssc-gray bg-gssc-white px-2 py-1 font-sans text-gssc-dark-green"
+          type="search"
+          name="q"
+          [value]="searchQuery()"
+          (input)="onSearchQueryInput($any($event.target).value)"
+          aria-label="Site search query"
+          placeholder="Search"
+        />
+        <!-- @relation(GSSC-MLLR-465, GSSC-MLLR-466, GSSC-MLLR-467, scope=range_end, role=Implementation) -->
+
+        @if (quickResults().length > 0) {
+          <ul class="gssc-header__search-results m-0 list-none space-y-2 p-0">
+            @for (entry of quickResults(); track entry.href + entry.title + entry.kind) {
+              <!-- @relation(GSSC-MLLR-468, GSSC-MLLR-469, GSSC-MLLR-470, scope=range_start, role=Implementation) -->
+              <li class="gssc-header__search-result">
+                <button
+                  type="button"
+                  class="gssc-header__search-result-button w-full cursor-pointer border-0 bg-transparent p-0 text-left font-sans"
+                  (click)="onQuickResultActivate(entry)"
+                >
+                  <span class="gssc-header__search-result-title block font-sans text-gssc-dark-green">
+                    {{ entry.title }}
+                  </span>
+                  <span class="gssc-header__search-result-snippet block font-sans text-sm text-gssc-gray">
+                    {{ entry.snippet }}
+                  </span>
+                  <span class="gssc-header__search-result-kind block font-sans text-xs text-gssc-dark-brown">
+                    {{ entry.kind }}
+                  </span>
+                </button>
+              </li>
+              <!-- @relation(GSSC-MLLR-468, GSSC-MLLR-469, GSSC-MLLR-470, scope=range_end, role=Implementation) -->
+            }
+          </ul>
+        }
+      </form>
     </div>
+    <!-- @relation(GSSC-MLLR-462, GSSC-MLLR-463, GSSC-MLLR-464, scope=range_end, role=Implementation) -->
   }
 
   @if (menuOpen() && chromeTier() !== 'wide') {
@@ -325,7 +364,6 @@
         aria-hidden="true"
       ></i>
     } @else {
-      <!-- Nerd Font glyphs; full search widget is GSSC5-109. -->
       <i
         class="nf nf-fa-search gssc-header__search-icon gssc-header__search-icon--open text-base leading-none"
         aria-hidden="true"
