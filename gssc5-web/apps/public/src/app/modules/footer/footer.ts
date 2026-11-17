@@ -1,6 +1,7 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, computed, inject, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ContactOverlay } from '../../services/contact-overlay/contact-overlay';
+import { MembersApp } from '../../services/members-app';
 import { SocietyContact } from '../../services/society-contact/society-contact';
 
 @Component({
@@ -10,7 +11,14 @@ import { SocietyContact } from '../../services/society-contact/society-contact';
 })
 export class Footer implements OnInit {
   private readonly contactOverlay = inject(ContactOverlay);
+  private readonly membersApp = inject(MembersApp);
   protected readonly societyContact = inject(SocietyContact);
+
+  protected readonly copyrightStatement = computed(() => {
+    const name = this.societyContact.organizationName().trim();
+    const label = name || 'Genealogical Society of Stanislaus County';
+    return `© ${new Date().getFullYear()} ${label}. All Rights Reserved.`;
+  });
 
   async ngOnInit(): Promise<void> {
     await this.societyContact.refresh();
@@ -21,4 +29,10 @@ export class Footer implements OnInit {
     this.contactOverlay.open();
   }
   // @relation(GSSC-PLLR-43, scope=range_end, role=Implementation)
+
+  // @relation(GSSC-PLLR-379, scope=range_start, role=Implementation)
+  protected openMembersApp(): void {
+    this.membersApp.navigate();
+  }
+  // @relation(GSSC-PLLR-379, scope=range_end, role=Implementation)
 }

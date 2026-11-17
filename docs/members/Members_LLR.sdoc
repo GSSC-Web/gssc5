@@ -108,7 +108,8 @@ GSSC5-117 Page Data Editor Unification owns GSSC-MLLR-308 through GSSC-MLLR-320 
 GSSC5-126 Page Data Editor section-from-template and nav cleanup owns GSSC-MLLR-581 through GSSC-MLLR-591 (exact end 591; band 581–600 reserved after template 541–580); HLR GSSC-MHLR-97 / GSSC-MHLR-98; also CHANGE_DRIVER on GSSC-MLLR-262.
 GSSC5-118 Directory Invite Member owns GSSC-MLLR-601 through GSSC-MLLR-608 (exact end 608; band 601–620 reserved for directory invite after GSSC5-126 band 581–600); HLR GSSC-MHLR-100.
 GSSC5-119 Directory Create Member owns GSSC-MLLR-621 through GSSC-MLLR-628 (exact end 628; band 621–640 reserved for directory create after invite 601–620); HLR GSSC-MHLR-37 (CHANGE_DRIVER append; create LLRs parent GSSC-MHLR-37).
-Wave coordination: GSSC5-92 directory 202–214, GSSC5-102 directory refinement 215–230, GSSC5-89 dashboard 231–239, GSSC5-93 page/section 261–286, GSSC5-94 announcements 291–307, GSSC5-117 page-data unification 308–320, GSSC5-95 events 321–346, GSSC5-96 newsletters 351–373, GSSC5-97 publications/tools 381–414, GSSC5-101 account refinement 415–428, GSSC5-103 mailing-equals-home 429–437, GSSC5-102 password-history-reset 438–440, GSSC5-107 members nav chrome 441–461, GSSC5-109 members site search 462–483 (band 462–500), GSSC5-108 sitemap 501–510, GSSC5-116 site-tree editor 521–540 (band 521–560), GSSC5-127 site-tree feedback MLLR-562 (+ CHANGE_DRIVER on 524/529; HLR MHLR-99), GSSC5-115/128 template editor 541–561 (band 541–580), GSSC5-126 PDE section create + nav 581–591 (band 581–600), GSSC5-118 directory invite 601–608 (band 601–620), GSSC5-119 directory create 621–628 (band 621–640) — do not collide.
+GSSC5-123 Members Footer Home Link owns GSSC-MLLR-641 through GSSC-MLLR-643 (exact end 643; band 641–660 reserved for Wave 3 footer chrome after directory create 621–640); HLR GSSC-MHLR-101; also CHANGE_DRIVER on GSSC-MLLR-40.
+Wave coordination: GSSC5-92 directory 202–214, GSSC5-102 directory refinement 215–230, GSSC5-89 dashboard 231–239, GSSC5-93 page/section 261–286, GSSC5-94 announcements 291–307, GSSC5-117 page-data unification 308–320, GSSC5-95 events 321–346, GSSC5-96 newsletters 351–373, GSSC5-97 publications/tools 381–414, GSSC5-101 account refinement 415–428, GSSC5-103 mailing-equals-home 429–437, GSSC5-102 password-history-reset 438–440, GSSC5-107 members nav chrome 441–461, GSSC5-109 members site search 462–483 (band 462–500), GSSC5-108 sitemap 501–510, GSSC5-116 site-tree editor 521–540 (band 521–560), GSSC5-127 site-tree feedback MLLR-562 (+ CHANGE_DRIVER on 524/529; HLR MHLR-99), GSSC5-115/128 template editor 541–561 (band 541–580), GSSC5-126 PDE section create + nav 581–591 (band 581–600), GSSC5-118 directory invite 601–608 (band 601–620), GSSC5-119 directory create 621–628 (band 621–640), GSSC5-123 footer home link 641–643 (band 641–660) — do not collide.
 GSSC-MLLR-33 through GSSC-MLLR-39 remain free for later claimants.
 Do not reuse numbers already claimed by another ticket.
 <<<
@@ -1294,15 +1295,18 @@ TITLE: Footer
 UID: GSSC-MLLR-40
 TITLE: Semantic
 STATEMENT: >>>
-The GSSC Website Member Frontend Footer SHALL contain the Footer Organization Name, Phone Number, Email Address, Postal Address, Contact control, and Footer Copyright.
+The GSSC Website Member Frontend Footer SHALL contain the Footer Organization Name, Phone Number, Email Address, Postal Address, Contact control, Footer Home Link, and Footer Copyright.
 <<<
 RATIONALE: >>>
-The Footer presents society identity, contact paths, and copyright together in the Member Frontend shell. Each element's behavior is a separate requirement. Contact overlay contents are a separate feature.
+The Footer presents society identity, contact paths, home access, and copyright together in the Member Frontend shell. Each element's behavior is a separate requirement. Contact overlay contents are a separate feature.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-82
-REVIEW_STATUS: Approved
+CHANGE_DRIVER: >>>
+GSSC5-82
+GSSC5-123
+<<<
+REVIEW_STATUS: Changed
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-20
@@ -1324,6 +1328,9 @@ RELATIONS:
   ROLE: Refines
 - TYPE: Parent
   VALUE: GSSC-MHLR-73
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-101
   ROLE: Refines
 
 [REQUIREMENT]
@@ -1720,6 +1727,66 @@ REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-79
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-FOOTER-HOME-LINK
+TITLE: Footer Home Link
+
+[REQUIREMENT]
+UID: GSSC-MLLR-641
+TITLE: Semantic
+STATEMENT: >>>
+The Footer Home Link SHALL open the Members home dashboard when the member activates it.
+<<<
+RATIONALE: >>>
+The Footer provides access back to the Members home dashboard so members can return from other authenticated views without using the Header Navigation Menu.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-123
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-101
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-642
+TITLE: Syntactic
+STATEMENT: >>>
+The Footer Home Link SHALL appear in the Footer below the Footer Sitemap Link as a text control that opens the Members home dashboard when activated.
+<<<
+RATIONALE: >>>
+Placing the link with other Footer actions keeps home access discoverable. A text control matches Contact and destination links elsewhere in the Footer.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-123
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-101
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-643
+TITLE: Lexical
+STATEMENT: >>>
+The Footer Home Link SHALL use the white theme token for its text color, with no underline except on hover.
+<<<
+RATIONALE: >>>
+White text keeps the home link aligned with other Footer text on the black Footer background. Underline on hover marks it as activatable without a default underline.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-123
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-101
   ROLE: Refines
 
 [[/SECTION]]

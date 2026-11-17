@@ -55,6 +55,7 @@ test('GSSC-MLLR-40 Semantic', async () => {
   expect(root.querySelector('.gssc-footer__email')).not.toBeNull();
   expect(root.querySelector('.gssc-footer__postal')).not.toBeNull();
   expect(root.querySelector('.gssc-footer__contact')).not.toBeNull();
+  expect(root.querySelector('.gssc-footer__home')).not.toBeNull();
   expect(root.querySelector('.gssc-footer__copyright')).not.toBeNull();
 });
 // @relation(GSSC-MLLR-40, scope=range_end, role=Test)
@@ -288,3 +289,37 @@ test('GSSC-MLLR-503 Lexical', async () => {
   expect(sitemap.classList.contains('hover:underline')).toBe(true);
 });
 // @relation(GSSC-MLLR-503, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-641, scope=range_start, role=Test)
+test('GSSC-MLLR-641 Semantic', async () => {
+  const { root } = await setupFooter();
+  const home = root.querySelector<HTMLAnchorElement>('.gssc-footer__home')!;
+  expect(home).not.toBeNull();
+  expect(home.getAttribute('href')).toBe('/');
+  expect(home.textContent?.trim()).toBe('Home');
+});
+// @relation(GSSC-MLLR-641, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-642, scope=range_start, role=Test)
+test('GSSC-MLLR-642 Syntactic', async () => {
+  const { root } = await setupFooter();
+  const details = root.querySelector('.gssc-footer__contact-details')!;
+  const sitemap = root.querySelector('.gssc-footer__sitemap')!;
+  const home = root.querySelector('.gssc-footer__home')!;
+  expect(details.contains(home)).toBe(true);
+  expect(
+    sitemap.compareDocumentPosition(home) & Node.DOCUMENT_POSITION_FOLLOWING,
+  ).toBeTruthy();
+  expect(home.tagName).toBe('A');
+});
+// @relation(GSSC-MLLR-642, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-643, scope=range_start, role=Test)
+test('GSSC-MLLR-643 Lexical', async () => {
+  const { root } = await setupFooter();
+  const home = root.querySelector<HTMLElement>('.gssc-footer__home')!;
+  expect(home.classList.contains('text-gssc-white')).toBe(true);
+  expect(home.classList.contains('no-underline')).toBe(true);
+  expect(home.classList.contains('hover:underline')).toBe(true);
+});
+// @relation(GSSC-MLLR-643, scope=range_end, role=Test)
