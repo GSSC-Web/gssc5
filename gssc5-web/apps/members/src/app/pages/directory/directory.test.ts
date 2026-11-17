@@ -744,8 +744,8 @@ test('GSSC-MLLR-230 Lexical', async () => {
 });
 // @relation(GSSC-MLLR-230, scope=range_end, role=Test)
 
-// @relation(GSSC-MLLR-581, scope=range_start, role=Test)
-test('GSSC-MLLR-581 Semantic', async () => {
+// @relation(GSSC-MLLR-601, scope=range_start, role=Test)
+test('GSSC-MLLR-601 Semantic', async () => {
   const mod = await setupDirectory({ viewer: { cuid: 'mod_1', isUserMod: true } });
   try {
     const invite = mod.root.querySelector<HTMLButtonElement>('[data-slot="directory-invite"]')!;
@@ -758,10 +758,10 @@ test('GSSC-MLLR-581 Semantic', async () => {
     mod.restore();
   }
 });
-// @relation(GSSC-MLLR-581, scope=range_end, role=Test)
+// @relation(GSSC-MLLR-601, scope=range_end, role=Test)
 
-// @relation(GSSC-MLLR-582, scope=range_start, role=Test)
-test('GSSC-MLLR-582 Syntactic', async () => {
+// @relation(GSSC-MLLR-602, scope=range_start, role=Test)
+test('GSSC-MLLR-602 Syntactic', async () => {
   const { root, restore } = await setupDirectory({ viewer: { cuid: 'mod_1', isUserMod: true } });
   try {
     const header = root.querySelector('.gssc-directory-page__header')!;
@@ -776,10 +776,10 @@ test('GSSC-MLLR-582 Syntactic', async () => {
     restore();
   }
 });
-// @relation(GSSC-MLLR-582, scope=range_end, role=Test)
+// @relation(GSSC-MLLR-602, scope=range_end, role=Test)
 
-// @relation(GSSC-MLLR-583, scope=range_start, role=Test)
-test('GSSC-MLLR-583 Lexical', async () => {
+// @relation(GSSC-MLLR-603, scope=range_start, role=Test)
+test('GSSC-MLLR-603 Lexical', async () => {
   const { root, restore } = await setupDirectory({ viewer: { cuid: 'mod_1', isUserMod: true } });
   try {
     const invite = root.querySelector<HTMLElement>('[data-slot="directory-invite"]')!;
@@ -791,10 +791,10 @@ test('GSSC-MLLR-583 Lexical', async () => {
     restore();
   }
 });
-// @relation(GSSC-MLLR-583, scope=range_end, role=Test)
+// @relation(GSSC-MLLR-603, scope=range_end, role=Test)
 
-// @relation(GSSC-MLLR-584, scope=range_start, role=Test)
-test('GSSC-MLLR-584 Semantic', async () => {
+// @relation(GSSC-MLLR-604, scope=range_start, role=Test)
+test('GSSC-MLLR-604 Semantic', async () => {
   const { root, page, fixture, restore } = await setupDirectory({
     viewer: { cuid: 'mod_1', isUserMod: true },
   });
@@ -812,10 +812,10 @@ test('GSSC-MLLR-584 Semantic', async () => {
     restore();
   }
 });
-// @relation(GSSC-MLLR-584, scope=range_end, role=Test)
+// @relation(GSSC-MLLR-604, scope=range_end, role=Test)
 
-// @relation(GSSC-MLLR-585, scope=range_start, role=Test)
-test('GSSC-MLLR-585 Syntactic', async () => {
+// @relation(GSSC-MLLR-605, scope=range_start, role=Test)
+test('GSSC-MLLR-605 Syntactic', async () => {
   const { root, page, fixture, restore } = await setupDirectory({
     viewer: { cuid: 'mod_1', isUserMod: true },
   });
@@ -832,10 +832,10 @@ test('GSSC-MLLR-585 Syntactic', async () => {
     restore();
   }
 });
-// @relation(GSSC-MLLR-585, scope=range_end, role=Test)
+// @relation(GSSC-MLLR-605, scope=range_end, role=Test)
 
-// @relation(GSSC-MLLR-586, scope=range_start, role=Test)
-test('GSSC-MLLR-586 Lexical', async () => {
+// @relation(GSSC-MLLR-606, scope=range_start, role=Test)
+test('GSSC-MLLR-606 Lexical', async () => {
   const { root, page, fixture, restore } = await setupDirectory({
     viewer: { cuid: 'mod_1', isUserMod: true },
   });
@@ -854,10 +854,10 @@ test('GSSC-MLLR-586 Lexical', async () => {
     restore();
   }
 });
-// @relation(GSSC-MLLR-586, scope=range_end, role=Test)
+// @relation(GSSC-MLLR-606, scope=range_end, role=Test)
 
-// @relation(GSSC-MLLR-587, scope=range_start, role=Test)
-test('GSSC-MLLR-587 Invite Persists And Refreshes', async () => {
+// @relation(GSSC-MLLR-607, scope=range_start, role=Test)
+test('GSSC-MLLR-607 Invite Persists And Refreshes', async () => {
   const { root, page, fixture, listCalls, inviteCalls, restore } = await setupDirectory({
     viewer: { cuid: 'mod_1', isUserMod: true },
   });
@@ -887,10 +887,10 @@ test('GSSC-MLLR-587 Invite Persists And Refreshes', async () => {
     restore();
   }
 });
-// @relation(GSSC-MLLR-587, scope=range_end, role=Test)
+// @relation(GSSC-MLLR-607, scope=range_end, role=Test)
 
-// @relation(GSSC-MLLR-588, scope=range_start, role=Test)
-test('GSSC-MLLR-588 Invite Hidden Without User Moderator', async () => {
+// @relation(GSSC-MLLR-608, scope=range_start, role=Test)
+test('GSSC-MLLR-608 Invite Hidden Without User Moderator', async () => {
   const plain = await setupDirectory({ viewer: { cuid: 'user_1', isUserMod: false } });
   try {
     expect(plain.root.querySelector('[data-slot="directory-invite"]')).toBeNull();
@@ -908,10 +908,10 @@ test('GSSC-MLLR-588 Invite Hidden Without User Moderator', async () => {
     mod.restore();
   }
 });
-// @relation(GSSC-MLLR-588, scope=range_end, role=Test)
+// @relation(GSSC-MLLR-608, scope=range_end, role=Test)
 
-// @relation(GSSC-MLLR-611, scope=range_start, role=Test)
-test('GSSC-MLLR-611 Semantic', async () => {
+// @relation(GSSC-MLLR-621, scope=range_start, role=Test)
+test('GSSC-MLLR-621 Semantic', async () => {
   const admin = await setupDirectory({ viewer: { cuid: 'admin_1', isAdmin: true } });
   try {
     const create = admin.root.querySelector<HTMLButtonElement>('[data-slot="directory-create"]')!;
@@ -925,10 +925,10 @@ test('GSSC-MLLR-611 Semantic', async () => {
     admin.restore();
   }
 });
-// @relation(GSSC-MLLR-611, scope=range_end, role=Test)
+// @relation(GSSC-MLLR-621, scope=range_end, role=Test)
 
-// @relation(GSSC-MLLR-612, scope=range_start, role=Test)
-test('GSSC-MLLR-612 Syntactic', async () => {
+// @relation(GSSC-MLLR-622, scope=range_start, role=Test)
+test('GSSC-MLLR-622 Syntactic', async () => {
   const { root, restore } = await setupDirectory({ viewer: { cuid: 'admin_1', isAdmin: true } });
   try {
     const header = root.querySelector('.gssc-directory-page__header')!;
@@ -943,10 +943,10 @@ test('GSSC-MLLR-612 Syntactic', async () => {
     restore();
   }
 });
-// @relation(GSSC-MLLR-612, scope=range_end, role=Test)
+// @relation(GSSC-MLLR-622, scope=range_end, role=Test)
 
-// @relation(GSSC-MLLR-613, scope=range_start, role=Test)
-test('GSSC-MLLR-613 Lexical', async () => {
+// @relation(GSSC-MLLR-623, scope=range_start, role=Test)
+test('GSSC-MLLR-623 Lexical', async () => {
   const { root, restore } = await setupDirectory({ viewer: { cuid: 'admin_1', isAdmin: true } });
   try {
     const create = root.querySelector<HTMLElement>('[data-slot="directory-create"]')!;
@@ -958,10 +958,10 @@ test('GSSC-MLLR-613 Lexical', async () => {
     restore();
   }
 });
-// @relation(GSSC-MLLR-613, scope=range_end, role=Test)
+// @relation(GSSC-MLLR-623, scope=range_end, role=Test)
 
-// @relation(GSSC-MLLR-614, scope=range_start, role=Test)
-test('GSSC-MLLR-614 Semantic', async () => {
+// @relation(GSSC-MLLR-624, scope=range_start, role=Test)
+test('GSSC-MLLR-624 Semantic', async () => {
   const { root, page, fixture, restore } = await setupDirectory({
     viewer: { cuid: 'admin_1', isAdmin: true },
   });
@@ -980,10 +980,10 @@ test('GSSC-MLLR-614 Semantic', async () => {
     restore();
   }
 });
-// @relation(GSSC-MLLR-614, scope=range_end, role=Test)
+// @relation(GSSC-MLLR-624, scope=range_end, role=Test)
 
-// @relation(GSSC-MLLR-615, scope=range_start, role=Test)
-test('GSSC-MLLR-615 Syntactic', async () => {
+// @relation(GSSC-MLLR-625, scope=range_start, role=Test)
+test('GSSC-MLLR-625 Syntactic', async () => {
   const { root, page, fixture, restore } = await setupDirectory({
     viewer: { cuid: 'admin_1', isAdmin: true },
   });
@@ -1000,10 +1000,10 @@ test('GSSC-MLLR-615 Syntactic', async () => {
     restore();
   }
 });
-// @relation(GSSC-MLLR-615, scope=range_end, role=Test)
+// @relation(GSSC-MLLR-625, scope=range_end, role=Test)
 
-// @relation(GSSC-MLLR-616, scope=range_start, role=Test)
-test('GSSC-MLLR-616 Lexical', async () => {
+// @relation(GSSC-MLLR-626, scope=range_start, role=Test)
+test('GSSC-MLLR-626 Lexical', async () => {
   const { root, page, fixture, restore } = await setupDirectory({
     viewer: { cuid: 'admin_1', isAdmin: true },
   });
@@ -1022,10 +1022,10 @@ test('GSSC-MLLR-616 Lexical', async () => {
     restore();
   }
 });
-// @relation(GSSC-MLLR-616, scope=range_end, role=Test)
+// @relation(GSSC-MLLR-626, scope=range_end, role=Test)
 
-// @relation(GSSC-MLLR-617, scope=range_start, role=Test)
-test('GSSC-MLLR-617 Create Persists And Refreshes', async () => {
+// @relation(GSSC-MLLR-627, scope=range_start, role=Test)
+test('GSSC-MLLR-627 Create Persists And Refreshes', async () => {
   const { root, page, fixture, listCalls, createCalls, restore } = await setupDirectory({
     viewer: { cuid: 'admin_1', isAdmin: true },
   });
@@ -1057,10 +1057,10 @@ test('GSSC-MLLR-617 Create Persists And Refreshes', async () => {
     restore();
   }
 });
-// @relation(GSSC-MLLR-617, scope=range_end, role=Test)
+// @relation(GSSC-MLLR-627, scope=range_end, role=Test)
 
-// @relation(GSSC-MLLR-618, scope=range_start, role=Test)
-test('GSSC-MLLR-618 Create Hidden Without Administrator', async () => {
+// @relation(GSSC-MLLR-628, scope=range_start, role=Test)
+test('GSSC-MLLR-628 Create Hidden Without Administrator', async () => {
   const mod = await setupDirectory({ viewer: { cuid: 'mod_1', isUserMod: true } });
   try {
     expect(mod.root.querySelector('[data-slot="directory-create"]')).toBeNull();
@@ -1078,4 +1078,4 @@ test('GSSC-MLLR-618 Create Hidden Without Administrator', async () => {
     plain.restore();
   }
 });
-// @relation(GSSC-MLLR-618, scope=range_end, role=Test)
+// @relation(GSSC-MLLR-628, scope=range_end, role=Test)
