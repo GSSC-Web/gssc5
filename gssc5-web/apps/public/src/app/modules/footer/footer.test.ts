@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { ContactOverlay } from '../../services/contact-overlay/contact-overlay';
 import {
   SOCIETY_EMAIL_KEY,
@@ -36,7 +37,10 @@ class FakeKvStore {
 
 async function setupFooter() {
   const fixture = await setupPublicComponent(Footer, {
-    providers: [{ provide: KvStore, useClass: FakeKvStore }],
+    providers: [
+      provideRouter([]),
+      { provide: KvStore, useClass: FakeKvStore },
+    ],
   });
   await fixture.whenStable();
   fixture.detectChanges();
@@ -221,3 +225,37 @@ test('GSSC-PLLR-45 Lexical', async () => {
   expect(contact.classList.contains('hover:underline')).toBe(true);
 });
 // @relation(GSSC-PLLR-45, scope=range_end, role=Test)
+
+// @relation(GSSC-PLLR-345, scope=range_start, role=Test)
+test('GSSC-PLLR-345 Semantic', async () => {
+  const { root } = await setupFooter();
+  const sitemap = root.querySelector<HTMLAnchorElement>('.gssc-footer__sitemap')!;
+  expect(sitemap).not.toBeNull();
+  expect(sitemap.getAttribute('href')).toBe('/sitemap');
+  expect(sitemap.textContent?.trim()).toBe('Sitemap');
+});
+// @relation(GSSC-PLLR-345, scope=range_end, role=Test)
+
+// @relation(GSSC-PLLR-346, scope=range_start, role=Test)
+test('GSSC-PLLR-346 Syntactic', async () => {
+  const { root } = await setupFooter();
+  const details = root.querySelector('.gssc-footer__contact-details')!;
+  const contact = root.querySelector('.gssc-footer__contact')!;
+  const sitemap = root.querySelector('.gssc-footer__sitemap')!;
+  expect(details.contains(sitemap)).toBe(true);
+  expect(
+    contact.compareDocumentPosition(sitemap) & Node.DOCUMENT_POSITION_FOLLOWING,
+  ).toBeTruthy();
+  expect(sitemap.tagName).toBe('A');
+});
+// @relation(GSSC-PLLR-346, scope=range_end, role=Test)
+
+// @relation(GSSC-PLLR-347, scope=range_start, role=Test)
+test('GSSC-PLLR-347 Lexical', async () => {
+  const { root } = await setupFooter();
+  const sitemap = root.querySelector<HTMLElement>('.gssc-footer__sitemap')!;
+  expect(sitemap.classList.contains('text-gssc-white')).toBe(true);
+  expect(sitemap.classList.contains('no-underline')).toBe(true);
+  expect(sitemap.classList.contains('hover:underline')).toBe(true);
+});
+// @relation(GSSC-PLLR-347, scope=range_end, role=Test)
