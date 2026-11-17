@@ -1520,6 +1520,8 @@ RELATIONS:
   VALUE: GSSC-PIR-50
   ROLE: Refines
 
+[[/SECTION]]
+
 [REQUIREMENT]
 UID: GSSC-BHLR-237
 TITLE: Administrator Member Account Creation
@@ -1529,7 +1531,7 @@ The GSSC Website Unified Backend SHALL let an administrator create a member acco
 RATIONALE: >>>
 Administrators register members who can later log in. Exact request fields and response projection are low-level.
 <<<
-DERIVED: True
+DERIVED: False
 CHANGE_DRIVER: GSSC5-119
 REVIEW_STATUS: Approved
 RELATIONS:
@@ -1549,16 +1551,13 @@ The GSSC Website Unified Backend SHALL let a user moderator invite a prospective
 RATIONALE: >>>
 User moderators add prospective members without choosing a usable password; the invitee sets a password through the recovery-style token. An administrator is a user moderator. Exact request fields and response projection are low-level.
 <<<
-DERIVED: True
+DERIVED: False
 CHANGE_DRIVER: GSSC5-118
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-50
   ROLE: Refines
-
-[[/SECTION]]
-
 
 [REQUIREMENT]
 UID: GSSC-BHLR-81
