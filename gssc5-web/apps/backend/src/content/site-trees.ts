@@ -3,6 +3,10 @@ import { Elysia, t } from "elysia";
 import { loadConfig } from "../config";
 import { getPrisma } from "../db";
 import {
+  SiteTreeNodePlain,
+  SiteTreeNodePlainInputCreate,
+} from "../generated/prismabox/SiteTreeNode";
+import {
   loginTokenCookie,
   resolveLoginSessionUser,
   type CookieJar,
@@ -42,11 +46,11 @@ export type NestedSiteTree = {
 const NestedSiteTreeNodeSchema: ReturnType<typeof t.Recursive> = t.Recursive(
   (This) =>
     t.Object({
-      cuid: t.String({ minLength: 1 }),
-      label: t.String({ minLength: 1 }),
-      path: t.String({ minLength: 1 }),
-      sortOrder: t.Integer(),
-      sectionTag: t.Union([t.String(), t.Null()]),
+      cuid: SiteTreeNodePlain.properties.id,
+      label: SiteTreeNodePlain.properties.label,
+      path: SiteTreeNodePlain.properties.path,
+      sortOrder: SiteTreeNodePlain.properties.sortOrder,
+      sectionTag: SiteTreeNodePlain.properties.sectionTag,
       children: t.Array(This),
     }),
 );
@@ -56,34 +60,43 @@ const NestedSiteTreeSchema = t.Object({
   root: NestedSiteTreeNodeSchema,
 });
 
+/**
+ * Wire entry: Prismabox scalars with intentional `cuid` (not raw `id`).
+ * Do not drop in raw `SiteTreeNodePlain` (exposes `id` + relations).
+ */
 const SiteTreeNodeEntry = t.Object({
-  cuid: t.String({ minLength: 1 }),
-  treeId: t.String({ minLength: 1 }),
-  parentId: t.Union([t.String({ minLength: 1 }), t.Null()]),
-  label: t.String({ minLength: 1 }),
-  path: t.String({ minLength: 1 }),
-  sortOrder: t.Integer(),
-  sectionTag: t.Union([t.String(), t.Null()]),
+  cuid: SiteTreeNodePlain.properties.id,
+  treeId: SiteTreeNodePlain.properties.treeId,
+  parentId: SiteTreeNodePlain.properties.parentId,
+  label: SiteTreeNodePlain.properties.label,
+  path: SiteTreeNodePlain.properties.path,
+  sortOrder: SiteTreeNodePlain.properties.sortOrder,
+  sectionTag: SiteTreeNodePlain.properties.sectionTag,
 });
 
+/**
+ * Create body from Prismabox create input + optional parent. `additionalProperties: true`
+ * keeps ignored extras so auth can return 403 before a schema reject surfaces as 422.
+ */
 const CreateNodeBody = t.Object(
   {
-    label: t.String({ minLength: 1 }),
-    path: t.String({ minLength: 1 }),
-    sortOrder: t.Integer(),
-    parentId: t.Optional(t.Union([t.String({ minLength: 1 }), t.Null()])),
-    sectionTag: t.Optional(t.Union([t.String(), t.Null()])),
+    label: SiteTreeNodePlainInputCreate.properties.label,
+    path: SiteTreeNodePlainInputCreate.properties.path,
+    sortOrder: SiteTreeNodePlainInputCreate.properties.sortOrder,
+    parentId: t.Optional(SiteTreeNodePlain.properties.parentId),
+    sectionTag: t.Optional(SiteTreeNodePlain.properties.sectionTag),
   },
   { additionalProperties: true },
 );
 
+/** Patch body: same scalars, all optional; handler rejects empty patches. */
 const UpdateNodeBody = t.Object(
   {
-    label: t.Optional(t.String({ minLength: 1 })),
-    path: t.Optional(t.String({ minLength: 1 })),
-    sortOrder: t.Optional(t.Integer()),
-    parentId: t.Optional(t.Union([t.String({ minLength: 1 }), t.Null()])),
-    sectionTag: t.Optional(t.Union([t.String(), t.Null()])),
+    label: t.Optional(SiteTreeNodePlain.properties.label),
+    path: t.Optional(SiteTreeNodePlain.properties.path),
+    sortOrder: t.Optional(SiteTreeNodePlain.properties.sortOrder),
+    parentId: t.Optional(SiteTreeNodePlain.properties.parentId),
+    sectionTag: t.Optional(SiteTreeNodePlain.properties.sectionTag),
   },
   { additionalProperties: true },
 );
@@ -326,6 +339,10 @@ export const siteTrees = new Elysia({
   normalize: false,
   sanitize: (value) => value.trim(),
 })
+  .model({
+    siteTreeNode: SiteTreeNodePlain,
+    siteTreeNodeCreate: SiteTreeNodePlainInputCreate,
+  })
   .onTransform(({ body }) => {
     trimStrings(body);
   })
