@@ -61,9 +61,9 @@ export class SitemapPage {
   }
 
   private async loadTree(): Promise<void> {
-    // @relation(GSSC-PLLR-333, scope=range_start, role=Implementation)
+    // @relation(GSSC-PLLR-348, scope=range_start, role=Implementation)
     const tree = await this.treeGet();
     this.root.set(tree);
-    // @relation(GSSC-PLLR-333, scope=range_end, role=Implementation)
+    // @relation(GSSC-PLLR-348, scope=range_end, role=Implementation)
   }
 }

@@ -5,7 +5,7 @@ import type { SitemapTreeNode } from './sitemap';
 /**
  * Nested listing of Public site-tree entries (recursive).
  */
-// @relation(GSSC-PLLR-336, GSSC-PLLR-337, GSSC-PLLR-338, scope=range_start, role=Implementation)
+// @relation(GSSC-PLLR-351, GSSC-PLLR-352, GSSC-PLLR-353, scope=range_start, role=Implementation)
 @Component({
   selector: 'gssc-sitemap-tree',
   imports: [RouterLink, SitemapTree],
@@ -29,4 +29,4 @@ import type { SitemapTreeNode } from './sitemap';
 export class SitemapTree {
   readonly nodes = input.required<SitemapTreeNode[]>();
 }
-// @relation(GSSC-PLLR-336, GSSC-PLLR-337, GSSC-PLLR-338, scope=range_end, role=Implementation)
+// @relation(GSSC-PLLR-351, GSSC-PLLR-352, GSSC-PLLR-353, scope=range_end, role=Implementation)

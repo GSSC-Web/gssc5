@@ -67,8 +67,8 @@ async function setupSitemapPage(
   };
 }
 
-// @relation(GSSC-PLLR-333, scope=range_start, role=Test)
-test('GSSC-PLLR-333 Semantic', async () => {
+// @relation(GSSC-PLLR-348, scope=range_start, role=Test)
+test('GSSC-PLLR-348 Semantic', async () => {
   let treeCalls = 0;
   const { page, root } = await setupSitemapPage(async () => {
     treeCalls += 1;
@@ -94,10 +94,10 @@ test('GSSC-PLLR-333 Semantic', async () => {
     '/leadership',
   ]);
 });
-// @relation(GSSC-PLLR-333, scope=range_end, role=Test)
+// @relation(GSSC-PLLR-348, scope=range_end, role=Test)
 
-// @relation(GSSC-PLLR-334, scope=range_start, role=Test)
-test('GSSC-PLLR-334 Syntactic', async () => {
+// @relation(GSSC-PLLR-349, scope=range_start, role=Test)
+test('GSSC-PLLR-349 Syntactic', async () => {
   const { root: present } = await setupSitemapPage(async () => sampleTree);
   const host = present.querySelector<HTMLElement>('.gssc-sitemap-page')!;
   expect(host.classList.contains('w-full')).toBe(true);
@@ -127,10 +127,10 @@ test('GSSC-PLLR-334 Syntactic', async () => {
   expect(missing.querySelector('.gssc-sitemap-page__content')).toBeNull();
   expect(missing.querySelector('.gssc-sitemap-entry')).toBeNull();
 });
-// @relation(GSSC-PLLR-334, scope=range_end, role=Test)
+// @relation(GSSC-PLLR-349, scope=range_end, role=Test)
 
-// @relation(GSSC-PLLR-335, scope=range_start, role=Test)
-test('GSSC-PLLR-335 Lexical', async () => {
+// @relation(GSSC-PLLR-350, scope=range_start, role=Test)
+test('GSSC-PLLR-350 Lexical', async () => {
   const { root } = await setupSitemapPage(async () => sampleTree);
   const host = root.querySelector<HTMLElement>('.gssc-sitemap-page')!;
   expect(host.classList.contains('bg-gssc-white')).toBe(true);
@@ -139,10 +139,10 @@ test('GSSC-PLLR-335 Lexical', async () => {
   const heading = root.querySelector<HTMLElement>('.gssc-sitemap-page__heading')!;
   expect(heading.classList.contains('text-gssc-dark-green')).toBe(true);
 });
-// @relation(GSSC-PLLR-335, scope=range_end, role=Test)
+// @relation(GSSC-PLLR-350, scope=range_end, role=Test)
 
-// @relation(GSSC-PLLR-336, scope=range_start, role=Test)
-test('GSSC-PLLR-336 Semantic', async () => {
+// @relation(GSSC-PLLR-351, scope=range_start, role=Test)
+test('GSSC-PLLR-351 Semantic', async () => {
   const { root } = await setupSitemapPage(async () => sampleTree);
   const membership = [
     ...root.querySelectorAll<HTMLAnchorElement>('.gssc-sitemap-entry__link'),
@@ -150,10 +150,10 @@ test('GSSC-PLLR-336 Semantic', async () => {
   expect(membership.textContent?.trim()).toBe('Membership');
   expect(membership.getAttribute('href')).toBe('/membership');
 });
-// @relation(GSSC-PLLR-336, scope=range_end, role=Test)
+// @relation(GSSC-PLLR-351, scope=range_end, role=Test)
 
-// @relation(GSSC-PLLR-337, scope=range_start, role=Test)
-test('GSSC-PLLR-337 Syntactic', async () => {
+// @relation(GSSC-PLLR-352, scope=range_start, role=Test)
+test('GSSC-PLLR-352 Syntactic', async () => {
   const { root } = await setupSitemapPage(async () => sampleTree);
   const entries = root.querySelectorAll('.gssc-sitemap-entry');
   expect(entries.length).toBe(4);
@@ -162,14 +162,14 @@ test('GSSC-PLLR-337 Syntactic', async () => {
     expect(entry.parentElement?.classList.contains('gssc-sitemap-tree')).toBe(true);
   }
 });
-// @relation(GSSC-PLLR-337, scope=range_end, role=Test)
+// @relation(GSSC-PLLR-352, scope=range_end, role=Test)
 
-// @relation(GSSC-PLLR-338, scope=range_start, role=Test)
-test('GSSC-PLLR-338 Lexical', async () => {
+// @relation(GSSC-PLLR-353, scope=range_start, role=Test)
+test('GSSC-PLLR-353 Lexical', async () => {
   const { root } = await setupSitemapPage(async () => sampleTree);
   const link = root.querySelector<HTMLElement>('.gssc-sitemap-entry__link')!;
   expect(link.classList.contains('font-sans')).toBe(true);
   expect(link.classList.contains('text-gssc-dark-green')).toBe(true);
   expect(link.classList.contains('underline')).toBe(true);
 });
-// @relation(GSSC-PLLR-338, scope=range_end, role=Test)
+// @relation(GSSC-PLLR-353, scope=range_end, role=Test)
