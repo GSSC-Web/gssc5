@@ -374,14 +374,20 @@ TITLE: Announcements Bar
 UID: GSSC-PLLR-15
 TITLE: Semantic
 STATEMENT: >>>
-The Announcements Bar SHALL display the title and text of each urgent public announcement it receives, and SHALL open the home page announcements display focused on an announcement when the visitor selects that announcement.
+The Announcements Bar SHALL retrieve visible public announcements tagged urgent from the Unified Backend, display each announcement's title and text, and open the home page announcements display focused on an announcement when the visitor selects that announcement.
 <<<
 RATIONALE: >>>
-The bar presents urgent announcement contents and routes the visitor to that announcement on the home page. Title and text refine the urgent announcement contents. Selection refines urgent announcement selection.
+The bar loads urgent announcement contents from the Unified Backend and routes the visitor to that announcement on the home page. Visibility follows each announcement's optional display window. Title and text refine the urgent announcement contents. Selection refines urgent announcement selection.
+<<<
+COMMENT: >>>
+GSSC5-42. Title maps from announcement header; text maps from announcement body; focus uses the announcement cuid. Urgent tagging is the public announcement tag value urgent.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-38
+CHANGE_DRIVER: >>>
+GSSC5-38
+GSSC5-42
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -398,14 +404,17 @@ RELATIONS:
 UID: GSSC-PLLR-16
 TITLE: Syntactic
 STATEMENT: >>>
-The App Root SHALL show the Announcements Bar between the Header host and the Page Outlet on every public page other than the home page when there is an urgent public announcement to display, and SHALL omit the Announcements Bar on the home page.
+The Announcements Bar SHALL appear as a full-width strip between the Header host and the Page Outlet on every public page other than the home page when there is an urgent public announcement to display, be omitted on the home page and when there is none, and present each urgent announcement as a full-width selectable control stacked vertically with the title above the text.
 <<<
 RATIONALE: >>>
-The Urgent Announcement Container belongs on non-home public pages when an urgent announcement exists. The home page uses the Announcements Display instead. Placement under the Header host keeps the bar in the shared shell.
+The Urgent Announcement Container belongs on non-home public pages when an urgent announcement exists. The home page uses the Announcements Display instead. Placement under the Header host keeps the bar in the shared shell. Stacked full-width controls keep each urgent announcement reachable without competing layout.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-38
+CHANGE_DRIVER: >>>
+GSSC5-38
+GSSC5-42
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -419,14 +428,17 @@ RELATIONS:
 UID: GSSC-PLLR-17
 TITLE: Lexical
 STATEMENT: >>>
-The Announcements Bar SHALL use the cream theme token for its background, the gray theme token for its bottom border, the dark-green theme token for announcement titles, and the dark-brown theme token for announcement text.
+The Announcements Bar SHALL use the cream theme token for its background, the gray theme token for its bottom border, the dark-green theme token and semibold weight for announcement titles, the dark-brown theme token and regular weight for announcement text, the sans-serif default typeface, and the light-green theme token for selectable-control hover and keyboard-focus backgrounds.
 <<<
 RATIONALE: >>>
-Theme tokens keep announcement presentation aligned with the organization palette. A fuller color role map for the bar is not set yet beyond these token choices.
+Theme tokens and weight roles keep announcement presentation aligned with the organization palette while making titles and interactive focus states distinct.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-38
+CHANGE_DRIVER: >>>
+GSSC5-38
+GSSC5-42
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent

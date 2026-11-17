@@ -38,6 +38,12 @@ export class App {
     return path === '/' || path === '';
   });
 
+  constructor() {
+    // @relation(GSSC-PLLR-15, scope=range_start, role=Implementation)
+    void this.urgentAnnouncements.load();
+    // @relation(GSSC-PLLR-15, scope=range_end, role=Implementation)
+  }
+
   // @relation(GSSC-PLLR-16, scope=range_start, role=Implementation)
   protected readonly showAnnouncementsBar = computed(
     () => !this.isHome() && this.urgentAnnouncements.announcements().length > 0,

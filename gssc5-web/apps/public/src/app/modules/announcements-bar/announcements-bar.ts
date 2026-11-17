@@ -1,7 +1,9 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { UrgentAnnouncements, type UrgentAnnouncement } from '../../services/urgent-announcements';
-
+import {
+  UrgentAnnouncements,
+  type UrgentAnnouncement,
+} from '../../services/urgent-announcements';
 
 @Component({
   selector: 'gssc-announcements-bar',
