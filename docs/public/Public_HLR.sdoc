@@ -1441,6 +1441,29 @@ RELATIONS:
 
 [[/SECTION]]
 
+[[SECTION]]
+UID: GSSC-PHLR-LEADERSHIP-CONTACT-PHOTOS
+TITLE: Leadership Contact Photos
+
+[REQUIREMENT]
+UID: GSSC-PHLR-147
+TITLE: Leadership Contact Card Account Photos
+STATEMENT: >>>
+The public leadership contact cards SHALL show each listed leader's Account Photo when an Account Photo is stored for that leader.
+<<<
+RATIONALE: >>>
+Officers, Directors at Large, and Committee Chairs use contact cards with a photo area. Stored Account Photos must appear as images on those cards so visitors can recognize leaders; empty photo storage keeps the silhouette placeholder.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-124
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-4
+  ROLE: Refines
+
+[[/SECTION]]
+
 [[/SECTION]]
 
 [[SECTION]]
