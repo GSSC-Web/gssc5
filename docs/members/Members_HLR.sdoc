@@ -1588,7 +1588,7 @@ No Member Frontend PIR requires a site-tree editor. Administrators maintain navi
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-116
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-MHLR-90
@@ -1601,7 +1601,7 @@ Administrators add destinations to either frontend tree as the site grows. Creat
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-116
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-MHLR-91
@@ -1614,7 +1614,7 @@ Administrators keep destination labels, paths, ordering, and nesting current for
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-116
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [REQUIREMENT]
 UID: GSSC-MHLR-92
@@ -1627,6 +1627,6 @@ Administrators remove obsolete destinations. The tree root stays so each fronten
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-116
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 
 [[/SECTION]]
