@@ -1,0 +1,153 @@
+<!-- @relation(GSSC-MLLR-522, GSSC-MLLR-523, scope=range_start, role=Implementation) -->
+<section
+  class="gssc-site-tree-editor-page w-full bg-gssc-white p-4 font-sans"
+  data-slot="site-tree-editor-page"
+>
+  <h1
+    id="gssc-site-tree-editor-heading"
+    class="gssc-site-tree-editor-page__heading mb-4 text-xl font-semibold text-gssc-dark-green"
+    data-slot="site-tree-editor-heading"
+  >
+    Site Trees
+  </h1>
+
+  <!-- @relation(GSSC-MLLR-524, GSSC-MLLR-525, GSSC-MLLR-526, scope=range_start, role=Implementation) -->
+  <div class="gssc-site-tree-editor-page__selector mb-4 max-w-md" data-slot="site-tree-frontend-selector">
+    <gssc-form-select-field
+      label="Frontend"
+      [options]="frontendOptions"
+      [value]="frontend()"
+      (valueChange)="onFrontendChange($event)"
+      [enabled]="true"
+    />
+  </div>
+  <!-- @relation(GSSC-MLLR-524, GSSC-MLLR-525, GSSC-MLLR-526, scope=range_end, role=Implementation) -->
+
+  <div
+    class="gssc-site-tree-editor-page__layout flex w-full flex-col gap-6 lg:flex-row lg:items-start"
+    data-slot="site-tree-editor-layout"
+  >
+    <div class="gssc-site-tree-editor-page__outline min-w-0 flex-1" data-slot="site-tree-outline-region">
+      <h2 class="mb-2 font-sans text-lg font-semibold text-gssc-dark-green">Tree</h2>
+      @if (outlineNodes().length > 0) {
+        <gssc-site-tree-outline
+          [nodes]="outlineNodes()"
+          [selectedCuid]="selectedCuid()"
+          (select)="onSelectNode($event)"
+        />
+      } @else {
+        <p class="m-0 font-sans text-sm text-gssc-dark-brown" data-slot="site-tree-empty">
+          No site tree loaded.
+        </p>
+      }
+    </div>
+
+    <!-- @relation(GSSC-MLLR-530, GSSC-MLLR-531, GSSC-MLLR-532, scope=range_start, role=Implementation) -->
+    <div
+      class="gssc-site-tree-editor-page__panel flex min-w-0 flex-1 flex-col gap-3 bg-gssc-white"
+      data-slot="site-tree-node-editor"
+    >
+      <h2 class="m-0 font-sans text-lg font-semibold text-gssc-dark-green">Node</h2>
+
+      @if (hasSelection()) {
+        <gssc-form-text-field
+          label="Label"
+          [(value)]="label"
+          [enabled]="permitted()"
+          [required]="true"
+        />
+        <gssc-form-text-field
+          label="Path"
+          [(value)]="path"
+          [enabled]="permitted()"
+          [required]="true"
+        />
+        <gssc-form-text-field
+          label="Section Tag"
+          [(value)]="sectionTag"
+          [enabled]="permitted()"
+        />
+        <gssc-form-text-field
+          label="Sort Order"
+          [(value)]="sortOrder"
+          [enabled]="permitted()"
+          [required]="true"
+        />
+
+        <div class="mt-2 flex flex-wrap gap-2" data-slot="site-tree-actions">
+          <!-- @relation(GSSC-MLLR-537, scope=range_start, role=Implementation) -->
+          <button
+            type="button"
+            class="inline-flex cursor-pointer items-center justify-center rounded-md border border-gssc-dark-green bg-gssc-light-green px-3 py-2 font-sans text-sm text-gssc-dark-green hover:bg-gssc-gray disabled:cursor-not-allowed disabled:opacity-50"
+            data-slot="site-tree-create"
+            [disabled]="!permitted()"
+            (click)="onCreateChild()"
+          >
+            Create Child
+          </button>
+          <button
+            type="button"
+            class="inline-flex cursor-pointer items-center justify-center rounded-md border border-gssc-dark-green bg-gssc-light-green px-3 py-2 font-sans text-sm text-gssc-dark-green hover:bg-gssc-gray disabled:cursor-not-allowed disabled:opacity-50"
+            data-slot="site-tree-save"
+            [disabled]="!permitted()"
+            (click)="onSave()"
+          >
+            Save
+          </button>
+          <button
+            type="button"
+            class="inline-flex cursor-pointer items-center justify-center rounded-md border border-gssc-dark-brown bg-gssc-white px-3 py-2 font-sans text-sm text-gssc-dark-brown hover:bg-gssc-gray disabled:cursor-not-allowed disabled:opacity-50"
+            data-slot="site-tree-discard"
+            [disabled]="!permitted()"
+            (click)="onDiscard()"
+          >
+            Discard
+          </button>
+          <button
+            type="button"
+            class="inline-flex cursor-pointer items-center justify-center rounded-md border border-gssc-dark-green bg-gssc-white px-3 py-2 font-sans text-sm text-gssc-dark-green hover:bg-gssc-gray disabled:cursor-not-allowed disabled:opacity-50"
+            data-slot="site-tree-move-up"
+            [disabled]="!permitted() || isRootSelected()"
+            (click)="onMove(-1)"
+          >
+            Move Up
+          </button>
+          <button
+            type="button"
+            class="inline-flex cursor-pointer items-center justify-center rounded-md border border-gssc-dark-green bg-gssc-white px-3 py-2 font-sans text-sm text-gssc-dark-green hover:bg-gssc-gray disabled:cursor-not-allowed disabled:opacity-50"
+            data-slot="site-tree-move-down"
+            [disabled]="!permitted() || isRootSelected()"
+            (click)="onMove(1)"
+          >
+            Move Down
+          </button>
+          <button
+            type="button"
+            class="inline-flex cursor-pointer items-center justify-center rounded-md border border-gssc-dark-red bg-gssc-white px-3 py-2 font-sans text-sm text-gssc-dark-red hover:bg-gssc-light-red disabled:cursor-not-allowed disabled:opacity-50"
+            data-slot="site-tree-delete"
+            [disabled]="!permitted() || isRootSelected()"
+            (click)="onDelete()"
+          >
+            Delete
+          </button>
+          <!-- @relation(GSSC-MLLR-537, scope=range_end, role=Implementation) -->
+        </div>
+      } @else {
+        <p class="m-0 font-sans text-sm text-gssc-dark-brown" data-slot="site-tree-no-selection">
+          Select a node in the tree to edit it.
+        </p>
+      }
+    </div>
+    <!-- @relation(GSSC-MLLR-530, GSSC-MLLR-531, GSSC-MLLR-532, scope=range_end, role=Implementation) -->
+  </div>
+
+  @if (statusMessage()) {
+    <p
+      class="gssc-site-tree-editor-page__status mt-4 m-0 font-sans text-sm text-gssc-dark-brown"
+      data-slot="site-tree-status"
+    >
+      {{ statusMessage() }}
+    </p>
+  }
+</section>
+<!-- @relation(GSSC-MLLR-522, GSSC-MLLR-523, scope=range_end, role=Implementation) -->

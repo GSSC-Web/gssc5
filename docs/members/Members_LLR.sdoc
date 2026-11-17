@@ -101,7 +101,8 @@ GSSC5-107 Members Navigation and Narrow Header owns GSSC-MLLR-441 through GSSC-M
 GSSC5-102 also owns GSSC-MLLR-438 through GSSC-MLLR-440 (Password History Reset on Account Page) and CHANGE_DRIVER on GSSC-MLLR-125 / GSSC-MLLR-158 / GSSC-MHLR-34.
 GSSC5-108 Members Sitemap Page owns GSSC-MLLR-501 through GSSC-MLLR-510 (exact end 510; band 501–520 reserved for sitemap); HLR GSSC-MHLR-79 / GSSC-MHLR-80.
 GSSC5-109 Members Site Search owns GSSC-MLLR-462 through GSSC-MLLR-483 (exact end 483; band 462–500 reserved for site search so GSSC5-107 nav 441–461 and GSSC5-108 sitemap 501–510 stay clear); HLR GSSC-MHLR-87 / GSSC-MHLR-88.
-Wave coordination: GSSC5-92 directory 202–214, GSSC5-102 directory refinement 215–230, GSSC5-89 dashboard 231–239, GSSC5-93 page/section 261–286, GSSC5-94 announcements 291–307, GSSC5-95 events 321–346, GSSC5-96 newsletters 351–373, GSSC5-97 publications/tools 381–414, GSSC5-101 account refinement 415–428, GSSC5-103 mailing-equals-home 429–437, GSSC5-102 password-history-reset 438–440, GSSC5-107 members nav chrome 441–461, GSSC5-109 members site search 462–483 (band 462–500), GSSC5-108 sitemap 501–510 — do not collide.
+GSSC5-116 Members Site Tree Editor owns GSSC-MLLR-521 through GSSC-MLLR-540 (exact end 540; band 521–560 reserved for site-tree editor); HLR GSSC-MHLR-89 through GSSC-MHLR-92.
+Wave coordination: GSSC5-92 directory 202–214, GSSC5-102 directory refinement 215–230, GSSC5-89 dashboard 231–239, GSSC5-93 page/section 261–286, GSSC5-94 announcements 291–307, GSSC5-95 events 321–346, GSSC5-96 newsletters 351–373, GSSC5-97 publications/tools 381–414, GSSC5-101 account refinement 415–428, GSSC5-103 mailing-equals-home 429–437, GSSC5-102 password-history-reset 438–440, GSSC5-107 members nav chrome 441–461, GSSC5-109 members site search 462–483 (band 462–500), GSSC5-108 sitemap 501–510, GSSC5-116 site-tree editor 521–540 (band 521–560) — do not collide.
 GSSC-MLLR-33 through GSSC-MLLR-39 remain free for later claimants.
 Do not reuse numbers already claimed by another ticket.
 <<<
@@ -9408,6 +9409,444 @@ REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-88
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-SITE-TREE-EDITOR
+TITLE: Site Tree Editor
+
+[[SECTION]]
+UID: GSSC-MLLR-SITE-TREE-EDITOR-PAGE
+TITLE: Site Tree Editor Page
+
+[REQUIREMENT]
+UID: GSSC-MLLR-521
+TITLE: Semantic
+STATEMENT: >>>
+The Site Tree Editor Page SHALL retrieve the selected Public or Members site tree from the Unified Backend, present that tree for administrator inspection, and when the logged-in member is not an administrator, SHALL withhold create, modify, and delete controls while stating that administrator permission is required.
+<<<
+RATIONALE: >>>
+The page is the administrator surface for both frontend trees. Non-administrators may reach the route when logged in but must not mutate trees.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-116
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-89
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-522
+TITLE: Syntactic
+STATEMENT: >>>
+The Site Tree Editor Page SHALL place its heading, frontend selector, tree outline, and node editor panel in the Page Outlet at full content width, with the tree outline beside or above the node editor panel so both remain visible together on a wide viewport.
+<<<
+RATIONALE: >>>
+Administrators need the outline and the selected-node fields in one composition without leaving the page.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-116
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-89
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-523
+TITLE: Lexical
+STATEMENT: >>>
+The Site Tree Editor Page SHALL use the white theme token for its background, the sans-serif typeface, and the dark-green theme token for the page heading text.
+<<<
+RATIONALE: >>>
+White background and sans-serif match the Member Frontend shell. Dark-green heading text aligns with other members page headings.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-116
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-89
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-SITE-TREE-FRONTEND-SELECTOR
+TITLE: Frontend Selector
+
+[REQUIREMENT]
+UID: GSSC-MLLR-524
+TITLE: Semantic
+STATEMENT: >>>
+The Frontend Selector SHALL let the administrator choose the Public Frontend site tree or the Members Frontend site tree, and when the choice changes the Site Tree Editor Page SHALL reload that tree from the Unified Backend and clear the current node selection.
+<<<
+RATIONALE: >>>
+Administrators switch between the two frontend trees without leaving the editor. Clearing selection avoids editing a node that is not in the newly loaded tree.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-116
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-89
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-525
+TITLE: Syntactic
+STATEMENT: >>>
+The Frontend Selector SHALL appear beneath the page heading and above the tree outline as a single control that offers Public and Members choices.
+<<<
+RATIONALE: >>>
+Placing the selector before the outline makes the active tree unmistakable before nodes are inspected.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-116
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-89
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-526
+TITLE: Lexical
+STATEMENT: >>>
+The Frontend Selector SHALL use the sans-serif typeface and the dark-green theme token for its label text.
+<<<
+RATIONALE: >>>
+Sans-serif and dark-green match other members form labels on editor pages.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-116
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-89
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-SITE-TREE-OUTLINE
+TITLE: Tree Outline
+
+[REQUIREMENT]
+UID: GSSC-MLLR-527
+TITLE: Semantic
+STATEMENT: >>>
+The Tree Outline SHALL present each node of the loaded site tree as a nested listing that shows that node's label, and when an administrator activates a node the Site Tree Editor Page SHALL select that node for the Node Editor Panel.
+<<<
+RATIONALE: >>>
+Nested labels mirror hierarchy so administrators can find and select the node to edit.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-116
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-89
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-528
+TITLE: Syntactic
+STATEMENT: >>>
+The Tree Outline SHALL nest each node's children under that node in the tree's sibling order, SHALL mark the selected node distinctly from siblings, and SHALL occupy the outline region of the Site Tree Editor Page.
+<<<
+RATIONALE: >>>
+Nesting and order preserve the Unified Backend hierarchy. A distinct selected mark ties the outline to the Node Editor Panel.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-116
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-89
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-529
+TITLE: Lexical
+STATEMENT: >>>
+The Tree Outline SHALL use the sans-serif typeface and the dark-green theme token for node label text, and SHALL use the light-green theme token for the selected node's background.
+<<<
+RATIONALE: >>>
+Dark-green labels match other members lists. Light-green selection background marks the active node without leaving the outline region.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-116
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-89
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-SITE-TREE-NODE-EDITOR
+TITLE: Node Editor Panel
+
+[REQUIREMENT]
+UID: GSSC-MLLR-530
+TITLE: Semantic
+STATEMENT: >>>
+When a site tree node is selected, the Node Editor Panel SHALL present editable fields for that node's label, destination path, optional section tag, and sibling sort order, and SHALL present the current values from the loaded tree until the administrator changes them.
+<<<
+RATIONALE: >>>
+Administrators need the mutable node attributes in one panel. Sort order supports sibling reorder together with save.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-116
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-91
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-531
+TITLE: Syntactic
+STATEMENT: >>>
+The Node Editor Panel SHALL appear in the editor region of the Site Tree Editor Page beside or beneath the Tree Outline, and SHALL stack its fields vertically with action controls below the fields.
+<<<
+RATIONALE: >>>
+Stacked fields and trailing actions match other members editor panels and keep outline and fields related.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-116
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-91
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-532
+TITLE: Lexical
+STATEMENT: >>>
+The Node Editor Panel SHALL use the sans-serif typeface, the dark-green theme token for field labels, and the white theme token for the panel background.
+<<<
+RATIONALE: >>>
+Sans-serif and dark-green labels match form primitives elsewhere on the Member Frontend. White panel background keeps the editor readable against the page shell.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-116
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-91
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-SITE-TREE-CREATE
+TITLE: Create Child Node
+
+[REQUIREMENT]
+UID: GSSC-MLLR-533
+TITLE: Semantic
+STATEMENT: >>>
+When an administrator activates Create Child on a selected node, the Site Tree Editor Page SHALL create a new child node under that selected node in the selected site tree through the Unified Backend using the label, destination path, optional section tag, and sibling sort order from the Node Editor Panel, then SHALL reload the tree and select the created node.
+<<<
+RATIONALE: >>>
+Create Child grows the tree under the chosen parent. Reloading and selecting the new node lets the administrator confirm persistence immediately.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-116
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-90
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-SITE-TREE-SAVE
+TITLE: Save Node
+
+[REQUIREMENT]
+UID: GSSC-MLLR-534
+TITLE: Semantic
+STATEMENT: >>>
+When an administrator activates Save on a selected node, the Site Tree Editor Page SHALL persist that node's label, destination path, optional section tag, and sibling sort order to the Unified Backend for the selected site tree, then SHALL reload the tree and keep that node selected.
+<<<
+RATIONALE: >>>
+Save applies field edits including reorder via sort order. Reloading keeps the outline aligned with persisted state.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-116
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-91
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-SITE-TREE-DELETE
+TITLE: Delete Node
+
+[REQUIREMENT]
+UID: GSSC-MLLR-535
+TITLE: Semantic
+STATEMENT: >>>
+When an administrator activates Delete on a selected non-root node, the Site Tree Editor Page SHALL delete that node through the Unified Backend for the selected site tree, then SHALL reload the tree and clear the node selection; Delete SHALL be unavailable for the tree root.
+<<<
+RATIONALE: >>>
+Non-root deletion removes obsolete destinations and descendants via the backend. The root stays so each frontend retains a single tree.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-116
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-92
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-SITE-TREE-REORDER
+TITLE: Reorder Sibling
+
+[REQUIREMENT]
+UID: GSSC-MLLR-536
+TITLE: Semantic
+STATEMENT: >>>
+When an administrator activates Move Up or Move Down on a selected non-root node that has a sibling in that direction, the Site Tree Editor Page SHALL exchange that node's sibling sort order with the adjacent sibling through the Unified Backend, then SHALL reload the tree and keep the moved node selected.
+<<<
+RATIONALE: >>>
+Move Up and Move Down provide explicit sibling reorder without requiring the administrator to edit sort-order numbers manually.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-116
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-91
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-SITE-TREE-PERMISSION
+TITLE: Administrator Permission Gate
+
+[REQUIREMENT]
+UID: GSSC-MLLR-537
+TITLE: Semantic
+STATEMENT: >>>
+The Site Tree Editor Page SHALL enable Create Child, Save, Delete, Move Up, and Move Down only when the logged-in member is an administrator, and SHALL leave those controls disabled otherwise.
+<<<
+RATIONALE: >>>
+Unified Backend site-tree mutations require an administrator. The page mirrors that gate so non-administrators cannot attempt mutations.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-116
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-89
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-SITE-TREE-DISCARD
+TITLE: Discard Node Edits
+
+[REQUIREMENT]
+UID: GSSC-MLLR-538
+TITLE: Semantic
+STATEMENT: >>>
+When an administrator activates Discard on a selected node, the Site Tree Editor Page SHALL restore the Node Editor Panel fields to the last loaded values for that node without requesting persistence.
+<<<
+RATIONALE: >>>
+Discard abandons unsaved field edits while keeping the outline unchanged.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-116
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-91
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-SITE-TREE-STATUS
+TITLE: Status Message
+
+[REQUIREMENT]
+UID: GSSC-MLLR-539
+TITLE: Semantic
+STATEMENT: >>>
+The Site Tree Editor Page SHALL present a status message that reports load failures, successful create, save, delete, and reorder outcomes, and permission denial for non-administrators.
+<<<
+RATIONALE: >>>
+Administrators need clear feedback when mutations succeed or fail and when permission blocks editing.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-116
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-89
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-SITE-TREE-ROUTE
+TITLE: Site Tree Editor Route
+
+[REQUIREMENT]
+UID: GSSC-MLLR-540
+TITLE: Semantic
+STATEMENT: >>>
+The Member Frontend SHALL expose the Site Tree Editor Page at the /site-trees route for a logged-in member.
+<<<
+RATIONALE: >>>
+A stable authenticated route lets administrators open the editor from bookmarks or navigation destinations.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-116
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-89
   ROLE: Refines
 
 [[/SECTION]]

@@ -1572,3 +1572,61 @@ RELATIONS:
   ROLE: Refines
 
 [[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MHLR-SITE-TREE-EDITOR
+TITLE: Site Tree Editor Requirements
+
+[REQUIREMENT]
+UID: GSSC-MHLR-89
+TITLE: Site Tree Editor Page
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL provide an administrator Site Tree Editor Page that presents the Public Frontend site tree or the Members Frontend site tree from the Unified Backend and lets the administrator select a tree node for modification.
+<<<
+RATIONALE: >>>
+No Member Frontend PIR requires a site-tree editor. Administrators maintain navigation destinations for both frontends through the Members Frontend. Presentation of either tree and node selection are the editor entry points; create, modify, and delete behaviors are separate requirements.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-116
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-MHLR-90
+TITLE: Site Tree Node Creation
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL let an administrator create a site tree node under a selected parent in the selected Public or Members site tree without programming knowledge and without developer intervention.
+<<<
+RATIONALE: >>>
+Administrators add destinations to either frontend tree as the site grows. Creation is distinct from modifying or removing an existing node.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-116
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-MHLR-91
+TITLE: Site Tree Node Modification
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL let an administrator modify a selected site tree node's label, destination path, optional section tag, sibling order, and parent without programming knowledge and without developer intervention.
+<<<
+RATIONALE: >>>
+Administrators keep destination labels, paths, ordering, and nesting current for Public and Members trees. Reordering siblings and changing parent are modifications of the selected node.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-116
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-MHLR-92
+TITLE: Site Tree Node Deletion
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL let an administrator delete a non-root site tree node from the selected Public or Members site tree, including that node's descendants, without programming knowledge and without developer intervention.
+<<<
+RATIONALE: >>>
+Administrators remove obsolete destinations. The tree root stays so each frontend retains a single tree. Descendant removal follows the Unified Backend cascade for the deleted node.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-116
+REVIEW_STATUS: Approved
+
+[[/SECTION]]
