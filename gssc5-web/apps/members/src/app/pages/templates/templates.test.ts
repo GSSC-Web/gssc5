@@ -219,6 +219,52 @@ async function chooseSelect(
   await fixture.whenStable();
 }
 
+async function addNamedPermission(
+  fixture: { detectChanges: () => void; whenStable: () => Promise<unknown> },
+  root: HTMLElement,
+  field: 'create' | 'modify' | 'delete',
+  permissionId: string,
+): Promise<void> {
+  const group = root.querySelector<HTMLElement>(
+    `[data-slot="templates-permission-field"][data-perm="${field}"]`,
+  );
+  if (!group) throw new Error(`missing permission field ${field}`);
+  const select = group.querySelector<HTMLSelectElement>(
+    '[data-slot="templates-permission-pick"]',
+  );
+  if (!select) throw new Error(`missing permission pick ${field}`);
+  select.value = permissionId;
+  select.dispatchEvent(new Event('change', { bubbles: true }));
+  fixture.detectChanges();
+  await fixture.whenStable();
+  const add = group.querySelector<HTMLButtonElement>(
+    '[data-slot="templates-permission-add"]',
+  );
+  if (!add) throw new Error(`missing permission add ${field}`);
+  add.click();
+  fixture.detectChanges();
+  await fixture.whenStable();
+}
+
+async function removeNamedPermission(
+  fixture: { detectChanges: () => void; whenStable: () => Promise<unknown> },
+  root: HTMLElement,
+  field: 'create' | 'modify' | 'delete',
+  permissionId: string,
+): Promise<void> {
+  const group = root.querySelector<HTMLElement>(
+    `[data-slot="templates-permission-field"][data-perm="${field}"]`,
+  );
+  if (!group) throw new Error(`missing permission field ${field}`);
+  const remove = group.querySelector<HTMLButtonElement>(
+    `[data-slot="templates-permission-remove"][data-perm-id="${permissionId}"]`,
+  );
+  if (!remove) throw new Error(`missing permission remove ${field}/${permissionId}`);
+  remove.click();
+  fixture.detectChanges();
+  await fixture.whenStable();
+}
+
 async function settle(
   fixture: { detectChanges: () => void; whenStable: () => Promise<unknown> },
 ): Promise<void> {
@@ -239,8 +285,11 @@ test('GSSC-MLLR-541 Semantic', async () => {
     fixture.detectChanges();
     await fixture.whenStable();
     expect(root.querySelector('gssc-editor')).toBeTruthy();
-    expect(root.querySelectorAll('.gssc-form-text-field').length).toBe(5);
+    expect(root.querySelectorAll('.gssc-form-text-field').length).toBe(2);
     expect(root.querySelectorAll('.gssc-form-select-field').length).toBe(1);
+    expect(
+      root.querySelectorAll('[data-slot="templates-permission-field"]').length,
+    ).toBe(3);
   } finally {
     restore();
   }
@@ -285,7 +334,9 @@ test('GSSC-MLLR-544 Semantic', async () => {
     expect(page.name()).toBe('Section Default');
     expect(page.visibility()).toBe('true');
     expect(page.tagsText()).toBe('section');
-    expect(page.createPerm()).toBe('1');
+    expect(page.createPerm()).toBe(1);
+    expect(root.textContent).toContain('Regular member');
+    expect(root.textContent).toContain('User moderator');
   } finally {
     restore();
   }
@@ -335,7 +386,7 @@ test('GSSC-MLLR-547 Semantic', async () => {
     expect(page.name()).toBe('');
     expect(page.visibility()).toBe('false');
     expect(page.tagsText()).toBe('');
-    expect(page.createPerm()).toBe('0');
+    expect(page.createPerm()).toBe(0);
   } finally {
     restore();
   }
@@ -460,9 +511,10 @@ test('GSSC-MLLR-555 Semantic', async () => {
     await typeField(ctx.fixture, ctx.root, 'Name', 'New Template');
     await chooseSelect(ctx.fixture, ctx.root, 'Visibility', 'true');
     await typeField(ctx.fixture, ctx.root, 'Tags', 'alpha, beta');
-    await typeField(ctx.fixture, ctx.root, 'Create Permission', '4');
-    await typeField(ctx.fixture, ctx.root, 'Modify Permission', '5');
-    await typeField(ctx.fixture, ctx.root, 'Delete Permission', '6');
+    await addNamedPermission(ctx.fixture, ctx.root, 'create', 'member');
+    await addNamedPermission(ctx.fixture, ctx.root, 'create', 'userMod');
+    await addNamedPermission(ctx.fixture, ctx.root, 'modify', 'member');
+    await addNamedPermission(ctx.fixture, ctx.root, 'delete', 'userMod');
     await ctx.page.onSaved();
     await settle(ctx.fixture);
     expect(ctx.createCalls.length).toBe(1);
@@ -470,9 +522,9 @@ test('GSSC-MLLR-555 Semantic', async () => {
       name: 'New Template',
       isPublic: true,
       tags: ['alpha', 'beta'],
-      createPerm: 4,
-      modifyPerm: 5,
-      deletePerm: 6,
+      createPerm: 3,
+      modifyPerm: 1,
+      deletePerm: 2,
     });
 
     ctx.root.querySelector<HTMLButtonElement>('[data-cuid="tpl_2"]')!.click();
@@ -480,13 +532,13 @@ test('GSSC-MLLR-555 Semantic', async () => {
     await ctx.fixture.whenStable();
     await settle(ctx.fixture);
     await chooseSelect(ctx.fixture, ctx.root, 'Visibility', 'true');
-    await typeField(ctx.fixture, ctx.root, 'Create Permission', '9');
+    await addNamedPermission(ctx.fixture, ctx.root, 'create', 'userMod');
     await ctx.page.onSaved();
     await settle(ctx.fixture);
     expect(ctx.updateCalls.some((call) => call.cuid === 'tpl_2')).toBe(true);
     expect(ctx.updateCalls.find((call) => call.cuid === 'tpl_2')?.body).toMatchObject({
       isPublic: true,
-      createPerm: 9,
+      createPerm: 2,
     });
   } finally {
     ctx.restore();
@@ -544,3 +596,96 @@ test('GSSC-MLLR-558 Semantic', async () => {
   expect(Array.isArray(match?.canActivate)).toBe(true);
 });
 // @relation(GSSC-MLLR-558, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-559, scope=range_start, role=Test)
+test('GSSC-MLLR-559 Semantic', async () => {
+  const ctx = await setupTemplates();
+  try {
+    ctx.root.querySelector<HTMLButtonElement>('[data-cuid="tpl_1"]')!.click();
+    ctx.fixture.detectChanges();
+    await ctx.fixture.whenStable();
+    await settle(ctx.fixture);
+
+    const createField = ctx.root.querySelector(
+      '[data-slot="templates-permission-field"][data-perm="create"]',
+    )!;
+    expect(createField.textContent).toContain('Regular member');
+    expect(
+      createField.querySelector(
+        '[data-slot="templates-permission-remove"][data-perm-id="member"]',
+      ),
+    ).toBeTruthy();
+
+    await removeNamedPermission(ctx.fixture, ctx.root, 'create', 'member');
+    expect(ctx.page.createPerm()).toBe(0);
+    expect(createField.textContent).toContain('None');
+
+    await addNamedPermission(ctx.fixture, ctx.root, 'create', 'userMod');
+    expect(ctx.page.createPerm()).toBe(2);
+    expect(createField.textContent).toContain('User moderator');
+
+    await ctx.page.onSaved();
+    await settle(ctx.fixture);
+    expect(ctx.updateCalls.find((call) => call.cuid === 'tpl_1')?.body).toMatchObject({
+      createPerm: 2,
+      modifyPerm: 2,
+      deletePerm: 3,
+    });
+  } finally {
+    ctx.restore();
+  }
+});
+// @relation(GSSC-MLLR-559, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-560, scope=range_start, role=Test)
+test('GSSC-MLLR-560 Syntactic', async () => {
+  const { root, fixture, restore } = await setupTemplates();
+  try {
+    root.querySelector<HTMLButtonElement>('[data-slot="templates-create"]')!.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    const editor = root.querySelector('gssc-editor')!;
+    const tags = Array.from(editor.querySelectorAll('.gssc-form-text-field')).find(
+      (el) => el.querySelector('label')?.textContent?.includes('Tags'),
+    )!;
+    const createPerm = editor.querySelector(
+      '[data-slot="templates-permission-field"][data-perm="create"]',
+    )!;
+    expect(
+      Boolean(
+        tags.compareDocumentPosition(createPerm) & Node.DOCUMENT_POSITION_FOLLOWING,
+      ),
+    ).toBe(true);
+    expect(
+      createPerm.querySelector('[data-slot="templates-permission-list"]'),
+    ).toBeTruthy();
+    expect(
+      createPerm.querySelector('[data-slot="templates-permission-pick"]'),
+    ).toBeTruthy();
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-560, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-561, scope=range_start, role=Test)
+test('GSSC-MLLR-561 Lexical', async () => {
+  const { root, fixture, restore } = await setupTemplates();
+  try {
+    root.querySelector<HTMLButtonElement>('[data-cuid="tpl_1"]')!.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    await settle(fixture);
+    const field = root.querySelector(
+      '[data-slot="templates-permission-field"][data-perm="create"]',
+    )!;
+    const label = field.querySelector('.gssc-templates-page__perm-label')!;
+    expect(label.className).toContain('font-sans');
+    expect(label.className).toContain('text-gssc-dark-green');
+    expect(field.className).toContain('font-sans');
+    expect(field.textContent).toContain('Regular member');
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-561, scope=range_end, role=Test)

@@ -10134,14 +10134,17 @@ TITLE: Content Template Editor Page
 UID: GSSC-MLLR-541
 TITLE: Semantic
 STATEMENT: >>>
-The Member Frontend Content Template Editor Page SHALL present a content template catalog list, a create control when modification is permitted, and a Generic Editor host for the selected template with name, visibility, tags, and create, modify, and delete permission fields.
+The Member Frontend Content Template Editor Page SHALL present a content template catalog list, a create control when modification is permitted, and a Generic Editor host for the selected template with name, visibility, tags, and create, modify, and delete permission fields that add and remove permissions by readable name.
 <<<
 RATIONALE: >>>
-One page hosts catalog browsing and Generic Editor composition so administrators maintain content templates without programming knowledge.
+One page hosts catalog browsing and Generic Editor composition so administrators maintain content templates without programming knowledge, including permission assignment by name.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-115
+CHANGE_DRIVER: >>>
+GSSC5-115
+GSSC5-128
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -10485,6 +10488,66 @@ REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-95
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-TEMPLATE-PERMISSION-FIELDS
+TITLE: Content Template Permission Fields
+
+[REQUIREMENT]
+UID: GSSC-MLLR-559
+TITLE: Semantic
+STATEMENT: >>>
+Each Content Template create, modify, and delete permission field SHALL present the currently assigned permissions by readable name, let an administrator add a permission by selecting a readable name from the remaining known permission set, and let an administrator remove an assigned permission by name, while persisting the same underlying permission values the Unified Backend expects.
+<<<
+RATIONALE: >>>
+Administrators assign content-template permissions without typing opaque integers; the Member Frontend maps readable names to the Unified Backend permission values.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-128
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-96
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-560
+TITLE: Syntactic
+STATEMENT: >>>
+Each Content Template permission field SHALL appear in the Generic Editor host below the tags field as a labeled group with the assigned permission names listed above an add control for remaining names.
+<<<
+RATIONALE: >>>
+Grouping assigned names with the add control keeps create, modify, and delete permission editing in one reading order inside the editor.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-128
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-96
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-561
+TITLE: Lexical
+STATEMENT: >>>
+Each Content Template permission field SHALL use the Member Frontend sans-serif typeface and dark-green theme color for the field label and assigned permission names.
+<<<
+RATIONALE: >>>
+Permission fields match other Members form chrome inside the Generic Editor host.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-128
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-96
   ROLE: Refines
 
 [[/SECTION]]

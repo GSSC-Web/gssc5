@@ -85,24 +85,75 @@
         [(value)]="tagsText"
         [enabled]="identityEditable()"
       />
-      <gssc-form-text-field
-        label="Create Permission"
-        [(value)]="createPerm"
-        [enabled]="permitted()"
-        [required]="true"
-      />
-      <gssc-form-text-field
-        label="Modify Permission"
-        [(value)]="modifyPerm"
-        [enabled]="permitted()"
-        [required]="true"
-      />
-      <gssc-form-text-field
-        label="Delete Permission"
-        [(value)]="deletePerm"
-        [enabled]="permitted()"
-        [required]="true"
-      />
+      <!-- @relation(GSSC-MLLR-559, GSSC-MLLR-560, GSSC-MLLR-561, scope=range_start, role=Implementation) -->
+      @for (field of permissionFieldKeys; track field) {
+        <div
+          class="gssc-templates-page__perm flex w-full flex-col gap-2 rounded-md border border-gssc-dark-green bg-gssc-white p-2 font-sans"
+          data-slot="templates-permission-field"
+          [attr.data-perm]="field"
+        >
+          <p
+            class="gssc-templates-page__perm-label m-0 font-sans text-xs font-extralight italic text-gssc-dark-green"
+          >
+            {{ permissionFieldLabels[field] }}
+          </p>
+          <ul
+            class="gssc-templates-page__perm-list m-0 flex list-none flex-col gap-1 p-0"
+            data-slot="templates-permission-list"
+          >
+            @for (entry of selectedPermissionNames(field); track entry.id) {
+              <li
+                class="flex items-center justify-between gap-2 font-sans text-sm text-gssc-dark-green"
+              >
+                <span>{{ entry.label }}</span>
+                @if (permitted()) {
+                  <button
+                    type="button"
+                    class="gssc-templates-page__perm-remove inline-flex cursor-pointer items-center justify-center rounded-md border border-gssc-dark-red bg-gssc-white px-2 py-1 font-sans text-xs font-normal text-gssc-dark-red hover:bg-gssc-light-red"
+                    data-slot="templates-permission-remove"
+                    [attr.data-perm-id]="entry.id"
+                    (click)="removePermission(field, entry.id)"
+                  >
+                    Remove
+                  </button>
+                }
+              </li>
+            } @empty {
+              <li
+                class="font-sans text-sm text-gssc-dark-brown"
+                data-slot="templates-permission-empty"
+              >
+                None
+              </li>
+            }
+          </ul>
+          @if (permitted() && availablePermissionNames(field).length > 0) {
+            <div class="flex flex-wrap items-center gap-2">
+              <select
+                class="gssc-templates-page__perm-pick min-w-0 flex-1 rounded-md border border-gssc-dark-green bg-gssc-white px-2 py-2 font-sans text-sm text-gssc-dark-green outline-none"
+                data-slot="templates-permission-pick"
+                [value]="permissionPick(field)"
+                (change)="onPermissionPick(field, $any($event.target).value)"
+              >
+                <option value="">Add permission…</option>
+                @for (option of availablePermissionNames(field); track option.id) {
+                  <option [value]="option.id">{{ option.label }}</option>
+                }
+              </select>
+              <button
+                type="button"
+                class="gssc-templates-page__perm-add inline-flex cursor-pointer items-center justify-center rounded-md border border-gssc-dark-green bg-gssc-light-green px-3 py-2 font-sans text-sm font-normal text-gssc-dark-green hover:bg-gssc-gray disabled:cursor-not-allowed disabled:opacity-50"
+                data-slot="templates-permission-add"
+                [disabled]="!permissionPick(field)"
+                (click)="addPermission(field)"
+              >
+                Add
+              </button>
+            </div>
+          }
+        </div>
+      }
+      <!-- @relation(GSSC-MLLR-559, GSSC-MLLR-560, GSSC-MLLR-561, scope=range_end, role=Implementation) -->
     </gssc-editor>
 
     @if (permitted() && selectedCuid() && !isCreating()) {
