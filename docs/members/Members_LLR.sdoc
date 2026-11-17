@@ -1306,7 +1306,7 @@ CHANGE_DRIVER: >>>
 GSSC5-82
 GSSC5-123
 <<<
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-20
@@ -1747,7 +1747,7 @@ The Footer provides access back to the Members home dashboard so members can ret
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-123
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-101
@@ -1765,7 +1765,7 @@ Placing the link with other Footer actions keeps home access discoverable. A tex
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-123
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-101
@@ -1783,7 +1783,7 @@ White text keeps the home link aligned with other Footer text on the black Foote
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-123
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-101
