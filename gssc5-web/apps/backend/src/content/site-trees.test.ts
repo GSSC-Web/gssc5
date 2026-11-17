@@ -384,7 +384,7 @@ test("GSSC-BLLR-474 Site Tree Node Deletion Forbidden", async () => {
 });
 // @relation(GSSC-BLLR-474, scope=range_end, role=Test)
 
-// @relation(GSSC-BLLR-475, GSSC-MLLR-591, scope=range_start, role=Test)
+// @relation(GSSC-BLLR-475, scope=range_start, role=Test)
 test("GSSC-BLLR-475 Site Tree Seed", async () => {
   await seedSiteTrees();
   const publicTree = (await getJson("/site-trees/public")).body as NestedSiteTree;
@@ -420,4 +420,4 @@ test("GSSC-BLLR-475 Site Tree Seed", async () => {
   expect(membersPaths).not.toContain("/announcements");
   expect(membersPaths).not.toContain("/events");
 });
-// @relation(GSSC-BLLR-475, GSSC-MLLR-591, scope=range_end, role=Test)
+// @relation(GSSC-BLLR-475, scope=range_end, role=Test)
