@@ -99,8 +99,9 @@ GSSC5-101 Account Page Refinement owns GSSC-MLLR-415 through GSSC-MLLR-428 (coll
 GSSC5-103 Account Mailing Equals Home owns GSSC-MLLR-429 through GSSC-MLLR-437 (exact end 437); HLR GSSC-MHLR-78.
 GSSC5-107 Members Navigation and Narrow Header owns GSSC-MLLR-441 through GSSC-MLLR-461 (exact end 461; Navigation Menu / Item / Submenu / Menu Toggle / Expander / Organization Name / Site Search appearance triads) and CHANGE_DRIVER updates on GSSC-MLLR-14, 15, 18, 20, 21; HLR GSSC-MHLR-81 through GSSC-MHLR-86.
 GSSC5-102 also owns GSSC-MLLR-438 through GSSC-MLLR-440 (Password History Reset on Account Page) and CHANGE_DRIVER on GSSC-MLLR-125 / GSSC-MLLR-158 / GSSC-MHLR-34.
-GSSC5-108 Members Sitemap Page owns GSSC-MLLR-501 through GSSC-MLLR-510 (exact end 510; band 501–520 reserved for sitemap so parallel GSSC5-107 Members nav can claim 441–500 without collision); HLR GSSC-MHLR-79 / GSSC-MHLR-80.
-Wave coordination: GSSC5-92 directory 202–214, GSSC5-102 directory refinement 215–230, GSSC5-89 dashboard 231–239, GSSC5-93 page/section 261–286, GSSC5-94 announcements 291–307, GSSC5-95 events 321–346, GSSC5-96 newsletters 351–373, GSSC5-97 publications/tools 381–414, GSSC5-101 account refinement 415–428, GSSC5-103 mailing-equals-home 429–437, GSSC5-102 password-history-reset 438–440, GSSC5-107 members nav chrome 441–461, GSSC5-108 sitemap 501–510 — do not collide.
+GSSC5-108 Members Sitemap Page owns GSSC-MLLR-501 through GSSC-MLLR-510 (exact end 510; band 501–520 reserved for sitemap); HLR GSSC-MHLR-79 / GSSC-MHLR-80.
+GSSC5-109 Members Site Search owns GSSC-MLLR-462 through GSSC-MLLR-483 (exact end 483; band 462–500 reserved for site search so GSSC5-107 nav 441–461 and GSSC5-108 sitemap 501–510 stay clear); HLR GSSC-MHLR-87 / GSSC-MHLR-88.
+Wave coordination: GSSC5-92 directory 202–214, GSSC5-102 directory refinement 215–230, GSSC5-89 dashboard 231–239, GSSC5-93 page/section 261–286, GSSC5-94 announcements 291–307, GSSC5-95 events 321–346, GSSC5-96 newsletters 351–373, GSSC5-97 publications/tools 381–414, GSSC5-101 account refinement 415–428, GSSC5-103 mailing-equals-home 429–437, GSSC5-102 password-history-reset 438–440, GSSC5-107 members nav chrome 441–461, GSSC5-109 members site search 462–483 (band 462–500), GSSC5-108 sitemap 501–510 — do not collide.
 GSSC-MLLR-33 through GSSC-MLLR-39 remain free for later claimants.
 Do not reuse numbers already claimed by another ticket.
 <<<
@@ -8957,6 +8958,456 @@ REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-80
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-SITE-SEARCH
+TITLE: Site Search
+
+[[SECTION]]
+UID: GSSC-MLLR-SITE-SEARCH-OVERLAY
+TITLE: Site Search Overlay
+
+[REQUIREMENT]
+UID: GSSC-MLLR-462
+TITLE: Semantic
+STATEMENT: >>>
+When the Header Site Search presentation is open, the Site Search Overlay SHALL accept a search query from the member, retrieve quick results from the Unified Backend Members site search corpus for that query, present those quick results, open a result's destination when the member activates that result and then close the presentation, and open the Members Site Search Page with that query when the member submits the overlay search.
+<<<
+RATIONALE: >>>
+The overlay turns the Header Site Search control into a usable quick lookup and a path into the full search page.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-109
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-87
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-463
+TITLE: Syntactic
+STATEMENT: >>>
+The Site Search Overlay SHALL appear as a panel attached to the Header beneath the Site Search control, SHALL place the overlay query field above the quick results list, and SHALL keep the panel from shifting other page content when it opens.
+<<<
+RATIONALE: >>>
+Overlay placement keeps search near the Header control without rearranging the page layout.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-109
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-87
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-464
+TITLE: Lexical
+STATEMENT: >>>
+The Site Search Overlay SHALL use the white theme token for its background, the gray theme token for its border, the sans-serif typeface, and the dark-green theme token for its text color.
+<<<
+RATIONALE: >>>
+White panel with gray border matches the Header open-search presentation chrome; dark-green sans-serif matches other Member Frontend text.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-109
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-87
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-SITE-SEARCH-OVERLAY-QUERY
+TITLE: Site Search Overlay Query Field
+
+[REQUIREMENT]
+UID: GSSC-MLLR-465
+TITLE: Semantic
+STATEMENT: >>>
+The Site Search Overlay Query Field SHALL accept the member's search text and SHALL refresh the overlay quick results from the Unified Backend as that text changes.
+<<<
+RATIONALE: >>>
+Typing drives quick lookup without requiring a separate search action in the overlay.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-109
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-87
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-466
+TITLE: Syntactic
+STATEMENT: >>>
+The Site Search Overlay Query Field SHALL appear as a single-line text field that spans the width of the Site Search Overlay content area and SHALL sit above the quick results list.
+<<<
+RATIONALE: >>>
+Full-width placement keeps the query primary in the overlay and leaves room for results beneath.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-109
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-87
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-467
+TITLE: Lexical
+STATEMENT: >>>
+The Site Search Overlay Query Field SHALL use the sans-serif typeface, the dark-green theme token for its text color, and the gray theme token for its border.
+<<<
+RATIONALE: >>>
+Shared field chrome keeps the overlay consistent with other Member Frontend form fields.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-109
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-87
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-SITE-SEARCH-QUICK-RESULT
+TITLE: Site Search Quick Result
+
+[REQUIREMENT]
+UID: GSSC-MLLR-468
+TITLE: Semantic
+STATEMENT: >>>
+Each Site Search Quick Result SHALL present that result's title, snippet, and kind from the Unified Backend, and SHALL open that result's destination when activated.
+<<<
+RATIONALE: >>>
+Quick results summarize matches so members can jump to a destination without opening the full search page.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-109
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-87
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-469
+TITLE: Syntactic
+STATEMENT: >>>
+Each Site Search Quick Result SHALL appear as one stacked entry in the overlay quick results list beneath the overlay query field.
+<<<
+RATIONALE: >>>
+A stacked list keeps multiple quick matches scannable under the query.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-109
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-87
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-470
+TITLE: Lexical
+STATEMENT: >>>
+Each Site Search Quick Result SHALL use the sans-serif typeface, the dark-green theme token for its title text, and the gray theme token for its snippet text.
+<<<
+RATIONALE: >>>
+Dark-green titles remain primary; gray snippets secondary within the white overlay.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-109
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-87
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-SITE-SEARCH-PAGE
+TITLE: Site Search Page
+
+[REQUIREMENT]
+UID: GSSC-MLLR-471
+TITLE: Semantic
+STATEMENT: >>>
+The Members Site Search Page SHALL accept a search query and an optional result-kind filter from the member, retrieve matching results from the Unified Backend Members site search corpus for those criteria, and present those results.
+<<<
+RATIONALE: >>>
+The dedicated page supports query plus kind filtering beyond the Header overlay quick list.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-109
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-88
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-472
+TITLE: Syntactic
+STATEMENT: >>>
+The Members Site Search Page SHALL place its heading, query field, and kind filter above the results list at full width in the Page Outlet, and SHALL omit the results list when the Unified Backend returns no matches for the current criteria.
+<<<
+RATIONALE: >>>
+Filter controls stay above results so members refine criteria before scanning matches.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-109
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-88
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-473
+TITLE: Lexical
+STATEMENT: >>>
+The Members Site Search Page SHALL use the white theme token for its background, the sans-serif typeface, and the dark-green theme token for the page heading text.
+<<<
+RATIONALE: >>>
+White page chrome and dark-green heading match other Member Frontend content pages.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-109
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-88
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-SITE-SEARCH-PAGE-QUERY
+TITLE: Site Search Page Query Field
+
+[REQUIREMENT]
+UID: GSSC-MLLR-474
+TITLE: Semantic
+STATEMENT: >>>
+The Site Search Page Query Field SHALL accept the member's search text and SHALL drive the page results from the Unified Backend when that text is used for search.
+<<<
+RATIONALE: >>>
+The page query is the primary criterion for the dedicated site search.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-109
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-88
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-475
+TITLE: Syntactic
+STATEMENT: >>>
+The Site Search Page Query Field SHALL appear as a single-line text field in the page filter row above the results list.
+<<<
+RATIONALE: >>>
+Placing the query in the filter row keeps search criteria grouped above results.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-109
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-88
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-476
+TITLE: Lexical
+STATEMENT: >>>
+The Site Search Page Query Field SHALL use the sans-serif typeface, the dark-green theme token for its text color, and the gray theme token for its border.
+<<<
+RATIONALE: >>>
+Shared field chrome matches other Member Frontend text fields.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-109
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-88
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-SITE-SEARCH-KIND-FILTER
+TITLE: Site Search Kind Filter
+
+[REQUIREMENT]
+UID: GSSC-MLLR-477
+TITLE: Semantic
+STATEMENT: >>>
+The Site Search Kind Filter SHALL let the member optionally restrict page results to one result kind from the Unified Backend Members site search kinds, and SHALL treat an unset kind as no kind restriction.
+<<<
+RATIONALE: >>>
+Kind filtering narrows the dedicated search page without changing the Header overlay quick path.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-109
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-88
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-478
+TITLE: Syntactic
+STATEMENT: >>>
+The Site Search Kind Filter SHALL appear as a single selection control in the page filter row with the Site Search Page Query Field above the results list.
+<<<
+RATIONALE: >>>
+Grouping the kind filter with the query keeps page criteria in one filter row.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-109
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-88
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-479
+TITLE: Lexical
+STATEMENT: >>>
+The Site Search Kind Filter SHALL use the sans-serif typeface and the dark-green theme token for its text color.
+<<<
+RATIONALE: >>>
+Dark-green sans-serif matches surrounding Member Frontend filter controls.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-109
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-88
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-SITE-SEARCH-PAGE-RESULT
+TITLE: Site Search Page Result
+
+[REQUIREMENT]
+UID: GSSC-MLLR-480
+TITLE: Semantic
+STATEMENT: >>>
+Each Site Search Page Result SHALL present that result's title, snippet, and kind from the Unified Backend, and SHALL open that result's destination when activated.
+<<<
+RATIONALE: >>>
+Page results mirror the overlay projection so members can open destinations from the dedicated search list.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-109
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-88
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-481
+TITLE: Syntactic
+STATEMENT: >>>
+Each Site Search Page Result SHALL appear as one stacked entry in the page results list beneath the page filter row.
+<<<
+RATIONALE: >>>
+A stacked list keeps filtered matches scannable under the page criteria.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-109
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-88
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-482
+TITLE: Lexical
+STATEMENT: >>>
+Each Site Search Page Result SHALL use the sans-serif typeface, the dark-green theme token for its title text, and the gray theme token for its snippet text.
+<<<
+RATIONALE: >>>
+Dark-green titles and gray snippets match the overlay quick-result presentation on the white page.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-109
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-88
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-SITE-SEARCH-ROUTE
+TITLE: Site Search Page Route
+
+[REQUIREMENT]
+UID: GSSC-MLLR-483
+TITLE: Semantic
+STATEMENT: >>>
+The Member Frontend SHALL expose the Members Site Search Page at the /search route for a logged-in member.
+<<<
+RATIONALE: >>>
+A stable route lets the Header overlay submit open the dedicated search page and lets members bookmark filtered searches.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-109
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-88
   ROLE: Refines
 
 [[/SECTION]]

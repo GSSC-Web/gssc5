@@ -1532,3 +1532,43 @@ CHANGE_DRIVER: GSSC5-108
 REVIEW_STATUS: Approved
 
 [[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MHLR-SITE-SEARCH
+TITLE: Site Search Requirements
+
+[REQUIREMENT]
+UID: GSSC-MHLR-87
+TITLE: Site Search Overlay
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL provide a Site Search overlay in the Header that accepts a search query, presents quick results from the Unified Backend Members site search corpus, lets the member open a result destination, and lets the member open the dedicated Members Site Search Page for that query.
+<<<
+RATIONALE: >>>
+No Member Frontend PIR requires a site-search overlay. The Header Site Search control (GSSC-MHLR-86) is the entry point; the overlay supplies quick lookup without leaving the current view, distinct from Directory Search (GSSC-MHLR-DIRECTORY).
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-109
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-86
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MHLR-88
+TITLE: Members Site Search Page
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL provide a dedicated Members Site Search Page that accepts a search query and optional result-kind filter, presents matching results from the Unified Backend Members site search corpus, and lets the member open a result destination.
+<<<
+RATIONALE: >>>
+No Member Frontend PIR requires a dedicated site-search page. A full search page supports richer filtering than the Header overlay and remains separate from Directory Search.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-109
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-15
+  ROLE: Refines
+
+[[/SECTION]]

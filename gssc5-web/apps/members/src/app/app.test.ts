@@ -236,3 +236,11 @@ test('GSSC-MLLR-510 Sitemap Page Route', async () => {
   expect(root.querySelector('gssc-sitemap-page')).not.toBeNull();
 });
 // @relation(GSSC-MLLR-510, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-483, scope=range_start, role=Test)
+test('GSSC-MLLR-483 Semantic Site Search Page Route', async () => {
+  const { router, root } = await setupApp('/search');
+  expect(router.url.split('?')[0]).toBe('/search');
+  expect(root.querySelector('gssc-search-page')).not.toBeNull();
+});
+// @relation(GSSC-MLLR-483, scope=range_end, role=Test)
