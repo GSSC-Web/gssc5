@@ -46,6 +46,20 @@ export type AccountUpdateBody = Record<string, string | boolean | null>;
 
 export type AccountPhotoUploadResult = { cuid: string; path: string };
 
+type AccountPhotoPostResult = {
+  data: AccountPhotoUploadResult | null;
+  error: { status: number; value: unknown } | null;
+  status?: number;
+};
+
+/**
+ * Treaty POST /account-photos. Mutable so unit tests can stub without fighting Eden proxies.
+ */
+export const accountPhotosTreaty = {
+  post: (body: { file: File; userCuid: string }): Promise<AccountPhotoPostResult> =>
+    backend['account-photos'].post(body) as Promise<AccountPhotoPostResult>,
+};
+
 /**
  * Treaty calls for account load / update / password change / photo upload.
  * Mutable object so unit tests can stub without fighting Eden proxies.
@@ -77,22 +91,16 @@ export const accountApi = {
     data: AccountPhotoUploadResult | null;
     error: { status: number; value: unknown } | null;
   }> => {
-    const form = new FormData();
-    form.append('file', file, file.name);
-    form.append('userCuid', userCuid);
-    const response = await fetch(`${ACCOUNT_PHOTOS_ORIGIN}/account-photos`, {
-      method: 'POST',
-      body: form,
-      credentials: 'include',
-    });
-    if (!response.ok) {
+    // Eden Treaty multipart: File fields become FormData automatically.
+    const result = await accountPhotosTreaty.post({ file, userCuid });
+    if (result.error) {
       return {
         data: null,
-        error: { status: response.status, value: await response.text() },
+        error: { status: result.error.status, value: result.error.value },
       };
     }
     return {
-      data: (await response.json()) as AccountPhotoUploadResult,
+      data: result.data ?? null,
       error: null,
     };
   },

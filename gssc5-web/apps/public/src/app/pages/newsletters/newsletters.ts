@@ -11,13 +11,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SectionFromCuid } from '../../modules/section-from-cuid/section-from-cuid';
 import { backend } from '../../services/backend';
 import { filterSectionsVisibleOn } from '../../services/section-display-window/section-display-window';
+import { resolveStoredFileObjectUrl } from '../../services/files-api';
 import {
   catalogVolumes,
   catalogYears,
   entryByCuid,
   entryForVolumeNumber,
   entryForYearMonth,
-  filesApiUrl,
   monthLabel,
   monthsForYear,
   mostRecentEntry,
@@ -115,16 +115,8 @@ async function defaultNewsletterSectionListByTag(
 }
 
 async function defaultNewsletterFileResolve(filePath: string): Promise<string | null> {
-  const url = filesApiUrl(filePath);
-  try {
-    const response = await fetch(url, { credentials: 'include' });
-    // Soft-deleted / missing → 404; ACL denial → 403; both omit preview/download.
-    if (!response.ok) return null;
-    const blob = await response.blob();
-    return URL.createObjectURL(blob);
-  } catch {
-    return null;
-  }
+  // Soft-deleted / missing → 404; ACL denial → 403; both omit preview/download.
+  return resolveStoredFileObjectUrl(filePath);
 }
 
 function sortIntroByIndex(

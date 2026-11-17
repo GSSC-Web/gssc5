@@ -1,5 +1,7 @@
 import {
+  accountApi,
   accountPhotoUrl,
+  accountPhotosTreaty,
   evaluatePasswordCriteria,
   isValidEmail,
   isValidPhone,
@@ -63,4 +65,29 @@ test('validateMemberInfoFields flags empty required and bad formats', () => {
 test('accountPhotoUrl builds dedicated account-photos GET path', () => {
   expect(accountPhotoUrl('abc')).toBe('http://localhost:3000/account-photos/abc');
   expect(accountPhotoUrl('')).toBeNull();
+});
+
+test('uploadAccountPhoto posts file + userCuid through Eden Treaty', async () => {
+  const originalPost = accountPhotosTreaty.post;
+  let seenFile: File | null = null;
+  let seenUserCuid: string | null = null;
+  accountPhotosTreaty.post = (async (body: { file: File; userCuid: string }) => {
+    seenFile = body.file;
+    seenUserCuid = body.userCuid;
+    return {
+      data: { cuid: body.userCuid, path: `account-photos/${body.userCuid}` },
+      error: null,
+    };
+  }) as typeof accountPhotosTreaty.post;
+
+  try {
+    const file = new File([new Uint8Array([1])], 'avatar.png', { type: 'image/png' });
+    const result = await accountApi.uploadAccountPhoto(file, 'user_42');
+    expect(seenUserCuid).toBe('user_42');
+    expect(seenFile).toBe(file);
+    expect(result.error).toBeNull();
+    expect(result.data).toEqual({ cuid: 'user_42', path: 'account-photos/user_42' });
+  } finally {
+    accountPhotosTreaty.post = originalPost;
+  }
 });
