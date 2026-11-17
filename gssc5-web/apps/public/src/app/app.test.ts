@@ -330,6 +330,14 @@ test('GSSC-PLLR-344 Sitemap Page Route', async () => {
 });
 // @relation(GSSC-PLLR-344, scope=range_end, role=Test)
 
+// @relation(GSSC-PLLR-375, scope=range_start, role=Test)
+test('GSSC-PLLR-375 Search Page Route', async () => {
+  const { router, root } = await setupApp('/search');
+  expect(router.url).toBe('/search');
+  expect(root.querySelector('gssc-search-page')).not.toBeNull();
+});
+// @relation(GSSC-PLLR-375, scope=range_end, role=Test)
+
 // @relation(GSSC-PLLR-16, scope=range_start, role=Test)
 test('GSSC-PLLR-16 Syntactic', async () => {
   const { fixture, announcements, root } = await setupApp('/membership');

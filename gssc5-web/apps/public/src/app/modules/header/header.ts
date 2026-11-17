@@ -10,11 +10,16 @@ import {
   viewChild,
 } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ContactOverlay } from '../../services/contact-overlay/contact-overlay';
 import { MemberSession } from '../../services/member-session';
 import { MembersApp } from '../../services/members-app';
 import { SocietyContact } from '../../services/society-contact/society-contact';
+import {
+  SEARCH_OVERLAY_LIMIT,
+  SITE_SEARCH_GET,
+  type SiteSearchResult,
+} from '../../services/site-search/site-search';
 import {
   SiteTree,
   type SiteTreeNavNode,
@@ -36,11 +41,15 @@ export class Header implements OnInit, OnDestroy {
   private readonly membersApp = inject(MembersApp);
   private readonly contactOverlay = inject(ContactOverlay);
   private readonly siteTree = inject(SiteTree);
+  private readonly siteSearchGet = inject(SITE_SEARCH_GET);
+  private readonly router = inject(Router);
   protected readonly societyContact = inject(SocietyContact);
 
   readonly loggedIn = this.memberSession.loggedIn;
   readonly displayName = this.memberSession.displayName;
   readonly searchOpen = signal(false);
+  readonly searchQuery = signal('');
+  readonly quickResults = signal<SiteSearchResult[]>([]);
   readonly menuOpen = signal(false);
   readonly chromeTier = signal<HeaderChromeTier>('wide');
   readonly expandedIds = signal<ReadonlySet<string>>(new Set());
@@ -52,6 +61,8 @@ export class Header implements OnInit, OnDestroy {
     viewChild<ElementRef<HTMLElement>>('chromeHost');
   private resizeObserver: ResizeObserver | null = null;
   private mediaQuery: MediaQueryList | null = null;
+  private quickSearchTimer: ReturnType<typeof setTimeout> | null = null;
+  private quickSearchSeq = 0;
 
   constructor() {
     afterNextRender(() => {
@@ -68,6 +79,7 @@ export class Header implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.resizeObserver?.disconnect();
     this.mediaQuery?.removeEventListener('change', this.onViewportChange);
+    if (this.quickSearchTimer !== null) clearTimeout(this.quickSearchTimer);
   }
 
   // @relation(GSSC-PLLR-55, GSSC-PLLR-58, scope=range_start, role=Implementation)
@@ -89,11 +101,16 @@ export class Header implements OnInit, OnDestroy {
 
   // @relation(GSSC-PLLR-70, scope=range_start, role=Implementation)
   protected toggleSearch(): void {
-    this.searchOpen.update((open) => !open);
+    this.searchOpen.update((open) => {
+      const next = !open;
+      if (!next) this.resetSearchOverlay();
+      return next;
+    });
   }
 
   protected closeSearch(): void {
     this.searchOpen.set(false);
+    this.resetSearchOverlay();
   }
 
   @HostListener('document:keydown.escape')
@@ -102,6 +119,59 @@ export class Header implements OnInit, OnDestroy {
     if (this.menuOpen()) this.closeMenu();
   }
   // @relation(GSSC-PLLR-70, scope=range_end, role=Implementation)
+
+  // @relation(GSSC-PLLR-354, GSSC-PLLR-357, scope=range_start, role=Implementation)
+  protected onSearchQueryInput(event: Event): void {
+    const value = (event.target as HTMLInputElement).value;
+    this.searchQuery.set(value);
+    this.scheduleQuickSearch(value);
+  }
+
+  protected submitOverlaySearch(event: Event): void {
+    event.preventDefault();
+    const q = this.searchQuery().trim();
+    void this.router.navigate(['/search'], {
+      queryParams: q.length > 0 ? { q } : {},
+    });
+    this.closeSearch();
+  }
+
+  protected onQuickResultNavigate(): void {
+    this.closeSearch();
+  }
+
+  private resetSearchOverlay(): void {
+    this.searchQuery.set('');
+    this.quickResults.set([]);
+    if (this.quickSearchTimer !== null) {
+      clearTimeout(this.quickSearchTimer);
+      this.quickSearchTimer = null;
+    }
+  }
+
+  private scheduleQuickSearch(raw: string): void {
+    if (this.quickSearchTimer !== null) clearTimeout(this.quickSearchTimer);
+    this.quickSearchTimer = setTimeout(() => {
+      this.quickSearchTimer = null;
+      void this.runQuickSearch(raw);
+    }, 200);
+  }
+
+  private async runQuickSearch(raw: string): Promise<void> {
+    const q = raw.trim();
+    const seq = ++this.quickSearchSeq;
+    if (q.length === 0) {
+      this.quickResults.set([]);
+      return;
+    }
+    const entries = await this.siteSearchGet({
+      q,
+      limit: SEARCH_OVERLAY_LIMIT,
+    });
+    if (seq !== this.quickSearchSeq) return;
+    this.quickResults.set(entries ?? []);
+  }
+  // @relation(GSSC-PLLR-354, GSSC-PLLR-357, scope=range_end, role=Implementation)
 
   // @relation(GSSC-PLLR-338, scope=range_start, role=Implementation)
   protected toggleMenu(): void {

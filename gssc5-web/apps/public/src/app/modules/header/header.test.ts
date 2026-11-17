@@ -11,6 +11,11 @@ import {
   SocietyContact,
 } from '../../services/society-contact/society-contact';
 import {
+  SITE_SEARCH_GET,
+  type SiteSearchQuery,
+  type SiteSearchResult,
+} from '../../services/site-search/site-search';
+import {
   SITE_TREE_GET,
   type NestedSiteTreePayload,
   type SiteTreeNavNode,
@@ -18,6 +23,21 @@ import {
 import { nativeElement, setupPublicComponent, textContent } from '../../../test-harness';
 import { memberSessionApi } from '../../services/member-session';
 import { Header } from './header';
+
+const sampleSearchResults: SiteSearchResult[] = [
+  {
+    title: 'Membership',
+    snippet: 'Join',
+    href: '/membership',
+    kind: 'site-tree',
+  },
+  {
+    title: 'Publications',
+    snippet: 'Catalog',
+    href: '/publications',
+    kind: 'site-tree',
+  },
+];
 
 function stubBackendLogoutSuccess(): () => void {
   const original = memberSessionApi.logout;
@@ -83,6 +103,7 @@ async function setupHeader(options?: {
   displayName?: string;
   chromeTier?: 'wide' | 'mid' | 'narrow';
   tree?: NestedSiteTreePayload | null;
+  searchGet?: (query: SiteSearchQuery) => Promise<SiteSearchResult[] | null>;
 }): Promise<{
   fixture: Awaited<ReturnType<typeof setupPublicComponent<Header>>>;
   router: Router;
@@ -92,6 +113,7 @@ async function setupHeader(options?: {
   societyContact: SocietyContact;
   root: HTMLElement;
   header: Header;
+  searchCalls: SiteSearchQuery[];
 }> {
   try {
     globalThis.localStorage?.removeItem('gssc.memberSessionToken');
@@ -102,11 +124,19 @@ async function setupHeader(options?: {
   }
 
   const tree = options?.tree === undefined ? sampleTree : options.tree;
+  const searchCalls: SiteSearchQuery[] = [];
+  const searchGet =
+    options?.searchGet ??
+    (async (query: SiteSearchQuery) => {
+      searchCalls.push(query);
+      return sampleSearchResults;
+    });
 
   const fixture = await setupPublicComponent(Header, {
     providers: [
       { provide: KvStore, useClass: FakeKvStore },
       { provide: SITE_TREE_GET, useValue: async () => tree },
+      { provide: SITE_SEARCH_GET, useValue: searchGet },
     ],
   });
   const router = TestBed.inject(Router);
@@ -142,6 +172,7 @@ async function setupHeader(options?: {
     societyContact,
     root: nativeElement(fixture),
     header,
+    searchCalls,
   };
 }
 
@@ -521,6 +552,165 @@ test('GSSC-PLLR-72 Lexical', async () => {
   expect(panel.classList.contains('border-gssc-gray')).toBe(true);
 });
 // @relation(GSSC-PLLR-72, scope=range_end, role=Test)
+
+// @relation(GSSC-PLLR-354, scope=range_start, role=Test)
+test('GSSC-PLLR-354 Semantic', async () => {
+  const { fixture, root, router, header, searchCalls } = await setupHeader();
+  root.querySelector<HTMLButtonElement>('.gssc-header__search-toggle')!.click();
+  fixture.detectChanges();
+  await fixture.whenStable();
+
+  const input = root.querySelector<HTMLInputElement>('.gssc-header__search-query')!;
+  input.value = 'membership';
+  input.dispatchEvent(new Event('input'));
+  fixture.detectChanges();
+  await new Promise((resolve) => setTimeout(resolve, 220));
+  fixture.detectChanges();
+  await fixture.whenStable();
+
+  expect(searchCalls.some((call) => call.q === 'membership' && call.limit === 8)).toBe(
+    true,
+  );
+  expect(header.quickResults().map((entry) => entry.title)).toEqual([
+    'Membership',
+    'Publications',
+  ]);
+  expect(root.querySelectorAll('.gssc-header__search-result').length).toBe(2);
+
+  root.querySelector<HTMLFormElement>('.gssc-header__search-form')!.requestSubmit();
+  await fixture.whenStable();
+  expect(router.url).toContain('/search');
+  expect(router.url).toContain('q=membership');
+  expect(header.searchOpen()).toBe(false);
+});
+// @relation(GSSC-PLLR-354, scope=range_end, role=Test)
+
+// @relation(GSSC-PLLR-355, scope=range_start, role=Test)
+test('GSSC-PLLR-355 Syntactic', async () => {
+  const { fixture, root, header } = await setupHeader();
+  root.querySelector<HTMLButtonElement>('.gssc-header__search-toggle')!.click();
+  header.searchQuery.set('x');
+  header.quickResults.set(sampleSearchResults);
+  fixture.detectChanges();
+  await fixture.whenStable();
+
+  const panel = root.querySelector('.gssc-header__search-panel')!;
+  const query = root.querySelector('.gssc-header__search-query')!;
+  const results = root.querySelector('.gssc-header__search-results')!;
+  expect(panel.contains(query)).toBe(true);
+  expect(
+    query.compareDocumentPosition(results) & Node.DOCUMENT_POSITION_FOLLOWING,
+  ).toBeTruthy();
+  expect(root.querySelectorAll('.gssc-header__search-result').length).toBe(2);
+});
+// @relation(GSSC-PLLR-355, scope=range_end, role=Test)
+
+// @relation(GSSC-PLLR-356, scope=range_start, role=Test)
+test('GSSC-PLLR-356 Lexical', async () => {
+  const { fixture, root } = await setupHeader();
+  root.querySelector<HTMLButtonElement>('.gssc-header__search-toggle')!.click();
+  fixture.detectChanges();
+  await fixture.whenStable();
+  const panel = root.querySelector('.gssc-header__search-panel')!;
+  expect(panel.classList.contains('bg-gssc-white')).toBe(true);
+  expect(panel.classList.contains('border-gssc-gray')).toBe(true);
+  expect(panel.classList.contains('font-sans')).toBe(true);
+  expect(panel.classList.contains('text-gssc-dark-green')).toBe(true);
+});
+// @relation(GSSC-PLLR-356, scope=range_end, role=Test)
+
+// @relation(GSSC-PLLR-357, scope=range_start, role=Test)
+test('GSSC-PLLR-357 Semantic', async () => {
+  const { fixture, root, router } = await setupHeader();
+  root.querySelector<HTMLButtonElement>('.gssc-header__search-toggle')!.click();
+  fixture.detectChanges();
+  await fixture.whenStable();
+  const input = root.querySelector<HTMLInputElement>('.gssc-header__search-query')!;
+  input.value = 'calendar';
+  input.dispatchEvent(new Event('input'));
+  fixture.detectChanges();
+  root.querySelector<HTMLFormElement>('.gssc-header__search-form')!.requestSubmit();
+  await fixture.whenStable();
+  expect(router.url).toContain('q=calendar');
+});
+// @relation(GSSC-PLLR-357, scope=range_end, role=Test)
+
+// @relation(GSSC-PLLR-358, scope=range_start, role=Test)
+test('GSSC-PLLR-358 Syntactic', async () => {
+  const { fixture, root } = await setupHeader();
+  root.querySelector<HTMLButtonElement>('.gssc-header__search-toggle')!.click();
+  fixture.detectChanges();
+  await fixture.whenStable();
+  const query = root.querySelector('.gssc-header__search-query')!;
+  expect(query.getAttribute('type')).toBe('search');
+  expect(query.classList.contains('w-full')).toBe(true);
+});
+// @relation(GSSC-PLLR-358, scope=range_end, role=Test)
+
+// @relation(GSSC-PLLR-359, scope=range_start, role=Test)
+test('GSSC-PLLR-359 Lexical', async () => {
+  const { fixture, root } = await setupHeader();
+  root.querySelector<HTMLButtonElement>('.gssc-header__search-toggle')!.click();
+  fixture.detectChanges();
+  await fixture.whenStable();
+  const query = root.querySelector('.gssc-header__search-query')!;
+  expect(query.classList.contains('font-sans')).toBe(true);
+  expect(query.classList.contains('text-gssc-dark-green')).toBe(true);
+  expect(query.classList.contains('bg-gssc-white')).toBe(true);
+  expect(query.classList.contains('border-gssc-gray')).toBe(true);
+});
+// @relation(GSSC-PLLR-359, scope=range_end, role=Test)
+
+// @relation(GSSC-PLLR-360, scope=range_start, role=Test)
+test('GSSC-PLLR-360 Semantic', async () => {
+  const { fixture, root, header } = await setupHeader();
+  root.querySelector<HTMLButtonElement>('.gssc-header__search-toggle')!.click();
+  header.quickResults.set(sampleSearchResults);
+  fixture.detectChanges();
+  await fixture.whenStable();
+  const links = [
+    ...root.querySelectorAll<HTMLAnchorElement>('.gssc-header__search-result-link'),
+  ];
+  expect(links.map((link) => link.textContent?.trim())).toEqual([
+    'Membership',
+    'Publications',
+  ]);
+  expect(links.map((link) => link.getAttribute('href'))).toEqual([
+    '/membership',
+    '/publications',
+  ]);
+});
+// @relation(GSSC-PLLR-360, scope=range_end, role=Test)
+
+// @relation(GSSC-PLLR-361, scope=range_start, role=Test)
+test('GSSC-PLLR-361 Syntactic', async () => {
+  const { fixture, root, header } = await setupHeader();
+  root.querySelector<HTMLButtonElement>('.gssc-header__search-toggle')!.click();
+  header.quickResults.set(sampleSearchResults);
+  fixture.detectChanges();
+  await fixture.whenStable();
+  const results = root.querySelector('.gssc-header__search-results')!;
+  const query = root.querySelector('.gssc-header__search-query')!;
+  expect(results.querySelectorAll('.gssc-header__search-result').length).toBe(2);
+  expect(
+    query.compareDocumentPosition(results) & Node.DOCUMENT_POSITION_FOLLOWING,
+  ).toBeTruthy();
+});
+// @relation(GSSC-PLLR-361, scope=range_end, role=Test)
+
+// @relation(GSSC-PLLR-362, scope=range_start, role=Test)
+test('GSSC-PLLR-362 Lexical', async () => {
+  const { fixture, root, header } = await setupHeader();
+  root.querySelector<HTMLButtonElement>('.gssc-header__search-toggle')!.click();
+  header.quickResults.set(sampleSearchResults);
+  fixture.detectChanges();
+  await fixture.whenStable();
+  const link = root.querySelector('.gssc-header__search-result-link')!;
+  expect(link.classList.contains('font-sans')).toBe(true);
+  expect(link.classList.contains('text-gssc-dark-green')).toBe(true);
+  expect(link.classList.contains('underline')).toBe(true);
+});
+// @relation(GSSC-PLLR-362, scope=range_end, role=Test)
 
 // @relation(GSSC-PLLR-329, scope=range_start, role=Test)
 test('GSSC-PLLR-329 Semantic', async () => {

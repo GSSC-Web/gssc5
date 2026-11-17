@@ -1,0 +1,75 @@
+<!-- @relation(GSSC-PLLR-364, GSSC-PLLR-365, scope=range_start, role=Implementation) -->
+<div class="gssc-search-page w-full bg-gssc-white p-4 font-sans">
+  <section class="gssc-search-page__content w-full" aria-labelledby="gssc-search-heading">
+    <h1
+      id="gssc-search-heading"
+      class="gssc-search-page__heading mb-4 text-xl font-semibold text-gssc-dark-green"
+    >
+      Search
+    </h1>
+
+    <form
+      class="gssc-search-page__controls mb-4 flex w-full flex-wrap items-end gap-3"
+      (submit)="submitSearch($event)"
+    >
+      <!-- @relation(GSSC-PLLR-367, GSSC-PLLR-368, scope=range_start, role=Implementation) -->
+      <label class="gssc-search-page__query-label flex min-w-[12rem] flex-1 flex-col gap-1 font-sans text-sm text-gssc-dark-green">
+        Query
+        <input
+          class="gssc-search-page__query box-border w-full border border-gssc-gray bg-gssc-white px-2 py-1 font-sans text-gssc-dark-green"
+          type="search"
+          name="q"
+          [value]="query()"
+          (input)="onQueryInput($event)"
+          autocomplete="off"
+        />
+      </label>
+      <!-- @relation(GSSC-PLLR-367, GSSC-PLLR-368, scope=range_end, role=Implementation) -->
+
+      <!-- @relation(GSSC-PLLR-370, GSSC-PLLR-371, scope=range_start, role=Implementation) -->
+      <label class="gssc-search-page__kind-label flex min-w-[10rem] flex-col gap-1 font-sans text-sm text-gssc-dark-green">
+        Kind
+        <select
+          class="gssc-search-page__kind box-border w-full border border-gssc-gray bg-gssc-white px-2 py-1 font-sans text-gssc-dark-green"
+          name="kind"
+          [value]="kind()"
+          (change)="onKindChange($event); applyFilters()"
+        >
+          <option value="">All kinds</option>
+          @for (option of kindOptions; track option) {
+            <option [value]="option">{{ labelForKind(option) }}</option>
+          }
+        </select>
+      </label>
+      <!-- @relation(GSSC-PLLR-370, GSSC-PLLR-371, scope=range_end, role=Implementation) -->
+
+      <button
+        type="submit"
+        class="gssc-search-page__submit cursor-pointer border border-gssc-gray bg-gssc-light-green px-3 py-1 font-sans text-gssc-dark-green"
+      >
+        Search
+      </button>
+    </form>
+
+    <ul class="gssc-search-page__results m-0 list-none p-0">
+      @for (result of results(); track result.href + result.title + result.kind) {
+        <!-- @relation(GSSC-PLLR-372, GSSC-PLLR-373, GSSC-PLLR-374, scope=range_start, role=Implementation) -->
+        <li class="gssc-search-page__result mb-3 border-b border-gssc-gray pb-3 last:mb-0 last:border-b-0">
+          <a
+            class="gssc-search-page__result-title font-sans text-gssc-dark-green underline"
+            [routerLink]="result.href"
+          >
+            {{ result.title }}
+          </a>
+          @if (result.snippet) {
+            <p class="gssc-search-page__result-snippet m-0 mt-1 font-sans text-sm text-gssc-dark-brown">
+              {{ result.snippet }}
+            </p>
+          }
+        </li>
+        <!-- @relation(GSSC-PLLR-372, GSSC-PLLR-373, GSSC-PLLR-374, scope=range_end, role=Implementation) -->
+      }
+    </ul>
+  </section>
+</div>
+<!-- @relation(GSSC-PLLR-364, GSSC-PLLR-365, scope=range_end, role=Implementation) -->

@@ -969,7 +969,7 @@ RATIONALE: >>>
 The Header search control opens and closes search from the Header. The full search widget contents are a separate feature.
 <<<
 COMMENT: >>>
-Placeholder open presentation is acceptable in GSSC5-22. Search widget UI is deferred to GSSC5-47.
+Open-presentation contents (query entry and quick results) are specified under GSSC-PHLR-145 / GSSC5-47.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -6318,6 +6318,438 @@ RELATIONS:
 [[/SECTION]]
 
 [[SECTION]]
+UID: GSSC-PLLR-SEARCH-OVERLAY
+TITLE: Header Search Overlay
+
+[[SECTION]]
+UID: GSSC-PLLR-SEARCH-OVERLAY-ELEMENT
+TITLE: Search Overlay
+
+[REQUIREMENT]
+UID: GSSC-PLLR-354
+TITLE: Semantic
+STATEMENT: >>>
+While the Header Site Search presentation is open, the Search Overlay SHALL accept a search query from the visitor, SHALL retrieve a short list of matching public site results from the Unified Backend for that query, SHALL present those quick results, and SHALL open the public search page with that query when the visitor submits the overlay search.
+<<<
+RATIONALE: >>>
+The open Header search presentation is the overlay. Quick results support immediate navigation; submit opens the dedicated page for richer filtering.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-47
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-145
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-355
+TITLE: Syntactic
+STATEMENT: >>>
+The Search Overlay SHALL appear within the open Header Site Search presentation below the Header Site Search control, SHALL place the Search Overlay Query Field above the quick-result list, and SHALL present at most a short list of quick results for the current query.
+<<<
+RATIONALE: >>>
+Placement under the search control keeps the overlay attached to Header Site Search. Query above results matches expected search form order. A short list keeps the overlay scannable.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-47
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-145
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-356
+TITLE: Lexical
+STATEMENT: >>>
+The Search Overlay SHALL use the white theme token for its background, the gray theme token for its border, the sans-serif typeface, and the dark-green theme token for its text color.
+<<<
+RATIONALE: >>>
+White background and gray border match the Header Site Search open presentation. Sans-serif and dark-green match other Header text.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-47
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-145
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-SEARCH-OVERLAY-QUERY
+TITLE: Search Overlay Query Field
+
+[REQUIREMENT]
+UID: GSSC-PLLR-357
+TITLE: Semantic
+STATEMENT: >>>
+The Search Overlay Query Field SHALL accept the visitor's search text for the overlay query and SHALL include that text when the overlay search is submitted to the public search page.
+<<<
+RATIONALE: >>>
+The overlay needs a single text entry for the query used for quick results and for submit to the search page.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-47
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-145
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-358
+TITLE: Syntactic
+STATEMENT: >>>
+The Search Overlay Query Field SHALL appear as a single-line text field at the top of the Search Overlay and SHALL span the usable width of the overlay.
+<<<
+RATIONALE: >>>
+A full-width single-line field is the primary overlay control and keeps entry visible while scanning quick results.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-47
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-145
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-359
+TITLE: Lexical
+STATEMENT: >>>
+The Search Overlay Query Field SHALL use the sans-serif typeface, the dark-green theme token for its text color, the white theme token for its background, and the gray theme token for its border.
+<<<
+RATIONALE: >>>
+Tokens match other public text fields and keep the query readable inside the white overlay.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-47
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-145
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-SEARCH-OVERLAY-RESULT
+TITLE: Search Overlay Quick Result
+
+[REQUIREMENT]
+UID: GSSC-PLLR-360
+TITLE: Semantic
+STATEMENT: >>>
+Each Search Overlay Quick Result SHALL present that matching result's title and SHALL open that result's destination when activated.
+<<<
+RATIONALE: >>>
+Quick results are destinations from the Unified Backend search listing. The title identifies the destination; activating the result opens it.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-47
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-145
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-361
+TITLE: Syntactic
+STATEMENT: >>>
+Each Search Overlay Quick Result SHALL appear as one item in the overlay quick-result list below the Search Overlay Query Field.
+<<<
+RATIONALE: >>>
+A vertical list under the query field lets visitors scan and choose a destination without leaving the Header.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-47
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-145
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-362
+TITLE: Lexical
+STATEMENT: >>>
+Each Search Overlay Quick Result SHALL use the sans-serif typeface and the dark-green theme token for its text color, with an underline.
+<<<
+RATIONALE: >>>
+Sans-serif and dark-green match other public destination links. An underline marks the result as navigable.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-47
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-145
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-SEARCH-PAGE
+TITLE: Search Page
+
+[[SECTION]]
+UID: GSSC-PLLR-SEARCH-PAGE-ELEMENT
+TITLE: Search Page
+
+[REQUIREMENT]
+UID: GSSC-PLLR-363
+TITLE: Semantic
+STATEMENT: >>>
+The GSSC Website Public Frontend Search Page SHALL accept a search query and an optional result-kind filter from the visitor, SHALL retrieve matching public site results from the Unified Backend for that query and filter, and SHALL present those results.
+<<<
+RATIONALE: >>>
+The page is the fuller search surface beyond the Header overlay. Query and kind filter drive the Unified Backend public search listing.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-47
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-146
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-364
+TITLE: Syntactic
+STATEMENT: >>>
+The Search Page SHALL place its query field, kind filter, and result list at full width in the Page Outlet, with the query field and kind filter above the result list.
+<<<
+RATIONALE: >>>
+Full-width placement matches other public page content. Controls above results keep filter changes visible while scanning matches.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-47
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-146
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-365
+TITLE: Lexical
+STATEMENT: >>>
+The Search Page SHALL use the white theme token for its background, the sans-serif typeface, and the dark-green theme token for the page heading text.
+<<<
+RATIONALE: >>>
+White background matches the Public Frontend shell. Sans-serif matches the default public typeface. Dark-green heading text aligns with other public page headings.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-47
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-146
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-SEARCH-PAGE-QUERY
+TITLE: Search Page Query Field
+
+[REQUIREMENT]
+UID: GSSC-PLLR-366
+TITLE: Semantic
+STATEMENT: >>>
+The Search Page Query Field SHALL accept the visitor's search text for the page query and SHALL apply that text when retrieving Search Page results.
+<<<
+RATIONALE: >>>
+The page needs a text entry that drives the Unified Backend public search listing together with the kind filter.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-47
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-146
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-367
+TITLE: Syntactic
+STATEMENT: >>>
+The Search Page Query Field SHALL appear as a single-line text field in the Search Page controls row above the result list.
+<<<
+RATIONALE: >>>
+A single-line field in the controls row keeps the query visible next to the kind filter.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-47
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-146
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-368
+TITLE: Lexical
+STATEMENT: >>>
+The Search Page Query Field SHALL use the sans-serif typeface, the dark-green theme token for its text color, the white theme token for its background, and the gray theme token for its border.
+<<<
+RATIONALE: >>>
+Tokens match the overlay query field and other public text fields.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-47
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-146
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-SEARCH-PAGE-KIND
+TITLE: Search Page Kind Filter
+
+[REQUIREMENT]
+UID: GSSC-PLLR-369
+TITLE: Semantic
+STATEMENT: >>>
+The Search Page Kind Filter SHALL let the visitor choose all result kinds or one result kind and SHALL apply that choice when retrieving Search Page results.
+<<<
+RATIONALE: >>>
+Kind filtering is the richer filter on the search page beyond the Header overlay's quick list.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-47
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-146
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-370
+TITLE: Syntactic
+STATEMENT: >>>
+The Search Page Kind Filter SHALL appear as a selection control in the Search Page controls row beside the Search Page Query Field above the result list.
+<<<
+RATIONALE: >>>
+Placing the kind filter beside the query keeps both controls in one row above results.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-47
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-146
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-371
+TITLE: Lexical
+STATEMENT: >>>
+The Search Page Kind Filter SHALL use the sans-serif typeface, the dark-green theme token for its text color, the white theme token for its background, and the gray theme token for its border.
+<<<
+RATIONALE: >>>
+Tokens match the Search Page Query Field so the controls row reads as one set.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-47
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-146
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-SEARCH-PAGE-RESULT
+TITLE: Search Page Result
+
+[REQUIREMENT]
+UID: GSSC-PLLR-372
+TITLE: Semantic
+STATEMENT: >>>
+Each Search Page Result SHALL present that matching result's title and a short snippet and SHALL open that result's destination when activated.
+<<<
+RATIONALE: >>>
+Page results are destinations from the Unified Backend search listing. Title and snippet identify the match; activating the result opens it.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-47
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-146
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-373
+TITLE: Syntactic
+STATEMENT: >>>
+Each Search Page Result SHALL appear as one item in the Search Page result list below the query and kind filter controls.
+<<<
+RATIONALE: >>>
+A list under the controls lets visitors scan matches after refining the query or kind.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-47
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-146
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-374
+TITLE: Lexical
+STATEMENT: >>>
+Each Search Page Result SHALL use the sans-serif typeface and the dark-green theme token for its title text with an underline, and SHALL use the sans-serif typeface and the dark-brown theme token for its snippet text.
+<<<
+RATIONALE: >>>
+Dark-green underlined titles match other public destination links. Dark-brown snippet text secondary to the title keeps hierarchy without leaving the theme palette.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-47
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-146
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
 UID: GSSC-PLLR-SERVICES
 TITLE: Public Services
 
@@ -6607,6 +7039,24 @@ REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-143
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-375
+TITLE: Search Page Route
+STATEMENT: >>>
+The GSSC Website Public Frontend Router SHALL open the public search page at the search path.
+<<<
+RATIONALE: >>>
+Header Search Overlay submit and direct navigation reach the public search page through this route.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-47
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-146
   ROLE: Refines
 
 [[/SECTION]]

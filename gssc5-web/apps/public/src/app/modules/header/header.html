@@ -176,15 +176,50 @@
   }
 
   @if (searchOpen()) {
+    <!-- @relation(GSSC-PLLR-355, GSSC-PLLR-356, scope=range_start, role=Implementation) -->
     <div
-      class="gssc-header__search-panel absolute end-4 top-full z-20 mt-1 min-w-48 border border-gssc-gray bg-gssc-white p-3 font-sans text-gssc-dark-green"
+      class="gssc-header__search-panel absolute end-4 top-full z-20 mt-1 w-72 max-w-[min(100vw-2rem,20rem)] border border-gssc-gray bg-gssc-white p-3 font-sans text-gssc-dark-green"
       [class.start-4]="chromeTier() === 'narrow'"
       [class.end-auto]="chromeTier() === 'narrow'"
       role="search"
     >
-      <!-- Placeholder until GSSC5-47 search widget. -->
-      <p class="gssc-header__search-placeholder m-0 text-sm">Search</p>
+      <form class="gssc-header__search-form m-0" (submit)="submitOverlaySearch($event)">
+        <!-- @relation(GSSC-PLLR-358, GSSC-PLLR-359, scope=range_start, role=Implementation) -->
+        <label
+          class="gssc-header__search-query-label absolute -m-px h-px w-px overflow-hidden whitespace-nowrap border-0 p-0"
+          for="gssc-header-search-query"
+        >
+          Search
+        </label>
+        <input
+          id="gssc-header-search-query"
+          class="gssc-header__search-query box-border w-full border border-gssc-gray bg-gssc-white px-2 py-1 font-sans text-gssc-dark-green"
+          type="search"
+          name="q"
+          [value]="searchQuery()"
+          (input)="onSearchQueryInput($event)"
+          autocomplete="off"
+          autofocus
+        />
+        <!-- @relation(GSSC-PLLR-358, GSSC-PLLR-359, scope=range_end, role=Implementation) -->
+      </form>
+      <ul class="gssc-header__search-results m-0 mt-2 list-none p-0">
+        @for (result of quickResults(); track result.href + result.title + result.kind) {
+          <!-- @relation(GSSC-PLLR-360, GSSC-PLLR-361, GSSC-PLLR-362, scope=range_start, role=Implementation) -->
+          <li class="gssc-header__search-result">
+            <a
+              class="gssc-header__search-result-link block py-1 font-sans text-sm text-gssc-dark-green underline"
+              [routerLink]="result.href"
+              (click)="onQuickResultNavigate()"
+            >
+              {{ result.title }}
+            </a>
+          </li>
+          <!-- @relation(GSSC-PLLR-360, GSSC-PLLR-361, GSSC-PLLR-362, scope=range_end, role=Implementation) -->
+        }
+      </ul>
     </div>
+    <!-- @relation(GSSC-PLLR-355, GSSC-PLLR-356, scope=range_end, role=Implementation) -->
   }
 
   @if (menuOpen() && chromeTier() !== 'wide') {

@@ -8,9 +8,10 @@ import {
 import { NewslettersPage } from './pages/newsletters/newsletters';
 import { PublicationsPage } from './pages/publications/publications-page';
 import { ResearchToolsPage } from './pages/research-tools/research-tools';
+import { SearchPage } from './pages/search/search';
 import { SitemapPage } from './pages/sitemap/sitemap';
 
-// @relation(GSSC-PLLR-8, GSSC-PLLR-9, GSSC-PLLR-10, GSSC-PLLR-11, GSSC-PLLR-12, GSSC-PLLR-13, GSSC-PLLR-14, GSSC-PLLR-344, scope=range_start, role=Implementation)
+// @relation(GSSC-PLLR-8, GSSC-PLLR-9, GSSC-PLLR-10, GSSC-PLLR-11, GSSC-PLLR-12, GSSC-PLLR-13, GSSC-PLLR-14, GSSC-PLLR-344, GSSC-PLLR-375, scope=range_start, role=Implementation)
 export const routes: Routes = [
   { path: '', pathMatch: 'full', component: HomePage },
   { path: 'membership', component: MembershipPage },
@@ -20,5 +21,6 @@ export const routes: Routes = [
   { path: 'research-tools', component: ResearchToolsPage },
   { path: 'newsletters', component: NewslettersPage },
   { path: 'sitemap', component: SitemapPage },
+  { path: 'search', component: SearchPage },
 ];
-// @relation(GSSC-PLLR-8, GSSC-PLLR-9, GSSC-PLLR-10, GSSC-PLLR-11, GSSC-PLLR-12, GSSC-PLLR-13, GSSC-PLLR-14, GSSC-PLLR-344, scope=range_end, role=Implementation)
+// @relation(GSSC-PLLR-8, GSSC-PLLR-9, GSSC-PLLR-10, GSSC-PLLR-11, GSSC-PLLR-12, GSSC-PLLR-13, GSSC-PLLR-14, GSSC-PLLR-344, GSSC-PLLR-375, scope=range_end, role=Implementation)
