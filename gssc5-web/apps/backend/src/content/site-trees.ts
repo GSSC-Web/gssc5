@@ -102,6 +102,7 @@ const PUBLIC_SEED_CHILDREN: Array<{ label: string; path: string }> = [
  * Members header + editor destinations at seed time
  * (header.html nav + authenticated editor routes).
  */
+// @relation(GSSC-MLLR-591, scope=range_start, role=Implementation)
 const MEMBERS_SEED_CHILDREN: Array<{ label: string; path: string }> = [
   { label: "Directory", path: "/directory" },
   { label: "Account", path: "/account" },
@@ -111,6 +112,7 @@ const MEMBERS_SEED_CHILDREN: Array<{ label: string; path: string }> = [
   { label: "Publications", path: "/publications" },
   { label: "Research Tools", path: "/research-tools" },
 ];
+// @relation(GSSC-MLLR-591, scope=range_end, role=Implementation)
 
 function isFrontend(value: string): value is SiteTreeFrontend {
   return (SITE_TREE_FRONTENDS as readonly string[]).includes(value);

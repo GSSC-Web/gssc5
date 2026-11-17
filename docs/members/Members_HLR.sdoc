@@ -1173,13 +1173,10 @@ Authorized members need to add sections to public pages the same way they create
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-126
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-20
-  ROLE: Refines
-- TYPE: Parent
-  VALUE: GSSC-MHLR-38
   ROLE: Refines
 
 [[/SECTION]]
@@ -1702,7 +1699,7 @@ After Page Data Editor unification, duplicate top-level Announcements and Events
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-126
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-93
