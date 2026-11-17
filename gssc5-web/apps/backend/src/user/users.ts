@@ -4,12 +4,17 @@ import { loadConfig, type Config } from "../config";
 import { getPrisma } from "../db";
 import type { Prisma, PrismaClient } from "../generated/prisma/client";
 import { UserPlain, UserPlainInputUpdate } from "../generated/prismabox/User";
+import { getMailTransporter } from "../mail";
 import {
+  hashLoginToken,
   loginTokenCookie,
   resolveLoginSessionUser,
   type CookieJar,
   type LoginSessionFailure,
 } from "./login-session";
+import { passwordMeetsRules } from "./passwords";
+
+const MILLISECONDS_PER_DAY = 24 * 60 * 60 * 1000;
 
 const userSelect = {
   // @relation(GSSC-BLLR-54, GSSC-BLLR-100, scope=range_start, role=Implementation)
@@ -307,6 +312,172 @@ export const users = new Elysia({
       },
     },
   )
+  // @relation(GSSC-BLLR-485, GSSC-BLLR-486, GSSC-BLLR-487, scope=range_start, role=Implementation)
+  .post(
+    "/",
+    async ({ body, cookie, status }) => {
+      const session = await openSession(cookie);
+      if ("failure" in session) {
+        return status(403, "Forbidden" as const);
+      }
+      if (!session.user.isAdmin) {
+        return status(403, "Forbidden" as const);
+      }
+
+      const username = optionalTrimmed(body.username);
+      const primaryEmail = optionalTrimmed(body.primaryEmail);
+      const password = typeof body.password === "string" ? body.password : "";
+      const firstName = optionalNullableName(body.firstName);
+      const lastName = optionalNullableName(body.lastName);
+      if (username === null || primaryEmail === null || password === "") {
+        return status(422, "Invalid" as const);
+      }
+
+      const { prisma, config } = runtime();
+      if (!passwordMeetsRules(password, config.PASSWORD_MIN_LENGTH)) {
+        return status(422, "Invalid" as const);
+      }
+      if (!(await createIdentifiersAvailable(prisma, username, primaryEmail))) {
+        return status(422, "Invalid" as const);
+      }
+
+      const passwordHash = await Bun.password.hash(password, "argon2id");
+      try {
+        const created = await prisma.user.create({
+          data: {
+            username,
+            primaryEmail,
+            passwordHash,
+            ...(firstName !== undefined ? { firstName } : {}),
+            ...(lastName !== undefined ? { lastName } : {}),
+          },
+          select: userSelect,
+        });
+        return status(201, project(created, session.user));
+      } catch (error) {
+        if (isUniqueConflict(error) || isPrimaryEmailGuard(error)) {
+          return status(422, "Invalid" as const);
+        }
+        throw error;
+      }
+    },
+    {
+      body: t.Object({
+        username: t.String({ minLength: 1 }),
+        primaryEmail: t.String({ format: "email" }),
+        password: t.String({ minLength: 1 }),
+        firstName: t.Optional(t.String()),
+        lastName: t.Optional(t.String()),
+      }),
+      cookie: loginTokenCookie,
+      response: {
+        201: PublicUser,
+        403: t.Literal("Forbidden"),
+        422: t.Literal("Invalid"),
+      },
+    },
+  )
+  // @relation(GSSC-BLLR-485, GSSC-BLLR-486, GSSC-BLLR-487, scope=range_end, role=Implementation)
+  // @relation(GSSC-BLLR-488, GSSC-BLLR-489, GSSC-BLLR-490, scope=range_start, role=Implementation)
+  .post(
+    "/invite",
+    async ({ body, cookie, status }) => {
+      const session = await openSession(cookie);
+      if ("failure" in session) {
+        return status(403, "Forbidden" as const);
+      }
+      if (!session.user.isAdmin && !session.user.isUserMod) {
+        return status(403, "Forbidden" as const);
+      }
+
+      const primaryEmail = optionalTrimmed(body.primaryEmail);
+      if (primaryEmail === null) {
+        return status(422, "Invalid" as const);
+      }
+      const requestedUsername = optionalTrimmed(body.username);
+      const firstName = optionalNullableName(body.firstName);
+      const lastName = optionalNullableName(body.lastName);
+
+      const { prisma, config } = runtime();
+      const username =
+        requestedUsername ?? (await uniqueUsernameFromEmail(prisma, primaryEmail));
+      if (username === null) {
+        return status(422, "Invalid" as const);
+      }
+      if (!(await createIdentifiersAvailable(prisma, username, primaryEmail))) {
+        return status(422, "Invalid" as const);
+      }
+
+      const unusablePassword = randomToken();
+      const passwordHash = await Bun.password.hash(unusablePassword, "argon2id");
+      const recoveryToken = randomToken();
+      const issuedAt = new Date();
+      const expiresAt = new Date(
+        issuedAt.getTime() + config.PASSWORD_RECOVERY_LIFETIME_DAYS * MILLISECONDS_PER_DAY,
+      );
+
+      let createdId: string | undefined;
+      let recoveryId: string | undefined;
+      try {
+        const created = await prisma.user.create({
+          data: {
+            username,
+            primaryEmail,
+            passwordHash,
+            ...(firstName !== undefined ? { firstName } : {}),
+            ...(lastName !== undefined ? { lastName } : {}),
+          },
+          select: userSelect,
+        });
+        createdId = created.id;
+        const stored = await prisma.passwordRecoveryToken.create({
+          data: {
+            tokenHash: hashLoginToken(recoveryToken),
+            userId: created.id,
+            primaryEmail,
+            issuedAt,
+            expiresAt,
+          },
+        });
+        recoveryId = stored.id;
+
+        await getMailTransporter(config).sendMail({
+          to: primaryEmail,
+          from: config.SMTP_FROM,
+          subject: "Member invitation",
+          text: `recovery-token=${recoveryToken}`,
+        });
+
+        return status(201, project(created, session.user));
+      } catch (error) {
+        if (recoveryId) {
+          await prisma.passwordRecoveryToken.delete({ where: { id: recoveryId } }).catch(() => undefined);
+        }
+        if (createdId) {
+          await prisma.user.delete({ where: { id: createdId } }).catch(() => undefined);
+        }
+        if (isUniqueConflict(error) || isPrimaryEmailGuard(error)) {
+          return status(422, "Invalid" as const);
+        }
+        throw error;
+      }
+    },
+    {
+      body: t.Object({
+        primaryEmail: t.String({ format: "email" }),
+        username: t.Optional(t.String({ minLength: 1 })),
+        firstName: t.Optional(t.String()),
+        lastName: t.Optional(t.String()),
+      }),
+      cookie: loginTokenCookie,
+      response: {
+        201: PublicUser,
+        403: t.Literal("Forbidden"),
+        422: t.Literal("Invalid"),
+      },
+    },
+  )
+  // @relation(GSSC-BLLR-488, GSSC-BLLR-489, GSSC-BLLR-490, scope=range_end, role=Implementation)
   .post(
     "/:cuid/soft-delete",
     softDeleteUserHandler,
@@ -1010,6 +1181,61 @@ function trimStrings(value: unknown): void {
     const item = (value as Record<string, unknown>)[key];
     if (typeof item === "string") (value as Record<string, unknown>)[key] = item.trim();
   }
+}
+
+function optionalTrimmed(value: unknown): string | null {
+  if (typeof value !== "string") return null;
+  const trimmed = value.trim();
+  return trimmed.length > 0 ? trimmed : null;
+}
+
+function optionalNullableName(value: unknown): string | null | undefined {
+  if (value === undefined) return undefined;
+  if (typeof value !== "string") return undefined;
+  const trimmed = value.trim();
+  return trimmed.length > 0 ? trimmed : null;
+}
+
+async function createIdentifiersAvailable(
+  prisma: PrismaClient,
+  username: string,
+  primaryEmail: string,
+): Promise<boolean> {
+  const byUsername = await prisma.user.findUnique({
+    where: { username },
+    select: { id: true },
+  });
+  if (byUsername) return false;
+  const byEmail = await prisma.user.findUnique({
+    where: { primaryEmail },
+    select: { id: true },
+  });
+  return !byEmail;
+}
+
+async function uniqueUsernameFromEmail(
+  prisma: PrismaClient,
+  primaryEmail: string,
+): Promise<string | null> {
+  const local = primaryEmail.split("@")[0]?.trim() ?? "";
+  const base =
+    local
+      .toLowerCase()
+      .replace(/[^a-z0-9._-]+/g, "-")
+      .replace(/^-+|-+$/g, "") || "member";
+  for (let attempt = 0; attempt < 50; attempt += 1) {
+    const candidate = attempt === 0 ? base : `${base}-${attempt + 1}`;
+    const existing = await prisma.user.findUnique({
+      where: { username: candidate },
+      select: { id: true },
+    });
+    if (!existing) return candidate;
+  }
+  return null;
+}
+
+function randomToken(): string {
+  return Buffer.from(crypto.getRandomValues(new Uint8Array(32))).toString("base64url");
 }
 
 function isUniqueConflict(error: unknown): boolean {

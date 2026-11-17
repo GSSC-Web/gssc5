@@ -5,6 +5,7 @@ import { randomUUID } from "node:crypto";
 
 import { beforeAll, expect, setSystemTime, test } from "bun:test";
 
+import { setMailTransporter, type MailMessage } from "../mail";
 import {
   DAY_MS,
   bootInProcess,
@@ -2356,4 +2357,162 @@ test("GSSC-BLLR-465 User List Address Filter", async () => {
   }
 });
 // @relation(GSSC-BLLR-465, scope=range_end, role=Test)
+
+const CREATE_PASSWORD = "Aa1!created";
+
+async function postUsersJson(
+  pathname: string,
+  token: string | undefined,
+  body: Record<string, unknown>,
+): Promise<{ status: number; text: string; user: Record<string, unknown> | undefined }> {
+  const headers: Record<string, string> = { "content-type": "application/json" };
+  if (token !== undefined) headers.cookie = `gssc_login_token=${token}`;
+  const response = await app.backend(
+    new Request(`http://127.0.0.1${pathname}`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify(body),
+    }),
+  );
+  const text = await response.text();
+  const parsed = parseJson(text);
+  return {
+    status: response.status,
+    text,
+    user: userFrom(parsed),
+  };
+}
+
+async function deleteUserRow(id: string): Promise<void> {
+  const column = columnOf.get("cuid") ?? "id";
+  await app.sql.execute(
+    `DELETE FROM ${quote(app.table)} WHERE ${quote(column)} = ${sqlLiteral(id)}`,
+  );
+}
+
+// @relation(GSSC-BLLR-485, GSSC-BLLR-486, GSSC-BLLR-487, scope=range_start, role=Test)
+test("GSSC-BLLR-485 User Creation", async () => {
+  const username = `create-${randomUUID().slice(0, 8)}`;
+  const primaryEmail = `${username}@example.com`;
+  const created = await postUsersJson("/users", admin.token, {
+    username,
+    primaryEmail,
+    password: CREATE_PASSWORD,
+    firstName: "Created",
+    lastName: "Member",
+  });
+  expect(created.status, created.text.slice(0, 500)).toBe(201);
+  expect(created.user?.["cuid"]).toEqual(expect.any(String));
+  expect(created.user?.["username"]).toBe(username);
+  expect(created.user?.["primaryEmail"]).toBe(primaryEmail);
+  expect(created.user?.["firstName"]).toBe("Created");
+  expect(created.user?.["lastName"]).toBe("Member");
+  const cuid = String(created.user?.["cuid"] ?? "");
+  expect(idsOf(await listEntries(admin.token))).toContain(cuid);
+  await deleteUserRow(cuid);
+});
+
+test("GSSC-BLLR-486 User Creation Forbidden", async () => {
+  const username = `forbid-create-${randomUUID().slice(0, 8)}`;
+  const forbidden = await postUsersJson("/users", emailMember.token, {
+    username,
+    primaryEmail: `${username}@example.com`,
+    password: CREATE_PASSWORD,
+  });
+  expect(forbidden.status).toBe(403);
+  const modForbidden = await postUsersJson("/users", moderator.token, {
+    username: `${username}-mod`,
+    primaryEmail: `${username}-mod@example.com`,
+    password: CREATE_PASSWORD,
+  });
+  expect(modForbidden.status).toBe(403);
+});
+
+test("GSSC-BLLR-487 User Creation Invalid Or Duplicate", async () => {
+  const weak = await postUsersJson("/users", admin.token, {
+    username: `weak-${randomUUID().slice(0, 8)}`,
+    primaryEmail: `weak-${randomUUID().slice(0, 8)}@example.com`,
+    password: "short",
+  });
+  expect(weak.status).toBe(422);
+
+  const dupUser = await postUsersJson("/users", admin.token, {
+    username: String(emailMember.values.username),
+    primaryEmail: `unique-${randomUUID().slice(0, 8)}@example.com`,
+    password: CREATE_PASSWORD,
+  });
+  expect(dupUser.status).toBe(422);
+
+  const dupEmail = await postUsersJson("/users", admin.token, {
+    username: `dup-email-${randomUUID().slice(0, 8)}`,
+    primaryEmail: String(emailMember.values.primaryEmail),
+    password: CREATE_PASSWORD,
+  });
+  expect(dupEmail.status).toBe(422);
+});
+// @relation(GSSC-BLLR-485, GSSC-BLLR-486, GSSC-BLLR-487, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-488, GSSC-BLLR-489, GSSC-BLLR-490, scope=range_start, role=Test)
+test("GSSC-BLLR-488 User Invitation", async () => {
+  const sent: MailMessage[] = [];
+  setMailTransporter({
+    async sendMail(message) {
+      sent.push(message);
+    },
+  });
+  try {
+    const primaryEmail = `invite-${randomUUID().slice(0, 8)}@example.com`;
+    const invited = await postUsersJson("/users/invite", moderator.token, {
+      primaryEmail,
+      firstName: "Invited",
+      lastName: "Prospect",
+    });
+    expect(invited.status, invited.text.slice(0, 500)).toBe(201);
+    expect(invited.user?.["cuid"]).toEqual(expect.any(String));
+    expect(invited.user?.["primaryEmail"]).toBe(primaryEmail);
+    expect(invited.user?.["firstName"]).toBe("Invited");
+    expect(sent).toHaveLength(1);
+    expect(sent[0]?.to).toBe(primaryEmail);
+    expect(sent[0]?.subject).toBe("Member invitation");
+    expect(sent[0]?.text).toMatch(/recovery-token=/);
+    const cuid = String(invited.user?.["cuid"] ?? "");
+    expect(idsOf(await listEntries(moderator.token))).toContain(cuid);
+    await deleteUserRow(cuid);
+  } finally {
+    setMailTransporter(undefined);
+  }
+});
+
+test("GSSC-BLLR-489 User Invitation Forbidden", async () => {
+  const forbidden = await postUsersJson("/users/invite", emailMember.token, {
+    primaryEmail: `forbid-invite-${randomUUID().slice(0, 8)}@example.com`,
+  });
+  expect(forbidden.status).toBe(403);
+});
+
+test("GSSC-BLLR-490 User Invitation Invalid Or Duplicate", async () => {
+  const sent: MailMessage[] = [];
+  setMailTransporter({
+    async sendMail(message) {
+      sent.push(message);
+    },
+  });
+  try {
+    const dupEmail = await postUsersJson("/users/invite", admin.token, {
+      primaryEmail: String(emailMember.values.primaryEmail),
+    });
+    expect(dupEmail.status).toBe(422);
+    expect(sent).toHaveLength(0);
+
+    const dupUsername = await postUsersJson("/users/invite", admin.token, {
+      primaryEmail: `invite-dup-user-${randomUUID().slice(0, 8)}@example.com`,
+      username: String(emailMember.values.username),
+    });
+    expect(dupUsername.status).toBe(422);
+    expect(sent).toHaveLength(0);
+  } finally {
+    setMailTransporter(undefined);
+  }
+});
+// @relation(GSSC-BLLR-488, GSSC-BLLR-489, GSSC-BLLR-490, scope=range_end, role=Test)
 
