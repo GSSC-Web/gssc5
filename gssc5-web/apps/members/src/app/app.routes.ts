@@ -1,12 +1,10 @@
 import { Routes } from '@angular/router';
 import { AccountPage } from './pages/account/account';
-import { AnnouncementsEditorPage } from './pages/announcements-editor/announcements-editor';
 import { DirectoryPage } from './pages/directory/directory';
-import { EventsPage } from './pages/events/events';
 import { HomePage } from './pages/home/home';
 import { LoginPage } from './pages/login/login';
 import { NewslettersPage } from './pages/newsletters/newsletters';
-import { PageSectionEditorPage } from './pages/page-section-editor/page-section-editor';
+import { PageDataEditorPage } from './pages/page-data-editor/page-data-editor';
 import { PublicationsPage } from './pages/publications/publications';
 import { ResearchToolsPage } from './pages/research-tools/research-tools';
 import { SearchPage } from './pages/search/search';
@@ -44,26 +42,40 @@ export const routes: Routes = [
     canActivate: [requireAuthGuard],
   },
   // @relation(GSSC-MLLR-211, scope=range_end, role=Implementation)
-  // @relation(GSSC-MLLR-345, scope=range_start, role=Implementation)
+  // @relation(GSSC-MLLR-320, scope=range_start, role=Implementation)
+  {
+    path: 'page-data',
+    pathMatch: 'full',
+    redirectTo: 'page-sections',
+  },
+  // @relation(GSSC-MLLR-320, scope=range_end, role=Implementation)
+  // @relation(GSSC-MLLR-345, GSSC-MLLR-319, scope=range_start, role=Implementation)
   {
     path: 'events',
     pathMatch: 'full',
-    component: EventsPage,
+    component: PageDataEditorPage,
+    data: { kind: 'events' },
     canActivate: [requireAuthGuard],
   },
-  // @relation(GSSC-MLLR-345, scope=range_end, role=Implementation)
+  // @relation(GSSC-MLLR-345, GSSC-MLLR-319, scope=range_end, role=Implementation)
+  // @relation(GSSC-MLLR-317, scope=range_start, role=Implementation)
   {
     path: 'page-sections',
     pathMatch: 'full',
-    component: PageSectionEditorPage,
+    component: PageDataEditorPage,
+    data: { kind: 'sections' },
     canActivate: [requireAuthGuard],
   },
+  // @relation(GSSC-MLLR-317, scope=range_end, role=Implementation)
+  // @relation(GSSC-MLLR-318, scope=range_start, role=Implementation)
   {
     path: 'announcements',
     pathMatch: 'full',
-    component: AnnouncementsEditorPage,
+    component: PageDataEditorPage,
+    data: { kind: 'announcements' },
     canActivate: [requireAuthGuard],
   },
+  // @relation(GSSC-MLLR-318, scope=range_end, role=Implementation)
   // @relation(GSSC-MLLR-366, scope=range_start, role=Implementation)
   {
     path: 'newsletters',
