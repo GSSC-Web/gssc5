@@ -535,9 +535,15 @@ The Header Logo SHALL display the GSSC Logo, and selection of the Header Logo SH
 RATIONALE: >>>
 The Header always includes the GSSC Logo so the member can identify the society. Selecting the logo returns the member to the Member Frontend dashboard home.
 <<<
+COMMENT: >>>
+Society logo image is a chrome placeholder until brand artwork lands in GSSC5-46.
+<<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-81
+CHANGE_DRIVER: >>>
+GSSC5-81
+GSSC5-120
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -572,14 +578,17 @@ RELATIONS:
 UID: GSSC-MLLR-19
 TITLE: Lexical
 STATEMENT: >>>
-The Header Logo SHALL use the dark-green theme token for its mark color.
+The Header Logo SHALL present a compact society logo image sized for the Header identity bar.
 <<<
 RATIONALE: >>>
-A single theme token keeps the mark readable on the Header background until a brand color role is set.
+A compact logo image keeps the society mark readable on the Header background until full Wave 4 branding sets final artwork roles.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-81
+CHANGE_DRIVER: >>>
+GSSC5-81
+GSSC5-120
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -854,14 +863,17 @@ TITLE: Navigation Menu
 UID: GSSC-MLLR-441
 TITLE: Semantic
 STATEMENT: >>>
-The Navigation Menu SHALL present top-level entries built from the members frontend site tree, including access to the Member Frontend dashboard and to each top-level child destination from that tree, and SHALL open each entry's destination path in the Member Frontend.
+The Navigation Menu SHALL present top-level entries built from the members frontend site tree after permission filtering, including access to the Member Frontend dashboard and to each permitted top-level child destination from that tree, and SHALL open each entry's destination path in the Member Frontend.
 <<<
 RATIONALE: >>>
-Procedural menu labels and destinations come from the Unified Backend site tree. Dashboard remains reachable from the menu. Child area access requirements stay separately stated.
+Procedural menu labels and destinations come from the Unified Backend site tree after Members permission visibility. Dashboard remains reachable from the menu. Child area access requirements stay separately stated.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-107
+CHANGE_DRIVER: >>>
+GSSC5-107
+GSSC5-121
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -869,6 +881,9 @@ RELATIONS:
   ROLE: Refines
 - TYPE: Parent
   VALUE: GSSC-MHLR-81
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-99
   ROLE: Refines
 
 [REQUIREMENT]
@@ -899,14 +914,17 @@ RELATIONS:
 UID: GSSC-MLLR-443
 TITLE: Lexical
 STATEMENT: >>>
-The Navigation Menu wide bar SHALL use the cream theme token for its background and the dark-green theme token for its text, and overlay Navigation Menu presentations SHALL use the white theme token for their background and the dark-green theme token for their text.
+The Navigation Menu wide bar SHALL use the white theme token for its background and the dark-green theme token for its text, and overlay Navigation Menu presentations SHALL use the white theme token for their background and the dark-green theme token for their text.
 <<<
 RATIONALE: >>>
-A light navigation bar under the Header distinguishes menu chrome from the identity bar. Overlay menus stay readable on a white surface with Header text tokens.
+A white navigation bar under the Header replaces the cream packed look with a cleaner grid surface. Overlay menus stay readable on a white surface with Header text tokens.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-107
+CHANGE_DRIVER: >>>
+GSSC5-107
+GSSC5-121
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -941,14 +959,17 @@ RELATIONS:
 UID: GSSC-MLLR-445
 TITLE: Syntactic
 STATEMENT: >>>
-Top-level Navigation Items in the wide Navigation Menu bar SHALL appear in a single horizontal row separated by vertical dividers, and Navigation Items in the mid or narrow overlay SHALL appear in a vertical list.
+Top-level Navigation Items in the wide Navigation Menu bar SHALL appear in an evenly spaced horizontal grid with labels that do not wrap, and Navigation Items in the mid or narrow overlay SHALL appear in a vertical list.
 <<<
 RATIONALE: >>>
-Horizontal separated items match the wide prototype. Vertical listing fits the overlay accordion.
+An evenly spaced grid replaces the packed cream row and keeps titles on one line. Vertical listing fits the overlay accordion.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-107
+CHANGE_DRIVER: >>>
+GSSC5-107
+GSSC5-121
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -1184,14 +1205,17 @@ RELATIONS:
 UID: GSSC-MLLR-457
 TITLE: Syntactic
 STATEMENT: >>>
-The Header Organization Name SHALL appear beside the Header Logo in wide and mid chrome, and SHALL be omitted from the Header in narrow chrome.
+The Header Organization Name SHALL appear beside the Header Logo in wide and mid chrome on a single line without wrapping, and SHALL be omitted from the Header in narrow chrome.
 <<<
 RATIONALE: >>>
-Placement beside the logo keeps identity together in wider chrome. Omitting the name in narrow chrome leaves the centered logo as the identity mark.
+Placement beside the logo keeps identity together in wider chrome. A single non-wrapping line avoids crowding the Header actions. Omitting the name in narrow chrome leaves the centered logo as the identity mark.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-107
+CHANGE_DRIVER: >>>
+GSSC5-107
+GSSC5-120
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent

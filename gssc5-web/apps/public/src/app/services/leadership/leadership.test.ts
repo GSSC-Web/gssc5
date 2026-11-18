@@ -8,8 +8,8 @@ import {
   type LeadershipEntry,
 } from './leadership';
 
-// @relation(GSSC-PLLR-376, scope=range_start, role=Test)
-test('GSSC-PLLR-376 Leadership Account Photo Semantic', () => {
+// @relation(GSSC-PLLR-382, scope=range_start, role=Test)
+test('GSSC-PLLR-382 Leadership Account Photo Semantic', () => {
   expect(accountPhotoUrl('user_karen')).toBe(
     'http://localhost:3000/account-photos/user_karen',
   );
@@ -84,4 +84,4 @@ test('GSSC-PLLR-376 Leadership Account Photo Semantic', () => {
   expect(chairCards).toHaveLength(1);
   expect(chairCards[0]!.photoUrl).toBe('http://localhost:3000/account-photos/user_judy');
 });
-// @relation(GSSC-PLLR-376, scope=range_end, role=Test)
+// @relation(GSSC-PLLR-382, scope=range_end, role=Test)

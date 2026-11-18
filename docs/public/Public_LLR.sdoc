@@ -534,11 +534,14 @@ RATIONALE: >>>
 The Header always includes the GSSC Logo so the visitor can identify the society. Selecting the logo returns the visitor to the public home page.
 <<<
 COMMENT: >>>
-Placeholder SVG mark is acceptable until brand artwork lands in GSSC5-46 (logo branding across favicon, Header, and Footer).
+Society logo image is a chrome placeholder until brand artwork lands in GSSC5-46 (logo branding across favicon, Header, and Footer).
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-22
+CHANGE_DRIVER: >>>
+GSSC5-22
+GSSC5-120
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -570,14 +573,17 @@ RELATIONS:
 UID: GSSC-PLLR-51
 TITLE: Lexical
 STATEMENT: >>>
-The Header Logo SHALL use the dark-green theme token for its mark color.
+The Header Logo SHALL present a compact society logo image sized for the Header identity bar.
 <<<
 RATIONALE: >>>
-A single theme token keeps the mark readable on the Header background until a brand color role is set.
+A compact logo image keeps the society mark readable on the Header background until full Wave 4 branding sets final artwork roles.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-22
+CHANGE_DRIVER: >>>
+GSSC5-22
+GSSC5-120
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -618,16 +624,17 @@ RELATIONS:
 UID: GSSC-PLLR-53
 TITLE: Syntactic
 STATEMENT: >>>
-The Header Organization Name SHALL appear beside the Header Logo in wide and mid chrome, and SHALL be omitted from the Header in narrow chrome.
+The Header Organization Name SHALL appear beside the Header Logo in wide and mid chrome on a single line without wrapping, and SHALL be omitted from the Header in narrow chrome.
 <<<
 RATIONALE: >>>
-Placement beside the logo keeps identity together in wider chrome. Omitting the name in narrow chrome leaves the centered logo as the identity mark.
+Placement beside the logo keeps identity together in wider chrome. A single non-wrapping line avoids crowding the Header actions. Omitting the name in narrow chrome leaves the centered logo as the identity mark.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: >>>
 GSSC5-22
 GSSC5-45
+GSSC5-120
 <<<
 REVIEW_STATUS: Approved
 RELATIONS:
@@ -1096,14 +1103,17 @@ RELATIONS:
 UID: GSSC-PLLR-331
 TITLE: Lexical
 STATEMENT: >>>
-The Navigation Menu wide bar SHALL use the cream theme token for its background and the dark-green theme token for its text, and overlay Navigation Menu presentations SHALL use the white theme token for their background and the dark-green theme token for their text.
+The Navigation Menu wide bar SHALL use the white theme token for its background and the dark-green theme token for its text, and overlay Navigation Menu presentations SHALL use the white theme token for their background and the dark-green theme token for their text.
 <<<
 RATIONALE: >>>
-A light navigation bar under the Header distinguishes menu chrome from the identity bar. Overlay menus stay readable on a white surface with Header text tokens.
+A white navigation bar under the Header replaces the cream packed look with a cleaner grid surface. Overlay menus stay readable on a white surface with Header text tokens.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-45
+CHANGE_DRIVER: >>>
+GSSC5-45
+GSSC5-121
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -1138,14 +1148,17 @@ RELATIONS:
 UID: GSSC-PLLR-333
 TITLE: Syntactic
 STATEMENT: >>>
-Top-level Navigation Items in the wide Navigation Menu bar SHALL appear in a single horizontal row separated by vertical dividers, and Navigation Items in the mid or narrow overlay SHALL appear in a vertical list.
+Top-level Navigation Items in the wide Navigation Menu bar SHALL appear in an evenly spaced horizontal grid with labels that do not wrap, and Navigation Items in the mid or narrow overlay SHALL appear in a vertical list.
 <<<
 RATIONALE: >>>
-Horizontal separated items match the wide prototype. Vertical listing fits the overlay accordion.
+An evenly spaced grid replaces the packed cream row and keeps titles on one line. Vertical listing fits the overlay accordion.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-45
+CHANGE_DRIVER: >>>
+GSSC5-45
+GSSC5-121
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -5046,7 +5059,7 @@ UID: GSSC-PLLR-LEADERSHIP-ACCOUNT-PHOTO
 TITLE: Leadership Account Photo
 
 [REQUIREMENT]
-UID: GSSC-PLLR-376
+UID: GSSC-PLLR-382
 TITLE: Semantic
 STATEMENT: >>>
 When a leadership list entry includes an Account Photo, the Public Frontend SHALL present that photo as a visitor-visible image on the matching contact card; when the Account Photo value is a stored Account Photo identifier rather than a visitor-loadable image address, the Public Frontend SHALL resolve it to the society's Account Photos resource so the image loads; when no Account Photo is present, the matching contact card SHALL keep the silhouette placeholder.
@@ -5060,7 +5073,7 @@ CHANGE_DRIVER: GSSC5-124
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-PHLR-147
+  VALUE: GSSC-PHLR-148
   ROLE: Refines
 
 [[/SECTION]]

@@ -7,19 +7,17 @@
 >
   <!-- @relation(GSSC-PLLR-48, scope=range_end, role=Implementation) -->
 
-  <!-- Hidden probe: measures whether the top-level nav fits without wrapping. -->
+  <!-- Hidden probe: measures equal-grid nowrap fit (n × max label width). -->
   <nav
     #navProbe
     class="gssc-header__nav-probe pointer-events-none invisible absolute start-0 top-0 -z-10 flex w-max flex-nowrap items-center gap-0 whitespace-nowrap opacity-0"
     aria-hidden="true"
   >
-    @for (item of navItems(); track item.cuid; let last = $last) {
-      <span class="gssc-header__nav-probe-item px-3 py-2 font-sans text-sm">{{
-        item.label
-      }}</span>
-      @if (!last) {
-        <span class="mx-1 inline-block h-4 w-px" aria-hidden="true"></span>
-      }
+    @for (item of navItems(); track item.cuid) {
+      <span
+        class="gssc-header__nav-probe-item inline-block px-2 py-2 font-sans text-sm whitespace-nowrap"
+        >{{ item.label }}</span
+      >
     }
   </nav>
 
@@ -59,7 +57,9 @@
         <!-- @relation(GSSC-PLLR-49, GSSC-PLLR-50, GSSC-PLLR-51, scope=range_end, role=Implementation) -->
 
         <!-- @relation(GSSC-PLLR-52, GSSC-PLLR-53, GSSC-PLLR-54, scope=range_start, role=Implementation) -->
-        <p class="gssc-header__org-name m-0 font-medium text-gssc-dark-green">
+        <p
+          class="gssc-header__org-name m-0 min-w-0 truncate whitespace-nowrap font-medium text-gssc-dark-green"
+        >
           @if (chromeTier() === 'wide') {
             <span class="gssc-header__org-name--full">{{
               societyContact.organizationName()
@@ -118,14 +118,15 @@
   @if (chromeTier() === 'wide') {
     <!-- @relation(GSSC-PLLR-329, GSSC-PLLR-330, GSSC-PLLR-331, GSSC-PHLR-140, scope=range_start, role=Implementation) -->
     <nav
-      class="gssc-header__nav gssc-header__nav--wide flex w-full flex-nowrap items-center border-b border-gssc-gray bg-gssc-cream px-4 py-0 font-sans text-gssc-dark-green"
+      class="gssc-header__nav gssc-header__nav--wide grid w-full items-stretch border-b border-gssc-gray bg-gssc-white px-0 py-0 font-sans text-gssc-dark-green"
+      [style.grid-template-columns]="wideNavGridColumns()"
       aria-label="Public"
     >
-      @for (item of navItems(); track item.cuid; let last = $last) {
+      @for (item of navItems(); track item.cuid) {
         <!-- @relation(GSSC-PLLR-332, GSSC-PLLR-333, GSSC-PLLR-334, scope=range_start, role=Implementation) -->
-        <div class="gssc-header__nav-item group relative">
+        <div class="gssc-header__nav-item group relative min-w-0">
           <a
-            class="gssc-header__nav-link inline-flex px-3 py-2 font-sans text-sm text-gssc-dark-green no-underline"
+            class="gssc-header__nav-link inline-flex w-full items-center justify-center whitespace-nowrap px-2 py-2 font-sans text-sm text-gssc-dark-green no-underline"
             [routerLink]="item.path"
           >
             {{ item.label }}
@@ -138,7 +139,7 @@
               @for (child of item.children; track child.cuid) {
                 <div class="gssc-header__submenu-item group/sub relative">
                   <a
-                    class="gssc-header__submenu-link block px-3 py-2 font-sans text-sm text-gssc-dark-green no-underline hover:bg-gssc-gray"
+                    class="gssc-header__submenu-link block whitespace-nowrap px-3 py-2 font-sans text-sm text-gssc-dark-green no-underline hover:bg-gssc-gray"
                     [routerLink]="child.path"
                   >
                     {{ child.label }}
@@ -149,7 +150,7 @@
                     >
                       @for (grand of child.children; track grand.cuid) {
                         <a
-                          class="gssc-header__submenu-link block px-3 py-2 font-sans text-sm text-gssc-dark-green no-underline hover:bg-gssc-gray"
+                          class="gssc-header__submenu-link block whitespace-nowrap px-3 py-2 font-sans text-sm text-gssc-dark-green no-underline hover:bg-gssc-gray"
                           [routerLink]="grand.path"
                         >
                           {{ grand.label }}
@@ -164,12 +165,6 @@
           }
         </div>
         <!-- @relation(GSSC-PLLR-332, GSSC-PLLR-333, GSSC-PLLR-334, scope=range_end, role=Implementation) -->
-        @if (!last) {
-          <span
-            class="gssc-header__nav-divider mx-1 inline-block h-4 w-px shrink-0 bg-gssc-dark-green/40"
-            aria-hidden="true"
-          ></span>
-        }
       }
     </nav>
     <!-- @relation(GSSC-PLLR-329, GSSC-PLLR-330, GSSC-PLLR-331, GSSC-PHLR-140, scope=range_end, role=Implementation) -->
@@ -343,27 +338,15 @@
     routerLink="/"
     aria-label="GSSC Logo"
   >
-    <!-- Placeholder mark until GSSC5-46 brand artwork. -->
-    <svg
-      class="gssc-header__logo-mark block"
-      viewBox="0 0 48 48"
+    <!-- Society logo chrome placeholder until GSSC5-46 full branding. -->
+    <img
+      class="gssc-header__logo-mark block size-10 object-contain"
+      src="/gssc-society-logo.png"
       width="40"
       height="40"
-      role="img"
+      alt=""
       aria-hidden="true"
-    >
-      <rect x="4" y="4" width="40" height="40" rx="6" fill="currentColor" opacity="0.15" />
-      <text
-        x="24"
-        y="30"
-        text-anchor="middle"
-        font-size="14"
-        font-weight="700"
-        fill="currentColor"
-      >
-        GSSC
-      </text>
-    </svg>
+    />
   </a>
 </ng-template>
 

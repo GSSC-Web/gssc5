@@ -266,8 +266,11 @@ test('GSSC-PLLR-50 Syntactic', async () => {
 // @relation(GSSC-PLLR-51, scope=range_start, role=Test)
 test('GSSC-PLLR-51 Lexical', async () => {
   const { root } = await setupHeader();
-  const logo = root.querySelector<HTMLElement>('.gssc-header__logo')!;
-  expect(logo.classList.contains('text-gssc-dark-green')).toBe(true);
+  const mark = root.querySelector<HTMLImageElement>('.gssc-header__logo-mark')!;
+  expect(mark.tagName).toBe('IMG');
+  expect(mark.getAttribute('src')).toBe('/gssc-society-logo.png');
+  expect(mark.classList.contains('size-10')).toBe(true);
+  expect(mark.classList.contains('object-contain')).toBe(true);
 });
 // @relation(GSSC-PLLR-51, scope=range_end, role=Test)
 
@@ -294,7 +297,9 @@ test('GSSC-PLLR-53 Syntactic', async () => {
   const { root } = await setupHeader({ chromeTier: 'wide' });
   const identity = root.querySelector('.gssc-header__identity')!;
   expect(identity.querySelector('.gssc-header__logo')).not.toBeNull();
-  expect(identity.querySelector('.gssc-header__org-name')).not.toBeNull();
+  const orgName = identity.querySelector<HTMLElement>('.gssc-header__org-name')!;
+  expect(orgName).not.toBeNull();
+  expect(orgName.classList.contains('whitespace-nowrap')).toBe(true);
 });
 // @relation(GSSC-PLLR-53, scope=range_end, role=Test)
 
@@ -756,7 +761,7 @@ test('GSSC-PLLR-330 Syntactic', async () => {
 test('GSSC-PLLR-331 Lexical', async () => {
   const { fixture, root, header } = await setupHeader({ chromeTier: 'wide' });
   const nav = root.querySelector<HTMLElement>('.gssc-header__nav--wide')!;
-  expect(nav.classList.contains('bg-gssc-cream')).toBe(true);
+  expect(nav.classList.contains('bg-gssc-white')).toBe(true);
   expect(nav.classList.contains('text-gssc-dark-green')).toBe(true);
 
   header.setChromeTierForTest('mid');
@@ -788,9 +793,15 @@ test('GSSC-PLLR-332 Semantic', async () => {
 // @relation(GSSC-PLLR-333, scope=range_start, role=Test)
 test('GSSC-PLLR-333 Syntactic', async () => {
   const { fixture, root, header } = await setupHeader({ chromeTier: 'wide' });
-  const wideNav = root.querySelector('.gssc-header__nav--wide')!;
-  expect(wideNav.classList.contains('flex-nowrap')).toBe(true);
-  expect(wideNav.querySelectorAll('.gssc-header__nav-divider').length).toBeGreaterThan(0);
+  const wideNav = root.querySelector<HTMLElement>('.gssc-header__nav--wide')!;
+  expect(wideNav.classList.contains('grid')).toBe(true);
+  expect(wideNav.querySelectorAll('.gssc-header__nav-divider').length).toBe(0);
+  const topLinks = [
+    ...wideNav.querySelectorAll<HTMLElement>(':scope > .gssc-header__nav-item > .gssc-header__nav-link'),
+  ];
+  expect(topLinks.length).toBeGreaterThan(0);
+  expect(topLinks.every((link) => link.classList.contains('whitespace-nowrap'))).toBe(true);
+  expect(wideNav.style.gridTemplateColumns).toMatch(/^repeat\(\d+, minmax\(0, 1fr\)\)$/);
 
   header.setChromeTierForTest('mid');
   fixture.detectChanges();
