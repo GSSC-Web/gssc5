@@ -2,6 +2,10 @@ import { InjectionToken } from '@angular/core';
 import type { ContactCardContents } from '../../modules/contact-card-large/contact-card-large';
 import { backend } from '../backend';
 import { filterSectionsVisibleOn } from '../section-display-window/section-display-window';
+import {
+  lintPositionSegments,
+  positionIncludesOffice,
+} from './position-lint';
 
 /** Backend tag that binds public Leadership Intro sections to this page. */
 export const LEADERSHIP_INTRO_TAG = 'leadership';
@@ -155,13 +159,17 @@ export function preferredContact(
   return null;
 }
 
-/** Map a canonical roster onto leadership list entries by exact Position. */
+/** Map a canonical roster onto leadership list entries by Position segments. */
 export function cardsForRoster(
   roster: readonly string[],
   leaders: readonly LeadershipEntry[],
 ): ContactCardContents[] {
   return roster.map((office) => {
-    const match = leaders.find((leader) => leader.position === office);
+    // @relation(GSSC-PLLR-389, GSSC-PLLR-162, GSSC-PLLR-165, scope=range_start, role=Implementation)
+    const match = leaders.find((leader) =>
+      positionIncludesOffice(leader.position, office),
+    );
+    // @relation(GSSC-PLLR-389, GSSC-PLLR-162, GSSC-PLLR-165, scope=range_end, role=Implementation)
     if (!match) {
       return {
         name: null,
@@ -196,32 +204,33 @@ export function cardsForRoster(
 }
 
 /**
- * Committee chair cards from leadership list entries that are not Officers or
- * Directors at Large. Only named entries; alphabetical by Position. No Vacant.
+ * Committee chair cards from leadership list Position segments that are not
+ * Officers or Directors at Large. One card per non-fixed segment; named
+ * entries only; alphabetical by Position title. No Vacant.
  */
 export function committeeChairCards(
   leaders: readonly LeadershipEntry[],
 ): ContactCardContents[] {
-  return leaders
-    .filter((leader) => {
-      if (FIXED_LEADERSHIP_OFFICES.has(leader.position)) return false;
-      return leaderDisplayName(leader) !== null;
-    })
-    .slice()
-    .sort((a, b) => a.position.localeCompare(b.position))
-    .map((match) => {
-      const contact = preferredContact(match);
-      // @relation(GSSC-PLLR-382, GSSC-PLLR-231, scope=range_start, role=Implementation)
-      const photoUrl = accountPhotoUrl(match.accountPhoto);
-      // @relation(GSSC-PLLR-382, GSSC-PLLR-231, scope=range_end, role=Implementation)
-      return {
-        name: leaderDisplayName(match)!,
-        title: match.position,
+  // @relation(GSSC-PLLR-389, GSSC-PLLR-231, scope=range_start, role=Implementation)
+  const cards: ContactCardContents[] = [];
+  for (const leader of leaders) {
+    const name = leaderDisplayName(leader);
+    if (name === null) continue;
+    const contact = preferredContact(leader);
+    const photoUrl = accountPhotoUrl(leader.accountPhoto);
+    for (const title of lintPositionSegments(leader.position)) {
+      if (FIXED_LEADERSHIP_OFFICES.has(title)) continue;
+      cards.push({
+        name,
+        title,
         photoUrl,
         contactLabel: contact?.label ?? null,
         contactHref: contact?.href ?? null,
-      };
-    });
+      });
+    }
+  }
+  return cards.sort((a, b) => a.title.localeCompare(b.title));
+  // @relation(GSSC-PLLR-389, GSSC-PLLR-231, scope=range_end, role=Implementation)
 }
 
 /** Sort list entries by backend index ascending (stable for equal index). */

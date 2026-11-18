@@ -2,6 +2,7 @@ import { backend } from './backend';
 import type { AccountRecord } from './account-api';
 import { accountPhotoUrl } from './account-api';
 import type { ContactMethod, ContactRowContents } from '../modules/contact-row/contact-row';
+import { lintPositionSegments } from './position-lint';
 
 /** Query filters accepted by Unified Backend GET /users. */
 export type DirectorySearchFilters = {
@@ -125,8 +126,12 @@ export function directoryContactMethods(entry: AccountRecord): ContactMethod[] {
 }
 
 export function toContactRowContents(entry: AccountRecord): ContactRowContents {
+  // @relation(GSSC-MLLR-661, scope=range_start, role=Implementation)
+  const positions = lintPositionSegments(entry.position);
+  // @relation(GSSC-MLLR-661, scope=range_end, role=Implementation)
   return {
     displayName: directoryDisplayName(entry) || entry.username || entry.cuid,
+    ...(positions.length > 0 ? { positions } : {}),
     methods: directoryContactMethods(entry),
   };
 }

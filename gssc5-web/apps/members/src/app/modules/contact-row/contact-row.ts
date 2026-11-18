@@ -12,6 +12,8 @@ export type ContactMethod = {
 /** Contents placed by the Contact Row primitive. */
 export type ContactRowContents = {
   displayName: string;
+  /** Linted Position titles when the directory projects Position (GSSC5-135). */
+  positions?: readonly string[];
   methods: readonly ContactMethod[];
 };
 

@@ -4923,18 +4923,21 @@ TITLE: Officers
 UID: GSSC-PLLR-162
 TITLE: Semantic
 STATEMENT: >>>
-The Officers SHALL retrieve the Unified Backend leadership list, present each officer office with the name of the leader whose Position matches that office when that list includes such a leader with a name, present that leader's preferred contact for contact when the matched entry includes the preferred contact value, present that leader's Account Photo when the matched entry includes Account Photo, and present Vacant when that list has no matching Position or the matching leader has no name.
+The Officers SHALL retrieve the Unified Backend leadership list, present each officer office with the name of the leader whose Position includes that office among semicolon-separated Position titles after trimming whitespace and dropping empty segments when that list includes such a leader with a name, present that leader's preferred contact for contact when the matched entry includes the preferred contact value, present that leader's Account Photo when the matched entry includes Account Photo, and present Vacant when that list has no matching Position title or the matching leader has no name.
 <<<
 RATIONALE: >>>
-The leadership list supplies current officer names. Matching by Position fills each officer slot. Preferred contact and Account Photo come from the list entry when present. Vacant marks an empty slot because the list omits empty Position.
+The leadership list supplies current officer names. Matching by linted Position titles fills each officer slot, including leaders who hold multiple offices in one Position field. Preferred contact and Account Photo come from the list entry when present. Vacant marks an empty slot because the list omits empty Position.
 <<<
 COMMENT: >>>
 Canonical officer titles are Lexical. Card chrome is Contact Card Large.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-16
-REVIEW_STATUS: Approved
+CHANGE_DRIVER: >>>
+GSSC5-16
+GSSC5-135
+<<<
+REVIEW_STATUS: Changed
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-76
@@ -4992,18 +4995,21 @@ TITLE: Directors at Large
 UID: GSSC-PLLR-165
 TITLE: Semantic
 STATEMENT: >>>
-The Directors at Large SHALL retrieve the Unified Backend leadership list, present each Director at Large office with the name of the leader whose Position matches that office when that list includes such a leader with a name, present that leader's preferred contact for contact when the matched entry includes the preferred contact value, present that leader's Account Photo when the matched entry includes Account Photo, and present Vacant when that list has no matching Position or the matching leader has no name.
+The Directors at Large SHALL retrieve the Unified Backend leadership list, present each Director at Large office with the name of the leader whose Position includes that office among semicolon-separated Position titles after trimming whitespace and dropping empty segments when that list includes such a leader with a name, present that leader's preferred contact for contact when the matched entry includes the preferred contact value, present that leader's Account Photo when the matched entry includes Account Photo, and present Vacant when that list has no matching Position title or the matching leader has no name.
 <<<
 RATIONALE: >>>
-The leadership list supplies current Director at Large names. Matching by Position fills each Director at Large slot. Preferred contact and Account Photo come from the list entry when present. Vacant marks an empty slot because the list omits empty Position.
+The leadership list supplies current Director at Large names. Matching by linted Position titles fills each Director at Large slot, including leaders who hold multiple offices in one Position field. Preferred contact and Account Photo come from the list entry when present. Vacant marks an empty slot because the list omits empty Position.
 <<<
 COMMENT: >>>
 Canonical Director at Large titles are Lexical. Card chrome is Contact Card Small.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-16
-REVIEW_STATUS: Approved
+CHANGE_DRIVER: >>>
+GSSC5-16
+GSSC5-135
+<<<
+REVIEW_STATUS: Changed
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-77
@@ -5061,18 +5067,21 @@ TITLE: Committee Chairs
 UID: GSSC-PLLR-231
 TITLE: Semantic
 STATEMENT: >>>
-The Committee Chairs SHALL retrieve the Unified Backend leadership list, present each list entry whose Position is not an Officers office and not a Directors at Large office when that entry has a name, present that leader's preferred contact for contact when the entry includes the preferred contact value, and present that leader's Account Photo when the entry includes Account Photo.
+The Committee Chairs SHALL retrieve the Unified Backend leadership list, present one card for each Position title from that list that is not an Officers office and not a Directors at Large office after splitting Position on semicolons, trimming whitespace, and dropping empty segments when the list entry has a name, present that leader's preferred contact for contact when the entry includes the preferred contact value, and present that leader's Account Photo when the entry includes Account Photo.
 <<<
 RATIONALE: >>>
-Committee chairs are the leadership list entries that are not Officers or Directors at Large. Only entries present on the list with a name appear; empty Positions never appear on the list, so this section does not present Vacant.
+Committee chairs are Position titles that are not Officers or Directors at Large. Splitting multi-office Position fields yields one chair card per non-fixed title. Only named entries appear; empty Position segments are dropped, so this section does not present Vacant.
 <<<
 COMMENT: >>>
-GSSC5-16 owner follow-up: dynamic chairs from the API; no hardcoded chair roster; no Vacant cards. Card chrome is Contact Card Small. Vacant-chair HLR is not refined here.
+GSSC5-16 owner follow-up: dynamic chairs from the API; no hardcoded chair roster; no Vacant cards. Card chrome is Contact Card Small. Vacant-chair HLR is not refined here. GSSC5-135 multi-position semicolon lint.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-16
-REVIEW_STATUS: Approved
+CHANGE_DRIVER: >>>
+GSSC5-16
+GSSC5-135
+<<<
+REVIEW_STATUS: Changed
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-80
@@ -5139,6 +5148,30 @@ REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-148
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-MULTI-POSITION
+TITLE: Multiple Positions
+
+[REQUIREMENT]
+UID: GSSC-PLLR-389
+TITLE: Semantic
+STATEMENT: >>>
+Wherever the Public Frontend matches or presents leadership Position text, it SHALL split that text on semicolons, trim whitespace from each segment, drop empty segments, match Officers and Directors at Large offices against those segments, and present Committee Chair cards for each remaining non-officer and non-Director-at-Large segment.
+<<<
+RATIONALE: >>>
+A single Position string may list multiple offices. Linting before match and presentation keeps leadership cards correct without a multi-value schema.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-135
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-151
   ROLE: Refines
 
 [[/SECTION]]
