@@ -533,9 +533,6 @@ The Header Logo SHALL display the GSSC Logo, and selection of the Header Logo SH
 RATIONALE: >>>
 The Header always includes the GSSC Logo so the visitor can identify the society. Selecting the logo returns the visitor to the public home page.
 <<<
-COMMENT: >>>
-Society logo image is a chrome placeholder until brand artwork lands in GSSC5-46 (logo branding across favicon, Header, and Footer).
-<<<
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: >>>
@@ -573,16 +570,17 @@ RELATIONS:
 UID: GSSC-PLLR-51
 TITLE: Lexical
 STATEMENT: >>>
-The Header Logo SHALL present a compact society logo image sized for the Header identity bar.
+The Header Logo SHALL present the official society logo image at a compact size for the Header identity bar.
 <<<
 RATIONALE: >>>
-A compact logo image keeps the society mark readable on the Header background until full Wave 4 branding sets final artwork roles.
+The official society logo mark keeps the Header brand readable on the Header background.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: >>>
 GSSC5-22
 GSSC5-120
+GSSC5-46
 <<<
 REVIEW_STATUS: Approved
 RELATIONS:
@@ -606,7 +604,7 @@ RATIONALE: >>>
 The Header shows one organization-name form at a time from the Society Contact service. Which form is visible by chrome tier is a separate Lexical requirement.
 <<<
 COMMENT: >>>
-GSSC5-45 chrome tiers: full name in wide; acronym in mid; omit in narrow (logo remains). Brand artwork deferred to GSSC5-46.
+GSSC5-45 chrome tiers: full name in wide; acronym in mid; omit in narrow (logo remains). Official society logo branding is GSSC5-46.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -1382,7 +1380,7 @@ TITLE: Footer
 UID: GSSC-PLLR-28
 TITLE: Semantic
 STATEMENT: >>>
-The Public Frontend Footer SHALL contain the Organization Name, Phone Number, Email Address, Postal Address, Contact control, Footer Copyright, and Footer Members Link.
+The Public Frontend Footer SHALL contain the Footer Logo, Organization Name, Phone Number, Email Address, Postal Address, Contact control, Footer Copyright, and Footer Members Link.
 <<<
 RATIONALE: >>>
 The Footer presents those society identity, contact, copyright, and Members access elements together in the public shell. Each element's behavior is a separate requirement. Contact overlay contents are a separate feature.
@@ -1392,6 +1390,7 @@ VERIFICATION_METHOD: Test
 CHANGE_DRIVER: >>>
 GSSC5-23
 GSSC5-122
+GSSC5-46
 <<<
 REVIEW_STATUS: Approved
 RELATIONS:
@@ -1415,6 +1414,9 @@ RELATIONS:
   ROLE: Refines
 - TYPE: Parent
   VALUE: GSSC-PHLR-147
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-150
   ROLE: Refines
 
 [REQUIREMENT]
@@ -1456,6 +1458,66 @@ RELATIONS:
 [[/SECTION]]
 
 [[SECTION]]
+UID: GSSC-PLLR-FOOTER-LOGO
+TITLE: Footer Logo
+
+[REQUIREMENT]
+UID: GSSC-PLLR-383
+TITLE: Semantic
+STATEMENT: >>>
+The Footer Logo SHALL display the GSSC Logo, and selection of the Footer Logo SHALL open the public home page.
+<<<
+RATIONALE: >>>
+The Footer carries the same society mark as the Header so visitors can identify the society from the page bottom. Selecting the logo returns the visitor to the public home page.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-46
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-150
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-384
+TITLE: Syntactic
+STATEMENT: >>>
+The Footer Logo SHALL appear at the start of the Footer identity group ahead of the Footer Organization Name.
+<<<
+RATIONALE: >>>
+Leading with the society mark keeps brand identity first in the Footer before the organization name and contact details.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-46
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-150
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-385
+TITLE: Lexical
+STATEMENT: >>>
+The Footer Logo SHALL present the official society logo image at a compact size on the Footer background.
+<<<
+RATIONALE: >>>
+A compact official mark stays readable on the dark Footer without competing with contact text.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-46
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-150
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
 UID: GSSC-PLLR-FOOTER-ORGANIZATION-NAME
 TITLE: Organization Name
 
@@ -1481,14 +1543,17 @@ RELATIONS:
 UID: GSSC-PLLR-32
 TITLE: Syntactic
 STATEMENT: >>>
-The Footer Organization Name SHALL appear at the start of the Footer content.
+The Footer Organization Name SHALL appear beside the Footer Logo in the leading Footer identity group.
 <<<
 RATIONALE: >>>
-Leading with the organization name identifies the Footer before the contact details.
+Placing the organization name with the Footer Logo identifies the Footer before the contact details.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-23
+CHANGE_DRIVER: >>>
+GSSC5-23
+GSSC5-46
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -7236,6 +7301,72 @@ RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-146
   ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-SITE-BRANDING
+TITLE: Site Branding
+
+[[SECTION]]
+UID: GSSC-PLLR-FAVICON
+TITLE: Browser Favicon
+
+[REQUIREMENT]
+UID: GSSC-PLLR-386
+TITLE: Semantic
+STATEMENT: >>>
+The Public Frontend Browser Favicon SHALL present the GSSC Logo as the document icon for the public site.
+<<<
+RATIONALE: >>>
+Browser tabs and bookmarks need the society mark so visitors recognize the public site among other open documents.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-46
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-149
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-387
+TITLE: Syntactic
+STATEMENT: >>>
+The Public Frontend Browser Favicon SHALL be declared in the public document head as the document icon link.
+<<<
+RATIONALE: >>>
+Declaring the icon in the document head is how browsers discover the favicon for the public site.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-46
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-149
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-388
+TITLE: Lexical
+STATEMENT: >>>
+The Public Frontend Browser Favicon SHALL use the official society logo artwork.
+<<<
+RATIONALE: >>>
+Using the same official society logo as Header and Footer keeps public brand marks consistent.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-46
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-149
+  ROLE: Refines
+
+[[/SECTION]]
 
 [[/SECTION]]
 

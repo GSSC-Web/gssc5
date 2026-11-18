@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { provideRouter } from '@angular/router';
+import { provideRouter, Router } from '@angular/router';
 import { ContactOverlay } from '../../services/contact-overlay/contact-overlay';
 import {
   SOCIETY_EMAIL_KEY,
@@ -35,7 +35,7 @@ class FakeKvStore {
 async function setupFooter() {
   const fixture = await setupMembersComponent(Footer, {
     providers: [
-      provideRouter([]),
+      provideRouter([{ path: '**', children: [] }]),
       { provide: KvStore, useClass: FakeKvStore },
     ],
   });
@@ -43,13 +43,15 @@ async function setupFooter() {
   fixture.detectChanges();
   const societyContact = TestBed.inject(SocietyContact);
   const contactOverlay = TestBed.inject(ContactOverlay);
+  const router = TestBed.inject(Router);
   const root = nativeElement(fixture);
-  return { fixture, societyContact, contactOverlay, root };
+  return { fixture, societyContact, contactOverlay, router, root };
 }
 
 // @relation(GSSC-MLLR-40, scope=range_start, role=Test)
 test('GSSC-MLLR-40 Semantic', async () => {
   const { root } = await setupFooter();
+  expect(root.querySelector('.gssc-footer__logo')).not.toBeNull();
   expect(root.querySelector('.gssc-footer__organization-name')).not.toBeNull();
   expect(root.querySelector('.gssc-footer__phone')).not.toBeNull();
   expect(root.querySelector('.gssc-footer__email')).not.toBeNull();
@@ -92,11 +94,51 @@ test('GSSC-MLLR-43 Semantic', async () => {
 // @relation(GSSC-MLLR-44, scope=range_start, role=Test)
 test('GSSC-MLLR-44 Syntactic', async () => {
   const { root } = await setupFooter();
-  const footer = root.querySelector('.gssc-footer')!;
-  const firstContent = [...footer.children].find((child) => child instanceof HTMLElement);
-  expect(firstContent?.classList.contains('gssc-footer__organization-name')).toBe(true);
+  const identity = root.querySelector('.gssc-footer__identity')!;
+  const logo = identity.querySelector('.gssc-footer__logo')!;
+  const name = identity.querySelector('.gssc-footer__organization-name')!;
+  expect(logo.compareDocumentPosition(name) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
 });
 // @relation(GSSC-MLLR-44, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-644, scope=range_start, role=Test)
+test('GSSC-MLLR-644 Semantic', async () => {
+  const { fixture, root, router } = await setupFooter();
+  const logo = root.querySelector<HTMLAnchorElement>('.gssc-footer__logo')!;
+  expect(logo.getAttribute('aria-label')).toBe('GSSC Logo');
+  expect(logo.querySelector('.gssc-footer__logo-mark')).not.toBeNull();
+  await router.navigateByUrl('/account');
+  fixture.detectChanges();
+  await fixture.whenStable();
+  logo.click();
+  fixture.detectChanges();
+  await fixture.whenStable();
+  expect(router.url).toBe('/');
+});
+// @relation(GSSC-MLLR-644, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-645, scope=range_start, role=Test)
+test('GSSC-MLLR-645 Syntactic', async () => {
+  const { root } = await setupFooter();
+  const footer = root.querySelector('.gssc-footer')!;
+  const identity = [...footer.children].find((child) => child instanceof HTMLElement);
+  expect(identity?.classList.contains('gssc-footer__identity')).toBe(true);
+  const logo = identity!.querySelector('.gssc-footer__logo')!;
+  const name = identity!.querySelector('.gssc-footer__organization-name')!;
+  expect(logo.compareDocumentPosition(name) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+});
+// @relation(GSSC-MLLR-645, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-646, scope=range_start, role=Test)
+test('GSSC-MLLR-646 Lexical', async () => {
+  const { root } = await setupFooter();
+  const mark = root.querySelector<HTMLImageElement>('.gssc-footer__logo-mark')!;
+  expect(mark.tagName).toBe('IMG');
+  expect(mark.getAttribute('src')).toBe('/gssc-society-logo.png');
+  expect(mark.classList.contains('size-10')).toBe(true);
+  expect(mark.classList.contains('object-contain')).toBe(true);
+});
+// @relation(GSSC-MLLR-646, scope=range_end, role=Test)
 
 // @relation(GSSC-MLLR-45, scope=range_start, role=Test)
 test('GSSC-MLLR-45 Lexical', async () => {

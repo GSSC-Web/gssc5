@@ -5,16 +5,35 @@
 >
   <!-- @relation(GSSC-PLLR-30, scope=range_end, role=Implementation) -->
 
-  <!-- @relation(GSSC-PLLR-31, GSSC-PLLR-32, GSSC-PLLR-33, scope=range_start, role=Implementation) -->
-  <p class="gssc-footer__organization-name m-0 font-semibold text-gssc-white">
-    <span class="gssc-footer__organization-name--full hidden sm:inline">{{
-      societyContact.organizationName()
-    }}</span>
-    <span class="gssc-footer__organization-name--short inline sm:hidden">{{
-      societyContact.organizationAcronym()
-    }}</span>
-  </p>
-  <!-- @relation(GSSC-PLLR-31, GSSC-PLLR-32, GSSC-PLLR-33, scope=range_end, role=Implementation) -->
+  <div class="gssc-footer__identity flex items-center gap-3">
+    <!-- @relation(GSSC-PLLR-383, GSSC-PLLR-384, GSSC-PLLR-385, scope=range_start, role=Implementation) -->
+    <a
+      class="gssc-footer__logo inline-flex shrink-0"
+      routerLink="/"
+      aria-label="GSSC Logo"
+    >
+      <img
+        class="gssc-footer__logo-mark block size-10 object-contain"
+        src="/gssc-society-logo.png"
+        width="40"
+        height="40"
+        alt=""
+        aria-hidden="true"
+      />
+    </a>
+    <!-- @relation(GSSC-PLLR-383, GSSC-PLLR-384, GSSC-PLLR-385, scope=range_end, role=Implementation) -->
+
+    <!-- @relation(GSSC-PLLR-31, GSSC-PLLR-32, GSSC-PLLR-33, scope=range_start, role=Implementation) -->
+    <p class="gssc-footer__organization-name m-0 font-semibold text-gssc-white">
+      <span class="gssc-footer__organization-name--full hidden sm:inline">{{
+        societyContact.organizationName()
+      }}</span>
+      <span class="gssc-footer__organization-name--short inline sm:hidden">{{
+        societyContact.organizationAcronym()
+      }}</span>
+    </p>
+    <!-- @relation(GSSC-PLLR-31, GSSC-PLLR-32, GSSC-PLLR-33, scope=range_end, role=Implementation) -->
+  </div>
 
   <div class="gssc-footer__contact-details flex flex-col items-start gap-1.5">
     <!-- @relation(GSSC-PLLR-34, GSSC-PLLR-35, GSSC-PLLR-36, scope=range_start, role=Implementation) -->
