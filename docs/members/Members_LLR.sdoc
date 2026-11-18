@@ -109,7 +109,9 @@ GSSC5-126 Page Data Editor section-from-template and nav cleanup owns GSSC-MLLR-
 GSSC5-118 Directory Invite Member owns GSSC-MLLR-601 through GSSC-MLLR-608 (exact end 608; band 601–620 reserved for directory invite after GSSC5-126 band 581–600); HLR GSSC-MHLR-100.
 GSSC5-119 Directory Create Member owns GSSC-MLLR-621 through GSSC-MLLR-628 (exact end 628; band 621–640 reserved for directory create after invite 601–620); HLR GSSC-MHLR-37 (CHANGE_DRIVER append; create LLRs parent GSSC-MHLR-37).
 GSSC5-123 Members Footer Home Link owns GSSC-MLLR-641 through GSSC-MLLR-643 (exact end 643; band 641–660 reserved for Wave 3 footer chrome after directory create 621–640); HLR GSSC-MHLR-101; also CHANGE_DRIVER on GSSC-MLLR-40.
-Wave coordination: GSSC5-92 directory 202–214, GSSC5-102 directory refinement 215–230, GSSC5-89 dashboard 231–239, GSSC5-93 page/section 261–286, GSSC5-94 announcements 291–307, GSSC5-117 page-data unification 308–320, GSSC5-95 events 321–346, GSSC5-96 newsletters 351–373, GSSC5-97 publications/tools 381–414, GSSC5-101 account refinement 415–428, GSSC5-103 mailing-equals-home 429–437, GSSC5-102 password-history-reset 438–440, GSSC5-107 members nav chrome 441–461, GSSC5-109 members site search 462–483 (band 462–500), GSSC5-108 sitemap 501–510, GSSC5-116 site-tree editor 521–540 (band 521–560), GSSC5-127 site-tree feedback MLLR-562 (+ CHANGE_DRIVER on 524/529; HLR MHLR-99), GSSC5-115/128 template editor 541–561 (band 541–580), GSSC5-126 PDE section create + nav 581–591 (band 581–600), GSSC5-118 directory invite 601–608 (band 601–620), GSSC5-119 directory create 621–628 (band 621–640), GSSC5-123 footer home link 641–643 (band 641–660) — do not collide.
+GSSC5-46 Site Branding owns GSSC-MLLR-644 through GSSC-MLLR-649 (exact end 649) and GSSC-MHLR-102 / GSSC-MHLR-103.
+GSSC5-135 Multiple Positions with Semicolon Lint owns GSSC-MLLR-661 through GSSC-MLLR-664 (exact end 664; band 661–680 reserved); HLR GSSC-MHLR-104.
+Wave coordination: GSSC5-92 directory 202–214, GSSC5-102 directory refinement 215–230, GSSC5-89 dashboard 231–239, GSSC5-93 page/section 261–286, GSSC5-94 announcements 291–307, GSSC5-117 page-data unification 308–320, GSSC5-95 events 321–346, GSSC5-96 newsletters 351–373, GSSC5-97 publications/tools 381–414, GSSC5-101 account refinement 415–428, GSSC5-103 mailing-equals-home 429–437, GSSC5-102 password-history-reset 438–440, GSSC5-107 members nav chrome 441–461, GSSC5-109 members site search 462–483 (band 462–500), GSSC5-108 sitemap 501–510, GSSC5-116 site-tree editor 521–540 (band 521–560), GSSC5-127 site-tree feedback MLLR-562 (+ CHANGE_DRIVER on 524/529; HLR MHLR-99), GSSC5-115/128 template editor 541–561 (band 541–580), GSSC5-126 PDE section create + nav 581–591 (band 581–600), GSSC5-118 directory invite 601–608 (band 601–620), GSSC5-119 directory create 621–628 (band 621–640), GSSC5-123 footer home link 641–643 (band 641–660), GSSC5-46 branding 644–649, GSSC5-135 multi-position 661–664 (band 661–680) — do not collide.
 GSSC-MLLR-33 through GSSC-MLLR-39 remain free for later claimants.
 Do not reuse numbers already claimed by another ticket.
 <<<
@@ -11374,6 +11376,96 @@ REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-102
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-MULTI-POSITION
+TITLE: Multiple Positions
+
+[[SECTION]]
+UID: GSSC-MLLR-DIRECTORY-POSITION-LIST
+TITLE: Directory Position List
+
+[REQUIREMENT]
+UID: GSSC-MLLR-661
+TITLE: Semantic
+STATEMENT: >>>
+When a directory contact card's member record includes Position, the Directory Position List SHALL present each Position title from that Position text after splitting on semicolons, trimming whitespace, and dropping empty segments, and SHALL omit the list when no titles remain.
+<<<
+RATIONALE: >>>
+Directory cards show leadership and committee roles held by the member. Linting keeps multi-office Position strings scannable.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-135
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-104
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-662
+TITLE: Syntactic
+STATEMENT: >>>
+The Directory Position List SHALL appear on the directory contact card below the member name and above the contact methods as a vertical list of Position titles.
+<<<
+RATIONALE: >>>
+Position titles sit with identity so scanners see roles before contact details.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-135
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-104
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-663
+TITLE: Lexical
+STATEMENT: >>>
+The Directory Position List SHALL use the Member Frontend sans-serif typeface, small regular weight, and the dark-green theme token for Position titles.
+<<<
+RATIONALE: >>>
+Position titles share directory contact typography without competing with the member name.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-135
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-104
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-ACCOUNT-POSITION-LINT
+TITLE: Account Position Lint
+
+[REQUIREMENT]
+UID: GSSC-MLLR-664
+TITLE: Semantic
+STATEMENT: >>>
+When the Account Information Section presents Position, the Member Frontend SHALL present that Position text after splitting on semicolons, trimming whitespace, dropping empty segments, and rejoining the remaining titles with semicolons.
+<<<
+RATIONALE: >>>
+Account Position stays a single editable string using the semicolon convention while empty segments and extra whitespace are removed for display and edit.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-135
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-104
   ROLE: Refines
 
 [[/SECTION]]

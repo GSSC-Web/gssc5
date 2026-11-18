@@ -1490,6 +1490,29 @@ RELATIONS:
 
 [[/SECTION]]
 
+[[SECTION]]
+UID: GSSC-PHLR-MULTI-POSITION
+TITLE: Multiple Positions
+
+[REQUIREMENT]
+UID: GSSC-PHLR-151
+TITLE: Multiple Positions on Leadership
+STATEMENT: >>>
+When a leader's Position lists more than one office separated by semicolons, the public leadership page SHALL match and present that leader for each listed office after trimming whitespace and dropping empty segments.
+<<<
+RATIONALE: >>>
+Individuals may hold multiple positions in one Position field. Splitting on semicolons keeps the existing single-string storage while filling every matching leadership card.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-135
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-4
+  ROLE: Refines
+
+[[/SECTION]]
+
 [[/SECTION]]
 
 [[SECTION]]

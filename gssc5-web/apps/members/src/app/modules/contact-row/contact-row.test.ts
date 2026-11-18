@@ -116,3 +116,39 @@ test('GSSC-MLLR-167 Lexical', async () => {
   expect(methods.className).toContain('text-gssc-dark-green');
 });
 // @relation(GSSC-MLLR-167, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-662, scope=range_start, role=Test)
+test('GSSC-MLLR-662 Syntactic', async () => {
+  const { root } = await setup({
+    displayName: 'Karen Souza',
+    positions: ['President', 'Historian'],
+    methods: [{ label: 'karen@example.com', href: 'mailto:karen@example.com' }],
+  });
+  const name = root.querySelector('.gssc-contact-row__name')!;
+  const positions = root.querySelector('.gssc-contact-row__positions')!;
+  const methods = root.querySelector('.gssc-contact-row__methods')!;
+  expect(positions.getAttribute('data-slot')).toBe('contact-row-positions');
+  expect(name.compareDocumentPosition(positions) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  expect(
+    positions.compareDocumentPosition(methods) & Node.DOCUMENT_POSITION_FOLLOWING,
+  ).toBeTruthy();
+  expect([...positions.querySelectorAll('.gssc-contact-row__position')].map((el) =>
+    el.textContent?.trim(),
+  )).toEqual(['President', 'Historian']);
+});
+// @relation(GSSC-MLLR-662, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-663, scope=range_start, role=Test)
+test('GSSC-MLLR-663 Lexical', async () => {
+  const { root } = await setup({
+    displayName: 'Karen Souza',
+    positions: ['Historian'],
+    methods: [],
+  });
+  const positions = root.querySelector('.gssc-contact-row__positions')!;
+  expect(positions.className).toContain('font-sans');
+  expect(positions.className).toContain('text-sm');
+  expect(positions.className).toContain('font-normal');
+  expect(positions.className).toContain('text-gssc-dark-green');
+});
+// @relation(GSSC-MLLR-663, scope=range_end, role=Test)

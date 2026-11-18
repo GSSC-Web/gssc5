@@ -16,6 +16,7 @@ import {
   validateMemberInfoFields,
 } from '../../services/account-api';
 import { MemberSession } from '../../services/member-session';
+import { formatPositionText } from '../../services/position-lint';
 
 type MemberInfoForm = {
   firstName: string;
@@ -560,7 +561,9 @@ function accountInfoFromAccount(account: AccountRecord): AccountInfoForm {
     accountPhoto: account.accountPhoto ?? '',
     username: account.username ?? '',
     membershipStatus: account.membershipStatus ?? '',
-    position: account.position ?? '',
+    // @relation(GSSC-MLLR-664, scope=range_start, role=Implementation)
+    position: formatPositionText(account.position),
+    // @relation(GSSC-MLLR-664, scope=range_end, role=Implementation)
     isAdmin: account.isAdmin === true,
     isUserMod: account.isUserMod === true,
     isToolEditor: account.isToolEditor === true,

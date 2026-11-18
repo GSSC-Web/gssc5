@@ -50,6 +50,19 @@
       </h3>
       <!-- @relation(GSSC-MLLR-162, GSSC-MLLR-163, GSSC-MLLR-164, scope=range_end, role=Implementation) -->
 
+      <!-- @relation(GSSC-MLLR-661, GSSC-MLLR-662, GSSC-MLLR-663, scope=range_start, role=Implementation) -->
+      @if (contents().positions && contents().positions!.length > 0) {
+        <ul
+          class="gssc-contact-row__positions m-0 flex list-none flex-col gap-0.5 p-0 font-sans text-sm font-normal text-gssc-dark-green"
+          data-slot="contact-row-positions"
+        >
+          @for (title of contents().positions!; track title) {
+            <li class="gssc-contact-row__position">{{ title }}</li>
+          }
+        </ul>
+      }
+      <!-- @relation(GSSC-MLLR-661, GSSC-MLLR-662, GSSC-MLLR-663, scope=range_end, role=Implementation) -->
+
       <!-- @relation(GSSC-MLLR-165, GSSC-MLLR-166, GSSC-MLLR-167, scope=range_start, role=Implementation) -->
       <ul class="gssc-contact-row__methods m-0 flex list-none flex-col gap-0.5 p-0 font-sans text-sm font-normal text-gssc-dark-green">
         @for (method of contents().methods; track method.label) {
@@ -80,6 +93,19 @@
       {{ contents().displayName }}
     </h3>
     <!-- @relation(GSSC-MLLR-162, GSSC-MLLR-163, GSSC-MLLR-164, scope=range_end, role=Implementation) -->
+
+    <!-- @relation(GSSC-MLLR-661, GSSC-MLLR-662, GSSC-MLLR-663, scope=range_start, role=Implementation) -->
+    @if (contents().positions && contents().positions!.length > 0) {
+      <ul
+        class="gssc-contact-row__positions m-0 flex list-none flex-col gap-0.5 p-0 font-sans text-sm font-normal text-gssc-dark-green"
+        data-slot="contact-row-positions"
+      >
+        @for (title of contents().positions!; track title) {
+          <li class="gssc-contact-row__position">{{ title }}</li>
+        }
+      </ul>
+    }
+    <!-- @relation(GSSC-MLLR-661, GSSC-MLLR-662, GSSC-MLLR-663, scope=range_end, role=Implementation) -->
 
     <!-- @relation(GSSC-MLLR-165, GSSC-MLLR-166, GSSC-MLLR-167, scope=range_start, role=Implementation) -->
     <ul class="gssc-contact-row__methods m-0 flex list-none flex-col gap-0.5 p-0 font-sans text-sm font-normal text-gssc-dark-green">

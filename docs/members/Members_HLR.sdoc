@@ -1829,3 +1829,29 @@ REVIEW_STATUS: Approved
 
 [[/SECTION]]
 
+[[SECTION]]
+UID: GSSC-MHLR-MULTI-POSITION
+TITLE: Multiple Positions
+
+[REQUIREMENT]
+UID: GSSC-MHLR-104
+TITLE: Multiple Positions Display
+STATEMENT: >>>
+Wherever the Member Frontend shows a member's Position, it SHALL present each Position from that member's Position text after splitting on semicolons, trimming whitespace, and dropping empty segments.
+<<<
+RATIONALE: >>>
+Individuals may hold multiple positions in one Position field. Linting on display keeps directory cards and account Position presentation accurate without a multi-value schema.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-135
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-12
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-10
+  ROLE: Refines
+
+[[/SECTION]]
+
