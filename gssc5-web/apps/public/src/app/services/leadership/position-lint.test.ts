@@ -11,7 +11,7 @@ import {
   type LeadershipEntry,
 } from './leadership';
 
-// @relation(GSSC-PLLR-389, scope=range_start, role=Test)
+// @relation(GSSC-PLLR-389, GSSC-PLLR-162, GSSC-PLLR-165, GSSC-PLLR-231, scope=range_start, role=Test)
 test('GSSC-PLLR-389 Multiple Position Semicolon Lint Semantic', () => {
   expect(lintPositionSegments('President; Historian')).toEqual([
     'President',
@@ -71,4 +71,4 @@ test('GSSC-PLLR-389 Multiple Position Semicolon Lint Semantic', () => {
   );
   expect(chairs.find((card) => card.title === 'Budget')!.name).toBe('Pat Lee');
 });
-// @relation(GSSC-PLLR-389, scope=range_end, role=Test)
+// @relation(GSSC-PLLR-389, GSSC-PLLR-162, GSSC-PLLR-165, GSSC-PLLR-231, scope=range_end, role=Test)

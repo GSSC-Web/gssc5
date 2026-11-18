@@ -1844,7 +1844,7 @@ Individuals may hold multiple positions in one Position field. Linting on displa
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-135
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-12
