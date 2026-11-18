@@ -96,6 +96,13 @@
           aria-hidden="true"
         ></span>
 
+        <ng-container *ngTemplateOutlet="themeToggle" />
+
+        <span
+          class="gssc-header__divider mx-3 inline-block h-4 w-px bg-gssc-dark-green/40"
+          aria-hidden="true"
+        ></span>
+
         <!-- @relation(GSSC-PLLR-71, GSSC-PLLR-72, scope=range_start, role=Implementation) -->
         <div class="gssc-header__search relative flex items-center">
           <ng-container *ngTemplateOutlet="searchToggle" />
@@ -240,6 +247,11 @@
           >
             Contact
           </button>
+          <span
+            class="gssc-header__divider inline-block h-4 w-px bg-gssc-dark-green/40"
+            aria-hidden="true"
+          ></span>
+          <ng-container *ngTemplateOutlet="themeToggle" />
         </div>
       }
 
@@ -348,6 +360,29 @@
     />
   </a>
 </ng-template>
+
+<!-- @relation(GSSC-PHLR-153, GSSC-PLLR-391, GSSC-PLLR-392, scope=range_start, role=Implementation) -->
+<ng-template #themeToggle>
+  <button
+    type="button"
+    class="gssc-header__theme-toggle inline-flex size-6 shrink-0 cursor-pointer items-center justify-center rounded border-0 bg-transparent p-0 font-sans text-gssc-dark-green hover:bg-gssc-gray"
+    [attr.aria-label]="themeToggleLabel()"
+    (click)="toggleTheme()"
+  >
+    @if (themeMode.mode() === 'dark') {
+      <i
+        class="nf nf-md-white_balance_sunny gssc-header__theme-icon text-base leading-none"
+        aria-hidden="true"
+      ></i>
+    } @else {
+      <i
+        class="nf nf-md-weather_night gssc-header__theme-icon text-base leading-none"
+        aria-hidden="true"
+      ></i>
+    }
+  </button>
+</ng-template>
+<!-- @relation(GSSC-PHLR-153, GSSC-PLLR-391, GSSC-PLLR-392, scope=range_end, role=Implementation) -->
 
 <ng-template #searchToggle>
   <!-- @relation(GSSC-PLLR-70, GSSC-PLLR-72, scope=range_start, role=Implementation) -->

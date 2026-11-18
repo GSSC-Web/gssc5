@@ -3,6 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { Footer } from './modules/footer/footer';
 import { Header } from './modules/header/header';
 import { MemberSession } from './services/member-session';
+import { ThemeMode } from './services/theme-mode/theme-mode';
 
 @Component({
   imports: [RouterOutlet, Header, Footer],
@@ -17,6 +18,8 @@ import { MemberSession } from './services/member-session';
 })
 export class App {
   private readonly memberSession = inject(MemberSession);
+  /** Eager document color-mode apply (GSSC5-125). */
+  private readonly themeMode = inject(ThemeMode);
 
   /** Shell chrome (Header/Footer hosts) is shown only while logged in. */
   // @relation(GSSC-MLLR-32, scope=range_start, role=Implementation)

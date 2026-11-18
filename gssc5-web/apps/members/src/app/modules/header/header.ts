@@ -22,6 +22,7 @@ import {
   SiteTree,
   type SiteTreeNavNode,
 } from '../../services/site-tree/site-tree';
+import { ThemeMode } from '../../services/theme-mode/theme-mode';
 
 /** Viewport width at and below which narrow chrome is used (Tailwind `sm`). */
 export const NARROW_CHROME_MAX_WIDTH_PX = 639;
@@ -40,6 +41,7 @@ export class Header implements OnInit, OnDestroy {
   private readonly siteSearchGet = inject(SITE_SEARCH_GET);
   private readonly router = inject(Router);
   protected readonly societyContact = inject(SocietyContact);
+  readonly themeMode = inject(ThemeMode);
   private quickSearchGeneration = 0;
 
   readonly loggedIn = this.memberSession.loggedIn;
@@ -89,6 +91,18 @@ export class Header implements OnInit, OnDestroy {
     }
   }
   // @relation(GSSC-MLLR-93, scope=range_end, role=Implementation)
+
+  // @relation(GSSC-MLLR-651, GSSC-MLLR-652, scope=range_start, role=Implementation)
+  protected toggleTheme(): void {
+    this.themeMode.toggle();
+  }
+
+  protected themeToggleLabel(): string {
+    return this.themeMode.mode() === 'dark'
+      ? 'Switch to light mode'
+      : 'Switch to dark mode';
+  }
+  // @relation(GSSC-MLLR-651, GSSC-MLLR-652, scope=range_end, role=Implementation)
 
   // @relation(GSSC-MLLR-459, scope=range_start, role=Implementation)
   protected toggleSearch(): void {

@@ -1855,3 +1855,35 @@ RELATIONS:
 
 [[/SECTION]]
 
+[[SECTION]]
+UID: GSSC-MHLR-COLOR-MODE
+TITLE: Color Mode
+
+[REQUIREMENT]
+UID: GSSC-MHLR-105
+TITLE: Color Mode
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL present the members site in either a light or a dark color mode according to the member's stored preference, and SHALL default to light mode when no preference is stored.
+<<<
+RATIONALE: >>>
+No Member Frontend PIR requires color modes. Members need a durable light or dark presentation built from organization palette tokens so chrome and content remain readable, including beside the official society logo.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-125
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-MHLR-106
+TITLE: Header Theme Toggle
+STATEMENT: >>>
+The GSSC Website Member Frontend Header SHALL present a Theme Toggle that switches the active members color mode between light and dark and stores that preference for later visits.
+<<<
+RATIONALE: >>>
+Color Mode needs a Header control so members can change and persist light or dark presentation without leaving the members shell.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-125
+REVIEW_STATUS: Approved
+
+[[/SECTION]]
+
