@@ -9,6 +9,7 @@ tags: [frontend, members, angular, auth]
 
 - **Domain:** gssc5 members FE (Angular/Tailwind) — SoftDev/TestDev plans use members focused `ng test` / mise tasks, not LangGraph Python packaging.
 - App: `gssc5-web/apps/members` (Angular + Tailwind + Eden Treaty).
+- Color mode (GSSC5-125 / MHLR-105/106 / MLLR-650..655): same `ThemeMode` + `html.dark` org-token remap as Public; Header Theme Toggle; logo plate on dark chrome (Header/Footer/Login marks). Persisted preference applies even when Header is omitted for logged-out visitors.
 - Shell uses Tailwind utilities + shared `gssc-*` theme tokens in `src/styles.css` (aligned with public); no Angular CLI welcome scaffold or custom `@media` CSS.
 - Layout under `src/app/`: `pages/`, `services/`, and `modules/` (Header under `modules/header/`, Footer under `modules/footer/`). Eden Treaty client: `services/backend.ts`.
 - App Root + Router (GSSC5-79 / GSSC-MLLR-1..13): `app.html` hosts Page Outlet always; Header/Footer mounts only when `MemberSession.loggedIn()` (GSSC5-100 / GSSC-MLLR-32). Root path mounts the Member Dashboard (`pages/home/`).

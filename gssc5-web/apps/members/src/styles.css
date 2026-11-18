@@ -29,7 +29,29 @@
   /* Match Prompt field failure chrome (Tailwind red-50 / red-500). */
   --gssc-light-red: #fef2f2;
   --gssc-dark-red: #ef4444;
+  --gssc-logo-plate: transparent;
 }
+
+/*
+ * Dark mode (GSSC5-125): invert organization surface/text tokens so existing
+ * gssc-* utilities follow the visitor preference without a second palette.
+ */
+/* @relation(GSSC-MLLR-655, scope=range_start, role=Implementation) */
+html.dark {
+  color-scheme: dark;
+  --gssc-light-green: #3f4536;
+  --gssc-dark-green: #c5cab6;
+  --gssc-cream: #2e3228;
+  --gssc-light-brown: #6b5643;
+  --gssc-dark-brown: #d8ba98;
+  --gssc-gray: #5a5f52;
+  --gssc-white: #1a1c16;
+  --gssc-black: #f2efe6;
+  --gssc-light-red: #3f1d1d;
+  --gssc-dark-red: #f87171;
+  --gssc-logo-plate: #ffffee;
+}
+/* @relation(GSSC-MLLR-655, scope=range_end, role=Implementation) */
 
 @theme {
   --font-nerd-symbols: "Symbols Nerd Font", sans-serif;
@@ -86,6 +108,14 @@
   content: "\f00d";
 }
 
+.nf-md-weather_night:before {
+  content: "\f0594";
+}
+
+.nf-md-white_balance_sunny:before {
+  content: "\f05a8";
+}
+
 /*
  * Outermost site layer: white background, sans-serif default.
  * Preflight already zeros margins/borders; do not restate those here.
@@ -95,4 +125,14 @@ body {
   background-color: var(--gssc-white);
   color: var(--gssc-black);
   font-family: var(--font-sans);
+}
+
+/* Light plate keeps the circular society logo contrasted on dark chrome. */
+html.dark .gssc-header__logo-mark,
+html.dark .gssc-footer__logo-mark,
+html.dark .gssc-login-page__logo-mark {
+  background-color: var(--gssc-logo-plate);
+  border-radius: 9999px;
+  padding: 0.125rem;
+  box-sizing: content-box;
 }

@@ -7,6 +7,7 @@ import { ErrorContainer } from './modules/error/error';
 import { Footer } from './modules/footer/footer';
 import { Header } from './modules/header/header';
 import { PromptOverlayView } from './modules/prompt-overlay/prompt-overlay';
+import { ThemeMode } from './services/theme-mode/theme-mode';
 import { UrgentAnnouncements } from './services/urgent-announcements';
 
 @Component({
@@ -23,6 +24,8 @@ import { UrgentAnnouncements } from './services/urgent-announcements';
 export class App {
   private readonly router = inject(Router);
   private readonly urgentAnnouncements = inject(UrgentAnnouncements);
+  /** Eager document color-mode apply (GSSC5-125). */
+  private readonly themeMode = inject(ThemeMode);
 
   private readonly url = toSignal(
     this.router.events.pipe(

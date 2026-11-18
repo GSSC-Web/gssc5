@@ -120,9 +120,11 @@ async function setupHeader(options?: {
   try {
     globalThis.localStorage?.removeItem('gssc.memberSessionToken');
     globalThis.localStorage?.removeItem('gssc.memberDisplayName');
+    globalThis.localStorage?.removeItem('gssc-color-mode');
   } catch {
     // ignore
   }
+  globalThis.document?.documentElement.classList.remove('dark');
 
   stubChallengeLoggedOut();
   const tree = options?.tree === undefined ? sampleTree : options.tree;
@@ -190,6 +192,7 @@ test('GSSC-MLLR-14 Semantic', async () => {
   expect(root.querySelector('.gssc-header__logo')).not.toBeNull();
   expect(textContent(root, '.gssc-header__org-name--full')).toBe(sampleOrg.organizationName);
   expect(root.querySelector('.gssc-header__login')).not.toBeNull();
+  expect(root.querySelector('.gssc-header__theme-toggle')).not.toBeNull();
   expect(root.querySelector('.gssc-header__search-toggle')).not.toBeNull();
   expect(root.querySelector('.gssc-header__nav--wide')).not.toBeNull();
   expect(root.querySelector('.gssc-header__donate')).toBeNull();
@@ -959,3 +962,46 @@ test('GSSC-MLLR-470 Lexical', async () => {
   expect(snippet.classList.contains('text-gssc-gray')).toBe(true);
 });
 // @relation(GSSC-MLLR-470, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-651, scope=range_start, role=Test)
+test('GSSC-MLLR-651 Syntactic', async () => {
+  const { fixture, root, header } = await setupHeader({ chromeTier: 'wide' });
+  const actions = root.querySelector('.gssc-header__actions')!;
+  expect(actions.querySelector('.gssc-header__theme-toggle')).not.toBeNull();
+
+  header.setChromeTierForTest('mid');
+  fixture.detectChanges();
+  await fixture.whenStable();
+  expect(
+    root.querySelector('.gssc-header__actions .gssc-header__theme-toggle'),
+  ).not.toBeNull();
+
+  header.setChromeTierForTest('narrow');
+  fixture.detectChanges();
+  await fixture.whenStable();
+  expect(root.querySelector('.gssc-header__theme-toggle')).toBeNull();
+  root.querySelector<HTMLButtonElement>('.gssc-header__menu-toggle')!.click();
+  fixture.detectChanges();
+  await fixture.whenStable();
+  expect(
+    root.querySelector(
+      '.gssc-header__overlay-utilities .gssc-header__theme-toggle',
+    ),
+  ).not.toBeNull();
+});
+// @relation(GSSC-MLLR-651, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-652, scope=range_start, role=Test)
+test('GSSC-MLLR-652 Lexical', async () => {
+  const { fixture, root, header } = await setupHeader({ chromeTier: 'wide' });
+  const toggle = root.querySelector<HTMLButtonElement>('.gssc-header__theme-toggle')!;
+  expect(toggle.classList.contains('font-sans')).toBe(true);
+  expect(toggle.classList.contains('text-gssc-dark-green')).toBe(true);
+  expect(toggle.getAttribute('aria-label')).toBe('Switch to dark mode');
+  toggle.click();
+  fixture.detectChanges();
+  await fixture.whenStable();
+  expect(toggle.getAttribute('aria-label')).toBe('Switch to light mode');
+  expect(header.themeMode.mode()).toBe('dark');
+});
+// @relation(GSSC-MLLR-652, scope=range_end, role=Test)

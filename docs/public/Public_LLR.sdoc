@@ -465,19 +465,20 @@ TITLE: Header
 UID: GSSC-PLLR-46
 TITLE: Semantic
 STATEMENT: >>>
-The GSSC Website Public Frontend Header SHALL present the Header Logo, the Header Organization Name when the layout permits, the Header account-access controls, the Header Contact control, the Header Site Search control, and the Navigation Menu.
+The GSSC Website Public Frontend Header SHALL present the Header Logo, the Header Organization Name when the layout permits, the Header account-access controls, the Header Contact control, the Header Site Search control, the Header Theme Toggle, and the Navigation Menu.
 <<<
 RATIONALE: >>>
 The Header composes those displayed elements in the Header host. Each element's behavior is a separate requirement.
 <<<
 COMMENT: >>>
-Navigation Menu composition added for GSSC5-45.
+Navigation Menu composition added for GSSC5-45. Theme Toggle composition added for GSSC5-125.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: >>>
 GSSC5-22
 GSSC5-45
+GSSC5-125
 <<<
 REVIEW_STATUS: Approved
 
@@ -7403,3 +7404,128 @@ RELATIONS:
 
 [[/SECTION]]
 
+[[SECTION]]
+UID: GSSC-PLLR-COLOR-MODE
+TITLE: Color Mode
+
+[[SECTION]]
+UID: GSSC-PLLR-THEME-TOGGLE
+TITLE: Theme Toggle
+
+[REQUIREMENT]
+UID: GSSC-PLLR-390
+TITLE: Semantic
+STATEMENT: >>>
+The Header Theme Toggle SHALL switch the public site between light and dark color modes, and SHALL store the selected mode so later visits in the same browser restore that mode.
+<<<
+RATIONALE: >>>
+Visitors need one Header control that both changes the active color mode and remembers the choice for return visits.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-125
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-153
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-391
+TITLE: Syntactic
+STATEMENT: >>>
+The Header Theme Toggle SHALL appear among Header actions in wide and mid chrome, and SHALL appear with Header overlay utilities in narrow chrome.
+<<<
+RATIONALE: >>>
+Placing the Theme Toggle with other Header actions keeps color-mode control reachable in every chrome tier.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-125
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-153
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-392
+TITLE: Lexical
+STATEMENT: >>>
+The Header Theme Toggle SHALL use the sans-serif theme font and dark-green theme token for its control presentation, SHALL expose an accessible name that names the mode it will activate, and SHALL remain readable on Header chrome in both color modes.
+<<<
+RATIONALE: >>>
+Theme Toggle chrome must stay readable on Header surfaces in light and dark modes and must announce the mode it will switch to.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-125
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-153
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PLLR-COLOR-MODE-APPLICATION
+TITLE: Color Mode Application
+
+[REQUIREMENT]
+UID: GSSC-PLLR-393
+TITLE: Semantic
+STATEMENT: >>>
+The Public Frontend Color Mode Application SHALL apply the stored light or dark preference to the public document, SHALL default to light mode when no preference is stored, and SHALL keep organization palette theme tokens as the color source for both modes.
+<<<
+RATIONALE: >>>
+Color Mode is a document-wide preference. Organization palette tokens keep both modes on the society brand rather than introducing unrelated colors.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-125
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-152
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-394
+TITLE: Syntactic
+STATEMENT: >>>
+The Public Frontend Color Mode Application SHALL apply the active color mode to the entire public document, including the App Root outermost layer and Header chrome that hosts the Theme Toggle.
+<<<
+RATIONALE: >>>
+Document-wide application keeps shell, chrome, and page content on one mode without per-page exceptions for this feature.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-125
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-152
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-PLLR-395
+TITLE: Lexical
+STATEMENT: >>>
+The Public Frontend Color Mode Application SHALL present dark mode with inverted organization surface and text theme tokens relative to light mode, and SHALL place a light plate behind society logo marks in dark mode so the official logo remains contrasted.
+<<<
+RATIONALE: >>>
+Dark mode reuses organization tokens with surface inversion rather than a separate palette. A light plate keeps the circular society logo readable against dark chrome.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-125
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-152
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]

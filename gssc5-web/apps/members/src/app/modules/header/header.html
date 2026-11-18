@@ -81,6 +81,13 @@
           aria-hidden="true"
         ></span>
 
+        <ng-container *ngTemplateOutlet="themeToggle" />
+
+        <span
+          class="gssc-header__divider mx-3 inline-block h-4 w-px bg-gssc-dark-green/40"
+          aria-hidden="true"
+        ></span>
+
         <!-- @relation(GSSC-MLLR-459, GSSC-MLLR-460, GSSC-MLLR-461, scope=range_start, role=Implementation) -->
         <div class="gssc-header__search relative flex items-center">
           <ng-container *ngTemplateOutlet="searchToggle" />
@@ -221,6 +228,11 @@
           class="gssc-header__overlay-utilities flex flex-wrap items-center gap-3 border-b border-gssc-gray px-4 py-3"
         >
           <ng-container *ngTemplateOutlet="accountActions" />
+          <span
+            class="gssc-header__divider inline-block h-4 w-px bg-gssc-dark-green/40"
+            aria-hidden="true"
+          ></span>
+          <ng-container *ngTemplateOutlet="themeToggle" />
         </div>
       }
 
@@ -330,6 +342,29 @@
     />
   </a>
 </ng-template>
+
+<!-- @relation(GSSC-MHLR-106, GSSC-MLLR-651, GSSC-MLLR-652, scope=range_start, role=Implementation) -->
+<ng-template #themeToggle>
+  <button
+    type="button"
+    class="gssc-header__theme-toggle inline-flex size-6 shrink-0 cursor-pointer items-center justify-center rounded border-0 bg-transparent p-0 font-sans text-gssc-dark-green hover:bg-gssc-gray"
+    [attr.aria-label]="themeToggleLabel()"
+    (click)="toggleTheme()"
+  >
+    @if (themeMode.mode() === 'dark') {
+      <i
+        class="nf nf-md-white_balance_sunny gssc-header__theme-icon text-base leading-none"
+        aria-hidden="true"
+      ></i>
+    } @else {
+      <i
+        class="nf nf-md-weather_night gssc-header__theme-icon text-base leading-none"
+        aria-hidden="true"
+      ></i>
+    }
+  </button>
+</ng-template>
+<!-- @relation(GSSC-MHLR-106, GSSC-MLLR-651, GSSC-MLLR-652, scope=range_end, role=Implementation) -->
 
 <ng-template #searchToggle>
   <!-- @relation(GSSC-MLLR-459, GSSC-MLLR-461, scope=range_start, role=Implementation) -->
