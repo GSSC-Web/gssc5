@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { provideRouter } from '@angular/router';
+import { provideRouter, Router } from '@angular/router';
 import { ContactOverlay } from '../../services/contact-overlay/contact-overlay';
 import { DEFAULT_MEMBERS_APP_ORIGIN, MembersApp } from '../../services/members-app';
 import {
@@ -39,7 +39,7 @@ class FakeKvStore {
 async function setupFooter() {
   const fixture = await setupPublicComponent(Footer, {
     providers: [
-      provideRouter([]),
+      provideRouter([{ path: '**', children: [] }]),
       { provide: KvStore, useClass: FakeKvStore },
     ],
   });
@@ -48,14 +48,16 @@ async function setupFooter() {
   const societyContact = TestBed.inject(SocietyContact);
   const contactOverlay = TestBed.inject(ContactOverlay);
   const membersApp = TestBed.inject(MembersApp);
+  const router = TestBed.inject(Router);
   membersApp.assignLocation = false;
   const root = nativeElement(fixture);
-  return { fixture, societyContact, contactOverlay, membersApp, root };
+  return { fixture, societyContact, contactOverlay, membersApp, router, root };
 }
 
 // @relation(GSSC-PLLR-28, scope=range_start, role=Test)
 test('GSSC-PLLR-28 Semantic', async () => {
   const { root } = await setupFooter();
+  expect(root.querySelector('.gssc-footer__logo')).not.toBeNull();
   expect(root.querySelector('.gssc-footer__organization-name')).not.toBeNull();
   expect(root.querySelector('.gssc-footer__phone')).not.toBeNull();
   expect(root.querySelector('.gssc-footer__email')).not.toBeNull();
@@ -91,11 +93,51 @@ test('GSSC-PLLR-31 Semantic', async () => {
 // @relation(GSSC-PLLR-32, scope=range_start, role=Test)
 test('GSSC-PLLR-32 Syntactic', async () => {
   const { root } = await setupFooter();
-  const footer = root.querySelector('.gssc-footer')!;
-  const firstContent = [...footer.children].find((child) => child instanceof HTMLElement);
-  expect(firstContent?.classList.contains('gssc-footer__organization-name')).toBe(true);
+  const identity = root.querySelector('.gssc-footer__identity')!;
+  const logo = identity.querySelector('.gssc-footer__logo')!;
+  const name = identity.querySelector('.gssc-footer__organization-name')!;
+  expect(logo.compareDocumentPosition(name) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
 });
 // @relation(GSSC-PLLR-32, scope=range_end, role=Test)
+
+// @relation(GSSC-PLLR-383, scope=range_start, role=Test)
+test('GSSC-PLLR-383 Semantic', async () => {
+  const { fixture, root, router } = await setupFooter();
+  const logo = root.querySelector<HTMLAnchorElement>('.gssc-footer__logo')!;
+  expect(logo.getAttribute('aria-label')).toBe('GSSC Logo');
+  expect(logo.querySelector('.gssc-footer__logo-mark')).not.toBeNull();
+  await router.navigateByUrl('/membership');
+  fixture.detectChanges();
+  await fixture.whenStable();
+  logo.click();
+  fixture.detectChanges();
+  await fixture.whenStable();
+  expect(router.url).toBe('/');
+});
+// @relation(GSSC-PLLR-383, scope=range_end, role=Test)
+
+// @relation(GSSC-PLLR-384, scope=range_start, role=Test)
+test('GSSC-PLLR-384 Syntactic', async () => {
+  const { root } = await setupFooter();
+  const footer = root.querySelector('.gssc-footer')!;
+  const identity = [...footer.children].find((child) => child instanceof HTMLElement);
+  expect(identity?.classList.contains('gssc-footer__identity')).toBe(true);
+  const logo = identity!.querySelector('.gssc-footer__logo')!;
+  const name = identity!.querySelector('.gssc-footer__organization-name')!;
+  expect(logo.compareDocumentPosition(name) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+});
+// @relation(GSSC-PLLR-384, scope=range_end, role=Test)
+
+// @relation(GSSC-PLLR-385, scope=range_start, role=Test)
+test('GSSC-PLLR-385 Lexical', async () => {
+  const { root } = await setupFooter();
+  const mark = root.querySelector<HTMLImageElement>('.gssc-footer__logo-mark')!;
+  expect(mark.tagName).toBe('IMG');
+  expect(mark.getAttribute('src')).toBe('/gssc-society-logo.png');
+  expect(mark.classList.contains('size-10')).toBe(true);
+  expect(mark.classList.contains('object-contain')).toBe(true);
+});
+// @relation(GSSC-PLLR-385, scope=range_end, role=Test)
 
 // @relation(GSSC-PLLR-33, scope=range_start, role=Test)
 test('GSSC-PLLR-33 Lexical', async () => {

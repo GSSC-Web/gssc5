@@ -107,11 +107,13 @@ test('GSSC-MLLR-76 Syntactic', async () => {
 // @relation(GSSC-MLLR-77, scope=range_start, role=Test)
 test('GSSC-MLLR-77 Lexical', async () => {
   const { root } = await setupLogin();
-  const logo = root.querySelector<HTMLElement>('.gssc-login-page__logo')!;
-  expect(logo.classList.contains('text-gssc-dark-green')).toBe(true);
-  const mark = root.querySelector<SVGElement>('.gssc-login-page__logo-mark')!;
+  const mark = root.querySelector<HTMLImageElement>('.gssc-login-page__logo-mark')!;
+  expect(mark.tagName).toBe('IMG');
+  expect(mark.getAttribute('src')).toBe('/gssc-society-logo.png');
   expect(mark.getAttribute('width')).toBe('96');
   expect(mark.getAttribute('height')).toBe('96');
+  expect(mark.classList.contains('size-24')).toBe(true);
+  expect(mark.classList.contains('object-contain')).toBe(true);
 });
 // @relation(GSSC-MLLR-77, scope=range_end, role=Test)
 

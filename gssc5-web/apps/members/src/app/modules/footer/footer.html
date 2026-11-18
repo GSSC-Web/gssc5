@@ -5,11 +5,30 @@
 >
   <!-- @relation(GSSC-MLLR-42, scope=range_end, role=Implementation) -->
 
-  <!-- @relation(GSSC-MLLR-43, GSSC-MLLR-44, GSSC-MLLR-45, scope=range_start, role=Implementation) -->
-  <p class="gssc-footer__organization-name m-0 font-semibold text-gssc-white">
-    {{ societyContact.organizationName() }}
-  </p>
-  <!-- @relation(GSSC-MLLR-43, GSSC-MLLR-44, GSSC-MLLR-45, scope=range_end, role=Implementation) -->
+  <div class="gssc-footer__identity flex items-center gap-3">
+    <!-- @relation(GSSC-MLLR-644, GSSC-MLLR-645, GSSC-MLLR-646, scope=range_start, role=Implementation) -->
+    <a
+      class="gssc-footer__logo inline-flex shrink-0"
+      routerLink="/"
+      aria-label="GSSC Logo"
+    >
+      <img
+        class="gssc-footer__logo-mark block size-10 object-contain"
+        src="/gssc-society-logo.png"
+        width="40"
+        height="40"
+        alt=""
+        aria-hidden="true"
+      />
+    </a>
+    <!-- @relation(GSSC-MLLR-644, GSSC-MLLR-645, GSSC-MLLR-646, scope=range_end, role=Implementation) -->
+
+    <!-- @relation(GSSC-MLLR-43, GSSC-MLLR-44, GSSC-MLLR-45, scope=range_start, role=Implementation) -->
+    <p class="gssc-footer__organization-name m-0 font-semibold text-gssc-white">
+      {{ societyContact.organizationName() }}
+    </p>
+    <!-- @relation(GSSC-MLLR-43, GSSC-MLLR-44, GSSC-MLLR-45, scope=range_end, role=Implementation) -->
+  </div>
 
   <div class="gssc-footer__contact-details flex flex-col items-start gap-1.5">
     <!-- @relation(GSSC-MLLR-49, GSSC-MLLR-50, GSSC-MLLR-51, scope=range_start, role=Implementation) -->

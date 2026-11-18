@@ -558,6 +558,19 @@ CHANGE_DRIVER: GSSC5-10
 REVIEW_STATUS: Approved
 
 [REQUIREMENT]
+UID: GSSC-PHLR-150
+TITLE: Footer Logo
+STATEMENT: >>>
+The GSSC Website Public Frontend Footer SHALL include the GSSC Logo.
+<<<
+RATIONALE: >>>
+No Public Frontend PIR requires a Footer logo. Site branding places the same society mark in the Footer as in the Header so visitors recognize the society from the page bottom.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-46
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
 UID: GSSC-PHLR-22
 TITLE: Footer Copyright
 STATEMENT: >>>
@@ -2535,6 +2548,25 @@ No Public Frontend PIR requires a dedicated search page. A full search page comp
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-47
+REVIEW_STATUS: Approved
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-PHLR-SITE-BRANDING
+TITLE: Site Branding
+
+[REQUIREMENT]
+UID: GSSC-PHLR-149
+TITLE: Browser Favicon
+STATEMENT: >>>
+The GSSC Website Public Frontend SHALL present the GSSC Logo as the browser favicon for the public site.
+<<<
+RATIONALE: >>>
+No Public Frontend PIR requires a favicon. Browser tabs and bookmarks need the society mark so visitors recognize the public site among other open documents.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-46
 REVIEW_STATUS: Approved
 
 [[/SECTION]]

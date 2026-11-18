@@ -535,9 +535,6 @@ The Header Logo SHALL display the GSSC Logo, and selection of the Header Logo SH
 RATIONALE: >>>
 The Header always includes the GSSC Logo so the member can identify the society. Selecting the logo returns the member to the Member Frontend dashboard home.
 <<<
-COMMENT: >>>
-Society logo image is a chrome placeholder until brand artwork lands in GSSC5-46.
-<<<
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: >>>
@@ -578,16 +575,17 @@ RELATIONS:
 UID: GSSC-MLLR-19
 TITLE: Lexical
 STATEMENT: >>>
-The Header Logo SHALL present a compact society logo image sized for the Header identity bar.
+The Header Logo SHALL present the official society logo image at a compact size for the Header identity bar.
 <<<
 RATIONALE: >>>
-A compact logo image keeps the society mark readable on the Header background until full Wave 4 branding sets final artwork roles.
+The official society logo mark keeps the Header brand readable on the Header background.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: >>>
 GSSC5-81
 GSSC5-120
+GSSC5-46
 <<<
 REVIEW_STATUS: Approved
 RELATIONS:
@@ -1319,7 +1317,7 @@ TITLE: Footer
 UID: GSSC-MLLR-40
 TITLE: Semantic
 STATEMENT: >>>
-The GSSC Website Member Frontend Footer SHALL contain the Footer Organization Name, Phone Number, Email Address, Postal Address, Contact control, Footer Home Link, and Footer Copyright.
+The GSSC Website Member Frontend Footer SHALL contain the Footer Logo, Footer Organization Name, Phone Number, Email Address, Postal Address, Contact control, Footer Home Link, and Footer Copyright.
 <<<
 RATIONALE: >>>
 The Footer presents society identity, contact paths, home access, and copyright together in the Member Frontend shell. Each element's behavior is a separate requirement. Contact overlay contents are a separate feature.
@@ -1329,6 +1327,7 @@ VERIFICATION_METHOD: Test
 CHANGE_DRIVER: >>>
 GSSC5-82
 GSSC5-123
+GSSC5-46
 <<<
 REVIEW_STATUS: Approved
 RELATIONS:
@@ -1355,6 +1354,9 @@ RELATIONS:
   ROLE: Refines
 - TYPE: Parent
   VALUE: GSSC-MHLR-101
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-103
   ROLE: Refines
 
 [REQUIREMENT]
@@ -1396,6 +1398,66 @@ RELATIONS:
 [[/SECTION]]
 
 [[SECTION]]
+UID: GSSC-MLLR-FOOTER-LOGO
+TITLE: Footer Logo
+
+[REQUIREMENT]
+UID: GSSC-MLLR-644
+TITLE: Semantic
+STATEMENT: >>>
+The Footer Logo SHALL display the GSSC Logo, and selection of the Footer Logo SHALL open the Member Frontend dashboard.
+<<<
+RATIONALE: >>>
+The Footer carries the same society mark as the Header so members can identify the society from the page bottom. Selecting the logo returns the member to the Member Frontend dashboard home.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-46
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-103
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-645
+TITLE: Syntactic
+STATEMENT: >>>
+The Footer Logo SHALL appear at the start of the Footer identity group ahead of the Footer Organization Name.
+<<<
+RATIONALE: >>>
+Leading with the society mark keeps brand identity first in the Footer before the organization name and contact details.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-46
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-103
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-646
+TITLE: Lexical
+STATEMENT: >>>
+The Footer Logo SHALL present the official society logo image at a compact size on the Footer background.
+<<<
+RATIONALE: >>>
+A compact official mark stays readable on the dark Footer without competing with contact text.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-46
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-103
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
 UID: GSSC-MLLR-FOOTER-ORG-NAME
 TITLE: Footer Organization Name
 
@@ -1421,14 +1483,17 @@ RELATIONS:
 UID: GSSC-MLLR-44
 TITLE: Syntactic
 STATEMENT: >>>
-The Footer Organization Name SHALL appear at the start of the Footer content.
+The Footer Organization Name SHALL appear beside the Footer Logo in the leading Footer identity group.
 <<<
 RATIONALE: >>>
-Leading with the organization name identifies the Footer before the contact details and copyright.
+Placing the organization name with the Footer Logo identifies the Footer before the contact details and copyright.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-82
+CHANGE_DRIVER: >>>
+GSSC5-82
+GSSC5-46
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -2209,14 +2274,17 @@ RELATIONS:
 UID: GSSC-MLLR-77
 TITLE: Lexical
 STATEMENT: >>>
-The Login Logo SHALL use the Member Frontend dark-green theme color and present a larger mark than the Header Logo.
+The Login Logo SHALL present the official society logo image at a larger size than the Header Logo.
 <<<
 RATIONALE: >>>
-A larger mark makes login the brand-forward unauthenticated surface. Dark green matches other Member Frontend brand marks.
+A larger official society mark makes login the brand-forward unauthenticated surface and matches Header and Footer brand artwork.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-86
+CHANGE_DRIVER: >>>
+GSSC5-86
+GSSC5-46
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -11240,6 +11308,72 @@ REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-37
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-SITE-BRANDING
+TITLE: Site Branding
+
+[[SECTION]]
+UID: GSSC-MLLR-FAVICON
+TITLE: Browser Favicon
+
+[REQUIREMENT]
+UID: GSSC-MLLR-647
+TITLE: Semantic
+STATEMENT: >>>
+The Member Frontend Browser Favicon SHALL present the GSSC Logo as the document icon for the members site.
+<<<
+RATIONALE: >>>
+Browser tabs and bookmarks need the society mark so members recognize the members site among other open documents.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-46
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-102
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-648
+TITLE: Syntactic
+STATEMENT: >>>
+The Member Frontend Browser Favicon SHALL be declared in the members document head as the document icon link.
+<<<
+RATIONALE: >>>
+Declaring the icon in the document head is how browsers discover the favicon for the members site.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-46
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-102
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-649
+TITLE: Lexical
+STATEMENT: >>>
+The Member Frontend Browser Favicon SHALL use the official society logo artwork.
+<<<
+RATIONALE: >>>
+Using the same official society logo as Header, Footer, and Login keeps members brand marks consistent.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-46
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-102
   ROLE: Refines
 
 [[/SECTION]]
