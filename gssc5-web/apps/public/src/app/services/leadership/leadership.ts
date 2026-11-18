@@ -12,7 +12,7 @@ const ACCOUNT_PHOTOS_ORIGIN = 'http://localhost:3000';
  * Resolve a stored Account Photo identifier to the dedicated GET URL for card
  * `<img src>` (GSSC5-124). Absolute http(s) values pass through.
  */
-// @relation(GSSC-PLLR-376, scope=range_start, role=Implementation)
+// @relation(GSSC-PLLR-382, scope=range_start, role=Implementation)
 export function accountPhotoUrl(
   resource: string | null | undefined,
   origin: string = ACCOUNT_PHOTOS_ORIGIN,
@@ -24,7 +24,7 @@ export function accountPhotoUrl(
   if (trimmed.startsWith('/account-photos/')) return `${origin}${trimmed}`;
   return `${origin}/account-photos/${trimmed.replace(/^\/+/, '')}`;
 }
-// @relation(GSSC-PLLR-376, scope=range_end, role=Implementation)
+// @relation(GSSC-PLLR-382, scope=range_end, role=Implementation)
 
 /** One entry from Unified Backend GET /leadership. */
 export type LeadershipEntry = {
@@ -182,9 +182,9 @@ export function cardsForRoster(
       };
     }
     const contact = preferredContact(match);
-    // @relation(GSSC-PLLR-376, GSSC-PLLR-162, GSSC-PLLR-165, scope=range_start, role=Implementation)
+    // @relation(GSSC-PLLR-382, GSSC-PLLR-162, GSSC-PLLR-165, scope=range_start, role=Implementation)
     const photoUrl = accountPhotoUrl(match.accountPhoto);
-    // @relation(GSSC-PLLR-376, GSSC-PLLR-162, GSSC-PLLR-165, scope=range_end, role=Implementation)
+    // @relation(GSSC-PLLR-382, GSSC-PLLR-162, GSSC-PLLR-165, scope=range_end, role=Implementation)
     return {
       name,
       title: office,
@@ -211,9 +211,9 @@ export function committeeChairCards(
     .sort((a, b) => a.position.localeCompare(b.position))
     .map((match) => {
       const contact = preferredContact(match);
-      // @relation(GSSC-PLLR-376, GSSC-PLLR-231, scope=range_start, role=Implementation)
+      // @relation(GSSC-PLLR-382, GSSC-PLLR-231, scope=range_start, role=Implementation)
       const photoUrl = accountPhotoUrl(match.accountPhoto);
-      // @relation(GSSC-PLLR-376, GSSC-PLLR-231, scope=range_end, role=Implementation)
+      // @relation(GSSC-PLLR-382, GSSC-PLLR-231, scope=range_end, role=Implementation)
       return {
         name: leaderDisplayName(match)!,
         title: match.position,

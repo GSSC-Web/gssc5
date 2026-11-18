@@ -5059,7 +5059,7 @@ UID: GSSC-PLLR-LEADERSHIP-ACCOUNT-PHOTO
 TITLE: Leadership Account Photo
 
 [REQUIREMENT]
-UID: GSSC-PLLR-376
+UID: GSSC-PLLR-382
 TITLE: Semantic
 STATEMENT: >>>
 When a leadership list entry includes an Account Photo, the Public Frontend SHALL present that photo as a visitor-visible image on the matching contact card; when the Account Photo value is a stored Account Photo identifier rather than a visitor-loadable image address, the Public Frontend SHALL resolve it to the society's Account Photos resource so the image loads; when no Account Photo is present, the matching contact card SHALL keep the silhouette placeholder.
@@ -5073,7 +5073,7 @@ CHANGE_DRIVER: GSSC5-124
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-PHLR-147
+  VALUE: GSSC-PHLR-148
   ROLE: Refines
 
 [[/SECTION]]
