@@ -94,6 +94,59 @@ test("GSSC-BLLR-7 Password Match", async () => {
 });
 // @relation(GSSC-BLLR-7, scope=range_end, role=Test)
 
+// @relation(GSSC-BLLR-491, GSSC-BLLR-492, scope=range_start, role=Test)
+test("GSSC-BLLR-491 Soft-Deleted Login Forbidden", async () => {
+  const softUsername = `soft-login-${randomUUID().slice(0, 8)}`;
+  const softEmail = `${softUsername}@example.com`;
+  const softPassword = "soft-deleted-secret";
+  const passwordHash = await Bun.password.hash(softPassword, "argon2id");
+  const softUser = await prisma().user.create({
+    data: {
+      username: softUsername,
+      primaryEmail: softEmail,
+      passwordHash,
+      deletedAt: new Date(),
+    },
+  });
+
+  await expectForbidden({ password: softPassword, username: softUsername });
+  await expectForbidden({ password: softPassword, primaryEmail: softEmail });
+  expect(await establishedLogin(backend, { password: softPassword, username: softUsername })).toBeNull();
+
+  await prisma().user.update({
+    where: { id: softUser.id },
+    data: { deletedAt: null },
+  });
+  const token = await establishedLogin(backend, {
+    password: softPassword,
+    username: softUsername,
+  });
+  expect(token).toEqual(expect.any(String));
+
+  await prisma().user.update({
+    where: { id: softUser.id },
+    data: { deletedAt: new Date() },
+  });
+  const forbidden = await backend(
+    new Request("http://127.0.0.1/users", {
+      headers: { cookie: cookieHeaderForToken(token ?? "") },
+    }),
+  );
+  expect(forbidden.status).toBe(403);
+
+  await prisma().user.update({
+    where: { id: softUser.id },
+    data: { deletedAt: null },
+  });
+  const restored = await backend(
+    new Request("http://127.0.0.1/users", {
+      headers: { cookie: cookieHeaderForToken(token ?? "") },
+    }),
+  );
+  expect(restored.status).toBe(200);
+});
+// @relation(GSSC-BLLR-491, GSSC-BLLR-492, scope=range_end, role=Test)
+
 // @relation(GSSC-BLLR-8, scope=range_start, role=Test)
 test("GSSC-BLLR-8 Login Token Issued", async () => {
   const response = await postJsonResponse(backend, "/login", {

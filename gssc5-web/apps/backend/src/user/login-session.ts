@@ -75,7 +75,7 @@ export function classifyLoginTokenRow(
  * → classify → user payload. Pass a Prisma user `select` to project fields, or
  * omit for the full User row.
  */
-// @relation(GSSC-BLLR-42, GSSC-BLLR-48, GSSC-BLLR-56, GSSC-BLLR-67, GSSC-BLLR-68, GSSC-BLLR-69, GSSC-BLLR-133, GSSC-BLLR-134, GSSC-BLLR-135, GSSC-BLLR-166, GSSC-BLLR-167, GSSC-BLLR-168, scope=range_start, role=Implementation)
+// @relation(GSSC-BLLR-42, GSSC-BLLR-48, GSSC-BLLR-56, GSSC-BLLR-67, GSSC-BLLR-68, GSSC-BLLR-69, GSSC-BLLR-133, GSSC-BLLR-134, GSSC-BLLR-135, GSSC-BLLR-166, GSSC-BLLR-167, GSSC-BLLR-168, GSSC-BLLR-492, scope=range_start, role=Implementation)
 export async function resolveLoginSessionUser(
   prisma: PrismaClient,
   cookie: CookieJar,
@@ -93,17 +93,28 @@ export async function resolveLoginSessionUser(
   const token = loginTokenFromCookie(cookie);
   if (token === null) return { failure: "missing" };
 
-  const row = userSelect
+  const selectForSession = userSelect
+    ? ({ ...userSelect, deletedAt: true } as Prisma.UserSelect)
+    : undefined;
+  const row = selectForSession
     ? await prisma.loginToken.findUnique({
         where: { tokenHash: hashLoginToken(token) },
-        include: { user: { select: userSelect } },
+        include: { user: { select: selectForSession } },
       })
     : await prisma.loginToken.findUnique({
         where: { tokenHash: hashLoginToken(token) },
         include: { user: true },
       });
   const classified = classifyLoginTokenRow(row);
-  if (classified === "ok" && row) return { user: row.user };
-  return { failure: classified === "ok" ? "unknown" : classified };
+  if (classified !== "ok" || !row) {
+    return { failure: classified === "ok" ? "unknown" : classified };
+  }
+  // Soft-deleted accounts cannot keep an authenticated session.
+  if (row.user.deletedAt !== null) return { failure: "unknown" };
+  if (userSelect && !Object.prototype.hasOwnProperty.call(userSelect, "deletedAt")) {
+    const { deletedAt: _deletedAt, ...withoutDeletedAt } = row.user as Record<string, unknown>;
+    return { user: withoutDeletedAt };
+  }
+  return { user: row.user };
 }
-// @relation(GSSC-BLLR-42, GSSC-BLLR-48, GSSC-BLLR-56, GSSC-BLLR-67, GSSC-BLLR-68, GSSC-BLLR-69, GSSC-BLLR-133, GSSC-BLLR-134, GSSC-BLLR-135, GSSC-BLLR-166, GSSC-BLLR-167, GSSC-BLLR-168, scope=range_end, role=Implementation)
+// @relation(GSSC-BLLR-42, GSSC-BLLR-48, GSSC-BLLR-56, GSSC-BLLR-67, GSSC-BLLR-68, GSSC-BLLR-69, GSSC-BLLR-133, GSSC-BLLR-134, GSSC-BLLR-135, GSSC-BLLR-166, GSSC-BLLR-167, GSSC-BLLR-168, GSSC-BLLR-492, scope=range_end, role=Implementation)

@@ -46,7 +46,7 @@ export const leadership = new Elysia({
       // @relation(GSSC-BLLR-283, GSSC-BLLR-284, scope=range_start, role=Implementation)
       const prisma = getPrisma(loadConfig().DATABASE_URL);
       const rows = await prisma.user.findMany({
-        where: { position: { not: null } },
+        where: { position: { not: null }, deletedAt: null },
         select: {
           position: true,
           firstName: true,

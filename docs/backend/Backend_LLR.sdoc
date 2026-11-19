@@ -100,18 +100,57 @@ RELATIONS:
 UID: GSSC-BLLR-7
 TITLE: Password Match
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL log the member in when the supplied Username or Primary Email matches a member and the supplied password matches that member's stored password hash.
+The GSSC Website Unified Backend SHALL log the member in when the supplied Username or Primary Email matches a member who is not soft-deleted and the supplied password matches that member's stored password hash.
 <<<
 RATIONALE: >>>
-The member login succeeds when the identifier locates the member and the password matches the stored password hash. This requirement does not set the hash method.
+The member login succeeds when the identifier locates an active member and the password matches the stored password hash. This requirement does not set the hash method. Soft-deleted members are refused separately.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-33
+CHANGE_DRIVER: >>>
+GSSC5-33
+GSSC5-133
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-1
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-491
+TITLE: Soft-Deleted Login Forbidden
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL forbid a member login when the matched user is soft-deleted, and SHALL not issue a Login Token for that login.
+<<<
+RATIONALE: >>>
+Soft deletion removes the member from normal collaboration. A soft-deleted account must not obtain a new login session.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-133
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-223
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-492
+TITLE: Soft-Deleted Login Session Rejected
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL treat a Login Token as not resolving to an authenticated member when the user for that Login Token is soft-deleted.
+<<<
+RATIONALE: >>>
+An existing Login Token must not keep a soft-deleted member authenticated for collaboration endpoints.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-133
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-223
   ROLE: Refines
 
 [REQUIREMENT]
@@ -3166,18 +3205,24 @@ TITLE: Data Returned
 UID: GSSC-BLLR-49
 TITLE: User Read Subject
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return fields for the user identified by the cuid in the path.
+The GSSC Website Unified Backend SHALL return fields for the user identified by the cuid in the path when that user is not soft-deleted, or when the caller is an administrator. When the identified user is soft-deleted and the caller is not an administrator, the backend SHALL treat that user as not found.
 <<<
 RATIONALE: >>>
-The user read is about the user named by the cuid. Each returned field is its own requirement.
+The user read is about the user named by the cuid for ordinary collaboration. Soft-deleted accounts stay hidden from non-administrators on direct read, matching member-list omission. Administrators can still read soft-deleted accounts so they can restore or manage them. Each returned field is its own requirement.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: >>>
+GSSC5-34
+GSSC5-133
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-26
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-BHLR-224
   ROLE: Refines
 
 [REQUIREMENT]
@@ -5472,14 +5517,17 @@ RELATIONS:
 UID: GSSC-BLLR-284
 TITLE: Leadership List Populated Position
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL include in the leadership list each stored user whose Position is populated.
+The GSSC Website Unified Backend SHALL include in the leadership list each stored user whose Position is populated and who is not soft-deleted.
 <<<
 RATIONALE: >>>
-Leaders are the members whose Position is populated. A member with an empty Position is left off the list.
+Leaders are the active members whose Position is populated. A member with an empty Position, or a soft-deleted member, is left off the public leadership list.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-36
+CHANGE_DRIVER: >>>
+GSSC5-36
+GSSC5-133
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -5487,6 +5535,9 @@ RELATIONS:
   ROLE: Refines
 - TYPE: Parent
   VALUE: GSSC-BHLR-95
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-BHLR-224
   ROLE: Refines
 
 [REQUIREMENT]

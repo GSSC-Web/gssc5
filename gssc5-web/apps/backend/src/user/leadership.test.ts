@@ -152,6 +152,38 @@ test("GSSC-BLLR-284 Leadership List Populated Position", async () => {
   expect(positions).not.toContain("");
   expect(result.body.includes("Plain")).toBe(false);
   expect(result.body.includes(plainMemberId)).toBe(false);
+
+  const softLeader = await db().user.create({
+    data: {
+      username: "leader-soft-deleted",
+      primaryEmail: "leader.soft@example.com",
+      passwordHash: await Bun.password.hash("leadership-secret", "argon2id"),
+      firstName: "SoftDeleted",
+      lastName: "Leader",
+      primaryPhone: "2095559005",
+      preferredContactMethod: "Email",
+      position: "Soft Deleted Chair",
+      deletedAt: new Date(),
+      homeLine1: "5 Leader",
+      homeCity: "Modesto",
+      homeState: "CA",
+      homeZip: "95350",
+      mailingLine1: "5 Leader",
+      mailingCity: "Modesto",
+      mailingState: "CA",
+      mailingZip: "95350",
+    },
+  });
+  try {
+    const afterSoftDelete = await leadershipList();
+    expect(afterSoftDelete.status).toBe(200);
+    const afterPositions = afterSoftDelete.entries.map((entry) => entry.position);
+    expect(afterPositions).not.toContain("Soft Deleted Chair");
+    expect(afterSoftDelete.body.includes("SoftDeleted")).toBe(false);
+    expect(afterSoftDelete.body.includes(softLeader.id)).toBe(false);
+  } finally {
+    await db().user.delete({ where: { id: softLeader.id } });
+  }
 });
 // @relation(GSSC-BLLR-284, scope=range_end, role=Test)
 

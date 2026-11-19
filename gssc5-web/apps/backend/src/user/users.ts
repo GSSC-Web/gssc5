@@ -577,6 +577,9 @@ export const users = new Elysia({
         select: userSelect,
       });
       if (!user) return status(404, "Not Found" as const);
+      if (user.deletedAt !== null && !session.user.isAdmin) {
+        return status(404, "Not Found" as const);
+      }
       return status(200, project(user, session.user));
       // @relation(GSSC-BLLR-49, GSSC-BLLR-55, scope=range_end, role=Implementation)
     },
