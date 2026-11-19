@@ -9576,7 +9576,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-BLLR-505
+UID: GSSC-BLLR-506
 TITLE: Newsletter Issue Display Filename
 STATEMENT: >>>
 The GSSC Website Unified Backend SHALL set the stored-file entry display name for a newsletter issue file to Vol{volume}No{number}.pdf from that newsletter's volume and number, SHALL keep that display name current when volume or number changes, and SHALL report that display name in the Content-Disposition filename when serving that issue file.

@@ -230,7 +230,7 @@ async function patchNewsletterItem({
     where: { id: existing.id },
     data,
   });
-  // @relation(GSSC-BLLR-505, scope=range_start, role=Implementation)
+  // @relation(GSSC-BLLR-506, scope=range_start, role=Implementation)
   if (body.volume !== undefined || body.number !== undefined) {
     await syncNewsletterFileDisplayName({
       newsletterCuid: updated.id,
@@ -239,7 +239,7 @@ async function patchNewsletterItem({
       filePath: updated.filePath,
     });
   }
-  // @relation(GSSC-BLLR-505, scope=range_end, role=Implementation)
+  // @relation(GSSC-BLLR-506, scope=range_end, role=Implementation)
   return status(200, toEntry(updated));
   // @relation(GSSC-BLLR-391, scope=range_end, role=Implementation)
 }

@@ -107,11 +107,11 @@ function storageKeyForNewsletter(newsletterCuid: string): string {
 }
 
 /** Display filename for PDF chrome / Content-Disposition (GSSC5-144 / GSSC-191). */
-// @relation(GSSC-BLLR-505, scope=range_start, role=Implementation)
+// @relation(GSSC-BLLR-506, scope=range_start, role=Implementation)
 export function newsletterIssueDisplayName(volume: number, number: number): string {
   return `Vol${volume}No${number}.pdf`;
 }
-// @relation(GSSC-BLLR-505, scope=range_end, role=Implementation)
+// @relation(GSSC-BLLR-506, scope=range_end, role=Implementation)
 
 const newsletterFileSelect = {
   id: true,
@@ -335,9 +335,9 @@ export const newsletterFiles = new Elysia({ prefix: "/newsletter-files" })
       const bytes = new Uint8Array(await upload.arrayBuffer());
       const storageKey = storageKeyForNewsletter(newsletterCuid);
       const mimeType = upload.type || null;
-      // @relation(GSSC-BLLR-505, scope=range_start, role=Implementation)
+      // @relation(GSSC-BLLR-506, scope=range_start, role=Implementation)
       const displayName = newsletterIssueDisplayName(target.volume, target.number);
-      // @relation(GSSC-BLLR-505, scope=range_end, role=Implementation)
+      // @relation(GSSC-BLLR-506, scope=range_end, role=Implementation)
 
       // @relation(GSSC-BLLR-494, GSSC-BLLR-495, scope=range_start, role=Implementation)
       const existing =

@@ -446,7 +446,7 @@ export const files = new Elysia({ prefix: "/files" })
       if (file === null || !(await file.exists())) {
         return statusFn(404, "Not Found" as const);
       }
-      // @relation(GSSC-BLLR-379, GSSC-BLLR-505, scope=range_start, role=Implementation)
+      // @relation(GSSC-BLLR-379, GSSC-BLLR-506, scope=range_start, role=Implementation)
       const dispositionName = await newsletterDispositionFileName({
         id: row.id,
         name: row.name,
@@ -458,7 +458,7 @@ export const files = new Elysia({ prefix: "/files" })
           "content-disposition": `inline; filename="${dispositionName.replaceAll('"', "")}"`,
         },
       });
-      // @relation(GSSC-BLLR-379, GSSC-BLLR-505, scope=range_end, role=Implementation)
+      // @relation(GSSC-BLLR-379, GSSC-BLLR-506, scope=range_end, role=Implementation)
     },
     {
       params: t.Object({ cuid: t.String() }),

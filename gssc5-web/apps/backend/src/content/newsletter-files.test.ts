@@ -238,8 +238,8 @@ test("GSSC-BLLR-495 newsletter file replace deletes prior file", async () => {
 });
 // @relation(GSSC-BLLR-495, scope=range_end, role=Test)
 
-// @relation(GSSC-BLLR-505, scope=range_start, role=Test)
-test("GSSC-BLLR-505 newsletter issue display name is Vol{volume}No{number}.pdf", async () => {
+// @relation(GSSC-BLLR-506, scope=range_start, role=Test)
+test("GSSC-BLLR-506 newsletter issue display name is Vol{volume}No{number}.pdf", async () => {
   expect(newsletterIssueDisplayName(48, 1)).toBe("Vol48No1.pdf");
 
   const cuid = await createNewsletter(editorTok, `name-${Date.now()}`);
@@ -256,4 +256,4 @@ test("GSSC-BLLR-505 newsletter issue display name is Vol{volume}No{number}.pdf",
   expect(fileGet.status).toBe(200);
   expect(fileGet.headers.get("content-disposition")).toContain("Vol1No1.pdf");
 });
-// @relation(GSSC-BLLR-505, scope=range_end, role=Test)
+// @relation(GSSC-BLLR-506, scope=range_end, role=Test)
