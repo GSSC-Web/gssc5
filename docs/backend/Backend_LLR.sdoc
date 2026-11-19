@@ -9488,6 +9488,66 @@ RELATIONS:
 [[/SECTION]]
 
 [[SECTION]]
+UID: GSSC-BLLR-NEWSLETTER-FILES
+TITLE: Newsletter Issue Files Store
+
+[REQUIREMENT]
+UID: GSSC-BLLR-493
+TITLE: Newsletters Directory On Init
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL create the newsletters directory under the file storage root on startup when that directory is missing, and SHALL keep a corresponding newsletters folder entry for uploads.
+<<<
+RATIONALE: >>>
+Newsletter issue files have a dedicated store separate from general file uploads, mirroring account-photos.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-142
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-239
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-494
+TITLE: Newsletter Issue File Upload
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL accept a multipart upload into the newsletters store for a target newsletter cuid from a logged-in member who is a newsletter editor or an administrator, store that issue file under a name and path derived from that newsletter cuid, set that newsletter's file path to that newsletter cuid, and return that newsletter cuid and path.
+<<<
+RATIONALE: >>>
+Naming by newsletter cuid prevents collisions across issues and keeps the catalog file path stable for public retrieval.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-142
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-239
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-495
+TITLE: Newsletter Issue File Overwrite By Newsletter Cuid
+STATEMENT: >>>
+When an authenticated upload targets a newsletter cuid that already has an issue file, the GSSC Website Unified Backend SHALL store the replacement under that newsletter cuid in the newsletters store and SHALL delete the prior issue file for that newsletter—including any prior stored-file entry that newsletter's file path referenced—rather than retaining a second issue file.
+<<<
+RATIONALE: >>>
+One current issue file per newsletter keeps storage and catalog paths collision-free; replacing an issue file must not leave the previous file behind.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-142
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-239
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
 UID: GSSC-BLLR-ACCOUNT-PHOTOS
 TITLE: Account Photos Store
 

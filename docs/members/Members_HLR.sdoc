@@ -1983,3 +1983,32 @@ RELATIONS:
 
 [[/SECTION]]
 
+[[SECTION]]
+UID: GSSC-MHLR-NEWSLETTER-FILE-UPLOAD
+TITLE: Newsletter Issue File Upload
+
+[REQUIREMENT]
+UID: GSSC-MHLR-112
+TITLE: Newsletter Issue File Upload
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL present the newsletter issue as a file upload control, upload a chosen issue file to the Unified Backend newsletters store for that newsletter's cuid, and replace any prior issue file for that newsletter when a new file is uploaded on edit.
+<<<
+RATIONALE: >>>
+Newsletter editors must attach issue bytes without typing a storage path; naming by newsletter cuid mirrors account-photo storage and keeps one current issue file per newsletter.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-142
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-49
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-51
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-54
+  ROLE: Refines
+
+[[/SECTION]]
+

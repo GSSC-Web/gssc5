@@ -9,10 +9,11 @@ import {
   parseKeywordsInput,
   parseRequiredInteger,
   type NewsletterEntry,
-  type NewsletterFields,
+  type NewsletterMetaFields,
 } from '../../services/newsletters-api';
 
 const NEW_RESOURCE_ID = 'newsletter:new';
+const PENDING_FILE_PATH = 'pending';
 
 type EditorDraft = {
   volume: string;
@@ -21,6 +22,7 @@ type EditorDraft = {
   year: string;
   filePath: string;
   keywords: string;
+  fileLabel: string;
 };
 
 const emptyDraft = (): EditorDraft => ({
@@ -30,6 +32,7 @@ const emptyDraft = (): EditorDraft => ({
   year: '',
   filePath: '',
   keywords: '',
+  fileLabel: 'No file chosen',
 });
 
 function draftFromEntry(entry: NewsletterEntry): EditorDraft {
@@ -40,6 +43,7 @@ function draftFromEntry(entry: NewsletterEntry): EditorDraft {
     year: String(entry.year),
     filePath: entry.filePath,
     keywords: formatKeywordsInput(entry.keywords),
+    fileLabel: entry.filePath.trim().length > 0 ? 'Current issue file on file' : 'No file chosen',
   };
 }
 
@@ -62,10 +66,14 @@ export class NewslettersPage implements OnInit {
   readonly number = model('');
   readonly month = model('');
   readonly year = model('');
-  readonly filePath = model('');
   readonly keywords = model('');
+  readonly fileLabel = signal('No file chosen');
+
+  /** Chosen file awaiting upload on Save; cleared after a successful upload. */
+  pendingFile: File | null = null;
 
   private baseline = emptyDraft();
+  private storedFilePath = '';
 
   // @relation(GSSC-MLLR-367, scope=range_start, role=Implementation)
   /** Administrators and newsletter editors may create/publish/modify. */
@@ -80,8 +88,11 @@ export class NewslettersPage implements OnInit {
 
   async ngOnInit(): Promise<void> {
     await this.memberSession.whenReady();
-    if (this.canEdit()) {
-      await this.reloadCatalog();
+    if (!this.canEdit()) return;
+    // Reload first; only open create when nothing was selected during boot
+    // (avoids a late beginCreate clearing a Save that finished mid-init).
+    await this.reloadCatalog();
+    if (this.selectedCuid() == null) {
       this.beginCreate();
     }
   }
@@ -117,42 +128,83 @@ export class NewslettersPage implements OnInit {
   }
   // @relation(GSSC-MLLR-373, scope=range_end, role=Implementation)
 
-  // @relation(GSSC-MLLR-368, GSSC-MLLR-369, GSSC-MLLR-370, scope=range_start, role=Implementation)
+  // @relation(GSSC-MLLR-693, GSSC-MLLR-694, GSSC-MLLR-695, GSSC-MLLR-696, scope=range_start, role=Implementation)
+  onIssueFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0] ?? null;
+    this.pendingFile = file;
+    this.fileLabel.set(file?.name ?? 'No file chosen');
+  }
+  // @relation(GSSC-MLLR-693, GSSC-MLLR-694, GSSC-MLLR-695, GSSC-MLLR-696, scope=range_end, role=Implementation)
+
+  // @relation(GSSC-MLLR-368, GSSC-MLLR-369, GSSC-MLLR-370, GSSC-MLLR-696, scope=range_start, role=Implementation)
   async onEditorSaved(): Promise<void> {
     if (!this.canEdit()) return;
-    const fields = this.readFields();
+    const fields = this.readMetaFields();
     if (fields == null) {
-      this.saveError.set('Enter valid volume, number, month, year, file path, and keywords.');
+      this.saveError.set('Enter valid volume, number, month, year, and keywords.');
+      return;
+    }
+
+    const cuid = this.selectedCuid();
+    if (cuid == null && this.pendingFile == null) {
+      this.saveError.set('Choose a newsletter issue file before saving.');
       return;
     }
 
     this.saveError.set(null);
-    const cuid = this.selectedCuid();
     try {
       if (cuid == null) {
-        const { data, error } = await newslettersApi.create(fields);
+        const { data, error } = await newslettersApi.create({
+          ...fields,
+          filePath: PENDING_FILE_PATH,
+        });
         if (error || !data || typeof data !== 'object') {
           this.saveError.set('Create failed.');
           return;
         }
         const created = data as NewsletterEntry;
+        const uploaded = await newslettersApi.uploadFile(this.pendingFile!, created.cuid);
+        if (uploaded.error || !uploaded.data) {
+          this.saveError.set('Issue file could not be uploaded.');
+          return;
+        }
+        this.pendingFile = null;
         this.selectedCuid.set(created.cuid);
         this.resourceId.set(`newsletter:${created.cuid}`);
-        this.applyDraft(draftFromEntry(created));
+        this.applyDraft(
+          draftFromEntry({
+            ...created,
+            filePath: uploaded.data.cuid,
+          }),
+        );
       } else {
-        const { data, error } = await newslettersApi.update(cuid, fields);
+        const { data, error } = await newslettersApi.update(cuid, {
+          ...fields,
+          filePath: this.storedFilePath,
+        });
         if (error || !data || typeof data !== 'object') {
           this.saveError.set('Save failed.');
           return;
         }
-        this.applyDraft(draftFromEntry(data as NewsletterEntry));
+        let saved = data as NewsletterEntry;
+        if (this.pendingFile !== null) {
+          const uploaded = await newslettersApi.uploadFile(this.pendingFile, cuid);
+          if (uploaded.error || !uploaded.data) {
+            this.saveError.set('Issue file could not be uploaded.');
+            return;
+          }
+          this.pendingFile = null;
+          saved = { ...saved, filePath: uploaded.data.cuid };
+        }
+        this.applyDraft(draftFromEntry(saved));
       }
       await this.reloadCatalog();
     } catch {
       this.saveError.set(cuid == null ? 'Create failed.' : 'Save failed.');
     }
   }
-  // @relation(GSSC-MLLR-368, GSSC-MLLR-369, GSSC-MLLR-370, scope=range_end, role=Implementation)
+  // @relation(GSSC-MLLR-368, GSSC-MLLR-369, GSSC-MLLR-370, GSSC-MLLR-696, scope=range_end, role=Implementation)
 
   // @relation(GSSC-MLLR-372, scope=range_start, role=Implementation)
   onEditorCancelled(): void {
@@ -191,27 +243,22 @@ export class NewslettersPage implements OnInit {
     this.number.set(draft.number);
     this.month.set(draft.month);
     this.year.set(draft.year);
-    this.filePath.set(draft.filePath);
     this.keywords.set(draft.keywords);
+    this.fileLabel.set(draft.fileLabel);
+    this.storedFilePath = draft.filePath;
+    this.pendingFile = null;
     this.baseline = { ...draft };
   }
 
-  private readFields(): NewsletterFields | null {
+  private readMetaFields(): NewsletterMetaFields | null {
     const volume = parseRequiredInteger(this.volume());
     const number = parseRequiredInteger(this.number());
     const month = parseRequiredInteger(this.month());
     const year = parseRequiredInteger(this.year());
-    const filePath = this.filePath().trim();
     const keywords = parseKeywordsInput(this.keywords());
-    if (
-      volume == null ||
-      number == null ||
-      month == null ||
-      year == null ||
-      filePath.length === 0
-    ) {
+    if (volume == null || number == null || month == null || year == null) {
       return null;
     }
-    return { volume, number, month, year, filePath, keywords };
+    return { volume, number, month, year, keywords };
   }
 }

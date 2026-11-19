@@ -1560,6 +1560,29 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
+UID: GSSC-BHLR-239
+TITLE: Newsletter Issue File Store
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL provide a dedicated newsletters file store that accepts authenticated multipart upload of an issue file for a newsletter cuid, stores that file under a name and path derived from that newsletter cuid, and deletes the prior issue file for that newsletter when a replacement is uploaded.
+<<<
+RATIONALE: >>>
+Newsletter issue bytes are stored separately from catalog metadata; naming by newsletter cuid mirrors account-photo storage and keeps one current issue file per newsletter.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-142
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-31
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-BHLR-213
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-BHLR-214
+  ROLE: Refines
+
+[REQUIREMENT]
 UID: GSSC-BHLR-81
 TITLE: Permission Modification
 STATEMENT: >>>
