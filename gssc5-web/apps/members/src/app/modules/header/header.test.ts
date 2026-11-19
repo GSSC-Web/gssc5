@@ -4,6 +4,10 @@ import { routes } from '../../app.routes';
 import { KvStore } from '../../services/kv-store/kv-store';
 import { MemberSession, memberSessionApi } from '../../services/member-session';
 import {
+  DEFAULT_PUBLIC_APP_ORIGIN,
+  PublicApp,
+} from '../../services/public-app';
+import {
   SOCIETY_ORGANIZATION_ACRONYM_KEY,
   SOCIETY_ORGANIZATION_NAME_KEY,
   SocietyContact,
@@ -112,6 +116,7 @@ async function setupHeader(options?: {
   fixture: Awaited<ReturnType<typeof setupMembersComponent<Header>>>;
   router: Router;
   session: MemberSession;
+  publicApp: PublicApp;
   societyContact: SocietyContact;
   root: HTMLElement;
   header: Header;
@@ -150,9 +155,13 @@ async function setupHeader(options?: {
   const router = TestBed.inject(Router);
   router.resetConfig(routes);
   const session = TestBed.inject(MemberSession);
+  const publicApp = TestBed.inject(PublicApp);
   const societyContact = TestBed.inject(SocietyContact);
   const siteTree = TestBed.inject(SiteTree);
   const header = fixture.componentInstance;
+
+  publicApp.lastNavigation = null;
+  publicApp.assignLocation = false;
 
   await societyContact.refresh();
   await fixture.whenStable();
@@ -176,6 +185,7 @@ async function setupHeader(options?: {
     fixture,
     router,
     session,
+    publicApp,
     societyContact,
     root: nativeElement(fixture),
     header,
@@ -344,8 +354,19 @@ test('GSSC-MLLR-23 Semantic', async () => {
 
 // @relation(GSSC-MLLR-24, scope=range_start, role=Test)
 test('GSSC-MLLR-24 Syntactic', async () => {
-  const { fixture, root, session } = await setupHeader({ loggedIn: true, displayName: 'Ada' });
+  const { fixture, root, session } = await setupHeader({
+    loggedIn: true,
+    displayName: 'Ada',
+  });
+  const greeting = root.querySelector('.gssc-header__greeting')!;
+  const menu = root.querySelector<HTMLElement>('.gssc-header__greeting-menu')!;
   expect(root.querySelector('.gssc-header__account .gssc-header__greeting')).not.toBeNull();
+  expect(greeting).not.toBeNull();
+  expect(menu.querySelector('.gssc-header__public-access')).not.toBeNull();
+  expect(menu.querySelector('.gssc-header__logout')).not.toBeNull();
+  expect(menu.classList.contains('group-hover:visible')).toBe(true);
+  expect(menu.classList.contains('group-hover:flex')).toBe(true);
+  expect(root.querySelector('.gssc-header__login')).toBeNull();
 
   session.loggedIn.set(false);
   session.displayName.set('');
@@ -389,7 +410,7 @@ test('GSSC-MLLR-26 Semantic', async () => {
 // @relation(GSSC-MLLR-27, scope=range_start, role=Test)
 test('GSSC-MLLR-27 Syntactic', async () => {
   const { fixture, root, session } = await setupHeader({ loggedIn: true });
-  expect(root.querySelector('.gssc-header__account .gssc-header__logout')).not.toBeNull();
+  expect(root.querySelector('.gssc-header__greeting-menu .gssc-header__logout')).not.toBeNull();
 
   session.loggedIn.set(false);
   session.displayName.set('');
@@ -407,6 +428,37 @@ test('GSSC-MLLR-28 Lexical', async () => {
   expect(logout.classList.contains('text-gssc-dark-green')).toBe(true);
 });
 // @relation(GSSC-MLLR-28, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-33, scope=range_start, role=Test)
+test('GSSC-MLLR-33 Semantic', async () => {
+  const { root, publicApp } = await setupHeader({ loggedIn: true, displayName: 'Ada' });
+  root.querySelector<HTMLButtonElement>('.gssc-header__public-access')!.click();
+  expect(publicApp.lastNavigation).toBe(DEFAULT_PUBLIC_APP_ORIGIN);
+});
+// @relation(GSSC-MLLR-33, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-34, scope=range_start, role=Test)
+test('GSSC-MLLR-34 Syntactic', async () => {
+  const { fixture, root, session } = await setupHeader({ loggedIn: true });
+  expect(root.querySelector('.gssc-header__greeting-menu .gssc-header__public-access')).not.toBeNull();
+  expect(root.querySelector('.gssc-header__login')).toBeNull();
+
+  session.loggedIn.set(false);
+  session.displayName.set('');
+  fixture.detectChanges();
+  await fixture.whenStable();
+  expect(root.querySelector('.gssc-header__public-access')).toBeNull();
+});
+// @relation(GSSC-MLLR-34, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-35, scope=range_start, role=Test)
+test('GSSC-MLLR-35 Lexical', async () => {
+  const { root } = await setupHeader({ loggedIn: true });
+  const control = root.querySelector<HTMLElement>('.gssc-header__public-access')!;
+  expect(control.classList.contains('font-sans')).toBe(true);
+  expect(control.classList.contains('text-gssc-dark-green')).toBe(true);
+});
+// @relation(GSSC-MLLR-35, scope=range_end, role=Test)
 
 // @relation(GSSC-MLLR-29, scope=range_start, role=Test)
 test('GSSC-MLLR-29 Semantic', async () => {
