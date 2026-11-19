@@ -1691,6 +1691,19 @@ DERIVED: True
 CHANGE_DRIVER: GSSC5-127
 REVIEW_STATUS: Approved
 
+[REQUIREMENT]
+UID: GSSC-MHLR-107
+TITLE: Site Tree Editor Outline Fold And Pane Scroll
+STATEMENT: >>>
+The GSSC Website Member Frontend Site Tree Editor Page SHALL let the administrator expand and collapse nested children under Tree Outline parents, and SHALL keep the Tree Outline region and the Node Editor Panel scrolling independently of each other.
+<<<
+RATIONALE: >>>
+Deep trees and long node forms need independent pane scroll so selection and editing stay usable. Foldable parents keep large outlines manageable without leaving the editor.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-138
+REVIEW_STATUS: Approved
+
 [[/SECTION]]
 
 [[SECTION]]

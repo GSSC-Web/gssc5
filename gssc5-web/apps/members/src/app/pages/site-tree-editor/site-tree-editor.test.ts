@@ -248,10 +248,16 @@ test('GSSC-MLLR-522 Syntactic', async () => {
   );
   expect(root.querySelector('[data-slot="site-tree-editor-heading"]')).toBeTruthy();
   expect(root.querySelector('[data-slot="site-tree-frontend-selector"]')).toBeTruthy();
-  expect(root.querySelector('[data-slot="site-tree-outline-region"]')).toBeTruthy();
+  const outline = root.querySelector('[data-slot="site-tree-outline-region"]')!;
+  const panel = root.querySelector('[data-slot="site-tree-node-editor"]')!;
+  expect(outline).toBeTruthy();
   expect(root.querySelector('[data-slot="site-tree-editor-layout"]')?.className).toContain(
     'lg:flex-row',
   );
+  expect(outline.className).toContain('overflow-y-auto');
+  expect(panel.className).toContain('overflow-y-auto');
+  expect(outline.className).toContain('max-h-80');
+  expect(panel.className).toContain('max-h-80');
   restore();
 });
 // @relation(GSSC-MLLR-522, scope=range_end, role=Test)
@@ -614,3 +620,72 @@ test('GSSC-MLLR-562 Semantic', async () => {
   admin.restore();
 });
 // @relation(GSSC-MLLR-562, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-665, scope=range_start, role=Test)
+test('GSSC-MLLR-665 Semantic', async () => {
+  const { root, page, fixture, restore } = await setupEditor();
+  clickNode(root, 'node_dir');
+  fixture.detectChanges();
+  expect(page.selectedCuid()).toBe('node_dir');
+
+  const expander = root.querySelector<HTMLButtonElement>(
+    '[data-slot="site-tree-outline-expander"][data-cuid="node_acct"]',
+  )!;
+  expect(expander).toBeTruthy();
+  expect(page.isExpanded('node_acct')).toBe(true);
+  expect(root.querySelector('.gssc-site-tree-outline__node[data-cuid="node_pwd"]')).toBeTruthy();
+
+  expander.click();
+  fixture.detectChanges();
+  expect(page.isExpanded('node_acct')).toBe(false);
+  expect(root.querySelector('.gssc-site-tree-outline__node[data-cuid="node_pwd"]')).toBeNull();
+  expect(page.selectedCuid()).toBe('node_dir');
+
+  expander.click();
+  fixture.detectChanges();
+  expect(page.isExpanded('node_acct')).toBe(true);
+  expect(root.querySelector('.gssc-site-tree-outline__node[data-cuid="node_pwd"]')).toBeTruthy();
+  restore();
+});
+// @relation(GSSC-MLLR-665, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-666, scope=range_start, role=Test)
+test('GSSC-MLLR-666 Syntactic', async () => {
+  const { root, page, fixture, restore } = await setupEditor();
+  const parentRow = root.querySelector(
+    '.gssc-site-tree-outline__item:has(.gssc-site-tree-outline__node[data-cuid="node_acct"])',
+  )!;
+  const expander = parentRow.querySelector<HTMLButtonElement>(
+    '[data-slot="site-tree-outline-expander"][data-cuid="node_acct"]',
+  )!;
+  const label = parentRow.querySelector('.gssc-site-tree-outline__node[data-cuid="node_acct"]')!;
+  expect(expander).toBeTruthy();
+  expect(expander.getAttribute('aria-expanded')).toBe('true');
+  expect(page.isExpanded('node_acct')).toBe(true);
+  expect(
+    expander.compareDocumentPosition(label) & Node.DOCUMENT_POSITION_FOLLOWING,
+  ).toBeTruthy();
+  expect(
+    root.querySelector('[data-slot="site-tree-outline-expander"][data-cuid="node_dir"]'),
+  ).toBeNull();
+
+  expander.click();
+  fixture.detectChanges();
+  expect(expander.getAttribute('aria-expanded')).toBe('false');
+  expect(root.querySelector('.gssc-site-tree-outline__node[data-cuid="node_pwd"]')).toBeNull();
+  restore();
+});
+// @relation(GSSC-MLLR-666, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-667, scope=range_start, role=Test)
+test('GSSC-MLLR-667 Lexical', async () => {
+  const { root, restore } = await setupEditor();
+  const expander = root.querySelector<HTMLButtonElement>(
+    '[data-slot="site-tree-outline-expander"][data-cuid="node_acct"]',
+  )!;
+  expect(expander.className).toContain('font-sans');
+  expect(expander.className).toContain('text-gssc-dark-green');
+  expect(expander.textContent?.trim()).toBe('−');
+  restore();
+});
+// @relation(GSSC-MLLR-667, scope=range_end, role=Test)
