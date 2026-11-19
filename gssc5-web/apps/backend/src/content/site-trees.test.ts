@@ -400,6 +400,8 @@ test("GSSC-BLLR-475 Site Tree Seed", async () => {
       "/publications",
       "/research-tools",
       "/newsletters",
+      "/sitemap",
+      "/search",
     ]),
   );
 
@@ -414,10 +416,66 @@ test("GSSC-BLLR-475 Site Tree Seed", async () => {
       "/newsletters",
       "/publications",
       "/research-tools",
+      "/templates",
+      "/site-trees",
+      "/sitemap",
+      "/search",
     ]),
   );
   // GSSC5-126: announcement/event editors are under Pages / PDE, not top-level seed tabs.
   expect(membersPaths).not.toContain("/announcements");
   expect(membersPaths).not.toContain("/events");
+
+  // Already-seeded DBs gain missing seed paths without wiping admin edits.
+  const prisma = getPrisma(loadConfig().DATABASE_URL);
+  const storedPublic = await prisma.siteTree.findUniqueOrThrow({
+    where: { frontend: "public" },
+    include: { nodes: true },
+  });
+  const membership = storedPublic.nodes.find((node) => node.path === "/membership");
+  expect(membership).toBeDefined();
+  const editedLabel = `Admin Membership ${Date.now()}`;
+  await prisma.siteTreeNode.update({
+    where: { id: membership!.id },
+    data: { label: editedLabel, sortOrder: membership!.sortOrder },
+  });
+  await prisma.siteTreeNode.deleteMany({
+    where: {
+      treeId: storedPublic.id,
+      path: { in: ["/sitemap", "/search"] },
+    },
+  });
+  const beforePaths = new Set(
+    (
+      await prisma.siteTreeNode.findMany({
+        where: { treeId: storedPublic.id },
+        select: { path: true },
+      })
+    ).map((node) => node.path),
+  );
+  expect(beforePaths.has("/sitemap")).toBe(false);
+  expect(beforePaths.has("/search")).toBe(false);
+
+  await seedSiteTrees();
+
+  const after = await prisma.siteTreeNode.findMany({
+    where: { treeId: storedPublic.id },
+  });
+  expect(after.map((node) => node.path)).toEqual(
+    expect.arrayContaining(["/sitemap", "/search", "/membership"]),
+  );
+  expect(after.find((node) => node.id === membership!.id)).toMatchObject({
+    id: membership!.id,
+    label: editedLabel,
+    path: "/membership",
+    sortOrder: membership!.sortOrder,
+    parentId: membership!.parentId,
+  });
+  await seedSiteTrees();
+  expect(
+    await prisma.siteTreeNode.count({
+      where: { treeId: storedPublic.id, path: "/sitemap" },
+    }),
+  ).toBe(1);
 });
 // @relation(GSSC-BLLR-475, scope=range_end, role=Test)

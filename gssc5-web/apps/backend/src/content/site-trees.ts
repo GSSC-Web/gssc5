@@ -109,11 +109,13 @@ const PUBLIC_SEED_CHILDREN: Array<{ label: string; path: string }> = [
   { label: "Publications", path: "/publications" },
   { label: "Research Tools", path: "/research-tools" },
   { label: "Newsletters", path: "/newsletters" },
+  { label: "Sitemap", path: "/sitemap" },
+  { label: "Search", path: "/search" },
 ];
 
 /**
  * Members header + editor destinations at seed time
- * (header.html nav + authenticated editor routes).
+ * (header nav from tree + authenticated editor/page routes).
  */
 // @relation(GSSC-MLLR-591, scope=range_start, role=Implementation)
 const MEMBERS_SEED_CHILDREN: Array<{ label: string; path: string }> = [
@@ -124,6 +126,10 @@ const MEMBERS_SEED_CHILDREN: Array<{ label: string; path: string }> = [
   { label: "Newsletters", path: "/newsletters" },
   { label: "Publications", path: "/publications" },
   { label: "Research Tools", path: "/research-tools" },
+  { label: "Templates", path: "/templates" },
+  { label: "Site Trees", path: "/site-trees" },
+  { label: "Sitemap", path: "/sitemap" },
+  { label: "Search", path: "/search" },
 ];
 // @relation(GSSC-MLLR-591, scope=range_end, role=Implementation)
 
@@ -187,6 +193,11 @@ function trimStrings(value: unknown): void {
   }
 }
 
+/**
+ * Ensure a frontend tree exists and includes every seed child path.
+ * Missing seed paths are appended under the root; existing nodes (labels,
+ * sortOrder, nesting, admin-added rows) are left untouched.
+ */
 async function ensureTree(
   frontend: SiteTreeFrontend,
   root: { label: string; path: string },
@@ -195,9 +206,17 @@ async function ensureTree(
   const prisma = getPrisma(loadConfig().DATABASE_URL);
   const existing = await prisma.siteTree.findUnique({
     where: { frontend },
-    include: { nodes: { select: { id: true } } },
+    include: {
+      nodes: {
+        select: {
+          id: true,
+          parentId: true,
+          path: true,
+          sortOrder: true,
+        },
+      },
+    },
   });
-  if (existing && existing.nodes.length > 0) return;
 
   if (!existing) {
     const tree = await prisma.siteTree.create({
@@ -230,27 +249,48 @@ async function ensureTree(
     return;
   }
 
-  // Tree row exists but has no nodes — recreate root + children.
-  const rootNode = await prisma.siteTreeNode.create({
-    data: {
-      treeId: existing.id,
-      label: root.label,
-      path: root.path,
-      sortOrder: 0,
-      parentId: null,
-    },
-  });
-  if (children.length > 0) {
-    await prisma.siteTreeNode.createMany({
-      data: children.map((child, index) => ({
+  let rootNode = existing.nodes.find((node) => node.parentId === null);
+  if (!rootNode) {
+    // Tree row exists but has no root — recreate root, then fill missing children.
+    rootNode = await prisma.siteTreeNode.create({
+      data: {
         treeId: existing.id,
-        parentId: rootNode.id,
-        label: child.label,
-        path: child.path,
-        sortOrder: index,
-      })),
+        label: root.label,
+        path: root.path,
+        sortOrder: 0,
+        parentId: null,
+      },
+      select: {
+        id: true,
+        parentId: true,
+        path: true,
+        sortOrder: true,
+      },
     });
   }
+
+  const presentPaths = new Set(existing.nodes.map((node) => node.path));
+  presentPaths.add(rootNode.path);
+  const missing = children.filter((child) => !presentPaths.has(child.path));
+  if (missing.length === 0) return;
+
+  const rootChildSortOrders = existing.nodes
+    .filter((node) => node.parentId === rootNode.id)
+    .map((node) => node.sortOrder);
+  const nextSort =
+    rootChildSortOrders.length === 0
+      ? 0
+      : Math.max(...rootChildSortOrders) + 1;
+
+  await prisma.siteTreeNode.createMany({
+    data: missing.map((child, index) => ({
+      treeId: existing.id,
+      parentId: rootNode.id,
+      label: child.label,
+      path: child.path,
+      sortOrder: nextSort + index,
+    })),
+  });
 }
 
 /** Idempotent seed: Public + Members trees matching current destinations. */
