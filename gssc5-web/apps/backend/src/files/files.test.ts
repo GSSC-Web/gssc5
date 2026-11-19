@@ -468,6 +468,34 @@ test("GSSC-BLLR-380 File Get Denied", async () => {
 
   await sendJson("DELETE", `/files/${cuid}`, {}, editorTok);
   expect((await getBytes(`/files/${cuid}`, editorTok)).status).toBe(404);
+
+  const hideFolder = await sendJson(
+    "POST",
+    "/files",
+    { name: "hide-ancestor-folder" },
+    adminTok,
+  );
+  expect(hideFolder.status).toBe(201);
+  const hideParent = (hideFolder.body as { cuid: string }).cuid;
+  const childUp = await uploadFile(
+    "under-deleted-folder.pdf",
+    "%PDF-under-deleted",
+    { parent: hideParent },
+    adminTok,
+  );
+  expect(childUp.status).toBe(201);
+  const childCuid = (childUp.body as { cuid: string }).cuid;
+  expect((await getBytes(`/files/${childCuid}`, adminTok)).status).toBe(200);
+
+  const deletedParent = await sendJson("DELETE", `/files/${hideParent}`, {}, adminTok);
+  expect(deletedParent.status).toBe(204);
+  expect((await getBytes(`/files/${childCuid}`, adminTok)).status).toBe(404);
+
+  const childRows = await app.sql.query(
+    `SELECT deletedAt FROM stored_file_entries WHERE id = '${childCuid}'`,
+  );
+  expect(childRows).toHaveLength(1);
+  expect(childRows[0].deletedAt).toBeNull();
 });
 // @relation(GSSC-BLLR-380, scope=range_end, role=Test)
 

@@ -95,6 +95,18 @@ async function loadEntry(cuid: string): Promise<EntryRow | null> {
   return prisma.storedFileEntry.findUnique({ where: { id: cuid } });
 }
 
+/** True when any folder above this entry has deletedAt set (hide-on-read). */
+async function hasSoftDeletedAncestor(entry: EntryRow): Promise<boolean> {
+  let parentId = entry.parentId;
+  while (parentId !== null) {
+    const parent = await loadEntry(parentId);
+    if (parent === null) return false;
+    if (parent.deletedAt !== null) return true;
+    parentId = parent.parentId;
+  }
+  return false;
+}
+
 async function resolveParent(
   parentId: string | null | undefined,
 ): Promise<
@@ -414,7 +426,11 @@ export const files = new Elysia({ prefix: "/files" })
       const user = sessionUser(session);
       const row = await loadEntry(params.cuid);
       // @relation(GSSC-BLLR-380, scope=range_start, role=Implementation)
-      if (row === null || row.deletedAt !== null) {
+      if (
+        row === null ||
+        row.deletedAt !== null ||
+        (await hasSoftDeletedAncestor(row))
+      ) {
         return statusFn(404, "Not Found" as const);
       }
       if (row.kind !== "file" || row.storageKey === null) {
