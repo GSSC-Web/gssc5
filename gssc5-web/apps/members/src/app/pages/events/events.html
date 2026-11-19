@@ -6,32 +6,43 @@
     Events
   </h1>
 
-  <!-- @relation(GSSC-MLLR-324, GSSC-MLLR-325, GSSC-MLLR-326, scope=range_start, role=Implementation) -->
-  <div class="gssc-events-catalog flex w-full flex-col gap-3 font-sans text-gssc-dark-green">
-    <!-- @relation(GSSC-MLLR-330, GSSC-MLLR-331, GSSC-MLLR-332, scope=range_start, role=Implementation) -->
-    <button
-      type="button"
-      class="gssc-events-new inline-flex w-fit cursor-pointer items-center justify-center rounded-md border border-gssc-dark-green bg-gssc-light-green px-3 py-2 font-sans text-sm font-normal text-gssc-dark-green hover:bg-gssc-gray disabled:cursor-not-allowed disabled:opacity-60"
-      [disabled]="!canEdit()"
-      (click)="startCreate()"
-    >
-      New Event
-    </button>
-    <!-- @relation(GSSC-MLLR-330, GSSC-MLLR-331, GSSC-MLLR-332, scope=range_end, role=Implementation) -->
+  <!-- @relation(GSSC-MLLR-324, GSSC-MLLR-325, GSSC-MLLR-326, GSSC-MLLR-681, GSSC-MLLR-682, GSSC-MLLR-683, scope=range_start, role=Implementation) -->
+  <div
+    class="gssc-events-catalog flex w-full flex-col gap-2 border border-gssc-gray bg-gssc-white px-3 py-3 font-sans text-gssc-dark-green"
+  >
+    <div class="flex flex-wrap items-center justify-between gap-2">
+      <h2 class="gssc-events-catalog__heading m-0 text-lg font-semibold text-gssc-dark-green">
+        Catalog
+      </h2>
+      <!-- @relation(GSSC-MLLR-330, GSSC-MLLR-331, GSSC-MLLR-332, scope=range_start, role=Implementation) -->
+      <button
+        type="button"
+        class="gssc-events-new inline-flex cursor-pointer items-center justify-center rounded-md border border-gssc-dark-green bg-gssc-light-green px-3 py-1.5 font-sans text-sm text-gssc-dark-green hover:bg-gssc-gray disabled:cursor-not-allowed disabled:opacity-60"
+        [disabled]="!canEdit()"
+        (click)="startCreate()"
+      >
+        New Event
+      </button>
+      <!-- @relation(GSSC-MLLR-330, GSSC-MLLR-331, GSSC-MLLR-332, scope=range_end, role=Implementation) -->
+    </div>
 
     @if (loadError()) {
-      <p class="gssc-events-catalog__error m-0 text-sm text-gssc-dark-red" role="alert">
+      <p class="gssc-events-catalog__error m-0 px-2 py-2 text-sm text-gssc-dark-red" role="alert">
         {{ loadError() }}
       </p>
     }
 
-    <ul class="gssc-events-catalog__list m-0 flex list-none flex-col gap-1 p-0">
+    <ul
+      class="gssc-events-catalog__list m-0 max-h-40 list-none overflow-y-auto p-0"
+      role="list"
+    >
       @for (event of catalog(); track event.cuid) {
         <!-- @relation(GSSC-MLLR-327, GSSC-MLLR-328, GSSC-MLLR-329, scope=range_start, role=Implementation) -->
         <li class="gssc-events-catalog__entry">
           <button
             type="button"
-            class="gssc-events-catalog__entry-button w-full cursor-pointer border-0 bg-transparent px-0 py-1 text-start font-sans text-sm text-gssc-dark-green hover:underline"
+            class="gssc-events-catalog__entry-button w-full cursor-pointer border-0 px-2 py-2 text-start font-sans text-sm text-gssc-dark-green hover:bg-gssc-light-green"
+            [class.bg-gssc-light-green]="editingCuid() === event.cuid"
             [attr.data-event-cuid]="event.cuid"
             [attr.aria-current]="editingCuid() === event.cuid ? 'true' : null"
             (click)="selectEvent(event)"
@@ -41,15 +52,15 @@
         </li>
         <!-- @relation(GSSC-MLLR-327, GSSC-MLLR-328, GSSC-MLLR-329, scope=range_end, role=Implementation) -->
       } @empty {
-        <li class="gssc-events-catalog__empty font-sans text-sm text-gssc-dark-brown">
+        <li class="gssc-events-catalog__empty px-2 py-2 font-sans text-sm text-gssc-dark-brown">
           No events yet.
         </li>
       }
     </ul>
   </div>
-  <!-- @relation(GSSC-MLLR-324, GSSC-MLLR-325, GSSC-MLLR-326, scope=range_end, role=Implementation) -->
+  <!-- @relation(GSSC-MLLR-324, GSSC-MLLR-325, GSSC-MLLR-326, GSSC-MLLR-681, GSSC-MLLR-682, GSSC-MLLR-683, scope=range_end, role=Implementation) -->
 
-  <!-- @relation(GSSC-MLLR-333, GSSC-MLLR-334, GSSC-MLLR-335, scope=range_start, role=Implementation) -->
+  <!-- @relation(GSSC-MLLR-333, GSSC-MLLR-334, GSSC-MLLR-335, GSSC-MLLR-684, GSSC-MLLR-685, GSSC-MLLR-686, scope=range_start, role=Implementation) -->
   @for (resourceId of [editorResourceId()]; track resourceId) {
     <div class="gssc-event-editor-host w-full">
       <gssc-editor
@@ -112,7 +123,7 @@
       </gssc-editor>
     </div>
   }
-  <!-- @relation(GSSC-MLLR-333, GSSC-MLLR-334, GSSC-MLLR-335, scope=range_end, role=Implementation) -->
+  <!-- @relation(GSSC-MLLR-333, GSSC-MLLR-334, GSSC-MLLR-335, GSSC-MLLR-684, GSSC-MLLR-685, GSSC-MLLR-686, scope=range_end, role=Implementation) -->
 
   @if (statusMessage()) {
     <p class="gssc-events-page__status m-0 font-sans text-sm text-gssc-dark-brown" data-slot="events-status">

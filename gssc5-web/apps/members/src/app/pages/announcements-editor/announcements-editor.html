@@ -8,7 +8,7 @@
 
   <!-- @relation(GSSC-MLLR-294, GSSC-MLLR-295, GSSC-MLLR-296, scope=range_start, role=Implementation) -->
   <div
-    class="gssc-announcement-catalog flex w-full flex-col gap-2 border border-gssc-gray px-3 py-3 font-sans text-gssc-dark-green"
+    class="gssc-announcement-catalog flex w-full flex-col gap-2 border border-gssc-gray bg-gssc-white px-3 py-3 font-sans text-gssc-dark-green"
   >
     <div class="flex flex-wrap items-center justify-between gap-2">
       <h2 class="gssc-announcement-catalog__heading m-0 text-lg font-semibold text-gssc-dark-green">
@@ -57,33 +57,37 @@
         (saved)="onEditorSaved()"
         (cancelled)="onEditorCancelled()"
       >
-        @if (mode() === 'create') {
-          <gssc-form-select-field
-            label="Content Template"
-            [options]="templateOptions()"
-            [value]="templateId()"
+        <!-- @relation(GSSC-MLLR-684, GSSC-MLLR-685, GSSC-MLLR-686, scope=range_start, role=Implementation) -->
+        <div class="gssc-announcement-fields flex w-full flex-col gap-2">
+          @if (mode() === 'create') {
+            <gssc-form-select-field
+              label="Content Template"
+              [options]="templateOptions()"
+              [value]="templateId()"
+              [required]="true"
+              [enabled]="fieldsEnabled()"
+              (valueChange)="onTemplateChange($event)"
+            />
+          }
+          <gssc-form-text-field
+            label="Header"
+            [(value)]="header"
+            [enabled]="fieldsEnabled()"
+          />
+          <gssc-form-text-field
+            label="Body"
+            [(value)]="body"
             [required]="true"
             [enabled]="fieldsEnabled()"
-            (valueChange)="onTemplateChange($event)"
           />
-        }
-        <gssc-form-text-field
-          label="Header"
-          [(value)]="header"
-          [enabled]="fieldsEnabled()"
-        />
-        <gssc-form-text-field
-          label="Body"
-          [(value)]="body"
-          [required]="true"
-          [enabled]="fieldsEnabled()"
-        />
-        <gssc-form-select-field
-          label="Publication Target"
-          [options]="activePublicationOptions()"
-          [(value)]="publication"
-          [enabled]="fieldsEnabled()"
-        />
+          <gssc-form-select-field
+            label="Publication Target"
+            [options]="activePublicationOptions()"
+            [(value)]="publication"
+            [enabled]="fieldsEnabled()"
+          />
+        </div>
+        <!-- @relation(GSSC-MLLR-684, GSSC-MLLR-685, GSSC-MLLR-686, scope=range_end, role=Implementation) -->
       </gssc-editor>
     </div>
     <!-- @relation(GSSC-MLLR-297, GSSC-MLLR-298, GSSC-MLLR-299, scope=range_end, role=Implementation) -->

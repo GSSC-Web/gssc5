@@ -89,7 +89,8 @@ GSSC5-85 Contact-row / Form Primitives owns GSSC-MLLR-159 through GSSC-MLLR-179 
 GSSC5-84 Generic Editor Module owns GSSC-MLLR-180 through GSSC-MLLR-201 (editor shell, actions, contention, session behaviors; composes GSSC5-85 form fields).
 GSSC5-92 Members Directory + Search owns GSSC-MLLR-202 through GSSC-MLLR-214 (exact end 214; band 202–230 reserved for directory so parallel Wave tickets do not mint below 231).
 GSSC5-102 Directory Contact Cards + Soft-Delete owns GSSC-MLLR-215 through GSSC-MLLR-230 (exact end 230); also CHANGE_DRIVER on GSSC-MLLR-205 through GSSC-MLLR-208 and on GSSC-MHLR-57 / GSSC-MHLR-59.
-GSSC5-93 Page/Section Content Editor owns GSSC-MLLR-261 through GSSC-MLLR-286 (page selector, section list, section editor host, preview, save/cancel/permission behaviors).
+GSSC5-93 Page/Section Content Editor owns GSSC-MLLR-261 through GSSC-MLLR-286 (section tags field, section list, section editor host, preview, save/cancel/permission behaviors; GSSC5-139 rewrote page-selector triad 264–266 to tags).
+GSSC5-139 Unify Page Data Editor forms owns GSSC-MLLR-681 through GSSC-MLLR-686 (exact end 686; band 681–700 reserved) and CHANGE_DRIVER updates on GSSC-MLLR-261, 262, 264–267, 269, 279, 286, 326, 329, 589; HLR GSSC-MHLR-110.
 GSSC5-89 Member Dashboard Page owns GSSC-MLLR-231 through GSSC-MLLR-239.
 GSSC5-94 Announcements Editor owns GSSC-MLLR-291 through GSSC-MLLR-307 (page, catalog, Generic Editor host, create/modify/publish behaviors; reuses GSSC5-84/85; consumes GSSC5-68 /announcements).
 GSSC5-96 Newsletters Editor owns GSSC-MLLR-351 through GSSC-MLLR-373 (exact end 373; band 351–380 reserved so parallel Wave editors do not collide).
@@ -112,7 +113,7 @@ GSSC5-123 Members Footer Home Link owns GSSC-MLLR-641 through GSSC-MLLR-643 (exa
 GSSC5-46 Site Branding owns GSSC-MLLR-644 through GSSC-MLLR-649 (exact end 649) and GSSC-MHLR-102 / GSSC-MHLR-103.
 GSSC5-135 Multiple Positions with Semicolon Lint owns GSSC-MLLR-661 through GSSC-MLLR-664 (exact end 664; band 661–680 reserved); HLR GSSC-MHLR-104.
 GSSC5-138 Site Tree Editor foldable outline and independent pane scroll owns GSSC-MLLR-668 through GSSC-MLLR-670 (exact end 670; continues band 661–680) plus CHANGE_DRIVER on GSSC-MLLR-522; HLR GSSC-MHLR-108.
-Wave coordination: GSSC5-92 directory 202–214, GSSC5-102 directory refinement 215–230, GSSC5-89 dashboard 231–239, GSSC5-93 page/section 261–286, GSSC5-94 announcements 291–307, GSSC5-117 page-data unification 308–320, GSSC5-95 events 321–346, GSSC5-96 newsletters 351–373, GSSC5-97 publications/tools 381–414, GSSC5-101 account refinement 415–428, GSSC5-103 mailing-equals-home 429–437, GSSC5-102 password-history-reset 438–440, GSSC5-107 members nav chrome 441–461, GSSC5-109 members site search 462–483 (band 462–500), GSSC5-108 sitemap 501–510, GSSC5-116 site-tree editor 521–540 (band 521–560), GSSC5-127 site-tree feedback MLLR-562 (+ CHANGE_DRIVER on 524/529; HLR MHLR-99), GSSC5-115/128 template editor 541–561 (band 541–580), GSSC5-126 PDE section create + nav 581–591 (band 581–600), GSSC5-118 directory invite 601–608 (band 601–620), GSSC5-119 directory create 621–628 (band 621–640), GSSC5-123 footer home link 641–643 (band 641–660), GSSC5-46 branding 644–649, GSSC5-135 multi-position 661–664, GSSC5-137 nested submenu pointer bridge 665–667 (HLR MHLR-109), GSSC5-138 site-tree fold/scroll 668–670 (band 661–680) — do not collide.
+Wave coordination: GSSC5-92 directory 202–214, GSSC5-102 directory refinement 215–230, GSSC5-89 dashboard 231–239, GSSC5-93 page/section 261–286, GSSC5-94 announcements 291–307, GSSC5-117 page-data unification 308–320, GSSC5-95 events 321–346, GSSC5-96 newsletters 351–373, GSSC5-97 publications/tools 381–414, GSSC5-101 account refinement 415–428, GSSC5-103 mailing-equals-home 429–437, GSSC5-102 password-history-reset 438–440, GSSC5-107 members nav chrome 441–461, GSSC5-109 members site search 462–483 (band 462–500), GSSC5-108 sitemap 501–510, GSSC5-116 site-tree editor 521–540 (band 521–560), GSSC5-127 site-tree feedback MLLR-562 (+ CHANGE_DRIVER on 524/529; HLR MHLR-99), GSSC5-115/128 template editor 541–561 (band 541–580), GSSC5-126 PDE section create + nav 581–591 (band 581–600), GSSC5-118 directory invite 601–608 (band 601–620), GSSC5-119 directory create 621–628 (band 621–640), GSSC5-123 footer home link 641–643 (band 641–660), GSSC5-46 branding 644–649, GSSC5-135 multi-position 661–664, GSSC5-137 nested submenu pointer bridge 665–667 (HLR MHLR-109), GSSC5-138 site-tree fold/scroll 668–670 (band 661–680), GSSC5-139 PDE form unify 681–686 (band 681–700) — do not collide.
 GSSC-173 Members Header Greeting menu owns GSSC-MLLR-33 through GSSC-MLLR-35 (Header Public Access triad) plus CHANGE_DRIVER on GSSC-MLLR-14, 24, 27, 30 and HLR GSSC-MHLR-107; GSSC-MLLR-36 through GSSC-MLLR-39 remain free.
 Do not reuse numbers already claimed by another ticket.
 <<<
@@ -6871,14 +6872,17 @@ TITLE: Page/Section Editor Page
 UID: GSSC-MLLR-261
 TITLE: Semantic
 STATEMENT: >>>
-The GSSC Website Member Frontend Page/Section Editor Page SHALL let a logged-in member with the necessary permissions choose a public page, select a section of that page, and modify that section's editable contents through the Generic Editor without programming knowledge.
+The GSSC Website Member Frontend Page/Section Editor Page SHALL let a logged-in member with the necessary permissions browse sections, select a section, specify that section's page association by tags, and modify that section's editable contents through the Generic Editor without programming knowledge.
 <<<
 RATIONALE: >>>
-One host page covers public page and section modification by composing page selection, section selection, and the shared Generic Editor.
+One host page covers public page and section modification by composing a section catalog, tag-based page association, and the shared Generic Editor.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-93
+CHANGE_DRIVER: >>>
+GSSC5-93
+GSSC5-139
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -6887,21 +6891,25 @@ RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-39
   ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-110
+  ROLE: Refines
 
 [REQUIREMENT]
 UID: GSSC-MLLR-262
 TITLE: Syntactic
 STATEMENT: >>>
-The Page/Section Editor Page SHALL fill the page content area as a single vertical column of page selection, section list, and when creating a section or a section is selected, the section editor and preview regions.
+The Page/Section Editor Page SHALL fill the page content area as a single vertical column of section catalog, and when creating a section or a section is selected, the section editor and preview regions.
 <<<
 RATIONALE: >>>
-A vertical stack keeps selection and editing ordered as the viewport resizes. Create mode reuses the same editor and preview stack as selection.
+A vertical stack keeps selection and editing ordered as the viewport resizes. Create mode reuses the same editor and preview stack as selection. Page association is a field inside the editor rather than a preceding selector.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: >>>
 GSSC5-93
 GSSC5-126
+GSSC5-139
 <<<
 REVIEW_STATUS: Approved
 RELATIONS:
@@ -6910,6 +6918,9 @@ RELATIONS:
   ROLE: Refines
 - TYPE: Parent
   VALUE: GSSC-MHLR-97
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-110
   ROLE: Refines
 
 [REQUIREMENT]
@@ -6934,60 +6945,78 @@ RELATIONS:
 
 [[SECTION]]
 UID: GSSC-MLLR-PAGE-SELECTOR
-TITLE: Page Selector
+TITLE: Section Tags Field
 
 [REQUIREMENT]
 UID: GSSC-MLLR-264
 TITLE: Semantic
 STATEMENT: >>>
-The Page Selector SHALL present the set of public pages whose sections the member may browse for modification and SHALL set the active public page used to retrieve sections.
+The Section Tags Field SHALL let the member specify the tags that associate a section with one or more public pages, and SHALL present the current tags when a section is loaded for modification.
 <<<
 RATIONALE: >>>
-Choosing a public page scopes section listing to that page's tagged contents.
+Public pages are composed of tagged sections; members set page association by tags instead of choosing from a fixed page selector.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-93
+CHANGE_DRIVER: >>>
+GSSC5-93
+GSSC5-139
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-38
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-110
   ROLE: Refines
 
 [REQUIREMENT]
 UID: GSSC-MLLR-265
 TITLE: Syntactic
 STATEMENT: >>>
-The Page Selector SHALL fill the width of the Page/Section Editor Page content column and appear above the Section List.
+The Section Tags Field SHALL fill the width of the Section Editor Host field column and appear among the other projected section fields inside the Generic Editor.
 <<<
 RATIONALE: >>>
-Page choice precedes section listing so the member selects scope before picking a section.
+Tags are edited with other section fields so page association stays with the section being created or modified.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-93
+CHANGE_DRIVER: >>>
+GSSC5-93
+GSSC5-139
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-38
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-110
   ROLE: Refines
 
 [REQUIREMENT]
 UID: GSSC-MLLR-266
 TITLE: Lexical
 STATEMENT: >>>
-The Page Selector SHALL use shared form-select field chrome with the dark-green theme token for its border and label and the white theme token for its field background.
+The Section Tags Field SHALL use shared form-text field chrome with the dark-green theme token for its border and label and the white theme token for its field background.
 <<<
 RATIONALE: >>>
-Shared form chrome keeps page selection consistent with other Member Frontend editors.
+Shared form chrome keeps tag editing consistent with other Member Frontend editors.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-93
+CHANGE_DRIVER: >>>
+GSSC5-93
+GSSC5-139
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-38
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-110
   ROLE: Refines
 
 [[/SECTION]]
@@ -7000,14 +7029,17 @@ TITLE: Section List
 UID: GSSC-MLLR-267
 TITLE: Semantic
 STATEMENT: >>>
-When a public page is selected, the Section List SHALL present the sections that belong to that page so the member can choose one section to modify.
+The Section List SHALL present the sections available to the signed-in member so the member can choose one section to modify.
 <<<
 RATIONALE: >>>
-Listing page sections is how a member reaches a specific section for modification.
+Listing sections without a prior page selector is how a member reaches a specific section for modification; page association is carried on each section's tags.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-93
+CHANGE_DRIVER: >>>
+GSSC5-93
+GSSC5-139
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -7021,36 +7053,48 @@ RELATIONS:
 UID: GSSC-MLLR-268
 TITLE: Syntactic
 STATEMENT: >>>
-The Section List SHALL fill the width of the Page/Section Editor Page content column and stack section choices vertically below the Page Selector.
+The Section List SHALL fill the width of the Page/Section Editor Page content column and stack section choices vertically below the catalog heading and create control.
 <<<
 RATIONALE: >>>
 A full-width stacked list keeps section choices scannable before the editor opens.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-93
+CHANGE_DRIVER: >>>
+GSSC5-93
+GSSC5-139
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-38
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-110
   ROLE: Refines
 
 [REQUIREMENT]
 UID: GSSC-MLLR-269
 TITLE: Lexical
 STATEMENT: >>>
-The Section List SHALL use the white theme token for its background, the gray theme token for its border, and the dark-green theme token for its heading text.
+The Section List SHALL use the white theme token for its background, the gray theme token for its border, the dark-green theme token for its Catalog heading text, and the light-green theme token for the selected list entry background.
 <<<
 RATIONALE: >>>
-List chrome stays aligned with Member Frontend content panels.
+List chrome matches the Announcement Catalog pattern used across Page Data Editor kinds.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-93
+CHANGE_DRIVER: >>>
+GSSC5-93
+GSSC5-139
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-38
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-110
   ROLE: Refines
 
 [[/SECTION]]
@@ -7249,18 +7293,24 @@ TITLE: Page/Section Editor Behaviors
 UID: GSSC-MLLR-279
 TITLE: Semantic
 STATEMENT: >>>
-When the member selects a public page, the Page/Section Editor Page SHALL retrieve the sections that belong to that page from the Unified Backend and place them in the Section List in backend order.
+When the Page/Section Editor Page opens for a signed-in member, it SHALL retrieve available sections from the Unified Backend and place them in the Section List in backend order.
 <<<
 RATIONALE: >>>
-Backend-ordered retrieval keeps the editor list aligned with public page assembly.
+Backend-ordered retrieval keeps the editor catalog aligned with Unified Backend section index order without requiring a prior page choice.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-93
+CHANGE_DRIVER: >>>
+GSSC5-93
+GSSC5-139
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-38
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-110
   ROLE: Refines
 
 [REQUIREMENT]
@@ -7378,14 +7428,17 @@ RELATIONS:
 UID: GSSC-MLLR-286
 TITLE: Semantic
 STATEMENT: >>>
-Modifying a public page on the Page/Section Editor Page SHALL mean selecting that page and modifying one or more of the sections that belong to it.
+Modifying a public page on the Page/Section Editor Page SHALL mean modifying one or more sections whose tags associate them with that page.
 <<<
 RATIONALE: >>>
-Public pages are composed of tagged sections; page modification is section modification scoped to that page.
+Public pages are composed of tagged sections; page modification is section modification with tags carrying page association.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-93
+CHANGE_DRIVER: >>>
+GSSC5-93
+GSSC5-139
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -7565,18 +7618,24 @@ RELATIONS:
 UID: GSSC-MLLR-589
 TITLE: Create Section
 STATEMENT: >>>
-When Save succeeds on the Section Editor Host in create mode with a selected Content Template, non-empty Body, and selected public page, the Member Frontend SHALL create the section through the Unified Backend sections create contract with that template and the selected page tag, then show that section in the section list for further modification.
+When Save succeeds on the Section Editor Host in create mode with a selected Content Template, non-empty Body, and at least one tag, the Member Frontend SHALL create the section through the Unified Backend sections create contract with that template and those tags, then show that section in the section list for further modification.
 <<<
 RATIONALE: >>>
-Creation without developer intervention uses the existing sections POST API, template identity, and page tag so the new section appears under the chosen public page.
+Creation without developer intervention uses the existing sections POST API, template identity, and tags so the new section is associated with the intended public pages.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-126
+CHANGE_DRIVER: >>>
+GSSC5-126
+GSSC5-139
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-97
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-110
   ROLE: Refines
 
 [REQUIREMENT]
@@ -8227,18 +8286,24 @@ RELATIONS:
 UID: GSSC-MLLR-326
 TITLE: Lexical
 STATEMENT: >>>
-The Events Catalog SHALL use the Member Frontend sans-serif typeface and the dark-green theme token for catalog text.
+The Events Catalog SHALL use the Member Frontend sans-serif typeface, the dark-green theme token for catalog text, and the gray theme token for the catalog border.
 <<<
 RATIONALE: >>>
-Catalog text matches Member Frontend content color.
+Catalog chrome matches the Announcement Catalog pattern used across Page Data Editor kinds.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-95
+CHANGE_DRIVER: >>>
+GSSC5-95
+GSSC5-139
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-48
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-110
   ROLE: Refines
 
 [[/SECTION]]
@@ -8287,18 +8352,24 @@ RELATIONS:
 UID: GSSC-MLLR-329
 TITLE: Lexical
 STATEMENT: >>>
-Each Events Catalog Entry SHALL use the Member Frontend sans-serif typeface and the dark-green theme token for its label.
+Each Events Catalog Entry SHALL use the Member Frontend sans-serif typeface and the dark-green theme token for its label, and SHALL use the light-green theme token for the selected entry background.
 <<<
 RATIONALE: >>>
-Entry labels match catalog text styling.
+Entry labels and selection highlight match the Announcement Catalog pattern.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-95
+CHANGE_DRIVER: >>>
+GSSC5-95
+GSSC5-139
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-48
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-110
   ROLE: Refines
 
 [[/SECTION]]
@@ -11807,6 +11878,132 @@ RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-105
   ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-PDE-FORM-UNIFY
+TITLE: Page Data Editor Form Unification
+
+[[SECTION]]
+UID: GSSC-MLLR-PDE-UNIFIED-CATALOG
+TITLE: Unified Page Data Catalog
+
+[REQUIREMENT]
+UID: GSSC-MLLR-681
+TITLE: Semantic
+STATEMENT: >>>
+Each Page Data Editor kind catalog SHALL list existing entries available to the signed-in member, offer a control to start creating a new entry, and select which entry the kind editor loads for modification.
+<<<
+RATIONALE: >>>
+Unifying catalogs on the Announcement Catalog pattern keeps create versus edit selection consistent across sections, announcements, and events.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-139
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-110
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-682
+TITLE: Syntactic
+STATEMENT: >>>
+Each Page Data Editor kind catalog SHALL place the create control and the entry list above the kind editor, fill the page content width, and keep the list scrollable when it grows taller than a short viewport band.
+<<<
+RATIONALE: >>>
+Catalog above the editor keeps selection separate from field editing and avoids pushing actions off-screen on long lists.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-139
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-110
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-683
+TITLE: Lexical
+STATEMENT: >>>
+Each Page Data Editor kind catalog SHALL use a sans-serif typeface, the dark-green theme token for list text, the light-green theme token for the selected list entry background, and the gray theme token for the catalog border.
+<<<
+RATIONALE: >>>
+Selected-row highlight and organization palette tokens keep catalogs aligned with Member Frontend chrome.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-139
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-110
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-PDE-UNIFIED-FORM-FIELDS
+TITLE: Unified Page Data Form Fields
+
+[REQUIREMENT]
+UID: GSSC-MLLR-684
+TITLE: Semantic
+STATEMENT: >>>
+Each Page Data Editor kind editor SHALL project its kind-specific fields through the Generic Editor Field Area as a stacked field column that uses shared form-text and form-select fields for single-line values.
+<<<
+RATIONALE: >>>
+The Events editor field column is the reference for full-featured Page Data editing; aligning kinds on that pattern keeps create and modify sessions consistent.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-139
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-110
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-685
+TITLE: Syntactic
+STATEMENT: >>>
+The unified Page Data form field column SHALL fill the Generic Editor Field Area width and stack projected fields vertically with consistent spacing between fields.
+<<<
+RATIONALE: >>>
+A single stacked column keeps long field sets scannable inside the Generic Editor.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-139
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-110
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-686
+TITLE: Lexical
+STATEMENT: >>>
+Projected fields in the unified Page Data form field column SHALL use shared form field chrome with the dark-green theme token for borders and labels and the white theme token for field backgrounds.
+<<<
+RATIONALE: >>>
+Shared form chrome keeps Page Data kind editors visually consistent with other Member Frontend editors.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-139
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-110
+  ROLE: Refines
+
+[[/SECTION]]
 
 [[/SECTION]]
 

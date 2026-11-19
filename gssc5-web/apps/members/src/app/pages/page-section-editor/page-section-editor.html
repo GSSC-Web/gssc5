@@ -8,75 +8,63 @@
       Page &amp; Section Content
     </h1>
     <p class="gssc-page-section-editor__lead m-0 text-sm text-gssc-dark-brown">
-      Choose a public page, create a section from a template or select an existing section, and edit
-      its contents without programming.
+      Browse sections, create from a template or select an existing section, and edit its contents
+      without programming. Specify page association with tags.
     </p>
   </header>
 
-  <!-- @relation(GSSC-MLLR-264, GSSC-MLLR-265, GSSC-MLLR-266, scope=range_start, role=Implementation) -->
-  <div class="gssc-page-section-editor__page-selector flex w-full flex-col gap-2">
-    <gssc-form-select-field
-      label="Public Page"
-      [options]="pageOptions"
-      [value]="selectedPageTag()"
-      (valueChange)="onPageTagChange($event)"
-      controlId="page-section-editor-page"
-    />
-  </div>
-  <!-- @relation(GSSC-MLLR-264, GSSC-MLLR-265, GSSC-MLLR-266, scope=range_end, role=Implementation) -->
-
-  @if (selectedPageTag()) {
-    <!-- @relation(GSSC-MLLR-267, GSSC-MLLR-268, GSSC-MLLR-269, scope=range_start, role=Implementation) -->
-    <div
-      class="gssc-page-section-editor__section-list flex w-full flex-col gap-2 border border-gssc-gray bg-gssc-white px-3 py-3"
-      data-slot="section-list"
-    >
-      <div class="flex flex-wrap items-center justify-between gap-2">
-        <h2 class="gssc-page-section-editor__section-list-title m-0 text-base font-semibold text-gssc-dark-green">
-          Sections
-        </h2>
-        <!-- @relation(GSSC-MLLR-581, GSSC-MLLR-582, GSSC-MLLR-583, scope=range_start, role=Implementation) -->
-        <button
-          type="button"
-          class="gssc-page-section-editor__create inline-flex cursor-pointer items-center justify-center rounded-md border border-gssc-dark-green bg-gssc-light-green px-3 py-1.5 font-sans text-sm text-gssc-dark-green hover:bg-gssc-gray"
-          data-slot="section-create"
-          (click)="startCreate()"
-        >
-          New section
-        </button>
-        <!-- @relation(GSSC-MLLR-581, GSSC-MLLR-582, GSSC-MLLR-583, scope=range_end, role=Implementation) -->
-      </div>
-      @if (sections().length === 0) {
-        <p class="gssc-page-section-editor__section-list-empty m-0 text-sm text-gssc-dark-brown">
-          No sections for this page.
-        </p>
-      } @else {
-        <ul class="gssc-page-section-editor__section-list-items m-0 flex list-none flex-col gap-1 p-0">
-          @for (entry of sections(); track entry.cuid) {
-            <!-- @relation(GSSC-MLLR-270, GSSC-MLLR-271, GSSC-MLLR-272, scope=range_start, role=Implementation) -->
-            <li>
-              <button
-                type="button"
-                class="gssc-page-section-editor__section-item flex w-full cursor-pointer items-center justify-start rounded-md border border-transparent bg-transparent px-2 py-2 text-left font-sans text-sm text-gssc-dark-green hover:bg-gssc-light-green"
-                [class.border-gssc-dark-green]="selectedCuid() === entry.cuid"
-                [class.bg-gssc-light-green]="selectedCuid() === entry.cuid"
-                [attr.data-cuid]="entry.cuid"
-                (click)="onSelectSection(entry.cuid)"
-              >
-                {{ sectionLabel(entry) }}
-              </button>
-            </li>
-            <!-- @relation(GSSC-MLLR-270, GSSC-MLLR-271, GSSC-MLLR-272, scope=range_end, role=Implementation) -->
-          }
-        </ul>
-      }
+  <!-- @relation(GSSC-MLLR-267, GSSC-MLLR-268, GSSC-MLLR-269, GSSC-MLLR-681, GSSC-MLLR-682, GSSC-MLLR-683, scope=range_start, role=Implementation) -->
+  <div
+    class="gssc-page-section-editor__section-list gssc-section-catalog flex w-full flex-col gap-2 border border-gssc-gray bg-gssc-white px-3 py-3 font-sans text-gssc-dark-green"
+    data-slot="section-list"
+  >
+    <div class="flex flex-wrap items-center justify-between gap-2">
+      <h2 class="gssc-page-section-editor__section-list-title m-0 text-lg font-semibold text-gssc-dark-green">
+        Catalog
+      </h2>
+      <!-- @relation(GSSC-MLLR-581, GSSC-MLLR-582, GSSC-MLLR-583, scope=range_start, role=Implementation) -->
+      <button
+        type="button"
+        class="gssc-page-section-editor__create inline-flex cursor-pointer items-center justify-center rounded-md border border-gssc-dark-green bg-gssc-light-green px-3 py-1.5 font-sans text-sm text-gssc-dark-green hover:bg-gssc-gray"
+        data-slot="section-create"
+        (click)="startCreate()"
+      >
+        New section
+      </button>
+      <!-- @relation(GSSC-MLLR-581, GSSC-MLLR-582, GSSC-MLLR-583, scope=range_end, role=Implementation) -->
     </div>
-    <!-- @relation(GSSC-MLLR-267, GSSC-MLLR-268, GSSC-MLLR-269, scope=range_end, role=Implementation) -->
-  }
+    @if (sections().length === 0) {
+      <p class="gssc-page-section-editor__section-list-empty m-0 px-2 py-2 text-sm text-gssc-dark-brown">
+        No sections yet.
+      </p>
+    } @else {
+      <ul
+        class="gssc-page-section-editor__section-list-items m-0 max-h-40 list-none overflow-y-auto p-0"
+        role="list"
+      >
+        @for (entry of sections(); track entry.cuid) {
+          <!-- @relation(GSSC-MLLR-270, GSSC-MLLR-271, GSSC-MLLR-272, scope=range_start, role=Implementation) -->
+          <li>
+            <button
+              type="button"
+              class="gssc-page-section-editor__section-item w-full cursor-pointer border-0 px-2 py-2 text-start font-sans text-sm text-gssc-dark-green hover:bg-gssc-light-green"
+              [class.bg-gssc-light-green]="selectedCuid() === entry.cuid"
+              [attr.data-cuid]="entry.cuid"
+              (click)="onSelectSection(entry.cuid)"
+            >
+              {{ sectionLabel(entry) }}
+            </button>
+          </li>
+          <!-- @relation(GSSC-MLLR-270, GSSC-MLLR-271, GSSC-MLLR-272, scope=range_end, role=Implementation) -->
+        }
+      </ul>
+    }
+  </div>
+  <!-- @relation(GSSC-MLLR-267, GSSC-MLLR-268, GSSC-MLLR-269, GSSC-MLLR-681, GSSC-MLLR-682, GSSC-MLLR-683, scope=range_end, role=Implementation) -->
 
   @if (showEditor()) {
     <div class="gssc-page-section-editor__workspace grid w-full gap-4 lg:grid-cols-2">
-      <!-- @relation(GSSC-MLLR-273, GSSC-MLLR-274, GSSC-MLLR-275, GSSC-MLLR-284, GSSC-MLLR-285, scope=range_start, role=Implementation) -->
+      <!-- @relation(GSSC-MLLR-273, GSSC-MLLR-274, GSSC-MLLR-275, GSSC-MLLR-284, GSSC-MLLR-285, GSSC-MLLR-684, GSSC-MLLR-685, GSSC-MLLR-686, scope=range_start, role=Implementation) -->
       <gssc-editor
         class="gssc-page-section-editor__editor"
         [resourceId]="editorResourceId()"
@@ -85,78 +73,89 @@
         (saved)="onEditorSaved()"
         (cancelled)="onEditorCancelled()"
       >
-        @if (mode() === 'create') {
-          <!-- @relation(GSSC-MLLR-584, GSSC-MLLR-585, GSSC-MLLR-586, GSSC-MLLR-587, scope=range_start, role=Implementation) -->
-          <gssc-form-select-field
-            label="Content Template"
-            [options]="templateOptions()"
-            [value]="templateId()"
+        <div class="gssc-section-fields flex w-full flex-col gap-2">
+          @if (mode() === 'create') {
+            <!-- @relation(GSSC-MLLR-584, GSSC-MLLR-585, GSSC-MLLR-586, GSSC-MLLR-587, scope=range_start, role=Implementation) -->
+            <gssc-form-select-field
+              label="Content Template"
+              [options]="templateOptions()"
+              [value]="templateId()"
+              [required]="true"
+              [enabled]="permitted()"
+              controlId="page-section-editor-template"
+              (valueChange)="onTemplateChange($event)"
+            />
+            <!-- @relation(GSSC-MLLR-584, GSSC-MLLR-585, GSSC-MLLR-586, GSSC-MLLR-587, scope=range_end, role=Implementation) -->
+          }
+          <!-- @relation(GSSC-MLLR-264, GSSC-MLLR-265, GSSC-MLLR-266, scope=range_start, role=Implementation) -->
+          <gssc-form-text-field
+            label="Tags"
+            [(value)]="editorTagsText"
             [required]="true"
             [enabled]="permitted()"
-            controlId="page-section-editor-template"
-            (valueChange)="onTemplateChange($event)"
+            controlId="page-section-editor-tags"
           />
-          <!-- @relation(GSSC-MLLR-584, GSSC-MLLR-585, GSSC-MLLR-586, GSSC-MLLR-587, scope=range_end, role=Implementation) -->
-        }
-        <gssc-form-text-field
-          label="Header"
-          [(value)]="editorHeader"
-          [enabled]="permitted()"
-          controlId="page-section-editor-header"
-        />
-        <!-- Body uses a host textarea (multi-line); chrome matches form-text-field. -->
-        <div
-          class="gssc-page-section-editor__body-field relative flex min-w-0 w-full flex-col rounded-md border border-gssc-dark-green bg-gssc-white font-sans"
-          [class.bg-gssc-gray]="!permitted()"
-        >
-          <label
-            class="gssc-page-section-editor__body-label absolute -top-2 start-2 bg-inherit px-1 font-sans text-xs font-extralight italic text-gssc-dark-green"
-            for="page-section-editor-body"
+          <!-- @relation(GSSC-MLLR-264, GSSC-MLLR-265, GSSC-MLLR-266, scope=range_end, role=Implementation) -->
+          <gssc-form-text-field
+            label="Header"
+            [(value)]="editorHeader"
+            [enabled]="permitted()"
+            controlId="page-section-editor-header"
+          />
+          <!-- Body uses a host textarea (multi-line); chrome matches form-text-field. -->
+          <div
+            class="gssc-page-section-editor__body-field relative flex min-w-0 w-full flex-col rounded-md border border-gssc-dark-green bg-gssc-white font-sans"
+            [class.bg-gssc-gray]="!permitted()"
           >
-            Body
-          </label>
-          <textarea
-            id="page-section-editor-body"
-            class="gssc-page-section-editor__body-control min-h-[8rem] min-w-0 resize-y border-0 bg-transparent px-2 py-2 font-sans text-sm text-gssc-dark-green outline-none"
-            [disabled]="!permitted()"
-            [value]="editorBody()"
-            (input)="editorBody.set($any($event.target).value)"
-          ></textarea>
-        </div>
-        <gssc-form-select-field
-          label="Image Position"
-          [options]="imagePositionOptions"
-          [(value)]="editorImagePosition"
-          [enabled]="permitted()"
-          controlId="page-section-editor-image-position"
-        />
-        <gssc-form-text-field
-          label="Image File"
-          [(value)]="editorImageFile"
-          [enabled]="permitted()"
-          controlId="page-section-editor-image-file"
-        />
-        <div
-          class="gssc-page-section-editor__resources-field relative flex min-w-0 w-full flex-col rounded-md border border-gssc-dark-green bg-gssc-white font-sans"
-          [class.bg-gssc-gray]="!permitted()"
-        >
-          <label
-            class="gssc-page-section-editor__resources-label absolute -top-2 start-2 bg-inherit px-1 font-sans text-xs font-extralight italic text-gssc-dark-green"
-            for="page-section-editor-resources"
+            <label
+              class="gssc-page-section-editor__body-label absolute -top-2 start-2 bg-inherit px-1 font-sans text-xs font-extralight italic text-gssc-dark-green"
+              for="page-section-editor-body"
+            >
+              Body
+            </label>
+            <textarea
+              id="page-section-editor-body"
+              class="gssc-page-section-editor__body-control min-h-[8rem] min-w-0 resize-y border-0 bg-transparent px-2 py-2 font-sans text-sm text-gssc-dark-green outline-none"
+              [disabled]="!permitted()"
+              [value]="editorBody()"
+              (input)="editorBody.set($any($event.target).value)"
+            ></textarea>
+          </div>
+          <gssc-form-select-field
+            label="Image Position"
+            [options]="imagePositionOptions"
+            [(value)]="editorImagePosition"
+            [enabled]="permitted()"
+            controlId="page-section-editor-image-position"
+          />
+          <gssc-form-text-field
+            label="Image File"
+            [(value)]="editorImageFile"
+            [enabled]="permitted()"
+            controlId="page-section-editor-image-file"
+          />
+          <div
+            class="gssc-page-section-editor__resources-field relative flex min-w-0 w-full flex-col rounded-md border border-gssc-dark-green bg-gssc-white font-sans"
+            [class.bg-gssc-gray]="!permitted()"
           >
-            Resources
-          </label>
-          <textarea
-            id="page-section-editor-resources"
-            class="gssc-page-section-editor__resources-control min-h-[4rem] min-w-0 resize-y border-0 bg-transparent px-2 py-2 font-sans text-sm text-gssc-dark-green outline-none"
-            [disabled]="!permitted()"
-            [value]="editorResourcesText()"
-            (input)="editorResourcesText.set($any($event.target).value)"
-            placeholder="One resource per line"
-          ></textarea>
+            <label
+              class="gssc-page-section-editor__resources-label absolute -top-2 start-2 bg-inherit px-1 font-sans text-xs font-extralight italic text-gssc-dark-green"
+              for="page-section-editor-resources"
+            >
+              Resources
+            </label>
+            <textarea
+              id="page-section-editor-resources"
+              class="gssc-page-section-editor__resources-control min-h-[4rem] min-w-0 resize-y border-0 bg-transparent px-2 py-2 font-sans text-sm text-gssc-dark-green outline-none"
+              [disabled]="!permitted()"
+              [value]="editorResourcesText()"
+              (input)="editorResourcesText.set($any($event.target).value)"
+              placeholder="One resource per line"
+            ></textarea>
+          </div>
         </div>
       </gssc-editor>
-      <!-- @relation(GSSC-MLLR-273, GSSC-MLLR-274, GSSC-MLLR-275, GSSC-MLLR-284, GSSC-MLLR-285, scope=range_end, role=Implementation) -->
+      <!-- @relation(GSSC-MLLR-273, GSSC-MLLR-274, GSSC-MLLR-275, GSSC-MLLR-284, GSSC-MLLR-285, GSSC-MLLR-684, GSSC-MLLR-685, GSSC-MLLR-686, scope=range_end, role=Implementation) -->
 
       <!-- @relation(GSSC-MLLR-276, GSSC-MLLR-277, GSSC-MLLR-278, scope=range_start, role=Implementation) -->
       <div

@@ -9,11 +9,10 @@ import {
   type SectionResource,
 } from '../../modules/section/section';
 import {
-  PUBLIC_PAGE_OPTIONS,
   SECTION_CREATE,
   SECTION_GET_BY_CUID,
   SECTION_PATCH_BY_CUID,
-  SECTIONS_LIST_BY_TAG,
+  SECTIONS_LIST,
   SECTIONS_LIST_TEMPLATES,
   type SectionDetail,
   type SectionListEntry,
@@ -28,13 +27,14 @@ type EditorBaseline = {
   imagePosition: string;
   imageFile: string;
   resourcesText: string;
+  tagsText: string;
   templateId: string;
 };
 
 /**
- * Page/Section Content Editor (GSSC5-93 / PIR-20; create-from-template GSSC5-126):
- * select a public page tag, pick or create a section, edit via Generic Editor,
- * persist with POST /sections (create) or PATCH /sections/{cuid} (edit).
+ * Page/Section Content Editor (GSSC5-93 / PIR-20; create-from-template GSSC5-126;
+ * form unify GSSC5-139): catalog of sections, create/edit via Generic Editor with
+ * tags (no page selector), persist with POST /sections or PATCH /sections/{cuid}.
  */
 @Component({
   selector: 'gssc-page-section-editor-page',
@@ -42,29 +42,21 @@ type EditorBaseline = {
   templateUrl: './page-section-editor.html',
 })
 export class PageSectionEditorPage implements OnInit {
-  private readonly listByTag = inject(SECTIONS_LIST_BY_TAG);
+  private readonly listSections = inject(SECTIONS_LIST);
   private readonly getByCuid = inject(SECTION_GET_BY_CUID);
   private readonly patchByCuid = inject(SECTION_PATCH_BY_CUID);
   private readonly createSection = inject(SECTION_CREATE);
   private readonly listTemplates = inject(SECTIONS_LIST_TEMPLATES);
 
-  private listGeneration = 0;
   private detailGeneration = 0;
 
-  protected readonly pageOptions = [
-    { value: '', label: 'Select a page…' },
-    ...PUBLIC_PAGE_OPTIONS,
-  ];
   protected readonly imagePositionOptions = [
     { value: 'none', label: 'None' },
     { value: 'left', label: 'Left' },
     { value: 'right', label: 'Right' },
   ];
 
-  /** Selected public page tag (empty until the member chooses). */
-  readonly selectedPageTag = signal('');
-
-  /** Sections for the selected page tag, backend index order. */
+  /** Sections catalog (backend index order). */
   readonly sections = signal<SectionListEntry[]>([]);
 
   /** Content templates available for section create. */
@@ -90,6 +82,7 @@ export class PageSectionEditorPage implements OnInit {
   readonly editorImagePosition = signal('none');
   readonly editorImageFile = signal('');
   readonly editorResourcesText = signal('');
+  readonly editorTagsText = signal('');
   readonly templateId = signal('');
 
   private baseline: EditorBaseline = {
@@ -98,6 +91,7 @@ export class PageSectionEditorPage implements OnInit {
     imagePosition: 'none',
     imageFile: '',
     resourcesText: '',
+    tagsText: '',
     templateId: '',
   };
 
@@ -138,32 +132,16 @@ export class PageSectionEditorPage implements OnInit {
   );
 
   async ngOnInit(): Promise<void> {
-    await this.reloadTemplates();
+    await Promise.all([this.reloadCatalog(), this.reloadTemplates()]);
   }
 
   constructor() {
-    effect(() => {
-      const tag = this.selectedPageTag();
-      void this.loadSectionsForPage(tag);
-    });
-
     effect(() => {
       const cuid = this.selectedCuid();
       if (cuid == null || this.mode() !== 'edit') return;
       void this.loadSectionDetail(cuid);
     });
   }
-
-  // @relation(GSSC-MLLR-264, GSSC-MLLR-279, GSSC-MLLR-286, scope=range_start, role=Implementation)
-  onPageTagChange(tag: string): void {
-    this.selectedPageTag.set(tag);
-    this.selectedCuid.set(null);
-    this.mode.set('idle');
-    this.statusMessage.set('');
-    this.permitted.set(true);
-    this.clearEditorFields();
-  }
-  // @relation(GSSC-MLLR-264, GSSC-MLLR-279, GSSC-MLLR-286, scope=range_end, role=Implementation)
 
   // @relation(GSSC-MLLR-270, GSSC-MLLR-280, GSSC-MLLR-588, scope=range_start, role=Implementation)
   onSelectSection(cuid: string): void {
@@ -177,10 +155,6 @@ export class PageSectionEditorPage implements OnInit {
 
   // @relation(GSSC-MLLR-581, GSSC-MLLR-587, GSSC-MLLR-588, scope=range_start, role=Implementation)
   startCreate(): void {
-    if (this.selectedPageTag().length === 0) {
-      this.statusMessage.set('Choose a public page before creating a section.');
-      return;
-    }
     this.mode.set('create');
     this.selectedCuid.set(null);
     this.permitted.set(true);
@@ -208,12 +182,18 @@ export class PageSectionEditorPage implements OnInit {
       this.statusMessage.set('Body is required.');
       return;
     }
+    const tags = parseTagsText(this.editorTagsText());
+    if (tags.length === 0) {
+      this.statusMessage.set('At least one tag is required.');
+      return;
+    }
 
     const imageFile = this.editorImageFile().trim();
     const result = await this.patchByCuid(cuid, {
       header: this.editorHeader().trim() || null,
       body,
       resources: parseResourcesText(this.editorResourcesText()).map((r) => r.href),
+      tags,
       imageFile: imageFile.length > 0 ? imageFile : null,
       imagePosition: parseImagePosition(this.editorImagePosition()),
     });
@@ -230,23 +210,19 @@ export class PageSectionEditorPage implements OnInit {
 
     this.applyDetail(result.detail);
     this.statusMessage.set('Saved.');
-    const tag = this.selectedPageTag();
-    if (tag.length > 0) {
-      const list = await this.listByTag(tag);
-      this.sections.set(list);
-    }
+    await this.reloadCatalog();
   }
 
   private async saveCreate(): Promise<void> {
     const templateId = this.templateId().trim();
     const body = this.editorBody().trim();
-    const pageTag = this.selectedPageTag().trim();
+    const tags = parseTagsText(this.editorTagsText());
     if (!templateId || !body) {
       this.statusMessage.set('Template and body are required to create a section.');
       return;
     }
-    if (!pageTag) {
-      this.statusMessage.set('Choose a public page before creating a section.');
+    if (tags.length === 0) {
+      this.statusMessage.set('At least one tag is required to create a section.');
       return;
     }
 
@@ -255,7 +231,7 @@ export class PageSectionEditorPage implements OnInit {
       body,
       templateId,
       header: this.editorHeader().trim() || null,
-      tags: [pageTag],
+      tags,
       resources: parseResourcesText(this.editorResourcesText()).map((r) => r.href),
       imageFile: imageFile.length > 0 ? imageFile : null,
       imagePosition: parseImagePosition(this.editorImagePosition()),
@@ -271,8 +247,7 @@ export class PageSectionEditorPage implements OnInit {
       return;
     }
 
-    const list = await this.listByTag(pageTag);
-    this.sections.set(list);
+    await this.reloadCatalog();
     this.onSelectSection(result.detail.cuid);
     this.applyDetail(result.detail);
     this.statusMessage.set('Section created.');
@@ -280,12 +255,13 @@ export class PageSectionEditorPage implements OnInit {
   // @relation(GSSC-MLLR-281, GSSC-MLLR-283, GSSC-MLLR-587, GSSC-MLLR-589, GSSC-MLLR-590, scope=range_end, role=Implementation)
 
   // @relation(GSSC-MLLR-282, scope=range_start, role=Implementation)
-  protected onEditorCancelled(): void {
+  onEditorCancelled(): void {
     this.editorHeader.set(this.baseline.header);
     this.editorBody.set(this.baseline.body);
     this.editorImagePosition.set(this.baseline.imagePosition);
     this.editorImageFile.set(this.baseline.imageFile);
     this.editorResourcesText.set(this.baseline.resourcesText);
+    this.editorTagsText.set(this.baseline.tagsText);
     this.templateId.set(this.baseline.templateId);
     this.statusMessage.set('Discarded.');
   }
@@ -299,25 +275,21 @@ export class PageSectionEditorPage implements OnInit {
     return entry.cuid;
   }
 
+  // @relation(GSSC-MLLR-267, GSSC-MLLR-681, scope=range_start, role=Implementation)
+  private async reloadCatalog(): Promise<void> {
+    this.loading.set(true);
+    const list = await this.listSections();
+    this.sections.set(list);
+    this.loading.set(false);
+  }
+  // @relation(GSSC-MLLR-267, GSSC-MLLR-681, scope=range_end, role=Implementation)
+
   // @relation(GSSC-MLLR-587, scope=range_start, role=Implementation)
   private async reloadTemplates(): Promise<void> {
     const rows = await this.listTemplates();
     this.templates.set(rows);
   }
   // @relation(GSSC-MLLR-587, scope=range_end, role=Implementation)
-
-  private async loadSectionsForPage(tag: string): Promise<void> {
-    const generation = ++this.listGeneration;
-    if (tag.length === 0) {
-      this.sections.set([]);
-      return;
-    }
-    this.loading.set(true);
-    const list = await this.listByTag(tag);
-    if (generation !== this.listGeneration) return;
-    this.sections.set(list);
-    this.loading.set(false);
-  }
 
   private async loadSectionDetail(cuid: string): Promise<void> {
     const generation = ++this.detailGeneration;
@@ -341,11 +313,13 @@ export class PageSectionEditorPage implements OnInit {
     const imagePosition = detail.imagePosition ?? 'none';
     const imageFile = detail.imageFile ?? '';
     const resourcesText = (detail.resources ?? []).join('\n');
+    const tagsText = (detail.tags ?? []).join(', ');
     this.editorHeader.set(header);
     this.editorBody.set(body);
     this.editorImagePosition.set(imagePosition);
     this.editorImageFile.set(imageFile);
     this.editorResourcesText.set(resourcesText);
+    this.editorTagsText.set(tagsText);
     this.templateId.set('');
     this.baseline = {
       header,
@@ -353,6 +327,7 @@ export class PageSectionEditorPage implements OnInit {
       imagePosition,
       imageFile,
       resourcesText,
+      tagsText,
       templateId: '',
     };
   }
@@ -363,6 +338,7 @@ export class PageSectionEditorPage implements OnInit {
     this.editorImagePosition.set('none');
     this.editorImageFile.set('');
     this.editorResourcesText.set('');
+    this.editorTagsText.set('');
     this.templateId.set('');
     this.baseline = {
       header: '',
@@ -370,6 +346,7 @@ export class PageSectionEditorPage implements OnInit {
       imagePosition: 'none',
       imageFile: '',
       resourcesText: '',
+      tagsText: '',
       templateId: '',
     };
   }
@@ -386,4 +363,11 @@ function parseResourcesText(text: string): SectionResource[] {
     .map((line) => line.trim())
     .filter((line) => line.length > 0)
     .map((line) => ({ name: line, href: line }));
+}
+
+function parseTagsText(raw: string): string[] {
+  return raw
+    .split(',')
+    .map((tag) => tag.trim())
+    .filter((tag) => tag.length > 0);
 }
