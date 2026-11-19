@@ -7448,14 +7448,17 @@ RELATIONS:
 UID: GSSC-BLLR-380
 TITLE: File Get Denied
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL reject a file get without returning file bytes when the cuid is missing, names a folder, names a soft-deleted entry, or names a file the caller may not read.
+The GSSC Website Unified Backend SHALL reject a file get without returning file bytes when the cuid is missing, names a folder, names a soft-deleted entry, names a file under a soft-deleted ancestor folder, or names a file the caller may not read.
 <<<
 RATIONALE: >>>
-Missing, deleted, folder, and unauthorized targets stay closed.
+Missing, deleted, folder, ancestor-deleted, and unauthorized targets stay closed.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-71
+CHANGE_DRIVER: >>>
+GSSC5-71
+GSSC5-132
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
