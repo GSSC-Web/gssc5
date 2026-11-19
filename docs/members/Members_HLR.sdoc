@@ -520,7 +520,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-MHLR-107
+UID: GSSC-MHLR-109
 TITLE: Nested Submenu Pointer Bridge
 STATEMENT: >>>
 While a nested Navigation Submenu is open in wide chrome, the Member Frontend SHALL keep that submenu open during diagonal pointer travel from its parent Navigation Item toward the submenu, and SHALL still allow vertical pointer travel to reach sibling Navigation Items outside that diagonal path.
