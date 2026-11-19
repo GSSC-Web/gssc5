@@ -12,6 +12,7 @@ import {
 import { NgTemplateOutlet } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { MemberSession } from '../../services/member-session';
+import { PublicApp } from '../../services/public-app';
 import {
   QUICK_SEARCH_LIMIT,
   SITE_SEARCH_GET,
@@ -37,6 +38,7 @@ export type HeaderChromeTier = 'wide' | 'mid' | 'narrow';
 })
 export class Header implements OnInit, OnDestroy {
   private readonly memberSession = inject(MemberSession);
+  private readonly publicApp = inject(PublicApp);
   private readonly siteTree = inject(SiteTree);
   private readonly siteSearchGet = inject(SITE_SEARCH_GET);
   private readonly router = inject(Router);
@@ -77,6 +79,12 @@ export class Header implements OnInit, OnDestroy {
     this.resizeObserver?.disconnect();
     this.mediaQuery?.removeEventListener('change', this.onViewportChange);
   }
+
+  // @relation(GSSC-MLLR-33, GSSC-MLLR-34, scope=range_start, role=Implementation)
+  protected openPublicApp(): void {
+    this.publicApp.navigate();
+  }
+  // @relation(GSSC-MLLR-33, GSSC-MLLR-34, scope=range_end, role=Implementation)
 
   /**
    * Session end Implementation owned by MemberSession.logout (GSSC-MLLR-26).

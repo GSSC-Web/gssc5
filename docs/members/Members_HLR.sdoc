@@ -409,6 +409,19 @@ GSSC5-81
 REVIEW_STATUS: Approved
 
 [REQUIREMENT]
+UID: GSSC-MHLR-107
+TITLE: Header Public Access
+STATEMENT: >>>
+When a member is logged in, the Header SHALL offer access to the Public Frontend.
+<<<
+RATIONALE: >>>
+A logged-in member needs a Header path back to the Public Frontend, matching the Public Header's Member Access control in the opposite direction. Logout remains a separate option.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC-173
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
 UID: GSSC-MHLR-19
 TITLE: Header Navigation
 STATEMENT: >>>

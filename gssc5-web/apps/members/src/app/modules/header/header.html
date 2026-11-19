@@ -407,23 +407,41 @@
 </ng-template>
 
 <ng-template #accountActions>
-  <div class="gssc-header__account relative flex items-center gap-x-3">
+  <div class="gssc-header__account relative flex items-center">
     @if (loggedIn()) {
       <!-- @relation(GSSC-MLLR-23, GSSC-MLLR-24, GSSC-MLLR-25, scope=range_start, role=Implementation) -->
-      <span class="gssc-header__greeting font-sans text-gssc-dark-green">
-        Hello, {{ displayName() }}
-      </span>
-      <!-- @relation(GSSC-MLLR-23, GSSC-MLLR-24, GSSC-MLLR-25, scope=range_end, role=Implementation) -->
+      <div class="gssc-header__greeting-wrap group relative">
+        <button
+          type="button"
+          class="gssc-header__greeting cursor-pointer border-0 bg-transparent p-0 font-sans text-gssc-dark-green"
+        >
+          Hello, {{ displayName() }}
+        </button>
+        <div
+          class="gssc-header__greeting-menu invisible absolute end-0 top-full z-10 min-w-36 flex-col gap-1 border border-gssc-gray bg-gssc-white py-2 opacity-0 shadow-sm group-hover:visible group-hover:flex group-hover:opacity-100 group-focus-within:visible group-focus-within:flex group-focus-within:opacity-100"
+        >
+          <!-- @relation(GSSC-MLLR-33, GSSC-MLLR-34, GSSC-MLLR-35, scope=range_start, role=Implementation) -->
+          <button
+            type="button"
+            class="gssc-header__public-access cursor-pointer border-0 bg-transparent px-3 py-1 text-start font-sans text-gssc-dark-green"
+            (click)="openPublicApp()"
+          >
+            Public
+          </button>
+          <!-- @relation(GSSC-MLLR-33, GSSC-MLLR-34, GSSC-MLLR-35, scope=range_end, role=Implementation) -->
 
-      <!-- @relation(GSSC-MLLR-27, GSSC-MLLR-28, scope=range_start, role=Implementation) -->
-      <button
-        type="button"
-        class="gssc-header__logout cursor-pointer border-0 bg-transparent p-0 font-sans text-gssc-dark-green"
-        (click)="logout()"
-      >
-        Logout
-      </button>
-      <!-- @relation(GSSC-MLLR-27, GSSC-MLLR-28, scope=range_end, role=Implementation) -->
+          <!-- @relation(GSSC-MLLR-27, GSSC-MLLR-28, scope=range_start, role=Implementation) -->
+          <button
+            type="button"
+            class="gssc-header__logout cursor-pointer border-0 bg-transparent px-3 py-1 text-start font-sans text-gssc-dark-green"
+            (click)="logout()"
+          >
+            Logout
+          </button>
+          <!-- @relation(GSSC-MLLR-27, GSSC-MLLR-28, scope=range_end, role=Implementation) -->
+        </div>
+      </div>
+      <!-- @relation(GSSC-MLLR-23, GSSC-MLLR-24, GSSC-MLLR-25, scope=range_end, role=Implementation) -->
     } @else {
       <!-- @relation(GSSC-MLLR-29, GSSC-MLLR-30, GSSC-MLLR-31, scope=range_start, role=Implementation) -->
       <a
