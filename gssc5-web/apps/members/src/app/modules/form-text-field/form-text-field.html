@@ -1,7 +1,11 @@
 <!-- @relation(GSSC-MLLR-168, GSSC-MLLR-169, GSSC-MLLR-170, scope=range_start, role=Implementation) -->
 <div
-  class="gssc-form-text-field relative flex min-w-0 w-full flex-col rounded-md border border-gssc-dark-green bg-gssc-white font-sans"
-  [class.bg-gssc-gray]="!enabled()"
+  class="gssc-form-text-field relative flex min-w-0 w-full flex-col rounded-md border font-sans"
+  [class.border-gssc-dark-green]="!invalid()"
+  [class.border-gssc-dark-red]="invalid()"
+  [class.bg-gssc-white]="!invalid() && enabled()"
+  [class.bg-gssc-light-red]="invalid()"
+  [class.bg-gssc-gray]="!enabled() && !invalid()"
 >
   <label
     class="gssc-form-text-field__label absolute -top-2 start-2 bg-inherit px-1 font-sans text-xs font-extralight italic text-gssc-dark-green"
@@ -19,6 +23,7 @@
     [required]="required()"
     [attr.name]="name()"
     [attr.autocomplete]="autocomplete()"
+    [attr.aria-invalid]="invalid()"
     [value]="value()"
     (input)="onInput($any($event.target).value)"
   />

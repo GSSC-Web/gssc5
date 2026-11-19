@@ -2014,3 +2014,32 @@ RELATIONS:
 
 [[/SECTION]]
 
+[[SECTION]]
+UID: GSSC-MHLR-NEWSLETTER-VALIDATION
+TITLE: Newsletter Editor Validation Feedback
+
+[REQUIREMENT]
+UID: GSSC-MHLR-113
+TITLE: Newsletter Editor Validation Feedback
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL mark Newsletter Editor fields that fail Save validation with the same invalid appearance used for other Member Frontend forms.
+<<<
+RATIONALE: >>>
+Generic error text alone does not show which volume, number, month, year, or issue-file values must be corrected before retrying Save.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC-192
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-49
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-51
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PIR-54
+  ROLE: Refines
+
+[[/SECTION]]
+

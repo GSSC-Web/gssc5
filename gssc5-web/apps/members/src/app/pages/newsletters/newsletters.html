@@ -73,7 +73,7 @@
       <!-- @relation(GSSC-MLLR-354, GSSC-MLLR-355, GSSC-MLLR-356, scope=range_end, role=Implementation) -->
     </div>
 
-    <!-- @relation(GSSC-MLLR-360, GSSC-MLLR-361, GSSC-MLLR-362, scope=range_start, role=Implementation) -->
+    <!-- @relation(GSSC-MLLR-360, GSSC-MLLR-361, GSSC-MLLR-362, GSSC-MLLR-703, GSSC-MLLR-704, scope=range_start, role=Implementation) -->
     <gssc-editor
       class="gssc-newsletters-editor block w-full"
       [resourceId]="resourceId()"
@@ -89,6 +89,7 @@
         [enabled]="canEdit()"
         controlId="gssc-newsletter-volume"
         [required]="true"
+        [invalid]="fieldInvalid('volume')"
       />
       <gssc-form-text-field
         label="Number"
@@ -97,6 +98,7 @@
         [enabled]="canEdit()"
         controlId="gssc-newsletter-number"
         [required]="true"
+        [invalid]="fieldInvalid('number')"
       />
       <gssc-form-text-field
         label="Month"
@@ -105,6 +107,7 @@
         [enabled]="canEdit()"
         controlId="gssc-newsletter-month"
         [required]="true"
+        [invalid]="fieldInvalid('month')"
       />
       <gssc-form-text-field
         label="Year"
@@ -113,10 +116,15 @@
         [enabled]="canEdit()"
         controlId="gssc-newsletter-year"
         [required]="true"
+        [invalid]="fieldInvalid('year')"
       />
       <!-- @relation(GSSC-MLLR-693, GSSC-MLLR-694, GSSC-MLLR-695, scope=range_start, role=Implementation) -->
       <div
-        class="gssc-field gssc-newsletters-issue-file relative flex min-w-0 flex-col rounded-md border border-gssc-dark-green bg-gssc-white font-sans text-gssc-dark-green"
+        class="gssc-field gssc-newsletters-issue-file relative flex min-w-0 flex-col rounded-md border font-sans text-gssc-dark-green"
+        [class.border-gssc-dark-green]="!fieldInvalid('issueFile')"
+        [class.border-gssc-dark-red]="fieldInvalid('issueFile')"
+        [class.bg-gssc-white]="!fieldInvalid('issueFile')"
+        [class.bg-gssc-light-red]="fieldInvalid('issueFile')"
       >
         <span
           class="gssc-newsletters-issue-file__label absolute -top-2 start-2 bg-inherit px-1 text-xs font-extralight italic text-gssc-dark-green"
@@ -130,6 +138,7 @@
           type="file"
           accept="application/pdf,.pdf"
           [disabled]="!canEdit()"
+          [attr.aria-invalid]="fieldInvalid('issueFile')"
           (change)="onIssueFileSelected($event)"
         />
         <div class="flex min-w-0 flex-wrap items-center gap-3 px-2 py-2">
@@ -151,9 +160,10 @@
         [(value)]="keywords"
         [enabled]="canEdit()"
         controlId="gssc-newsletter-keywords"
+        [invalid]="fieldInvalid('keywords')"
       />
     </gssc-editor>
-    <!-- @relation(GSSC-MLLR-360, GSSC-MLLR-361, GSSC-MLLR-362, scope=range_end, role=Implementation) -->
+    <!-- @relation(GSSC-MLLR-360, GSSC-MLLR-361, GSSC-MLLR-362, GSSC-MLLR-703, GSSC-MLLR-704, scope=range_end, role=Implementation) -->
 
     @if (saveError()) {
       <p class="gssc-newsletters-save-error m-0 font-sans text-sm text-gssc-dark-red" role="alert">

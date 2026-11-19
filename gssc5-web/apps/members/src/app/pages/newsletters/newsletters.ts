@@ -1,4 +1,13 @@
-import { Component, computed, inject, model, OnInit, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  inject,
+  model,
+  OnInit,
+  signal,
+  untracked,
+} from '@angular/core';
 import { Editor } from '../../modules/editor/editor';
 import { FormTextField } from '../../modules/form-text-field/form-text-field';
 import { MemberSession } from '../../services/member-session';
@@ -24,6 +33,8 @@ type EditorDraft = {
   keywords: string;
   fileLabel: string;
 };
+
+type NewsletterFieldKey = 'volume' | 'number' | 'month' | 'year' | 'keywords' | 'issueFile';
 
 const emptyDraft = (): EditorDraft => ({
   volume: '',
@@ -75,6 +86,72 @@ export class NewslettersPage implements OnInit {
   private baseline = emptyDraft();
   private storedFilePath = '';
 
+  // @relation(GSSC-MLLR-703, GSSC-MLLR-704, scope=range_start, role=Implementation)
+  private readonly invalidKeys = signal<ReadonlySet<NewsletterFieldKey>>(new Set());
+
+  constructor() {
+    // Clear a field's invalid mark when the member edits that value.
+    effect(() => {
+      this.volume();
+      untracked(() => this.clearInvalidKey('volume'));
+    });
+    effect(() => {
+      this.number();
+      untracked(() => this.clearInvalidKey('number'));
+    });
+    effect(() => {
+      this.month();
+      untracked(() => this.clearInvalidKey('month'));
+    });
+    effect(() => {
+      this.year();
+      untracked(() => this.clearInvalidKey('year'));
+    });
+    effect(() => {
+      this.keywords();
+      untracked(() => this.clearInvalidKey('keywords'));
+    });
+  }
+
+  fieldInvalid(key: NewsletterFieldKey): boolean {
+    return this.invalidKeys().has(key);
+  }
+
+  private evaluateMetaFields(): {
+    fields: NewsletterMetaFields | null;
+    invalid: NewsletterFieldKey[];
+  } {
+    const volume = parseRequiredInteger(this.volume());
+    const number = parseRequiredInteger(this.number());
+    const month = parseRequiredInteger(this.month());
+    const year = parseRequiredInteger(this.year());
+    const keywords = parseKeywordsInput(this.keywords());
+    const invalid: NewsletterFieldKey[] = [];
+    if (volume == null) invalid.push('volume');
+    if (number == null) invalid.push('number');
+    if (month == null) invalid.push('month');
+    if (year == null) invalid.push('year');
+    if (invalid.length > 0) {
+      return { fields: null, invalid };
+    }
+    return {
+      fields: { volume: volume!, number: number!, month: month!, year: year!, keywords },
+      invalid: [],
+    };
+  }
+
+  private clearInvalidKeys(): void {
+    this.invalidKeys.set(new Set());
+  }
+
+  private clearInvalidKey(key: NewsletterFieldKey): void {
+    if (!this.invalidKeys().has(key)) return;
+    const next = new Set(this.invalidKeys());
+    next.delete(key);
+    this.invalidKeys.set(next);
+  }
+  // @relation(GSSC-MLLR-703, GSSC-MLLR-704, scope=range_end, role=Implementation)
+
   // @relation(GSSC-MLLR-367, scope=range_start, role=Implementation)
   /** Administrators and newsletter editors may create/publish/modify. */
   readonly canEdit = computed(
@@ -103,12 +180,14 @@ export class NewslettersPage implements OnInit {
     this.resourceId.set(NEW_RESOURCE_ID);
     this.applyDraft(emptyDraft());
     this.saveError.set(null);
+    this.clearInvalidKeys();
   }
   // @relation(GSSC-MLLR-357, scope=range_end, role=Implementation)
 
   // @relation(GSSC-MLLR-373, scope=range_start, role=Implementation)
   async selectEntry(entry: NewsletterEntry): Promise<void> {
     this.saveError.set(null);
+    this.clearInvalidKeys();
     this.loading.set(true);
     try {
       const { data, error } = await newslettersApi.get(entry.cuid);
@@ -134,25 +213,30 @@ export class NewslettersPage implements OnInit {
     const file = input.files?.[0] ?? null;
     this.pendingFile = file;
     this.fileLabel.set(file?.name ?? 'No file chosen');
+    this.clearInvalidKey('issueFile');
   }
   // @relation(GSSC-MLLR-693, GSSC-MLLR-694, GSSC-MLLR-695, GSSC-MLLR-696, scope=range_end, role=Implementation)
 
   // @relation(GSSC-MLLR-368, GSSC-MLLR-369, GSSC-MLLR-370, GSSC-MLLR-696, scope=range_start, role=Implementation)
   async onEditorSaved(): Promise<void> {
     if (!this.canEdit()) return;
-    const fields = this.readMetaFields();
-    if (fields == null) {
+    const meta = this.evaluateMetaFields();
+    if (meta.fields == null) {
+      this.invalidKeys.set(new Set(meta.invalid));
       this.saveError.set('Enter valid volume, number, month, year, and keywords.');
       return;
     }
 
     const cuid = this.selectedCuid();
     if (cuid == null && this.pendingFile == null) {
+      this.invalidKeys.set(new Set<NewsletterFieldKey>(['issueFile']));
       this.saveError.set('Choose a newsletter issue file before saving.');
       return;
     }
 
+    this.clearInvalidKeys();
     this.saveError.set(null);
+    const fields = meta.fields;
     try {
       if (cuid == null) {
         const { data, error } = await newslettersApi.create({
@@ -210,6 +294,7 @@ export class NewslettersPage implements OnInit {
   onEditorCancelled(): void {
     this.applyDraft({ ...this.baseline });
     this.saveError.set(null);
+    this.clearInvalidKeys();
   }
   // @relation(GSSC-MLLR-372, scope=range_end, role=Implementation)
 
@@ -248,17 +333,5 @@ export class NewslettersPage implements OnInit {
     this.storedFilePath = draft.filePath;
     this.pendingFile = null;
     this.baseline = { ...draft };
-  }
-
-  private readMetaFields(): NewsletterMetaFields | null {
-    const volume = parseRequiredInteger(this.volume());
-    const number = parseRequiredInteger(this.number());
-    const month = parseRequiredInteger(this.month());
-    const year = parseRequiredInteger(this.year());
-    const keywords = parseKeywordsInput(this.keywords());
-    if (volume == null || number == null || month == null || year == null) {
-      return null;
-    }
-    return { volume, number, month, year, keywords };
   }
 }
