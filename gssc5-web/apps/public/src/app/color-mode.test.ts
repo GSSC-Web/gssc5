@@ -13,6 +13,12 @@ test('GSSC-PLLR-395 Lexical', () => {
   expect(css).toMatch(/--gssc-logo-plate:\s*#ffffee/);
   expect(css).toContain('html.dark .gssc-header__logo-mark');
   expect(css).toContain('html.dark .gssc-footer__logo-mark');
+  expect(css).toMatch(/html\.dark\s+\.gssc-footer\s*\{/);
+  expect(css).not.toMatch(/--gssc-cream\b/);
+  expect(css).not.toMatch(/--color-gssc-cream\b/);
+  const footerPin = css.match(/html\.dark\s+\.gssc-footer\s*\{([^}]*)\}/);
+  expect(footerPin?.[1]).toMatch(/--gssc-black:\s*#000000/);
+  expect(footerPin?.[1]).toMatch(/--gssc-white:\s*#ffffff/);
 });
 // @relation(GSSC-PLLR-395, scope=range_end, role=Test)
 

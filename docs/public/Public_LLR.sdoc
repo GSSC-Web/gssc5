@@ -428,7 +428,7 @@ RELATIONS:
 UID: GSSC-PLLR-17
 TITLE: Lexical
 STATEMENT: >>>
-The Announcements Bar SHALL use the cream theme token for its background, the gray theme token for its bottom border, the dark-green theme token and semibold weight for announcement titles, the dark-brown theme token and regular weight for announcement text, the sans-serif default typeface, and the light-green theme token for selectable-control hover and keyboard-focus backgrounds.
+The Announcements Bar SHALL use the white theme token for its background, the gray theme token for its bottom border, the dark-green theme token and semibold weight for announcement titles, the dark-brown theme token and regular weight for announcement text, the sans-serif default typeface, and the light-green theme token for selectable-control hover and keyboard-focus backgrounds.
 <<<
 RATIONALE: >>>
 Theme tokens and weight roles keep announcement presentation aligned with the organization palette while making titles and interactive focus states distinct.
@@ -438,6 +438,7 @@ VERIFICATION_METHOD: Test
 CHANGE_DRIVER: >>>
 GSSC5-38
 GSSC5-42
+GSSC5-136
 <<<
 REVIEW_STATUS: Approved
 RELATIONS:
@@ -1442,14 +1443,17 @@ RELATIONS:
 UID: GSSC-PLLR-30
 TITLE: Lexical
 STATEMENT: >>>
-The Footer SHALL use the black theme token for its background and the white theme token for its default text color.
+The Footer SHALL use the black theme token for its background and the white theme token for its default text color in both light and dark color modes so Footer chrome stays dark with light text.
 <<<
 RATIONALE: >>>
-Black and white theme tokens set a high-contrast Footer chrome. A fuller color role map for the Footer is not set yet beyond these token choices.
+Black and white theme tokens set a high-contrast Footer chrome that must not lighten when other organization surface tokens invert for dark mode.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-23
+CHANGE_DRIVER: >>>
+GSSC5-23
+GSSC5-136
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -3187,14 +3191,17 @@ RELATIONS:
 UID: GSSC-PLLR-295
 TITLE: Lexical
 STATEMENT: >>>
-A Calendar Event Chip SHALL use the light-green or cream theme token for its background and the dark-green theme token for its text.
+A Calendar Event Chip SHALL use the light-green theme token for its background, the white theme token for hover background, and the dark-green theme token for its text.
 <<<
 RATIONALE: >>>
 Light chip backgrounds keep titles readable on the white calendar without competing with day numbers.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-30
+CHANGE_DRIVER: >>>
+GSSC5-30
+GSSC5-136
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -7512,14 +7519,17 @@ RELATIONS:
 UID: GSSC-PLLR-395
 TITLE: Lexical
 STATEMENT: >>>
-The Public Frontend Color Mode Application SHALL present dark mode with inverted organization surface and text theme tokens relative to light mode, and SHALL place a light plate behind society logo marks in dark mode so the official logo remains contrasted.
+The Public Frontend Color Mode Application SHALL present dark mode with inverted organization surface and text theme tokens relative to light mode, SHALL keep Footer black and white theme tokens uninverted so Footer chrome stays dark with light text, and SHALL place a light plate behind society logo marks in dark mode so the official logo remains contrasted.
 <<<
 RATIONALE: >>>
-Dark mode reuses organization tokens with surface inversion rather than a separate palette. A light plate keeps the circular society logo readable against dark chrome.
+Dark mode reuses organization tokens with surface inversion rather than a separate palette. Footer chrome stays dark for contrast with page content. A light plate keeps the circular society logo readable against dark chrome.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-125
+CHANGE_DRIVER: >>>
+GSSC5-125
+GSSC5-136
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent

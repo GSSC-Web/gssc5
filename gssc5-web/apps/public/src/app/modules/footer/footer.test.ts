@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter, Router } from '@angular/router';
 import { ContactOverlay } from '../../services/contact-overlay/contact-overlay';
@@ -74,6 +76,10 @@ test('GSSC-PLLR-30 Lexical', async () => {
   const footer = root.querySelector<HTMLElement>('.gssc-footer')!;
   expect(footer.classList.contains('bg-gssc-black')).toBe(true);
   expect(footer.classList.contains('text-gssc-white')).toBe(true);
+  const css = readFileSync(join(process.cwd(), 'src', 'styles.css'), 'utf8');
+  const footerPin = css.match(/html\.dark\s+\.gssc-footer\s*\{([^}]*)\}/);
+  expect(footerPin?.[1]).toMatch(/--gssc-black:\s*#000000/);
+  expect(footerPin?.[1]).toMatch(/--gssc-white:\s*#ffffff/);
 });
 // @relation(GSSC-PLLR-30, scope=range_end, role=Test)
 

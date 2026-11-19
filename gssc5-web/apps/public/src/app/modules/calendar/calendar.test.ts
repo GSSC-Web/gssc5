@@ -387,9 +387,8 @@ test('GSSC-PLLR-295 Lexical', async () => {
     visibleMonth: 3,
   });
   const chip = root.querySelector<HTMLElement>('.gssc-calendar__chip')!;
-  expect(
-    chip.classList.contains('bg-gssc-light-green') || chip.classList.contains('bg-gssc-cream'),
-  ).toBe(true);
+  expect(chip.classList.contains('bg-gssc-light-green')).toBe(true);
+  expect(chip.classList.contains('hover:bg-gssc-white')).toBe(true);
   expect(chip.classList.contains('text-gssc-dark-green')).toBe(true);
   expect(chip.classList.contains('font-sans')).toBe(true);
 });

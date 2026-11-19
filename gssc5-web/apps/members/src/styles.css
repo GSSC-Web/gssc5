@@ -20,7 +20,6 @@
 :root {
   --gssc-light-green: #c5cab6;
   --gssc-dark-green: #61684d;
-  --gssc-cream: #ffffcc;
   --gssc-light-brown: #d8ba98;
   --gssc-dark-brown: #92745d;
   --gssc-gray: #d4d4d4;
@@ -35,13 +34,13 @@
 /*
  * Dark mode (GSSC5-125): invert organization surface/text tokens so existing
  * gssc-* utilities follow the visitor preference without a second palette.
+ * Footer chrome keeps black/white uninverted (GSSC5-136).
  */
 /* @relation(GSSC-MLLR-655, scope=range_start, role=Implementation) */
 html.dark {
   color-scheme: dark;
   --gssc-light-green: #3f4536;
   --gssc-dark-green: #c5cab6;
-  --gssc-cream: #2e3228;
   --gssc-light-brown: #6b5643;
   --gssc-dark-brown: #d8ba98;
   --gssc-gray: #5a5f52;
@@ -51,6 +50,11 @@ html.dark {
   --gssc-dark-red: #f87171;
   --gssc-logo-plate: #ffffee;
 }
+
+html.dark .gssc-footer {
+  --gssc-black: #000000;
+  --gssc-white: #ffffff;
+}
 /* @relation(GSSC-MLLR-655, scope=range_end, role=Implementation) */
 
 @theme {
@@ -58,7 +62,6 @@ html.dark {
   --font-sans: ui-sans-serif, system-ui, sans-serif;
   --color-gssc-light-green: var(--gssc-light-green);
   --color-gssc-dark-green: var(--gssc-dark-green);
-  --color-gssc-cream: var(--gssc-cream);
   --color-gssc-light-brown: var(--gssc-light-brown);
   --color-gssc-dark-brown: var(--gssc-dark-brown);
   --color-gssc-gray: var(--gssc-gray);
