@@ -230,6 +230,68 @@ export class Header implements OnInit, OnDestroy {
     return tracks.join(' ');
   }
 
+  // @relation(GSSC-PLLR-336, scope=range_start, role=Implementation)
+  /** Top-level submenu cuids that end-align to stay in the viewport. */
+  readonly topSubmenuAlignEnd = signal<ReadonlySet<string>>(new Set());
+  /** Nested submenu cuids that open toward the start to stay in the viewport. */
+  readonly nestedOpenTowardStart = signal<ReadonlySet<string>>(new Set());
+
+  protected isTopSubmenuAlignEnd(cuid: string): boolean {
+    return this.topSubmenuAlignEnd().has(cuid);
+  }
+
+  protected isNestedOpenTowardStart(cuid: string): boolean {
+    return this.nestedOpenTowardStart().has(cuid);
+  }
+
+  protected onTopSubmenuPlace(event: Event, item: SiteTreeNavNode): void {
+    if (!this.hasChildren(item) || typeof window === 'undefined') return;
+    const cluster = event.currentTarget as HTMLElement | null;
+    const submenu = cluster?.querySelector<HTMLElement>(
+      ':scope > .gssc-header__submenu',
+    );
+    if (!cluster || !submenu) return;
+    const width = this.submenuMeasureWidth(submenu);
+    const startRight = cluster.getBoundingClientRect().left + width;
+    this.setCuidFlag(this.topSubmenuAlignEnd, item.cuid, startRight > window.innerWidth);
+  }
+
+  protected onNestedSubmenuPlace(event: Event, child: SiteTreeNavNode): void {
+    if (!this.hasChildren(child) || typeof window === 'undefined') return;
+    const host = event.currentTarget as HTMLElement | null;
+    const nested = host?.querySelector<HTMLElement>(
+      '.gssc-header__submenu--nested',
+    );
+    if (!host || !nested) return;
+    const width = this.submenuMeasureWidth(nested);
+    const endRight = host.getBoundingClientRect().right + width;
+    this.setCuidFlag(
+      this.nestedOpenTowardStart,
+      child.cuid,
+      endRight > window.innerWidth,
+    );
+  }
+
+  private submenuMeasureWidth(el: HTMLElement): number {
+    const measured = Math.max(el.offsetWidth, el.scrollWidth);
+    // min-w-44 (11rem) fallback when the closed overlay has not laid out yet.
+    return measured > 0 ? measured : 176;
+  }
+
+  private setCuidFlag(
+    store: ReturnType<typeof signal<ReadonlySet<string>>>,
+    cuid: string,
+    enabled: boolean,
+  ): void {
+    const current = store();
+    if (current.has(cuid) === enabled) return;
+    const next = new Set(current);
+    if (enabled) next.add(cuid);
+    else next.delete(cuid);
+    store.set(next);
+  }
+  // @relation(GSSC-PLLR-336, scope=range_end, role=Implementation)
+
   // @relation(GSSC-PHLR-154, GSSC-PLLR-396, GSSC-PLLR-397, GSSC-PLLR-398, scope=range_start, role=Implementation)
   readonly safeTrianglePath = signal<string | null>(null);
   readonly safeTriangleCuid = signal<string | null>(null);
@@ -250,14 +312,19 @@ export class Header implements OnInit, OnDestroy {
       this.clearSafeTriangle();
       return;
     }
+    this.onNestedSubmenuPlace(event, child);
     const nestedRect = nested.getBoundingClientRect();
     if (nestedRect.width <= 0 || nestedRect.height <= 0) {
       this.clearSafeTriangle();
       return;
     }
+    const hostRect = host.getBoundingClientRect();
     const x = event.clientX;
     const y = event.clientY;
-    const nearX = nestedRect.left;
+    // Near vertical edge of the nested panel (host side), including before CD applies flip classes.
+    const nearX = this.isNestedOpenTowardStart(child.cuid)
+      ? hostRect.left
+      : hostRect.right;
     const path = `M ${x} ${y} L ${nearX} ${nestedRect.top} L ${nearX} ${nestedRect.bottom} Z`;
     this.safeTriangleCuid.set(child.cuid);
     this.safeTrianglePath.set(path);
