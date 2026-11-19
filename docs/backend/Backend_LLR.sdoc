@@ -6644,15 +6644,18 @@ TITLE: GET
 UID: GSSC-BLLR-345
 TITLE: Research Tools List
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return each research tool's cuid, title, and reference link when listing research tools.
+The GSSC Website Unified Backend SHALL return each research tool's cuid, title, reference link, and whether a stored reference file is present when listing research tools.
 <<<
 RATIONALE: >>>
-The public research tools page assembles its hyperlink grid from this list.
+The public research tools page assembles its hyperlink grid from this list and must know when to open a stored file instead of an external URL.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-18
-REVIEW_STATUS: Changed
+CHANGE_DRIVER: >>>
+GSSC5-18
+GSSC-188
+<<<
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-188
@@ -6668,15 +6671,18 @@ TITLE: POST
 UID: GSSC-BLLR-346
 TITLE: Research Tool Creation
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL create a research tool for a logged-in member who is a tool editor or an administrator, requiring a title and a reference link, and returning the created tool's cuid, title, and reference link.
+The GSSC Website Unified Backend SHALL create a research tool for a logged-in member who is a tool editor or an administrator, requiring a title and either a non-empty reference link or a subsequent reference-file upload for that tool, and returning the created tool's cuid, title, reference link, and whether a stored reference file is present.
 <<<
 RATIONALE: >>>
-Authorized editors add tools with the fields the public list presents.
+Authorized editors add tools with a title and either an outside URL or a society-hosted file.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-18
-REVIEW_STATUS: Changed
+CHANGE_DRIVER: >>>
+GSSC5-18
+GSSC-188
+<<<
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-190
@@ -6716,15 +6722,18 @@ TITLE: GET
 UID: GSSC-BLLR-347
 TITLE: Research Tool Get
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return a research tool by cuid in the path, including title and reference link.
+The GSSC Website Unified Backend SHALL return a research tool by cuid in the path, including title, reference link, and whether a stored reference file is present.
 <<<
 RATIONALE: >>>
 Path cuid identifies one research tool for assembly or editing.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-18
-REVIEW_STATUS: Changed
+CHANGE_DRIVER: >>>
+GSSC5-18
+GSSC-188
+<<<
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-189
@@ -6740,15 +6749,18 @@ TITLE: PATCH
 UID: GSSC-BLLR-348
 TITLE: Research Tool Modification
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL modify a research tool by cuid for a logged-in member who is a tool editor or an administrator, accepting title and reference link updates, and returning the updated tool's cuid, title, and reference link.
+The GSSC Website Unified Backend SHALL modify a research tool by cuid for a logged-in member who is a tool editor or an administrator, accepting title and reference link updates, and returning the updated tool's cuid, title, reference link, and whether a stored reference file is present.
 <<<
 RATIONALE: >>>
-Authorized editors keep tool titles and reference links current.
+Authorized editors keep tool titles and URL references current; file replacement is a separate research-tools file upload.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-18
-REVIEW_STATUS: Changed
+CHANGE_DRIVER: >>>
+GSSC5-18
+GSSC-188
+<<<
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-191
@@ -9238,15 +9250,18 @@ TITLE: Research Tools
 UID: GSSC-BLLR-343
 TITLE: Research Tools Table
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL store each research tool as a row in a research tools table with a cuid, a title, and a reference link.
+The GSSC Website Unified Backend SHALL store each research tool as a row in a research tools table with a cuid, a title, and a reference link string that is empty when that tool's reference is a stored file rather than an external URL.
 <<<
 RATIONALE: >>>
-The dedicated table is the source of truth for the public research tools list.
+The dedicated table is the source of truth for the public research tools list; file bytes live in the research-tools file store named by the tool cuid.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-18
-REVIEW_STATUS: Changed
+CHANGE_DRIVER: >>>
+GSSC5-18
+GSSC-188
+<<<
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-194
@@ -9673,6 +9688,102 @@ REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-85
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-RESEARCH-TOOL-FILES
+TITLE: Research Tools File Store
+
+[REQUIREMENT]
+UID: GSSC-BLLR-496
+TITLE: Research Tools Directory On Init
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL create the research-tools directory under the file storage root on startup when that directory is missing, and SHALL keep a corresponding research-tools folder entry for uploads.
+<<<
+RATIONALE: >>>
+Research tool reference files have a dedicated store separate from general file uploads, mirroring account photos.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC-188
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-194
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-497
+TITLE: Research Tool File Upload
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL accept a multipart reference-file upload for a research tool cuid from a logged-in member who is a tool editor or an administrator, store that file under a name and path derived from that research tool cuid in the research-tools store, clear that tool's external reference link, and return that tool cuid and path.
+<<<
+RATIONALE: >>>
+Naming by research tool cuid prevents file collisions and keeps the public file path stable.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC-188
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-191
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-498
+TITLE: Research Tool File Replace
+STATEMENT: >>>
+When an authenticated research-tool file upload targets a research tool cuid that already has a stored reference file, the GSSC Website Unified Backend SHALL store the replacement under that research tool cuid in the research-tools store rather than retaining a second current file for that tool.
+<<<
+RATIONALE: >>>
+One current reference file per research tool keeps storage collision-free when editors replace a file.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC-188
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-191
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-499
+TITLE: Research Tool File GET Public
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL allow GET of a file in the research-tools store for a research tool cuid without requiring a login session token when that file is present and not soft-deleted.
+<<<
+RATIONALE: >>>
+Public research tools catalog links must open society-hosted reference files without a member session.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC-188
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-188
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-500
+TITLE: Research Tool URL Clears Stored File
+STATEMENT: >>>
+When a logged-in tool editor or administrator sets a non-empty external reference link on a research tool that has a stored reference file, the GSSC Website Unified Backend SHALL soft-delete that stored file so the external URL becomes the sole reference.
+<<<
+RATIONALE: >>>
+A research tool reference is either a URL or a stored file, not both at once.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC-188
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-191
   ROLE: Refines
 
 [[/SECTION]]
