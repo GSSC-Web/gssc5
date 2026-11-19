@@ -19,6 +19,7 @@ import {
 import {
   ensureNewslettersFolder,
   NEWSLETTERS_DIR,
+  newsletterIssueDisplayName,
   resetNewslettersInitForTests,
 } from "./newsletter-files";
 
@@ -236,3 +237,23 @@ test("GSSC-BLLR-495 newsletter file replace deletes prior file", async () => {
   expect(legacyGone).toBe(true);
 });
 // @relation(GSSC-BLLR-495, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-506, scope=range_start, role=Test)
+test("GSSC-BLLR-506 newsletter issue display name is Vol{volume}No{number}.pdf", async () => {
+  expect(newsletterIssueDisplayName(48, 1)).toBe("Vol48No1.pdf");
+
+  const cuid = await createNewsletter(editorTok, `name-${Date.now()}`);
+  const response = await uploadNewsletterFile(editorTok, cuid, "named-bytes");
+  expect(response.status).toBe(200);
+
+  const prisma = getPrisma(loadConfig().DATABASE_URL);
+  const entry = await prisma.storedFileEntry.findUnique({ where: { id: cuid } });
+  expect(entry?.name).toBe("Vol1No1.pdf");
+
+  const fileGet = await backend(
+    new Request(`http://127.0.0.1/files/${cuid}`, { method: "GET" }),
+  );
+  expect(fileGet.status).toBe(200);
+  expect(fileGet.headers.get("content-disposition")).toContain("Vol1No1.pdf");
+});
+// @relation(GSSC-BLLR-506, scope=range_end, role=Test)

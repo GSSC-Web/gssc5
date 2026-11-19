@@ -257,12 +257,12 @@ test('GSSC-PLLR-208 Syntactic Selection Form', async () => {
   const intro = root.querySelector('.gssc-newsletters-intro')!;
   const form = root.querySelector('.gssc-newsletters-form')!;
   const preview = root.querySelector('.gssc-newsletters-preview')!;
-  const download = root.querySelector('.gssc-newsletters-download')!;
+  const open = root.querySelector('.gssc-newsletters-open')!;
 
   expect(intro.compareDocumentPosition(form) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   expect(form.querySelector('.gssc-newsletters-mode')).not.toBeNull();
   expect(form.compareDocumentPosition(preview) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
-  expect(form.compareDocumentPosition(download) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  expect(form.compareDocumentPosition(open) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
 });
 // @relation(GSSC-PLLR-208, scope=range_end, role=Test)
 
@@ -516,45 +516,47 @@ test('GSSC-PLLR-227 Lexical Preview', async () => {
   const preview = root.querySelector<HTMLElement>('.gssc-newsletters-preview')!;
   expect(preview.classList.contains('bg-gssc-white')).toBe(true);
   expect(preview.classList.contains('border-gssc-gray')).toBe(true);
-  expect(preview.classList.contains('min-h-96')).toBe(true);
+  expect(preview.classList.contains('min-h-[70vh]')).toBe(true);
 });
 // @relation(GSSC-PLLR-227, scope=range_end, role=Test)
 
 // @relation(GSSC-PLLR-252, scope=range_start, role=Test)
-test('GSSC-PLLR-252 Semantic Download', async () => {
+test('GSSC-PLLR-252 Semantic Open In New Window', async () => {
   const { root, page, fixture } = await setupNewslettersPage();
-  const download = root.querySelector<HTMLAnchorElement>('[data-testid="newsletter-download"]')!;
-  expect(download.getAttribute('href')).toBe(blobUrlFor('file-2025-03'));
-  expect(download.hasAttribute('download')).toBe(true);
+  const open = root.querySelector<HTMLAnchorElement>('[data-testid="newsletter-open"]')!;
+  expect(open.getAttribute('href')).toBe(blobUrlFor('file-2025-03'));
+  expect(open.getAttribute('target')).toBe('_blank');
+  expect(open.hasAttribute('download')).toBe(false);
+  expect(open.textContent?.trim()).toBe('Open in new window');
 
   await setSelectValue(volumeSelect(root), '4', fixture, page);
   expect(
     root
-      .querySelector<HTMLAnchorElement>('[data-testid="newsletter-download"]')!
+      .querySelector<HTMLAnchorElement>('[data-testid="newsletter-open"]')!
       .getAttribute('href'),
   ).toBe(blobUrlFor('file-2024-11'));
 });
 // @relation(GSSC-PLLR-252, scope=range_end, role=Test)
 
 // @relation(GSSC-PLLR-253, scope=range_start, role=Test)
-test('GSSC-PLLR-253 Syntactic Download', async () => {
+test('GSSC-PLLR-253 Syntactic Open In New Window', async () => {
   const { root } = await setupNewslettersPage();
-  const download = root.querySelector('.gssc-newsletters-download')!;
+  const open = root.querySelector('.gssc-newsletters-open')!;
   const preview = root.querySelector('.gssc-newsletters-preview')!;
   const selected = root.querySelector('.gssc-newsletters-selected')!;
-  expect(selected.contains(download)).toBe(true);
+  expect(selected.contains(open)).toBe(true);
   expect(selected.contains(preview)).toBe(true);
 });
 // @relation(GSSC-PLLR-253, scope=range_end, role=Test)
 
 // @relation(GSSC-PLLR-254, scope=range_start, role=Test)
-test('GSSC-PLLR-254 Lexical Download', async () => {
+test('GSSC-PLLR-254 Lexical Open In New Window', async () => {
   const { root } = await setupNewslettersPage();
-  const download = root.querySelector<HTMLElement>('.gssc-newsletters-download')!;
-  expect(download.classList.contains('font-sans')).toBe(true);
-  expect(download.classList.contains('text-gssc-dark-green')).toBe(true);
-  expect(download.classList.contains('border-gssc-dark-green')).toBe(true);
-  expect(download.classList.contains('hover:bg-gssc-gray')).toBe(true);
+  const open = root.querySelector<HTMLElement>('.gssc-newsletters-open')!;
+  expect(open.classList.contains('font-sans')).toBe(true);
+  expect(open.classList.contains('text-gssc-dark-green')).toBe(true);
+  expect(open.classList.contains('border-gssc-dark-green')).toBe(true);
+  expect(open.classList.contains('hover:bg-gssc-gray')).toBe(true);
 });
 // @relation(GSSC-PLLR-254, scope=range_end, role=Test)
 
@@ -593,7 +595,7 @@ test('GSSC-PLLR-257 Lexical Intro Sections', async () => {
 });
 // @relation(GSSC-PLLR-257, scope=range_end, role=Test)
 
-test('preview and download omit when /files denies ACL or soft-deleted file', async () => {
+test('preview and open omit when /files denies ACL or soft-deleted file', async () => {
   const { root, page } = await setupNewslettersPage(fixtureCatalog, {
     deniedRefs: new Set(['file-2025-03']),
   });
@@ -601,5 +603,5 @@ test('preview and download omit when /files denies ACL or soft-deleted file', as
   expect(page.selectedFilePath()).toBe('file-2025-03');
   expect(page.selectedFileUrl()).toBeNull();
   expect(root.querySelector('[data-testid="newsletter-preview"]')).toBeNull();
-  expect(root.querySelector('[data-testid="newsletter-download"]')).toBeNull();
+  expect(root.querySelector('[data-testid="newsletter-open"]')).toBeNull();
 });

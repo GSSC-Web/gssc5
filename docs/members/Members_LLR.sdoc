@@ -92,7 +92,7 @@ GSSC5-102 Directory Contact Cards + Soft-Delete owns GSSC-MLLR-215 through GSSC-
 GSSC5-93 Page/Section Content Editor owns GSSC-MLLR-261 through GSSC-MLLR-286 (section tags field, section list, section editor host, preview, save/cancel/permission behaviors; GSSC5-139 rewrote page-selector triad 264–266 to tags).
 GSSC5-139 Unify Page Data Editor forms owns GSSC-MLLR-681 through GSSC-MLLR-686 (exact end 686; band 681–700 reserved) and CHANGE_DRIVER updates on GSSC-MLLR-261, 262, 264–267, 269, 279, 286, 326, 329, 589; HLR GSSC-MHLR-110.
 GSSC5-140 Unify PDE padding and disclaimer text owns GSSC-MLLR-687 through GSSC-MLLR-692 (exact end 692; continues band 681–700) and CHANGE_DRIVER updates on GSSC-MLLR-262, 263, 292, 293, 322, 323; HLR GSSC-MHLR-111.
-GSSC-192 Newsletter edit validation red fields owns GSSC-MLLR-703 through GSSC-MLLR-704 (exact end 704; band 703–720) plus CHANGE_DRIVER on GSSC-MLLR-168, 170, 695; HLR GSSC-MHLR-113.
+GSSC-192 Newsletter edit validation red fields owns GSSC-MLLR-706 through GSSC-MLLR-707 (exact end 707; band 706–720; 703–705 claimed by research-tool kind choice GSSC-193) plus CHANGE_DRIVER on GSSC-MLLR-168, 170, 695; HLR GSSC-MHLR-113.
 GSSC5-89 Member Dashboard Page owns GSSC-MLLR-231 through GSSC-MLLR-239.
 GSSC5-94 Announcements Editor owns GSSC-MLLR-291 through GSSC-MLLR-307 (page, catalog, Generic Editor host, create/modify/publish behaviors; reuses GSSC5-84/85; consumes GSSC5-68 /announcements).
 GSSC5-96 Newsletters Editor owns GSSC-MLLR-351 through GSSC-MLLR-373 (exact end 373; band 351–380 reserved so parallel Wave editors do not collide).
@@ -12503,7 +12503,7 @@ UID: GSSC-MLLR-NEWSLETTER-VALIDATION
 TITLE: Newsletter Editor Validation Feedback
 
 [REQUIREMENT]
-UID: GSSC-MLLR-703
+UID: GSSC-MLLR-706
 TITLE: Semantic
 STATEMENT: >>>
 When Save is refused because volume, number, month, or year is not a valid integer, or because a new newsletter has no chosen issue file, the Newsletter Editor SHALL mark each failing field invalid and SHALL omit create or modify until those fields are valid.
@@ -12521,7 +12521,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-MLLR-704
+UID: GSSC-MLLR-707
 TITLE: Lexical
 STATEMENT: >>>
 Invalid Newsletter Editor fields SHALL use the Member Frontend dark-red border and light-red field background.

@@ -11,7 +11,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SectionFromCuid } from '../../modules/section-from-cuid/section-from-cuid';
 import { backend } from '../../services/backend';
 import { filterSectionsVisibleOn } from '../../services/section-display-window/section-display-window';
-import { resolveStoredFileObjectUrl } from '../../services/files-api';
+import { resolveStoredFileAccessUrl } from '../../services/files-api';
 import {
   catalogVolumes,
   catalogYears,
@@ -115,8 +115,9 @@ async function defaultNewsletterSectionListByTag(
 }
 
 async function defaultNewsletterFileResolve(filePath: string): Promise<string | null> {
-  // Soft-deleted / missing → 404; ACL denial → 403; both omit preview/download.
-  return resolveStoredFileObjectUrl(filePath);
+  // Soft-deleted / missing → 404; ACL denial → 403; both omit preview/open.
+  // Access URL (not blob) so PDF chrome uses Content-Disposition Vol/No.pdf.
+  return resolveStoredFileAccessUrl(filePath);
 }
 
 function sortIntroByIndex(
@@ -281,24 +282,26 @@ export class NewslettersPage {
 
   private async resolveSelectedFile(filePath: string | null): Promise<void> {
     const generation = ++this.resolveGeneration;
-    this.revokeObjectUrl();
+    this.revokeResolvedUrl();
     this.resolvedFileUrl.set(null);
     if (filePath === null) return;
 
-    const objectUrl = await this.fileResolve(filePath);
+    const resolvedUrl = await this.fileResolve(filePath);
     if (generation !== this.resolveGeneration) {
-      if (objectUrl !== null) URL.revokeObjectURL(objectUrl);
+      this.revokeIfObjectUrl(resolvedUrl);
       return;
     }
-    this.objectUrlToRevoke = objectUrl;
-    this.resolvedFileUrl.set(objectUrl);
+    this.objectUrlToRevoke = resolvedUrl?.startsWith('blob:') ? resolvedUrl : null;
+    this.resolvedFileUrl.set(resolvedUrl);
   }
 
-  private revokeObjectUrl(): void {
-    if (this.objectUrlToRevoke !== null) {
-      URL.revokeObjectURL(this.objectUrlToRevoke);
-      this.objectUrlToRevoke = null;
-    }
+  private revokeIfObjectUrl(url: string | null): void {
+    if (url !== null && url.startsWith('blob:')) URL.revokeObjectURL(url);
+  }
+
+  private revokeResolvedUrl(): void {
+    this.revokeIfObjectUrl(this.objectUrlToRevoke);
+    this.objectUrlToRevoke = null;
   }
 
   labelForMonth(month: number): string {

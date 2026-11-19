@@ -5779,14 +5779,14 @@ RELATIONS:
 UID: GSSC-PLLR-227
 TITLE: Lexical
 STATEMENT: >>>
-The Newsletter Preview SHALL use a white theme-token surface, a gray theme-token border, and a minimum preview height large enough to show the issue page content.
+The Newsletter Preview SHALL use a white theme-token surface, a gray theme-token border, and a minimum preview height of seventy percent of the viewport height.
 <<<
 RATIONALE: >>>
-A bordered white frame marks the preview region.
+A bordered white frame marks the preview region and shows most of the issue page without scrolling the iframe first.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-20
+CHANGE_DRIVER: GSSC5-144
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -5796,21 +5796,21 @@ RELATIONS:
 [[/SECTION]]
 
 [[SECTION]]
-UID: GSSC-PLLR-NEWSLETTER-DOWNLOAD
-TITLE: Newsletter Download
+UID: GSSC-PLLR-NEWSLETTER-OPEN
+TITLE: Newsletter Open In New Window
 
 [REQUIREMENT]
 UID: GSSC-PLLR-252
 TITLE: Semantic
 STATEMENT: >>>
-The Newsletter Download SHALL provide a download control whose target is the selected newsletter's issue file from the Unified Backend file identified by that newsletter's file path.
+The Newsletter Open In New Window SHALL provide a control that opens the selected newsletter's issue file from the Unified Backend file identified by that newsletter's file path in a new browsing context.
 <<<
 RATIONALE: >>>
-Download uses the same stored file as the preview.
+Open uses the same stored file as the preview without a redundant download beside the iframe.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-20
+CHANGE_DRIVER: GSSC5-144
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -5821,14 +5821,14 @@ RELATIONS:
 UID: GSSC-PLLR-253
 TITLE: Syntactic
 STATEMENT: >>>
-The Newsletter Download SHALL appear adjacent to the Newsletter Preview on the newsletters page.
+The Newsletter Open In New Window SHALL appear adjacent to the Newsletter Preview on the newsletters page.
 <<<
 RATIONALE: >>>
-Download stays with the previewed issue.
+Open stays with the previewed issue.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-20
+CHANGE_DRIVER: GSSC5-144
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -5839,14 +5839,14 @@ RELATIONS:
 UID: GSSC-PLLR-254
 TITLE: Lexical
 STATEMENT: >>>
-The Newsletter Download SHALL present a sans-serif control using the dark-green theme token for text and border and the gray theme token for its hover background.
+The Newsletter Open In New Window SHALL present a sans-serif control using the dark-green theme token for text and border and the gray theme token for its hover background, labeled Open in new window.
 <<<
 RATIONALE: >>>
-Download chrome matches other public text controls.
+Open chrome matches other public text controls.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-20
+CHANGE_DRIVER: GSSC5-144
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent

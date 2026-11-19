@@ -2450,15 +2450,15 @@ RELATIONS:
 
 [REQUIREMENT]
 UID: GSSC-PHLR-132
-TITLE: Newsletter Download
+TITLE: Newsletter Open In New Window
 STATEMENT: >>>
-The newsletters page SHALL provide a download of the selected newsletter.
+The newsletters page SHALL provide a control that opens the selected newsletter in a new window.
 <<<
 RATIONALE: >>>
-Visitors can save the selected issue file.
+Visitors can read the selected issue file in a full browser window without a redundant download control beside the on-page preview.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-20
+CHANGE_DRIVER: GSSC5-144
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent

@@ -659,8 +659,8 @@ test('GSSC-MLLR-696 Newsletter Issue File upload on edit Save', async () => {
 });
 // @relation(GSSC-MLLR-696, scope=range_end, role=Test)
 
-// @relation(GSSC-MLLR-703, GSSC-MLLR-704, scope=range_start, role=Test)
-test('GSSC-MLLR-703..704 Newsletter Editor marks invalid fields red on Save', async () => {
+// @relation(GSSC-MLLR-706, GSSC-MLLR-707, scope=range_start, role=Test)
+test('GSSC-MLLR-706..707 Newsletter Editor marks invalid fields red on Save', async () => {
   const { root, fixture, page, patched, restore } = await setupNewsletters();
   try {
     root.querySelector<HTMLButtonElement>('.gssc-newsletters-catalog__entry')!.click();
@@ -699,7 +699,7 @@ test('GSSC-MLLR-703..704 Newsletter Editor marks invalid fields red on Save', as
   }
 });
 
-test('GSSC-MLLR-703 Newsletter create marks issue file invalid without a chosen file', async () => {
+test('GSSC-MLLR-706 Newsletter create marks issue file invalid without a chosen file', async () => {
   const { root, fixture, page, createdBodies, restore } = await setupNewsletters({ list: [] });
   try {
     await typeField(fixture, root, 'gssc-newsletter-volume', '1');
@@ -723,7 +723,7 @@ test('GSSC-MLLR-703 Newsletter create marks issue file invalid without a chosen 
     restore();
   }
 });
-// @relation(GSSC-MLLR-703, GSSC-MLLR-704, scope=range_end, role=Test)
+// @relation(GSSC-MLLR-706, GSSC-MLLR-707, scope=range_end, role=Test)
 
 test('newsletters-api helpers', () => {
   expect(newsletterLabel(sampleEntry)).toBe('Vol. 42 No. 3 · 11/2026');

@@ -86,7 +86,7 @@ export class NewslettersPage implements OnInit {
   private baseline = emptyDraft();
   private storedFilePath = '';
 
-  // @relation(GSSC-MLLR-703, GSSC-MLLR-704, scope=range_start, role=Implementation)
+  // @relation(GSSC-MLLR-706, GSSC-MLLR-707, scope=range_start, role=Implementation)
   private readonly invalidKeys = signal<ReadonlySet<NewsletterFieldKey>>(new Set());
 
   constructor() {
@@ -150,7 +150,7 @@ export class NewslettersPage implements OnInit {
     next.delete(key);
     this.invalidKeys.set(next);
   }
-  // @relation(GSSC-MLLR-703, GSSC-MLLR-704, scope=range_end, role=Implementation)
+  // @relation(GSSC-MLLR-706, GSSC-MLLR-707, scope=range_end, role=Implementation)
 
   // @relation(GSSC-MLLR-367, scope=range_start, role=Implementation)
   /** Administrators and newsletter editors may create/publish/modify. */

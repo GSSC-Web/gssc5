@@ -26,6 +26,7 @@ import {
   writeStoredBytes,
 } from "./storage";
 import { includesInsensitive, parseKnownQuery } from "../content/helpers";
+import { newsletterDispositionFileName } from "../content/newsletter-files";
 
 const FILE_LIST_FILTERS = new Set(["parent", "name", "cuid", "kind", "isPublic"]);
 
@@ -445,14 +446,19 @@ export const files = new Elysia({ prefix: "/files" })
       if (file === null || !(await file.exists())) {
         return statusFn(404, "Not Found" as const);
       }
-      // @relation(GSSC-BLLR-379, scope=range_start, role=Implementation)
+      // @relation(GSSC-BLLR-379, GSSC-BLLR-506, scope=range_start, role=Implementation)
+      const dispositionName = await newsletterDispositionFileName({
+        id: row.id,
+        name: row.name,
+        parentId: row.parentId,
+      });
       return new Response(file, {
         headers: {
           "content-type": row.mimeType || "application/octet-stream",
-          "content-disposition": `inline; filename="${row.name.replaceAll('"', "")}"`,
+          "content-disposition": `inline; filename="${dispositionName.replaceAll('"', "")}"`,
         },
       });
-      // @relation(GSSC-BLLR-379, scope=range_end, role=Implementation)
+      // @relation(GSSC-BLLR-379, GSSC-BLLR-506, scope=range_end, role=Implementation)
     },
     {
       params: t.Object({ cuid: t.String() }),
