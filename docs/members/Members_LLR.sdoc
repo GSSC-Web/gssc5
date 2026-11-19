@@ -960,16 +960,17 @@ RELATIONS:
 UID: GSSC-MLLR-445
 TITLE: Syntactic
 STATEMENT: >>>
-Top-level Navigation Items in the wide Navigation Menu bar SHALL appear in an evenly spaced horizontal grid with labels that do not wrap, and Navigation Items in the mid or narrow overlay SHALL appear in a vertical list.
+Top-level Navigation Items in the wide Navigation Menu bar SHALL appear in an evenly spaced horizontal grid with labels that do not wrap, SHALL be separated from adjacent top-level items by a vertical divider matching the Header utility separators, and Navigation Items in the mid or narrow overlay SHALL appear in a vertical list.
 <<<
 RATIONALE: >>>
-An evenly spaced grid replaces the packed cream row and keeps titles on one line. Vertical listing fits the overlay accordion.
+An evenly spaced grid replaces the packed cream row and keeps titles on one line. Vertical dividers match the Header utility chrome separators. Vertical listing fits the overlay accordion.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: >>>
 GSSC5-107
 GSSC5-121
+GSSC5-137
 <<<
 REVIEW_STATUS: Approved
 RELATIONS:
@@ -981,14 +982,17 @@ RELATIONS:
 UID: GSSC-MLLR-446
 TITLE: Lexical
 STATEMENT: >>>
-Each Navigation Item SHALL use the sans-serif theme font and the dark-green theme token for its text color.
+Each Navigation Item SHALL use the sans-serif theme font and the dark-green theme token for its text color, and SHALL use the dark-brown theme token for its text color on pointer hover and while its Navigation Submenu is open from hover or keyboard focus within that item.
 <<<
 RATIONALE: >>>
-Navigation text matches Header action text tokens until a fuller menu style map exists.
+Navigation text matches Header action text tokens at rest; dark-brown on hover and while open marks the active parent without inventing a new palette token.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-107
+CHANGE_DRIVER: >>>
+GSSC5-107
+GSSC5-137
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -1023,14 +1027,17 @@ RELATIONS:
 UID: GSSC-MLLR-448
 TITLE: Syntactic
 STATEMENT: >>>
-In wide chrome, a Navigation Submenu SHALL open as an overlay under its parent Navigation Item on hover or keyboard focus within that item. In mid and narrow chrome, a Navigation Submenu SHALL expand and collapse in place within the overlay Navigation Menu.
+In wide chrome, a Navigation Submenu SHALL open as an overlay under its parent Navigation Item on hover or keyboard focus within that item, with the overlay's start edge aligned to the start edge of that parent item's label, and in mid and narrow chrome, a Navigation Submenu SHALL expand and collapse in place within the overlay Navigation Menu.
 <<<
 RATIONALE: >>>
-Wide chrome uses hover dropdown overlays. Mid and narrow chrome use accordion expansion inside the menu overlay.
+Wide chrome uses hover dropdown overlays whose start edge must track the parent label rather than the equal-grid cell edge. Mid and narrow chrome use accordion expansion inside the menu overlay.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-107
+CHANGE_DRIVER: >>>
+GSSC5-107
+GSSC5-137
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -1056,6 +1063,66 @@ REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-84
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-NESTED-SUBMENU-POINTER-BRIDGE
+TITLE: Nested Submenu Pointer Bridge
+
+[REQUIREMENT]
+UID: GSSC-MLLR-665
+TITLE: Semantic
+STATEMENT: >>>
+The Nested Submenu Pointer Bridge SHALL keep a nested Navigation Submenu open while the pointer travels diagonally from that submenu's parent Navigation Item toward the submenu, and SHALL allow the pointer to reach sibling Navigation Items when travel leaves that diagonal path.
+<<<
+RATIONALE: >>>
+Diagonal travel toward a nested submenu is intentional; sibling hits outside that path must still retarget the menu.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-137
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-107
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-666
+TITLE: Syntactic
+STATEMENT: >>>
+In wide chrome, the Nested Submenu Pointer Bridge SHALL occupy the triangular region from the current pointer position to the near vertical edge of the open nested Navigation Submenu, and SHALL leave the residual area beside that triangle free for sibling Navigation Item hits.
+<<<
+RATIONALE: >>>
+A triangle from the pointer to the nested submenu near edge covers the diagonal path; residual space must not block vertical sibling selection.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-137
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-107
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-667
+TITLE: Lexical
+STATEMENT: >>>
+The Nested Submenu Pointer Bridge SHALL not present visible fill, border, or text chrome of its own.
+<<<
+RATIONALE: >>>
+The bridge is an invisible pointer aid; visible chrome would distract from Navigation Item labels.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-137
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-107
   ROLE: Refines
 
 [[/SECTION]]
