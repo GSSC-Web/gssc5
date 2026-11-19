@@ -9460,11 +9460,14 @@ Logged-in members may retrieve account photos for account and directory views.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-101
+CHANGE_DRIVER: >>>
+GSSC5-101
+GSSC5-131
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-BHLR-133
+  VALUE: GSSC-BHLR-87
   ROLE: Refines
 
 [REQUIREMENT]
@@ -9478,11 +9481,14 @@ Public leadership display needs leader photos without requiring a member session
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-101
+CHANGE_DRIVER: >>>
+GSSC5-101
+GSSC5-131
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-BHLR-133
+  VALUE: GSSC-BHLR-94
   ROLE: Refines
 
 [REQUIREMENT]
@@ -9496,11 +9502,14 @@ Naming by user cuid prevents photo collisions across accounts and keeps the acco
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-101
+CHANGE_DRIVER: >>>
+GSSC5-101
+GSSC5-131
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-BHLR-31
+  VALUE: GSSC-BHLR-83
   ROLE: Refines
 
 [REQUIREMENT]
@@ -9514,11 +9523,14 @@ The users table stores the Account Photo path returned from the account-photos s
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-101
+CHANGE_DRIVER: >>>
+GSSC5-101
+GSSC5-131
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-BHLR-155
+  VALUE: GSSC-BHLR-109
   ROLE: Refines
 
 [REQUIREMENT]
@@ -9535,11 +9547,12 @@ VERIFICATION_METHOD: Test
 CHANGE_DRIVER: >>>
 GSSC5-101
 GSSC5-102
+GSSC5-131
 <<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-BHLR-31
+  VALUE: GSSC-BHLR-85
   ROLE: Refines
 
 [[/SECTION]]
