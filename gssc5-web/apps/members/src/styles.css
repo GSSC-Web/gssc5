@@ -108,6 +108,19 @@ html.dark {
   content: "\f00d";
 }
 
+/* Header Site Search + menu glyphs (mirror public styles.css). */
+.nf-fa-search:before {
+  content: "\f002";
+}
+
+.nf-md-close:before {
+  content: "\f0156";
+}
+
+.nf-md-menu:before {
+  content: "\f035c";
+}
+
 .nf-md-weather_night:before {
   content: "\f0594";
 }
