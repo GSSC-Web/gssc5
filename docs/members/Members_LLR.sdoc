@@ -11208,14 +11208,17 @@ TITLE: Content Template Permission Fields
 UID: GSSC-MLLR-559
 TITLE: Semantic
 STATEMENT: >>>
-Each Content Template create, modify, and delete permission field SHALL present the currently assigned permissions by readable name, let an administrator add a permission by selecting a readable name from the remaining known permission set, and let an administrator remove an assigned permission by name, while persisting the same underlying permission values the Unified Backend expects.
+Each Content Template create, modify, and delete permission field SHALL present the currently assigned permissions by readable name, let an administrator add a permission by selecting a readable name from the remaining known permission set that includes every non-administrator permission available to users, and let an administrator remove an assigned permission by name, while persisting the same underlying permission values the Unified Backend expects.
 <<<
 RATIONALE: >>>
-Administrators assign content-template permissions without typing opaque integers; the Member Frontend maps readable names to the Unified Backend permission values.
+Administrators assign content-template permissions without typing opaque integers; the Member Frontend maps readable names to the Unified Backend permission values for the full known user permission set.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-128
+CHANGE_DRIVER: >>>
+GSSC5-128
+GSSC5-141
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
