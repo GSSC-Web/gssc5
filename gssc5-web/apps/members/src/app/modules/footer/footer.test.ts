@@ -84,6 +84,8 @@ test('GSSC-MLLR-42 Lexical', async () => {
   const footerPin = css.match(/html\.dark\s+\.gssc-footer\s*\{([^}]*)\}/);
   expect(footerPin?.[1]).toMatch(/--gssc-black:\s*#000000/);
   expect(footerPin?.[1]).toMatch(/--gssc-white:\s*#ffffff/);
+  expect(footerPin?.[1]).toMatch(/--color-gssc-black:\s*#000000/);
+  expect(footerPin?.[1]).toMatch(/--color-gssc-white:\s*#ffffff/);
 });
 // @relation(GSSC-MLLR-42, scope=range_end, role=Test)
 
