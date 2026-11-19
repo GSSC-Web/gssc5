@@ -426,7 +426,7 @@ test("GSSC-BLLR-475 Site Tree Seed", async () => {
   expect(membersPaths).not.toContain("/announcements");
   expect(membersPaths).not.toContain("/events");
 
-  // Already-seeded DBs gain missing seed paths without wiping admin edits.
+  // Initialized trees stay untouched: admin edits preserved; deleted seed paths stay gone.
   const prisma = getPrisma(loadConfig().DATABASE_URL);
   const storedPublic = await prisma.siteTree.findUniqueOrThrow({
     where: { frontend: "public" },
@@ -445,25 +445,23 @@ test("GSSC-BLLR-475 Site Tree Seed", async () => {
       path: { in: ["/sitemap", "/search"] },
     },
   });
-  const beforePaths = new Set(
-    (
-      await prisma.siteTreeNode.findMany({
-        where: { treeId: storedPublic.id },
-        select: { path: true },
-      })
-    ).map((node) => node.path),
-  );
-  expect(beforePaths.has("/sitemap")).toBe(false);
-  expect(beforePaths.has("/search")).toBe(false);
+  const beforeCount = await prisma.siteTreeNode.count({
+    where: { treeId: storedPublic.id },
+  });
+  expect(
+    await prisma.siteTreeNode.count({
+      where: { treeId: storedPublic.id, path: { in: ["/sitemap", "/search"] } },
+    }),
+  ).toBe(0);
 
   await seedSiteTrees();
 
   const after = await prisma.siteTreeNode.findMany({
     where: { treeId: storedPublic.id },
   });
-  expect(after.map((node) => node.path)).toEqual(
-    expect.arrayContaining(["/sitemap", "/search", "/membership"]),
-  );
+  expect(after).toHaveLength(beforeCount);
+  expect(after.find((node) => node.path === "/sitemap")).toBeUndefined();
+  expect(after.find((node) => node.path === "/search")).toBeUndefined();
   expect(after.find((node) => node.id === membership!.id)).toMatchObject({
     id: membership!.id,
     label: editedLabel,
@@ -474,8 +472,8 @@ test("GSSC-BLLR-475 Site Tree Seed", async () => {
   await seedSiteTrees();
   expect(
     await prisma.siteTreeNode.count({
-      where: { treeId: storedPublic.id, path: "/sitemap" },
+      where: { treeId: storedPublic.id },
     }),
-  ).toBe(1);
+  ).toBe(beforeCount);
 });
 // @relation(GSSC-BLLR-475, scope=range_end, role=Test)

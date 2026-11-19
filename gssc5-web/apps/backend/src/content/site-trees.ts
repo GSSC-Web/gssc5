@@ -194,9 +194,9 @@ function trimStrings(value: unknown): void {
 }
 
 /**
- * Ensure a frontend tree exists and includes every seed child path.
- * Missing seed paths are appended under the root; existing nodes (labels,
- * sortOrder, nesting, admin-added rows) are left untouched.
+ * Seed a frontend tree only when uninitialized (no SiteTree row yet).
+ * Once a tree exists, later seed/boot runs leave nodes untouched — including
+ * admin-removed destinations — so deleted seed paths are never re-added.
  */
 async function ensureTree(
   frontend: SiteTreeFrontend,
@@ -206,94 +206,40 @@ async function ensureTree(
   const prisma = getPrisma(loadConfig().DATABASE_URL);
   const existing = await prisma.siteTree.findUnique({
     where: { frontend },
-    include: {
+    select: { id: true },
+  });
+  if (existing) return;
+
+  const tree = await prisma.siteTree.create({
+    data: {
+      frontend,
       nodes: {
-        select: {
-          id: true,
-          parentId: true,
-          path: true,
-          sortOrder: true,
+        create: {
+          label: root.label,
+          path: root.path,
+          sortOrder: 0,
+          parentId: null,
         },
       },
     },
+    include: { nodes: true },
   });
-
-  if (!existing) {
-    const tree = await prisma.siteTree.create({
-      data: {
-        frontend,
-        nodes: {
-          create: {
-            label: root.label,
-            path: root.path,
-            sortOrder: 0,
-            parentId: null,
-          },
-        },
-      },
-      include: { nodes: true },
-    });
-    const rootNode = tree.nodes[0];
-    if (!rootNode) throw new Error(`site tree root missing for ${frontend}`);
-    if (children.length > 0) {
-      await prisma.siteTreeNode.createMany({
-        data: children.map((child, index) => ({
-          treeId: tree.id,
-          parentId: rootNode.id,
-          label: child.label,
-          path: child.path,
-          sortOrder: index,
-        })),
-      });
-    }
-    return;
-  }
-
-  let rootNode = existing.nodes.find((node) => node.parentId === null);
-  if (!rootNode) {
-    // Tree row exists but has no root — recreate root, then fill missing children.
-    rootNode = await prisma.siteTreeNode.create({
-      data: {
-        treeId: existing.id,
-        label: root.label,
-        path: root.path,
-        sortOrder: 0,
-        parentId: null,
-      },
-      select: {
-        id: true,
-        parentId: true,
-        path: true,
-        sortOrder: true,
-      },
+  const rootNode = tree.nodes[0];
+  if (!rootNode) throw new Error(`site tree root missing for ${frontend}`);
+  if (children.length > 0) {
+    await prisma.siteTreeNode.createMany({
+      data: children.map((child, index) => ({
+        treeId: tree.id,
+        parentId: rootNode.id,
+        label: child.label,
+        path: child.path,
+        sortOrder: index,
+      })),
     });
   }
-
-  const presentPaths = new Set(existing.nodes.map((node) => node.path));
-  presentPaths.add(rootNode.path);
-  const missing = children.filter((child) => !presentPaths.has(child.path));
-  if (missing.length === 0) return;
-
-  const rootChildSortOrders = existing.nodes
-    .filter((node) => node.parentId === rootNode.id)
-    .map((node) => node.sortOrder);
-  const nextSort =
-    rootChildSortOrders.length === 0
-      ? 0
-      : Math.max(...rootChildSortOrders) + 1;
-
-  await prisma.siteTreeNode.createMany({
-    data: missing.map((child, index) => ({
-      treeId: existing.id,
-      parentId: rootNode.id,
-      label: child.label,
-      path: child.path,
-      sortOrder: nextSort + index,
-    })),
-  });
 }
 
-/** Idempotent seed: Public + Members trees matching current destinations. */
+/** Idempotent seed: Public + Members trees when uninitialized. */
 export async function seedSiteTrees(
   databaseUrl = loadConfig().DATABASE_URL,
 ): Promise<void> {
