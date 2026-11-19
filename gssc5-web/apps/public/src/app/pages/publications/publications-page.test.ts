@@ -10,13 +10,13 @@ const samplePublications: PublicationEntry[] = [
   {
     cuid: 'pub_cooking',
     title: 'The Cooking Gene',
-    referenceLink: '/documents/cooking-gene.pdf',
+    referenceLink: 'publications/pub_cooking',
     description: 'Presented courtesy of the Cookbook Committee',
   },
   {
     cuid: 'pub_register',
     title: 'The 1890 Great Register',
-    referenceLink: 'https://example.org/great-register.pdf',
+    referenceLink: 'publications/pub_register',
     description: null,
   },
 ];
@@ -62,8 +62,8 @@ test('GSSC-PLLR-243 Semantic', async () => {
     'The 1890 Great Register',
   ]);
   expect(page.publications().map((pub) => pub.referenceLink)).toEqual([
-    '/documents/cooking-gene.pdf',
-    'https://example.org/great-register.pdf',
+    'publications/pub_cooking',
+    'publications/pub_register',
   ]);
   expect(page.publications().map((pub) => pub.description)).toEqual([
     'Presented courtesy of the Cookbook Committee',
@@ -119,8 +119,8 @@ test('GSSC-PLLR-246 Semantic', async () => {
     'The 1890 Great Register',
   ]);
   expect(links.map((link) => link.getAttribute('href'))).toEqual([
-    '/documents/cooking-gene.pdf',
-    'https://example.org/great-register.pdf',
+    'http://localhost:3000/publications/pub_cooking/file',
+    'http://localhost:3000/publications/pub_register/file',
   ]);
 });
 // @relation(GSSC-PLLR-246, scope=range_end, role=Test)

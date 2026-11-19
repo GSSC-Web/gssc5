@@ -5,14 +5,18 @@ import {
   signal,
 } from '@angular/core';
 import { backend } from '../../services/backend';
+import { publicationFileUrl } from '../../services/publications-api';
 
 /** Public publication entry from Unified Backend GET /publications. */
 export type PublicationEntry = {
   cuid: string;
   title: string;
+  /** Stored path `publications/{cuid}`; public links use publicationFileUrl. */
   referenceLink: string;
   description: string | null;
 };
+
+export { publicationFileUrl };
 
 export type PublicationsListGet = () => Promise<PublicationEntry[] | null>;
 
@@ -53,6 +57,9 @@ export class PublicationsPage {
 
   /** Publications for the grid, in backend list order. */
   readonly publications = signal<PublicationEntry[]>([]);
+
+  /** Bound in template for Publication Link href resolution. */
+  readonly publicationFileUrl = publicationFileUrl;
 
   constructor() {
     void this.loadPublications();

@@ -6848,14 +6848,17 @@ TITLE: GET
 UID: GSSC-BLLR-356
 TITLE: Publications List
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return each publication's cuid, title, reference link, and description when listing publications, with description null when that publication has no description.
+The GSSC Website Unified Backend SHALL return each publication's cuid, title, stored publication file path, and description when listing publications, with description null when that publication has no description.
 <<<
 RATIONALE: >>>
 The public publications page assembles its hyperlink grid from this list, including optional description text under each title when present.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-19
+CHANGE_DRIVER: >>>
+GSSC5-19
+GSSC-190
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -6872,14 +6875,17 @@ TITLE: POST
 UID: GSSC-BLLR-357
 TITLE: Publication Creation
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL create a publication for a logged-in member who is a publication editor or an administrator, requiring a title and a reference link, accepting an optional description, and returning the created publication's cuid, title, reference link, and description.
+The GSSC Website Unified Backend SHALL create a publication for a logged-in member who is a publication editor or an administrator, requiring a title, accepting an optional description, assigning a stored publication file path named by the new publication cuid under the publications file store, and returning the created publication's cuid, title, stored publication file path, and description.
 <<<
 RATIONALE: >>>
-Authorized editors add publications with the fields the public list presents. Description may be omitted.
+Authorized editors add publications with the fields the public list presents. The publication file is uploaded separately under that cuid. Description may be omitted.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-19
+CHANGE_DRIVER: >>>
+GSSC5-19
+GSSC-190
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -6920,14 +6926,17 @@ TITLE: GET
 UID: GSSC-BLLR-358
 TITLE: Publication Get
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL return a publication by cuid in the path, including title, reference link, and description, with description null when that publication has no description.
+The GSSC Website Unified Backend SHALL return a publication by cuid in the path, including title, stored publication file path, and description, with description null when that publication has no description.
 <<<
 RATIONALE: >>>
 Path cuid identifies one publication for assembly or editing.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-19
+CHANGE_DRIVER: >>>
+GSSC5-19
+GSSC-190
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -6944,14 +6953,17 @@ TITLE: PATCH
 UID: GSSC-BLLR-359
 TITLE: Publication Modification
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL modify a publication by cuid for a logged-in member who is a publication editor or an administrator, accepting title, reference link, and description updates, and returning the updated publication's cuid, title, reference link, and description.
+The GSSC Website Unified Backend SHALL modify a publication by cuid for a logged-in member who is a publication editor or an administrator, accepting title and description updates, and returning the updated publication's cuid, title, stored publication file path, and description.
 <<<
 RATIONALE: >>>
-Authorized editors keep publication fields current, including clearing or setting the optional description.
+Authorized editors keep publication title and optional description current. Replacing the stored publication file is a separate upload.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-19
+CHANGE_DRIVER: >>>
+GSSC5-19
+GSSC-190
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -9277,14 +9289,17 @@ TITLE: Publications
 UID: GSSC-BLLR-354
 TITLE: Publications Table
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL store each publication as a row in a publications table with a cuid, a title, a reference link, and an optional description.
+The GSSC Website Unified Backend SHALL store each publication as a row in a publications table with a cuid, a title, a stored publication file path under the publications file store named by that cuid, and an optional description.
 <<<
 RATIONALE: >>>
 The dedicated table is the source of truth for the public publications list. Description may be absent.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-19
+CHANGE_DRIVER: >>>
+GSSC5-19
+GSSC-190
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -9784,6 +9799,84 @@ REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-191
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-PUBLICATIONS-FILES
+TITLE: Publications File Store
+
+[REQUIREMENT]
+UID: GSSC-BLLR-501
+TITLE: Publications File Directory
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL create the publications directory under the file storage root on startup when that directory is missing, and SHALL keep a corresponding publications folder entry for uploads.
+<<<
+RATIONALE: >>>
+Publication files share a dedicated store parallel to account photos so each publication cuid maps to one path.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC-190
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-201
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-502
+TITLE: Publication File Upload
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL accept an authenticated multipart upload of a publication file for a publication cuid by a logged-in member who is a publication editor or an administrator, store that file under a name and path derived from that publication cuid in the publications file store, and return that publication cuid and path.
+<<<
+RATIONALE: >>>
+Editors attach the digital publication bytes under the publication's cuid after creating the catalog entry.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC-190
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-198
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-503
+TITLE: Publication File Get
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL return the stored publication file bytes for a publication cuid in the path without requiring a login session token when that publication exists and has a stored file.
+<<<
+RATIONALE: >>>
+Public publication links open the stored file for visitors.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC-190
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-196
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-504
+TITLE: Publication File Replace
+STATEMENT: >>>
+When an authenticated upload targets a publication cuid that already has a stored file, the GSSC Website Unified Backend SHALL store the replacement under that publication cuid in the publications file store and SHALL delete the prior file for that publication rather than retaining a second file.
+<<<
+RATIONALE: >>>
+Editors replace an outdated digital publication without leaving orphaned prior bytes.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC-190
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-198
   ROLE: Refines
 
 [[/SECTION]]

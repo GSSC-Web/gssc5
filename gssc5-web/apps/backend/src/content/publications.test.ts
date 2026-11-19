@@ -1,3 +1,6 @@
+import { access } from "node:fs/promises";
+import path from "node:path";
+
 import { beforeAll, expect, test } from "bun:test";
 
 import { loadConfig } from "../config";
@@ -11,6 +14,11 @@ import {
   type BackendFetch,
   type InProcessApp,
 } from "../test-harness";
+import {
+  ensurePublicationsFolder,
+  PUBLICATIONS_DIR,
+  resetPublicationsInitForTests,
+} from "./publications";
 
 let app: InProcessApp;
 let backend: BackendFetch;
@@ -19,6 +27,7 @@ let memberTok = "";
 let editorTok = "";
 
 beforeAll(async () => {
+  resetPublicationsInitForTests();
   app = await bootInProcess();
   backend = app.backend;
   const prisma = getPrisma(loadConfig().DATABASE_URL);
@@ -93,10 +102,10 @@ beforeAll(async () => {
   expect(editorTok.length).toBeGreaterThan(0);
 });
 
-async function getJson(path: string, token?: string) {
+async function getJson(pathName: string, token?: string) {
   const headers: Record<string, string> = {};
   if (token) headers.cookie = cookieHeaderForToken(token);
-  const response = await backend(new Request(`http://127.0.0.1${path}`, { headers }));
+  const response = await backend(new Request(`http://127.0.0.1${pathName}`, { headers }));
   const text = await response.text();
   let body: unknown = text;
   try {
@@ -109,7 +118,7 @@ async function getJson(path: string, token?: string) {
 
 async function sendJson(
   method: string,
-  path: string,
+  pathName: string,
   body: unknown,
   token?: string,
 ) {
@@ -118,7 +127,7 @@ async function sendJson(
   };
   if (token) headers.cookie = cookieHeaderForToken(token);
   const response = await backend(
-    new Request(`http://127.0.0.1${path}`, {
+    new Request(`http://127.0.0.1${pathName}`, {
       method,
       headers,
       body: JSON.stringify(body),
@@ -134,20 +143,54 @@ async function sendJson(
   return { status: response.status, body: parsed };
 }
 
+async function uploadPublicationFile(
+  cuid: string,
+  token: string,
+  bytes = "pub-bytes",
+  filename = "issue.pdf",
+): Promise<Response> {
+  const form = new FormData();
+  form.append("file", new File([bytes], filename, { type: "application/pdf" }));
+  return backend(
+    new Request(`http://127.0.0.1/publications/${cuid}/file`, {
+      method: "POST",
+      headers: { cookie: cookieHeaderForToken(token) },
+      body: form,
+    }),
+  );
+}
+
+async function getPublicationFile(cuid: string): Promise<Response> {
+  return backend(
+    new Request(`http://127.0.0.1/publications/${cuid}/file`, {
+      method: "GET",
+    }),
+  );
+}
+
+function expectedPath(cuid: string): string {
+  return `${PUBLICATIONS_DIR}/${cuid}`;
+}
+
 // @relation(GSSC-BLLR-354, scope=range_start, role=Test)
 test("GSSC-BLLR-354 Publications Table", async () => {
   const prisma = getPrisma(loadConfig().DATABASE_URL);
   const row = await prisma.publication.create({
     data: {
       title: `Stored Pub ${Date.now()}`,
-      referenceLink: "https://example.org/stored",
+      referenceLink: "publications/temp",
     },
+  });
+  const pathKey = expectedPath(row.id);
+  await prisma.publication.update({
+    where: { id: row.id },
+    data: { referenceLink: pathKey },
   });
   const loaded = await prisma.publication.findUnique({ where: { id: row.id } });
   expect(loaded).toEqual({
     id: row.id,
     title: row.title,
-    referenceLink: row.referenceLink,
+    referenceLink: pathKey,
     description: null,
   });
 });
@@ -159,19 +202,29 @@ test("GSSC-BLLR-356 Publications List", async () => {
   const row = await prisma.publication.create({
     data: {
       title: `List Pub ${Date.now()}`,
-      referenceLink: "https://example.org/list",
+      referenceLink: "publications/pending-list",
     },
+  });
+  const pathKey = expectedPath(row.id);
+  await prisma.publication.update({
+    where: { id: row.id },
+    data: { referenceLink: pathKey },
   });
   const { status, body } = await getJson("/publications");
   expect(status).toBe(200);
   expect(Array.isArray(body)).toBe(true);
-  const entry = (body as Array<{ cuid: string; title: string; referenceLink: string; description: string | null }>).find(
-    (item) => item.cuid === row.id,
-  );
+  const entry = (
+    body as Array<{
+      cuid: string;
+      title: string;
+      referenceLink: string;
+      description: string | null;
+    }>
+  ).find((item) => item.cuid === row.id);
   expect(entry).toEqual({
     cuid: row.id,
     title: row.title,
-    referenceLink: row.referenceLink,
+    referenceLink: pathKey,
     description: null,
   });
 });
@@ -183,26 +236,28 @@ test("GSSC-BLLR-357 Publication Creation", async () => {
   const { status, body } = await sendJson(
     "POST",
     "/publications",
-    { title, referenceLink: "https://example.org/create" },
+    { title },
     editorTok,
   );
   expect(status).toBe(201);
+  const cuid = (body as { cuid: string }).cuid;
   expect(body).toMatchObject({
     title,
-    referenceLink: "https://example.org/create",
+    referenceLink: expectedPath(cuid),
     description: null,
   });
-  expect(typeof (body as { cuid: string }).cuid).toBe("string");
+  expect(typeof cuid).toBe("string");
 
   const withDesc = await sendJson(
     "POST",
     "/publications",
-    { title: `Desc Pub ${Date.now()}`, referenceLink: "https://example.org/desc", description: "Optional blurb" },
+    { title: `Desc Pub ${Date.now()}`, description: "Optional blurb" },
     editorTok,
   );
   expect(withDesc.status).toBe(201);
+  const descCuid = (withDesc.body as { cuid: string }).cuid;
   expect(withDesc.body).toMatchObject({
-    referenceLink: "https://example.org/desc",
+    referenceLink: expectedPath(descCuid),
     description: "Optional blurb",
   });
 });
@@ -214,7 +269,7 @@ test("GSSC-BLLR-361 Publication Creation Forbidden", async () => {
   const { status } = await sendJson(
     "POST",
     "/publications",
-    { title: "Nope", referenceLink: "https://example.org/nope" },
+    { title: "Nope" },
     memberTok,
   );
   expect(status).toBe(403);
@@ -225,18 +280,20 @@ test("GSSC-BLLR-361 Publication Creation Forbidden", async () => {
 
 // @relation(GSSC-BLLR-358, scope=range_start, role=Test)
 test("GSSC-BLLR-358 Publication Get", async () => {
-  const row = await getPrisma(loadConfig().DATABASE_URL).publication.create({
-    data: {
-      title: `Get Pub ${Date.now()}`,
-      referenceLink: "https://example.org/get",
-    },
-  });
-  const { status, body } = await getJson(`/publications/${row.id}`);
+  const created = await sendJson(
+    "POST",
+    "/publications",
+    { title: `Get Pub ${Date.now()}` },
+    editorTok,
+  );
+  expect(created.status).toBe(201);
+  const cuid = (created.body as { cuid: string }).cuid;
+  const { status, body } = await getJson(`/publications/${cuid}`);
   expect(status).toBe(200);
   expect(body).toEqual({
-    cuid: row.id,
-    title: row.title,
-    referenceLink: row.referenceLink,
+    cuid,
+    title: (created.body as { title: string }).title,
+    referenceLink: expectedPath(cuid),
     description: null,
   });
 });
@@ -244,29 +301,30 @@ test("GSSC-BLLR-358 Publication Get", async () => {
 
 // @relation(GSSC-BLLR-359, scope=range_start, role=Test)
 test("GSSC-BLLR-359 Publication Modification", async () => {
-  const row = await getPrisma(loadConfig().DATABASE_URL).publication.create({
-    data: {
-      title: `Patch Pub ${Date.now()}`,
-      referenceLink: "https://example.org/old",
-    },
-  });
+  const created = await sendJson(
+    "POST",
+    "/publications",
+    { title: `Patch Pub ${Date.now()}` },
+    editorTok,
+  );
+  const cuid = (created.body as { cuid: string }).cuid;
   const { status, body } = await sendJson(
     "PATCH",
-    `/publications/${row.id}`,
-    { title: "Patched Title", referenceLink: "https://example.org/new" },
+    `/publications/${cuid}`,
+    { title: "Patched Title" },
     editorTok,
   );
   expect(status).toBe(200);
   expect(body).toEqual({
-    cuid: row.id,
+    cuid,
     title: "Patched Title",
-    referenceLink: "https://example.org/new",
+    referenceLink: expectedPath(cuid),
     description: null,
   });
 
   const described = await sendJson(
     "PATCH",
-    `/publications/${row.id}`,
+    `/publications/${cuid}`,
     { description: "Now described" },
     editorTok,
   );
@@ -277,69 +335,153 @@ test("GSSC-BLLR-359 Publication Modification", async () => {
 
 // @relation(GSSC-BLLR-362, scope=range_start, role=Test)
 test("GSSC-BLLR-362 Publication Modification Forbidden", async () => {
-  const row = await getPrisma(loadConfig().DATABASE_URL).publication.create({
-    data: {
-      title: `No Patch Pub ${Date.now()}`,
-      referenceLink: "https://example.org/locked",
-    },
-  });
+  const created = await sendJson(
+    "POST",
+    "/publications",
+    { title: `No Patch Pub ${Date.now()}` },
+    editorTok,
+  );
+  const cuid = (created.body as { cuid: string }).cuid;
+  const title = (created.body as { title: string }).title;
   const { status } = await sendJson(
     "PATCH",
-    `/publications/${row.id}`,
+    `/publications/${cuid}`,
     { title: "Hijack" },
     memberTok,
   );
   expect(status).toBe(403);
   const unchanged = await getPrisma(loadConfig().DATABASE_URL).publication.findUnique({
-    where: { id: row.id },
+    where: { id: cuid },
   });
-  expect(unchanged?.title).toBe(row.title);
+  expect(unchanged?.title).toBe(title);
 });
 // @relation(GSSC-BLLR-362, scope=range_end, role=Test)
 
 // @relation(GSSC-BLLR-360, scope=range_start, role=Test)
 test("GSSC-BLLR-360 Publication Deletion", async () => {
-  const row = await getPrisma(loadConfig().DATABASE_URL).publication.create({
-    data: {
-      title: `Delete Pub ${Date.now()}`,
-      referenceLink: "https://example.org/delete",
-    },
-  });
+  const created = await sendJson(
+    "POST",
+    "/publications",
+    { title: `Delete Pub ${Date.now()}` },
+    editorTok,
+  );
+  const cuid = (created.body as { cuid: string }).cuid;
+  const uploaded = await uploadPublicationFile(cuid, editorTok, "delete-me");
+  expect(uploaded.status).toBe(200);
+
   const response = await backend(
-    new Request(`http://127.0.0.1/publications/${row.id}`, {
+    new Request(`http://127.0.0.1/publications/${cuid}`, {
       method: "DELETE",
       headers: { cookie: cookieHeaderForToken(editorTok) },
     }),
   );
   expect(response.status).toBe(204);
   const gone = await getPrisma(loadConfig().DATABASE_URL).publication.findUnique({
-    where: { id: row.id },
+    where: { id: cuid },
   });
   expect(gone).toBeNull();
+  expect((await getPublicationFile(cuid)).status).toBe(404);
+  const filePath = path.resolve(loadConfig().FILE_STORAGE_ROOT, expectedPath(cuid));
+  expect(await Bun.file(filePath).exists()).toBe(false);
 });
 // @relation(GSSC-BLLR-360, scope=range_end, role=Test)
 
 // @relation(GSSC-BLLR-363, scope=range_start, role=Test)
 test("GSSC-BLLR-363 Publication Deletion Forbidden", async () => {
-  const row = await getPrisma(loadConfig().DATABASE_URL).publication.create({
-    data: {
-      title: `No Delete Pub ${Date.now()}`,
-      referenceLink: "https://example.org/keep",
-    },
-  });
+  const created = await sendJson(
+    "POST",
+    "/publications",
+    { title: `No Delete Pub ${Date.now()}` },
+    editorTok,
+  );
+  const cuid = (created.body as { cuid: string }).cuid;
   const response = await backend(
-    new Request(`http://127.0.0.1/publications/${row.id}`, {
+    new Request(`http://127.0.0.1/publications/${cuid}`, {
       method: "DELETE",
       headers: { cookie: cookieHeaderForToken(memberTok) },
     }),
   );
   expect(response.status).toBe(403);
   const kept = await getPrisma(loadConfig().DATABASE_URL).publication.findUnique({
-    where: { id: row.id },
+    where: { id: cuid },
   });
   expect(kept).not.toBeNull();
 });
 // @relation(GSSC-BLLR-363, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-501, scope=range_start, role=Test)
+test("GSSC-BLLR-501 publications directory exists on init", async () => {
+  const folderId = await ensurePublicationsFolder();
+  expect(folderId.length).toBeGreaterThan(0);
+  const root = path.resolve(loadConfig().FILE_STORAGE_ROOT, PUBLICATIONS_DIR);
+  await access(root);
+  const prisma = getPrisma(loadConfig().DATABASE_URL);
+  const row = await prisma.storedFileEntry.findUnique({ where: { id: folderId } });
+  expect(row?.name).toBe(PUBLICATIONS_DIR);
+  expect(row?.kind).toBe("folder");
+});
+// @relation(GSSC-BLLR-501, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-502, scope=range_start, role=Test)
+test("GSSC-BLLR-502 authenticated upload stores by publication cuid", async () => {
+  const created = await sendJson(
+    "POST",
+    "/publications",
+    { title: `Upload Pub ${Date.now()}` },
+    editorTok,
+  );
+  const cuid = (created.body as { cuid: string }).cuid;
+  const response = await uploadPublicationFile(cuid, editorTok, "named-pub");
+  expect(response.status).toBe(200);
+  const body = (await response.json()) as { cuid: string; path: string };
+  expect(body.cuid).toBe(cuid);
+  expect(body.path).toBe(expectedPath(cuid));
+  await access(path.resolve(loadConfig().FILE_STORAGE_ROOT, body.path));
+
+  const denied = await uploadPublicationFile(cuid, memberTok, "denied");
+  expect(denied.status).toBe(403);
+});
+// @relation(GSSC-BLLR-502, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-503, scope=range_start, role=Test)
+test("GSSC-BLLR-503 GET publication file without token succeeds", async () => {
+  const created = await sendJson(
+    "POST",
+    "/publications",
+    { title: `Public File Pub ${Date.now()}` },
+    editorTok,
+  );
+  const cuid = (created.body as { cuid: string }).cuid;
+  expect((await uploadPublicationFile(cuid, editorTok, "public-bytes")).status).toBe(200);
+  const got = await getPublicationFile(cuid);
+  expect(got.status).toBe(200);
+  expect(await got.text()).toBe("public-bytes");
+});
+// @relation(GSSC-BLLR-503, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-504, scope=range_start, role=Test)
+test("GSSC-BLLR-504 upload for same publication cuid overwrites existing file", async () => {
+  const created = await sendJson(
+    "POST",
+    "/publications",
+    { title: `Replace Pub ${Date.now()}` },
+    editorTok,
+  );
+  const cuid = (created.body as { cuid: string }).cuid;
+  expect((await uploadPublicationFile(cuid, editorTok, "first-bytes")).status).toBe(200);
+  expect((await uploadPublicationFile(cuid, editorTok, "second-bytes")).status).toBe(200);
+
+  const prisma = getPrisma(loadConfig().DATABASE_URL);
+  const folderId = await ensurePublicationsFolder();
+  const rows = await prisma.storedFileEntry.findMany({
+    where: { name: cuid, parentId: folderId, kind: "file", deletedAt: null },
+  });
+  expect(rows.length).toBe(1);
+  const got = await getPublicationFile(cuid);
+  expect(got.status).toBe(200);
+  expect(await got.text()).toBe("second-bytes");
+});
+// @relation(GSSC-BLLR-504, scope=range_end, role=Test)
 
 test("Publication mutation body schema rejects empty title and empty patch", async () => {
   expect(
@@ -347,17 +489,21 @@ test("Publication mutation body schema rejects empty title and empty patch", asy
       await sendJson(
         "POST",
         "/publications",
-        { title: "", referenceLink: "https://example.org/x" },
+        { title: "" },
         editorTok,
       )
     ).status,
   ).toBe(422);
 
-  const row = await getPrisma(loadConfig().DATABASE_URL).publication.create({
-    data: {
-      title: `Schema Pub ${Date.now()}`,
-      referenceLink: "https://example.org/schema",
-    },
-  });
-  expect((await sendJson("PATCH", `/publications/${row.id}`, {}, editorTok)).status).toBe(422);
+  const created = await sendJson(
+    "POST",
+    "/publications",
+    { title: `Schema Pub ${Date.now()}` },
+    editorTok,
+  );
+  const cuid = (created.body as { cuid: string }).cuid;
+  expect((await sendJson("PATCH", `/publications/${cuid}`, {}, editorTok)).status).toBe(422);
 });
+
+// silence unused adminTok for future admin-only asserts
+void adminTok;
