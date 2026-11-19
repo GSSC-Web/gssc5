@@ -8016,14 +8016,17 @@ RELATIONS:
 UID: GSSC-BLLR-475
 TITLE: Site Tree Seed
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL seed the public and members site trees so each tree's nodes match the current public routes and members header and editor destinations available at seed time.
+The GSSC Website Unified Backend SHALL seed the public and members site trees only when each tree is uninitialized, matching the current public routes and members header and editor destinations available at seed time, leaving already-initialized trees unmodified by later seed runs so administrator-removed nodes are not recreated.
 <<<
 RATIONALE: >>>
-Seeded trees give frontends a usable menu without a tree-editor UI. Exact node lists follow the routes and destinations present when the seed runs.
+Seeded trees give frontends a usable menu without a tree-editor UI. Exact node lists follow the routes and destinations present when the seed first runs. Later boots must not undo administrator deletions or soft-removals.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-40
+CHANGE_DRIVER: >>>
+GSSC5-40
+GSSC-181
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
