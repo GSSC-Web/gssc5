@@ -7,11 +7,14 @@ import {
   researchToolsApi,
 } from '../../services/research-tools-api';
 
+type ReferenceMode = 'url' | 'file';
+
 type ResearchToolDraft = {
   cuid: string | null;
   title: string;
   referenceLink: string;
   hasFile: boolean;
+  referenceMode: ReferenceMode;
 };
 
 const emptyDraft = (): ResearchToolDraft => ({
@@ -19,6 +22,7 @@ const emptyDraft = (): ResearchToolDraft => ({
   title: '',
   referenceLink: '',
   hasFile: false,
+  referenceMode: 'url',
 });
 
 @Component({
@@ -35,6 +39,7 @@ export class ResearchToolsPage implements OnInit {
   readonly title = signal('');
   readonly referenceLink = signal('');
   readonly hasFile = signal(false);
+  readonly referenceMode = signal<ReferenceMode>('url');
   readonly selectedFileName = signal('');
   readonly selectedCuid = signal<string | null>(null);
   readonly isCreating = signal(false);
@@ -94,6 +99,7 @@ export class ResearchToolsPage implements OnInit {
       title: entry.title,
       referenceLink: entry.referenceLink,
       hasFile: entry.hasFile,
+      referenceMode: entry.hasFile ? 'file' : 'url',
     });
     this.statusMessage.set('');
   }
@@ -109,6 +115,20 @@ export class ResearchToolsPage implements OnInit {
   }
   // @relation(GSSC-MLLR-404, scope=range_end, role=Implementation)
 
+  // @relation(GSSC-MLLR-703, scope=range_start, role=Implementation)
+  setReferenceMode(mode: ReferenceMode): void {
+    if (!this.permitted() || this.referenceMode() === mode) return;
+    this.referenceMode.set(mode);
+    if (mode === 'url') {
+      this.pendingFile = null;
+      this.selectedFileName.set('');
+    } else {
+      this.referenceLink.set('');
+      this.hasFile.set(this.baseline.hasFile);
+    }
+  }
+  // @relation(GSSC-MLLR-703, scope=range_end, role=Implementation)
+
   // @relation(GSSC-MLLR-697, GSSC-MLLR-698, GSSC-MLLR-699, scope=range_start, role=Implementation)
   onFileSelected(event: Event): void {
     if (!this.permitted()) return;
@@ -116,23 +136,35 @@ export class ResearchToolsPage implements OnInit {
     const file = input.files?.[0] ?? null;
     this.pendingFile = file;
     this.selectedFileName.set(file?.name ?? '');
-    if (file) {
-      this.referenceLink.set('');
-    }
+    this.referenceMode.set('file');
+    this.referenceLink.set('');
   }
   // @relation(GSSC-MLLR-697, GSSC-MLLR-698, GSSC-MLLR-699, scope=range_end, role=Implementation)
 
-  // @relation(GSSC-MLLR-412, GSSC-MLLR-414, GSSC-MLLR-697, scope=range_start, role=Implementation)
+  // @relation(GSSC-MLLR-412, GSSC-MLLR-414, GSSC-MLLR-697, GSSC-MLLR-703, scope=range_start, role=Implementation)
   async onSaved(): Promise<void> {
     if (!this.permitted()) return;
     const title = this.title().trim();
-    const referenceLink = this.referenceLink().trim();
-    const file = this.pendingFile;
+    const mode = this.referenceMode();
+    const referenceLink = mode === 'url' ? this.referenceLink().trim() : '';
+    const file = mode === 'file' ? this.pendingFile : null;
     if (!title) {
       this.statusMessage.set('Title is required.');
       return;
     }
-    if (!file && !referenceLink && !this.hasFile()) {
+    if (mode === 'url' && file) {
+      this.statusMessage.set('Choose a URL or a file, not both.');
+      return;
+    }
+    if (mode === 'file' && referenceLink) {
+      this.statusMessage.set('Choose a URL or a file, not both.');
+      return;
+    }
+    if (mode === 'url' && !referenceLink) {
+      this.statusMessage.set('Provide a reference link or choose a file.');
+      return;
+    }
+    if (mode === 'file' && !file && !this.hasFile()) {
       this.statusMessage.set('Provide a reference link or choose a file.');
       return;
     }
@@ -141,14 +173,14 @@ export class ResearchToolsPage implements OnInit {
       if (this.isCreating() || this.selectedCuid() === null) {
         const { data, error } = await researchToolsApi.create({
           title,
-          referenceLink: file ? '' : referenceLink,
+          referenceLink: mode === 'url' ? referenceLink : '',
         });
         if (error || !data) {
           this.statusMessage.set('Save failed.');
           return;
         }
         let created = data as ResearchToolEntry;
-        if (file) {
+        if (mode === 'file' && file) {
           const uploaded = await researchToolsApi.uploadFile(created.cuid, file);
           if (uploaded.error || !uploaded.data) {
             this.statusMessage.set('File upload failed.');
@@ -168,11 +200,12 @@ export class ResearchToolsPage implements OnInit {
           title: created.title,
           referenceLink: created.referenceLink,
           hasFile: created.hasFile,
+          referenceMode: created.hasFile ? 'file' : 'url',
         });
         this.statusMessage.set('Created.');
       } else {
         const cuid = this.selectedCuid()!;
-        if (file) {
+        if (mode === 'file' && file) {
           const uploaded = await researchToolsApi.uploadFile(cuid, file);
           if (uploaded.error || !uploaded.data) {
             this.statusMessage.set('File upload failed.');
@@ -180,9 +213,7 @@ export class ResearchToolsPage implements OnInit {
           }
         }
         const patch: { title: string; referenceLink?: string } = { title };
-        if (!file && referenceLink) {
-          patch.referenceLink = referenceLink;
-        } else if (!file && !this.hasFile()) {
+        if (mode === 'url') {
           patch.referenceLink = referenceLink;
         }
         const { data, error } = await researchToolsApi.update(cuid, patch);
@@ -196,6 +227,7 @@ export class ResearchToolsPage implements OnInit {
           title: updated.title,
           referenceLink: updated.referenceLink,
           hasFile: updated.hasFile,
+          referenceMode: updated.hasFile ? 'file' : 'url',
         });
         this.statusMessage.set('Saved.');
       }
@@ -204,7 +236,7 @@ export class ResearchToolsPage implements OnInit {
       this.statusMessage.set('Save failed.');
     }
   }
-  // @relation(GSSC-MLLR-412, GSSC-MLLR-414, GSSC-MLLR-697, scope=range_end, role=Implementation)
+  // @relation(GSSC-MLLR-412, GSSC-MLLR-414, GSSC-MLLR-697, GSSC-MLLR-703, scope=range_end, role=Implementation)
 
   // @relation(GSSC-MLLR-413, scope=range_start, role=Implementation)
   onCancelled(): void {
@@ -240,6 +272,7 @@ export class ResearchToolsPage implements OnInit {
     this.title.set(draft.title);
     this.referenceLink.set(draft.referenceLink);
     this.hasFile.set(draft.hasFile);
+    this.referenceMode.set(draft.referenceMode);
     this.selectedCuid.set(draft.cuid);
     this.pendingFile = null;
     this.selectedFileName.set('');

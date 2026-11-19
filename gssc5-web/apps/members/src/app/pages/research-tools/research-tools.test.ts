@@ -199,7 +199,7 @@ async function settle(
 
 // @relation(GSSC-MLLR-398, scope=range_start, role=Test)
 test('GSSC-MLLR-398 Semantic', async () => {
-  const { root, fixture, restore } = await setupResearchTools();
+  const { root, fixture, page, restore } = await setupResearchTools();
   try {
     expect(root.querySelector('[data-slot="research-tools-page"]')).toBeTruthy();
     expect(root.querySelector('[data-slot="research-tools-list"]')).toBeTruthy();
@@ -208,8 +208,19 @@ test('GSSC-MLLR-398 Semantic', async () => {
     fixture.detectChanges();
     await fixture.whenStable();
     expect(root.querySelector('gssc-editor')).toBeTruthy();
+    expect(root.querySelector('[data-slot="research-tools-reference-kind"]')).toBeTruthy();
+    expect(page.referenceMode()).toBe('url');
     expect(root.querySelectorAll('.gssc-form-text-field').length).toBe(2);
+    expect(root.querySelector('[data-slot="research-tools-file-upload"]')).toBeNull();
+    page.setReferenceMode('file');
+    fixture.detectChanges();
+    await fixture.whenStable();
     expect(root.querySelector('[data-slot="research-tools-file-upload"]')).toBeTruthy();
+    expect(
+      Array.from(root.querySelectorAll('.gssc-form-text-field')).some((el) =>
+        el.querySelector('label')?.textContent?.includes('Reference Link'),
+      ),
+    ).toBe(false);
   } finally {
     restore();
   }
@@ -485,6 +496,8 @@ test('GSSC-MLLR-697 Semantic', async () => {
     ctx.fixture.detectChanges();
     await ctx.fixture.whenStable();
     await typeField(ctx.fixture, ctx.root, 'Title', 'File Tool');
+    ctx.page.setReferenceMode('file');
+    ctx.fixture.detectChanges();
     await ctx.page.onSaved();
     await settle(ctx.fixture);
     expect(ctx.createCalls.length).toBe(0);
@@ -495,9 +508,12 @@ test('GSSC-MLLR-697 Semantic', async () => {
       target: { files: [file] },
     } as unknown as Event);
     ctx.fixture.detectChanges();
+    expect(ctx.page.referenceMode()).toBe('file');
+    expect(ctx.page.referenceLink()).toBe('');
     await ctx.page.onSaved();
     await settle(ctx.fixture);
     expect(ctx.createCalls.length).toBe(1);
+    expect(ctx.createCalls[0]?.referenceLink).toBe('');
     expect(ctx.uploadCalls).toEqual([{ cuid: 'tool_new_1', fileName: 'guide.pdf' }]);
     expect(ctx.page.hasFile()).toBe(true);
   } finally {
@@ -508,20 +524,20 @@ test('GSSC-MLLR-697 Semantic', async () => {
 
 // @relation(GSSC-MLLR-698, scope=range_start, role=Test)
 test('GSSC-MLLR-698 Syntactic', async () => {
-  const { root, fixture, restore } = await setupResearchTools();
+  const { root, fixture, page, restore } = await setupResearchTools();
   try {
     root.querySelector<HTMLButtonElement>('[data-slot="research-tools-create"]')!.click();
     fixture.detectChanges();
     await fixture.whenStable();
-    const linkField = Array.from(
-      root.querySelectorAll<HTMLElement>('.gssc-form-text-field'),
-    ).find((el) => el.querySelector('label')?.textContent?.includes('Reference Link'))!;
-    const fileUpload = root.querySelector('[data-slot="research-tools-file-upload"]')!;
+    page.setReferenceMode('file');
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(root.querySelector('[data-slot="research-tools-file-upload"]')).toBeTruthy();
     expect(
-      Boolean(
-        linkField.compareDocumentPosition(fileUpload) & Node.DOCUMENT_POSITION_FOLLOWING,
+      Array.from(root.querySelectorAll('.gssc-form-text-field')).some((el) =>
+        el.querySelector('label')?.textContent?.includes('Reference Link'),
       ),
-    ).toBe(true);
+    ).toBe(false);
   } finally {
     restore();
   }
@@ -530,9 +546,12 @@ test('GSSC-MLLR-698 Syntactic', async () => {
 
 // @relation(GSSC-MLLR-699, scope=range_start, role=Test)
 test('GSSC-MLLR-699 Lexical', async () => {
-  const { root, fixture, restore } = await setupResearchTools();
+  const { root, fixture, page, restore } = await setupResearchTools();
   try {
     root.querySelector<HTMLButtonElement>('[data-slot="research-tools-create"]')!.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    page.setReferenceMode('file');
     fixture.detectChanges();
     await fixture.whenStable();
     const fileUpload = root.querySelector('[data-slot="research-tools-file-upload"]')!;
@@ -543,3 +562,69 @@ test('GSSC-MLLR-699 Lexical', async () => {
   }
 });
 // @relation(GSSC-MLLR-699, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-703, scope=range_start, role=Test)
+test('GSSC-MLLR-703 Semantic', async () => {
+  const { root, fixture, page, restore } = await setupResearchTools();
+  try {
+    root.querySelector<HTMLButtonElement>('[data-slot="research-tools-create"]')!.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    await typeField(fixture, root, 'Reference Link', 'https://example.com/xor');
+    page.setReferenceMode('file');
+    fixture.detectChanges();
+    expect(page.referenceLink()).toBe('');
+    expect(root.querySelector('[data-slot="research-tools-file-upload"]')).toBeTruthy();
+    page.setReferenceMode('url');
+    fixture.detectChanges();
+    expect(root.querySelector('[data-slot="research-tools-file-upload"]')).toBeNull();
+    expect(
+      Array.from(root.querySelectorAll('.gssc-form-text-field')).some((el) =>
+        el.querySelector('label')?.textContent?.includes('Reference Link'),
+      ),
+    ).toBe(true);
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-703, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-704, scope=range_start, role=Test)
+test('GSSC-MLLR-704 Syntactic', async () => {
+  const { root, fixture, restore } = await setupResearchTools();
+  try {
+    root.querySelector<HTMLButtonElement>('[data-slot="research-tools-create"]')!.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    const kind = root.querySelector('[data-slot="research-tools-reference-kind"]')!;
+    const urlBtn = root.querySelector('[data-slot="research-tools-kind-url"]')!;
+    const fileBtn = root.querySelector('[data-slot="research-tools-kind-file"]')!;
+    const linkField = Array.from(
+      root.querySelectorAll<HTMLElement>('.gssc-form-text-field'),
+    ).find((el) => el.querySelector('label')?.textContent?.includes('Reference Link'))!;
+    expect(kind.contains(urlBtn)).toBe(true);
+    expect(kind.contains(fileBtn)).toBe(true);
+    expect(
+      Boolean(kind.compareDocumentPosition(linkField) & Node.DOCUMENT_POSITION_FOLLOWING),
+    ).toBe(true);
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-704, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-705, scope=range_start, role=Test)
+test('GSSC-MLLR-705 Lexical', async () => {
+  const { root, fixture, restore } = await setupResearchTools();
+  try {
+    root.querySelector<HTMLButtonElement>('[data-slot="research-tools-create"]')!.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    const kind = root.querySelector('[data-slot="research-tools-reference-kind"]')!;
+    expect(kind.className).toContain('font-sans');
+    expect(kind.className).toContain('text-gssc-dark-green');
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-705, scope=range_end, role=Test)

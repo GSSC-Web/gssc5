@@ -9253,16 +9253,17 @@ TITLE: Research Tools Editor Page
 UID: GSSC-MLLR-398
 TITLE: Semantic
 STATEMENT: >>>
-The Member Frontend Research Tools Editor Page SHALL present a research tools catalog list, a create control when modification is permitted, and a Generic Editor host for the selected research tool with a title field, a reference link field, and a reference file upload control.
+The Member Frontend Research Tools Editor Page SHALL present a research tools catalog list, a create control when modification is permitted, and a Generic Editor host for the selected research tool with a title field and exactly one reference control at a time — either a reference link field or a reference file upload control, never both together.
 <<<
 RATIONALE: >>>
-One page hosts catalog browsing and Generic Editor composition so authorized members maintain research tools with either a URL or an uploaded file without programming knowledge.
+One page hosts catalog browsing and Generic Editor composition so authorized members maintain research tools with a single reference kind without programming knowledge.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: >>>
 GSSC5-97
 GSSC-188
+GSSC-193
 <<<
 REVIEW_STATUS: Approved
 RELATIONS:
@@ -9598,14 +9599,17 @@ TITLE: Research Tools Reference File Upload
 UID: GSSC-MLLR-697
 TITLE: Semantic
 STATEMENT: >>>
-When research tools modification is permitted, the Research Tools Reference File Upload SHALL let the member choose a local file as the research tool reference instead of a reference link, and SHALL require either a non-empty reference link or a chosen file before Save succeeds for a new research tool.
+When research tools modification is permitted and the file reference kind is selected, the Research Tools Reference File Upload SHALL let the member choose a local file as the research tool reference, and Save SHALL succeed for a new research tool only when exactly one of a non-empty reference link or a chosen file is supplied — never both.
 <<<
 RATIONALE: >>>
-Editors supply either an outside URL or a society-hosted file for each catalog entry.
+Editors supply exactly one of an outside URL or a society-hosted file for each catalog entry.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC-188
+CHANGE_DRIVER: >>>
+GSSC-188
+GSSC-193
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -9616,14 +9620,17 @@ RELATIONS:
 UID: GSSC-MLLR-698
 TITLE: Syntactic
 STATEMENT: >>>
-The Research Tools Reference File Upload SHALL appear in the Generic Editor Field Area below the reference link field as a labeled file chooser.
+When the file reference kind is selected, the Research Tools Reference File Upload SHALL appear in the Generic Editor Field Area as a labeled file chooser, and the reference link field SHALL not appear at the same time.
 <<<
 RATIONALE: >>>
-Placing the file chooser with the URL field keeps both reference options in one reading order.
+Showing only the active reference control prevents supplying a URL and a file together.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC-188
+CHANGE_DRIVER: >>>
+GSSC-188
+GSSC-193
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -9641,7 +9648,70 @@ File upload chrome matches other Member Frontend editor fields.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC-188
+CHANGE_DRIVER: >>>
+GSSC-188
+GSSC-193
+<<<
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-54
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-RESEARCH-TOOLS-REFERENCE-KIND
+TITLE: Research Tools Reference Kind Choice
+
+[REQUIREMENT]
+UID: GSSC-MLLR-703
+TITLE: Semantic
+STATEMENT: >>>
+When research tools modification is permitted, the Research Tools Reference Kind Choice SHALL let the member select URL or file as the sole reference kind for the open research tool, SHALL present only the matching reference control for that kind, and SHALL clear the inactive kind's value when the member switches kinds.
+<<<
+RATIONALE: >>>
+An exclusive kind choice keeps each catalog entry on one reference path.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC-193
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-54
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-704
+TITLE: Syntactic
+STATEMENT: >>>
+The Research Tools Reference Kind Choice SHALL appear in the Generic Editor Field Area as two adjacent labeled controls for URL and File above the active reference field.
+<<<
+RATIONALE: >>>
+Adjacent kind controls make the exclusive choice obvious before the active field.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC-193
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-54
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-705
+TITLE: Lexical
+STATEMENT: >>>
+The Research Tools Reference Kind Choice SHALL use the Member Frontend sans-serif typeface and dark-green theme color for its control labels.
+<<<
+RATIONALE: >>>
+Kind choice chrome matches other Member Frontend editor fields.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC-193
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
