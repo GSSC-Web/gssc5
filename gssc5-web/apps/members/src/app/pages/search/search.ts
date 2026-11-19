@@ -32,6 +32,8 @@ export class SearchPage implements OnInit {
   readonly query = signal('');
   readonly kind = signal<SiteSearchKind | ''>('');
   readonly results = signal<SiteSearchResult[]>([]);
+  /** True when site search retrieval failed (null); distinct from empty match. */
+  readonly loadError = signal(false);
 
   ngOnInit(): void {
     const params = this.route.snapshot.queryParamMap;
@@ -75,7 +77,10 @@ export class SearchPage implements OnInit {
     const q = this.query().trim();
     // @relation(GSSC-MLLR-471, scope=range_start, role=Implementation)
     if (q.length === 0) {
-      if (generation === this.loadGeneration) this.results.set([]);
+      if (generation === this.loadGeneration) {
+        this.results.set([]);
+        this.loadError.set(false);
+      }
       return;
     }
     const rows = await this.searchGet({
@@ -84,7 +89,13 @@ export class SearchPage implements OnInit {
       ...(this.kind() ? { kind: this.kind() } : {}),
     });
     if (generation !== this.loadGeneration) return;
-    this.results.set(rows ?? []);
+    if (rows === null) {
+      this.results.set([]);
+      this.loadError.set(true);
+      return;
+    }
+    this.loadError.set(false);
+    this.results.set(rows);
     // @relation(GSSC-MLLR-471, scope=range_end, role=Implementation)
   }
 }

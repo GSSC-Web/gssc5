@@ -51,25 +51,34 @@
       </button>
     </form>
 
-    <ul class="gssc-search-page__results m-0 list-none p-0">
-      @for (result of results(); track result.href + result.title + result.kind) {
-        <!-- @relation(GSSC-PLLR-372, GSSC-PLLR-373, GSSC-PLLR-374, scope=range_start, role=Implementation) -->
-        <li class="gssc-search-page__result mb-3 border-b border-gssc-gray pb-3 last:mb-0 last:border-b-0">
-          <a
-            class="gssc-search-page__result-title font-sans text-gssc-dark-green underline"
-            [routerLink]="result.href"
-          >
-            {{ result.title }}
-          </a>
-          @if (result.snippet) {
-            <p class="gssc-search-page__result-snippet m-0 mt-1 font-sans text-sm text-gssc-dark-brown">
-              {{ result.snippet }}
-            </p>
-          }
-        </li>
-        <!-- @relation(GSSC-PLLR-372, GSSC-PLLR-373, GSSC-PLLR-374, scope=range_end, role=Implementation) -->
-      }
-    </ul>
+    @if (loadError()) {
+      <p
+        class="gssc-search-page__unavailable m-0 font-sans text-sm text-gssc-dark-green"
+        role="alert"
+      >
+        Search unavailable.
+      </p>
+    } @else {
+      <ul class="gssc-search-page__results m-0 list-none p-0">
+        @for (result of results(); track result.href + result.title + result.kind) {
+          <!-- @relation(GSSC-PLLR-372, GSSC-PLLR-373, GSSC-PLLR-374, scope=range_start, role=Implementation) -->
+          <li class="gssc-search-page__result mb-3 border-b border-gssc-gray pb-3 last:mb-0 last:border-b-0">
+            <a
+              class="gssc-search-page__result-title font-sans text-gssc-dark-green underline"
+              [routerLink]="result.href"
+            >
+              {{ result.title }}
+            </a>
+            @if (result.snippet) {
+              <p class="gssc-search-page__result-snippet m-0 mt-1 font-sans text-sm text-gssc-dark-brown">
+                {{ result.snippet }}
+              </p>
+            }
+          </li>
+          <!-- @relation(GSSC-PLLR-372, GSSC-PLLR-373, GSSC-PLLR-374, scope=range_end, role=Implementation) -->
+        }
+      </ul>
+    }
   </section>
 </div>
 <!-- @relation(GSSC-PLLR-364, GSSC-PLLR-365, scope=range_end, role=Implementation) -->

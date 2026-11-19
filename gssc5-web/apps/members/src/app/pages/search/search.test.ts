@@ -65,8 +65,30 @@ test('GSSC-MLLR-471 Semantic', async () => {
 
   expect(lastQuery).toEqual({ q: 'dir', kind: undefined });
   expect(page.results().length).toBe(2);
+  expect(page.loadError()).toBe(false);
   expect(textContent(root, '.gssc-search-page__heading')).toBe('Search');
   expect(root.querySelectorAll('.gssc-search-page__result').length).toBe(2);
+  expect(root.querySelector('.gssc-search-page__unavailable')).toBeNull();
+
+  const { page: emptyPage, root: emptyRoot } = await setupSearchPage(
+    async () => [],
+    '/search?q=zzz',
+  );
+  expect(emptyPage.results()).toEqual([]);
+  expect(emptyPage.loadError()).toBe(false);
+  expect(emptyRoot.querySelector('.gssc-search-page__unavailable')).toBeNull();
+  expect(emptyRoot.querySelector('.gssc-search-page__results')).toBeNull();
+
+  const { page: failedPage, root: failedRoot } = await setupSearchPage(
+    async () => null,
+    '/search?q=dir',
+  );
+  expect(failedPage.results()).toEqual([]);
+  expect(failedPage.loadError()).toBe(true);
+  expect(textContent(failedRoot, '.gssc-search-page__unavailable')).toBe(
+    'Search unavailable.',
+  );
+  expect(failedRoot.querySelector('.gssc-search-page__results')).toBeNull();
 });
 // @relation(GSSC-MLLR-471, scope=range_end, role=Test)
 

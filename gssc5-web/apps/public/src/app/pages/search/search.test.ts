@@ -73,8 +73,31 @@ test('GSSC-PLLR-363 Semantic', async () => {
   expect(calls.length).toBeGreaterThanOrEqual(1);
   expect(calls[0]?.q).toBe('membership');
   expect(page.results()).toEqual(sampleResults);
+  expect(page.loadError()).toBe(false);
   expect(textContent(root, '.gssc-search-page__heading')).toBe('Search');
   expect(root.querySelectorAll('.gssc-search-page__result').length).toBe(2);
+  expect(root.querySelector('.gssc-search-page__unavailable')).toBeNull();
+
+  const { page: emptyPage, root: emptyRoot } = await setupSearchPage({
+    initialUrl: '/search?q=zzz',
+    searchGet: async () => [],
+  });
+  expect(emptyPage.results()).toEqual([]);
+  expect(emptyPage.loadError()).toBe(false);
+  expect(emptyRoot.querySelector('.gssc-search-page__unavailable')).toBeNull();
+  expect(emptyRoot.querySelector('.gssc-search-page__results')).not.toBeNull();
+  expect(emptyRoot.querySelectorAll('.gssc-search-page__result').length).toBe(0);
+
+  const { page: failedPage, root: failedRoot } = await setupSearchPage({
+    initialUrl: '/search?q=membership',
+    searchGet: async () => null,
+  });
+  expect(failedPage.results()).toEqual([]);
+  expect(failedPage.loadError()).toBe(true);
+  expect(textContent(failedRoot, '.gssc-search-page__unavailable')).toBe(
+    'Search unavailable.',
+  );
+  expect(failedRoot.querySelector('.gssc-search-page__results')).toBeNull();
 });
 // @relation(GSSC-PLLR-363, scope=range_end, role=Test)
 

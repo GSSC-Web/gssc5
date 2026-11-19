@@ -49,7 +49,14 @@
     </button>
   </form>
 
-  @if (results().length > 0) {
+  @if (loadError()) {
+    <p
+      class="gssc-search-page__unavailable m-0 font-sans text-sm text-gssc-dark-green"
+      role="alert"
+    >
+      Search unavailable.
+    </p>
+  } @else if (results().length > 0) {
     <ul class="gssc-search-page__results m-0 list-none space-y-3 p-0">
       @for (entry of results(); track entry.href + entry.title + entry.kind) {
         <!-- @relation(GSSC-MLLR-480, GSSC-MLLR-481, GSSC-MLLR-482, scope=range_start, role=Implementation) -->
