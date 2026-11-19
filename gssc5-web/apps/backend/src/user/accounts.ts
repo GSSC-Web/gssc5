@@ -81,6 +81,10 @@ export const accounts = new Elysia({
       if (!passwordMatches) return status(403, "Forbidden");
       // @relation(GSSC-BLLR-6, GSSC-BLLR-233, scope=range_end, role=Implementation)
 
+      // @relation(GSSC-BLLR-491, scope=range_start, role=Implementation)
+      if (user.deletedAt !== null) return status(403, "Forbidden");
+      // @relation(GSSC-BLLR-491, scope=range_end, role=Implementation)
+
       // @relation(GSSC-BLLR-7, GSSC-BLLR-8, GSSC-BLLR-11, GSSC-BLLR-315, scope=range_start, role=Implementation)
       const issuedAt = new Date();
       const maxAgeSeconds = Math.floor(config.LOGIN_TOKEN_LIFETIME_DAYS * SECONDS_PER_DAY);

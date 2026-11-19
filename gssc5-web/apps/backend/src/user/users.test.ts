@@ -1277,6 +1277,18 @@ test("GSSC-BLLR-49 User Read Subject", async () => {
   expect(idOf(entry)).toBe(emailMember.id);
   expect(locate(entry, "firstName")?.value).toBe(emailMember.values.firstName);
   expect(locate(entry, "firstName")?.value).not.toBe(phoneMember.values.firstName);
+
+  await withRow(mutable.id, async () => {
+    const deleted = await call("DELETE", `/users/${encodeURIComponent(mutable.id)}`, admin.token);
+    expect(deleted.status).toBe(204);
+
+    const memberRead = await call("GET", `/users/${encodeURIComponent(mutable.id)}`, emailMember.token);
+    expect(memberRead.status).toBe(404);
+
+    const adminRead = await readEntry(admin.token, mutable.id);
+    expect(idOf(adminRead)).toBe(mutable.id);
+    expect(adminRead["deletedAt"]).toEqual(expect.any(String));
+  });
 });
 // @relation(GSSC-BLLR-49, scope=range_end, role=Test)
 
