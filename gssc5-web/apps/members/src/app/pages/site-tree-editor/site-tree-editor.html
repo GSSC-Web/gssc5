@@ -24,16 +24,21 @@
   <!-- @relation(GSSC-MLLR-524, GSSC-MLLR-525, GSSC-MLLR-526, scope=range_end, role=Implementation) -->
 
   <div
-    class="gssc-site-tree-editor-page__layout flex w-full flex-col gap-6 lg:flex-row lg:items-start"
+    class="gssc-site-tree-editor-page__layout flex w-full flex-col gap-6 lg:max-h-[min(70vh,36rem)] lg:flex-row lg:items-stretch"
     data-slot="site-tree-editor-layout"
   >
-    <div class="gssc-site-tree-editor-page__outline min-w-0 flex-1" data-slot="site-tree-outline-region">
-      <h2 class="mb-2 font-sans text-lg font-semibold text-gssc-dark-green">Tree</h2>
+    <div
+      class="gssc-site-tree-editor-page__outline flex min-h-0 min-w-0 max-h-80 flex-1 flex-col overflow-y-auto lg:max-h-full"
+      data-slot="site-tree-outline-region"
+    >
+      <h2 class="mb-2 shrink-0 font-sans text-lg font-semibold text-gssc-dark-green">Tree</h2>
       @if (outlineNodes().length > 0) {
         <gssc-site-tree-outline
           [nodes]="outlineNodes()"
           [selectedCuid]="selectedCuid()"
+          [collapsedIds]="collapsedIds()"
           (select)="onSelectNode($event)"
+          (toggleExpand)="onToggleExpand($event)"
         />
       } @else {
         <p class="m-0 font-sans text-sm text-gssc-dark-brown" data-slot="site-tree-empty">
@@ -44,7 +49,7 @@
 
     <!-- @relation(GSSC-MLLR-530, GSSC-MLLR-531, GSSC-MLLR-532, scope=range_start, role=Implementation) -->
     <div
-      class="gssc-site-tree-editor-page__panel flex min-w-0 flex-1 flex-col gap-3 bg-gssc-white"
+      class="gssc-site-tree-editor-page__panel flex min-h-0 min-w-0 max-h-80 flex-1 flex-col gap-3 overflow-y-auto bg-gssc-white lg:max-h-full"
       data-slot="site-tree-node-editor"
     >
       <h2 class="m-0 font-sans text-lg font-semibold text-gssc-dark-green">Node</h2>

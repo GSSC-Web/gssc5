@@ -218,7 +218,7 @@ export class Header implements OnInit, OnDestroy {
     return tracks.join(' ');
   }
 
-  // @relation(GSSC-MHLR-107, GSSC-MLLR-665, GSSC-MLLR-666, GSSC-MLLR-667, scope=range_start, role=Implementation)
+  // @relation(GSSC-MHLR-109, GSSC-MLLR-665, GSSC-MLLR-666, GSSC-MLLR-667, scope=range_start, role=Implementation)
   readonly safeTrianglePath = signal<string | null>(null);
   readonly safeTriangleCuid = signal<string | null>(null);
 
@@ -259,7 +259,7 @@ export class Header implements OnInit, OnDestroy {
     this.safeTriangleCuid.set(null);
     this.safeTrianglePath.set(null);
   }
-  // @relation(GSSC-MHLR-107, GSSC-MLLR-665, GSSC-MLLR-666, GSSC-MLLR-667, scope=range_end, role=Implementation)
+  // @relation(GSSC-MHLR-109, GSSC-MLLR-665, GSSC-MLLR-666, GSSC-MLLR-667, scope=range_end, role=Implementation)
 
   /** Test / harness hook to force a chrome tier without resize geometry. */
   setChromeTierForTest(tier: HeaderChromeTier): void {
