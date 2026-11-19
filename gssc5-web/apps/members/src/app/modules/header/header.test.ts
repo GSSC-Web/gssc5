@@ -774,10 +774,18 @@ test('GSSC-MLLR-461 Lexical', async () => {
   expect(toggle.classList.contains('text-gssc-dark-green')).toBe(true);
   expect(toggle.classList.contains('rounded')).toBe(true);
   expect(toggle.classList.contains('hover:bg-gssc-gray')).toBe(true);
+  // Closed: search glyph must be present (styles.css .nf-fa-search) so the
+  // dark-green icon stays visible including on hover:bg-gssc-gray.
+  expect(
+    root.querySelector('.gssc-header__search-icon--open.nf.nf-fa-search'),
+  ).not.toBeNull();
 
   toggle.click();
   fixture.detectChanges();
   await fixture.whenStable();
+  expect(
+    root.querySelector('.gssc-header__search-icon--close.nf.nf-md-close'),
+  ).not.toBeNull();
   const panel = root.querySelector<HTMLElement>('.gssc-header__search-panel')!;
   expect(panel.classList.contains('bg-gssc-white')).toBe(true);
   expect(panel.classList.contains('border-gssc-gray')).toBe(true);
