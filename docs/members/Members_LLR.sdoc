@@ -96,7 +96,7 @@ GSSC5-89 Member Dashboard Page owns GSSC-MLLR-231 through GSSC-MLLR-239.
 GSSC5-94 Announcements Editor owns GSSC-MLLR-291 through GSSC-MLLR-307 (page, catalog, Generic Editor host, create/modify/publish behaviors; reuses GSSC5-84/85; consumes GSSC5-68 /announcements).
 GSSC5-96 Newsletters Editor owns GSSC-MLLR-351 through GSSC-MLLR-373 (exact end 373; band 351–380 reserved so parallel Wave editors do not collide).
 GSSC5-95 Events Editor owns GSSC-MLLR-321 through GSSC-MLLR-346 (events page, catalog, create/publish/modify host; composes GSSC5-84 Generic Editor + GSSC5-85 form fields; uses GSSC5-69 /events APIs).
-GSSC5-97 Publications/Tools Editors owns GSSC-MLLR-381 through GSSC-MLLR-414 (publications catalog editor 381–397; research tools catalog editor 398–414). Composes GSSC5-84 Generic Editor and GSSC5-85 form fields; does not re-claim 180–201.
+GSSC5-97 Publications/Tools Editors owns GSSC-MLLR-381 through GSSC-MLLR-414 (publications file upload GSSC-MLLR-700–702 CHANGE_DRIVER GSSC-190) (publications catalog editor 381–397; research tools catalog editor 398–414). Composes GSSC5-84 Generic Editor and GSSC5-85 form fields; does not re-claim 180–201.
 GSSC5-101 Account Page Refinement owns GSSC-MLLR-415 through GSSC-MLLR-428 (collapsible sections, submit validation, Enter-to-submit, account photo upload with polished Choose Photo control, password current/previous rejection); also CHANGE_DRIVER on GSSC-MLLR-146.
 GSSC5-103 Account Mailing Equals Home owns GSSC-MLLR-429 through GSSC-MLLR-437 (exact end 437); HLR GSSC-MHLR-78.
 GSSC5-107 Members Navigation and Narrow Header owns GSSC-MLLR-441 through GSSC-MLLR-461 (exact end 461; Navigation Menu / Item / Submenu / Menu Toggle / Expander / Organization Name / Site Search appearance triads) and CHANGE_DRIVER updates on GSSC-MLLR-14, 15, 18, 20, 21; HLR GSSC-MHLR-81 through GSSC-MHLR-86.
@@ -114,7 +114,7 @@ GSSC5-123 Members Footer Home Link owns GSSC-MLLR-641 through GSSC-MLLR-643 (exa
 GSSC5-46 Site Branding owns GSSC-MLLR-644 through GSSC-MLLR-649 (exact end 649) and GSSC-MHLR-102 / GSSC-MHLR-103.
 GSSC5-135 Multiple Positions with Semicolon Lint owns GSSC-MLLR-661 through GSSC-MLLR-664 (exact end 664; band 661–680 reserved); HLR GSSC-MHLR-104.
 GSSC5-138 Site Tree Editor foldable outline and independent pane scroll owns GSSC-MLLR-668 through GSSC-MLLR-670 (exact end 670; continues band 661–680) plus CHANGE_DRIVER on GSSC-MLLR-522; HLR GSSC-MHLR-108.
-Wave coordination: GSSC5-92 directory 202–214, GSSC5-102 directory refinement 215–230, GSSC5-89 dashboard 231–239, GSSC5-93 page/section 261–286, GSSC5-94 announcements 291–307, GSSC5-117 page-data unification 308–320, GSSC5-95 events 321–346, GSSC5-96 newsletters 351–373, GSSC5-97 publications/tools 381–414, GSSC5-101 account refinement 415–428, GSSC5-103 mailing-equals-home 429–437, GSSC5-102 password-history-reset 438–440, GSSC5-107 members nav chrome 441–461, GSSC5-109 members site search 462–483 (band 462–500), GSSC5-108 sitemap 501–510, GSSC5-116 site-tree editor 521–540 (band 521–560), GSSC5-127 site-tree feedback MLLR-562 (+ CHANGE_DRIVER on 524/529; HLR MHLR-99), GSSC5-115/128 template editor 541–561 (band 541–580), GSSC5-126 PDE section create + nav 581–591 (band 581–600), GSSC5-118 directory invite 601–608 (band 601–620), GSSC5-119 directory create 621–628 (band 621–640), GSSC5-123 footer home link 641–643 (band 641–660), GSSC5-46 branding 644–649, GSSC5-135 multi-position 661–664, GSSC5-137 nested submenu pointer bridge 665–667 (HLR MHLR-109), GSSC5-138 site-tree fold/scroll 668–670 (band 661–680), GSSC5-139 PDE form unify 681–686, GSSC5-140 PDE padding/disclaimer 687–692 (band 681–700) — do not collide.
+Wave coordination: GSSC5-92 directory 202–214, GSSC5-102 directory refinement 215–230, GSSC5-89 dashboard 231–239, GSSC5-93 page/section 261–286, GSSC5-94 announcements 291–307, GSSC5-117 page-data unification 308–320, GSSC5-95 events 321–346, GSSC5-96 newsletters 351–373, GSSC5-97 publications/tools 381–414, GSSC5-101 account refinement 415–428, GSSC5-103 mailing-equals-home 429–437, GSSC5-102 password-history-reset 438–440, GSSC5-107 members nav chrome 441–461, GSSC5-109 members site search 462–483 (band 462–500), GSSC5-108 sitemap 501–510, GSSC5-116 site-tree editor 521–540 (band 521–560), GSSC5-127 site-tree feedback MLLR-562 (+ CHANGE_DRIVER on 524/529; HLR MHLR-99), GSSC5-115/128 template editor 541–561 (band 541–580), GSSC5-126 PDE section create + nav 581–591 (band 581–600), GSSC5-118 directory invite 601–608 (band 601–620), GSSC5-119 directory create 621–628 (band 621–640), GSSC5-123 footer home link 641–643 (band 641–660), GSSC5-46 branding 644–649, GSSC5-135 multi-position 661–664, GSSC5-137 nested submenu pointer bridge 665–667 (HLR MHLR-109), GSSC5-138 site-tree fold/scroll 668–670 (band 661–680), GSSC5-139 PDE form unify 681–686, GSSC5-140 PDE padding/disclaimer 687–692 (band 681–700), GSSC-190 publications file upload 693–695 — do not collide.
 GSSC-173 Members Header Greeting menu owns GSSC-MLLR-33 through GSSC-MLLR-35 (Header Public Access triad) plus CHANGE_DRIVER on GSSC-MLLR-14, 24, 27, 30 and HLR GSSC-MHLR-107; GSSC-MLLR-36 through GSSC-MLLR-39 remain free.
 Do not reuse numbers already claimed by another ticket.
 <<<
@@ -8821,14 +8821,17 @@ TITLE: Publications Editor Page
 UID: GSSC-MLLR-381
 TITLE: Semantic
 STATEMENT: >>>
-The Member Frontend Publications Editor Page SHALL present a publications catalog list, a create control when modification is permitted, and a Generic Editor host for the selected publication with title, reference link, and optional description fields.
+The Member Frontend Publications Editor Page SHALL present a publications catalog list, a create control when modification is permitted, and a Generic Editor host for the selected publication with title, publication file upload, and optional description fields.
 <<<
 RATIONALE: >>>
 One page hosts catalog browsing and Generic Editor composition so authorized members maintain publications without programming knowledge.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-97
+CHANGE_DRIVER: >>>
+GSSC5-97
+GSSC-190
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -8959,14 +8962,17 @@ TITLE: Publications Create Control
 UID: GSSC-MLLR-387
 TITLE: Semantic
 STATEMENT: >>>
-When publication modification is permitted, the Publications Create Control SHALL start a new publication in the Generic Editor host with empty title, reference link, and description fields.
+When publication modification is permitted, the Publications Create Control SHALL start a new publication in the Generic Editor host with empty title, no chosen publication file, and empty description fields.
 <<<
 RATIONALE: >>>
 Create starts a blank catalog entry before persistence.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-97
+CHANGE_DRIVER: >>>
+GSSC5-97
+GSSC-190
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -9115,14 +9121,17 @@ RELATIONS:
 UID: GSSC-MLLR-395
 TITLE: Semantic
 STATEMENT: >>>
-When Save succeeds on the Publications Generic Editor host for a new publication, the Member Frontend SHALL create the entry in the Unified Backend publications catalog; when Save succeeds for an existing publication, it SHALL update that entry with the editor field values.
+When Save succeeds on the Publications Generic Editor host for a new publication, the Member Frontend SHALL create the entry in the Unified Backend publications catalog and upload the chosen publication file; when Save succeeds for an existing publication, it SHALL update that entry with the editor field values and upload a newly chosen publication file when one was selected.
 <<<
 RATIONALE: >>>
-Save persists title, reference link, and optional description through the publications catalog API.
+Save persists title and optional description through the publications catalog API and stores the publication file under that publication's cuid.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-97
+CHANGE_DRIVER: >>>
+GSSC5-97
+GSSC-190
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -9164,6 +9173,66 @@ RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-52
   ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-53
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-PUBLICATIONS-FILE-UPLOAD
+TITLE: Publications File Upload Control
+
+[REQUIREMENT]
+UID: GSSC-MLLR-700
+TITLE: Semantic
+STATEMENT: >>>
+When publication modification is permitted, the Publications File Upload Control SHALL let the member choose a publication file for the open Generic Editor host entry and SHALL show the chosen file name, or that no file is chosen, beside the choose control.
+<<<
+RATIONALE: >>>
+Editors attach or replace the digital publication without typing a link.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC-190
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-53
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-701
+TITLE: Syntactic
+STATEMENT: >>>
+The Publications File Upload Control SHALL appear in the Publications Generic Editor host below the title field and above the description field.
+<<<
+RATIONALE: >>>
+File selection sits with the other publication fields in reading order.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC-190
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-53
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-702
+TITLE: Lexical
+STATEMENT: >>>
+The Publications File Upload Control SHALL use the Member Frontend sans-serif typeface, dark-green theme color for the choose-file label text, and light-green theme color for the choose-file control background.
+<<<
+RATIONALE: >>>
+Choose File shares primary action chrome with other Member Frontend file controls.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC-190
+REVIEW_STATUS: Approved
+RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-53
   ROLE: Refines

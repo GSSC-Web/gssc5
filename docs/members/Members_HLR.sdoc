@@ -1442,12 +1442,13 @@ STATEMENT: >>>
 The GSSC Website Member Frontend SHALL let a member with the necessary permissions create, modify, and remove a publication catalog entry without programming knowledge.
 <<<
 RATIONALE: >>>
-Authorized members maintain publication title, reference link, and optional description in the Society publications catalog without developer intervention.
+Authorized members maintain publication title, publication file, and optional description in the Society publications catalog without developer intervention.
 <<<
 DERIVED: False
 CHANGE_DRIVER: >>>
 GSSC5-11
 GSSC5-97
+GSSC-190
 <<<
 REVIEW_STATUS: Approved
 RELATIONS:

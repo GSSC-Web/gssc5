@@ -68,12 +68,41 @@
       (cancelled)="onCancelled()"
     >
       <gssc-form-text-field label="Title" [(value)]="title" [enabled]="permitted()" [required]="true" />
-      <gssc-form-text-field
-        label="Reference Link"
-        [(value)]="referenceLink"
-        [enabled]="permitted()"
-        [required]="true"
-      />
+      <!-- @relation(GSSC-MLLR-700, GSSC-MLLR-701, GSSC-MLLR-702, scope=range_start, role=Implementation) -->
+      <div
+        class="gssc-publications-page__file relative flex min-w-0 flex-col rounded-md border border-gssc-dark-green bg-gssc-white font-sans"
+        data-slot="publications-file-field"
+      >
+        <span
+          class="absolute -top-2 start-2 bg-inherit px-1 text-xs font-extralight italic text-gssc-dark-green"
+        >
+          Publication File&nbsp;*
+        </span>
+        <input
+          id="gssc-publication-file"
+          class="sr-only"
+          name="publicationFile"
+          type="file"
+          [disabled]="!permitted()"
+          (change)="onFileSelected($event)"
+        />
+        <div class="flex min-w-0 flex-wrap items-center gap-3 px-2 py-2">
+          <label
+            for="gssc-publication-file"
+            class="gssc-publications-page__choose-file inline-flex w-fit cursor-pointer items-center justify-center rounded-md border border-gssc-dark-green bg-gssc-light-green px-3 py-1.5 font-sans text-sm text-gssc-dark-green hover:bg-gssc-gray"
+            data-slot="publications-choose-file"
+          >
+            Choose File
+          </label>
+          <span
+            class="gssc-publications-page__file-name truncate font-sans text-sm text-gssc-dark-brown"
+            data-slot="publications-file-name"
+          >
+            {{ fileLabel() }}
+          </span>
+        </div>
+      </div>
+      <!-- @relation(GSSC-MLLR-700, GSSC-MLLR-701, GSSC-MLLR-702, scope=range_end, role=Implementation) -->
       <gssc-form-text-field label="Description" [(value)]="description" [enabled]="permitted()" />
     </gssc-editor>
 

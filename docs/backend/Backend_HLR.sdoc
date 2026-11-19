@@ -2717,10 +2717,13 @@ STATEMENT: >>>
 The GSSC Website Unified Backend SHALL accept modification of a publication by a logged-in member who has publication editor authorization.
 <<<
 RATIONALE: >>>
-Authorized editors keep publication titles, reference links, and optional descriptions current.
+Authorized editors keep publication titles, stored publication files, and optional descriptions current.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-19
+CHANGE_DRIVER: >>>
+GSSC5-19
+GSSC-190
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -2765,13 +2768,16 @@ RELATIONS:
 UID: GSSC-BHLR-201
 TITLE: Publications Storage
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL store each publication with a cuid, a title, a reference link, and an optional description.
+The GSSC Website Unified Backend SHALL store each publication with a cuid, a title, a stored publication file path under the publications file store named by that cuid, and an optional description.
 <<<
 RATIONALE: >>>
-Each listed publication is identified by cuid and presents a title that opens a reference link. An optional description may accompany the title. Exact field shapes are low-level. Cemetery Project and War Veterans publications are outside this storage.
+Each listed publication is identified by cuid and presents a title that opens that publication's stored file. An optional description may accompany the title. Exact field shapes are low-level. Cemetery Project and War Veterans publications are outside this storage.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-19
+CHANGE_DRIVER: >>>
+GSSC5-19
+GSSC-190
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent

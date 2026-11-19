@@ -4765,7 +4765,7 @@ TITLE: Society Publications List
 UID: GSSC-PLLR-243
 TITLE: Semantic
 STATEMENT: >>>
-The Society Publications List SHALL request the current society publications from the Unified Backend publications list as normal publications page content, identifying each listed publication by that publication's cuid, title, reference link, and description in the order the Unified Backend provides.
+The Society Publications List SHALL request the current society publications from the Unified Backend publications list as normal publications page content, identifying each listed publication by that publication's cuid, title, stored publication file path, and description in the order the Unified Backend provides.
 <<<
 RATIONALE: >>>
 The publications page lists society publications from the dedicated publications catalog as normal webpage content, not generic section Contents. The Stanislaus County Cemetery Project and War Veterans of Stanislaus County are outside this list. Tagged generic sections and Section From CUID are not the source for this list.
@@ -4775,7 +4775,10 @@ Mirrors the Research Tools page pattern with optional description under each tit
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-19
+CHANGE_DRIVER: >>>
+GSSC5-19
+GSSC-190
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -4828,14 +4831,17 @@ TITLE: Publication Link
 UID: GSSC-PLLR-246
 TITLE: Semantic
 STATEMENT: >>>
-A Publication Link SHALL present that publication's title and open that publication's reference link when selected.
+A Publication Link SHALL present that publication's title and open that publication's stored publication file when selected.
 <<<
 RATIONALE: >>>
-Each catalog entry is a titled hyperlink to the publication's reference. The list supplies title and reference link from the Unified Backend.
+Each catalog entry is a titled hyperlink to the publication's stored file. The list supplies title and stored publication file path from the Unified Backend.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-19
+CHANGE_DRIVER: >>>
+GSSC5-19
+GSSC-190
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent

@@ -17,7 +17,7 @@
           <li class="gssc-publications-page__cell text-center">
             <a
               class="gssc-publication-link font-sans text-gssc-dark-green underline"
-              [href]="publication.referenceLink"
+              [href]="publicationFileUrl(publication.cuid)"
               >{{ publication.title }}</a
             >
             @if (publication.description) {

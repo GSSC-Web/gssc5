@@ -23,13 +23,13 @@ const sampleEntries: PublicationEntry[] = [
   {
     cuid: 'pub_1',
     title: 'Stanislaus Records',
-    referenceLink: 'https://example.com/records',
+    referenceLink: 'publications/pub_1',
     description: 'County records index',
   },
   {
     cuid: 'pub_2',
     title: 'Cemetery Index',
-    referenceLink: 'https://example.com/cemetery',
+    referenceLink: 'publications/pub_2',
     description: null,
   },
 ];
@@ -46,6 +46,7 @@ async function setupPublications(options?: {
   createCalls: PublicationEntry[];
   updateCalls: Array<{ cuid: string; body: unknown }>;
   deleteCalls: string[];
+  uploadCalls: Array<{ cuid: string; fileName: string }>;
   listCalls: number;
 }> {
   const originals = {
@@ -53,12 +54,14 @@ async function setupPublications(options?: {
     create: publicationsApi.create,
     update: publicationsApi.update,
     remove: publicationsApi.remove,
+    uploadFile: publicationsApi.uploadFile,
   };
 
   let listCalls = 0;
   const createCalls: PublicationEntry[] = [];
   const updateCalls: Array<{ cuid: string; body: unknown }> = [];
   const deleteCalls: string[] = [];
+  const uploadCalls: Array<{ cuid: string; fileName: string }> = [];
   let store = [...(options?.entries ?? sampleEntries)];
 
   publicationsApi.list = (async () => {
@@ -70,7 +73,7 @@ async function setupPublications(options?: {
     const created: PublicationEntry = {
       cuid: `pub_new_${createCalls.length + 1}`,
       title: body.title,
-      referenceLink: body.referenceLink,
+      referenceLink: `publications/pub_new_${createCalls.length + 1}`,
       description: body.description ?? null,
     };
     createCalls.push(created);
@@ -85,10 +88,6 @@ async function setupPublications(options?: {
         ? {
             ...entry,
             title: typeof body.title === 'string' ? body.title : entry.title,
-            referenceLink:
-              typeof body.referenceLink === 'string'
-                ? body.referenceLink
-                : entry.referenceLink,
             description:
               body.description !== undefined ? body.description ?? null : entry.description,
           }
@@ -102,6 +101,11 @@ async function setupPublications(options?: {
     store = store.filter((entry) => entry.cuid !== cuid);
     return okResponse(null, 204);
   }) as typeof publicationsApi.remove;
+
+  publicationsApi.uploadFile = (async (cuid, file) => {
+    uploadCalls.push({ cuid, fileName: file.name });
+    return { data: { cuid, path: `publications/${cuid}` }, error: null };
+  }) as typeof publicationsApi.uploadFile;
 
   TestBed.resetTestingModule();
   const fixture = await setupMembersComponent(PublicationsPage, {
@@ -132,6 +136,7 @@ async function setupPublications(options?: {
     createCalls,
     updateCalls,
     deleteCalls,
+    uploadCalls,
     get listCalls() {
       return listCalls;
     },
@@ -140,6 +145,7 @@ async function setupPublications(options?: {
       publicationsApi.create = originals.create;
       publicationsApi.update = originals.update;
       publicationsApi.remove = originals.remove;
+      publicationsApi.uploadFile = originals.uploadFile;
     },
   };
 }
@@ -164,6 +170,27 @@ async function typeField(
   await fixture.whenStable();
 }
 
+async function chooseFile(
+  fixture: { detectChanges: () => void; whenStable: () => Promise<unknown> },
+  root: HTMLElement,
+  name = 'doc.pdf',
+): Promise<void> {
+  const input = root.querySelector<HTMLInputElement>('#gssc-publication-file');
+  if (!input) throw new Error('missing file input');
+  const file = new File(['bytes'], name, { type: 'application/pdf' });
+  Object.defineProperty(input, 'files', {
+    configurable: true,
+    value: {
+      0: file,
+      length: 1,
+      item: (index: number) => (index === 0 ? file : null),
+    },
+  });
+  input.dispatchEvent(new Event('change', { bubbles: true }));
+  fixture.detectChanges();
+  await fixture.whenStable();
+}
+
 async function settle(
   fixture: { detectChanges: () => void; whenStable: () => Promise<unknown> },
 ): Promise<void> {
@@ -184,7 +211,8 @@ test('GSSC-MLLR-381 Semantic', async () => {
     fixture.detectChanges();
     await fixture.whenStable();
     expect(root.querySelector('gssc-editor')).toBeTruthy();
-    expect(root.querySelectorAll('.gssc-form-text-field').length).toBe(3);
+    expect(root.querySelectorAll('.gssc-form-text-field').length).toBe(2);
+    expect(root.querySelector('[data-slot="publications-file-field"]')).toBeTruthy();
   } finally {
     restore();
   }
@@ -225,8 +253,8 @@ test('GSSC-MLLR-384 Semantic', async () => {
     fixture.detectChanges();
     await fixture.whenStable();
     expect(page.title()).toBe('Stanislaus Records');
-    expect(page.referenceLink()).toBe('https://example.com/records');
     expect(page.description()).toBe('County records index');
+    expect(page.fileLabel()).toBe('Current file on file');
   } finally {
     restore();
   }
@@ -273,8 +301,8 @@ test('GSSC-MLLR-387 Semantic', async () => {
     await fixture.whenStable();
     expect(page.isCreating()).toBe(true);
     expect(page.title()).toBe('');
-    expect(page.referenceLink()).toBe('');
     expect(page.description()).toBe('');
+    expect(page.fileLabel()).toBe('No file chosen');
   } finally {
     restore();
   }
@@ -393,11 +421,12 @@ test('GSSC-MLLR-395 Semantic', async () => {
     ctx.fixture.detectChanges();
     await ctx.fixture.whenStable();
     await typeField(ctx.fixture, ctx.root, 'Title', 'New Title');
-    await typeField(ctx.fixture, ctx.root, 'Reference Link', 'https://example.com/new');
+    await chooseFile(ctx.fixture, ctx.root, 'new.pdf');
     await ctx.page.onSaved();
     await settle(ctx.fixture);
     expect(ctx.createCalls.length).toBe(1);
     expect(ctx.createCalls[0].title).toBe('New Title');
+    expect(ctx.uploadCalls.some((call) => call.fileName === 'new.pdf')).toBe(true);
 
     ctx.root.querySelector<HTMLButtonElement>('[data-cuid="pub_2"]')!.click();
     ctx.fixture.detectChanges();
@@ -441,7 +470,7 @@ test('GSSC-MLLR-397 Semantic', async () => {
     ctx.fixture.detectChanges();
     await ctx.fixture.whenStable();
     await typeField(ctx.fixture, ctx.root, 'Title', 'Refresh Me');
-    await typeField(ctx.fixture, ctx.root, 'Reference Link', 'https://example.com/refresh');
+    await chooseFile(ctx.fixture, ctx.root, 'refresh.pdf');
     await ctx.page.onSaved();
     await settle(ctx.fixture);
     expect(ctx.listCalls).toBeGreaterThan(before);
@@ -451,3 +480,54 @@ test('GSSC-MLLR-397 Semantic', async () => {
   }
 });
 // @relation(GSSC-MLLR-397, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-700, scope=range_start, role=Test)
+test('GSSC-MLLR-700 Semantic', async () => {
+  const ctx = await setupPublications();
+  try {
+    ctx.root.querySelector<HTMLButtonElement>('[data-slot="publications-create"]')!.click();
+    ctx.fixture.detectChanges();
+    await ctx.fixture.whenStable();
+    expect(ctx.root.querySelector('[data-slot="publications-choose-file"]')).toBeTruthy();
+    await chooseFile(ctx.fixture, ctx.root, 'picked.pdf');
+    expect(ctx.page.fileLabel()).toBe('picked.pdf');
+  } finally {
+    ctx.restore();
+  }
+});
+// @relation(GSSC-MLLR-700, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-701, scope=range_start, role=Test)
+test('GSSC-MLLR-701 Syntactic', async () => {
+  const { root, fixture, restore } = await setupPublications();
+  try {
+    root.querySelector<HTMLButtonElement>('[data-slot="publications-create"]')!.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    const field = root.querySelector('[data-slot="publications-file-field"]')!;
+    const title = root.querySelector('.gssc-form-text-field')!;
+    expect(
+      Boolean(title.compareDocumentPosition(field) & Node.DOCUMENT_POSITION_FOLLOWING),
+    ).toBe(true);
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-701, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-702, scope=range_start, role=Test)
+test('GSSC-MLLR-702 Lexical', async () => {
+  const { root, fixture, restore } = await setupPublications();
+  try {
+    root.querySelector<HTMLButtonElement>('[data-slot="publications-create"]')!.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    const choose = root.querySelector('[data-slot="publications-choose-file"]')!;
+    expect(choose.className).toContain('font-sans');
+    expect(choose.className).toContain('text-gssc-dark-green');
+    expect(choose.className).toContain('bg-gssc-light-green');
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-702, scope=range_end, role=Test)
