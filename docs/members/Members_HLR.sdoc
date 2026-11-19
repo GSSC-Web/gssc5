@@ -1917,3 +1917,29 @@ REVIEW_STATUS: Approved
 
 [[/SECTION]]
 
+[[SECTION]]
+UID: GSSC-MHLR-PDE-FORM-UNIFY
+TITLE: Page Data Editor Form Unification
+
+[REQUIREMENT]
+UID: GSSC-MHLR-108
+TITLE: Page Data Editor Form Unification
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL present a consistent catalog and Generic Editor field column across Page Data Editor kinds for sections, announcements, and events, and SHALL associate page sections with public pages by tags rather than by a page selector.
+<<<
+RATIONALE: >>>
+Page Data Editor unification hosted the three kind editors, but catalog and form chrome still differed. Aligning catalogs to the announcement pattern, form fields to the events pattern, and section page association to tags removes those differences without changing kind-specific content fields.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-139
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-93
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-38
+  ROLE: Refines
+
+[[/SECTION]]
+

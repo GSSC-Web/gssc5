@@ -70,6 +70,7 @@ export type SectionTemplateListEntry = {
   name: string;
 };
 
+export type SectionsList = () => Promise<SectionListEntry[]>;
 export type SectionsListByTag = (tag: string) => Promise<SectionListEntry[]>;
 export type SectionGetByCuid = (cuid: string) => Promise<SectionDetail | null>;
 export type SectionPatchByCuid = (
@@ -80,6 +81,12 @@ export type SectionCreate = (
   body: SectionCreateBody,
 ) => Promise<{ ok: true; detail: SectionDetail } | { ok: false; forbidden: boolean }>;
 export type SectionsListTemplates = () => Promise<SectionTemplateListEntry[]>;
+
+/** Unfiltered section catalog for Page Data Editor (GSSC5-139). */
+export const SECTIONS_LIST = new InjectionToken<SectionsList>('SECTIONS_LIST', {
+  providedIn: 'root',
+  factory: () => defaultSectionsList,
+});
 
 export const SECTIONS_LIST_BY_TAG = new InjectionToken<SectionsListByTag>(
   'SECTIONS_LIST_BY_TAG',
@@ -140,6 +147,19 @@ function asSectionDetail(raw: SectionDetail): SectionDetail {
     ...asSectionListEntry(raw),
     resources: raw.resources ?? [],
   };
+}
+
+async function defaultSectionsList(): Promise<SectionListEntry[]> {
+  try {
+    const result = await backend.sections.get({ query: {} });
+    if (result.error || result.data === null || result.data === undefined) {
+      return [];
+    }
+    const rows = Array.isArray(result.data) ? result.data : [];
+    return rows.map((row) => asSectionListEntry(row as SectionListEntry));
+  } catch {
+    return [];
+  }
 }
 
 async function defaultSectionsListByTag(tag: string): Promise<SectionListEntry[]> {

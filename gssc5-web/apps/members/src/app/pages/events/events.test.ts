@@ -272,6 +272,8 @@ test('GSSC-MLLR-326 Lexical', async () => {
     const catalog = root.querySelector('.gssc-events-catalog')!;
     expect(catalog.className).toContain('font-sans');
     expect(catalog.className).toContain('text-gssc-dark-green');
+    expect(catalog.className).toContain('border-gssc-gray');
+    expect(textContent(root, '.gssc-events-catalog__heading')).toBe('Catalog');
   } finally {
     restore();
   }
@@ -310,11 +312,15 @@ test('GSSC-MLLR-328 Syntactic', async () => {
 
 // @relation(GSSC-MLLR-329, scope=range_start, role=Test)
 test('GSSC-MLLR-329 Lexical', async () => {
-  const { root, restore } = await setupEvents();
+  const { root, fixture, restore } = await setupEvents();
   try {
-    const button = root.querySelector('.gssc-events-catalog__entry-button')!;
+    const button = root.querySelector<HTMLButtonElement>('.gssc-events-catalog__entry-button')!;
     expect(button.className).toContain('font-sans');
     expect(button.className).toContain('text-gssc-dark-green');
+    button.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(button.className).toContain('bg-gssc-light-green');
   } finally {
     restore();
   }
