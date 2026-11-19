@@ -125,12 +125,13 @@
     <!-- @relation(GSSC-PLLR-252, GSSC-PLLR-253, GSSC-PLLR-254, scope=range_start, role=Implementation) -->
     @if (selectedFileUrl(); as fileUrl) {
       <a
-        class="gssc-newsletters-download inline-flex w-fit cursor-pointer border border-gssc-dark-green bg-transparent px-3 py-1 font-sans text-gssc-dark-green hover:bg-gssc-gray"
+        class="gssc-newsletters-open inline-flex w-fit cursor-pointer border border-gssc-dark-green bg-transparent px-3 py-1 font-sans text-gssc-dark-green hover:bg-gssc-gray"
         [href]="fileUrl"
-        download
-        data-testid="newsletter-download"
+        target="_blank"
+        rel="noopener noreferrer"
+        data-testid="newsletter-open"
       >
-        Download
+        Open in new window
       </a>
     }
     <!-- @relation(GSSC-PLLR-252, GSSC-PLLR-253, GSSC-PLLR-254, scope=range_end, role=Implementation) -->
@@ -138,7 +139,7 @@
     <!-- @relation(GSSC-PLLR-226, GSSC-PLLR-227, scope=range_start, role=Implementation) -->
     @if (previewSafeUrl(); as previewUrl) {
       <iframe
-        class="gssc-newsletters-preview min-h-96 w-full border border-gssc-gray bg-gssc-white"
+        class="gssc-newsletters-preview min-h-[70vh] w-full border border-gssc-gray bg-gssc-white"
         [src]="previewUrl"
         title="Newsletter preview"
         data-testid="newsletter-preview"

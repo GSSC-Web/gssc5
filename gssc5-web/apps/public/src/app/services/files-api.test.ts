@@ -1,4 +1,9 @@
-import { filesApi, filesApiUrl, resolveStoredFileObjectUrl } from './files-api';
+import {
+  filesApi,
+  filesApiUrl,
+  resolveStoredFileAccessUrl,
+  resolveStoredFileObjectUrl,
+} from './files-api';
 
 test('filesApiUrl maps cuid and /files paths; passes through absolute http(s)', () => {
   expect(filesApiUrl('file-abc')).toBe('http://localhost:3000/files/file-abc');
@@ -69,5 +74,41 @@ test('resolveStoredFileObjectUrl fetches absolute http(s) with omit on failure',
     expect(url).toMatch(/^blob:/);
   } finally {
     globalThis.fetch = originalFetch;
+  }
+});
+
+test('resolveStoredFileAccessUrl returns /files URL after Treaty probe', async () => {
+  const original = filesApi.get;
+  filesApi.get = (async () => ({
+    data: new Response(new Uint8Array([1]), { status: 200 }),
+    error: null,
+    status: 200,
+    response: new Response(),
+    headers: undefined,
+  })) as unknown as typeof filesApi.get;
+
+  try {
+    expect(await resolveStoredFileAccessUrl('file-abc')).toBe(
+      'http://localhost:3000/files/file-abc',
+    );
+  } finally {
+    filesApi.get = original;
+  }
+});
+
+test('resolveStoredFileAccessUrl omits on Treaty 403', async () => {
+  const original = filesApi.get;
+  filesApi.get = (async () => ({
+    data: null,
+    error: { status: 403, value: 'Forbidden' },
+    status: 403,
+    response: new Response(),
+    headers: undefined,
+  })) as unknown as typeof filesApi.get;
+
+  try {
+    expect(await resolveStoredFileAccessUrl('secret')).toBeNull();
+  } finally {
+    filesApi.get = original;
   }
 });

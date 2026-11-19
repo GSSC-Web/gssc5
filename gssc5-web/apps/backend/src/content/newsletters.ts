@@ -17,6 +17,7 @@ import {
   parseStringArray,
   trimStrings,
 } from "./helpers";
+import { syncNewsletterFileDisplayName } from "./newsletter-files";
 
 const NEWSLETTER_LIST_FILTERS = new Set([
   "keyword",
@@ -229,6 +230,16 @@ async function patchNewsletterItem({
     where: { id: existing.id },
     data,
   });
+  // @relation(GSSC-BLLR-505, scope=range_start, role=Implementation)
+  if (body.volume !== undefined || body.number !== undefined) {
+    await syncNewsletterFileDisplayName({
+      newsletterCuid: updated.id,
+      volume: updated.volume,
+      number: updated.number,
+      filePath: updated.filePath,
+    });
+  }
+  // @relation(GSSC-BLLR-505, scope=range_end, role=Implementation)
   return status(200, toEntry(updated));
   // @relation(GSSC-BLLR-391, scope=range_end, role=Implementation)
 }

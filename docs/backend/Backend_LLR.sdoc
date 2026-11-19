@@ -9543,14 +9543,14 @@ RELATIONS:
 UID: GSSC-BLLR-494
 TITLE: Newsletter Issue File Upload
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL accept a multipart upload into the newsletters store for a target newsletter cuid from a logged-in member who is a newsletter editor or an administrator, store that issue file under a name and path derived from that newsletter cuid, set that newsletter's file path to that newsletter cuid, and return that newsletter cuid and path.
+The GSSC Website Unified Backend SHALL accept a multipart upload into the newsletters store for a target newsletter cuid from a logged-in member who is a newsletter editor or an administrator, store that issue file under a storage path derived from that newsletter cuid with display filename Vol{volume}No{number}.pdf, set that newsletter's file path to that newsletter cuid, and return that newsletter cuid and path.
 <<<
 RATIONALE: >>>
-Naming by newsletter cuid prevents collisions across issues and keeps the catalog file path stable for public retrieval.
+Storage by newsletter cuid prevents collisions and keeps the catalog file path stable; the Vol/No display filename is what PDF chrome reports.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-142
+CHANGE_DRIVER: GSSC5-144
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -9569,6 +9569,24 @@ One current issue file per newsletter keeps storage and catalog paths collision-
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-142
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-239
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-505
+TITLE: Newsletter Issue Display Filename
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL set the stored-file entry display name for a newsletter issue file to Vol{volume}No{number}.pdf from that newsletter's volume and number, SHALL keep that display name current when volume or number changes, and SHALL report that display name in the Content-Disposition filename when serving that issue file.
+<<<
+RATIONALE: >>>
+Visitors see a human-readable issue filename in PDF chrome instead of the newsletter cuid or a blob identifier.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-144
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent

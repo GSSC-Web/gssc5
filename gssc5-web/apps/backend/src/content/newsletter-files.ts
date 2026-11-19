@@ -106,9 +106,100 @@ function storageKeyForNewsletter(newsletterCuid: string): string {
   return `${NEWSLETTERS_DIR}/${newsletterCuid}`;
 }
 
+/** Display filename for PDF chrome / Content-Disposition (GSSC5-144 / GSSC-191). */
+// @relation(GSSC-BLLR-505, scope=range_start, role=Implementation)
+export function newsletterIssueDisplayName(volume: number, number: number): string {
+  return `Vol${volume}No${number}.pdf`;
+}
+// @relation(GSSC-BLLR-505, scope=range_end, role=Implementation)
+
+const newsletterFileSelect = {
+  id: true,
+  name: true,
+  kind: true,
+  parentId: true,
+  storageKey: true,
+  mimeType: true,
+  deletedAt: true,
+} as const;
+
+async function syncNewsletterDisplayName(
+  entryId: string,
+  newsletterCuid: string,
+  currentName: string,
+) {
+  const prisma = runtimePrisma();
+  const newsletter = await prisma.newsletter.findUnique({
+    where: { id: newsletterCuid },
+    select: { volume: true, number: true },
+  });
+  if (newsletter === null) return currentName;
+  const displayName = newsletterIssueDisplayName(
+    newsletter.volume,
+    newsletter.number,
+  );
+  if (displayName === currentName) return currentName;
+  await prisma.storedFileEntry.update({
+    where: { id: entryId },
+    data: { name: displayName },
+  });
+  return displayName;
+}
+
+/**
+ * When serving a newsletters-store file, ensure Content-Disposition uses Vol/No.pdf.
+ * Newsletter issue entries use the newsletter cuid as StoredFileEntry.id.
+ */
+export async function newsletterDispositionFileName(args: {
+  id: string;
+  name: string;
+  parentId: string | null;
+}): Promise<string> {
+  if (!(await isNewsletterFileEntry(args.parentId))) return args.name;
+  return syncNewsletterDisplayName(args.id, args.id, args.name);
+}
+
+/** Keep StoredFileEntry.name as Vol{volume}No{number}.pdf when volume/number change. */
+export async function syncNewsletterFileDisplayName(args: {
+  newsletterCuid: string;
+  volume: number;
+  number: number;
+  filePath: string;
+}): Promise<void> {
+  const prisma = runtimePrisma();
+  const displayName = newsletterIssueDisplayName(args.volume, args.number);
+  const entryId =
+    args.filePath.trim().length > 0 ? args.filePath.trim() : args.newsletterCuid;
+  const row = await prisma.storedFileEntry.findUnique({
+    where: { id: entryId },
+    select: { id: true, name: true, deletedAt: true, parentId: true },
+  });
+  if (row === null || row.deletedAt !== null) return;
+  if (!(await isNewsletterFileEntry(row.parentId))) return;
+  if (row.name === displayName) return;
+  await prisma.storedFileEntry.update({
+    where: { id: row.id },
+    data: { name: displayName },
+  });
+}
+
 async function loadNewsletterFileByCuid(newsletterCuid: string) {
   const prisma = runtimePrisma();
+  const byId = await prisma.storedFileEntry.findUnique({
+    where: { id: newsletterCuid },
+    select: newsletterFileSelect,
+  });
+  if (byId !== null && byId.deletedAt === null) {
+    const name = await syncNewsletterDisplayName(
+      byId.id,
+      newsletterCuid,
+      byId.name,
+    );
+    return name === byId.name ? byId : { ...byId, name };
+  }
+
   const folderId = await ensureNewslettersFolder();
+  // Legacy: entry named by newsletter cuid before Vol/No display names.
   const byName = await prisma.storedFileEntry.findFirst({
     where: {
       name: newsletterCuid,
@@ -116,29 +207,15 @@ async function loadNewsletterFileByCuid(newsletterCuid: string) {
       parentId: folderId,
       deletedAt: null,
     },
-    select: {
-      id: true,
-      name: true,
-      kind: true,
-      parentId: true,
-      storageKey: true,
-      mimeType: true,
-      deletedAt: true,
-    },
+    select: newsletterFileSelect,
   });
-  if (byName !== null) return byName;
-  return prisma.storedFileEntry.findUnique({
-    where: { id: newsletterCuid },
-    select: {
-      id: true,
-      name: true,
-      kind: true,
-      parentId: true,
-      storageKey: true,
-      mimeType: true,
-      deletedAt: true,
-    },
-  });
+  if (byName === null) return null;
+  const name = await syncNewsletterDisplayName(
+    byName.id,
+    newsletterCuid,
+    byName.name,
+  );
+  return name === byName.name ? byName : { ...byName, name };
 }
 
 async function isNewsletterFileEntry(parentId: string | null): Promise<boolean> {
@@ -250,7 +327,7 @@ export const newsletterFiles = new Elysia({ prefix: "/newsletter-files" })
       const prisma = runtimePrisma();
       const target = await prisma.newsletter.findUnique({
         where: { id: newsletterCuid },
-        select: { id: true, filePath: true },
+        select: { id: true, filePath: true, volume: true, number: true },
       });
       if (target === null) return statusFn(404, "Not Found" as const);
 
@@ -258,20 +335,28 @@ export const newsletterFiles = new Elysia({ prefix: "/newsletter-files" })
       const bytes = new Uint8Array(await upload.arrayBuffer());
       const storageKey = storageKeyForNewsletter(newsletterCuid);
       const mimeType = upload.type || null;
+      // @relation(GSSC-BLLR-505, scope=range_start, role=Implementation)
+      const displayName = newsletterIssueDisplayName(target.volume, target.number);
+      // @relation(GSSC-BLLR-505, scope=range_end, role=Implementation)
 
       // @relation(GSSC-BLLR-494, GSSC-BLLR-495, scope=range_start, role=Implementation)
-      const existing = await prisma.storedFileEntry.findFirst({
-        where: {
-          name: newsletterCuid,
-          kind: "file",
-          parentId: folderId,
-          deletedAt: null,
-        },
-        select: { id: true },
-      });
+      const existing =
+        (await prisma.storedFileEntry.findUnique({
+          where: { id: newsletterCuid },
+          select: { id: true, deletedAt: true },
+        })) ??
+        (await prisma.storedFileEntry.findFirst({
+          where: {
+            OR: [{ name: newsletterCuid }, { storageKey }],
+            kind: "file",
+            parentId: folderId,
+            deletedAt: null,
+          },
+          select: { id: true, deletedAt: true },
+        }));
 
       let keepEntryId: string;
-      if (existing !== null) {
+      if (existing !== null && existing.deletedAt === null) {
         const written = await writeStoredBytes(storageKey, bytes);
         if (written === null) {
           return statusFn(500, "Invalid" as const);
@@ -279,6 +364,7 @@ export const newsletterFiles = new Elysia({ prefix: "/newsletter-files" })
         await prisma.storedFileEntry.update({
           where: { id: existing.id },
           data: {
+            name: displayName,
             storageKey,
             mimeType,
             sizeBytes: bytes.byteLength,
@@ -292,15 +378,11 @@ export const newsletterFiles = new Elysia({ prefix: "/newsletter-files" })
         if (written === null) {
           return statusFn(500, "Invalid" as const);
         }
-        const byId = await prisma.storedFileEntry.findUnique({
-          where: { id: newsletterCuid },
-          select: { id: true },
-        });
-        if (byId !== null) {
+        if (existing !== null) {
           await prisma.storedFileEntry.update({
-            where: { id: newsletterCuid },
+            where: { id: existing.id },
             data: {
-              name: newsletterCuid,
+              name: displayName,
               kind: "file",
               parentId: folderId,
               storageKey,
@@ -312,12 +394,12 @@ export const newsletterFiles = new Elysia({ prefix: "/newsletter-files" })
               deletedAt: null,
             },
           });
-          keepEntryId = newsletterCuid;
+          keepEntryId = existing.id;
         } else {
           const created = await prisma.storedFileEntry.create({
             data: {
               id: newsletterCuid,
-              name: newsletterCuid,
+              name: displayName,
               kind: "file",
               parentId: folderId,
               storageKey,

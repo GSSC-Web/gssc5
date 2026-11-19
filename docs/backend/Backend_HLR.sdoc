@@ -1563,13 +1563,13 @@ RELATIONS:
 UID: GSSC-BHLR-239
 TITLE: Newsletter Issue File Store
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL provide a dedicated newsletters file store that accepts authenticated multipart upload of an issue file for a newsletter cuid, stores that file under a name and path derived from that newsletter cuid, and deletes the prior issue file for that newsletter when a replacement is uploaded.
+The GSSC Website Unified Backend SHALL provide a dedicated newsletters file store that accepts authenticated multipart upload of an issue file for a newsletter cuid, stores that file under a storage path derived from that newsletter cuid, reports a display filename of Vol{volume}No{number}.pdf for that issue, and deletes the prior issue file for that newsletter when a replacement is uploaded.
 <<<
 RATIONALE: >>>
-Newsletter issue bytes are stored separately from catalog metadata; naming by newsletter cuid mirrors account-photo storage and keeps one current issue file per newsletter.
+Newsletter issue bytes are stored separately from catalog metadata; storage by newsletter cuid keeps one current issue file per newsletter while the Vol/No display filename is what visitors see in PDF chrome.
 <<<
 DERIVED: True
-CHANGE_DRIVER: GSSC5-142
+CHANGE_DRIVER: GSSC5-144
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent

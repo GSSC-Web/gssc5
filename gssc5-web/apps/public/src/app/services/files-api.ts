@@ -71,3 +71,33 @@ export async function resolveStoredFileObjectUrl(resource: string): Promise<stri
     return null;
   }
 }
+
+/**
+ * Probe Treaty GET /files/{cuid}; on success return the stable /files URL so the
+ * browser PDF chrome can honor Content-Disposition filename (not a blob: UUID).
+ * Absolute http(s) resources still pass through after a credentialed probe.
+ */
+export async function resolveStoredFileAccessUrl(resource: string): Promise<string | null> {
+  const trimmed = resource.trim();
+  if (trimmed.length === 0) return null;
+
+  if (/^https?:\/\//i.test(trimmed)) {
+    try {
+      const response = await fetch(trimmed, { credentials: 'include', method: 'GET' });
+      if (!response.ok) return null;
+      return trimmed;
+    } catch {
+      return null;
+    }
+  }
+
+  try {
+    const result = await filesApi.get(filesCuid(trimmed));
+    if (result.error) return null;
+    if (result.status === 403 || result.status === 404) return null;
+    if (result.status < 200 || result.status >= 300) return null;
+    return filesApiUrl(trimmed);
+  } catch {
+    return null;
+  }
+}
