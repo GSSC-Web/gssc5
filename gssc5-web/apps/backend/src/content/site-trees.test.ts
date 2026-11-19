@@ -425,67 +425,57 @@ test("GSSC-BLLR-475 Site Tree Seed", async () => {
   // GSSC5-126: announcement/event editors are under Pages / PDE, not top-level seed tabs.
   expect(membersPaths).not.toContain("/announcements");
   expect(membersPaths).not.toContain("/events");
-});
 
-test("GSSC-BLLR-475 Site Tree Seed adds missing paths without wiping edits", async () => {
+  // Already-seeded DBs gain missing seed paths without wiping admin edits.
   const prisma = getPrisma(loadConfig().DATABASE_URL);
-  const publicTree = await prisma.siteTree.findUniqueOrThrow({
+  const storedPublic = await prisma.siteTree.findUniqueOrThrow({
     where: { frontend: "public" },
     include: { nodes: true },
   });
-  const root = publicTree.nodes.find((node) => node.parentId === null);
-  expect(root).toBeDefined();
-
-  const membership = publicTree.nodes.find((node) => node.path === "/membership");
+  const membership = storedPublic.nodes.find((node) => node.path === "/membership");
   expect(membership).toBeDefined();
   const editedLabel = `Admin Membership ${Date.now()}`;
   await prisma.siteTreeNode.update({
     where: { id: membership!.id },
     data: { label: editedLabel, sortOrder: membership!.sortOrder },
   });
-
-  // Simulate an older DB that never received later seed routes.
   await prisma.siteTreeNode.deleteMany({
     where: {
-      treeId: publicTree.id,
+      treeId: storedPublic.id,
       path: { in: ["/sitemap", "/search"] },
     },
   });
-
   const beforePaths = new Set(
     (
       await prisma.siteTreeNode.findMany({
-        where: { treeId: publicTree.id },
+        where: { treeId: storedPublic.id },
         select: { path: true },
       })
     ).map((node) => node.path),
   );
   expect(beforePaths.has("/sitemap")).toBe(false);
   expect(beforePaths.has("/search")).toBe(false);
-  expect(beforePaths.has("/membership")).toBe(true);
 
   await seedSiteTrees();
 
   const after = await prisma.siteTreeNode.findMany({
-    where: { treeId: publicTree.id },
+    where: { treeId: storedPublic.id },
   });
-  const afterPaths = after.map((node) => node.path);
-  expect(afterPaths).toEqual(expect.arrayContaining(["/sitemap", "/search", "/membership"]));
-
-  const membershipAfter = after.find((node) => node.id === membership!.id);
-  expect(membershipAfter).toMatchObject({
+  expect(after.map((node) => node.path)).toEqual(
+    expect.arrayContaining(["/sitemap", "/search", "/membership"]),
+  );
+  expect(after.find((node) => node.id === membership!.id)).toMatchObject({
     id: membership!.id,
     label: editedLabel,
     path: "/membership",
     sortOrder: membership!.sortOrder,
     parentId: membership!.parentId,
   });
-
-  // Re-seed is idempotent: no duplicate paths for seed destinations.
   await seedSiteTrees();
-  const sitemapCount = await prisma.siteTreeNode.count({
-    where: { treeId: publicTree.id, path: "/sitemap" },
-  });
-  expect(sitemapCount).toBe(1);
+  expect(
+    await prisma.siteTreeNode.count({
+      where: { treeId: storedPublic.id, path: "/sitemap" },
+    }),
+  ).toBe(1);
 });
 // @relation(GSSC-BLLR-475, scope=range_end, role=Test)
