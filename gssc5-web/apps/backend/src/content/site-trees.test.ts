@@ -400,6 +400,8 @@ test("GSSC-BLLR-475 Site Tree Seed", async () => {
       "/publications",
       "/research-tools",
       "/newsletters",
+      "/sitemap",
+      "/search",
     ]),
   );
 
@@ -414,10 +416,76 @@ test("GSSC-BLLR-475 Site Tree Seed", async () => {
       "/newsletters",
       "/publications",
       "/research-tools",
+      "/templates",
+      "/site-trees",
+      "/sitemap",
+      "/search",
     ]),
   );
   // GSSC5-126: announcement/event editors are under Pages / PDE, not top-level seed tabs.
   expect(membersPaths).not.toContain("/announcements");
   expect(membersPaths).not.toContain("/events");
+});
+
+test("GSSC-BLLR-475 Site Tree Seed adds missing paths without wiping edits", async () => {
+  const prisma = getPrisma(loadConfig().DATABASE_URL);
+  const publicTree = await prisma.siteTree.findUniqueOrThrow({
+    where: { frontend: "public" },
+    include: { nodes: true },
+  });
+  const root = publicTree.nodes.find((node) => node.parentId === null);
+  expect(root).toBeDefined();
+
+  const membership = publicTree.nodes.find((node) => node.path === "/membership");
+  expect(membership).toBeDefined();
+  const editedLabel = `Admin Membership ${Date.now()}`;
+  await prisma.siteTreeNode.update({
+    where: { id: membership!.id },
+    data: { label: editedLabel, sortOrder: membership!.sortOrder },
+  });
+
+  // Simulate an older DB that never received later seed routes.
+  await prisma.siteTreeNode.deleteMany({
+    where: {
+      treeId: publicTree.id,
+      path: { in: ["/sitemap", "/search"] },
+    },
+  });
+
+  const beforePaths = new Set(
+    (
+      await prisma.siteTreeNode.findMany({
+        where: { treeId: publicTree.id },
+        select: { path: true },
+      })
+    ).map((node) => node.path),
+  );
+  expect(beforePaths.has("/sitemap")).toBe(false);
+  expect(beforePaths.has("/search")).toBe(false);
+  expect(beforePaths.has("/membership")).toBe(true);
+
+  await seedSiteTrees();
+
+  const after = await prisma.siteTreeNode.findMany({
+    where: { treeId: publicTree.id },
+  });
+  const afterPaths = after.map((node) => node.path);
+  expect(afterPaths).toEqual(expect.arrayContaining(["/sitemap", "/search", "/membership"]));
+
+  const membershipAfter = after.find((node) => node.id === membership!.id);
+  expect(membershipAfter).toMatchObject({
+    id: membership!.id,
+    label: editedLabel,
+    path: "/membership",
+    sortOrder: membership!.sortOrder,
+    parentId: membership!.parentId,
+  });
+
+  // Re-seed is idempotent: no duplicate paths for seed destinations.
+  await seedSiteTrees();
+  const sitemapCount = await prisma.siteTreeNode.count({
+    where: { treeId: publicTree.id, path: "/sitemap" },
+  });
+  expect(sitemapCount).toBe(1);
 });
 // @relation(GSSC-BLLR-475, scope=range_end, role=Test)
