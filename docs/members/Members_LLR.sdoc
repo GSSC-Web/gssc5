@@ -111,7 +111,8 @@ GSSC5-119 Directory Create Member owns GSSC-MLLR-621 through GSSC-MLLR-628 (exac
 GSSC5-123 Members Footer Home Link owns GSSC-MLLR-641 through GSSC-MLLR-643 (exact end 643; band 641–660 reserved for Wave 3 footer chrome after directory create 621–640); HLR GSSC-MHLR-101; also CHANGE_DRIVER on GSSC-MLLR-40.
 GSSC5-46 Site Branding owns GSSC-MLLR-644 through GSSC-MLLR-649 (exact end 649) and GSSC-MHLR-102 / GSSC-MHLR-103.
 GSSC5-135 Multiple Positions with Semicolon Lint owns GSSC-MLLR-661 through GSSC-MLLR-664 (exact end 664; band 661–680 reserved); HLR GSSC-MHLR-104.
-Wave coordination: GSSC5-92 directory 202–214, GSSC5-102 directory refinement 215–230, GSSC5-89 dashboard 231–239, GSSC5-93 page/section 261–286, GSSC5-94 announcements 291–307, GSSC5-117 page-data unification 308–320, GSSC5-95 events 321–346, GSSC5-96 newsletters 351–373, GSSC5-97 publications/tools 381–414, GSSC5-101 account refinement 415–428, GSSC5-103 mailing-equals-home 429–437, GSSC5-102 password-history-reset 438–440, GSSC5-107 members nav chrome 441–461, GSSC5-109 members site search 462–483 (band 462–500), GSSC5-108 sitemap 501–510, GSSC5-116 site-tree editor 521–540 (band 521–560), GSSC5-127 site-tree feedback MLLR-562 (+ CHANGE_DRIVER on 524/529; HLR MHLR-99), GSSC5-115/128 template editor 541–561 (band 541–580), GSSC5-126 PDE section create + nav 581–591 (band 581–600), GSSC5-118 directory invite 601–608 (band 601–620), GSSC5-119 directory create 621–628 (band 621–640), GSSC5-123 footer home link 641–643 (band 641–660), GSSC5-46 branding 644–649, GSSC5-135 multi-position 661–664 (band 661–680) — do not collide.
+GSSC5-138 Site Tree Editor foldable outline and independent pane scroll owns GSSC-MLLR-668 through GSSC-MLLR-670 (exact end 670; continues band 661–680) plus CHANGE_DRIVER on GSSC-MLLR-522; HLR GSSC-MHLR-108.
+Wave coordination: GSSC5-92 directory 202–214, GSSC5-102 directory refinement 215–230, GSSC5-89 dashboard 231–239, GSSC5-93 page/section 261–286, GSSC5-94 announcements 291–307, GSSC5-117 page-data unification 308–320, GSSC5-95 events 321–346, GSSC5-96 newsletters 351–373, GSSC5-97 publications/tools 381–414, GSSC5-101 account refinement 415–428, GSSC5-103 mailing-equals-home 429–437, GSSC5-102 password-history-reset 438–440, GSSC5-107 members nav chrome 441–461, GSSC5-109 members site search 462–483 (band 462–500), GSSC5-108 sitemap 501–510, GSSC5-116 site-tree editor 521–540 (band 521–560), GSSC5-127 site-tree feedback MLLR-562 (+ CHANGE_DRIVER on 524/529; HLR MHLR-99), GSSC5-115/128 template editor 541–561 (band 541–580), GSSC5-126 PDE section create + nav 581–591 (band 581–600), GSSC5-118 directory invite 601–608 (band 601–620), GSSC5-119 directory create 621–628 (band 621–640), GSSC5-123 footer home link 641–643 (band 641–660), GSSC5-46 branding 644–649, GSSC5-135 multi-position 661–664, GSSC5-137 nested submenu pointer bridge 665–667 (HLR MHLR-109), GSSC5-138 site-tree fold/scroll 668–670 (band 661–680) — do not collide.
 GSSC-173 Members Header Greeting menu owns GSSC-MLLR-33 through GSSC-MLLR-35 (Header Public Access triad) plus CHANGE_DRIVER on GSSC-MLLR-14, 24, 27, 30 and HLR GSSC-MHLR-107; GSSC-MLLR-36 through GSSC-MLLR-39 remain free.
 Do not reuse numbers already claimed by another ticket.
 <<<
@@ -1159,7 +1160,7 @@ CHANGE_DRIVER: GSSC5-137
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-MHLR-107
+  VALUE: GSSC-MHLR-109
   ROLE: Refines
 
 [REQUIREMENT]
@@ -1177,7 +1178,7 @@ CHANGE_DRIVER: GSSC5-137
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-MHLR-107
+  VALUE: GSSC-MHLR-109
   ROLE: Refines
 
 [REQUIREMENT]
@@ -1195,7 +1196,7 @@ CHANGE_DRIVER: GSSC5-137
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-MHLR-107
+  VALUE: GSSC-MHLR-109
   ROLE: Refines
 
 [[/SECTION]]
@@ -9990,18 +9991,24 @@ RELATIONS:
 UID: GSSC-MLLR-522
 TITLE: Syntactic
 STATEMENT: >>>
-The Site Tree Editor Page SHALL place its heading, frontend selector, tree outline, and node editor panel in the Page Outlet at full content width, with the tree outline beside or above the node editor panel so both remain visible together on a wide viewport.
+The Site Tree Editor Page SHALL place its heading, frontend selector, tree outline, and node editor panel in the Page Outlet at full content width, with the tree outline beside or above the node editor panel so both remain visible together on a wide viewport, and SHALL keep the tree outline region and the node editor panel independently scrollable when either region's contents grow taller than the available layout height.
 <<<
 RATIONALE: >>>
-Administrators need the outline and the selected-node fields in one composition without leaving the page.
+Administrators need the outline and the selected-node fields in one composition without leaving the page. Independent pane scroll keeps selection and editing usable when either side grows long.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-116
+CHANGE_DRIVER: >>>
+GSSC5-116
+GSSC5-138
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-89
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-108
   ROLE: Refines
 
 [REQUIREMENT]
@@ -10422,6 +10429,66 @@ REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-99
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-SITE-TREE-OUTLINE-EXPANDER
+TITLE: Tree Outline Expander
+
+[REQUIREMENT]
+UID: GSSC-MLLR-668
+TITLE: Semantic
+STATEMENT: >>>
+When a Tree Outline node has children, a Tree Outline Expander SHALL expand and collapse that node's nested children in the Tree Outline without changing the selected node.
+<<<
+RATIONALE: >>>
+Administrators fold deep branches to scan the outline while keeping the current Node Editor selection.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-138
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-108
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-669
+TITLE: Syntactic
+STATEMENT: >>>
+A Tree Outline Expander SHALL appear beside its node's label when that node has children, SHALL start expanded so those children are visible, and when collapsed SHALL hide that node's nested children in the Tree Outline.
+<<<
+RATIONALE: >>>
+Expanded-by-default preserves the prior full outline. Beside-label placement matches other Members expanders. Hiding children on collapse keeps the outline short.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-138
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-108
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-670
+TITLE: Lexical
+STATEMENT: >>>
+A Tree Outline Expander SHALL use the Member Frontend sans-serif typeface and the dark-green theme token for its expanded or collapsed affordance.
+<<<
+RATIONALE: >>>
+Dark-green expander chrome matches Tree Outline labels and other Members expanders.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-138
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-108
   ROLE: Refines
 
 [[/SECTION]]

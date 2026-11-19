@@ -30,9 +30,10 @@ const emptyBaseline = (): NodeBaseline => ({
 });
 
 /**
- * Members Site Tree Editor (GSSC5-116 / GSSC5-127): admin CRUD/reorder over
- * GSSC5-40 /site-trees/{frontend} for Public and Members trees; Members outline
- * hides destinations the current member cannot use.
+ * Members Site Tree Editor (GSSC5-116 / GSSC5-127 / GSSC5-138): admin CRUD/reorder
+ * over GSSC5-40 /site-trees/{frontend} for Public and Members trees; Members
+ * outline hides destinations the current member cannot use; outline folds and
+ * Tree/Node panes scroll independently.
  */
 @Component({
   selector: 'gssc-site-tree-editor-page',
@@ -57,6 +58,10 @@ export class SiteTreeEditorPage implements OnInit {
   readonly path = signal('');
   readonly sectionTag = signal('');
   readonly sortOrder = signal('0');
+  // @relation(GSSC-MLLR-668, GSSC-MLLR-669, scope=range_start, role=Implementation)
+  /** Collapsed node cuids; absence means expanded (default). */
+  readonly collapsedIds = signal<ReadonlySet<string>>(new Set());
+  // @relation(GSSC-MLLR-668, GSSC-MLLR-669, scope=range_end, role=Implementation)
 
   private baseline: NodeBaseline = emptyBaseline();
 
@@ -115,6 +120,7 @@ export class SiteTreeEditorPage implements OnInit {
     if (next !== 'public' && next !== 'members') return;
     this.frontend.set(next);
     this.selectedCuid.set(null);
+    this.collapsedIds.set(new Set());
     this.clearFields();
     await this.reloadTree();
   }
@@ -131,6 +137,21 @@ export class SiteTreeEditorPage implements OnInit {
     this.statusMessage.set('');
   }
   // @relation(GSSC-MLLR-527, scope=range_end, role=Implementation)
+
+  // @relation(GSSC-MLLR-668, GSSC-MLLR-669, scope=range_start, role=Implementation)
+  onToggleExpand(cuid: string): void {
+    this.collapsedIds.update((current) => {
+      const next = new Set(current);
+      if (next.has(cuid)) next.delete(cuid);
+      else next.add(cuid);
+      return next;
+    });
+  }
+
+  isExpanded(cuid: string): boolean {
+    return !this.collapsedIds().has(cuid);
+  }
+  // @relation(GSSC-MLLR-668, GSSC-MLLR-669, scope=range_end, role=Implementation)
 
   // @relation(GSSC-MLLR-533, scope=range_start, role=Implementation)
   async onCreateChild(): Promise<void> {

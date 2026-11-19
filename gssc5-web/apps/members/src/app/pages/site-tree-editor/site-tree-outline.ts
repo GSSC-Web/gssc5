@@ -2,7 +2,7 @@ import { Component, input, output } from '@angular/core';
 import type { SiteTreeNode } from '../../services/site-trees-api';
 
 /**
- * Nested selectable outline for the Site Tree Editor (GSSC5-116).
+ * Nested selectable outline for the Site Tree Editor (GSSC5-116 / GSSC5-138).
  */
 // @relation(GSSC-MLLR-527, GSSC-MLLR-528, GSSC-MLLR-529, scope=range_start, role=Implementation)
 @Component({
@@ -12,22 +12,45 @@ import type { SiteTreeNode } from '../../services/site-trees-api';
     <ul class="gssc-site-tree-outline m-0 list-none p-0" data-slot="site-tree-outline">
       @for (node of nodes(); track node.cuid) {
         <li class="gssc-site-tree-outline__item my-0.5">
-          <button
-            type="button"
-            class="gssc-site-tree-outline__node w-full cursor-pointer rounded-md border border-transparent px-2 py-1 text-start font-sans text-sm text-gssc-dark-green hover:bg-gssc-gray"
-            [class.bg-gssc-light-green]="selectedCuid() === node.cuid"
-            [class.border-gssc-dark-green]="selectedCuid() === node.cuid"
-            [attr.data-cuid]="node.cuid"
-            (click)="select.emit(node.cuid)"
-          >
-            {{ node.label }}
-          </button>
-          @if (node.children.length > 0) {
+          <div class="flex items-center gap-1">
+            @if (hasChildren(node)) {
+              <!-- @relation(GSSC-MLLR-668, GSSC-MLLR-669, GSSC-MLLR-670, scope=range_start, role=Implementation) -->
+              <button
+                type="button"
+                class="gssc-site-tree-outline__expander shrink-0 cursor-pointer border-0 bg-transparent px-1 py-0.5 font-sans text-sm text-gssc-dark-green"
+                data-slot="site-tree-outline-expander"
+                [attr.data-cuid]="node.cuid"
+                [attr.aria-expanded]="isExpanded(node.cuid)"
+                [attr.aria-label]="
+                  isExpanded(node.cuid)
+                    ? 'Collapse ' + node.label
+                    : 'Expand ' + node.label
+                "
+                (click)="onToggleExpand($event, node.cuid)"
+              >
+                {{ isExpanded(node.cuid) ? '−' : '+' }}
+              </button>
+              <!-- @relation(GSSC-MLLR-668, GSSC-MLLR-669, GSSC-MLLR-670, scope=range_end, role=Implementation) -->
+            }
+            <button
+              type="button"
+              class="gssc-site-tree-outline__node min-w-0 flex-auto cursor-pointer rounded-md border border-transparent px-2 py-1 text-start font-sans text-sm text-gssc-dark-green hover:bg-gssc-gray"
+              [class.bg-gssc-light-green]="selectedCuid() === node.cuid"
+              [class.border-gssc-dark-green]="selectedCuid() === node.cuid"
+              [attr.data-cuid]="node.cuid"
+              (click)="select.emit(node.cuid)"
+            >
+              {{ node.label }}
+            </button>
+          </div>
+          @if (hasChildren(node) && isExpanded(node.cuid)) {
             <gssc-site-tree-outline
               class="block pl-4"
               [nodes]="node.children"
               [selectedCuid]="selectedCuid()"
+              [collapsedIds]="collapsedIds()"
               (select)="select.emit($event)"
+              (toggleExpand)="toggleExpand.emit($event)"
             />
           }
         </li>
@@ -38,6 +61,23 @@ import type { SiteTreeNode } from '../../services/site-trees-api';
 export class SiteTreeOutline {
   readonly nodes = input.required<SiteTreeNode[]>();
   readonly selectedCuid = input<string | null>(null);
+  // @relation(GSSC-MLLR-668, GSSC-MLLR-669, scope=range_start, role=Implementation)
+  readonly collapsedIds = input<ReadonlySet<string>>(new Set());
   readonly select = output<string>();
+  readonly toggleExpand = output<string>();
+
+  protected hasChildren(node: SiteTreeNode): boolean {
+    return (node.children?.length ?? 0) > 0;
+  }
+
+  protected isExpanded(cuid: string): boolean {
+    return !this.collapsedIds().has(cuid);
+  }
+
+  protected onToggleExpand(event: Event, cuid: string): void {
+    event.stopPropagation();
+    this.toggleExpand.emit(cuid);
+  }
+  // @relation(GSSC-MLLR-668, GSSC-MLLR-669, scope=range_end, role=Implementation)
 }
 // @relation(GSSC-MLLR-527, GSSC-MLLR-528, GSSC-MLLR-529, scope=range_end, role=Implementation)
