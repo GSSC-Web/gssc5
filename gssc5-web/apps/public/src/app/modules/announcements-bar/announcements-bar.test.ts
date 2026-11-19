@@ -69,7 +69,7 @@ test('GSSC-PLLR-17 Lexical', async () => {
   const title = root.querySelector<HTMLElement>('.gssc-announcements-bar__title')!;
   const text = root.querySelector<HTMLElement>('.gssc-announcements-bar__text')!;
   // Prefer theme utility classes over getComputedStyle (jsdom / @layer limits).
-  expect(bar.classList.contains('bg-gssc-cream')).toBe(true);
+  expect(bar.classList.contains('bg-gssc-white')).toBe(true);
   expect(bar.classList.contains('border-gssc-gray')).toBe(true);
   expect(bar.classList.contains('font-sans')).toBe(true);
   expect(title.classList.contains('text-gssc-dark-green')).toBe(true);
