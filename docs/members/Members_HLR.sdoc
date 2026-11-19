@@ -1463,16 +1463,17 @@ RELATIONS:
 UID: GSSC-MHLR-54
 TITLE: Research Tools Content Modification
 STATEMENT: >>>
-The GSSC Website Member Frontend SHALL let a member with the necessary permissions create, modify, and remove a research tools catalog entry without programming knowledge.
+The GSSC Website Member Frontend SHALL let a member with the necessary permissions create, modify, and remove a research tools catalog entry without programming knowledge, with each entry referencing either a URL or an uploaded file but not both.
 <<<
 RATIONALE: >>>
-Authorized members maintain research tool title and a reference that is either a URL or an uploaded file in the Society research tools catalog without developer intervention.
+Authorized members maintain research tool title and exactly one reference — a URL or an uploaded file — in the Society research tools catalog without developer intervention.
 <<<
 DERIVED: False
 CHANGE_DRIVER: >>>
 GSSC5-11
 GSSC5-97
 GSSC-188
+GSSC-193
 <<<
 REVIEW_STATUS: Approved
 RELATIONS:

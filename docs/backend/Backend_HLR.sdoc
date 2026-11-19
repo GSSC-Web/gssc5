@@ -2637,10 +2637,10 @@ RELATIONS:
 UID: GSSC-BHLR-194
 TITLE: Research Tools Storage
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL store each research tool with a cuid, a title, and a reference that is either an external URL or a stored file under the research-tools file store named by that tool's cuid.
+The GSSC Website Unified Backend SHALL store each research tool with a cuid, a title, and a reference that is either an external URL or a stored file under the research-tools file store named by that tool's cuid, never both at once.
 <<<
 RATIONALE: >>>
-Each recommended tool is identified by cuid and presents a title that opens either an outside URL or a society-hosted file. Exact field shapes are low-level.
+Each recommended tool is identified by cuid and presents a title that opens exactly one of an outside URL or a society-hosted file. Exact field shapes are low-level.
 <<<
 DERIVED: False
 CHANGE_DRIVER: >>>
@@ -3416,6 +3416,7 @@ DERIVED: True
 CHANGE_DRIVER: >>>
 GSSC5-12
 GSSC5-36
+GSSC-193
 <<<
 REVIEW_STATUS: Approved
 

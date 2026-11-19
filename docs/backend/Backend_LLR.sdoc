@@ -9794,7 +9794,28 @@ A research tool reference is either a URL or a stored file, not both at once.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC-188
+CHANGE_DRIVER: >>>
+GSSC-188
+GSSC-193
+<<<
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-191
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-505
+TITLE: Research Tool Single Reference Kind
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL not persist a research tool that has both a non-empty external reference link and a stored reference file; after create, update, or reference-file upload, that tool SHALL have exactly one reference kind.
+<<<
+RATIONALE: >>>
+Catalog entries must expose one reference kind so public and members clients never see a URL and a file together.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC-193
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent

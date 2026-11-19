@@ -471,6 +471,33 @@ test("GSSC-BLLR-500 setting URL soft-deletes stored research tool file", async (
 });
 // @relation(GSSC-BLLR-500, scope=range_end, role=Test)
 
+// @relation(GSSC-BLLR-505, scope=range_start, role=Test)
+test("GSSC-BLLR-505 upload after URL create leaves a single reference kind", async () => {
+  const { status, body } = await sendJson(
+    "POST",
+    "/research-tools",
+    {
+      title: `XOR Tool ${Date.now()}`,
+      referenceLink: "https://example.org/before-file",
+    },
+    editorTok,
+  );
+  expect(status).toBe(201);
+  const cuid = (body as { cuid: string }).cuid;
+  expect(body).toMatchObject({
+    referenceLink: "https://example.org/before-file",
+    hasFile: false,
+  });
+  expect((await uploadToolFile(cuid, editorTok, "xor-bytes")).status).toBe(200);
+  const got = await sendJson("GET", `/research-tools/${cuid}`, undefined, editorTok);
+  expect(got.status).toBe(200);
+  expect(got.body).toMatchObject({
+    referenceLink: "",
+    hasFile: true,
+  });
+});
+// @relation(GSSC-BLLR-505, scope=range_end, role=Test)
+
 test("research tool file upload forbidden for non-editor", async () => {
   const prisma = getPrisma(loadConfig().DATABASE_URL);
   const tool = await prisma.researchTool.create({
