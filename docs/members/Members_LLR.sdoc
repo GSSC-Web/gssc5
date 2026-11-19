@@ -111,9 +111,9 @@ GSSC5-119 Directory Create Member owns GSSC-MLLR-621 through GSSC-MLLR-628 (exac
 GSSC5-123 Members Footer Home Link owns GSSC-MLLR-641 through GSSC-MLLR-643 (exact end 643; band 641–660 reserved for Wave 3 footer chrome after directory create 621–640); HLR GSSC-MHLR-101; also CHANGE_DRIVER on GSSC-MLLR-40.
 GSSC5-46 Site Branding owns GSSC-MLLR-644 through GSSC-MLLR-649 (exact end 649) and GSSC-MHLR-102 / GSSC-MHLR-103.
 GSSC5-135 Multiple Positions with Semicolon Lint owns GSSC-MLLR-661 through GSSC-MLLR-664 (exact end 664; band 661–680 reserved); HLR GSSC-MHLR-104.
-GSSC5-138 Site Tree Editor foldable outline and independent pane scroll owns GSSC-MLLR-665 through GSSC-MLLR-667 (exact end 667; continues band 661–680) plus CHANGE_DRIVER on GSSC-MLLR-522; HLR GSSC-MHLR-107.
-Wave coordination: GSSC5-92 directory 202–214, GSSC5-102 directory refinement 215–230, GSSC5-89 dashboard 231–239, GSSC5-93 page/section 261–286, GSSC5-94 announcements 291–307, GSSC5-117 page-data unification 308–320, GSSC5-95 events 321–346, GSSC5-96 newsletters 351–373, GSSC5-97 publications/tools 381–414, GSSC5-101 account refinement 415–428, GSSC5-103 mailing-equals-home 429–437, GSSC5-102 password-history-reset 438–440, GSSC5-107 members nav chrome 441–461, GSSC5-109 members site search 462–483 (band 462–500), GSSC5-108 sitemap 501–510, GSSC5-116 site-tree editor 521–540 (band 521–560), GSSC5-127 site-tree feedback MLLR-562 (+ CHANGE_DRIVER on 524/529; HLR MHLR-99), GSSC5-115/128 template editor 541–561 (band 541–580), GSSC5-126 PDE section create + nav 581–591 (band 581–600), GSSC5-118 directory invite 601–608 (band 601–620), GSSC5-119 directory create 621–628 (band 621–640), GSSC5-123 footer home link 641–643 (band 641–660), GSSC5-46 branding 644–649, GSSC5-135 multi-position 661–664, GSSC5-138 site-tree fold/scroll 665–667 (band 661–680) — do not collide.
-GSSC-MLLR-33 through GSSC-MLLR-39 remain free for later claimants.
+GSSC5-138 Site Tree Editor foldable outline and independent pane scroll owns GSSC-MLLR-668 through GSSC-MLLR-670 (exact end 670; continues band 661–680) plus CHANGE_DRIVER on GSSC-MLLR-522; HLR GSSC-MHLR-108.
+Wave coordination: GSSC5-92 directory 202–214, GSSC5-102 directory refinement 215–230, GSSC5-89 dashboard 231–239, GSSC5-93 page/section 261–286, GSSC5-94 announcements 291–307, GSSC5-117 page-data unification 308–320, GSSC5-95 events 321–346, GSSC5-96 newsletters 351–373, GSSC5-97 publications/tools 381–414, GSSC5-101 account refinement 415–428, GSSC5-103 mailing-equals-home 429–437, GSSC5-102 password-history-reset 438–440, GSSC5-107 members nav chrome 441–461, GSSC5-109 members site search 462–483 (band 462–500), GSSC5-108 sitemap 501–510, GSSC5-116 site-tree editor 521–540 (band 521–560), GSSC5-127 site-tree feedback MLLR-562 (+ CHANGE_DRIVER on 524/529; HLR MHLR-99), GSSC5-115/128 template editor 541–561 (band 541–580), GSSC5-126 PDE section create + nav 581–591 (band 581–600), GSSC5-118 directory invite 601–608 (band 601–620), GSSC5-119 directory create 621–628 (band 621–640), GSSC5-123 footer home link 641–643 (band 641–660), GSSC5-46 branding 644–649, GSSC5-135 multi-position 661–664, GSSC5-137 nested submenu pointer bridge 665–667, GSSC5-138 site-tree fold/scroll 668–670 (band 661–680) — do not collide.
+GSSC-173 Members Header Greeting menu owns GSSC-MLLR-33 through GSSC-MLLR-35 (Header Public Access triad) plus CHANGE_DRIVER on GSSC-MLLR-14, 24, 27, 30 and HLR GSSC-MHLR-107; GSSC-MLLR-36 through GSSC-MLLR-39 remain free.
 Do not reuse numbers already claimed by another ticket.
 <<<
 
@@ -461,10 +461,10 @@ STATEMENT: >>>
 The GSSC Website Member Frontend Header SHALL present the Header Logo, the Header Organization Name when the layout permits, the Header account-access controls, the Header Site Search control, the Header Theme Toggle, and the Navigation Menu, and SHALL omit a Donate control.
 <<<
 RATIONALE: >>>
-The Header composes those displayed elements in the Header host. Each element's behavior is a separate requirement. Account-access controls remain greeting and logout when logged in, or login when logged out. Donate is omitted for v5.0.2.
+The Header composes those displayed elements in the Header host. Each element's behavior is a separate requirement. Account-access controls remain the Greeting dropdown (Public Access and Logout) when logged in, or login when logged out. Donate is omitted for v5.0.2.
 <<<
 COMMENT: >>>
-Navigation Menu, Organization Name, and Site Search composition added for GSSC5-107. Theme Toggle composition added for GSSC5-125. Donate omitted.
+Navigation Menu, Organization Name, and Site Search composition added for GSSC5-107. Theme Toggle composition added for GSSC5-125. Greeting dropdown Public Access added for GSSC-173. Donate omitted.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
@@ -472,6 +472,7 @@ CHANGE_DRIVER: >>>
 GSSC5-81
 GSSC5-107
 GSSC5-125
+GSSC-173
 <<<
 REVIEW_STATUS: Approved
 RELATIONS:
@@ -700,14 +701,17 @@ RELATIONS:
 UID: GSSC-MLLR-24
 TITLE: Syntactic
 STATEMENT: >>>
-The Header Greeting SHALL appear among the Header account-access controls when a member is logged in, and SHALL be omitted when no member is logged in.
+The Header Greeting SHALL appear among the Header account-access controls when a member is logged in, SHALL be omitted when no member is logged in, and SHALL open a dropdown on hover that contains the Header Public Access and Header Logout controls.
 <<<
 RATIONALE: >>>
-The Greeting is the logged-in account-access signal. Omitting it when logged out leaves room for the Header Login control.
+The Greeting is the logged-in account-access signal. Hover reveals Public site access and Logout without crowding the Header bar. Omitting it when logged out leaves room for the Header Login control.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-81
+CHANGE_DRIVER: >>>
+GSSC5-81
+GSSC-173
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -730,6 +734,69 @@ REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-17
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-HEADER-PUBLIC-ACCESS
+TITLE: Header Public Access
+
+[REQUIREMENT]
+UID: GSSC-MLLR-33
+TITLE: Semantic
+STATEMENT: >>>
+When a member is logged in, the Header Public Access control SHALL navigate the visitor to the Public Frontend.
+<<<
+RATIONALE: >>>
+A logged-in member reaches the Public Frontend through Public Access from the Member Header Greeting dropdown.
+<<<
+COMMENT: >>>
+Proposed default public origin for local development: http://localhost:4200.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC-173
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-107
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-34
+TITLE: Syntactic
+STATEMENT: >>>
+The Header Public Access control SHALL appear in the Header Greeting dropdown when a member is logged in, and SHALL be omitted when no member is logged in.
+<<<
+RATIONALE: >>>
+Public Access is reached from the Greeting dropdown rather than as a standalone Header control beside Logout.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC-173
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-107
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-35
+TITLE: Lexical
+STATEMENT: >>>
+The Header Public Access control SHALL use the sans-serif theme font and the dark-green theme token for its text color.
+<<<
+RATIONALE: >>>
+Account-access controls share Header text tokens until a fuller control style map exists.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC-173
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-107
   ROLE: Refines
 
 [[/SECTION]]
@@ -763,14 +830,17 @@ RELATIONS:
 UID: GSSC-MLLR-27
 TITLE: Syntactic
 STATEMENT: >>>
-The Header Logout control SHALL appear among the Header account-access controls when a member is logged in, and SHALL be omitted when no member is logged in.
+The Header Logout control SHALL appear in the Header Greeting dropdown when a member is logged in, and SHALL be omitted when no member is logged in.
 <<<
 RATIONALE: >>>
-Logout sits with the Greeting for logged-in members and is hidden when there is no session to end.
+Logout sits with Public Access in the Greeting dropdown for logged-in members and is hidden when there is no session to end.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-81
+CHANGE_DRIVER: >>>
+GSSC5-81
+GSSC-173
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -826,11 +896,14 @@ STATEMENT: >>>
 The Header Login control SHALL appear among the Header account-access controls when no member is logged in, and SHALL be omitted when a member is logged in.
 <<<
 RATIONALE: >>>
-Login replaces Greeting and Logout when there is no session. Omitting it when logged in avoids offering login to an authenticated member.
+Login replaces the Greeting dropdown when there is no session. Omitting it when logged in avoids offering login to an authenticated member.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-81
+CHANGE_DRIVER: >>>
+GSSC5-81
+GSSC-173
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -961,16 +1034,17 @@ RELATIONS:
 UID: GSSC-MLLR-445
 TITLE: Syntactic
 STATEMENT: >>>
-Top-level Navigation Items in the wide Navigation Menu bar SHALL appear in an evenly spaced horizontal grid with labels that do not wrap, and Navigation Items in the mid or narrow overlay SHALL appear in a vertical list.
+Top-level Navigation Items in the wide Navigation Menu bar SHALL appear in an evenly spaced horizontal grid with labels that do not wrap, SHALL be separated from adjacent top-level items by a vertical divider matching the Header utility separators, and Navigation Items in the mid or narrow overlay SHALL appear in a vertical list.
 <<<
 RATIONALE: >>>
-An evenly spaced grid replaces the packed cream row and keeps titles on one line. Vertical listing fits the overlay accordion.
+An evenly spaced grid replaces the packed cream row and keeps titles on one line. Vertical dividers match the Header utility chrome separators. Vertical listing fits the overlay accordion.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: >>>
 GSSC5-107
 GSSC5-121
+GSSC5-137
 <<<
 REVIEW_STATUS: Approved
 RELATIONS:
@@ -982,14 +1056,17 @@ RELATIONS:
 UID: GSSC-MLLR-446
 TITLE: Lexical
 STATEMENT: >>>
-Each Navigation Item SHALL use the sans-serif theme font and the dark-green theme token for its text color.
+Each Navigation Item SHALL use the sans-serif theme font and the dark-green theme token for its text color, and SHALL use the dark-brown theme token for its text color on pointer hover and while its Navigation Submenu is open from hover or keyboard focus within that item.
 <<<
 RATIONALE: >>>
-Navigation text matches Header action text tokens until a fuller menu style map exists.
+Navigation text matches Header action text tokens at rest; dark-brown on hover and while open marks the active parent without inventing a new palette token.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-107
+CHANGE_DRIVER: >>>
+GSSC5-107
+GSSC5-137
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -1024,14 +1101,17 @@ RELATIONS:
 UID: GSSC-MLLR-448
 TITLE: Syntactic
 STATEMENT: >>>
-In wide chrome, a Navigation Submenu SHALL open as an overlay under its parent Navigation Item on hover or keyboard focus within that item. In mid and narrow chrome, a Navigation Submenu SHALL expand and collapse in place within the overlay Navigation Menu.
+In wide chrome, a Navigation Submenu SHALL open as an overlay under its parent Navigation Item on hover or keyboard focus within that item, with the overlay's start edge aligned to the start edge of that parent item's label, and in mid and narrow chrome, a Navigation Submenu SHALL expand and collapse in place within the overlay Navigation Menu.
 <<<
 RATIONALE: >>>
-Wide chrome uses hover dropdown overlays. Mid and narrow chrome use accordion expansion inside the menu overlay.
+Wide chrome uses hover dropdown overlays whose start edge must track the parent label rather than the equal-grid cell edge. Mid and narrow chrome use accordion expansion inside the menu overlay.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-107
+CHANGE_DRIVER: >>>
+GSSC5-107
+GSSC5-137
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -1057,6 +1137,66 @@ REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-84
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-NESTED-SUBMENU-POINTER-BRIDGE
+TITLE: Nested Submenu Pointer Bridge
+
+[REQUIREMENT]
+UID: GSSC-MLLR-665
+TITLE: Semantic
+STATEMENT: >>>
+The Nested Submenu Pointer Bridge SHALL keep a nested Navigation Submenu open while the pointer travels diagonally from that submenu's parent Navigation Item toward the submenu, and SHALL allow the pointer to reach sibling Navigation Items when travel leaves that diagonal path.
+<<<
+RATIONALE: >>>
+Diagonal travel toward a nested submenu is intentional; sibling hits outside that path must still retarget the menu.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-137
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-107
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-666
+TITLE: Syntactic
+STATEMENT: >>>
+In wide chrome, the Nested Submenu Pointer Bridge SHALL occupy the triangular region from the current pointer position to the near vertical edge of the open nested Navigation Submenu, and SHALL leave the residual area beside that triangle free for sibling Navigation Item hits.
+<<<
+RATIONALE: >>>
+A triangle from the pointer to the nested submenu near edge covers the diagonal path; residual space must not block vertical sibling selection.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-137
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-107
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-667
+TITLE: Lexical
+STATEMENT: >>>
+The Nested Submenu Pointer Bridge SHALL not present visible fill, border, or text chrome of its own.
+<<<
+RATIONALE: >>>
+The bridge is an invisible pointer aid; visible chrome would distract from Navigation Item labels.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-137
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-107
   ROLE: Refines
 
 [[/SECTION]]
@@ -9868,7 +10008,7 @@ RELATIONS:
   VALUE: GSSC-MHLR-89
   ROLE: Refines
 - TYPE: Parent
-  VALUE: GSSC-MHLR-107
+  VALUE: GSSC-MHLR-108
   ROLE: Refines
 
 [REQUIREMENT]
@@ -10298,7 +10438,7 @@ UID: GSSC-MLLR-SITE-TREE-OUTLINE-EXPANDER
 TITLE: Tree Outline Expander
 
 [REQUIREMENT]
-UID: GSSC-MLLR-665
+UID: GSSC-MLLR-668
 TITLE: Semantic
 STATEMENT: >>>
 When a Tree Outline node has children, a Tree Outline Expander SHALL expand and collapse that node's nested children in the Tree Outline without changing the selected node.
@@ -10312,11 +10452,11 @@ CHANGE_DRIVER: GSSC5-138
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-MHLR-107
+  VALUE: GSSC-MHLR-108
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-MLLR-666
+UID: GSSC-MLLR-669
 TITLE: Syntactic
 STATEMENT: >>>
 A Tree Outline Expander SHALL appear beside its node's label when that node has children, SHALL start expanded so those children are visible, and when collapsed SHALL hide that node's nested children in the Tree Outline.
@@ -10330,11 +10470,11 @@ CHANGE_DRIVER: GSSC5-138
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-MHLR-107
+  VALUE: GSSC-MHLR-108
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-MLLR-667
+UID: GSSC-MLLR-670
 TITLE: Lexical
 STATEMENT: >>>
 A Tree Outline Expander SHALL use the Member Frontend sans-serif typeface and the dark-green theme token for its expanded or collapsed affordance.
@@ -10348,7 +10488,7 @@ CHANGE_DRIVER: GSSC5-138
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-MHLR-107
+  VALUE: GSSC-MHLR-108
   ROLE: Refines
 
 [[/SECTION]]

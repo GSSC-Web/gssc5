@@ -14,7 +14,7 @@ import type { SiteTreeNode } from '../../services/site-trees-api';
         <li class="gssc-site-tree-outline__item my-0.5">
           <div class="flex items-center gap-1">
             @if (hasChildren(node)) {
-              <!-- @relation(GSSC-MLLR-665, GSSC-MLLR-666, GSSC-MLLR-667, scope=range_start, role=Implementation) -->
+              <!-- @relation(GSSC-MLLR-668, GSSC-MLLR-669, GSSC-MLLR-670, scope=range_start, role=Implementation) -->
               <button
                 type="button"
                 class="gssc-site-tree-outline__expander shrink-0 cursor-pointer border-0 bg-transparent px-1 py-0.5 font-sans text-sm text-gssc-dark-green"
@@ -30,7 +30,7 @@ import type { SiteTreeNode } from '../../services/site-trees-api';
               >
                 {{ isExpanded(node.cuid) ? '−' : '+' }}
               </button>
-              <!-- @relation(GSSC-MLLR-665, GSSC-MLLR-666, GSSC-MLLR-667, scope=range_end, role=Implementation) -->
+              <!-- @relation(GSSC-MLLR-668, GSSC-MLLR-669, GSSC-MLLR-670, scope=range_end, role=Implementation) -->
             }
             <button
               type="button"
@@ -61,7 +61,7 @@ import type { SiteTreeNode } from '../../services/site-trees-api';
 export class SiteTreeOutline {
   readonly nodes = input.required<SiteTreeNode[]>();
   readonly selectedCuid = input<string | null>(null);
-  // @relation(GSSC-MLLR-665, GSSC-MLLR-666, scope=range_start, role=Implementation)
+  // @relation(GSSC-MLLR-668, GSSC-MLLR-669, scope=range_start, role=Implementation)
   readonly collapsedIds = input<ReadonlySet<string>>(new Set());
   readonly select = output<string>();
   readonly toggleExpand = output<string>();
@@ -78,6 +78,6 @@ export class SiteTreeOutline {
     event.stopPropagation();
     this.toggleExpand.emit(cuid);
   }
-  // @relation(GSSC-MLLR-665, GSSC-MLLR-666, scope=range_end, role=Implementation)
+  // @relation(GSSC-MLLR-668, GSSC-MLLR-669, scope=range_end, role=Implementation)
 }
 // @relation(GSSC-MLLR-527, GSSC-MLLR-528, GSSC-MLLR-529, scope=range_end, role=Implementation)

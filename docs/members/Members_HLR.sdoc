@@ -409,6 +409,19 @@ GSSC5-81
 REVIEW_STATUS: Approved
 
 [REQUIREMENT]
+UID: GSSC-MHLR-107
+TITLE: Header Public Access
+STATEMENT: >>>
+When a member is logged in, the Header SHALL offer access to the Public Frontend.
+<<<
+RATIONALE: >>>
+A logged-in member needs a Header path back to the Public Frontend, matching the Public Header's Member Access control in the opposite direction. Logout remains a separate option.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC-173
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
 UID: GSSC-MHLR-19
 TITLE: Header Navigation
 STATEMENT: >>>
@@ -504,6 +517,23 @@ REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-19
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MHLR-107
+TITLE: Nested Submenu Pointer Bridge
+STATEMENT: >>>
+While a nested Navigation Submenu is open in wide chrome, the Member Frontend SHALL keep that submenu open during diagonal pointer travel from its parent Navigation Item toward the submenu, and SHALL still allow vertical pointer travel to reach sibling Navigation Items outside that diagonal path.
+<<<
+RATIONALE: >>>
+Nested dropdowns dismiss too early when the pointer crosses sibling items on a diagonal path; a pointer-safe bridge toward the open submenu preserves intent without blocking vertical sibling selection.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-137
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-84
   ROLE: Refines
 
 [REQUIREMENT]
@@ -1692,7 +1722,7 @@ CHANGE_DRIVER: GSSC5-127
 REVIEW_STATUS: Approved
 
 [REQUIREMENT]
-UID: GSSC-MHLR-107
+UID: GSSC-MHLR-108
 TITLE: Site Tree Editor Outline Fold And Pane Scroll
 STATEMENT: >>>
 The GSSC Website Member Frontend Site Tree Editor Page SHALL let the administrator expand and collapse nested children under Tree Outline parents, and SHALL keep the Tree Outline region and the Node Editor Panel scrolling independently of each other.

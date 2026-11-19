@@ -621,8 +621,8 @@ test('GSSC-MLLR-562 Semantic', async () => {
 });
 // @relation(GSSC-MLLR-562, scope=range_end, role=Test)
 
-// @relation(GSSC-MLLR-665, scope=range_start, role=Test)
-test('GSSC-MLLR-665 Semantic', async () => {
+// @relation(GSSC-MLLR-668, scope=range_start, role=Test)
+test('GSSC-MLLR-668 Semantic', async () => {
   const { root, page, fixture, restore } = await setupEditor();
   clickNode(root, 'node_dir');
   fixture.detectChanges();
@@ -647,10 +647,10 @@ test('GSSC-MLLR-665 Semantic', async () => {
   expect(root.querySelector('.gssc-site-tree-outline__node[data-cuid="node_pwd"]')).toBeTruthy();
   restore();
 });
-// @relation(GSSC-MLLR-665, scope=range_end, role=Test)
+// @relation(GSSC-MLLR-668, scope=range_end, role=Test)
 
-// @relation(GSSC-MLLR-666, scope=range_start, role=Test)
-test('GSSC-MLLR-666 Syntactic', async () => {
+// @relation(GSSC-MLLR-669, scope=range_start, role=Test)
+test('GSSC-MLLR-669 Syntactic', async () => {
   const { root, page, fixture, restore } = await setupEditor();
   const parentRow = root.querySelector(
     '.gssc-site-tree-outline__item:has(.gssc-site-tree-outline__node[data-cuid="node_acct"])',
@@ -675,10 +675,10 @@ test('GSSC-MLLR-666 Syntactic', async () => {
   expect(root.querySelector('.gssc-site-tree-outline__node[data-cuid="node_pwd"]')).toBeNull();
   restore();
 });
-// @relation(GSSC-MLLR-666, scope=range_end, role=Test)
+// @relation(GSSC-MLLR-669, scope=range_end, role=Test)
 
-// @relation(GSSC-MLLR-667, scope=range_start, role=Test)
-test('GSSC-MLLR-667 Lexical', async () => {
+// @relation(GSSC-MLLR-670, scope=range_start, role=Test)
+test('GSSC-MLLR-670 Lexical', async () => {
   const { root, restore } = await setupEditor();
   const expander = root.querySelector<HTMLButtonElement>(
     '[data-slot="site-tree-outline-expander"][data-cuid="node_acct"]',
@@ -688,4 +688,4 @@ test('GSSC-MLLR-667 Lexical', async () => {
   expect(expander.textContent?.trim()).toBe('−');
   restore();
 });
-// @relation(GSSC-MLLR-667, scope=range_end, role=Test)
+// @relation(GSSC-MLLR-670, scope=range_end, role=Test)

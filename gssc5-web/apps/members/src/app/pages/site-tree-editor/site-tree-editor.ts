@@ -58,10 +58,10 @@ export class SiteTreeEditorPage implements OnInit {
   readonly path = signal('');
   readonly sectionTag = signal('');
   readonly sortOrder = signal('0');
-  // @relation(GSSC-MLLR-665, GSSC-MLLR-666, scope=range_start, role=Implementation)
+  // @relation(GSSC-MLLR-668, GSSC-MLLR-669, scope=range_start, role=Implementation)
   /** Collapsed node cuids; absence means expanded (default). */
   readonly collapsedIds = signal<ReadonlySet<string>>(new Set());
-  // @relation(GSSC-MLLR-665, GSSC-MLLR-666, scope=range_end, role=Implementation)
+  // @relation(GSSC-MLLR-668, GSSC-MLLR-669, scope=range_end, role=Implementation)
 
   private baseline: NodeBaseline = emptyBaseline();
 
@@ -138,7 +138,7 @@ export class SiteTreeEditorPage implements OnInit {
   }
   // @relation(GSSC-MLLR-527, scope=range_end, role=Implementation)
 
-  // @relation(GSSC-MLLR-665, GSSC-MLLR-666, scope=range_start, role=Implementation)
+  // @relation(GSSC-MLLR-668, GSSC-MLLR-669, scope=range_start, role=Implementation)
   onToggleExpand(cuid: string): void {
     this.collapsedIds.update((current) => {
       const next = new Set(current);
@@ -151,7 +151,7 @@ export class SiteTreeEditorPage implements OnInit {
   isExpanded(cuid: string): boolean {
     return !this.collapsedIds().has(cuid);
   }
-  // @relation(GSSC-MLLR-665, GSSC-MLLR-666, scope=range_end, role=Implementation)
+  // @relation(GSSC-MLLR-668, GSSC-MLLR-669, scope=range_end, role=Implementation)
 
   // @relation(GSSC-MLLR-533, scope=range_start, role=Implementation)
   async onCreateChild(): Promise<void> {

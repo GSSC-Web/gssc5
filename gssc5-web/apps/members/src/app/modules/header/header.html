@@ -115,49 +115,74 @@
       [style.grid-template-columns]="wideNavGridColumns()"
       aria-label="Member"
     >
-      @for (item of navItems(); track item.cuid) {
+      @for (item of navItems(); track item.cuid; let last = $last) {
         <!-- @relation(GSSC-MLLR-444, GSSC-MLLR-445, GSSC-MLLR-446, scope=range_start, role=Implementation) -->
-        <div class="gssc-header__nav-item group relative min-w-0">
-          <a
-            class="gssc-header__nav-link inline-flex w-full items-center justify-center whitespace-nowrap px-2 py-2 font-sans text-sm text-gssc-dark-green no-underline"
-            [routerLink]="item.path"
-          >
-            {{ item.label }}
-          </a>
-          @if (hasChildren(item)) {
-            <!-- @relation(GSSC-MLLR-447, GSSC-MLLR-448, GSSC-MLLR-449, scope=range_start, role=Implementation) -->
-            <div
-              class="gssc-header__submenu invisible absolute start-0 top-full z-20 min-w-44 flex-col border border-gssc-gray bg-gssc-white py-1 opacity-0 shadow-sm group-hover:visible group-hover:flex group-hover:opacity-100 group-focus-within:visible group-focus-within:flex group-focus-within:opacity-100"
+        <div class="gssc-header__nav-item group relative flex min-w-0 justify-center">
+          <div class="gssc-header__nav-cluster relative inline-flex flex-col items-stretch">
+            <a
+              class="gssc-header__nav-link inline-flex items-center whitespace-nowrap px-2 py-2 font-sans text-sm text-gssc-dark-green no-underline hover:text-gssc-dark-brown group-hover:text-gssc-dark-brown group-focus-within:text-gssc-dark-brown"
+              [routerLink]="item.path"
             >
-              @for (child of item.children; track child.cuid) {
-                <div class="gssc-header__submenu-item group/sub relative">
-                  <a
-                    class="gssc-header__submenu-link block whitespace-nowrap px-3 py-2 font-sans text-sm text-gssc-dark-green no-underline hover:bg-gssc-gray"
-                    [routerLink]="child.path"
+              {{ item.label }}
+            </a>
+            @if (hasChildren(item)) {
+              <!-- @relation(GSSC-MLLR-447, GSSC-MLLR-448, GSSC-MLLR-449, scope=range_start, role=Implementation) -->
+              <div
+                class="gssc-header__submenu invisible absolute start-0 top-full z-20 min-w-44 flex-col border border-gssc-gray bg-gssc-white py-1 opacity-0 shadow-sm group-hover:visible group-hover:flex group-hover:opacity-100 group-focus-within:visible group-focus-within:flex group-focus-within:opacity-100"
+              >
+                @for (child of item.children; track child.cuid) {
+                  <div
+                    class="gssc-header__submenu-item group/sub relative"
+                    (mousemove)="onNestedBridgeMove($event, child)"
+                    (mouseleave)="onNestedBridgeLeave(child)"
                   >
-                    {{ child.label }}
-                  </a>
-                  @if (hasChildren(child)) {
-                    <div
-                      class="gssc-header__submenu gssc-header__submenu--nested invisible absolute start-full top-0 z-30 min-w-44 flex-col border border-gssc-gray bg-gssc-white py-1 opacity-0 shadow-sm group-hover/sub:visible group-hover/sub:flex group-hover/sub:opacity-100 group-focus-within/sub:visible group-focus-within/sub:opacity-100"
+                    <a
+                      class="gssc-header__submenu-link block whitespace-nowrap px-3 py-2 font-sans text-sm text-gssc-dark-green no-underline hover:bg-gssc-gray"
+                      [routerLink]="child.path"
                     >
-                      @for (grand of child.children; track grand.cuid) {
-                        <a
-                          class="gssc-header__submenu-link block whitespace-nowrap px-3 py-2 font-sans text-sm text-gssc-dark-green no-underline hover:bg-gssc-gray"
-                          [routerLink]="grand.path"
+                      {{ child.label }}
+                    </a>
+                    @if (hasChildren(child)) {
+                      <!-- @relation(GSSC-MHLR-107, GSSC-MLLR-665, GSSC-MLLR-666, GSSC-MLLR-667, scope=range_start, role=Implementation) -->
+                      <div
+                        class="gssc-header__submenu gssc-header__submenu--nested invisible absolute start-full top-0 z-30 min-w-44 flex-col border border-gssc-gray bg-gssc-white py-1 opacity-0 shadow-sm group-hover/sub:visible group-hover/sub:flex group-hover/sub:opacity-100 group-focus-within/sub:visible group-focus-within/sub:flex group-focus-within/sub:opacity-100"
+                      >
+                        @for (grand of child.children; track grand.cuid) {
+                          <a
+                            class="gssc-header__submenu-link block whitespace-nowrap px-3 py-2 font-sans text-sm text-gssc-dark-green no-underline hover:bg-gssc-gray"
+                            [routerLink]="grand.path"
+                          >
+                            {{ grand.label }}
+                          </a>
+                        }
+                      </div>
+                      @if (safeTriangleCuid() === child.cuid && safeTrianglePath()) {
+                        <svg
+                          class="gssc-header__safe-triangle pointer-events-none fixed inset-0 z-40 h-screen w-screen overflow-visible"
+                          aria-hidden="true"
                         >
-                          {{ grand.label }}
-                        </a>
+                          <path
+                            class="gssc-header__safe-triangle-path pointer-events-auto fill-transparent"
+                            [attr.d]="safeTrianglePath()"
+                          ></path>
+                        </svg>
                       }
-                    </div>
-                  }
-                </div>
-              }
-            </div>
-            <!-- @relation(GSSC-MLLR-447, GSSC-MLLR-448, GSSC-MLLR-449, scope=range_end, role=Implementation) -->
-          }
+                      <!-- @relation(GSSC-MHLR-107, GSSC-MLLR-665, GSSC-MLLR-666, GSSC-MLLR-667, scope=range_end, role=Implementation) -->
+                    }
+                  </div>
+                }
+              </div>
+              <!-- @relation(GSSC-MLLR-447, GSSC-MLLR-448, GSSC-MLLR-449, scope=range_end, role=Implementation) -->
+            }
+          </div>
         </div>
         <!-- @relation(GSSC-MLLR-444, GSSC-MLLR-445, GSSC-MLLR-446, scope=range_end, role=Implementation) -->
+        @if (!last) {
+          <span
+            class="gssc-header__nav-divider gssc-header__divider mx-0 inline-block h-4 w-px self-center bg-gssc-dark-green/40"
+            aria-hidden="true"
+          ></span>
+        }
       }
     </nav>
     <!-- @relation(GSSC-MLLR-441, GSSC-MLLR-442, GSSC-MLLR-443, GSSC-MHLR-84, scope=range_end, role=Implementation) -->
@@ -407,23 +432,41 @@
 </ng-template>
 
 <ng-template #accountActions>
-  <div class="gssc-header__account relative flex items-center gap-x-3">
+  <div class="gssc-header__account relative flex items-center">
     @if (loggedIn()) {
       <!-- @relation(GSSC-MLLR-23, GSSC-MLLR-24, GSSC-MLLR-25, scope=range_start, role=Implementation) -->
-      <span class="gssc-header__greeting font-sans text-gssc-dark-green">
-        Hello, {{ displayName() }}
-      </span>
-      <!-- @relation(GSSC-MLLR-23, GSSC-MLLR-24, GSSC-MLLR-25, scope=range_end, role=Implementation) -->
+      <div class="gssc-header__greeting-wrap group relative">
+        <button
+          type="button"
+          class="gssc-header__greeting cursor-pointer border-0 bg-transparent p-0 font-sans text-gssc-dark-green"
+        >
+          Hello, {{ displayName() }}
+        </button>
+        <div
+          class="gssc-header__greeting-menu invisible absolute end-0 top-full z-10 min-w-36 flex-col gap-1 border border-gssc-gray bg-gssc-white py-2 opacity-0 shadow-sm group-hover:visible group-hover:flex group-hover:opacity-100 group-focus-within:visible group-focus-within:flex group-focus-within:opacity-100"
+        >
+          <!-- @relation(GSSC-MLLR-33, GSSC-MLLR-34, GSSC-MLLR-35, scope=range_start, role=Implementation) -->
+          <button
+            type="button"
+            class="gssc-header__public-access cursor-pointer border-0 bg-transparent px-3 py-1 text-start font-sans text-gssc-dark-green"
+            (click)="openPublicApp()"
+          >
+            Public
+          </button>
+          <!-- @relation(GSSC-MLLR-33, GSSC-MLLR-34, GSSC-MLLR-35, scope=range_end, role=Implementation) -->
 
-      <!-- @relation(GSSC-MLLR-27, GSSC-MLLR-28, scope=range_start, role=Implementation) -->
-      <button
-        type="button"
-        class="gssc-header__logout cursor-pointer border-0 bg-transparent p-0 font-sans text-gssc-dark-green"
-        (click)="logout()"
-      >
-        Logout
-      </button>
-      <!-- @relation(GSSC-MLLR-27, GSSC-MLLR-28, scope=range_end, role=Implementation) -->
+          <!-- @relation(GSSC-MLLR-27, GSSC-MLLR-28, scope=range_start, role=Implementation) -->
+          <button
+            type="button"
+            class="gssc-header__logout cursor-pointer border-0 bg-transparent px-3 py-1 text-start font-sans text-gssc-dark-green"
+            (click)="logout()"
+          >
+            Logout
+          </button>
+          <!-- @relation(GSSC-MLLR-27, GSSC-MLLR-28, scope=range_end, role=Implementation) -->
+        </div>
+      </div>
+      <!-- @relation(GSSC-MLLR-23, GSSC-MLLR-24, GSSC-MLLR-25, scope=range_end, role=Implementation) -->
     } @else {
       <!-- @relation(GSSC-MLLR-29, GSSC-MLLR-30, GSSC-MLLR-31, scope=range_start, role=Implementation) -->
       <a
