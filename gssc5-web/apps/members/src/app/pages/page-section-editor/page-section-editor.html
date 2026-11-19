@@ -1,8 +1,9 @@
-<!-- @relation(GSSC-MLLR-261, GSSC-MLLR-262, GSSC-MLLR-263, scope=range_start, role=Implementation) -->
+<!-- @relation(GSSC-MLLR-261, GSSC-MLLR-262, GSSC-MLLR-263, GSSC-MLLR-687, GSSC-MLLR-688, GSSC-MLLR-689, scope=range_start, role=Implementation) -->
 <section
-  class="gssc-page-section-editor mx-auto flex w-full max-w-4xl flex-col gap-5 px-4 py-5 font-sans text-gssc-dark-green"
+  class="gssc-page-section-editor mx-auto flex w-full max-w-3xl flex-col gap-5 bg-gssc-white font-sans text-gssc-dark-green"
   data-slot="page-section-editor"
 >
+  <!-- @relation(GSSC-MLLR-687, GSSC-MLLR-688, GSSC-MLLR-689, scope=range_start, role=Implementation) -->
   <header class="gssc-page-section-editor__intro flex flex-col gap-1">
     <h1 class="gssc-page-section-editor__title m-0 text-[1.75em] font-semibold text-gssc-dark-green">
       Page &amp; Section Content
@@ -12,6 +13,7 @@
       without programming. Specify page association with tags.
     </p>
   </header>
+  <!-- @relation(GSSC-MLLR-687, GSSC-MLLR-688, GSSC-MLLR-689, scope=range_end, role=Implementation) -->
 
   <!-- @relation(GSSC-MLLR-267, GSSC-MLLR-268, GSSC-MLLR-269, GSSC-MLLR-681, GSSC-MLLR-682, GSSC-MLLR-683, scope=range_start, role=Implementation) -->
   <div
@@ -171,14 +173,14 @@
     </div>
   }
 
-  @if (statusMessage()) {
-    <p
-      class="gssc-page-section-editor__status m-0 text-sm text-gssc-dark-brown"
-      data-slot="editor-status"
-      role="status"
-    >
-      {{ statusMessage() }}
-    </p>
-  }
+  <!-- @relation(GSSC-MLLR-690, GSSC-MLLR-691, GSSC-MLLR-692, scope=range_start, role=Implementation) -->
+  <p
+    class="gssc-page-section-editor__status m-0 font-sans text-sm text-gssc-dark-brown"
+    data-slot="editor-status"
+    role="status"
+  >
+    {{ statusMessage() }}
+  </p>
+  <!-- @relation(GSSC-MLLR-690, GSSC-MLLR-691, GSSC-MLLR-692, scope=range_end, role=Implementation) -->
 </section>
-<!-- @relation(GSSC-MLLR-261, GSSC-MLLR-262, GSSC-MLLR-263, scope=range_end, role=Implementation) -->
+<!-- @relation(GSSC-MLLR-261, GSSC-MLLR-262, GSSC-MLLR-263, GSSC-MLLR-687, GSSC-MLLR-688, GSSC-MLLR-689, scope=range_end, role=Implementation) -->

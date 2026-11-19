@@ -189,7 +189,7 @@ test('GSSC-MLLR-292 Syntactic', async () => {
   expect(page.classList.contains('w-full')).toBe(true);
   expect(page.classList.contains('flex-col')).toBe(true);
   expect(page.classList.contains('max-w-3xl')).toBe(true);
-  expect(page.classList.contains('gap-4')).toBe(true);
+  expect(page.classList.contains('gap-5')).toBe(true);
 });
 // @relation(GSSC-MLLR-292, scope=range_end, role=Test)
 
@@ -480,3 +480,18 @@ test('GSSC-MLLR-307 Persistence Feedback', async () => {
   expect(root.querySelector('gssc-form-text-field')).not.toBeNull();
 });
 // @relation(GSSC-MLLR-307, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-687, GSSC-MLLR-690, scope=range_start, role=Test)
+test('GSSC-MLLR-687/690 Announcements intro and idle disclaimer', async () => {
+  const { root } = await setupPage(createMockApi({}));
+  expect(textContent(root, '.gssc-announcements-editor-page__lead')).toContain(
+    'Browse announcements',
+  );
+  expect(textContent(root, '[data-slot="announcements-editor-status"]')).toBe(
+    'Select an announcement or create a new one.',
+  );
+  const title = root.querySelector('.gssc-announcements-editor-page__title')!;
+  expect(title.className).toContain('text-[1.75em]');
+  expect(title.className).toContain('font-semibold');
+});
+// @relation(GSSC-MLLR-687, GSSC-MLLR-690, scope=range_end, role=Test)

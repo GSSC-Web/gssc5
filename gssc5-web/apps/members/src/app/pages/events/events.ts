@@ -128,7 +128,7 @@ export class EventsPage implements OnInit {
 
   readonly catalog = signal<EventRecord[]>([]);
   readonly loadError = signal('');
-  readonly statusMessage = signal('');
+  readonly statusMessage = signal('Select an event or create a new one.');
   readonly mode = signal<'create' | 'edit'>('create');
   readonly editingCuid = signal<string | null>(null);
 
@@ -171,7 +171,7 @@ export class EventsPage implements OnInit {
 
   ngOnInit(): void {
     void this.loadCatalog();
-    this.startCreate();
+    this.startCreate({ announce: false });
   }
 
   // @relation(GSSC-MLLR-339, scope=range_start, role=Implementation)
@@ -187,18 +187,22 @@ export class EventsPage implements OnInit {
   }
   // @relation(GSSC-MLLR-339, scope=range_end, role=Implementation)
 
-  startCreate(): void {
+  startCreate(options?: { announce?: boolean }): void {
     this.mode.set('create');
     this.editingCuid.set(null);
     this.applyForm(emptyForm());
-    this.statusMessage.set('');
+    this.statusMessage.set(
+      options?.announce === false
+        ? 'Select an event or create a new one.'
+        : 'Creating a new event.',
+    );
   }
 
   selectEvent(event: EventRecord): void {
     this.mode.set('edit');
     this.editingCuid.set(event.cuid);
     this.applyForm(formFromRecord(event));
-    this.statusMessage.set('');
+    this.statusMessage.set('Editing event.');
   }
 
   catalogLabel(event: EventRecord): string {

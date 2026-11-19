@@ -75,7 +75,7 @@ export class PageSectionEditorPage implements OnInit {
   readonly permitted = signal(true);
 
   /** Status line for save/cancel/load feedback. */
-  readonly statusMessage = signal('');
+  readonly statusMessage = signal('Select a section or create a new one.');
 
   readonly editorHeader = signal('');
   readonly editorBody = signal('');
@@ -147,7 +147,7 @@ export class PageSectionEditorPage implements OnInit {
   onSelectSection(cuid: string): void {
     this.mode.set('edit');
     this.selectedCuid.set(cuid);
-    this.statusMessage.set('');
+    this.statusMessage.set('Editing section.');
     this.permitted.set(true);
     this.templateId.set('');
   }

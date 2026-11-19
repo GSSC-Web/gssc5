@@ -1956,3 +1956,29 @@ RELATIONS:
 
 [[/SECTION]]
 
+[[SECTION]]
+UID: GSSC-MHLR-PDE-PADDING-DISCLAIMER
+TITLE: Page Data Editor Padding and Disclaimer Unification
+
+[REQUIREMENT]
+UID: GSSC-MHLR-111
+TITLE: Page Data Editor Padding and Disclaimer Unification
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL present matching outer spacing, kind-title chrome, intro lead copy, and idle status disclaimer text across Page Data Editor section, announcement, and event kind panels.
+<<<
+RATIONALE: >>>
+After catalog and form-field unification, kind panels still differed in padding, title treatment, and helper/disclaimer placement. Shared chrome and parallel idle copy make the three editors appear similar without changing kind-specific fields.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC5-140
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-93
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-110
+  ROLE: Refines
+
+[[/SECTION]]
+

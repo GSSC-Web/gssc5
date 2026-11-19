@@ -166,7 +166,9 @@ test('GSSC-MLLR-262 Syntactic', async () => {
   expect(page.className).toContain('flex');
   expect(page.className).toContain('flex-col');
   expect(page.className).toContain('w-full');
-  expect(page.className).toContain('max-w-4xl');
+  expect(page.className).toContain('max-w-3xl');
+  expect(page.className).toContain('gap-5');
+  expect(page.className).not.toContain('px-4');
 });
 // @relation(GSSC-MLLR-262, scope=range_end, role=Test)
 
@@ -716,3 +718,75 @@ test('GSSC-MLLR-686 Unified Form Fields Lexical', async () => {
   expect(tagField.className).toContain('font-sans');
 });
 // @relation(GSSC-MLLR-686, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-687, scope=range_start, role=Test)
+test('GSSC-MLLR-687 Kind Chrome Semantic', async () => {
+  const { root } = await setup();
+  expect(textContent(root, '.gssc-page-section-editor__title')).toContain('Page');
+  expect(textContent(root, '.gssc-page-section-editor__lead')).toContain('Browse sections');
+  expect(textContent(root, '[data-slot="editor-status"]')).toContain(
+    'Select a section or create a new one',
+  );
+});
+// @relation(GSSC-MLLR-687, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-688, scope=range_start, role=Test)
+test('GSSC-MLLR-688 Kind Chrome Syntactic', async () => {
+  const { root } = await setup();
+  const page = root.querySelector('.gssc-page-section-editor')!;
+  expect(page.className).toContain('max-w-3xl');
+  expect(page.className).toContain('gap-5');
+  expect(page.className).not.toContain('px-4');
+  expect(page.className).not.toContain('py-5');
+  const intro = root.querySelector('.gssc-page-section-editor__intro')!;
+  const catalog = root.querySelector('.gssc-section-catalog')!;
+  const status = root.querySelector('[data-slot="editor-status"]')!;
+  expect(intro.compareDocumentPosition(catalog) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  expect(catalog.compareDocumentPosition(status) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+});
+// @relation(GSSC-MLLR-688, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-689, scope=range_start, role=Test)
+test('GSSC-MLLR-689 Kind Chrome Lexical', async () => {
+  const { root } = await setup();
+  const title = root.querySelector('.gssc-page-section-editor__title')!;
+  const lead = root.querySelector('.gssc-page-section-editor__lead')!;
+  const status = root.querySelector('[data-slot="editor-status"]')!;
+  expect(title.className).toContain('text-[1.75em]');
+  expect(title.className).toContain('font-semibold');
+  expect(title.className).toContain('text-gssc-dark-green');
+  expect(lead.className).toContain('text-sm');
+  expect(lead.className).toContain('text-gssc-dark-brown');
+  expect(status.className).toContain('text-sm');
+  expect(status.className).toContain('text-gssc-dark-brown');
+});
+// @relation(GSSC-MLLR-689, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-690, scope=range_start, role=Test)
+test('GSSC-MLLR-690 Idle Disclaimer Semantic', async () => {
+  const { root } = await setup();
+  expect(textContent(root, '[data-slot="editor-status"]')).toBe(
+    'Select a section or create a new one.',
+  );
+});
+// @relation(GSSC-MLLR-690, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-691, scope=range_start, role=Test)
+test('GSSC-MLLR-691 Idle Disclaimer Syntactic', async () => {
+  const { root } = await setup();
+  const catalog = root.querySelector('.gssc-section-catalog')!;
+  const status = root.querySelector('[data-slot="editor-status"]')!;
+  expect(status.tagName).toBe('P');
+  expect(catalog.compareDocumentPosition(status) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+});
+// @relation(GSSC-MLLR-691, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-692, scope=range_start, role=Test)
+test('GSSC-MLLR-692 Idle Disclaimer Lexical', async () => {
+  const { root } = await setup();
+  const status = root.querySelector('[data-slot="editor-status"]')!;
+  expect(status.className).toContain('font-sans');
+  expect(status.className).toContain('text-sm');
+  expect(status.className).toContain('text-gssc-dark-brown');
+});
+// @relation(GSSC-MLLR-692, scope=range_end, role=Test)
