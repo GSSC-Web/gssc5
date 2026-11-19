@@ -2586,11 +2586,14 @@ STATEMENT: >>>
 The GSSC Website Unified Backend SHALL accept modification of a research tool by a logged-in member who has tool editor authorization.
 <<<
 RATIONALE: >>>
-Authorized editors keep research tool titles and reference links current.
+Authorized editors keep research tool titles and references current, including replacing a stored reference file when a new file is uploaded.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-18
-REVIEW_STATUS: Changed
+CHANGE_DRIVER: >>>
+GSSC5-18
+GSSC-188
+<<<
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-27
@@ -2634,14 +2637,17 @@ RELATIONS:
 UID: GSSC-BHLR-194
 TITLE: Research Tools Storage
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL store each research tool with a cuid, a title, and a reference link.
+The GSSC Website Unified Backend SHALL store each research tool with a cuid, a title, and a reference that is either an external URL or a stored file under the research-tools file store named by that tool's cuid.
 <<<
 RATIONALE: >>>
-Each recommended tool is identified by cuid and presents a title that opens a reference link. Exact field shapes are low-level.
+Each recommended tool is identified by cuid and presents a title that opens either an outside URL or a society-hosted file. Exact field shapes are low-level.
 <<<
 DERIVED: False
-CHANGE_DRIVER: GSSC5-18
-REVIEW_STATUS: Changed
+CHANGE_DRIVER: >>>
+GSSC5-18
+GSSC-188
+<<<
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-27

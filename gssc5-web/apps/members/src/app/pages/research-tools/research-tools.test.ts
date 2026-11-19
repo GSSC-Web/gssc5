@@ -24,11 +24,13 @@ const sampleEntries: ResearchToolEntry[] = [
     cuid: 'tool_1',
     title: 'FamilySearch',
     referenceLink: 'https://www.familysearch.org',
+    hasFile: false,
   },
   {
     cuid: 'tool_2',
     title: 'Ancestry Library',
     referenceLink: 'https://www.ancestry.com',
+    hasFile: false,
   },
 ];
 
@@ -44,6 +46,7 @@ async function setupResearchTools(options?: {
   createCalls: ResearchToolEntry[];
   updateCalls: Array<{ cuid: string; body: unknown }>;
   deleteCalls: string[];
+  uploadCalls: Array<{ cuid: string; fileName: string }>;
   listCalls: number;
 }> {
   const originals = {
@@ -51,12 +54,15 @@ async function setupResearchTools(options?: {
     create: researchToolsApi.create,
     update: researchToolsApi.update,
     remove: researchToolsApi.remove,
+    uploadFile: researchToolsApi.uploadFile,
+    get: researchToolsApi.get,
   };
 
   let listCalls = 0;
   const createCalls: ResearchToolEntry[] = [];
   const updateCalls: Array<{ cuid: string; body: unknown }> = [];
   const deleteCalls: string[] = [];
+  const uploadCalls: Array<{ cuid: string; fileName: string }> = [];
   let store = [...(options?.entries ?? sampleEntries)];
 
   researchToolsApi.list = (async () => {
@@ -64,11 +70,17 @@ async function setupResearchTools(options?: {
     return okResponse([...store]);
   }) as typeof researchToolsApi.list;
 
+  researchToolsApi.get = (async (cuid) => {
+    const entry = store.find((item) => item.cuid === cuid);
+    return entry ? okResponse(entry) : okResponse(null, 404);
+  }) as typeof researchToolsApi.get;
+
   researchToolsApi.create = (async (body) => {
     const created: ResearchToolEntry = {
       cuid: `tool_new_${createCalls.length + 1}`,
       title: body.title,
-      referenceLink: body.referenceLink,
+      referenceLink: body.referenceLink ?? '',
+      hasFile: false,
     };
     createCalls.push(created);
     store = [...store, created];
@@ -86,11 +98,25 @@ async function setupResearchTools(options?: {
               typeof body.referenceLink === 'string'
                 ? body.referenceLink
                 : entry.referenceLink,
+            hasFile:
+              typeof body.referenceLink === 'string' && body.referenceLink.length > 0
+                ? false
+                : entry.hasFile,
           }
         : entry,
     );
     return okResponse(store.find((entry) => entry.cuid === cuid)!);
   }) as typeof researchToolsApi.update;
+
+  researchToolsApi.uploadFile = (async (cuid, file) => {
+    uploadCalls.push({ cuid, fileName: file.name });
+    store = store.map((entry) =>
+      entry.cuid === cuid
+        ? { ...entry, hasFile: true, referenceLink: '' }
+        : entry,
+    );
+    return { data: { cuid, path: `research-tools/${cuid}` }, error: null };
+  }) as typeof researchToolsApi.uploadFile;
 
   researchToolsApi.remove = (async (cuid) => {
     deleteCalls.push(cuid);
@@ -127,6 +153,7 @@ async function setupResearchTools(options?: {
     createCalls,
     updateCalls,
     deleteCalls,
+    uploadCalls,
     get listCalls() {
       return listCalls;
     },
@@ -135,6 +162,8 @@ async function setupResearchTools(options?: {
       researchToolsApi.create = originals.create;
       researchToolsApi.update = originals.update;
       researchToolsApi.remove = originals.remove;
+      researchToolsApi.uploadFile = originals.uploadFile;
+      researchToolsApi.get = originals.get;
     },
   };
 }
@@ -180,6 +209,7 @@ test('GSSC-MLLR-398 Semantic', async () => {
     await fixture.whenStable();
     expect(root.querySelector('gssc-editor')).toBeTruthy();
     expect(root.querySelectorAll('.gssc-form-text-field').length).toBe(2);
+    expect(root.querySelector('[data-slot="research-tools-file-upload"]')).toBeTruthy();
   } finally {
     restore();
   }
@@ -268,6 +298,8 @@ test('GSSC-MLLR-404 Semantic', async () => {
     expect(page.isCreating()).toBe(true);
     expect(page.title()).toBe('');
     expect(page.referenceLink()).toBe('');
+    expect(page.selectedFileName()).toBe('');
+    expect(page.hasFile()).toBe(false);
   } finally {
     restore();
   }
@@ -444,3 +476,70 @@ test('GSSC-MLLR-414 Semantic', async () => {
   }
 });
 // @relation(GSSC-MLLR-414, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-697, scope=range_start, role=Test)
+test('GSSC-MLLR-697 Semantic', async () => {
+  const ctx = await setupResearchTools();
+  try {
+    ctx.root.querySelector<HTMLButtonElement>('[data-slot="research-tools-create"]')!.click();
+    ctx.fixture.detectChanges();
+    await ctx.fixture.whenStable();
+    await typeField(ctx.fixture, ctx.root, 'Title', 'File Tool');
+    await ctx.page.onSaved();
+    await settle(ctx.fixture);
+    expect(ctx.createCalls.length).toBe(0);
+    expect(ctx.page.statusMessage()).toContain('reference link or choose a file');
+
+    const file = new File(['pdf-bytes'], 'guide.pdf', { type: 'application/pdf' });
+    ctx.page.onFileSelected({
+      target: { files: [file] },
+    } as unknown as Event);
+    ctx.fixture.detectChanges();
+    await ctx.page.onSaved();
+    await settle(ctx.fixture);
+    expect(ctx.createCalls.length).toBe(1);
+    expect(ctx.uploadCalls).toEqual([{ cuid: 'tool_new_1', fileName: 'guide.pdf' }]);
+    expect(ctx.page.hasFile()).toBe(true);
+  } finally {
+    ctx.restore();
+  }
+});
+// @relation(GSSC-MLLR-697, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-698, scope=range_start, role=Test)
+test('GSSC-MLLR-698 Syntactic', async () => {
+  const { root, fixture, restore } = await setupResearchTools();
+  try {
+    root.querySelector<HTMLButtonElement>('[data-slot="research-tools-create"]')!.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    const linkField = Array.from(
+      root.querySelectorAll<HTMLElement>('.gssc-form-text-field'),
+    ).find((el) => el.querySelector('label')?.textContent?.includes('Reference Link'))!;
+    const fileUpload = root.querySelector('[data-slot="research-tools-file-upload"]')!;
+    expect(
+      Boolean(
+        linkField.compareDocumentPosition(fileUpload) & Node.DOCUMENT_POSITION_FOLLOWING,
+      ),
+    ).toBe(true);
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-698, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-699, scope=range_start, role=Test)
+test('GSSC-MLLR-699 Lexical', async () => {
+  const { root, fixture, restore } = await setupResearchTools();
+  try {
+    root.querySelector<HTMLButtonElement>('[data-slot="research-tools-create"]')!.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    const fileUpload = root.querySelector('[data-slot="research-tools-file-upload"]')!;
+    expect(fileUpload.className).toContain('font-sans');
+    expect(fileUpload.className).toContain('text-gssc-dark-green');
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-699, scope=range_end, role=Test)

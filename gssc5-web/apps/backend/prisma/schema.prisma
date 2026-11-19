@@ -267,14 +267,14 @@ model Event {
 }
 // @relation(GSSC-BLLR-402, GSSC-BLLR-403, GSSC-BLLR-404, GSSC-BLLR-405, GSSC-BLLR-406, GSSC-BLLR-407, GSSC-BLLR-408, GSSC-BLLR-409, GSSC-BLLR-410, scope=range_end, role=Implementation)
 
-// Research tools catalog (GSSC-BHLR-194 / GSSC5-18).
+// Research tools catalog (GSSC-BHLR-194 / GSSC5-18 / GSSC-188).
 // @relation(GSSC-BLLR-343, scope=range_start, role=Implementation)
 model ResearchTool {
   id             String @id @default(cuid())
   /// @prismabox.options{ minLength: 1 }
   title          String
-  /// @prismabox.options{ minLength: 1 }
-  referenceLink  String
+  /// External URL when the reference is a link; empty when a stored file is the reference.
+  referenceLink  String @default("")
 
   @@map("research_tools")
 }

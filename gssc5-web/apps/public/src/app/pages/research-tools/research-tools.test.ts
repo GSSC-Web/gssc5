@@ -3,6 +3,7 @@ import { nativeElement, textContent } from '../../../test-harness';
 import {
   RESEARCH_TOOLS_LIST_GET,
   ResearchToolsPage,
+  researchToolHref,
   type ResearchToolEntry,
 } from './research-tools';
 
@@ -10,12 +11,14 @@ const sampleTools: ResearchToolEntry[] = [
   {
     cuid: 'tool_charts',
     title: 'Four Generations Chart',
-    referenceLink: '/documents/4-generation-chart.pdf',
+    referenceLink: '',
+    hasFile: true,
   },
   {
     cuid: 'tool_external',
     title: 'Victoria Genealogical Society',
     referenceLink: 'http://www.victoriags.org/',
+    hasFile: false,
   },
 ];
 
@@ -59,8 +62,9 @@ test('GSSC-PLLR-159 Semantic', async () => {
     'Four Generations Chart',
     'Victoria Genealogical Society',
   ]);
+  expect(page.tools().map((tool) => tool.hasFile)).toEqual([true, false]);
   expect(page.tools().map((tool) => tool.referenceLink)).toEqual([
-    '/documents/4-generation-chart.pdf',
+    '',
     'http://www.victoriags.org/',
   ]);
 });
@@ -123,7 +127,7 @@ test('GSSC-PLLR-228 Semantic', async () => {
     'Victoria Genealogical Society',
   ]);
   expect(links.map((link) => link.getAttribute('href'))).toEqual([
-    '/documents/4-generation-chart.pdf',
+    researchToolHref(sampleTools[0]!),
     'http://www.victoriags.org/',
   ]);
 });

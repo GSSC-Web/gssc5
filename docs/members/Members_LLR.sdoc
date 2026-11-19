@@ -9184,14 +9184,17 @@ TITLE: Research Tools Editor Page
 UID: GSSC-MLLR-398
 TITLE: Semantic
 STATEMENT: >>>
-The Member Frontend Research Tools Editor Page SHALL present a research tools catalog list, a create control when modification is permitted, and a Generic Editor host for the selected research tool with title and reference link fields.
+The Member Frontend Research Tools Editor Page SHALL present a research tools catalog list, a create control when modification is permitted, and a Generic Editor host for the selected research tool with a title field, a reference link field, and a reference file upload control.
 <<<
 RATIONALE: >>>
-One page hosts catalog browsing and Generic Editor composition so authorized members maintain research tools without programming knowledge.
+One page hosts catalog browsing and Generic Editor composition so authorized members maintain research tools with either a URL or an uploaded file without programming knowledge.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-97
+CHANGE_DRIVER: >>>
+GSSC5-97
+GSSC-188
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -9304,14 +9307,17 @@ TITLE: Research Tools Create Control
 UID: GSSC-MLLR-404
 TITLE: Semantic
 STATEMENT: >>>
-When research tools modification is permitted, the Research Tools Create Control SHALL start a new research tool in the Generic Editor host with empty title and reference link fields.
+When research tools modification is permitted, the Research Tools Create Control SHALL start a new research tool in the Generic Editor host with empty title and reference link fields and no selected reference file.
 <<<
 RATIONALE: >>>
 Create starts a blank catalog entry before persistence.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-97
+CHANGE_DRIVER: >>>
+GSSC5-97
+GSSC-188
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -9460,14 +9466,17 @@ RELATIONS:
 UID: GSSC-MLLR-412
 TITLE: Semantic
 STATEMENT: >>>
-When Save succeeds on the Research Tools Generic Editor host for a new research tool, the Member Frontend SHALL create the entry in the Unified Backend research tools catalog; when Save succeeds for an existing research tool, it SHALL update that entry with the editor field values.
+When Save succeeds on the Research Tools Generic Editor host for a new research tool, the Member Frontend SHALL create the entry in the Unified Backend research tools catalog with either a non-empty reference link or an uploaded reference file; when Save succeeds for an existing research tool, it SHALL update that entry with the editor field values and, when a new reference file is selected, upload that file to replace any prior stored reference file.
 <<<
 RATIONALE: >>>
-Save persists title and reference link through the research tools catalog API.
+Save persists title and either a URL or a file through the research tools catalog and file-upload APIs.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-97
+CHANGE_DRIVER: >>>
+GSSC5-97
+GSSC-188
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -9504,6 +9513,66 @@ The list stays aligned with persisted catalog state after mutations.
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: GSSC5-97
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-54
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-RESEARCH-TOOLS-FILE-UPLOAD
+TITLE: Research Tools Reference File Upload
+
+[REQUIREMENT]
+UID: GSSC-MLLR-697
+TITLE: Semantic
+STATEMENT: >>>
+When research tools modification is permitted, the Research Tools Reference File Upload SHALL let the member choose a local file as the research tool reference instead of a reference link, and SHALL require either a non-empty reference link or a chosen file before Save succeeds for a new research tool.
+<<<
+RATIONALE: >>>
+Editors supply either an outside URL or a society-hosted file for each catalog entry.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC-188
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-54
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-698
+TITLE: Syntactic
+STATEMENT: >>>
+The Research Tools Reference File Upload SHALL appear in the Generic Editor Field Area below the reference link field as a labeled file chooser.
+<<<
+RATIONALE: >>>
+Placing the file chooser with the URL field keeps both reference options in one reading order.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC-188
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-54
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-699
+TITLE: Lexical
+STATEMENT: >>>
+The Research Tools Reference File Upload SHALL use the Member Frontend sans-serif typeface and dark-green theme color for its label text.
+<<<
+RATIONALE: >>>
+File upload chrome matches other Member Frontend editor fields.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC-188
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent

@@ -72,8 +72,44 @@
         label="Reference Link"
         [(value)]="referenceLink"
         [enabled]="permitted()"
-        [required]="true"
+        [required]="false"
       />
+      <!-- @relation(GSSC-MLLR-697, GSSC-MLLR-698, GSSC-MLLR-699, scope=range_start, role=Implementation) -->
+      <div
+        class="gssc-field gssc-research-tools-page__file relative flex min-w-0 flex-col rounded-md border border-gssc-dark-green bg-gssc-white font-sans text-gssc-dark-green"
+        data-slot="research-tools-file-upload"
+      >
+        <span
+          class="absolute -top-2 start-2 bg-inherit px-1 font-sans text-xs font-extralight italic text-gssc-dark-green"
+        >
+          Reference File
+        </span>
+        <div class="flex flex-wrap items-center gap-3 px-2 py-2">
+          <input
+            id="gssc-research-tool-file"
+            class="sr-only"
+            type="file"
+            [disabled]="!permitted()"
+            (change)="onFileSelected($event)"
+          />
+          <label
+            for="gssc-research-tool-file"
+            class="inline-flex w-fit cursor-pointer items-center justify-center rounded-md border border-gssc-dark-green bg-gssc-light-green px-3 py-1.5 font-sans text-sm text-gssc-dark-green hover:bg-gssc-gray"
+          >
+            Choose File
+          </label>
+          <span class="font-sans text-sm text-gssc-dark-brown" data-slot="research-tools-file-name">
+            @if (selectedFileName()) {
+              {{ selectedFileName() }}
+            } @else if (hasFile()) {
+              Stored file on server
+            } @else {
+              No file selected
+            }
+          </span>
+        </div>
+      </div>
+      <!-- @relation(GSSC-MLLR-697, GSSC-MLLR-698, GSSC-MLLR-699, scope=range_end, role=Implementation) -->
     </gssc-editor>
 
     @if (permitted() && selectedCuid() && !isCreating()) {

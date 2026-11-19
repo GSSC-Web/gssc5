@@ -11,12 +11,14 @@ type ResearchToolDraft = {
   cuid: string | null;
   title: string;
   referenceLink: string;
+  hasFile: boolean;
 };
 
 const emptyDraft = (): ResearchToolDraft => ({
   cuid: null,
   title: '',
   referenceLink: '',
+  hasFile: false,
 });
 
 @Component({
@@ -32,8 +34,12 @@ export class ResearchToolsPage implements OnInit {
   readonly statusMessage = signal('');
   readonly title = signal('');
   readonly referenceLink = signal('');
+  readonly hasFile = signal(false);
+  readonly selectedFileName = signal('');
   readonly selectedCuid = signal<string | null>(null);
   readonly isCreating = signal(false);
+
+  private pendingFile: File | null = null;
 
   // @relation(GSSC-MLLR-410, scope=range_start, role=Implementation)
   readonly permitted = computed(
@@ -87,6 +93,7 @@ export class ResearchToolsPage implements OnInit {
       cuid: entry.cuid,
       title: entry.title,
       referenceLink: entry.referenceLink,
+      hasFile: entry.hasFile,
     });
     this.statusMessage.set('');
   }
@@ -102,13 +109,31 @@ export class ResearchToolsPage implements OnInit {
   }
   // @relation(GSSC-MLLR-404, scope=range_end, role=Implementation)
 
-  // @relation(GSSC-MLLR-412, GSSC-MLLR-414, scope=range_start, role=Implementation)
+  // @relation(GSSC-MLLR-697, GSSC-MLLR-698, GSSC-MLLR-699, scope=range_start, role=Implementation)
+  onFileSelected(event: Event): void {
+    if (!this.permitted()) return;
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0] ?? null;
+    this.pendingFile = file;
+    this.selectedFileName.set(file?.name ?? '');
+    if (file) {
+      this.referenceLink.set('');
+    }
+  }
+  // @relation(GSSC-MLLR-697, GSSC-MLLR-698, GSSC-MLLR-699, scope=range_end, role=Implementation)
+
+  // @relation(GSSC-MLLR-412, GSSC-MLLR-414, GSSC-MLLR-697, scope=range_start, role=Implementation)
   async onSaved(): Promise<void> {
     if (!this.permitted()) return;
     const title = this.title().trim();
     const referenceLink = this.referenceLink().trim();
-    if (!title || !referenceLink) {
-      this.statusMessage.set('Title and reference link are required.');
+    const file = this.pendingFile;
+    if (!title) {
+      this.statusMessage.set('Title is required.');
+      return;
+    }
+    if (!file && !referenceLink && !this.hasFile()) {
+      this.statusMessage.set('Provide a reference link or choose a file.');
       return;
     }
 
@@ -116,27 +141,51 @@ export class ResearchToolsPage implements OnInit {
       if (this.isCreating() || this.selectedCuid() === null) {
         const { data, error } = await researchToolsApi.create({
           title,
-          referenceLink,
+          referenceLink: file ? '' : referenceLink,
         });
         if (error || !data) {
           this.statusMessage.set('Save failed.');
           return;
         }
-        const created = data as ResearchToolEntry;
+        let created = data as ResearchToolEntry;
+        if (file) {
+          const uploaded = await researchToolsApi.uploadFile(created.cuid, file);
+          if (uploaded.error || !uploaded.data) {
+            this.statusMessage.set('File upload failed.');
+            return;
+          }
+          const refreshed = await researchToolsApi.get(created.cuid);
+          if (!refreshed.error && refreshed.data) {
+            created = refreshed.data as ResearchToolEntry;
+          } else {
+            created = { ...created, hasFile: true, referenceLink: '' };
+          }
+        }
         this.isCreating.set(false);
         this.selectedCuid.set(created.cuid);
         this.applyDraft({
           cuid: created.cuid,
           title: created.title,
           referenceLink: created.referenceLink,
+          hasFile: created.hasFile,
         });
         this.statusMessage.set('Created.');
       } else {
         const cuid = this.selectedCuid()!;
-        const { data, error } = await researchToolsApi.update(cuid, {
-          title,
-          referenceLink,
-        });
+        if (file) {
+          const uploaded = await researchToolsApi.uploadFile(cuid, file);
+          if (uploaded.error || !uploaded.data) {
+            this.statusMessage.set('File upload failed.');
+            return;
+          }
+        }
+        const patch: { title: string; referenceLink?: string } = { title };
+        if (!file && referenceLink) {
+          patch.referenceLink = referenceLink;
+        } else if (!file && !this.hasFile()) {
+          patch.referenceLink = referenceLink;
+        }
+        const { data, error } = await researchToolsApi.update(cuid, patch);
         if (error || !data) {
           this.statusMessage.set('Save failed.');
           return;
@@ -146,6 +195,7 @@ export class ResearchToolsPage implements OnInit {
           cuid: updated.cuid,
           title: updated.title,
           referenceLink: updated.referenceLink,
+          hasFile: updated.hasFile,
         });
         this.statusMessage.set('Saved.');
       }
@@ -154,7 +204,7 @@ export class ResearchToolsPage implements OnInit {
       this.statusMessage.set('Save failed.');
     }
   }
-  // @relation(GSSC-MLLR-412, GSSC-MLLR-414, scope=range_end, role=Implementation)
+  // @relation(GSSC-MLLR-412, GSSC-MLLR-414, GSSC-MLLR-697, scope=range_end, role=Implementation)
 
   // @relation(GSSC-MLLR-413, scope=range_start, role=Implementation)
   onCancelled(): void {
@@ -189,6 +239,9 @@ export class ResearchToolsPage implements OnInit {
     this.baseline = { ...draft };
     this.title.set(draft.title);
     this.referenceLink.set(draft.referenceLink);
+    this.hasFile.set(draft.hasFile);
     this.selectedCuid.set(draft.cuid);
+    this.pendingFile = null;
+    this.selectedFileName.set('');
   }
 }

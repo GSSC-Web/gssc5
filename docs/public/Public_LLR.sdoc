@@ -4630,18 +4630,21 @@ TITLE: Society Resources and Tools List
 UID: GSSC-PLLR-159
 TITLE: Semantic
 STATEMENT: >>>
-The Society Resources and Tools List SHALL request the current research tools from the Unified Backend research tools list as normal research tools page content, identifying each listed tool by that tool's cuid, title, and reference link in the order the Unified Backend provides.
+The Society Resources and Tools List SHALL request the current research tools from the Unified Backend research tools list as normal research tools page content, identifying each listed tool by that tool's cuid, title, reference link, and whether a stored reference file is present in the order the Unified Backend provides.
 <<<
 RATIONALE: >>>
-The research tools page lists society-recommended tools such as charts, instruction sheets, and outside resource links from the dedicated research-tools catalog. That catalog is normal webpage content for this page, not generic section Contents. Cemetery Project pages are outside this list. Tagged generic sections and Section From CUID are not the source for this list.
+The research tools page lists society-recommended tools such as charts, instruction sheets, outside resource links, and society-hosted files from the dedicated research-tools catalog. That catalog is normal webpage content for this page, not generic section Contents. Cemetery Project pages are outside this list. Tagged generic sections and Section From CUID are not the source for this list.
 <<<
 COMMENT: >>>
 REVIEW_STATUS stays Changed until owner approval. Owner clarified the tools listing lives in normal page content, not under generic/Section-from-CUID trees.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-18
-REVIEW_STATUS: Changed
+CHANGE_DRIVER: >>>
+GSSC5-18
+GSSC-188
+<<<
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-83
@@ -4693,15 +4696,18 @@ TITLE: Research Tool Link
 UID: GSSC-PLLR-228
 TITLE: Semantic
 STATEMENT: >>>
-A Research Tool Link SHALL present that tool's title and open that tool's reference link when selected.
+A Research Tool Link SHALL present that tool's title and, when selected, open that tool's stored reference file when one is present, otherwise open that tool's reference link.
 <<<
 RATIONALE: >>>
-Each catalog entry is a titled hyperlink to the tool's reference. The list supplies title and reference link from the Unified Backend.
+Each catalog entry is a titled hyperlink to the tool's reference—either a society-hosted file or an external URL. The list supplies title, reference link, and file presence from the Unified Backend.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-18
-REVIEW_STATUS: Changed
+CHANGE_DRIVER: >>>
+GSSC5-18
+GSSC-188
+<<<
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PHLR-83
