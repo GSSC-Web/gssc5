@@ -36,6 +36,8 @@ export class SearchPage implements OnDestroy {
   readonly query = signal('');
   readonly kind = signal<PublicSearchKind | ''>('');
   readonly results = signal<SiteSearchResult[]>([]);
+  /** True when site search retrieval failed (null); distinct from empty match. */
+  readonly loadError = signal(false);
 
   constructor() {
     this.sub.add(
@@ -91,6 +93,7 @@ export class SearchPage implements OnDestroy {
   ): Promise<void> {
     if (q.length === 0) {
       this.results.set([]);
+      this.loadError.set(false);
       return;
     }
     const entries = await this.searchGet({
@@ -98,7 +101,13 @@ export class SearchPage implements OnDestroy {
       limit: SEARCH_PAGE_LIMIT,
       kind,
     });
-    this.results.set(entries ?? []);
+    if (entries === null) {
+      this.results.set([]);
+      this.loadError.set(true);
+      return;
+    }
+    this.loadError.set(false);
+    this.results.set(entries);
   }
   // @relation(GSSC-PLLR-363, scope=range_end, role=Implementation)
 
