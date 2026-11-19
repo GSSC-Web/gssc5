@@ -217,12 +217,61 @@ export class Header implements OnInit, OnDestroy {
     return (item.children?.length ?? 0) > 0;
   }
 
-  /** Equal-column template for the wide Navigation Menu grid (GSSC5-121). */
+  /** Equal item columns with auto divider tracks between them (GSSC5-121 / GSSC5-137). */
   protected wideNavGridColumns(): string {
     const count = this.navItems().length;
     if (count <= 0) return 'none';
-    return `repeat(${count}, minmax(0, 1fr))`;
+    if (count === 1) return 'minmax(0, 1fr)';
+    const tracks: string[] = [];
+    for (let i = 0; i < count; i++) {
+      tracks.push('minmax(0, 1fr)');
+      if (i < count - 1) tracks.push('auto');
+    }
+    return tracks.join(' ');
   }
+
+  // @relation(GSSC-PHLR-154, GSSC-PLLR-396, GSSC-PLLR-397, GSSC-PLLR-398, scope=range_start, role=Implementation)
+  readonly safeTrianglePath = signal<string | null>(null);
+  readonly safeTriangleCuid = signal<string | null>(null);
+
+  protected onNestedBridgeMove(
+    event: MouseEvent,
+    child: SiteTreeNavNode,
+  ): void {
+    if (!this.hasChildren(child)) {
+      this.clearSafeTriangle();
+      return;
+    }
+    const host = event.currentTarget as HTMLElement | null;
+    const nested = host?.querySelector<HTMLElement>(
+      '.gssc-header__submenu--nested',
+    );
+    if (!host || !nested) {
+      this.clearSafeTriangle();
+      return;
+    }
+    const nestedRect = nested.getBoundingClientRect();
+    if (nestedRect.width <= 0 || nestedRect.height <= 0) {
+      this.clearSafeTriangle();
+      return;
+    }
+    const x = event.clientX;
+    const y = event.clientY;
+    const nearX = nestedRect.left;
+    const path = `M ${x} ${y} L ${nearX} ${nestedRect.top} L ${nearX} ${nestedRect.bottom} Z`;
+    this.safeTriangleCuid.set(child.cuid);
+    this.safeTrianglePath.set(path);
+  }
+
+  protected onNestedBridgeLeave(child: SiteTreeNavNode): void {
+    if (this.safeTriangleCuid() === child.cuid) this.clearSafeTriangle();
+  }
+
+  private clearSafeTriangle(): void {
+    this.safeTriangleCuid.set(null);
+    this.safeTrianglePath.set(null);
+  }
+  // @relation(GSSC-PHLR-154, GSSC-PLLR-396, GSSC-PLLR-397, GSSC-PLLR-398, scope=range_end, role=Implementation)
 
   /** Test / harness hook to force a chrome tier without resize geometry. */
   setChromeTierForTest(tier: HeaderChromeTier): void {

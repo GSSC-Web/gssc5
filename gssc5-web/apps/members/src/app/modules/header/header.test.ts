@@ -578,13 +578,22 @@ test('GSSC-MLLR-445 Syntactic', async () => {
   const { fixture, root, header } = await setupHeader({ chromeTier: 'wide' });
   const wideNav = root.querySelector<HTMLElement>('.gssc-header__nav--wide')!;
   expect(wideNav.classList.contains('grid')).toBe(true);
-  expect(wideNav.querySelectorAll('.gssc-header__nav-divider').length).toBe(0);
+  const topItems = [
+    ...wideNav.querySelectorAll<HTMLElement>(':scope > .gssc-header__nav-item'),
+  ];
+  expect(topItems.length).toBeGreaterThan(0);
+  expect(wideNav.querySelectorAll('.gssc-header__nav-divider').length).toBe(
+    Math.max(0, topItems.length - 1),
+  );
   const topLinks = [
-    ...wideNav.querySelectorAll<HTMLElement>(':scope > .gssc-header__nav-item > .gssc-header__nav-link'),
+    ...wideNav.querySelectorAll<HTMLElement>(
+      ':scope > .gssc-header__nav-item .gssc-header__nav-link',
+    ),
   ];
   expect(topLinks.length).toBeGreaterThan(0);
   expect(topLinks.every((link) => link.classList.contains('whitespace-nowrap'))).toBe(true);
-  expect(wideNav.style.gridTemplateColumns).toMatch(/^repeat\(\d+, minmax\(0, 1fr\)\)$/);
+  expect(wideNav.style.gridTemplateColumns).toContain('minmax(0, 1fr)');
+  expect(wideNav.style.gridTemplateColumns).toContain('auto');
 
   header.setChromeTierForTest('mid');
   fixture.detectChanges();
@@ -602,6 +611,9 @@ test('GSSC-MLLR-446 Lexical', async () => {
   const link = root.querySelector<HTMLElement>('.gssc-header__nav-link')!;
   expect(link.classList.contains('font-sans')).toBe(true);
   expect(link.classList.contains('text-gssc-dark-green')).toBe(true);
+  expect(link.classList.contains('hover:text-gssc-dark-brown')).toBe(true);
+  expect(link.classList.contains('group-hover:text-gssc-dark-brown')).toBe(true);
+  expect(link.classList.contains('group-focus-within:text-gssc-dark-brown')).toBe(true);
 });
 // @relation(GSSC-MLLR-446, scope=range_end, role=Test)
 
@@ -624,8 +636,13 @@ test('GSSC-MLLR-447 Semantic', async () => {
 // @relation(GSSC-MLLR-448, scope=range_start, role=Test)
 test('GSSC-MLLR-448 Syntactic', async () => {
   const { fixture, root, header } = await setupHeader({ chromeTier: 'wide' });
-  const submenu = root.querySelector<HTMLElement>('.gssc-header__submenu')!;
+  const publications = [...root.querySelectorAll('.gssc-header__nav-item')].find((item) =>
+    item.querySelector('.gssc-header__nav-link')?.textContent?.includes('Publications'),
+  )!;
+  const cluster = publications.querySelector<HTMLElement>('.gssc-header__nav-cluster')!;
+  const submenu = cluster.querySelector<HTMLElement>(':scope > .gssc-header__submenu')!;
   expect(submenu.classList.contains('absolute')).toBe(true);
+  expect(submenu.classList.contains('start-0')).toBe(true);
   expect(submenu.classList.contains('group-hover:visible')).toBe(true);
 
   header.setChromeTierForTest('mid');
@@ -1065,3 +1082,81 @@ test('GSSC-MLLR-652 Lexical', async () => {
   expect(header.themeMode.mode()).toBe('dark');
 });
 // @relation(GSSC-MLLR-652, scope=range_end, role=Test)
+
+function stubNestedSubmenuRect(nested: HTMLElement): void {
+  nested.getBoundingClientRect = () =>
+    ({
+      x: 200,
+      y: 100,
+      left: 200,
+      top: 100,
+      right: 360,
+      bottom: 220,
+      width: 160,
+      height: 120,
+      toJSON: () => ({}),
+    }) as DOMRect;
+}
+
+// @relation(GSSC-MLLR-665, scope=range_start, role=Test)
+test('GSSC-MLLR-665 Semantic', async () => {
+  const { fixture, root, header } = await setupHeader({ chromeTier: 'wide' });
+  const nestedParent = [...root.querySelectorAll('.gssc-header__submenu-item')].find((item) =>
+    item.querySelector('.gssc-header__submenu--nested'),
+  )!;
+  stubNestedSubmenuRect(nestedParent.querySelector('.gssc-header__submenu--nested')!);
+  nestedParent.dispatchEvent(
+    new MouseEvent('mousemove', { clientX: 40, clientY: 80, bubbles: true }),
+  );
+  fixture.detectChanges();
+  await fixture.whenStable();
+  expect(header.safeTriangleCuid()).not.toBeNull();
+  expect(header.safeTrianglePath()).toMatch(/^M /);
+  nestedParent.dispatchEvent(new MouseEvent('mouseleave', { bubbles: true }));
+  fixture.detectChanges();
+  await fixture.whenStable();
+  expect(header.safeTrianglePath()).toBeNull();
+});
+// @relation(GSSC-MLLR-665, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-666, scope=range_start, role=Test)
+test('GSSC-MLLR-666 Syntactic', async () => {
+  const { fixture, root, header } = await setupHeader({ chromeTier: 'wide' });
+  const nestedParent = [...root.querySelectorAll('.gssc-header__submenu-item')].find((item) =>
+    item.querySelector('.gssc-header__submenu--nested'),
+  )!;
+  stubNestedSubmenuRect(nestedParent.querySelector('.gssc-header__submenu--nested')!);
+  nestedParent.dispatchEvent(
+    new MouseEvent('mousemove', { clientX: 12, clientY: 24, bubbles: true }),
+  );
+  fixture.detectChanges();
+  await fixture.whenStable();
+  const path = header.safeTrianglePath()!;
+  expect(path.startsWith('M 12 24 L ')).toBe(true);
+  expect(path.endsWith(' Z')).toBe(true);
+  const svg = root.querySelector('.gssc-header__safe-triangle')!;
+  expect(svg.classList.contains('pointer-events-none')).toBe(true);
+  const triangle = root.querySelector('.gssc-header__safe-triangle-path')!;
+  expect(triangle.classList.contains('pointer-events-auto')).toBe(true);
+});
+// @relation(GSSC-MLLR-666, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-667, scope=range_start, role=Test)
+test('GSSC-MLLR-667 Lexical', async () => {
+  const { fixture, root, header } = await setupHeader({ chromeTier: 'wide' });
+  const nestedParent = [...root.querySelectorAll('.gssc-header__submenu-item')].find((item) =>
+    item.querySelector('.gssc-header__submenu--nested'),
+  )!;
+  stubNestedSubmenuRect(nestedParent.querySelector('.gssc-header__submenu--nested')!);
+  nestedParent.dispatchEvent(
+    new MouseEvent('mousemove', { clientX: 8, clientY: 16, bubbles: true }),
+  );
+  fixture.detectChanges();
+  await fixture.whenStable();
+  const triangle = root.querySelector<SVGPathElement>('.gssc-header__safe-triangle-path')!;
+  expect(triangle.classList.contains('fill-transparent')).toBe(true);
+  expect(triangle.getAttribute('stroke')).toBeNull();
+  expect(triangle.textContent?.trim() ?? '').toBe('');
+  expect(header.safeTrianglePath()).not.toBeNull();
+});
+// @relation(GSSC-MLLR-667, scope=range_end, role=Test)
