@@ -642,8 +642,69 @@ test('GSSC-MLLR-448 Syntactic', async () => {
   const cluster = publications.querySelector<HTMLElement>('.gssc-header__nav-cluster')!;
   const submenu = cluster.querySelector<HTMLElement>(':scope > .gssc-header__submenu')!;
   expect(submenu.classList.contains('absolute')).toBe(true);
-  expect(submenu.classList.contains('start-0')).toBe(true);
   expect(submenu.classList.contains('group-hover:visible')).toBe(true);
+
+  cluster.getBoundingClientRect = () =>
+    ({
+      x: 120,
+      y: 40,
+      left: 120,
+      top: 40,
+      right: 220,
+      bottom: 64,
+      width: 100,
+      height: 24,
+      toJSON: () => ({}),
+    }) as DOMRect;
+  Object.defineProperty(submenu, 'offsetWidth', { configurable: true, value: 176 });
+  Object.defineProperty(submenu, 'scrollWidth', { configurable: true, value: 176 });
+  cluster.dispatchEvent(new MouseEvent('mouseenter', { bubbles: true }));
+  fixture.detectChanges();
+  await fixture.whenStable();
+  expect(submenu.classList.contains('start-0')).toBe(true);
+  expect(submenu.classList.contains('end-0')).toBe(false);
+
+  cluster.getBoundingClientRect = () =>
+    ({
+      x: window.innerWidth - 80,
+      y: 40,
+      left: window.innerWidth - 80,
+      top: 40,
+      right: window.innerWidth - 10,
+      bottom: 64,
+      width: 70,
+      height: 24,
+      toJSON: () => ({}),
+    }) as DOMRect;
+  cluster.dispatchEvent(new MouseEvent('mouseenter', { bubbles: true }));
+  fixture.detectChanges();
+  await fixture.whenStable();
+  expect(submenu.classList.contains('end-0')).toBe(true);
+  expect(submenu.classList.contains('start-0')).toBe(false);
+
+  const nestedParent = [...publications.querySelectorAll('.gssc-header__submenu-item')].find(
+    (item) => item.querySelector('.gssc-header__submenu--nested'),
+  )!;
+  const nested = nestedParent.querySelector<HTMLElement>('.gssc-header__submenu--nested')!;
+  nestedParent.getBoundingClientRect = () =>
+    ({
+      x: window.innerWidth - 200,
+      y: 80,
+      left: window.innerWidth - 200,
+      top: 80,
+      right: window.innerWidth - 40,
+      bottom: 112,
+      width: 160,
+      height: 32,
+      toJSON: () => ({}),
+    }) as DOMRect;
+  Object.defineProperty(nested, 'offsetWidth', { configurable: true, value: 176 });
+  Object.defineProperty(nested, 'scrollWidth', { configurable: true, value: 176 });
+  nestedParent.dispatchEvent(new MouseEvent('mouseenter', { bubbles: true }));
+  fixture.detectChanges();
+  await fixture.whenStable();
+  expect(nested.classList.contains('end-full')).toBe(true);
+  expect(nested.classList.contains('start-full')).toBe(false);
 
   header.setChromeTierForTest('mid');
   fixture.detectChanges();

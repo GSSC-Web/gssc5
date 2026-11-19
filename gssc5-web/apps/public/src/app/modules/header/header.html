@@ -132,7 +132,11 @@
       @for (item of navItems(); track item.cuid; let last = $last) {
         <!-- @relation(GSSC-PLLR-332, GSSC-PLLR-333, GSSC-PLLR-334, scope=range_start, role=Implementation) -->
         <div class="gssc-header__nav-item group relative flex min-w-0 justify-center">
-          <div class="gssc-header__nav-cluster relative inline-flex flex-col items-stretch">
+          <div
+            class="gssc-header__nav-cluster relative inline-flex flex-col items-stretch"
+            (mouseenter)="onTopSubmenuPlace($event, item)"
+            (focusin)="onTopSubmenuPlace($event, item)"
+          >
             <a
               class="gssc-header__nav-link inline-flex items-center whitespace-nowrap px-2 py-2 font-sans text-sm text-gssc-dark-green no-underline hover:text-gssc-dark-brown group-hover:text-gssc-dark-brown group-focus-within:text-gssc-dark-brown"
               [routerLink]="item.path"
@@ -140,13 +144,18 @@
               {{ item.label }}
             </a>
             @if (hasChildren(item)) {
-              <!-- @relation(GSSC-PLLR-335, GSSC-PLLR-336, GSSC-PLLR-337, scope=range_start, role=Implementation) -->
+              <!-- @relation(GSSC-PLLR-335, GSSC-PLLR-337, scope=range_start, role=Implementation) -->
+              <!-- Placement flip bindings: GSSC-PLLR-336 Implementation in header.ts -->
               <div
-                class="gssc-header__submenu invisible absolute start-0 top-full z-20 min-w-44 flex-col border border-gssc-gray bg-gssc-white py-1 opacity-0 shadow-sm group-hover:visible group-hover:flex group-hover:opacity-100 group-focus-within:visible group-focus-within:flex group-focus-within:opacity-100"
+                class="gssc-header__submenu invisible absolute top-full z-20 min-w-44 flex-col border border-gssc-gray bg-gssc-white py-1 opacity-0 shadow-sm group-hover:visible group-hover:flex group-hover:opacity-100 group-focus-within:visible group-focus-within:flex group-focus-within:opacity-100"
+                [class.start-0]="!isTopSubmenuAlignEnd(item.cuid)"
+                [class.end-0]="isTopSubmenuAlignEnd(item.cuid)"
               >
                 @for (child of item.children; track child.cuid) {
                   <div
                     class="gssc-header__submenu-item group/sub relative"
+                    (mouseenter)="onNestedSubmenuPlace($event, child)"
+                    (focusin)="onNestedSubmenuPlace($event, child)"
                     (mousemove)="onNestedBridgeMove($event, child)"
                     (mouseleave)="onNestedBridgeLeave(child)"
                   >
@@ -159,7 +168,9 @@
                     @if (hasChildren(child)) {
                       <!-- @relation(GSSC-PHLR-154, GSSC-PLLR-396, GSSC-PLLR-397, GSSC-PLLR-398, scope=range_start, role=Implementation) -->
                       <div
-                        class="gssc-header__submenu gssc-header__submenu--nested invisible absolute start-full top-0 z-30 min-w-44 flex-col border border-gssc-gray bg-gssc-white py-1 opacity-0 shadow-sm group-hover/sub:visible group-hover/sub:flex group-hover/sub:opacity-100 group-focus-within/sub:visible group-focus-within/sub:flex group-focus-within/sub:opacity-100"
+                        class="gssc-header__submenu gssc-header__submenu--nested invisible absolute top-0 z-30 min-w-44 flex-col border border-gssc-gray bg-gssc-white py-1 opacity-0 shadow-sm group-hover/sub:visible group-hover/sub:flex group-hover/sub:opacity-100 group-focus-within/sub:visible group-focus-within/sub:flex group-focus-within/sub:opacity-100"
+                        [class.start-full]="!isNestedOpenTowardStart(child.cuid)"
+                        [class.end-full]="isNestedOpenTowardStart(child.cuid)"
                       >
                         @for (grand of child.children; track grand.cuid) {
                           <a
@@ -186,7 +197,7 @@
                   </div>
                 }
               </div>
-              <!-- @relation(GSSC-PLLR-335, GSSC-PLLR-336, GSSC-PLLR-337, scope=range_end, role=Implementation) -->
+              <!-- @relation(GSSC-PLLR-335, GSSC-PLLR-337, scope=range_end, role=Implementation) -->
             }
           </div>
         </div>

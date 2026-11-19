@@ -1102,16 +1102,17 @@ RELATIONS:
 UID: GSSC-MLLR-448
 TITLE: Syntactic
 STATEMENT: >>>
-In wide chrome, a Navigation Submenu SHALL open as an overlay under its parent Navigation Item on hover or keyboard focus within that item, with the overlay's start edge aligned to the start edge of that parent item's label, and in mid and narrow chrome, a Navigation Submenu SHALL expand and collapse in place within the overlay Navigation Menu.
+In wide chrome, a Navigation Submenu SHALL open as an overlay under its parent Navigation Item on hover or keyboard focus within that item, with the overlay's start edge aligned to the start edge of that parent item's label when that placement keeps the overlay inside the viewport, otherwise with the overlay's end edge aligned to the end edge of that parent item's label so the overlay stays inside the viewport; a nested Navigation Submenu in wide chrome SHALL open beside its parent Navigation Item toward the end when that placement keeps the overlay inside the viewport, otherwise toward the start so the overlay stays inside the viewport; and in mid and narrow chrome, a Navigation Submenu SHALL expand and collapse in place within the overlay Navigation Menu.
 <<<
 RATIONALE: >>>
-Wide chrome uses hover dropdown overlays whose start edge must track the parent label rather than the equal-grid cell edge. Mid and narrow chrome use accordion expansion inside the menu overlay.
+Wide chrome uses hover dropdown overlays whose preferred start edge tracks the parent label rather than the equal-grid cell edge, and flips to end-edge alignment or a startward nested flyout when needed so trailing items stay on-screen. Mid and narrow chrome use accordion expansion inside the menu overlay.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: >>>
 GSSC5-107
 GSSC5-137
+GSSC5-143
 <<<
 REVIEW_STATUS: Approved
 RELATIONS:
