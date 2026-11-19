@@ -4,6 +4,7 @@ import { Elysia } from "elysia";
 
 import { announcement } from "./content/announcement";
 import { events } from "./content/events";
+import { newsletterFiles } from "./content/newsletter-files";
 import { newsletters } from "./content/newsletters";
 import { publications } from "./content/publications";
 import { researchTools } from "./content/research-tools";
@@ -57,6 +58,7 @@ export const app = new Elysia({ normalize: false })
   .use(researchTools)
   .use(publications)
   .use(newsletters)
+  .use(newsletterFiles)
   .use(siteTrees)
   .use(files)
   .use(search)
@@ -81,6 +83,7 @@ export const app = new Elysia({ normalize: false })
         "research-tools",
         "publications",
         "newsletters",
+        "newsletter-files",
         "site-trees",
         "files",
         "kvs",

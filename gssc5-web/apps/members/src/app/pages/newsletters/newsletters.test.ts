@@ -45,6 +45,7 @@ async function setupNewsletters(options?: {
   session: MemberSession;
   createdBodies: unknown[];
   patched: Array<{ cuid: string; body: unknown }>;
+  uploaded: Array<{ cuid: string; fileName: string }>;
   restore: () => void;
 }> {
   const originals = {
@@ -56,6 +57,7 @@ async function setupNewsletters(options?: {
     get: newslettersApi.get,
     create: newslettersApi.create,
     update: newslettersApi.update,
+    uploadFile: newslettersApi.uploadFile,
   };
 
   try {
@@ -73,6 +75,7 @@ async function setupNewsletters(options?: {
   const list = options?.list ?? [sampleEntry];
   const createdBodies: unknown[] = [];
   const patched: Array<{ cuid: string; body: unknown }> = [];
+  const uploaded: Array<{ cuid: string; fileName: string }> = [];
 
   memberSessionApi.challenge = (async () =>
     okResponse({ status: 'valid', cuid: viewer.cuid })) as typeof memberSessionApi.challenge;
@@ -111,6 +114,10 @@ async function setupNewsletters(options?: {
       keywords: body.keywords ?? sampleEntry.keywords,
     });
   }) as typeof newslettersApi.update;
+  newslettersApi.uploadFile = (async (file, newsletterCuid) => {
+    uploaded.push({ cuid: newsletterCuid, fileName: file.name });
+    return { data: { cuid: newsletterCuid, path: `newsletters/${newsletterCuid}` }, error: null };
+  }) as typeof newslettersApi.uploadFile;
 
   TestBed.resetTestingModule();
   const fixture = await setupMembersComponent(NewslettersPage, {
@@ -129,6 +136,7 @@ async function setupNewsletters(options?: {
     session,
     createdBodies,
     patched,
+    uploaded,
     restore: () => {
       memberSessionApi.challenge = originals.challenge;
       memberSessionApi.getUser = originals.getUser;
@@ -138,8 +146,48 @@ async function setupNewsletters(options?: {
       newslettersApi.get = originals.get;
       newslettersApi.create = originals.create;
       newslettersApi.update = originals.update;
+      newslettersApi.uploadFile = originals.uploadFile;
     },
   };
+}
+
+async function chooseIssueFile(
+  fixture: { detectChanges: () => void; whenStable: () => Promise<unknown> },
+  root: HTMLElement,
+  page: NewslettersPage,
+  fileName = 'issue.pdf',
+): Promise<void> {
+  const file = new File(['%PDF'], fileName, { type: 'application/pdf' });
+  page.pendingFile = file;
+  page.fileLabel.set(fileName);
+  const input = root.querySelector<HTMLInputElement>('#gssc-newsletter-issue-file');
+  if (input) {
+    Object.defineProperty(input, 'files', {
+      configurable: true,
+      value: {
+        0: file,
+        length: 1,
+        item: (index: number) => (index === 0 ? file : null),
+      },
+    });
+    input.dispatchEvent(new Event('change', { bubbles: true }));
+  }
+  fixture.detectChanges();
+  await fixture.whenStable();
+}
+
+/** Flush async Save (create + upload) beyond a single whenStable. */
+async function settleEditorSave(
+  fixture: { detectChanges: () => void; whenStable: () => Promise<unknown> },
+  page: NewslettersPage,
+  expectCuid: string,
+): Promise<void> {
+  for (let i = 0; i < 20; i++) {
+    fixture.detectChanges();
+    await fixture.whenStable();
+    await Promise.resolve();
+    if (page.selectedCuid() === expectCuid) return;
+  }
 }
 
 function fieldControl(root: HTMLElement, controlId: string): HTMLInputElement {
@@ -217,7 +265,7 @@ test('GSSC-MLLR-354 Semantic', async () => {
     fixture.detectChanges();
     expect(page.selectedCuid()).toBe('nl_1');
     expect(fieldControl(root, 'gssc-newsletter-volume').value).toBe('42');
-    expect(fieldControl(root, 'gssc-newsletter-file-path').value).toBe('file_abc');
+    expect(page.fileLabel()).toContain('Current issue file');
   } finally {
     restore();
   }
@@ -273,7 +321,7 @@ test('GSSC-MLLR-357 Semantic', async () => {
     await fixture.whenStable();
     expect(page.selectedCuid()).toBeNull();
     expect(fieldControl(root, 'gssc-newsletter-volume').value).toBe('');
-    expect(fieldControl(root, 'gssc-newsletter-file-path').value).toBe('');
+    expect(page.fileLabel()).toBe('No file chosen');
   } finally {
     restore();
   }
@@ -317,7 +365,7 @@ test('GSSC-MLLR-360 Semantic', async () => {
     expect(root.querySelector('#gssc-newsletter-number')).not.toBeNull();
     expect(root.querySelector('#gssc-newsletter-month')).not.toBeNull();
     expect(root.querySelector('#gssc-newsletter-year')).not.toBeNull();
-    expect(root.querySelector('#gssc-newsletter-file-path')).not.toBeNull();
+    expect(root.querySelector('#gssc-newsletter-issue-file')).not.toBeNull();
     expect(root.querySelector('#gssc-newsletter-keywords')).not.toBeNull();
     expect(root.querySelector('.gssc-editor__save')).not.toBeNull();
   } finally {
@@ -343,7 +391,7 @@ test('GSSC-MLLR-361 Syntactic', async () => {
 test('GSSC-MLLR-362 Lexical', async () => {
   const { root, restore } = await setupNewsletters();
   try {
-    expect(root.querySelectorAll('gssc-form-text-field').length).toBe(6);
+    expect(root.querySelectorAll('gssc-form-text-field').length).toBe(5);
     expect(root.querySelector('.gssc-form-text-field')).not.toBeNull();
   } finally {
     restore();
@@ -438,26 +486,28 @@ test('GSSC-MLLR-367 Newsletter Editor Authorization', async () => {
 
 // @relation(GSSC-MLLR-368, scope=range_start, role=Test)
 test('GSSC-MLLR-368 Newsletter Creation Persist', async () => {
-  const { root, fixture, page, createdBodies, restore } = await setupNewsletters({ list: [] });
+  const { root, fixture, page, createdBodies, uploaded, restore } = await setupNewsletters({
+    list: [],
+  });
   try {
     await typeField(fixture, root, 'gssc-newsletter-volume', '7');
     await typeField(fixture, root, 'gssc-newsletter-number', '1');
     await typeField(fixture, root, 'gssc-newsletter-month', '5');
     await typeField(fixture, root, 'gssc-newsletter-year', '2025');
-    await typeField(fixture, root, 'gssc-newsletter-file-path', 'file_new');
+    await chooseIssueFile(fixture, root, page, 'file_new.pdf');
     await typeField(fixture, root, 'gssc-newsletter-keywords', 'alpha, beta');
     root.querySelector<HTMLButtonElement>('.gssc-editor__save')!.click();
-    fixture.detectChanges();
-    await fixture.whenStable();
+    await settleEditorSave(fixture, page, 'nl_new');
     expect(createdBodies.length).toBe(1);
     expect(createdBodies[0]).toEqual({
       volume: 7,
       number: 1,
       month: 5,
       year: 2025,
-      filePath: 'file_new',
+      filePath: 'pending',
       keywords: ['alpha', 'beta'],
     });
+    expect(uploaded).toEqual([{ cuid: 'nl_new', fileName: 'file_new.pdf' }]);
     expect(page.selectedCuid()).toBe('nl_new');
   } finally {
     restore();
@@ -467,19 +517,21 @@ test('GSSC-MLLR-368 Newsletter Creation Persist', async () => {
 
 // @relation(GSSC-MLLR-369, scope=range_start, role=Test)
 test('GSSC-MLLR-369 Newsletter Publication Persist', async () => {
-  const { root, fixture, createdBodies, restore } = await setupNewsletters({ list: [] });
+  const { root, fixture, page, createdBodies, uploaded, restore } = await setupNewsletters({
+    list: [],
+  });
   try {
     await typeField(fixture, root, 'gssc-newsletter-volume', '1');
     await typeField(fixture, root, 'gssc-newsletter-number', '1');
     await typeField(fixture, root, 'gssc-newsletter-month', '1');
     await typeField(fixture, root, 'gssc-newsletter-year', '2026');
-    await typeField(fixture, root, 'gssc-newsletter-file-path', 'file_pub');
+    await chooseIssueFile(fixture, root, page, 'file_pub.pdf');
     await typeField(fixture, root, 'gssc-newsletter-keywords', '');
     root.querySelector<HTMLButtonElement>('.gssc-editor__save')!.click();
-    fixture.detectChanges();
-    await fixture.whenStable();
-    // Successful create body is the public-catalog persist (no draft flag).
-    expect(createdBodies[0]).toMatchObject({ filePath: 'file_pub', keywords: [] });
+    await settleEditorSave(fixture, page, 'nl_new');
+    // Successful create + upload is the public-catalog persist (no draft flag).
+    expect(createdBodies[0]).toMatchObject({ filePath: 'pending', keywords: [] });
+    expect(uploaded).toEqual([{ cuid: 'nl_new', fileName: 'file_pub.pdf' }]);
   } finally {
     restore();
   }
@@ -543,7 +595,7 @@ test('GSSC-MLLR-372 Newsletter Editor Cancel', async () => {
 
 // @relation(GSSC-MLLR-373, scope=range_start, role=Test)
 test('GSSC-MLLR-373 Newsletter Catalog Selection Load', async () => {
-  const { root, fixture, restore } = await setupNewsletters();
+  const { root, fixture, page, restore } = await setupNewsletters();
   try {
     root.querySelector<HTMLButtonElement>('.gssc-newsletters-catalog__entry')!.click();
     fixture.detectChanges();
@@ -553,13 +605,59 @@ test('GSSC-MLLR-373 Newsletter Catalog Selection Load', async () => {
     expect(fieldControl(root, 'gssc-newsletter-number').value).toBe('3');
     expect(fieldControl(root, 'gssc-newsletter-month').value).toBe('11');
     expect(fieldControl(root, 'gssc-newsletter-year').value).toBe('2026');
-    expect(fieldControl(root, 'gssc-newsletter-file-path').value).toBe('file_abc');
+    expect(page.fileLabel()).toContain('Current issue file');
+    expect(root.querySelector('#gssc-newsletter-issue-file')).not.toBeNull();
     expect(fieldControl(root, 'gssc-newsletter-keywords').value).toBe('geology, newsletter');
   } finally {
     restore();
   }
 });
 // @relation(GSSC-MLLR-373, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-693, GSSC-MLLR-694, GSSC-MLLR-695, scope=range_start, role=Test)
+test('GSSC-MLLR-693..689 Newsletter Issue File upload control', async () => {
+  const { root, restore } = await setupNewsletters({ list: [] });
+  try {
+    const field = root.querySelector('.gssc-newsletters-issue-file')!;
+    expect(field).not.toBeNull();
+    expect(root.querySelector('.gssc-newsletters-issue-file__label')!.textContent).toContain(
+      'Issue File',
+    );
+    expect(root.querySelector('.gssc-newsletters-issue-file__choose')!.textContent).toContain(
+      'Choose File',
+    );
+    expect(root.querySelector<HTMLInputElement>('#gssc-newsletter-issue-file')!.type).toBe('file');
+    expect(
+      root.querySelector('#gssc-newsletter-issue-file')!.classList.contains('sr-only'),
+    ).toBe(true);
+    expect(root.querySelector('.gssc-newsletters-issue-file__name')).not.toBeNull();
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-693, GSSC-MLLR-694, GSSC-MLLR-695, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-696, scope=range_start, role=Test)
+test('GSSC-MLLR-696 Newsletter Issue File upload on edit Save', async () => {
+  const { root, fixture, page, uploaded, restore } = await setupNewsletters();
+  try {
+    root.querySelector<HTMLButtonElement>('.gssc-newsletters-catalog__entry')!.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+    await chooseIssueFile(fixture, root, page, 'replacement.pdf');
+    root.querySelector<HTMLButtonElement>('.gssc-editor__save')!.click();
+    for (let i = 0; i < 20 && uploaded.length === 0; i++) {
+      fixture.detectChanges();
+      await fixture.whenStable();
+      await Promise.resolve();
+    }
+    expect(uploaded).toEqual([{ cuid: 'nl_1', fileName: 'replacement.pdf' }]);
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-696, scope=range_end, role=Test)
 
 test('newsletters-api helpers', () => {
   expect(newsletterLabel(sampleEntry)).toBe('Vol. 42 No. 3 · 11/2026');

@@ -21,6 +21,37 @@ export type NewsletterFields = {
   keywords: string[];
 };
 
+/** Metadata fields without requiring a file path string from the editor. */
+export type NewsletterMetaFields = {
+  volume: number;
+  number: number;
+  month: number;
+  year: number;
+  keywords: string[];
+};
+
+export type NewsletterFileUploadResult = {
+  cuid: string;
+  path: string;
+};
+
+type NewsletterFilePostResult = {
+  data: NewsletterFileUploadResult | null;
+  error: { status: number; value: unknown } | null;
+  status?: number;
+};
+
+/**
+ * Treaty POST /newsletter-files. Mutable so unit tests can stub without fighting Eden proxies.
+ */
+export const newsletterFilesTreaty = {
+  post: (body: {
+    file: File;
+    newsletterCuid: string;
+  }): Promise<NewsletterFilePostResult> =>
+    backend['newsletter-files'].post(body) as Promise<NewsletterFilePostResult>,
+};
+
 /**
  * Treaty calls for newsletters catalog mutations (GSSC5-96).
  * Mutable object so unit tests can stub without fighting Eden proxies.
@@ -31,6 +62,26 @@ export const newslettersApi = {
   create: (body: NewsletterFields) => backend.newsletters.post(body),
   update: (cuid: string, body: Partial<NewsletterFields>) =>
     backend.newsletters({ cuid }).patch(body),
+  uploadFile: async (
+    file: File,
+    newsletterCuid: string,
+  ): Promise<{
+    data: NewsletterFileUploadResult | null;
+    error: { status: number; value: unknown } | null;
+  }> => {
+    // Eden Treaty multipart: File fields become FormData automatically.
+    const result = await newsletterFilesTreaty.post({ file, newsletterCuid });
+    if (result.error) {
+      return {
+        data: null,
+        error: { status: result.error.status, value: result.error.value },
+      };
+    }
+    return {
+      data: result.data ?? null,
+      error: null,
+    };
+  },
 };
 
 /** Display label for a catalog row. */

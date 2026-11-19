@@ -7902,14 +7902,17 @@ TITLE: Newsletter Editor
 UID: GSSC-MLLR-360
 TITLE: Semantic
 STATEMENT: >>>
-The Newsletter Editor SHALL host the Generic Editor with volume, number, month, year, file path, and keywords fields for the selected or new newsletter, accepting those values from the authorized member and sending create or modify outputs to the Unified Backend on Save.
+The Newsletter Editor SHALL host the Generic Editor with volume, number, month, year, issue file upload, and keywords fields for the selected or new newsletter, accepting those values from the authorized member and sending create or modify outputs to the Unified Backend on Save.
 <<<
 RATIONALE: >>>
-Generic Editor supplies exclusive edit, Save, and Cancel; newsletter fields are the society catalog identity and content pointer.
+Generic Editor supplies exclusive edit, Save, and Cancel; newsletter fields are the society catalog identity and issue file pointer.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-96
+CHANGE_DRIVER: >>>
+GSSC5-96
+GSSC5-142
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -7923,6 +7926,9 @@ RELATIONS:
   ROLE: Refines
 - TYPE: Parent
   VALUE: GSSC-MHLR-24
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-112
   ROLE: Refines
 
 [REQUIREMENT]
@@ -7950,14 +7956,17 @@ RELATIONS:
 UID: GSSC-MLLR-362
 TITLE: Lexical
 STATEMENT: >>>
-The Newsletter Editor SHALL use shared Member Frontend form-field primitives for its volume, number, month, year, file path, and keywords fields inside the Generic Editor chrome.
+The Newsletter Editor SHALL use shared Member Frontend form-field primitives for its volume, number, month, year, and keywords fields inside the Generic Editor chrome, and SHALL present the issue file as a file upload control matching Member Frontend file-picker chrome.
 <<<
 RATIONALE: >>>
-Reusing form primitives keeps newsletter fields consistent with other member forms.
+Reusing form primitives keeps newsletter text fields consistent with other member forms; the issue file uses the same upload chrome pattern as account photo selection.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-96
+CHANGE_DRIVER: >>>
+GSSC5-96
+GSSC5-142
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -7965,6 +7974,9 @@ RELATIONS:
   ROLE: Refines
 - TYPE: Parent
   VALUE: GSSC-MHLR-24
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-112
   ROLE: Refines
 
 [[/SECTION]]
@@ -8082,18 +8094,24 @@ RELATIONS:
 UID: GSSC-MLLR-368
 TITLE: Newsletter Creation Persist
 STATEMENT: >>>
-When Save succeeds on the Newsletter Editor for a new newsletter, the Member Frontend SHALL create that newsletter on the Unified Backend using the editor volume, number, month, year, file path, and keywords values.
+When Save succeeds on the Newsletter Editor for a new newsletter, the Member Frontend SHALL create that newsletter on the Unified Backend using the editor volume, number, month, year, and keywords values, and SHALL upload the chosen issue file to the Unified Backend newsletters store for that newsletter's cuid.
 <<<
 RATIONALE: >>>
-Create without programming knowledge means the Generic Editor Save writes a new catalog entry through the Unified Backend.
+Create without programming knowledge means the Generic Editor Save writes a new catalog entry and stores the issue bytes through the Unified Backend.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-96
+CHANGE_DRIVER: >>>
+GSSC5-96
+GSSC5-142
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-49
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-112
   ROLE: Refines
 
 [REQUIREMENT]
@@ -8175,18 +8193,24 @@ RELATIONS:
 UID: GSSC-MLLR-373
 TITLE: Newsletter Catalog Selection Load
 STATEMENT: >>>
-When an authorized member selects a Newsletter Catalog entry, the Member Frontend SHALL load that newsletter's volume, number, month, year, file path, and keywords into the Newsletter Editor.
+When an authorized member selects a Newsletter Catalog entry, the Member Frontend SHALL load that newsletter's volume, number, month, year, and keywords into the Newsletter Editor and SHALL show whether an issue file is already stored for that newsletter.
 <<<
 RATIONALE: >>>
-Selection must populate the editor before modification.
+Selection must populate the editor before modification without asking the member to type a storage path.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-96
+CHANGE_DRIVER: >>>
+GSSC5-96
+GSSC5-142
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-51
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-112
   ROLE: Refines
 
 [[/SECTION]]
@@ -12160,6 +12184,96 @@ REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-111
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-NEWSLETTER-ISSUE-FILE
+TITLE: Newsletter Issue File Upload
+
+[[SECTION]]
+UID: GSSC-MLLR-NEWSLETTER-ISSUE-FILE-CONTROL
+TITLE: Newsletter Issue File Control
+
+[REQUIREMENT]
+UID: GSSC-MLLR-693
+TITLE: Semantic
+STATEMENT: >>>
+The Newsletter Issue File Control SHALL accept a chosen issue file from an authorized member for the selected or new newsletter and SHALL present the chosen file name or an indication that a stored issue file already exists.
+<<<
+RATIONALE: >>>
+Editors attach issue bytes through a file picker rather than typing a storage path.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-142
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-112
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-694
+TITLE: Syntactic
+STATEMENT: >>>
+The Newsletter Issue File Control SHALL sit in the Newsletter Editor field stack with the volume, number, month, year, and keywords fields, stretching to the Generic Editor field area width.
+<<<
+RATIONALE: >>>
+Keeping the upload control in the same field stack preserves one create/modify surface.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-142
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-112
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-695
+TITLE: Lexical
+STATEMENT: >>>
+The Newsletter Issue File Control SHALL use the Member Frontend sans-serif typeface, dark-green theme border and label text, light-green theme choose-file control background, and dark-brown theme file-name text.
+<<<
+RATIONALE: >>>
+Upload chrome matches account photo file-picker styling on the Account Page.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-142
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-112
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-NEWSLETTER-ISSUE-FILE-UPLOAD
+TITLE: Newsletter Issue File Upload Persist
+
+[REQUIREMENT]
+UID: GSSC-MLLR-696
+TITLE: Newsletter Issue File Upload Persist
+STATEMENT: >>>
+When Save succeeds on the Newsletter Editor with a newly chosen issue file, the Member Frontend SHALL upload that file to the Unified Backend newsletters store for the newsletter cuid and, on edit, SHALL replace the prior issue file for that newsletter.
+<<<
+RATIONALE: >>>
+Issue bytes are stored under the newsletter cuid; a replacement must not leave the previous file behind.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-142
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-112
   ROLE: Refines
 
 [[/SECTION]]

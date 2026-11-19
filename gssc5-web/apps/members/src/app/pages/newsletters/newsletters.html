@@ -114,14 +114,37 @@
         controlId="gssc-newsletter-year"
         [required]="true"
       />
-      <gssc-form-text-field
-        label="File Path"
-        name="filePath"
-        [(value)]="filePath"
-        [enabled]="canEdit()"
-        controlId="gssc-newsletter-file-path"
-        [required]="true"
-      />
+      <!-- @relation(GSSC-MLLR-693, GSSC-MLLR-694, GSSC-MLLR-695, scope=range_start, role=Implementation) -->
+      <div
+        class="gssc-field gssc-newsletters-issue-file relative flex min-w-0 flex-col rounded-md border border-gssc-dark-green bg-gssc-white font-sans text-gssc-dark-green"
+      >
+        <span
+          class="gssc-newsletters-issue-file__label absolute -top-2 start-2 bg-inherit px-1 text-xs font-extralight italic text-gssc-dark-green"
+        >
+          Issue File&nbsp;*
+        </span>
+        <input
+          id="gssc-newsletter-issue-file"
+          class="gssc-newsletters-issue-file__input sr-only"
+          name="issueFile"
+          type="file"
+          accept="application/pdf,.pdf"
+          [disabled]="!canEdit()"
+          (change)="onIssueFileSelected($event)"
+        />
+        <div class="flex min-w-0 flex-wrap items-center gap-3 px-2 py-2">
+          <label
+            for="gssc-newsletter-issue-file"
+            class="gssc-newsletters-issue-file__choose inline-flex w-fit cursor-pointer items-center justify-center rounded-md border border-gssc-dark-green bg-gssc-light-green px-3 py-1.5 font-sans text-sm text-gssc-dark-green hover:bg-gssc-gray"
+          >
+            Choose File
+          </label>
+          <span class="gssc-newsletters-issue-file__name truncate font-sans text-sm text-gssc-dark-brown">
+            {{ fileLabel() }}
+          </span>
+        </div>
+      </div>
+      <!-- @relation(GSSC-MLLR-693, GSSC-MLLR-694, GSSC-MLLR-695, scope=range_end, role=Implementation) -->
       <gssc-form-text-field
         label="Keywords"
         name="keywords"
