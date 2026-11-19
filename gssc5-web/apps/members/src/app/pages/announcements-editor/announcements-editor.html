@@ -1,10 +1,18 @@
-<!-- @relation(GSSC-MLLR-291, GSSC-MLLR-292, GSSC-MLLR-293, scope=range_start, role=Implementation) -->
+<!-- @relation(GSSC-MLLR-291, GSSC-MLLR-292, GSSC-MLLR-293, GSSC-MLLR-687, GSSC-MLLR-688, GSSC-MLLR-689, scope=range_start, role=Implementation) -->
 <section
-  class="gssc-announcements-editor-page mx-auto flex w-full max-w-3xl flex-col gap-4 bg-gssc-white font-sans"
+  class="gssc-announcements-editor-page mx-auto flex w-full max-w-3xl flex-col gap-5 bg-gssc-white font-sans text-gssc-dark-green"
 >
-  <h1 class="gssc-announcements-editor-page__title m-0 text-2xl font-medium text-gssc-dark-green sm:text-3xl">
-    Announcements
-  </h1>
+  <!-- @relation(GSSC-MLLR-687, GSSC-MLLR-688, GSSC-MLLR-689, scope=range_start, role=Implementation) -->
+  <header class="gssc-announcements-editor-page__intro flex flex-col gap-1">
+    <h1 class="gssc-announcements-editor-page__title m-0 text-[1.75em] font-semibold text-gssc-dark-green">
+      Announcements
+    </h1>
+    <p class="gssc-announcements-editor-page__lead m-0 text-sm text-gssc-dark-brown">
+      Browse announcements, create a new one or select an existing announcement, and edit its contents
+      without programming.
+    </p>
+  </header>
+  <!-- @relation(GSSC-MLLR-687, GSSC-MLLR-688, GSSC-MLLR-689, scope=range_end, role=Implementation) -->
 
   <!-- @relation(GSSC-MLLR-294, GSSC-MLLR-295, GSSC-MLLR-296, scope=range_start, role=Implementation) -->
   <div
@@ -93,6 +101,7 @@
     <!-- @relation(GSSC-MLLR-297, GSSC-MLLR-298, GSSC-MLLR-299, scope=range_end, role=Implementation) -->
   }
 
+  <!-- @relation(GSSC-MLLR-690, GSSC-MLLR-691, GSSC-MLLR-692, scope=range_start, role=Implementation) -->
   <p
     class="gssc-announcements-editor-page__status m-0 font-sans text-sm text-gssc-dark-brown"
     data-slot="announcements-editor-status"
@@ -100,5 +109,6 @@
   >
     {{ statusMessage() }}
   </p>
+  <!-- @relation(GSSC-MLLR-690, GSSC-MLLR-691, GSSC-MLLR-692, scope=range_end, role=Implementation) -->
 </section>
-<!-- @relation(GSSC-MLLR-291, GSSC-MLLR-292, GSSC-MLLR-293, scope=range_end, role=Implementation) -->
+<!-- @relation(GSSC-MLLR-291, GSSC-MLLR-292, GSSC-MLLR-293, GSSC-MLLR-687, GSSC-MLLR-688, GSSC-MLLR-689, scope=range_end, role=Implementation) -->

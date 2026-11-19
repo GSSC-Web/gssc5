@@ -632,3 +632,21 @@ test('GSSC-MLLR-346 Event Exclusive Resource Identity', async () => {
   }
 });
 // @relation(GSSC-MLLR-346, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-687, GSSC-MLLR-690, scope=range_start, role=Test)
+test('GSSC-MLLR-687/690 Events intro and idle disclaimer', async () => {
+  const { root, page, restore } = await setupEvents({ catalog: [] });
+  try {
+    expect(root.querySelector('.gssc-events-page__lead')?.textContent).toContain('Browse events');
+    expect(page.statusMessage()).toBe('Select an event or create a new one.');
+    const title = root.querySelector('.gssc-events-page__title')!;
+    expect(title.className).toContain('text-[1.75em]');
+    expect(title.className).toContain('font-semibold');
+    expect(root.querySelector('[data-slot="events-status"]')?.className).toContain(
+      'text-gssc-dark-brown',
+    );
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-687, GSSC-MLLR-690, scope=range_end, role=Test)
