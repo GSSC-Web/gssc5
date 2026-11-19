@@ -80,6 +80,8 @@ test('GSSC-PLLR-30 Lexical', async () => {
   const footerPin = css.match(/html\.dark\s+\.gssc-footer\s*\{([^}]*)\}/);
   expect(footerPin?.[1]).toMatch(/--gssc-black:\s*#000000/);
   expect(footerPin?.[1]).toMatch(/--gssc-white:\s*#ffffff/);
+  expect(footerPin?.[1]).toMatch(/--color-gssc-black:\s*#000000/);
+  expect(footerPin?.[1]).toMatch(/--color-gssc-white:\s*#ffffff/);
 });
 // @relation(GSSC-PLLR-30, scope=range_end, role=Test)
 

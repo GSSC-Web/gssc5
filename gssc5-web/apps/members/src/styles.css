@@ -34,7 +34,10 @@
 /*
  * Dark mode (GSSC5-125): invert organization surface/text tokens so existing
  * gssc-* utilities follow the visitor preference without a second palette.
- * Footer chrome keeps black/white uninverted (GSSC5-136).
+ * Footer chrome keeps black/white uninverted (GSSC5-136 / GSSC-180).
+ * Pin Tailwind @theme color tokens (--color-gssc-*); re-pinning only
+ * --gssc-black/--gssc-white does not override utilities that already
+ * resolved --color-gssc-* under html.dark.
  */
 /* @relation(GSSC-MLLR-655, scope=range_start, role=Implementation) */
 html.dark {
@@ -54,6 +57,8 @@ html.dark {
 html.dark .gssc-footer {
   --gssc-black: #000000;
   --gssc-white: #ffffff;
+  --color-gssc-black: #000000;
+  --color-gssc-white: #ffffff;
 }
 /* @relation(GSSC-MLLR-655, scope=range_end, role=Implementation) */
 
