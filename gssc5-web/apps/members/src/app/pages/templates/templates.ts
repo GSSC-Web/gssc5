@@ -16,6 +16,9 @@ import {
 export const CONTENT_PERMISSION_OPTIONS = [
   { id: 'member', bit: 0o1, label: 'Regular member' },
   { id: 'userMod', bit: 0o2, label: 'User moderator' },
+  { id: 'toolEditor', bit: 0o4, label: 'Tool editor' },
+  { id: 'publicationEditor', bit: 0o10, label: 'Publication editor' },
+  { id: 'newsletterEditor', bit: 0o20, label: 'Newsletter editor' },
 ] as const;
 
 export type ContentPermissionId = (typeof CONTENT_PERMISSION_OPTIONS)[number]['id'];

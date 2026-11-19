@@ -616,18 +616,53 @@ test('GSSC-MLLR-559 Semantic', async () => {
       ),
     ).toBeTruthy();
 
+    const availableSelect = createField.querySelector(
+      '[data-slot="templates-permission-pick"]',
+    ) as HTMLSelectElement;
+    const availableLabels = Array.from(availableSelect.options).map((opt) =>
+      opt.textContent?.trim(),
+    );
+    for (const label of [
+      'User moderator',
+      'Tool editor',
+      'Publication editor',
+      'Newsletter editor',
+    ]) {
+      expect(availableLabels).toContain(label);
+    }
+
     await removeNamedPermission(ctx.fixture, ctx.root, 'create', 'member');
     expect(ctx.page.createPerm()).toBe(0);
     expect(createField.textContent).toContain('None');
+
+    const emptySelect = createField.querySelector(
+      '[data-slot="templates-permission-pick"]',
+    ) as HTMLSelectElement;
+    const emptyLabels = Array.from(emptySelect.options).map((opt) =>
+      opt.textContent?.trim(),
+    );
+    for (const label of [
+      'Regular member',
+      'User moderator',
+      'Tool editor',
+      'Publication editor',
+      'Newsletter editor',
+    ]) {
+      expect(emptyLabels).toContain(label);
+    }
 
     await addNamedPermission(ctx.fixture, ctx.root, 'create', 'userMod');
     expect(ctx.page.createPerm()).toBe(2);
     expect(createField.textContent).toContain('User moderator');
 
+    await addNamedPermission(ctx.fixture, ctx.root, 'create', 'toolEditor');
+    expect(ctx.page.createPerm()).toBe(0o2 | 0o4);
+    expect(createField.textContent).toContain('Tool editor');
+
     await ctx.page.onSaved();
     await settle(ctx.fixture);
     expect(ctx.updateCalls.find((call) => call.cuid === 'tpl_1')?.body).toMatchObject({
-      createPerm: 2,
+      createPerm: 0o2 | 0o4,
       modifyPerm: 2,
       deletePerm: 3,
     });

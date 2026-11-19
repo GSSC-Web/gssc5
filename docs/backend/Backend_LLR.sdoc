@@ -9043,14 +9043,17 @@ RELATIONS:
 UID: GSSC-BLLR-342
 TITLE: Content Permission Bit Fields
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL interpret each non-administrator create, modify, and delete permission integer with bit 0 set for a regular member and bit 1 set for a user moderator.
+The GSSC Website Unified Backend SHALL interpret each non-administrator create, modify, and delete permission integer with bit 0 set for a regular member, bit 1 set for a user moderator, bit 2 set for a tool editor, bit 3 set for a publication editor, and bit 4 set for a newsletter editor.
 <<<
 RATIONALE: >>>
-Permission integers on page data entries and content templates encode which non-administrator roles may create, modify, or delete.
+Permission integers on page data entries and content templates encode which non-administrator roles may create, modify, or delete, covering every site privilege available to users besides administrator bypass.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-37
+CHANGE_DRIVER: >>>
+GSSC5-37
+GSSC5-141
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent

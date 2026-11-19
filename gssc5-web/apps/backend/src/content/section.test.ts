@@ -13,16 +13,28 @@ import {
   type BackendFetch,
   type InProcessApp,
 } from "../test-harness";
-import { PERM_MEMBER, PERM_USER_MOD } from "./helpers";
+import {
+  PERM_MEMBER,
+  PERM_NEWSLETTER_EDITOR,
+  PERM_PUBLICATION_EDITOR,
+  PERM_TOOL_EDITOR,
+  PERM_USER_MOD,
+} from "./helpers";
 
 const MEMBER_PERM = PERM_MEMBER;
 const MOD_PERM = PERM_USER_MOD;
+const TOOL_PERM = PERM_TOOL_EDITOR;
+const PUBLICATION_PERM = PERM_PUBLICATION_EDITOR;
+const NEWSLETTER_PERM = PERM_NEWSLETTER_EDITOR;
 
 let app: InProcessApp;
 let backend: BackendFetch;
 let adminTok = "";
 let memberTok = "";
 let moderatorTok = "";
+let toolEditorTok = "";
+let publicationEditorTok = "";
+let newsletterEditorTok = "";
 let publicTemplateId = "";
 let memberCreateTemplateId = "";
 let lockedTemplateId = "";
@@ -77,6 +89,75 @@ beforeAll(async () => {
     },
   });
 
+  await prisma.user.create({
+    data: {
+      username: "sec-tool-editor",
+      primaryEmail: "sec.tool@example.com",
+      passwordHash,
+      isAdmin: false,
+      isUserMod: false,
+      isToolEditor: true,
+      firstName: "Tool",
+      lastName: "Editor",
+      primaryPhone: "2095550203",
+      preferredContactMethod: "Email",
+      homeLine1: "3 Tool",
+      homeCity: "Modesto",
+      homeState: "CA",
+      homeZip: "95350",
+      mailingLine1: "3 Tool",
+      mailingCity: "Modesto",
+      mailingState: "CA",
+      mailingZip: "95350",
+    },
+  });
+
+  await prisma.user.create({
+    data: {
+      username: "sec-pub-editor",
+      primaryEmail: "sec.pub@example.com",
+      passwordHash,
+      isAdmin: false,
+      isUserMod: false,
+      isPublicationEditor: true,
+      firstName: "Pub",
+      lastName: "Editor",
+      primaryPhone: "2095550204",
+      preferredContactMethod: "Email",
+      homeLine1: "4 Pub",
+      homeCity: "Modesto",
+      homeState: "CA",
+      homeZip: "95350",
+      mailingLine1: "4 Pub",
+      mailingCity: "Modesto",
+      mailingState: "CA",
+      mailingZip: "95350",
+    },
+  });
+
+  await prisma.user.create({
+    data: {
+      username: "sec-news-editor",
+      primaryEmail: "sec.news@example.com",
+      passwordHash,
+      isAdmin: false,
+      isUserMod: false,
+      isNewsletterEditor: true,
+      firstName: "News",
+      lastName: "Editor",
+      primaryPhone: "2095550205",
+      preferredContactMethod: "Email",
+      homeLine1: "5 News",
+      homeCity: "Modesto",
+      homeState: "CA",
+      homeZip: "95350",
+      mailingLine1: "5 News",
+      mailingCity: "Modesto",
+      mailingState: "CA",
+      mailingZip: "95350",
+    },
+  });
+
   adminTok =
     (await establishedLogin(backend, {
       username: memberUsername,
@@ -97,6 +178,27 @@ beforeAll(async () => {
       password: "page-data-secret",
     })) ?? "";
   expect(moderatorTok.length).toBeGreaterThan(0);
+
+  toolEditorTok =
+    (await establishedLogin(backend, {
+      username: "sec-tool-editor",
+      password: "page-data-secret",
+    })) ?? "";
+  expect(toolEditorTok.length).toBeGreaterThan(0);
+
+  publicationEditorTok =
+    (await establishedLogin(backend, {
+      username: "sec-pub-editor",
+      password: "page-data-secret",
+    })) ?? "";
+  expect(publicationEditorTok.length).toBeGreaterThan(0);
+
+  newsletterEditorTok =
+    (await establishedLogin(backend, {
+      username: "sec-news-editor",
+      password: "page-data-secret",
+    })) ?? "";
+  expect(newsletterEditorTok.length).toBeGreaterThan(0);
 
   const publicTemplate = await prisma.contentTemplate.create({
     data: {
@@ -840,7 +942,7 @@ test("GSSC-BLLR-341 Section Deletion", async () => {
 
 // @relation(GSSC-BLLR-342, scope=range_start, role=Test)
 test("GSSC-BLLR-342 Content Permission Bit Fields", async () => {
-  // Bit 0 = member, bit 1 = user moderator.
+  // Bits: member, userMod, toolEditor, publicationEditor, newsletterEditor.
   const memberOnly = await seedSection({
     body: "member-bit",
     isPublic: true,
@@ -851,9 +953,30 @@ test("GSSC-BLLR-342 Content Permission Bit Fields", async () => {
     isPublic: true,
     modifyPerm: MOD_PERM,
   });
+  const toolOnly = await seedSection({
+    body: "tool-bit",
+    isPublic: true,
+    modifyPerm: TOOL_PERM,
+  });
+  const publicationOnly = await seedSection({
+    body: "pub-bit",
+    isPublic: true,
+    modifyPerm: PUBLICATION_PERM,
+  });
+  const newsletterOnly = await seedSection({
+    body: "news-bit",
+    isPublic: true,
+    modifyPerm: NEWSLETTER_PERM,
+  });
 
   expect((await sendJson("PATCH", `/sections/${memberOnly.id}`, { body: "m1" }, memberTok)).status).toBe(200);
   expect((await sendJson("PATCH", `/sections/${modOnly.id}`, { body: "m2" }, memberTok)).status).toBe(403);
   expect((await sendJson("PATCH", `/sections/${modOnly.id}`, { body: "m3" }, moderatorTok)).status).toBe(200);
+  expect((await sendJson("PATCH", `/sections/${toolOnly.id}`, { body: "t1" }, memberTok)).status).toBe(403);
+  expect((await sendJson("PATCH", `/sections/${toolOnly.id}`, { body: "t2" }, toolEditorTok)).status).toBe(200);
+  expect((await sendJson("PATCH", `/sections/${publicationOnly.id}`, { body: "p1" }, memberTok)).status).toBe(403);
+  expect((await sendJson("PATCH", `/sections/${publicationOnly.id}`, { body: "p2" }, publicationEditorTok)).status).toBe(200);
+  expect((await sendJson("PATCH", `/sections/${newsletterOnly.id}`, { body: "n1" }, memberTok)).status).toBe(403);
+  expect((await sendJson("PATCH", `/sections/${newsletterOnly.id}`, { body: "n2" }, newsletterEditorTok)).status).toBe(200);
 });
 // @relation(GSSC-BLLR-342, scope=range_end, role=Test)

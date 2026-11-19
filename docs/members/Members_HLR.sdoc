@@ -1816,15 +1816,16 @@ REVIEW_STATUS: Approved
 UID: GSSC-MHLR-96
 TITLE: Content Template Modification
 STATEMENT: >>>
-The GSSC Website Member Frontend SHALL let an administrator create, modify, and remove a content template, and set that template's create, modify, and delete permissions by adding and removing readable permission names, without programming knowledge.
+The GSSC Website Member Frontend SHALL let an administrator create, modify, and remove a content template, and set that template's create, modify, and delete permissions by adding and removing readable permission names for every non-administrator permission available to users, without programming knowledge.
 <<<
 RATIONALE: >>>
-Template create, visibility and permission updates, and delete are administrator responsibilities on the Unified Backend; the Member Frontend exposes those operations for day-to-day catalog maintenance, including permission assignment by name rather than opaque numeric values.
+Template create, visibility and permission updates, and delete are administrator responsibilities on the Unified Backend; the Member Frontend exposes those operations for day-to-day catalog maintenance, including permission assignment by name rather than opaque numeric values, covering the full known user permission set.
 <<<
 DERIVED: True
 CHANGE_DRIVER: >>>
 GSSC5-115
 GSSC5-128
+GSSC5-141
 <<<
 REVIEW_STATUS: Approved
 
