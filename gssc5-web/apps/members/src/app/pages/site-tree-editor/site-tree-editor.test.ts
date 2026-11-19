@@ -655,10 +655,19 @@ test('GSSC-MLLR-669 Syntactic', async () => {
   const parentRow = root.querySelector(
     '.gssc-site-tree-outline__item:has(.gssc-site-tree-outline__node[data-cuid="node_acct"])',
   )!;
+  const leafRow = root.querySelector(
+    '.gssc-site-tree-outline__item:has(.gssc-site-tree-outline__node[data-cuid="node_dir"])',
+  )!;
   const expander = parentRow.querySelector<HTMLButtonElement>(
     '[data-slot="site-tree-outline-expander"][data-cuid="node_acct"]',
   )!;
   const label = parentRow.querySelector('.gssc-site-tree-outline__node[data-cuid="node_acct"]')!;
+  const parentToggle = parentRow.querySelector(
+    '[data-slot="site-tree-outline-toggle"][data-cuid="node_acct"]',
+  )!;
+  const leafToggle = leafRow.querySelector(
+    '[data-slot="site-tree-outline-toggle"][data-cuid="node_dir"]',
+  )!;
   expect(expander).toBeTruthy();
   expect(expander.getAttribute('aria-expanded')).toBe('true');
   expect(page.isExpanded('node_acct')).toBe(true);
@@ -668,6 +677,14 @@ test('GSSC-MLLR-669 Syntactic', async () => {
   expect(
     root.querySelector('[data-slot="site-tree-outline-expander"][data-cuid="node_dir"]'),
   ).toBeNull();
+  // Fixed-width toggle column on every row so parent/leaf labels align by depth.
+  expect(parentToggle).toBeTruthy();
+  expect(leafToggle).toBeTruthy();
+  expect(parentToggle.className).toContain('w-5');
+  expect(leafToggle.className).toContain('w-5');
+  expect(parentToggle.className).toContain('shrink-0');
+  expect(leafToggle.className).toContain('shrink-0');
+  expect(leafToggle.querySelector('[data-slot="site-tree-outline-expander"]')).toBeNull();
 
   expander.click();
   fixture.detectChanges();
