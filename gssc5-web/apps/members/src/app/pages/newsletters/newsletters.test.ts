@@ -659,6 +659,72 @@ test('GSSC-MLLR-696 Newsletter Issue File upload on edit Save', async () => {
 });
 // @relation(GSSC-MLLR-696, scope=range_end, role=Test)
 
+// @relation(GSSC-MLLR-703, GSSC-MLLR-704, scope=range_start, role=Test)
+test('GSSC-MLLR-703..704 Newsletter Editor marks invalid fields red on Save', async () => {
+  const { root, fixture, page, patched, restore } = await setupNewsletters();
+  try {
+    root.querySelector<HTMLButtonElement>('.gssc-newsletters-catalog__entry')!.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    await typeField(fixture, root, 'gssc-newsletter-month', 'Jan');
+    root.querySelector<HTMLButtonElement>('.gssc-editor__save')!.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(patched.length).toBe(0);
+    expect(root.querySelector('.gssc-newsletters-save-error')!.textContent).toContain(
+      'Enter valid volume, number, month, year, and keywords.',
+    );
+    expect(page.fieldInvalid('month')).toBe(true);
+    expect(page.fieldInvalid('volume')).toBe(false);
+    const monthField = root.querySelector('#gssc-newsletter-month')!.closest(
+      '.gssc-form-text-field',
+    )!;
+    expect(monthField.className).toContain('border-gssc-dark-red');
+    expect(monthField.className).toContain('bg-gssc-light-red');
+    const volumeField = root.querySelector('#gssc-newsletter-volume')!.closest(
+      '.gssc-form-text-field',
+    )!;
+    expect(volumeField.className).toContain('border-gssc-dark-green');
+
+    await typeField(fixture, root, 'gssc-newsletter-month', '11');
+    fixture.detectChanges();
+    expect(page.fieldInvalid('month')).toBe(false);
+    expect(monthField.className).toContain('border-gssc-dark-green');
+  } finally {
+    restore();
+  }
+});
+
+test('GSSC-MLLR-703 Newsletter create marks issue file invalid without a chosen file', async () => {
+  const { root, fixture, page, createdBodies, restore } = await setupNewsletters({ list: [] });
+  try {
+    await typeField(fixture, root, 'gssc-newsletter-volume', '1');
+    await typeField(fixture, root, 'gssc-newsletter-number', '1');
+    await typeField(fixture, root, 'gssc-newsletter-month', '1');
+    await typeField(fixture, root, 'gssc-newsletter-year', '2026');
+    root.querySelector<HTMLButtonElement>('.gssc-editor__save')!.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(createdBodies.length).toBe(0);
+    expect(page.fieldInvalid('issueFile')).toBe(true);
+    const issueFile = root.querySelector('.gssc-newsletters-issue-file')!;
+    expect(issueFile.className).toContain('border-gssc-dark-red');
+    expect(issueFile.className).toContain('bg-gssc-light-red');
+    expect(root.querySelector('.gssc-newsletters-save-error')!.textContent).toContain(
+      'Choose a newsletter issue file before saving.',
+    );
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-703, GSSC-MLLR-704, scope=range_end, role=Test)
+
 test('newsletters-api helpers', () => {
   expect(newsletterLabel(sampleEntry)).toBe('Vol. 42 No. 3 · 11/2026');
   expect(parseKeywordsInput(' a, b , ,c ')).toEqual(['a', 'b', 'c']);

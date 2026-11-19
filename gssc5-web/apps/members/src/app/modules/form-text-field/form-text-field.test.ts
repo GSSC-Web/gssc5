@@ -10,6 +10,7 @@ import { FormTextField } from './form-text-field';
       [required]="required()"
       [enabled]="enabled()"
       [inputType]="inputType()"
+      [invalid]="invalid()"
       [(value)]="value"
     />
   `,
@@ -18,6 +19,7 @@ class Host {
   label = signal('First Name');
   required = signal(true);
   enabled = signal(true);
+  invalid = signal(false);
   inputType = signal<'text' | 'email' | 'password' | 'tel'>('text');
   value = signal('');
 }
@@ -42,6 +44,14 @@ test('GSSC-MLLR-168 Semantic', async () => {
   host.required.set(false);
   fixture.detectChanges();
   expect(root.querySelector('.gssc-form-text-field__label')!.textContent).not.toContain('*');
+
+  host.invalid.set(true);
+  fixture.detectChanges();
+  expect(
+    root.querySelector<HTMLInputElement>('.gssc-form-text-field__control')!.getAttribute(
+      'aria-invalid',
+    ),
+  ).toBe('true');
 });
 // @relation(GSSC-MLLR-168, scope=range_end, role=Test)
 
@@ -58,7 +68,7 @@ test('GSSC-MLLR-169 Syntactic', async () => {
 
 // @relation(GSSC-MLLR-170, scope=range_start, role=Test)
 test('GSSC-MLLR-170 Lexical', async () => {
-  const { root } = await setup();
+  const { fixture, host, root } = await setup();
   const field = root.querySelector('.gssc-form-text-field')!;
   const label = root.querySelector('.gssc-form-text-field__label')!;
   const control = root.querySelector('.gssc-form-text-field__control')!;
@@ -70,5 +80,12 @@ test('GSSC-MLLR-170 Lexical', async () => {
   expect(label.className).toContain('text-gssc-dark-green');
   expect(control.className).toContain('font-sans');
   expect(control.className).toContain('text-gssc-dark-green');
+
+  host.invalid.set(true);
+  fixture.detectChanges();
+  expect(field.className).toContain('border-gssc-dark-red');
+  expect(field.className).toContain('bg-gssc-light-red');
+  expect(field.className).not.toContain('border-gssc-dark-green');
+  expect(control.getAttribute('aria-invalid')).toBe('true');
 });
 // @relation(GSSC-MLLR-170, scope=range_end, role=Test)

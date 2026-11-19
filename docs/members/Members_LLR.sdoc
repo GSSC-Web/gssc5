@@ -92,6 +92,7 @@ GSSC5-102 Directory Contact Cards + Soft-Delete owns GSSC-MLLR-215 through GSSC-
 GSSC5-93 Page/Section Content Editor owns GSSC-MLLR-261 through GSSC-MLLR-286 (section tags field, section list, section editor host, preview, save/cancel/permission behaviors; GSSC5-139 rewrote page-selector triad 264–266 to tags).
 GSSC5-139 Unify Page Data Editor forms owns GSSC-MLLR-681 through GSSC-MLLR-686 (exact end 686; band 681–700 reserved) and CHANGE_DRIVER updates on GSSC-MLLR-261, 262, 264–267, 269, 279, 286, 326, 329, 589; HLR GSSC-MHLR-110.
 GSSC5-140 Unify PDE padding and disclaimer text owns GSSC-MLLR-687 through GSSC-MLLR-692 (exact end 692; continues band 681–700) and CHANGE_DRIVER updates on GSSC-MLLR-262, 263, 292, 293, 322, 323; HLR GSSC-MHLR-111.
+GSSC-192 Newsletter edit validation red fields owns GSSC-MLLR-703 through GSSC-MLLR-704 (exact end 704; band 703–720) plus CHANGE_DRIVER on GSSC-MLLR-168, 170, 695; HLR GSSC-MHLR-113.
 GSSC5-89 Member Dashboard Page owns GSSC-MLLR-231 through GSSC-MLLR-239.
 GSSC5-94 Announcements Editor owns GSSC-MLLR-291 through GSSC-MLLR-307 (page, catalog, Generic Editor host, create/modify/publish behaviors; reuses GSSC5-84/85; consumes GSSC5-68 /announcements).
 GSSC5-96 Newsletters Editor owns GSSC-MLLR-351 through GSSC-MLLR-373 (exact end 373; band 351–380 reserved so parallel Wave editors do not collide).
@@ -114,7 +115,7 @@ GSSC5-123 Members Footer Home Link owns GSSC-MLLR-641 through GSSC-MLLR-643 (exa
 GSSC5-46 Site Branding owns GSSC-MLLR-644 through GSSC-MLLR-649 (exact end 649) and GSSC-MHLR-102 / GSSC-MHLR-103.
 GSSC5-135 Multiple Positions with Semicolon Lint owns GSSC-MLLR-661 through GSSC-MLLR-664 (exact end 664; band 661–680 reserved); HLR GSSC-MHLR-104.
 GSSC5-138 Site Tree Editor foldable outline and independent pane scroll owns GSSC-MLLR-668 through GSSC-MLLR-670 (exact end 670; continues band 661–680) plus CHANGE_DRIVER on GSSC-MLLR-522; HLR GSSC-MHLR-108.
-Wave coordination: GSSC5-92 directory 202–214, GSSC5-102 directory refinement 215–230, GSSC5-89 dashboard 231–239, GSSC5-93 page/section 261–286, GSSC5-94 announcements 291–307, GSSC5-117 page-data unification 308–320, GSSC5-95 events 321–346, GSSC5-96 newsletters 351–373, GSSC5-97 publications/tools 381–414, GSSC5-101 account refinement 415–428, GSSC5-103 mailing-equals-home 429–437, GSSC5-102 password-history-reset 438–440, GSSC5-107 members nav chrome 441–461, GSSC5-109 members site search 462–483 (band 462–500), GSSC5-108 sitemap 501–510, GSSC5-116 site-tree editor 521–540 (band 521–560), GSSC5-127 site-tree feedback MLLR-562 (+ CHANGE_DRIVER on 524/529; HLR MHLR-99), GSSC5-115/128 template editor 541–561 (band 541–580), GSSC5-126 PDE section create + nav 581–591 (band 581–600), GSSC5-118 directory invite 601–608 (band 601–620), GSSC5-119 directory create 621–628 (band 621–640), GSSC5-123 footer home link 641–643 (band 641–660), GSSC5-46 branding 644–649, GSSC5-135 multi-position 661–664, GSSC5-137 nested submenu pointer bridge 665–667 (HLR MHLR-109), GSSC5-138 site-tree fold/scroll 668–670 (band 661–680), GSSC5-139 PDE form unify 681–686, GSSC5-140 PDE padding/disclaimer 687–692 (band 681–700), GSSC-190 publications file upload 693–695 — do not collide.
+Wave coordination: GSSC5-92 directory 202–214, GSSC5-102 directory refinement 215–230, GSSC5-89 dashboard 231–239, GSSC5-93 page/section 261–286, GSSC5-94 announcements 291–307, GSSC5-117 page-data unification 308–320, GSSC5-95 events 321–346, GSSC5-96 newsletters 351–373, GSSC5-97 publications/tools 381–414, GSSC5-101 account refinement 415–428, GSSC5-103 mailing-equals-home 429–437, GSSC5-102 password-history-reset 438–440, GSSC5-107 members nav chrome 441–461, GSSC5-109 members site search 462–483 (band 462–500), GSSC5-108 sitemap 501–510, GSSC5-116 site-tree editor 521–540 (band 521–560), GSSC5-127 site-tree feedback MLLR-562 (+ CHANGE_DRIVER on 524/529; HLR MHLR-99), GSSC5-115/128 template editor 541–561 (band 541–580), GSSC5-126 PDE section create + nav 581–591 (band 581–600), GSSC5-118 directory invite 601–608 (band 601–620), GSSC5-119 directory create 621–628 (band 621–640), GSSC5-123 footer home link 641–643 (band 641–660), GSSC5-46 branding 644–649, GSSC5-135 multi-position 661–664, GSSC5-137 nested submenu pointer bridge 665–667 (HLR MHLR-109), GSSC5-138 site-tree fold/scroll 668–670 (band 661–680), GSSC5-139 PDE form unify 681–686, GSSC5-140 PDE padding/disclaimer 687–692 (band 681–700), GSSC5-142 newsletter issue file 693–696, GSSC-188 research-tools file 697–699, GSSC-190 publications file upload 700–702, GSSC-192 newsletter validation 703–704 — do not collide.
 GSSC-173 Members Header Greeting menu owns GSSC-MLLR-33 through GSSC-MLLR-35 (Header Public Access triad) plus CHANGE_DRIVER on GSSC-MLLR-14, 24, 27, 30 and HLR GSSC-MHLR-107; GSSC-MLLR-36 through GSSC-MLLR-39 remain free.
 Do not reuse numbers already claimed by another ticket.
 <<<
@@ -4975,14 +4976,17 @@ TITLE: Form Text Field
 UID: GSSC-MLLR-168
 TITLE: Semantic
 STATEMENT: >>>
-The Member Frontend Form Text Field SHALL accept a text value from the member, present a Title Case floating label for that field, and mark a required field with a trailing asterisk on the label.
+The Member Frontend Form Text Field SHALL accept a text value from the member, present a Title Case floating label for that field, mark a required field with a trailing asterisk on the label, and present an invalid appearance when the host marks the field invalid.
 <<<
 RATIONALE: >>>
-Account and editor forms share this chrome so required markers and Title Case labels stay consistent across member surfaces.
+Account and editor forms share this chrome so required markers, Title Case labels, and submit-time invalid feedback stay consistent across member surfaces.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-85
+CHANGE_DRIVER: >>>
+GSSC5-85
+GSSC-192
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -5011,14 +5015,17 @@ RELATIONS:
 UID: GSSC-MLLR-170
 TITLE: Lexical
 STATEMENT: >>>
-The Form Text Field SHALL use a rounded border in the dark-green theme color on a white background, with an extralight italic dark-green floating label and sans-serif dark-green control text.
+The Form Text Field SHALL use a rounded border in the dark-green theme color on a white background when valid, or a dark-red theme border and light-red field background when invalid, with an extralight italic dark-green floating label and sans-serif dark-green control text.
 <<<
 RATIONALE: >>>
-Matching account form field chrome keeps primitives interchangeable with polished account pages.
+Matching account form field chrome keeps primitives interchangeable with polished account pages, including invalid feedback.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-85
+CHANGE_DRIVER: >>>
+GSSC5-85
+GSSC-192
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -12446,14 +12453,17 @@ RELATIONS:
 UID: GSSC-MLLR-695
 TITLE: Lexical
 STATEMENT: >>>
-The Newsletter Issue File Control SHALL use the Member Frontend sans-serif typeface, dark-green theme border and label text, light-green theme choose-file control background, and dark-brown theme file-name text.
+The Newsletter Issue File Control SHALL use the Member Frontend sans-serif typeface, dark-green theme border and label text when valid or a dark-red theme border and light-red field background when invalid, light-green theme choose-file control background, and dark-brown theme file-name text.
 <<<
 RATIONALE: >>>
-Upload chrome matches account photo file-picker styling on the Account Page.
+Upload chrome matches account photo file-picker styling on the Account Page, including invalid feedback shared with other Member Frontend forms.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-142
+CHANGE_DRIVER: >>>
+GSSC5-142
+GSSC-192
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -12485,6 +12495,48 @@ RELATIONS:
   ROLE: Refines
 
 [[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-NEWSLETTER-VALIDATION
+TITLE: Newsletter Editor Validation Feedback
+
+[REQUIREMENT]
+UID: GSSC-MLLR-703
+TITLE: Semantic
+STATEMENT: >>>
+When Save is refused because volume, number, month, or year is not a valid integer, or because a new newsletter has no chosen issue file, the Newsletter Editor SHALL mark each failing field invalid and SHALL omit create or modify until those fields are valid.
+<<<
+RATIONALE: >>>
+Red invalid marks show which inputs must be corrected before retrying Save; the generic error text alone is not enough.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC-192
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-113
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-704
+TITLE: Lexical
+STATEMENT: >>>
+Invalid Newsletter Editor fields SHALL use the Member Frontend dark-red border and light-red field background.
+<<<
+RATIONALE: >>>
+Dark-red and light-red tokens match Account and Login invalid field chrome.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC-192
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-113
+  ROLE: Refines
 
 [[/SECTION]]
 

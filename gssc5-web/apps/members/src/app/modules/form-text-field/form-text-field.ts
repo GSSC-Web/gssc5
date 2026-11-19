@@ -14,6 +14,8 @@ export class FormTextField {
   readonly controlId = input<string | null>(null);
   readonly autocomplete = input<string | null>(null);
   readonly name = input<string | null>(null);
+  /** Host submit-time invalid mark (dark-red border + light-red background). */
+  readonly invalid = input(false);
 
   readonly resolvedId = computed(
     () => this.controlId() ?? `gssc-form-text-${this.label().replace(/\s+/g, '-').toLowerCase()}`,
