@@ -1932,7 +1932,7 @@ Page Data Editor unification hosted the three kind editors, but catalog and form
 <<<
 DERIVED: True
 CHANGE_DRIVER: GSSC5-139
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-93
