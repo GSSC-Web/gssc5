@@ -6,9 +6,9 @@ import {
   parseKnownQuery,
 } from "./content/helpers";
 import {
-  siteTreeNodesFor,
+  siteTreeSearchNodes,
   type SiteTreeFrontend,
-} from "./content/site-tree-stub";
+} from "./content/site-trees";
 import { getPrisma } from "./db";
 import {
   loginTokenCookie,
@@ -140,7 +140,7 @@ async function collectPublicCorpus(query: string): Promise<SearchResult[]> {
   const out: SearchResult[] = [];
 
   // @relation(GSSC-BLLR-481, scope=range_start, role=Implementation)
-  for (const node of siteTreeNodesFor("public")) {
+  for (const node of await siteTreeSearchNodes("public")) {
     pushIfMatch(out, query, "site-tree", node.label, node.path, node.path);
   }
 
@@ -230,7 +230,7 @@ async function collectMembersCorpus(
   const out: SearchResult[] = [];
 
   // @relation(GSSC-BLLR-482, scope=range_start, role=Implementation)
-  for (const node of siteTreeNodesFor("members")) {
+  for (const node of await siteTreeSearchNodes("members")) {
     pushIfMatch(out, query, "site-tree", node.label, node.path, node.path);
   }
 

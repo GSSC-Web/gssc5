@@ -357,6 +357,28 @@ test("GSSC-BLLR-481 Public Site Search Corpus Match", async () => {
     kind: "publication",
   });
   expect(asHits(caseInsensitive.body).some((hit) => hit.title.includes(stamp))).toBe(true);
+
+  // Persisted site-tree edits must drive search (not the retired stub list).
+  const publicTree = await prisma.siteTree.findUniqueOrThrow({ where: { frontend: "public" } });
+  const editable = await prisma.siteTreeNode.findFirstOrThrow({
+    where: { treeId: publicTree.id, path: "/membership" },
+  });
+  const editedLabel = `Edited Membership ${stamp}`;
+  await prisma.siteTreeNode.update({
+    where: { id: editable.id },
+    data: { label: editedLabel },
+  });
+  const edited = await getSearch({
+    q: stamp,
+    frontend: "public",
+    kind: "site-tree",
+  });
+  expect(edited.status).toBe(200);
+  expect(
+    asHits(edited.body).some(
+      (hit) => hit.kind === "site-tree" && hit.title === editedLabel && hit.href === "/membership",
+    ),
+  ).toBe(true);
 });
 // @relation(GSSC-BLLR-481, scope=range_end, role=Test)
 
