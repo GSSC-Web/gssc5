@@ -336,6 +336,20 @@ async function loadNestedTree(
   };
 }
 
+/** Flat label/path nodes for site search corpora (BLLR-481 / BLLR-482). */
+export async function siteTreeSearchNodes(
+  frontend: SiteTreeFrontend,
+): Promise<Array<{ label: string; path: string }>> {
+  await startSiteTrees();
+  const prisma = getPrisma(loadConfig().DATABASE_URL);
+  const tree = await prisma.siteTree.findUnique({
+    where: { frontend },
+    include: { nodes: { select: { label: true, path: true } } },
+  });
+  if (!tree) return [];
+  return tree.nodes.map((node) => ({ label: node.label, path: node.path }));
+}
+
 async function resolveParentId(
   treeId: string,
   parentId: string | null | undefined,
