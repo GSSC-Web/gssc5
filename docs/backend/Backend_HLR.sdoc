@@ -3728,7 +3728,7 @@ Public and Members frontends need a single backend location for branding artwork
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-151
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-57
@@ -3748,7 +3748,7 @@ Key-value path stubs let operators retarget branding files without rebuilding fr
 <<<
 DERIVED: False
 CHANGE_DRIVER: GSSC5-151
-REVIEW_STATUS: Changed
+REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-PIR-57
