@@ -274,3 +274,115 @@ test("GSSC-BLLR-308 Key-Value Value", async () => {
   expect(rows[0]?.value).toBe("stored-value");
 });
 // @relation(GSSC-BLLR-308, scope=range_end, role=Test)
+
+async function listCatalog(
+  token?: string,
+): Promise<{ status: number; body: string; entries?: Array<{ key: string; value: string }> }> {
+  const headers: HeadersInit = {};
+  if (token !== undefined) {
+    headers.cookie = cookieHeaderForToken(token);
+  }
+  const response = await backend(
+    new Request("http://127.0.0.1/kvs", { headers }),
+  );
+  const body = await response.text();
+  let entries: Array<{ key: string; value: string }> | undefined;
+  if (response.status === 200) {
+    try {
+      const parsed: unknown = JSON.parse(body);
+      if (Array.isArray(parsed)) {
+        entries = parsed as Array<{ key: string; value: string }>;
+      }
+    } catch {
+      entries = undefined;
+    }
+  }
+  return { status: response.status, body, entries };
+}
+
+async function deleteEntry(
+  key: string,
+  token?: string,
+): Promise<{ status: number; body: string }> {
+  const headers: HeadersInit = {};
+  if (token !== undefined) {
+    headers.cookie = cookieHeaderForToken(token);
+  }
+  const response = await backend(
+    new Request(`http://127.0.0.1/kvs/${encodeURIComponent(key)}`, {
+      method: "DELETE",
+      headers,
+    }),
+  );
+  return { status: response.status, body: await response.text() };
+}
+
+// @relation(GSSC-BLLR-509, scope=range_start, role=Test)
+test("GSSC-BLLR-509 Key-Value Catalog List", async () => {
+  const token = await adminToken();
+  await db().keyValue.upsert({
+    where: { key: "test.list.a" },
+    create: { key: "test.list.a", value: "alpha" },
+    update: { value: "alpha" },
+  });
+  await db().keyValue.upsert({
+    where: { key: "test.list.b" },
+    create: { key: "test.list.b", value: "beta" },
+    update: { value: "beta" },
+  });
+  const result = await listCatalog(token);
+  expect(result.status).toBe(200);
+  expect(result.entries).toEqual(
+    expect.arrayContaining([
+      { key: "test.list.a", value: "alpha" },
+      { key: "test.list.b", value: "beta" },
+    ]),
+  );
+});
+// @relation(GSSC-BLLR-509, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-510, scope=range_start, role=Test)
+test("GSSC-BLLR-510 Key-Value List Forbidden", async () => {
+  expect((await listCatalog()).status).toBe(403);
+  expect((await listCatalog("not-a-login-token")).status).toBe(403);
+  expect((await listCatalog(moderatorToken)).status).toBe(403);
+  expect((await listCatalog(memberToken)).status).toBe(403);
+});
+// @relation(GSSC-BLLR-510, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-511, scope=range_start, role=Test)
+test("GSSC-BLLR-511 Key-Value Entry Delete", async () => {
+  const token = await adminToken();
+  const key = "test.delete.ok";
+  await db().keyValue.upsert({
+    where: { key },
+    create: { key, value: "gone-soon" },
+    update: { value: "gone-soon" },
+  });
+  expect((await deleteEntry(key, token)).status).toBe(204);
+  expect(await storedValue(key)).toBeNull();
+});
+// @relation(GSSC-BLLR-511, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-512, scope=range_start, role=Test)
+test("GSSC-BLLR-512 Key-Value Delete Forbidden", async () => {
+  const key = "test.delete.forbidden";
+  await db().keyValue.upsert({
+    where: { key },
+    create: { key, value: "keep" },
+    update: { value: "keep" },
+  });
+  expect((await deleteEntry(key)).status).toBe(403);
+  expect((await deleteEntry(key, moderatorToken)).status).toBe(403);
+  expect((await deleteEntry(key, memberToken)).status).toBe(403);
+  expect(await storedValue(key)).toBe("keep");
+});
+// @relation(GSSC-BLLR-512, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-513, scope=range_start, role=Test)
+test("GSSC-BLLR-513 Key-Value Delete Not Found", async () => {
+  const token = await adminToken();
+  await db().keyValue.deleteMany({ where: { key: "test.delete.missing" } });
+  expect((await deleteEntry("test.delete.missing", token)).status).toBe(404);
+});
+// @relation(GSSC-BLLR-513, scope=range_end, role=Test)
