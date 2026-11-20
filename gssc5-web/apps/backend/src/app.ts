@@ -3,6 +3,7 @@ import { cors } from "@elysiajs/cors";
 import { Elysia } from "elysia";
 
 import { announcement } from "./content/announcement";
+import { branding } from "./content/branding";
 import { events } from "./content/events";
 import { newsletterFiles } from "./content/newsletter-files";
 import { newsletters } from "./content/newsletters";
@@ -51,6 +52,7 @@ export const app = new Elysia({ normalize: false })
   .use(accountPhotos)
   .use(leadership)
   .use(kvs)
+  .use(branding)
   .use(section)
   .use(announcement)
   .use(template)
@@ -87,6 +89,7 @@ export const app = new Elysia({ normalize: false })
         "site-trees",
         "files",
         "kvs",
+        "branding",
         "leadership",
         "account-photos",
         "password",

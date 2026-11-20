@@ -1,6 +1,7 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { BrandingAssets } from '../../services/branding-assets/branding-assets';
 import { MemberSession } from '../../services/member-session';
 import { RETURN_URL_QUERY, resolveReturnUrl } from '../../services/auth-guards';
 
@@ -10,10 +11,11 @@ import { RETURN_URL_QUERY, resolveReturnUrl } from '../../services/auth-guards';
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
-export class LoginPage {
+export class LoginPage implements OnInit {
   private readonly memberSession = inject(MemberSession);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
+  protected readonly brandingAssets = inject(BrandingAssets);
 
   identity = '';
   password = '';
@@ -21,6 +23,10 @@ export class LoginPage {
   readonly failureMessage = signal('');
   readonly identityInvalid = signal(false);
   readonly passwordInvalid = signal(false);
+
+  async ngOnInit(): Promise<void> {
+    await this.brandingAssets.refresh();
+  }
 
   // @relation(GSSC-MLLR-90, GSSC-MLLR-91, GSSC-MLLR-95, scope=range_start, role=Implementation)
   async onSubmit(): Promise<void> {

@@ -1,5 +1,6 @@
 import { Component, computed, inject, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { BrandingAssets } from '../../services/branding-assets/branding-assets';
 import { ContactOverlay } from '../../services/contact-overlay/contact-overlay';
 import { MembersApp } from '../../services/members-app';
 import { SocietyContact } from '../../services/society-contact/society-contact';
@@ -13,6 +14,7 @@ export class Footer implements OnInit {
   private readonly contactOverlay = inject(ContactOverlay);
   private readonly membersApp = inject(MembersApp);
   protected readonly societyContact = inject(SocietyContact);
+  protected readonly brandingAssets = inject(BrandingAssets);
 
   protected readonly copyrightStatement = computed(() => {
     const name = this.societyContact.organizationName().trim();
@@ -21,7 +23,7 @@ export class Footer implements OnInit {
   });
 
   async ngOnInit(): Promise<void> {
-    await this.societyContact.refresh();
+    await Promise.all([this.societyContact.refresh(), this.brandingAssets.refresh()]);
   }
 
   // @relation(GSSC-PLLR-43, scope=range_start, role=Implementation)

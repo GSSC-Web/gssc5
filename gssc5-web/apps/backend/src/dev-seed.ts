@@ -5,6 +5,10 @@ import { fileURLToPath } from "node:url";
 
 import { loadConfig } from "./config";
 import { createPrisma } from "./db";
+import {
+  BRANDING_DEV_KVS,
+  ensureBrandingStubFiles,
+} from "./content/branding";
 import { seedSiteTrees } from "./content/site-trees";
 
 const backendRoot = fileURLToPath(new URL("..", import.meta.url));
@@ -21,22 +25,26 @@ export const SOCIETY_DEV_KVS = [
   { key: "society.postalAddress", value: "P.O. Box 1352 Modesto, CA 95353-1352" },
 ] as const;
 
+/** Website KVS rows including society contact and branding asset paths. */
+export const WEBSITE_DEV_KVS = [...SOCIETY_DEV_KVS, ...BRANDING_DEV_KVS] as const;
+
 /** Apply migrations then upsert expected website KVS values (idempotent). */
 export async function prepareDevDatabase(
   databaseUrl = loadConfig().DATABASE_URL,
 ): Promise<void> {
   deployMigrations(databaseUrl);
   await seedWebsiteKvs(databaseUrl);
+  await ensureBrandingStubFiles();
   await seedSiteTrees(databaseUrl);
 }
 
-/** Upsert society contact KVS keys used by the public Footer. */
+/** Upsert society contact + branding path KVS keys used by the public shell. */
 export async function seedWebsiteKvs(
   databaseUrl = loadConfig().DATABASE_URL,
 ): Promise<void> {
   const prisma = createPrisma(databaseUrl);
   try {
-    for (const row of SOCIETY_DEV_KVS) {
+    for (const row of WEBSITE_DEV_KVS) {
       await prisma.keyValue.upsert({
         where: { key: row.key },
         create: { key: row.key, value: row.value },
@@ -80,6 +88,6 @@ function prepareSqliteFile(databaseUrl: string): void {
 if (import.meta.main) {
   await prepareDevDatabase();
   console.log(
-    `Prepared local database with ${SOCIETY_DEV_KVS.length} website KVS keys.`,
+    `Prepared local database with ${WEBSITE_DEV_KVS.length} website KVS keys.`,
   );
 }

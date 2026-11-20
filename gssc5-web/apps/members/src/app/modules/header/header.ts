@@ -18,6 +18,7 @@ import {
   SITE_SEARCH_GET,
   type SiteSearchResult,
 } from '../../services/site-search/site-search';
+import { BrandingAssets } from '../../services/branding-assets/branding-assets';
 import { SocietyContact } from '../../services/society-contact/society-contact';
 import {
   SiteTree,
@@ -43,6 +44,7 @@ export class Header implements OnInit, OnDestroy {
   private readonly siteSearchGet = inject(SITE_SEARCH_GET);
   private readonly router = inject(Router);
   protected readonly societyContact = inject(SocietyContact);
+  protected readonly brandingAssets = inject(BrandingAssets);
   readonly themeMode = inject(ThemeMode);
   private quickSearchGeneration = 0;
 
@@ -71,7 +73,11 @@ export class Header implements OnInit, OnDestroy {
   }
 
   async ngOnInit(): Promise<void> {
-    await Promise.all([this.societyContact.refresh(), this.siteTree.refresh()]);
+    await Promise.all([
+      this.societyContact.refresh(),
+      this.brandingAssets.refresh(),
+      this.siteTree.refresh(),
+    ]);
     this.recomputeChromeTier();
   }
 

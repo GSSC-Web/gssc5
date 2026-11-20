@@ -1,10 +1,28 @@
 import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { routes } from '../../app.routes';
+import {
+  BRANDING_FAVICON_KEY,
+  BRANDING_LOGO_KEY,
+} from '../../services/branding-assets/branding-assets';
+import { KvStore } from '../../services/kv-store/kv-store';
 import { MemberSession, memberSessionApi } from '../../services/member-session';
 import { RETURN_URL_QUERY } from '../../services/auth-guards';
 import { nativeElement, setupMembersComponent, textContent } from '../../../test-harness';
 import { LoginPage } from './login';
+
+const sampleBrandingLogoUrl = 'http://localhost:3000/branding/gssc-society-logo.png';
+
+class FakeKvStore {
+  private readonly values = new Map<string, string>([
+    [BRANDING_FAVICON_KEY, 'branding/favicon.ico'],
+    [BRANDING_LOGO_KEY, 'branding/gssc-society-logo.png'],
+  ]);
+
+  async getValue(key: string): Promise<string | null> {
+    return this.values.get(key) ?? null;
+  }
+}
 
 function okResponse(data: unknown, status = 200) {
   return {
@@ -36,7 +54,9 @@ async function setupLogin(url = '/login'): Promise<{
     // ignore
   }
 
-  const fixture = await setupMembersComponent(LoginPage);
+  const fixture = await setupMembersComponent(LoginPage, {
+    providers: [{ provide: KvStore, useClass: FakeKvStore }],
+  });
   const router = TestBed.inject(Router);
   const session = TestBed.inject(MemberSession);
   router.resetConfig(routes);
@@ -47,6 +67,7 @@ async function setupLogin(url = '/login'): Promise<{
   await router.navigateByUrl(url);
   fixture.detectChanges();
   await fixture.whenStable();
+  fixture.detectChanges();
   return {
     fixture,
     router,
@@ -109,7 +130,7 @@ test('GSSC-MLLR-77 Lexical', async () => {
   const { root } = await setupLogin();
   const mark = root.querySelector<HTMLImageElement>('.gssc-login-page__logo-mark')!;
   expect(mark.tagName).toBe('IMG');
-  expect(mark.getAttribute('src')).toBe('/gssc-society-logo.png');
+  expect(mark.getAttribute('src')).toBe(sampleBrandingLogoUrl);
   expect(mark.getAttribute('width')).toBe('96');
   expect(mark.getAttribute('height')).toBe('96');
   expect(mark.classList.contains('size-24')).toBe(true);

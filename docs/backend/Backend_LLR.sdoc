@@ -9438,6 +9438,84 @@ RELATIONS:
   VALUE: GSSC-BHLR-207
   ROLE: Refines
 
+[[SECTION]]
+UID: GSSC-BLLR-BRANDING-FILES
+TITLE: Branding Files
+
+[REQUIREMENT]
+UID: GSSC-BLLR-509
+TITLE: Branding Directory Under Storage Root
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL keep branding asset files under a branding directory beneath the configured local file storage root.
+<<<
+RATIONALE: >>>
+A dedicated branding directory separates public brand artwork from other stored file trees.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-151
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-240
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-510
+TITLE: Branding Default Path Key-Value Stubs
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL upsert website key-value entries branding.favicon and branding.logo whose values are the default storage paths branding/favicon.ico and branding/gssc-society-logo.png.
+<<<
+RATIONALE: >>>
+Stubbed default paths give Public and Members a stable resolution target after database seed without embedding binary image files in the repository.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-151
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-241
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-511
+TITLE: Public Branding File Get
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL answer an unauthenticated get for a branding file name under the branding store with that file's bytes and an image content type when the file exists beneath the branding directory, and SHALL answer not found for missing files or file names that escape the branding directory.
+<<<
+RATIONALE: >>>
+Frontends retrieve branding artwork by the storage path resolved from the key-value store without login.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-151
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-240
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-512
+TITLE: Branding Stub Files When Missing
+STATEMENT: >>>
+When a default branding file is missing under the branding directory, the GSSC Website Unified Backend SHALL write a minimal valid stub file for that default path so the branding get can serve bytes without requiring committed binary image files in the codebase.
+<<<
+RATIONALE: >>>
+Serveable stubs keep favicon and logo retrieval working in fresh environments until operators replace the bytes under the storage root.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-151
+REVIEW_STATUS: Changed
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-240
+  ROLE: Refines
+
+[[/SECTION]]
+
 [REQUIREMENT]
 UID: GSSC-BLLR-366
 TITLE: Stored File Entries Table

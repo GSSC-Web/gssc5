@@ -5,6 +5,10 @@ import { provideRouter, Router } from '@angular/router';
 import { ContactOverlay } from '../../services/contact-overlay/contact-overlay';
 import { DEFAULT_MEMBERS_APP_ORIGIN, MembersApp } from '../../services/members-app';
 import {
+  BRANDING_FAVICON_KEY,
+  BRANDING_LOGO_KEY,
+} from '../../services/branding-assets/branding-assets';
+import {
   SOCIETY_EMAIL_KEY,
   SOCIETY_ORGANIZATION_ACRONYM_KEY,
   SOCIETY_ORGANIZATION_NAME_KEY,
@@ -24,6 +28,8 @@ const sampleContact = {
   postalAddress: 'P.O. Box 1352 Modesto, CA 95353-1352',
 };
 
+const sampleBrandingLogoUrl = 'http://localhost:3000/branding/gssc-society-logo.png';
+
 class FakeKvStore {
   private readonly values = new Map<string, string>([
     [SOCIETY_ORGANIZATION_NAME_KEY, sampleContact.organizationName],
@@ -31,6 +37,8 @@ class FakeKvStore {
     [SOCIETY_PHONE_KEY, sampleContact.phoneNumber],
     [SOCIETY_EMAIL_KEY, sampleContact.emailAddress],
     [SOCIETY_POSTAL_KEY, sampleContact.postalAddress],
+    [BRANDING_FAVICON_KEY, 'branding/favicon.ico'],
+    [BRANDING_LOGO_KEY, 'branding/gssc-society-logo.png'],
   ]);
 
   async getValue(key: string): Promise<string | null> {
@@ -141,7 +149,7 @@ test('GSSC-PLLR-385 Lexical', async () => {
   const { root } = await setupFooter();
   const mark = root.querySelector<HTMLImageElement>('.gssc-footer__logo-mark')!;
   expect(mark.tagName).toBe('IMG');
-  expect(mark.getAttribute('src')).toBe('/gssc-society-logo.png');
+  expect(mark.getAttribute('src')).toBe(sampleBrandingLogoUrl);
   expect(mark.classList.contains('size-10')).toBe(true);
   expect(mark.classList.contains('object-contain')).toBe(true);
 });
