@@ -345,7 +345,6 @@ export const researchTools = new Elysia({
       if (tool === null) return statusFn(404, "Not Found" as const);
 
       const folderId = await ensureResearchToolsFolder();
-      const bytes = new Uint8Array(await upload.arrayBuffer());
       const storageKey = storageKeyForTool(params.cuid);
       const mimeType = upload.type || null;
 
@@ -361,7 +360,7 @@ export const researchTools = new Elysia({
       });
 
       if (existing !== null) {
-        const written = await writeStoredBytes(storageKey, bytes);
+        const written = await writeStoredBytes(storageKey, upload);
         if (written === null) {
           return statusFn(500, "Invalid" as const);
         }
@@ -370,7 +369,7 @@ export const researchTools = new Elysia({
           data: {
             storageKey,
             mimeType,
-            sizeBytes: bytes.byteLength,
+            sizeBytes: upload.size,
           },
         });
       } else {
@@ -381,13 +380,13 @@ export const researchTools = new Elysia({
             parentId: folderId,
             storageKey,
             mimeType,
-            sizeBytes: bytes.byteLength,
+            sizeBytes: upload.size,
             isPublic: true,
             readRoles: JSON.stringify([]),
             writeRoles: JSON.stringify(["toolEditor"]),
           },
         });
-        const written = await writeStoredBytes(storageKey, bytes);
+        const written = await writeStoredBytes(storageKey, upload);
         if (written === null) {
           await prisma.storedFileEntry.delete({ where: { id: created.id } });
           return statusFn(500, "Invalid" as const);

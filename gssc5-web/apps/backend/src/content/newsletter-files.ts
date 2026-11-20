@@ -332,7 +332,6 @@ export const newsletterFiles = new Elysia({ prefix: "/newsletter-files" })
       if (target === null) return statusFn(404, "Not Found" as const);
 
       const folderId = await ensureNewslettersFolder();
-      const bytes = new Uint8Array(await upload.arrayBuffer());
       const storageKey = storageKeyForNewsletter(newsletterCuid);
       const mimeType = upload.type || null;
       // @relation(GSSC-BLLR-506, scope=range_start, role=Implementation)
@@ -357,7 +356,7 @@ export const newsletterFiles = new Elysia({ prefix: "/newsletter-files" })
 
       let keepEntryId: string;
       if (existing !== null && existing.deletedAt === null) {
-        const written = await writeStoredBytes(storageKey, bytes);
+        const written = await writeStoredBytes(storageKey, upload);
         if (written === null) {
           return statusFn(500, "Invalid" as const);
         }
@@ -367,14 +366,14 @@ export const newsletterFiles = new Elysia({ prefix: "/newsletter-files" })
             name: displayName,
             storageKey,
             mimeType,
-            sizeBytes: bytes.byteLength,
+            sizeBytes: upload.size,
             isPublic: true,
             deletedAt: null,
           },
         });
         keepEntryId = existing.id;
       } else {
-        const written = await writeStoredBytes(storageKey, bytes);
+        const written = await writeStoredBytes(storageKey, upload);
         if (written === null) {
           return statusFn(500, "Invalid" as const);
         }
@@ -387,7 +386,7 @@ export const newsletterFiles = new Elysia({ prefix: "/newsletter-files" })
               parentId: folderId,
               storageKey,
               mimeType,
-              sizeBytes: bytes.byteLength,
+              sizeBytes: upload.size,
               isPublic: true,
               readRoles: JSON.stringify([]),
               writeRoles: JSON.stringify(["newsletterEditor"]),
@@ -404,7 +403,7 @@ export const newsletterFiles = new Elysia({ prefix: "/newsletter-files" })
               parentId: folderId,
               storageKey,
               mimeType,
-              sizeBytes: bytes.byteLength,
+              sizeBytes: upload.size,
               isPublic: true,
               readRoles: JSON.stringify([]),
               writeRoles: JSON.stringify(["newsletterEditor"]),

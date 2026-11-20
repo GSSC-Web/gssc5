@@ -425,11 +425,10 @@ export const files = new Elysia({ prefix: "/files" })
       if (acl === "invalid") return statusFn(422, "Invalid" as const);
       if (acl === "looser") return statusFn(422, "Invalid" as const);
 
-      const bytes = new Uint8Array(await upload.arrayBuffer());
       await ensureStorageRoot();
 
       const prisma = getPrisma(loadConfig().DATABASE_URL);
-      // @relation(GSSC-BLLR-377, scope=range_start, role=Implementation)
+      // @relation(GSSC-BLLR-377, GSSC-BLLR-508, scope=range_start, role=Implementation)
       const created = await prisma.storedFileEntry.create({
         data: {
           name,
@@ -437,14 +436,14 @@ export const files = new Elysia({ prefix: "/files" })
           parentId: parent.kind === "root" ? null : parent.row.id,
           storageKey: "pending",
           mimeType: upload.type || null,
-          sizeBytes: bytes.byteLength,
+          sizeBytes: upload.size,
           isPublic: acl.isPublic,
           readRoles: serializeRoleList(acl.readRoles),
           writeRoles: serializeRoleList(acl.writeRoles),
         },
       });
       const storageKey = created.id;
-      const written = await writeStoredBytes(storageKey, bytes);
+      const written = await writeStoredBytes(storageKey, upload);
       if (written === null) {
         await prisma.storedFileEntry.delete({ where: { id: created.id } });
         return statusFn(500, "Invalid" as const);
@@ -453,7 +452,7 @@ export const files = new Elysia({ prefix: "/files" })
         where: { id: created.id },
         data: { storageKey },
       });
-      // @relation(GSSC-BLLR-377, scope=range_end, role=Implementation)
+      // @relation(GSSC-BLLR-377, GSSC-BLLR-508, scope=range_end, role=Implementation)
       return statusFn(201, toListEntry(updated));
     },
     {
