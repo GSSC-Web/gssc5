@@ -276,7 +276,6 @@ export const accountPhotos = new Elysia({ prefix: "/account-photos" })
       if (target === null) return statusFn(404, "Not Found" as const);
 
       const folderId = await ensureAccountPhotosFolder();
-      const bytes = new Uint8Array(await upload.arrayBuffer());
       const storageKey = storageKeyForUser(targetUserCuid);
       const mimeType = upload.type || null;
 
@@ -293,7 +292,7 @@ export const accountPhotos = new Elysia({ prefix: "/account-photos" })
 
       let keepEntryId: string;
       if (existing !== null) {
-        const written = await writeStoredBytes(storageKey, bytes);
+        const written = await writeStoredBytes(storageKey, upload);
         if (written === null) {
           return statusFn(500, "Invalid" as const);
         }
@@ -302,7 +301,7 @@ export const accountPhotos = new Elysia({ prefix: "/account-photos" })
           data: {
             storageKey,
             mimeType,
-            sizeBytes: bytes.byteLength,
+            sizeBytes: upload.size,
           },
         });
         keepEntryId = existing.id;
@@ -314,13 +313,13 @@ export const accountPhotos = new Elysia({ prefix: "/account-photos" })
             parentId: folderId,
             storageKey,
             mimeType,
-            sizeBytes: bytes.byteLength,
+            sizeBytes: upload.size,
             isPublic: false,
             readRoles: JSON.stringify(["member"]),
             writeRoles: JSON.stringify(["member"]),
           },
         });
-        const written = await writeStoredBytes(storageKey, bytes);
+        const written = await writeStoredBytes(storageKey, upload);
         if (written === null) {
           await prisma.storedFileEntry.delete({ where: { id: created.id } });
           return statusFn(500, "Invalid" as const);

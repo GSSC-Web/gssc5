@@ -9397,6 +9397,24 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
+UID: GSSC-BLLR-508
+TITLE: Stored Upload Write Without Full-File Buffer
+STATEMENT: >>>
+When the GSSC Website Unified Backend stores an uploaded file under the configured local storage root, it SHALL write that upload without first copying the entire upload into an intermediate full-file buffer, while still rejecting storage keys that escape the storage root and creating parent directories as needed.
+<<<
+RATIONALE: >>>
+Upload handlers already receive a file body; a second full-file copy wastes memory before the bytes reach disk.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-146
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-207
+  ROLE: Refines
+
+[REQUIREMENT]
 UID: GSSC-BLLR-366
 TITLE: Stored File Entries Table
 STATEMENT: >>>
