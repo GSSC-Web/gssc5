@@ -7543,6 +7543,30 @@ RELATIONS:
 [[/SECTION]]
 
 [[SECTION]]
+UID: GSSC-BLLR-FILES-ITEM-HEAD
+TITLE: HEAD
+
+[REQUIREMENT]
+UID: GSSC-BLLR-507
+TITLE: File Head
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL answer a body-less file head for a file cuid in the path with the same access outcomes and content headers as file get when the caller may read that file and the file is not soft-deleted, without transferring the stored file bytes.
+<<<
+RATIONALE: >>>
+Clients that only need to know whether a file is readable can avoid downloading the issue body before preview or open.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-145
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-204
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
 UID: GSSC-BLLR-FILES-ITEM-DELETE
 TITLE: DELETE
 

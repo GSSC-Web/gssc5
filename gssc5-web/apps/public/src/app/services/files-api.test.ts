@@ -77,38 +77,59 @@ test('resolveStoredFileObjectUrl fetches absolute http(s) with omit on failure',
   }
 });
 
-test('resolveStoredFileAccessUrl returns /files URL after Treaty probe', async () => {
-  const original = filesApi.get;
-  filesApi.get = (async () => ({
-    data: new Response(new Uint8Array([1]), { status: 200 }),
-    error: null,
-    status: 200,
-    response: new Response(),
-    headers: undefined,
-  })) as unknown as typeof filesApi.get;
+// @relation(GSSC-PLLR-399, scope=range_start, role=Test)
+test('GSSC-PLLR-399 resolveStoredFileAccessUrl uses Treaty HEAD without body transfer', async () => {
+  const originalHead = filesApi.head;
+  let headCalls = 0;
+  let getCalls = 0;
+  const originalGet = filesApi.get;
+  filesApi.head = (async () => {
+    headCalls += 1;
+    return {
+      data: null,
+      error: null,
+      status: 200,
+      response: new Response(null, { status: 200 }),
+      headers: undefined,
+    };
+  }) as unknown as typeof filesApi.head;
+  filesApi.get = (async () => {
+    getCalls += 1;
+    return {
+      data: new Response(new Uint8Array([1]), { status: 200 }),
+      error: null,
+      status: 200,
+      response: new Response(),
+      headers: undefined,
+    };
+  }) as unknown as typeof filesApi.get;
 
   try {
     expect(await resolveStoredFileAccessUrl('file-abc')).toBe(
       'http://localhost:3000/files/file-abc',
     );
+    expect(headCalls).toBe(1);
+    expect(getCalls).toBe(0);
   } finally {
-    filesApi.get = original;
+    filesApi.head = originalHead;
+    filesApi.get = originalGet;
   }
 });
+// @relation(GSSC-PLLR-399, scope=range_end, role=Test)
 
-test('resolveStoredFileAccessUrl omits on Treaty 403', async () => {
-  const original = filesApi.get;
-  filesApi.get = (async () => ({
+test('resolveStoredFileAccessUrl omits on Treaty HEAD 403', async () => {
+  const original = filesApi.head;
+  filesApi.head = (async () => ({
     data: null,
     error: { status: 403, value: 'Forbidden' },
     status: 403,
     response: new Response(),
     headers: undefined,
-  })) as unknown as typeof filesApi.get;
+  })) as unknown as typeof filesApi.head;
 
   try {
     expect(await resolveStoredFileAccessUrl('secret')).toBeNull();
   } finally {
-    filesApi.get = original;
+    filesApi.head = original;
   }
 });

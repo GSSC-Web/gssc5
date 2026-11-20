@@ -167,6 +167,60 @@ function sanitizeFileName(name: string): string | null {
   return trimmed;
 }
 
+type FileStatusFn = (
+  code: number,
+  value: "Not Found" | "Forbidden" | "Invalid" | undefined,
+) => unknown;
+
+function fileContentHeaders(
+  row: EntryRow,
+  dispositionName: string,
+): Record<string, string> {
+  return {
+    "content-type": row.mimeType || "application/octet-stream",
+    "content-disposition": `inline; filename="${dispositionName.replaceAll('"', "")}"`,
+  };
+}
+
+async function resolveReadableStoredFile(
+  cuid: string,
+  cookie: CookieJar,
+  statusFn: FileStatusFn,
+): Promise<
+  | { error: unknown }
+  | { row: EntryRow; file: Bun.BunFile; dispositionName: string }
+> {
+  const session = await openSession(cookie);
+  const user = sessionUser(session);
+  const row = await loadEntry(cuid);
+  // @relation(GSSC-BLLR-380, scope=range_start, role=Implementation)
+  if (
+    row === null ||
+    row.deletedAt !== null ||
+    (await hasSoftDeletedAncestor(row))
+  ) {
+    return { error: statusFn(404, "Not Found" as const) };
+  }
+  if (row.kind !== "file" || row.storageKey === null) {
+    return { error: statusFn(404, "Not Found" as const) };
+  }
+  if (!canReadEntry(entryAcl(row), user)) {
+    return { error: statusFn(403, "Forbidden" as const) };
+  }
+  // @relation(GSSC-BLLR-380, scope=range_end, role=Implementation)
+
+  const file = readStoredFile(row.storageKey);
+  if (file === null || !(await file.exists())) {
+    return { error: statusFn(404, "Not Found" as const) };
+  }
+  const dispositionName = await newsletterDispositionFileName({
+    id: row.id,
+    name: row.name,
+    parentId: row.parentId,
+  });
+  return { row, file, dispositionName };
+}
+
 /** Local filesystem file storage with DB ACL metadata (GSSC5-71). */
 export const files = new Elysia({ prefix: "/files" })
   .guard({ cookie: loginTokenCookie })
@@ -423,42 +477,33 @@ export const files = new Elysia({ prefix: "/files" })
   .get(
     "/:cuid",
     async ({ params, cookie, status: statusFn }) => {
-      const session = await openSession(cookie);
-      const user = sessionUser(session);
-      const row = await loadEntry(params.cuid);
-      // @relation(GSSC-BLLR-380, scope=range_start, role=Implementation)
-      if (
-        row === null ||
-        row.deletedAt !== null ||
-        (await hasSoftDeletedAncestor(row))
-      ) {
-        return statusFn(404, "Not Found" as const);
-      }
-      if (row.kind !== "file" || row.storageKey === null) {
-        return statusFn(404, "Not Found" as const);
-      }
-      if (!canReadEntry(entryAcl(row), user)) {
-        return statusFn(403, "Forbidden" as const);
-      }
-      // @relation(GSSC-BLLR-380, scope=range_end, role=Implementation)
+      const resolved = await resolveReadableStoredFile(params.cuid, cookie, statusFn);
+      if ("error" in resolved) return resolved.error;
 
-      const file = readStoredFile(row.storageKey);
-      if (file === null || !(await file.exists())) {
-        return statusFn(404, "Not Found" as const);
-      }
       // @relation(GSSC-BLLR-379, GSSC-BLLR-506, scope=range_start, role=Implementation)
-      const dispositionName = await newsletterDispositionFileName({
-        id: row.id,
-        name: row.name,
-        parentId: row.parentId,
-      });
-      return new Response(file, {
-        headers: {
-          "content-type": row.mimeType || "application/octet-stream",
-          "content-disposition": `inline; filename="${dispositionName.replaceAll('"', "")}"`,
-        },
+      return new Response(resolved.file, {
+        headers: fileContentHeaders(resolved.row, resolved.dispositionName),
       });
       // @relation(GSSC-BLLR-379, GSSC-BLLR-506, scope=range_end, role=Implementation)
+    },
+    {
+      params: t.Object({ cuid: t.String() }),
+    },
+  )
+  .head(
+    "/:cuid",
+    async ({ params, cookie, status: statusFn }) => {
+      const resolved = await resolveReadableStoredFile(params.cuid, cookie, statusFn);
+      if ("error" in resolved) return resolved.error;
+
+      // @relation(GSSC-BLLR-507, GSSC-BLLR-506, scope=range_start, role=Implementation)
+      const headers = fileContentHeaders(resolved.row, resolved.dispositionName);
+      const size = resolved.file.size;
+      if (typeof size === "number" && Number.isFinite(size)) {
+        headers["content-length"] = String(size);
+      }
+      return new Response(null, { status: 200, headers });
+      // @relation(GSSC-BLLR-507, GSSC-BLLR-506, scope=range_end, role=Implementation)
     },
     {
       params: t.Object({ cuid: t.String() }),
