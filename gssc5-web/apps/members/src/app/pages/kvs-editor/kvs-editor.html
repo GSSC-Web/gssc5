@@ -1,0 +1,108 @@
+<!-- @relation(GSSC-MLLR-708, GSSC-MLLR-709, GSSC-MLLR-710, scope=range_start, role=Implementation) -->
+<section
+  class="gssc-kvs-editor-page mx-auto flex w-full max-w-3xl flex-col gap-4 font-sans"
+  data-slot="kvs-editor-page"
+>
+  <h1
+    class="gssc-kvs-editor-page__heading m-0 font-sans text-2xl font-medium text-gssc-dark-green sm:text-3xl"
+    data-slot="kvs-editor-heading"
+  >
+    Key-Value Store
+  </h1>
+
+  @if (loadError()) {
+    <p class="m-0 text-sm text-gssc-dark-red" data-slot="kvs-load-error">
+      {{ loadError() }}
+    </p>
+  }
+
+  <div class="flex flex-col gap-3" data-slot="kvs-catalog-block">
+    <div class="flex flex-wrap items-center gap-3">
+      <h2 class="m-0 text-lg font-semibold text-gssc-dark-green">Catalog</h2>
+      @if (permitted()) {
+        <!-- @relation(GSSC-MLLR-714, GSSC-MLLR-715, GSSC-MLLR-716, scope=range_start, role=Implementation) -->
+        <button
+          type="button"
+          class="gssc-kvs-editor-page__create inline-flex cursor-pointer items-center justify-center rounded-md border border-gssc-dark-green bg-gssc-light-green px-3 py-2 font-sans text-sm font-normal text-gssc-dark-green hover:bg-gssc-gray"
+          data-slot="kvs-create"
+          (click)="startCreate()"
+        >
+          New entry
+        </button>
+        <!-- @relation(GSSC-MLLR-714, GSSC-MLLR-715, GSSC-MLLR-716, scope=range_end, role=Implementation) -->
+      }
+    </div>
+
+    <!-- @relation(GSSC-MLLR-711, GSSC-MLLR-712, GSSC-MLLR-713, scope=range_start, role=Implementation) -->
+    <ul
+      class="gssc-kvs-editor-page__list m-0 flex list-none flex-col gap-1 p-0"
+      data-slot="kvs-list"
+    >
+      @for (entry of entries(); track entry.key) {
+        <li>
+          <button
+            type="button"
+            class="gssc-kvs-editor-page__list-item w-full cursor-pointer rounded-md border border-transparent px-3 py-2 text-start font-sans text-sm text-gssc-dark-green hover:border-gssc-gray hover:bg-gssc-white"
+            [class.border-gssc-dark-green]="selectedKey() === entry.key && !isCreating()"
+            [attr.data-key]="entry.key"
+            (click)="selectEntry(entry)"
+          >
+            {{ entry.key }}
+          </button>
+        </li>
+      } @empty {
+        <li class="px-3 py-2 font-sans text-sm text-gssc-dark-brown" data-slot="kvs-empty">
+          No key-value entries yet.
+        </li>
+      }
+    </ul>
+    <!-- @relation(GSSC-MLLR-711, GSSC-MLLR-712, GSSC-MLLR-713, scope=range_end, role=Implementation) -->
+  </div>
+
+  @if (editorOpen()) {
+    <gssc-editor
+      [resourceId]="resourceId()"
+      [permitted]="permitted()"
+      [title]="editorTitle()"
+      (saved)="onSaved()"
+      (cancelled)="onCancelled()"
+    >
+      <!-- @relation(GSSC-MLLR-720, GSSC-MLLR-721, GSSC-MLLR-722, scope=range_start, role=Implementation) -->
+      <gssc-form-text-field
+        label="Key"
+        [(value)]="key"
+        [enabled]="keyEditable()"
+        [required]="true"
+      />
+      <!-- @relation(GSSC-MLLR-720, GSSC-MLLR-721, GSSC-MLLR-722, scope=range_end, role=Implementation) -->
+      <!-- @relation(GSSC-MLLR-723, GSSC-MLLR-724, GSSC-MLLR-725, scope=range_start, role=Implementation) -->
+      <gssc-form-text-field
+        label="Value"
+        [(value)]="value"
+        [enabled]="permitted()"
+        [required]="true"
+      />
+      <!-- @relation(GSSC-MLLR-723, GSSC-MLLR-724, GSSC-MLLR-725, scope=range_end, role=Implementation) -->
+    </gssc-editor>
+
+    @if (permitted() && selectedKey() && !isCreating()) {
+      <!-- @relation(GSSC-MLLR-717, GSSC-MLLR-718, GSSC-MLLR-719, scope=range_start, role=Implementation) -->
+      <button
+        type="button"
+        class="gssc-kvs-editor-page__delete inline-flex cursor-pointer items-center justify-center self-start rounded-md border border-gssc-dark-red bg-gssc-white px-3 py-2 font-sans text-sm font-normal text-gssc-dark-red hover:bg-gssc-light-red"
+        data-slot="kvs-delete"
+        (click)="onDelete()"
+      >
+        Delete entry
+      </button>
+      <!-- @relation(GSSC-MLLR-717, GSSC-MLLR-718, GSSC-MLLR-719, scope=range_end, role=Implementation) -->
+    }
+  }
+
+  @if (statusMessage()) {
+    <p class="m-0 text-sm text-gssc-dark-brown" data-slot="kvs-status">
+      {{ statusMessage() }}
+    </p>
+  }
+</section>
+<!-- @relation(GSSC-MLLR-708, GSSC-MLLR-709, GSSC-MLLR-710, scope=range_end, role=Implementation) -->

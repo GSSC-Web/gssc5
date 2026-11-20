@@ -26,7 +26,7 @@ const KeyValueUpsertBody = t.Object(
   { additionalProperties: true },
 );
 
-/** Global website key-value store (GSSC-BHLR-119 / GSSC5-43). */
+/** Global website key-value store (GSSC-BHLR-119 / GSSC5-43 / GSSC-202). */
 export const kvs = new Elysia({
   name: "kvs",
   prefix: "/kvs",
@@ -40,6 +40,29 @@ export const kvs = new Elysia({
   .onTransform(({ body }) => {
     trimStrings(body);
   })
+  .get(
+    "/",
+    async ({ cookie, status }) => {
+      // @relation(GSSC-BLLR-509, GSSC-BLLR-510, scope=range_start, role=Implementation)
+      const session = await openSession(cookie);
+      if ("failure" in session) return status(403, "Forbidden" as const);
+      if (!session.user.isAdmin) return status(403, "Forbidden" as const);
+      const prisma = getPrisma(loadConfig().DATABASE_URL);
+      const rows = await prisma.keyValue.findMany({ orderBy: { key: "asc" } });
+      return status(
+        200,
+        rows.map((row) => ({ key: row.key, value: row.value })),
+      );
+      // @relation(GSSC-BLLR-509, GSSC-BLLR-510, scope=range_end, role=Implementation)
+    },
+    {
+      cookie: loginTokenCookie,
+      response: {
+        200: t.Array(KeyValuePlain),
+        403: t.Literal("Forbidden"),
+      },
+    },
+  )
   .get(
     "/:key",
     async ({ params, status }) => {
@@ -96,6 +119,36 @@ export const kvs = new Elysia({
         204: t.Void(),
         403: t.Literal("Forbidden"),
         422: t.Literal("Invalid"),
+      },
+    },
+  )
+  .delete(
+    "/:key",
+    async ({ params, cookie, status }) => {
+      // @relation(GSSC-BLLR-511, GSSC-BLLR-512, GSSC-BLLR-513, scope=range_start, role=Implementation)
+      const session = await openSession(cookie);
+      if ("failure" in session) return status(403, "Forbidden" as const);
+      if (!session.user.isAdmin) return status(403, "Forbidden" as const);
+
+      const prisma = getPrisma(loadConfig().DATABASE_URL);
+      const existing = await prisma.keyValue.findUnique({
+        where: { key: params.key },
+      });
+      if (!existing) return status(404, "Not Found" as const);
+
+      await prisma.keyValue.delete({ where: { key: params.key } });
+      return status(204, undefined);
+      // @relation(GSSC-BLLR-511, GSSC-BLLR-512, GSSC-BLLR-513, scope=range_end, role=Implementation)
+    },
+    {
+      params: t.Object({
+        key: t.String({ minLength: 1 }),
+      }),
+      cookie: loginTokenCookie,
+      response: {
+        204: t.Void(),
+        403: t.Literal("Forbidden"),
+        404: t.Literal("Not Found"),
       },
     },
   );

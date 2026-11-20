@@ -2044,3 +2044,35 @@ RELATIONS:
 
 [[/SECTION]]
 
+[[SECTION]]
+UID: GSSC-MHLR-KVS-EDITOR
+TITLE: Key-Value Store Editor Requirements
+
+[REQUIREMENT]
+UID: GSSC-MHLR-114
+TITLE: Key-Value Store Catalog Support
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL support the Unified Backend key-value store catalog for administrators who manage global website data entries.
+<<<
+RATIONALE: >>>
+Administrators need a Members surface over the Unified Backend key-value contracts so global website data can be reviewed without programming knowledge.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC-202
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-MHLR-115
+TITLE: Key-Value Store Modification
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL let an administrator create, modify, and remove a key-value entry without programming knowledge.
+<<<
+RATIONALE: >>>
+Key-value create, value update, and delete are administrator responsibilities on the Unified Backend; the Member Frontend exposes those operations for day-to-day catalog maintenance.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC-202
+REVIEW_STATUS: Approved
+
+[[/SECTION]]
+
