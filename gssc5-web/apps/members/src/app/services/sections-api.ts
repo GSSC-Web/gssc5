@@ -81,6 +81,9 @@ export type SectionCreate = (
   body: SectionCreateBody,
 ) => Promise<{ ok: true; detail: SectionDetail } | { ok: false; forbidden: boolean }>;
 export type SectionsListTemplates = () => Promise<SectionTemplateListEntry[]>;
+export type SectionDeleteByCuid = (
+  cuid: string,
+) => Promise<{ ok: true } | { ok: false; forbidden: boolean }>;
 
 /** Unfiltered section catalog for Page Data Editor (GSSC5-139). */
 export const SECTIONS_LIST = new InjectionToken<SectionsList>('SECTIONS_LIST', {
@@ -122,6 +125,14 @@ export const SECTIONS_LIST_TEMPLATES = new InjectionToken<SectionsListTemplates>
   {
     providedIn: 'root',
     factory: () => defaultSectionsListTemplates,
+  },
+);
+
+export const SECTION_DELETE_BY_CUID = new InjectionToken<SectionDeleteByCuid>(
+  'SECTION_DELETE_BY_CUID',
+  {
+    providedIn: 'root',
+    factory: () => defaultSectionDeleteByCuid,
   },
 );
 
@@ -248,5 +259,25 @@ async function defaultSectionsListTemplates(): Promise<SectionTemplateListEntry[
     });
   } catch {
     return [];
+  }
+}
+
+async function defaultSectionDeleteByCuid(
+  cuid: string,
+): Promise<{ ok: true } | { ok: false; forbidden: boolean }> {
+  try {
+    const result = await backend.sections({ cuid }).delete();
+    if (result.error) {
+      const status =
+        typeof result.error === 'object' &&
+        result.error !== null &&
+        'status' in result.error
+          ? Number((result.error as { status?: number }).status)
+          : undefined;
+      return { ok: false, forbidden: status === 403 };
+    }
+    return { ok: true };
+  } catch {
+    return { ok: false, forbidden: false };
   }
 }

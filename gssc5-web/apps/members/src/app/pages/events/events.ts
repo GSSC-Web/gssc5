@@ -118,6 +118,23 @@ function formatEventDate(event: EventRecord): string {
   return `${event.year}-${String(event.month).padStart(2, '0')}-${String(event.day).padStart(2, '0')}`;
 }
 
+export type EventsTimeFilter = 'past' | 'future' | 'all';
+
+function eventDateValue(event: EventRecord): number {
+  return event.year * 10_000 + event.month * 100 + event.day;
+}
+
+function todayDateValue(now = new Date()): number {
+  return now.getFullYear() * 10_000 + (now.getMonth() + 1) * 100 + now.getDate();
+}
+
+function matchesTimeFilter(event: EventRecord, filter: EventsTimeFilter, today = todayDateValue()): boolean {
+  if (filter === 'all') return true;
+  const value = eventDateValue(event);
+  if (filter === 'future') return value >= today;
+  return value < today;
+}
+
 @Component({
   selector: 'gssc-events-page',
   imports: [Editor, FormTextField, FormSelectField],
@@ -131,6 +148,15 @@ export class EventsPage implements OnInit {
   readonly statusMessage = signal('Select an event or create a new one.');
   readonly mode = signal<'create' | 'edit'>('create');
   readonly editingCuid = signal<string | null>(null);
+  // @relation(GSSC-MLLR-753, scope=range_start, role=Implementation)
+  readonly timeFilter = signal<EventsTimeFilter>('future');
+  // @relation(GSSC-MLLR-753, scope=range_end, role=Implementation)
+
+  readonly timeFilterOptions: ReadonlyArray<{ value: EventsTimeFilter; label: string }> = [
+    { value: 'past', label: 'Past' },
+    { value: 'future', label: 'Future' },
+    { value: 'all', label: 'All' },
+  ];
 
   readonly name = signal('');
   readonly month = signal('');
@@ -157,6 +183,20 @@ export class EventsPage implements OnInit {
   /** User moderators (and administrators via session gate) may create/modify. */
   readonly canEdit = computed(() => this.memberSession.isUserMod());
   // @relation(GSSC-MLLR-344, scope=range_end, role=Implementation)
+
+  // @relation(GSSC-MLLR-762, scope=range_start, role=Implementation)
+  readonly canCopy = computed(
+    () => this.canEdit() && this.mode() === 'edit' && this.editingCuid() != null,
+  );
+  // @relation(GSSC-MLLR-762, scope=range_end, role=Implementation)
+
+  // @relation(GSSC-MLLR-753, GSSC-MLLR-756, scope=range_start, role=Implementation)
+  readonly filteredCatalog = computed(() => {
+    const filter = this.timeFilter();
+    const today = todayDateValue();
+    return this.catalog().filter((event) => matchesTimeFilter(event, filter, today));
+  });
+  // @relation(GSSC-MLLR-753, GSSC-MLLR-756, scope=range_end, role=Implementation)
 
   // @relation(GSSC-MLLR-346, scope=range_start, role=Implementation)
   readonly editorResourceId = computed(() => {
@@ -205,9 +245,47 @@ export class EventsPage implements OnInit {
     this.statusMessage.set('Editing event.');
   }
 
+  onTimeFilterChange(next: string): void {
+    if (next === 'past' || next === 'future' || next === 'all') {
+      this.timeFilter.set(next);
+    }
+  }
+
   catalogLabel(event: EventRecord): string {
     return `${event.name} · ${formatEventDate(event)}`;
   }
+
+  // @relation(GSSC-MLLR-761, GSSC-MLLR-764, scope=range_start, role=Implementation)
+  copyToNew(): void {
+    if (!this.canCopy()) return;
+    const cuid = this.editingCuid();
+    if (cuid == null) return;
+    const source = this.catalog().find((event) => event.cuid === cuid);
+    const form = source != null ? formFromRecord(source) : this.currentForm();
+    this.mode.set('create');
+    this.editingCuid.set(null);
+    this.applyForm(form);
+    this.statusMessage.set('Copied — edit and save to create a new event.');
+  }
+  // @relation(GSSC-MLLR-761, GSSC-MLLR-764, scope=range_end, role=Implementation)
+
+  // @relation(GSSC-MLLR-749, GSSC-MLLR-752, scope=range_start, role=Implementation)
+  async onDelete(): Promise<void> {
+    if (!this.canEdit() || this.mode() !== 'edit') return;
+    const cuid = this.editingCuid();
+    if (!cuid) return;
+
+    const { error } = await eventsApi.remove(cuid);
+    if (error) {
+      this.statusMessage.set('Unable to delete event.');
+      return;
+    }
+
+    await this.loadCatalog();
+    this.startCreate({ announce: false });
+    this.statusMessage.set('Event deleted.');
+  }
+  // @relation(GSSC-MLLR-749, GSSC-MLLR-752, scope=range_end, role=Implementation)
 
   // @relation(GSSC-MLLR-340, GSSC-MLLR-342, scope=range_start, role=Implementation)
   async onSaved(): Promise<void> {

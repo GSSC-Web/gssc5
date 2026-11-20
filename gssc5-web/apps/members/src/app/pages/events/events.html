@@ -22,16 +22,48 @@
       <h2 class="gssc-events-catalog__heading m-0 text-lg font-semibold text-gssc-dark-green">
         Catalog
       </h2>
-      <!-- @relation(GSSC-MLLR-330, GSSC-MLLR-331, GSSC-MLLR-332, scope=range_start, role=Implementation) -->
-      <button
-        type="button"
-        class="gssc-events-new inline-flex cursor-pointer items-center justify-center rounded-md border border-gssc-dark-green bg-gssc-light-green px-3 py-1.5 font-sans text-sm text-gssc-dark-green hover:bg-gssc-gray disabled:cursor-not-allowed disabled:opacity-60"
-        [disabled]="!canEdit()"
-        (click)="startCreate()"
-      >
-        New Event
-      </button>
-      <!-- @relation(GSSC-MLLR-330, GSSC-MLLR-331, GSSC-MLLR-332, scope=range_end, role=Implementation) -->
+      <div class="flex flex-wrap items-center gap-2">
+        <!-- @relation(GSSC-MLLR-753, GSSC-MLLR-754, GSSC-MLLR-755, scope=range_start, role=Implementation) -->
+        <label
+          class="gssc-events-catalog__filter inline-flex items-center gap-2 font-sans text-sm text-gssc-dark-green"
+          data-slot="events-time-filter"
+        >
+          <span class="gssc-events-catalog__filter-label">Filter</span>
+          <select
+            class="gssc-events-catalog__filter-select rounded-md border border-gssc-dark-green bg-gssc-white px-2 py-1.5 font-sans text-sm text-gssc-dark-green"
+            [value]="timeFilter()"
+            (change)="onTimeFilterChange($any($event.target).value)"
+          >
+            @for (option of timeFilterOptions; track option.value) {
+              <option [value]="option.value" [selected]="timeFilter() === option.value">
+                {{ option.label }}
+              </option>
+            }
+          </select>
+        </label>
+        <!-- @relation(GSSC-MLLR-753, GSSC-MLLR-754, GSSC-MLLR-755, scope=range_end, role=Implementation) -->
+        <!-- @relation(GSSC-MLLR-761, GSSC-MLLR-762, GSSC-MLLR-763, scope=range_start, role=Implementation) -->
+        <button
+          type="button"
+          class="gssc-events-copy inline-flex cursor-pointer items-center justify-center rounded-md border border-gssc-dark-green bg-gssc-white px-3 py-1.5 font-sans text-sm text-gssc-dark-green hover:bg-gssc-light-green disabled:cursor-not-allowed disabled:opacity-60"
+          data-slot="events-copy"
+          [disabled]="!canCopy()"
+          (click)="copyToNew()"
+        >
+          Copy to New Event
+        </button>
+        <!-- @relation(GSSC-MLLR-761, GSSC-MLLR-762, GSSC-MLLR-763, scope=range_end, role=Implementation) -->
+        <!-- @relation(GSSC-MLLR-330, GSSC-MLLR-331, GSSC-MLLR-332, scope=range_start, role=Implementation) -->
+        <button
+          type="button"
+          class="gssc-events-new inline-flex cursor-pointer items-center justify-center rounded-md border border-gssc-dark-green bg-gssc-light-green px-3 py-1.5 font-sans text-sm text-gssc-dark-green hover:bg-gssc-gray disabled:cursor-not-allowed disabled:opacity-60"
+          [disabled]="!canEdit()"
+          (click)="startCreate()"
+        >
+          New Event
+        </button>
+        <!-- @relation(GSSC-MLLR-330, GSSC-MLLR-331, GSSC-MLLR-332, scope=range_end, role=Implementation) -->
+      </div>
     </div>
 
     @if (loadError()) {
@@ -44,7 +76,7 @@
       class="gssc-events-catalog__list m-0 max-h-40 list-none overflow-y-auto p-0"
       role="list"
     >
-      @for (event of catalog(); track event.cuid) {
+      @for (event of filteredCatalog(); track event.cuid) {
         <!-- @relation(GSSC-MLLR-327, GSSC-MLLR-328, GSSC-MLLR-329, scope=range_start, role=Implementation) -->
         <li class="gssc-events-catalog__entry">
           <button
@@ -129,6 +161,18 @@
         </div>
         <!-- @relation(GSSC-MLLR-336, GSSC-MLLR-337, GSSC-MLLR-338, scope=range_end, role=Implementation) -->
       </gssc-editor>
+      @if (canEdit() && mode() === 'edit' && editingCuid()) {
+        <!-- @relation(GSSC-MLLR-749, GSSC-MLLR-750, GSSC-MLLR-751, scope=range_start, role=Implementation) -->
+        <button
+          type="button"
+          class="gssc-events-page__delete mt-3 inline-flex cursor-pointer items-center justify-center self-start rounded-md border border-gssc-dark-red bg-gssc-white px-3 py-2 font-sans text-sm font-normal text-gssc-dark-red hover:bg-gssc-light-red"
+          data-slot="events-delete"
+          (click)="onDelete()"
+        >
+          Delete event
+        </button>
+        <!-- @relation(GSSC-MLLR-749, GSSC-MLLR-750, GSSC-MLLR-751, scope=range_end, role=Implementation) -->
+      }
     </div>
   }
   <!-- @relation(GSSC-MLLR-333, GSSC-MLLR-334, GSSC-MLLR-335, GSSC-MLLR-684, GSSC-MLLR-685, GSSC-MLLR-686, scope=range_end, role=Implementation) -->
