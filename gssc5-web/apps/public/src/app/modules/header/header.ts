@@ -14,6 +14,7 @@ import { Router, RouterLink } from '@angular/router';
 import { ContactOverlay } from '../../services/contact-overlay/contact-overlay';
 import { MemberSession } from '../../services/member-session';
 import { MembersApp } from '../../services/members-app';
+import { BrandingAssets } from '../../services/branding-assets/branding-assets';
 import { SocietyContact } from '../../services/society-contact/society-contact';
 import {
   SEARCH_OVERLAY_LIMIT,
@@ -45,6 +46,7 @@ export class Header implements OnInit, OnDestroy {
   private readonly siteSearchGet = inject(SITE_SEARCH_GET);
   private readonly router = inject(Router);
   protected readonly societyContact = inject(SocietyContact);
+  protected readonly brandingAssets = inject(BrandingAssets);
   readonly themeMode = inject(ThemeMode);
 
   readonly loggedIn = this.memberSession.loggedIn;
@@ -74,7 +76,11 @@ export class Header implements OnInit, OnDestroy {
   }
 
   async ngOnInit(): Promise<void> {
-    await Promise.all([this.societyContact.refresh(), this.siteTree.refresh()]);
+    await Promise.all([
+      this.societyContact.refresh(),
+      this.brandingAssets.refresh(),
+      this.siteTree.refresh(),
+    ]);
     this.recomputeChromeTier();
   }
 

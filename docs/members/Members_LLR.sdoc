@@ -11942,6 +11942,66 @@ RELATIONS:
 
 [[/SECTION]]
 
+[[SECTION]]
+UID: GSSC-MLLR-BRANDING-ASSET-PATHS
+TITLE: Branding Asset Paths
+
+[REQUIREMENT]
+UID: GSSC-MLLR-765
+TITLE: Semantic
+STATEMENT: >>>
+The Member Frontend Branding Asset Paths SHALL obtain the favicon and society logo storage paths from the website key-value store and SHALL present those branding images from the Unified Backend branding file store for those paths.
+<<<
+RATIONALE: >>>
+Resolving paths from the key-value store keeps Members branding retargetable without shipping binary image files in the Members app tree.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-151
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-102
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-766
+TITLE: Syntactic
+STATEMENT: >>>
+The Member Frontend Branding Asset Paths SHALL apply the resolved favicon path to the document icon link in the members document head and SHALL apply the resolved society logo path as the image source for Header, Footer, and Login society logo marks.
+<<<
+RATIONALE: >>>
+Document icon and chrome logo marks share the same resolved branding paths so Members brand presentation stays consistent across the shell.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-151
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-102
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-767
+TITLE: Lexical
+STATEMENT: >>>
+The Member Frontend Branding Asset Paths SHALL use Unified Backend branding file URLs derived from the resolved storage paths for favicon and society logo image retrieval.
+<<<
+RATIONALE: >>>
+Backend file URLs are how Members retrieves branding bytes after key-value path resolution.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-151
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-102
+  ROLE: Refines
+
+[[/SECTION]]
+
 [[/SECTION]]
 
 [[SECTION]]

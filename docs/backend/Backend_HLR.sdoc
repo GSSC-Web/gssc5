@@ -3757,6 +3757,46 @@ RELATIONS:
   VALUE: GSSC-PIR-57
   ROLE: Refines
 
+[REQUIREMENT]
+UID: GSSC-BHLR-242
+TITLE: Branding Asset File Store
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL provide a dedicated branding asset file store under the local file storage root that holds public branding files such as the favicon and society logo, and SHALL answer unauthenticated requests for those branding files by storage path under that store.
+<<<
+RATIONALE: >>>
+Public and Members frontends need a single backend location for branding artwork without committing binary image files into the frontend trees.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-151
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-57
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-BHLR-207
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BHLR-243
+TITLE: Branding Asset Path Keys
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL publish default website key-value entries that name the storage paths of the favicon and society logo branding assets so frontends can resolve those paths before retrieving the files.
+<<<
+RATIONALE: >>>
+Key-value path stubs let operators retarget branding files without rebuilding frontends, while defaults keep a serveable location available after seed.
+<<<
+DERIVED: False
+CHANGE_DRIVER: GSSC5-151
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PIR-57
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-BHLR-119
+  ROLE: Refines
+
 [[/SECTION]]
 
 [[SECTION]]

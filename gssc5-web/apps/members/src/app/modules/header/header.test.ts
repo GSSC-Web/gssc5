@@ -8,6 +8,10 @@ import {
   PublicApp,
 } from '../../services/public-app';
 import {
+  BRANDING_FAVICON_KEY,
+  BRANDING_LOGO_KEY,
+} from '../../services/branding-assets/branding-assets';
+import {
   SOCIETY_ORGANIZATION_ACRONYM_KEY,
   SOCIETY_ORGANIZATION_NAME_KEY,
   SocietyContact,
@@ -95,10 +99,14 @@ const sampleTree: NestedSiteTreePayload = {
   ]),
 };
 
+const sampleBrandingLogoUrl = 'http://localhost:3000/branding/gssc-society-logo.png';
+
 class FakeKvStore {
   private readonly values = new Map<string, string | null>([
     [SOCIETY_ORGANIZATION_NAME_KEY, sampleOrg.organizationName],
     [SOCIETY_ORGANIZATION_ACRONYM_KEY, sampleOrg.organizationAcronym],
+    [BRANDING_FAVICON_KEY, 'branding/favicon.ico'],
+    [BRANDING_LOGO_KEY, 'branding/gssc-society-logo.png'],
   ]);
 
   async getValue(key: string): Promise<string | null> {
@@ -291,7 +299,7 @@ test('GSSC-MLLR-19 Lexical', async () => {
   const { root } = await setupHeader();
   const mark = root.querySelector<HTMLImageElement>('.gssc-header__logo-mark')!;
   expect(mark.tagName).toBe('IMG');
-  expect(mark.getAttribute('src')).toBe('/gssc-society-logo.png');
+  expect(mark.getAttribute('src')).toBe(sampleBrandingLogoUrl);
   expect(mark.classList.contains('size-10')).toBe(true);
   expect(mark.classList.contains('object-contain')).toBe(true);
 });
