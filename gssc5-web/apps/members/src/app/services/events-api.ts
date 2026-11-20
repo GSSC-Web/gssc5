@@ -57,4 +57,5 @@ export const eventsApi = {
   create: (body: EventCreateBody) => backend.events.post(body as never),
   update: (cuid: string, body: EventUpdateBody) =>
     backend.events({ cuid }).patch(body as never),
+  remove: (cuid: string) => backend.events({ cuid }).delete(),
 };

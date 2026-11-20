@@ -39,8 +39,8 @@ test('brandingFileUrl maps branding paths; passes through absolute http(s)', () 
   expect(brandingFileUrl('https://example.org/x.png')).toBe('https://example.org/x.png');
 });
 
-// @relation(GSSC-MLLR-708, scope=range_start, role=Test)
-test('GSSC-MLLR-708 Semantic', async () => {
+// @relation(GSSC-MLLR-765, scope=range_start, role=Test)
+test('GSSC-MLLR-765 Semantic', async () => {
   const branding = await setupBranding({
     [BRANDING_FAVICON_KEY]: 'branding/favicon.ico',
     [BRANDING_LOGO_KEY]: 'branding/gssc-society-logo.png',
@@ -48,10 +48,10 @@ test('GSSC-MLLR-708 Semantic', async () => {
   expect(branding.faviconUrl()).toBe('http://localhost:3000/branding/favicon.ico');
   expect(branding.logoUrl()).toBe('http://localhost:3000/branding/gssc-society-logo.png');
 });
-// @relation(GSSC-MLLR-708, scope=range_end, role=Test)
+// @relation(GSSC-MLLR-765, scope=range_end, role=Test)
 
-// @relation(GSSC-MLLR-709, scope=range_start, role=Test)
-test('GSSC-MLLR-709 Syntactic', async () => {
+// @relation(GSSC-MLLR-766, scope=range_start, role=Test)
+test('GSSC-MLLR-766 Syntactic', async () => {
   await setupBranding({
     [BRANDING_FAVICON_KEY]: 'branding/favicon.ico',
     [BRANDING_LOGO_KEY]: 'branding/gssc-society-logo.png',
@@ -60,10 +60,10 @@ test('GSSC-MLLR-709 Syntactic', async () => {
   expect(link).not.toBeNull();
   expect(link!.getAttribute('href')).toBe('http://localhost:3000/branding/favicon.ico');
 });
-// @relation(GSSC-MLLR-709, scope=range_end, role=Test)
+// @relation(GSSC-MLLR-766, scope=range_end, role=Test)
 
-// @relation(GSSC-MLLR-710, scope=range_start, role=Test)
-test('GSSC-MLLR-710 Lexical', async () => {
+// @relation(GSSC-MLLR-767, scope=range_start, role=Test)
+test('GSSC-MLLR-767 Lexical', async () => {
   const branding = await setupBranding({
     [BRANDING_FAVICON_KEY]: 'branding/favicon.ico',
     [BRANDING_LOGO_KEY]: 'branding/gssc-society-logo.png',
@@ -71,4 +71,4 @@ test('GSSC-MLLR-710 Lexical', async () => {
   expect(branding.logoUrl()).toMatch(/^http:\/\/localhost:3000\/branding\/.+\.png$/);
   expect(branding.faviconUrl()).toMatch(/^http:\/\/localhost:3000\/branding\/.+\.ico$/);
 });
-// @relation(GSSC-MLLR-710, scope=range_end, role=Test)
+// @relation(GSSC-MLLR-767, scope=range_end, role=Test)

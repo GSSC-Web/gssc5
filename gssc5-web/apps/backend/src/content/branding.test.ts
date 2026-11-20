@@ -37,18 +37,18 @@ function readU16LE(bytes: Uint8Array, offset: number): number {
   return bytes[offset]! | (bytes[offset + 1]! << 8);
 }
 
-// @relation(GSSC-BLLR-509, scope=range_start, role=Test)
-test("GSSC-BLLR-509 Branding Directory Under Storage Root", async () => {
+// @relation(GSSC-BLLR-514, scope=range_start, role=Test)
+test("GSSC-BLLR-514 Branding Directory Under Storage Root", async () => {
   await ensureBrandingStubFiles();
   const root = path.resolve(loadConfig().FILE_STORAGE_ROOT, BRANDING_DIR);
   await access(root);
   await access(path.resolve(loadConfig().FILE_STORAGE_ROOT, DEFAULT_BRANDING_FAVICON_PATH));
   await access(path.resolve(loadConfig().FILE_STORAGE_ROOT, DEFAULT_BRANDING_LOGO_PATH));
 });
-// @relation(GSSC-BLLR-509, scope=range_end, role=Test)
+// @relation(GSSC-BLLR-514, scope=range_end, role=Test)
 
-// @relation(GSSC-BLLR-510, scope=range_start, role=Test)
-test("GSSC-BLLR-510 Branding Default Path KV Stubs", async () => {
+// @relation(GSSC-BLLR-515, scope=range_start, role=Test)
+test("GSSC-BLLR-515 Branding Default Path KV Stubs", async () => {
   await prepareBrandingAssets();
   const favicon = await db().keyValue.findUnique({ where: { key: BRANDING_FAVICON_KEY } });
   const logo = await db().keyValue.findUnique({ where: { key: BRANDING_LOGO_KEY } });
@@ -64,10 +64,10 @@ test("GSSC-BLLR-510 Branding Default Path KV Stubs", async () => {
     value: DEFAULT_BRANDING_LOGO_PATH,
   });
 });
-// @relation(GSSC-BLLR-510, scope=range_end, role=Test)
+// @relation(GSSC-BLLR-515, scope=range_end, role=Test)
 
-// @relation(GSSC-BLLR-511, scope=range_start, role=Test)
-test("GSSC-BLLR-511 Public Branding File Get", async () => {
+// @relation(GSSC-BLLR-516, scope=range_start, role=Test)
+test("GSSC-BLLR-516 Public Branding File Get", async () => {
   const logo = await backend(new Request("http://127.0.0.1/branding/gssc-society-logo.png"));
   expect(logo.status).toBe(200);
   expect(logo.headers.get("content-type")).toBe("image/png");
@@ -91,10 +91,10 @@ test("GSSC-BLLR-511 Public Branding File Get", async () => {
   const escape = await backend(new Request("http://127.0.0.1/branding/..%2Fconfig.ts"));
   expect(escape.status).toBe(404);
 });
-// @relation(GSSC-BLLR-511, scope=range_end, role=Test)
+// @relation(GSSC-BLLR-516, scope=range_end, role=Test)
 
-// @relation(GSSC-BLLR-512, scope=range_start, role=Test)
-test("GSSC-BLLR-512 Branding Stub Files When Missing", async () => {
+// @relation(GSSC-BLLR-517, scope=range_start, role=Test)
+test("GSSC-BLLR-517 Branding Stub Files When Missing", async () => {
   await ensureBrandingStubFiles();
   const faviconPath = path.resolve(
     loadConfig().FILE_STORAGE_ROOT,
@@ -108,4 +108,4 @@ test("GSSC-BLLR-512 Branding Stub Files When Missing", async () => {
   expect(favicon.size).toBeGreaterThan(0);
   expect(logo.size).toBeGreaterThan(0);
 });
-// @relation(GSSC-BLLR-512, scope=range_end, role=Test)
+// @relation(GSSC-BLLR-517, scope=range_end, role=Test)

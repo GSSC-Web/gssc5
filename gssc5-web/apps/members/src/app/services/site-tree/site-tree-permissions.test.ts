@@ -38,6 +38,9 @@ test('GSSC-MLLR-562 Semantic path gates', () => {
   ).toBe(true);
   expect(memberMayUseSiteTreePath('/directory', memberFlags)).toBe(true);
   expect(memberMayUseSiteTreePath('/site-trees', memberFlags)).toBe(false);
+  expect(memberMayUseSiteTreePath('/templates', memberFlags)).toBe(false);
+  expect(memberMayUseSiteTreePath('/kvs', memberFlags)).toBe(false);
+  expect(memberMayUseSiteTreePath('/kvs', adminFlags)).toBe(true);
   expect(memberMayUseSiteTreePath('/publications', memberFlags)).toBe(false);
   expect(memberMayUseSiteTreePath('/research-tools', memberFlags)).toBe(false);
 });

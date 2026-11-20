@@ -100,7 +100,7 @@ function isSafeBrandingFileName(fileName: string): boolean {
  * Ensure default branding files exist under FILE_STORAGE_ROOT/branding.
  * Writes minimal stub bytes when a default file is missing (not committed binaries).
  */
-// @relation(GSSC-BLLR-509, GSSC-BLLR-512, scope=range_start, role=Implementation)
+// @relation(GSSC-BLLR-514, GSSC-BLLR-517, scope=range_start, role=Implementation)
 export async function ensureBrandingStubFiles(): Promise<void> {
   brandingReady ??= (async () => {
     await ensureBrandingFs();
@@ -124,13 +124,13 @@ export async function ensureBrandingStubFiles(): Promise<void> {
   });
   return brandingReady;
 }
-// @relation(GSSC-BLLR-509, GSSC-BLLR-512, scope=range_end, role=Implementation)
+// @relation(GSSC-BLLR-514, GSSC-BLLR-517, scope=range_end, role=Implementation)
 
 /**
  * Upsert default branding path keys into the website key-value store.
  * Safe to call repeatedly (idempotent).
  */
-// @relation(GSSC-BLLR-510, scope=range_start, role=Implementation)
+// @relation(GSSC-BLLR-515, scope=range_start, role=Implementation)
 export async function seedBrandingKvs(
   databaseUrl = loadConfig().DATABASE_URL,
 ): Promise<void> {
@@ -143,7 +143,7 @@ export async function seedBrandingKvs(
     });
   }
 }
-// @relation(GSSC-BLLR-510, scope=range_end, role=Implementation)
+// @relation(GSSC-BLLR-515, scope=range_end, role=Implementation)
 
 /** Prepare branding FS stubs + KV path defaults (idempotent). */
 export async function prepareBrandingAssets(
@@ -161,7 +161,7 @@ export const branding = new Elysia({ prefix: "/branding" })
   .get(
     "/:fileName",
     async ({ params, status: statusFn }) => {
-      // @relation(GSSC-BLLR-511, scope=range_start, role=Implementation)
+      // @relation(GSSC-BLLR-516, scope=range_start, role=Implementation)
       if (!isSafeBrandingFileName(params.fileName)) {
         return statusFn(404, "Not Found" as const);
       }
@@ -178,7 +178,7 @@ export const branding = new Elysia({ prefix: "/branding" })
           "cache-control": "public, max-age=300",
         },
       });
-      // @relation(GSSC-BLLR-511, scope=range_end, role=Implementation)
+      // @relation(GSSC-BLLR-516, scope=range_end, role=Implementation)
     },
     {
       params: t.Object({

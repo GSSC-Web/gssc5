@@ -127,6 +127,7 @@ const MEMBERS_SEED_CHILDREN: Array<{ label: string; path: string }> = [
   { label: "Publications", path: "/publications" },
   { label: "Research Tools", path: "/research-tools" },
   { label: "Templates", path: "/templates" },
+  { label: "Key-Value Store", path: "/kvs" },
   { label: "Site Trees", path: "/site-trees" },
   { label: "Sitemap", path: "/sitemap" },
   { label: "Search", path: "/search" },

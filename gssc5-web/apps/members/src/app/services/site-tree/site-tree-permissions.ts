@@ -51,6 +51,9 @@ export function memberMayUseSiteTreePath(
   if (normalized === '/templates' || normalized.startsWith('/templates/')) {
     return flags.isAdmin;
   }
+  if (normalized === '/kvs' || normalized.startsWith('/kvs/')) {
+    return flags.isAdmin;
+  }
 
   return true;
 }

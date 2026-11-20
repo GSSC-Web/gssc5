@@ -5827,6 +5827,108 @@ REVIEW_STATUS: Approved
 
 [[/SECTION]]
 
+[[SECTION]]
+UID: GSSC-BLLR-KVS-LIST
+TITLE: GET Catalog
+
+[REQUIREMENT]
+UID: GSSC-BLLR-509
+TITLE: Key-Value Catalog List
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL return every stored key-value entry with its key and value when an administrator authenticated by the Login Token HTTP cookie requests the key-value catalog.
+<<<
+RATIONALE: >>>
+The Members key-value editor lists the full catalog so administrators can select entries without knowing keys in advance. The Login Token is taken from the HTTP cookie.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC-202
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-240
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-510
+TITLE: Key-Value List Forbidden
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL forbid a key-value catalog list when the Login Token HTTP cookie is missing or is not a valid Login Token, or when the caller is not an administrator.
+<<<
+RATIONALE: >>>
+Only a logged-in administrator may list the full key-value catalog.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC-202
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-240
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-BLLR-KVS-DELETE
+TITLE: DELETE Key
+
+[REQUIREMENT]
+UID: GSSC-BLLR-511
+TITLE: Key-Value Entry Delete
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL remove the key-value entry for the key in the path when an administrator authenticated by the Login Token HTTP cookie requests deletion of that key.
+<<<
+RATIONALE: >>>
+Administrators delete obsolete global website data. The Login Token is taken from the HTTP cookie.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC-202
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-241
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-512
+TITLE: Key-Value Delete Forbidden
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL forbid a key-value deletion when the Login Token HTTP cookie is missing or is not a valid Login Token, or when the caller is not an administrator, and the backend removes nothing.
+<<<
+RATIONALE: >>>
+Only a logged-in administrator may delete a key-value entry.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC-202
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-241
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-BLLR-513
+TITLE: Key-Value Delete Not Found
+STATEMENT: >>>
+The GSSC Website Unified Backend SHALL report not found when an administrator requests deletion of a key that has no key-value entry.
+<<<
+RATIONALE: >>>
+A missing key cannot be deleted. The test binds this report to HTTP 404.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC-202
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-BHLR-241
+  ROLE: Refines
+
+[[/SECTION]]
+
 [[/SECTION]]
 
 [[SECTION]]
@@ -9443,7 +9545,7 @@ UID: GSSC-BLLR-BRANDING-FILES
 TITLE: Branding Files
 
 [REQUIREMENT]
-UID: GSSC-BLLR-509
+UID: GSSC-BLLR-514
 TITLE: Branding Directory Under Storage Root
 STATEMENT: >>>
 The GSSC Website Unified Backend SHALL keep branding asset files under a branding directory beneath the configured local file storage root.
@@ -9457,11 +9559,11 @@ CHANGE_DRIVER: GSSC5-151
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-BHLR-240
+  VALUE: GSSC-BHLR-242
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-BLLR-510
+UID: GSSC-BLLR-515
 TITLE: Branding Default Path Key-Value Stubs
 STATEMENT: >>>
 The GSSC Website Unified Backend SHALL upsert website key-value entries branding.favicon and branding.logo whose values are the default storage paths branding/favicon.ico and branding/gssc-society-logo.png.
@@ -9475,11 +9577,11 @@ CHANGE_DRIVER: GSSC5-151
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-BHLR-241
+  VALUE: GSSC-BHLR-243
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-BLLR-511
+UID: GSSC-BLLR-516
 TITLE: Public Branding File Get
 STATEMENT: >>>
 The GSSC Website Unified Backend SHALL answer an unauthenticated get for a branding file name under the branding store with that file's bytes and an image content type when the file exists beneath the branding directory, and SHALL answer not found for missing files or file names that escape the branding directory.
@@ -9493,11 +9595,11 @@ CHANGE_DRIVER: GSSC5-151
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-BHLR-240
+  VALUE: GSSC-BHLR-242
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-BLLR-512
+UID: GSSC-BLLR-517
 TITLE: Branding Stub Files When Missing
 STATEMENT: >>>
 When a default branding file is missing under the branding directory, the GSSC Website Unified Backend SHALL write a minimal valid stub file for that default path so the branding get can serve bytes without requiring committed binary image files in the codebase.
@@ -9511,7 +9613,7 @@ CHANGE_DRIVER: GSSC5-151
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
-  VALUE: GSSC-BHLR-240
+  VALUE: GSSC-BHLR-242
   ROLE: Refines
 
 [[/SECTION]]

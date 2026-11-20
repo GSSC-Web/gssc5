@@ -23,10 +23,10 @@ const sampleEvent: EventRecord = {
   name: 'Spring Meeting',
   month: 3,
   day: 15,
-  year: 2026,
+  year: 2099,
   announcementStartMonth: 3,
   announcementStartDay: 1,
-  announcementStartYear: 2026,
+  announcementStartYear: 2099,
   time: '19:00',
   duration: '2h',
   location: 'Hall A',
@@ -37,10 +37,10 @@ const sampleEvent: EventRecord = {
   resources: [],
   startMonth: 3,
   startDay: 15,
-  startYear: 2026,
+  startYear: 2099,
   endMonth: 3,
   endDay: 15,
-  endYear: 2026,
+  endYear: 2099,
   imageFile: null,
   imagePosition: null,
 };
@@ -58,6 +58,7 @@ async function setupEvents(options?: {
   session: MemberSession;
   created: EventCreateCapture[];
   updated: EventUpdateCapture[];
+  deleted: string[];
   restore: () => void;
 }> {
   const originals = {
@@ -67,10 +68,12 @@ async function setupEvents(options?: {
     create: eventsApi.create,
     update: eventsApi.update,
     get: eventsApi.get,
+    remove: eventsApi.remove,
   };
 
   const created: EventCreateCapture[] = [];
   const updated: EventUpdateCapture[] = [];
+  const deleted: string[] = [];
   const catalog = options?.catalog ?? [sampleEvent];
   const viewer = options?.viewer ?? { cuid: 'mod_1', isUserMod: true };
 
@@ -118,6 +121,12 @@ async function setupEvents(options?: {
           : sampleEvent.isPublic,
     });
   }) as typeof eventsApi.update;
+  eventsApi.remove = (async (cuid) => {
+    deleted.push(cuid);
+    const index = catalog.findIndex((row) => row.cuid === cuid);
+    if (index >= 0) catalog.splice(index, 1);
+    return okResponse(undefined, 204);
+  }) as typeof eventsApi.remove;
 
   TestBed.resetTestingModule();
   await TestBed.configureTestingModule({
@@ -148,6 +157,7 @@ async function setupEvents(options?: {
     session,
     created,
     updated,
+    deleted,
     restore: () => {
       memberSessionApi.challenge = originals.challenge;
       memberSessionApi.getUser = originals.getUser;
@@ -155,6 +165,7 @@ async function setupEvents(options?: {
       eventsApi.create = originals.create;
       eventsApi.update = originals.update;
       eventsApi.get = originals.get;
+      eventsApi.remove = originals.remove;
     },
   };
 }
@@ -243,7 +254,7 @@ test('GSSC-MLLR-324 Semantic', async () => {
   try {
     const label = textContent(root, '.gssc-events-catalog__entry-button');
     expect(label).toContain('Spring Meeting');
-    expect(label).toContain('2026-03-15');
+    expect(label).toContain('2099-03-15');
   } finally {
     restore();
   }
@@ -650,3 +661,130 @@ test('GSSC-MLLR-687/690 Events intro and idle disclaimer', async () => {
   }
 });
 // @relation(GSSC-MLLR-687, GSSC-MLLR-690, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-749, GSSC-MLLR-750, GSSC-MLLR-751, scope=range_start, role=Test)
+test('GSSC-MLLR-749/750/751 Event Delete Control', async () => {
+  const { root, fixture, restore } = await setupEvents();
+  try {
+    expect(root.querySelector('[data-slot="events-delete"]')).toBeNull();
+    root.querySelector<HTMLButtonElement>('.gssc-events-catalog__entry-button')!.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    const del = root.querySelector<HTMLButtonElement>('[data-slot="events-delete"]')!;
+    expect(del).toBeTruthy();
+    expect(del.textContent?.trim()).toBe('Delete event');
+    expect(del.className).toContain('text-gssc-dark-red');
+    expect(del.className).toContain('font-sans');
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-749, GSSC-MLLR-750, GSSC-MLLR-751, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-752, scope=range_start, role=Test)
+test('GSSC-MLLR-752 Event Delete Persists And Refreshes', async () => {
+  const { root, fixture, page, deleted, restore } = await setupEvents();
+  try {
+    root.querySelector<HTMLButtonElement>('.gssc-events-catalog__entry-button')!.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    await page.onDelete();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(deleted).toEqual(['evt_1']);
+    expect(page.mode()).toBe('create');
+    expect(page.editingCuid()).toBeNull();
+    expect(page.statusMessage()).toContain('deleted');
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-752, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-753, GSSC-MLLR-754, GSSC-MLLR-755, scope=range_start, role=Test)
+test('GSSC-MLLR-753/754/755 Events Catalog Time Filter Control', async () => {
+  const { root, page, restore } = await setupEvents();
+  try {
+    expect(page.timeFilter()).toBe('future');
+    const filter = root.querySelector('[data-slot="events-time-filter"]')!;
+    expect(filter).toBeTruthy();
+    expect(filter.className).toContain('font-sans');
+    expect(filter.className).toContain('text-gssc-dark-green');
+    expect(filter.textContent).toContain('Filter');
+    const select = filter.querySelector('select')!;
+    expect(Array.from(select.options).map((o) => o.textContent?.trim())).toEqual([
+      'Past',
+      'Future',
+      'All',
+    ]);
+    expect(root.querySelector('.gssc-events-catalog')!.contains(filter)).toBe(true);
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-753, GSSC-MLLR-754, GSSC-MLLR-755, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-756, scope=range_start, role=Test)
+test('GSSC-MLLR-756 Events Catalog Lists Filtered Entries', async () => {
+  const past = { ...sampleEvent, cuid: 'evt_past', name: 'Past Meetup', year: 2000, month: 1, day: 1 };
+  const future = { ...sampleEvent, cuid: 'evt_future', name: 'Future Meetup', year: 2099, month: 6, day: 1 };
+  const { root, fixture, page, restore } = await setupEvents({ catalog: [past, future] });
+  try {
+    expect(page.timeFilter()).toBe('future');
+    expect(page.filteredCatalog().map((e) => e.cuid)).toEqual(['evt_future']);
+    expect(root.querySelectorAll('.gssc-events-catalog__entry').length).toBe(1);
+
+    page.onTimeFilterChange('past');
+    fixture.detectChanges();
+    expect(page.filteredCatalog().map((e) => e.cuid)).toEqual(['evt_past']);
+
+    page.onTimeFilterChange('all');
+    fixture.detectChanges();
+    expect(page.filteredCatalog().map((e) => e.cuid).sort()).toEqual(['evt_future', 'evt_past']);
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-756, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-761, GSSC-MLLR-762, GSSC-MLLR-763, scope=range_start, role=Test)
+test('GSSC-MLLR-761/762/763 Event Copy to New Control', async () => {
+  const { root, fixture, restore } = await setupEvents();
+  try {
+    const copy = root.querySelector<HTMLButtonElement>('[data-slot="events-copy"]')!;
+    expect(copy).toBeTruthy();
+    expect(copy.disabled).toBe(true);
+    expect(copy.textContent?.trim()).toBe('Copy to New Event');
+    expect(copy.className).toContain('text-gssc-dark-green');
+    expect(copy.className).toContain('font-sans');
+    root.querySelector<HTMLButtonElement>('.gssc-events-catalog__entry-button')!.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(copy.disabled).toBe(false);
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-761, GSSC-MLLR-762, GSSC-MLLR-763, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-764, scope=range_start, role=Test)
+test('GSSC-MLLR-764 Event Copy Prefills Create Draft', async () => {
+  const { root, fixture, page, restore } = await setupEvents();
+  try {
+    root.querySelector<HTMLButtonElement>('.gssc-events-catalog__entry-button')!.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    root.querySelector<HTMLButtonElement>('[data-slot="events-copy"]')!.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(page.mode()).toBe('create');
+    expect(page.editingCuid()).toBeNull();
+    expect(page.name()).toBe('Spring Meeting');
+    expect(page.year()).toBe('2099');
+    expect(page.editorResourceId()).toBe('event:new');
+    expect(page.statusMessage()).toContain('Copied');
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-764, scope=range_end, role=Test)

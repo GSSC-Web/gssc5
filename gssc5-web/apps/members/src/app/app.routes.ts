@@ -10,6 +10,7 @@ import { ResearchToolsPage } from './pages/research-tools/research-tools';
 import { SearchPage } from './pages/search/search';
 import { SiteTreeEditorPage } from './pages/site-tree-editor/site-tree-editor';
 import { TemplatesPage } from './pages/templates/templates';
+import { KvsEditorPage } from './pages/kvs-editor/kvs-editor';
 import { SitemapPage } from './pages/sitemap/sitemap';
 import {
   redirectIfAuthenticatedGuard,
@@ -105,7 +106,15 @@ export const routes: Routes = [
     canActivate: [requireAuthGuard],
   },
   // @relation(GSSC-MLLR-558, scope=range_end, role=Implementation)
-    // @relation(GSSC-MLLR-510, scope=range_start, role=Implementation)
+  // @relation(GSSC-MLLR-729, scope=range_start, role=Implementation)
+  {
+    path: 'kvs',
+    pathMatch: 'full',
+    component: KvsEditorPage,
+    canActivate: [requireAuthGuard],
+  },
+  // @relation(GSSC-MLLR-729, scope=range_end, role=Implementation)
+  // @relation(GSSC-MLLR-510, scope=range_start, role=Implementation)
   {
     path: 'sitemap',
     pathMatch: 'full',

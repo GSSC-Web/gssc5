@@ -33,7 +33,7 @@ export class BrandingAssets {
   readonly logoUrl = signal('');
 
   async refresh(): Promise<void> {
-    // @relation(GSSC-MLLR-708, GSSC-MLLR-709, GSSC-MLLR-710, scope=range_start, role=Implementation)
+    // @relation(GSSC-MLLR-765, GSSC-MLLR-766, GSSC-MLLR-767, scope=range_start, role=Implementation)
     const [faviconPath, logoPath] = await Promise.all([
       this.kvStore.getValue(BRANDING_FAVICON_KEY),
       this.kvStore.getValue(BRANDING_LOGO_KEY),
@@ -43,7 +43,7 @@ export class BrandingAssets {
     this.faviconUrl.set(favicon);
     this.logoUrl.set(logo);
     this.applyDocumentFavicon(favicon);
-    // @relation(GSSC-MLLR-708, GSSC-MLLR-709, GSSC-MLLR-710, scope=range_end, role=Implementation)
+    // @relation(GSSC-MLLR-765, GSSC-MLLR-766, GSSC-MLLR-767, scope=range_end, role=Implementation)
   }
 
   private applyDocumentFavicon(href: string): void {
