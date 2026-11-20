@@ -87,6 +87,12 @@ export class AnnouncementsEditorPage implements OnInit {
 
   protected readonly fieldsEnabled = computed(() => this.permitted() && this.showEditor());
 
+  // @relation(GSSC-MLLR-738, scope=range_start, role=Implementation)
+  protected readonly canCopy = computed(
+    () => this.permitted() && this.mode() === 'edit' && this.selectedCuid() != null,
+  );
+  // @relation(GSSC-MLLR-738, scope=range_end, role=Implementation)
+
   protected readonly activePublicationOptions = computed(() =>
     this.mode() === 'edit' ? this.editPublicationOptions : this.publicationOptions,
   );
@@ -248,6 +254,69 @@ export class AnnouncementsEditorPage implements OnInit {
     this.statusMessage.set('Discarded unsaved changes.');
   }
   // @relation(GSSC-MLLR-304, scope=range_end, role=Implementation)
+
+  // @relation(GSSC-MLLR-725, GSSC-MLLR-728, scope=range_start, role=Implementation)
+  protected async onDelete(): Promise<void> {
+    if (!this.permitted() || this.mode() !== 'edit') return;
+    const cuid = this.selectedCuid();
+    if (cuid == null) return;
+
+    const result = await this.api.remove(cuid);
+    if (!result.ok) {
+      this.statusMessage.set('Announcement was not deleted.');
+      if (result.status === 403) this.permitted.set(false);
+      return;
+    }
+
+    await this.reloadCatalog();
+    this.mode.set('idle');
+    this.selectedCuid.set(null);
+    this.header.set('');
+    this.body.set('');
+    this.publication.set('');
+    this.templateId.set('');
+    this.baseline = { header: '', body: '', publication: '', templateId: '' };
+    this.permitted.set(true);
+    this.statusMessage.set('Announcement deleted.');
+  }
+  // @relation(GSSC-MLLR-725, GSSC-MLLR-728, scope=range_end, role=Implementation)
+
+  // @relation(GSSC-MLLR-737, GSSC-MLLR-740, scope=range_start, role=Implementation)
+  protected async copyToNew(): Promise<void> {
+    if (!this.canCopy()) return;
+    const cuid = this.selectedCuid();
+    if (cuid == null) return;
+
+    const detail = await this.api.get(cuid);
+    if (detail == null) {
+      this.statusMessage.set('Could not load that announcement to copy.');
+      return;
+    }
+
+    const publication =
+      detail.isPublic === undefined
+        ? ('both' as PublicationTarget)
+        : isPublicToPublicationTarget(detail.isPublic);
+    const header = detail.header ?? '';
+    const body = detail.body;
+
+    this.mode.set('create');
+    this.selectedCuid.set(null);
+    this.permitted.set(true);
+    this.header.set(header);
+    this.body.set(body);
+    this.publication.set(publication);
+    this.templateId.set('');
+    this.templateIsPublic = detail.isPublic ?? null;
+    this.baseline = {
+      header,
+      body,
+      publication,
+      templateId: '',
+    };
+    this.statusMessage.set('Copied — choose a template and save.');
+  }
+  // @relation(GSSC-MLLR-737, GSSC-MLLR-740, scope=range_end, role=Implementation)
 
   protected catalogLabel(row: AnnouncementListEntry): string {
     const header = row.header?.trim();

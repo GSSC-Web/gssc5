@@ -41,21 +41,26 @@ function createMockApi(seed: {
 }): AnnouncementsApi & {
   createCalls: unknown[];
   updateCalls: Array<{ cuid: string; body: unknown }>;
+  deleteCalls: string[];
   failCreate?: boolean;
   failUpdate?: boolean;
+  failDelete?: boolean;
 } {
   const list = signal(seed.list ?? []);
   const createCalls: unknown[] = [];
   const updateCalls: Array<{ cuid: string; body: unknown }> = [];
+  const deleteCalls: string[] = [];
   const api = {
     createCalls,
     updateCalls,
+    deleteCalls,
     failCreate: false,
     failUpdate: false,
+    failDelete: false,
     list: async () => list(),
     get: async (cuid: string) => {
       const row = list().find((entry) => entry.cuid === cuid);
-      return row ? sampleAnnouncement({ ...row }) : null;
+      return row ? sampleAnnouncement({ ...row, isPublic: true }) : null;
     },
     create: async (body: {
       body: string;
@@ -68,6 +73,7 @@ function createMockApi(seed: {
         cuid: `created-${createCalls.length}`,
         body: body.body,
         header: body.header ?? null,
+        isPublic: true,
       });
       list.set([...list(), created]);
       return { ok: true as const, data: created };
@@ -84,6 +90,12 @@ function createMockApi(seed: {
       });
       list.set(list().map((entry) => (entry.cuid === cuid ? next : entry)));
       return { ok: true as const, data: next };
+    },
+    remove: async (cuid: string) => {
+      deleteCalls.push(cuid);
+      if (api.failDelete) return { ok: false as const, status: 403 };
+      list.set(list().filter((entry) => entry.cuid !== cuid));
+      return { ok: true as const };
     },
     listTemplates: async () => seed.templates ?? [],
     getTemplate: async () => seed.templateDetail ?? null,
@@ -495,3 +507,97 @@ test('GSSC-MLLR-687/690 Announcements intro and idle disclaimer', async () => {
   expect(title.className).toContain('font-semibold');
 });
 // @relation(GSSC-MLLR-687, GSSC-MLLR-690, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-725, GSSC-MLLR-726, GSSC-MLLR-727, scope=range_start, role=Test)
+test('GSSC-MLLR-725/726/727 Announcement Delete Control', async () => {
+  const api = createMockApi({
+    list: [sampleAnnouncement({ cuid: 'a1', body: 'One', header: 'Alpha' })],
+  });
+  const { root, fixture } = await setupPage(api);
+  expect(root.querySelector('[data-slot="announcement-delete"]')).toBeNull();
+  root.querySelector<HTMLButtonElement>('.gssc-announcement-catalog__item')!.click();
+  fixture.detectChanges();
+  await fixture.whenStable();
+  const del = root.querySelector<HTMLButtonElement>('[data-slot="announcement-delete"]')!;
+  expect(del).toBeTruthy();
+  expect(del.textContent?.trim()).toBe('Delete announcement');
+  expect(del.className).toContain('text-gssc-dark-red');
+  expect(del.className).toContain('font-sans');
+});
+// @relation(GSSC-MLLR-725, GSSC-MLLR-726, GSSC-MLLR-727, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-728, scope=range_start, role=Test)
+test('GSSC-MLLR-728 Announcement Delete Persists And Refreshes', async () => {
+  const api = createMockApi({
+    list: [sampleAnnouncement({ cuid: 'a1', body: 'One', header: 'Alpha' })],
+  });
+  const { root, fixture, page } = await setupPage(api);
+  root.querySelector<HTMLButtonElement>('.gssc-announcement-catalog__item')!.click();
+  fixture.detectChanges();
+  await fixture.whenStable();
+  await (
+    page as unknown as { onDelete: () => Promise<void> }
+  ).onDelete();
+  fixture.detectChanges();
+  await fixture.whenStable();
+  expect(api.deleteCalls).toEqual(['a1']);
+  expect(root.querySelector('.gssc-announcement-editor')).toBeNull();
+  expect(root.querySelectorAll('.gssc-announcement-catalog__item').length).toBe(0);
+  expect(textContent(root, '[data-slot="announcements-editor-status"]')).toContain('deleted');
+});
+// @relation(GSSC-MLLR-728, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-737, GSSC-MLLR-738, GSSC-MLLR-739, scope=range_start, role=Test)
+test('GSSC-MLLR-737/738/739 Announcement Copy to New Control', async () => {
+  const api = createMockApi({
+    list: [sampleAnnouncement({ cuid: 'a1', body: 'Source body', header: 'Source' })],
+    templates: [{ cuid: 't1', name: 'Public' }],
+  });
+  const { root, fixture } = await setupPage(api);
+  const copy = root.querySelector<HTMLButtonElement>('[data-slot="announcement-copy"]')!;
+  expect(copy).toBeTruthy();
+  expect(copy.disabled).toBe(true);
+  expect(copy.textContent?.trim()).toBe('Copy to New Announcement');
+  expect(copy.className).toContain('text-gssc-dark-green');
+  expect(copy.className).toContain('font-sans');
+  root.querySelector<HTMLButtonElement>('.gssc-announcement-catalog__item')!.click();
+  fixture.detectChanges();
+  await fixture.whenStable();
+  expect(copy.disabled).toBe(false);
+});
+// @relation(GSSC-MLLR-737, GSSC-MLLR-738, GSSC-MLLR-739, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-740, scope=range_start, role=Test)
+test('GSSC-MLLR-740 Announcement Copy Prefills Create Draft', async () => {
+  const api = createMockApi({
+    list: [sampleAnnouncement({ cuid: 'a1', body: 'Source body', header: 'Source', isPublic: false })],
+    templates: [{ cuid: 't1', name: 'Public' }],
+  });
+  const { root, fixture } = await setupPage(api);
+  root.querySelector<HTMLButtonElement>('.gssc-announcement-catalog__item')!.click();
+  fixture.detectChanges();
+  await fixture.whenStable();
+  root.querySelector<HTMLButtonElement>('[data-slot="announcement-copy"]')!.click();
+  fixture.detectChanges();
+  await fixture.whenStable();
+  fixture.detectChanges();
+  expect(root.querySelector('.gssc-editor')!.getAttribute('data-resource-id')).toBe(
+    'announcement:new',
+  );
+  expect(textContent(root, '.gssc-editor__title')).toBe('New announcement');
+  const headerInput = Array.from(root.querySelectorAll('gssc-form-text-field'))
+    .find((node) =>
+      node.querySelector('.gssc-form-text-field__label')?.textContent?.includes('Header'),
+    )
+    ?.querySelector<HTMLInputElement>('.gssc-form-text-field__control');
+  const bodyInput = Array.from(root.querySelectorAll('gssc-form-text-field'))
+    .find((node) =>
+      node.querySelector('.gssc-form-text-field__label')?.textContent?.includes('Body'),
+    )
+    ?.querySelector<HTMLInputElement>('.gssc-form-text-field__control');
+  expect(headerInput?.value).toBe('Source');
+  expect(bodyInput?.value).toBe('Source body');
+  expect(root.querySelector('gssc-form-select-field')).toBeTruthy();
+  expect(textContent(root, '[data-slot="announcements-editor-status"]')).toContain('Copied');
+});
+// @relation(GSSC-MLLR-740, scope=range_end, role=Test)

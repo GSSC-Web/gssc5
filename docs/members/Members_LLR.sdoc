@@ -117,6 +117,7 @@ GSSC5-135 Multiple Positions with Semicolon Lint owns GSSC-MLLR-661 through GSSC
 GSSC5-138 Site Tree Editor foldable outline and independent pane scroll owns GSSC-MLLR-668 through GSSC-MLLR-670 (exact end 670; continues band 661–680) plus CHANGE_DRIVER on GSSC-MLLR-522; HLR GSSC-MHLR-108.
 Wave coordination: GSSC5-92 directory 202–214, GSSC5-102 directory refinement 215–230, GSSC5-89 dashboard 231–239, GSSC5-93 page/section 261–286, GSSC5-94 announcements 291–307, GSSC5-117 page-data unification 308–320, GSSC5-95 events 321–346, GSSC5-96 newsletters 351–373, GSSC5-97 publications/tools 381–414, GSSC5-101 account refinement 415–428, GSSC5-103 mailing-equals-home 429–437, GSSC5-102 password-history-reset 438–440, GSSC5-107 members nav chrome 441–461, GSSC5-109 members site search 462–483 (band 462–500), GSSC5-108 sitemap 501–510, GSSC5-116 site-tree editor 521–540 (band 521–560), GSSC5-127 site-tree feedback MLLR-562 (+ CHANGE_DRIVER on 524/529; HLR MHLR-99), GSSC5-115/128 template editor 541–561 (band 541–580), GSSC5-126 PDE section create + nav 581–591 (band 581–600), GSSC5-118 directory invite 601–608 (band 601–620), GSSC5-119 directory create 621–628 (band 621–640), GSSC5-123 footer home link 641–643 (band 641–660), GSSC5-46 branding 644–649, GSSC5-135 multi-position 661–664, GSSC5-137 nested submenu pointer bridge 665–667 (HLR MHLR-109), GSSC5-138 site-tree fold/scroll 668–670 (band 661–680), GSSC5-139 PDE form unify 681–686, GSSC5-140 PDE padding/disclaimer 687–692 (band 681–700), GSSC5-142 newsletter issue file 693–696, GSSC-188 research-tools file 697–699, GSSC-190 publications file upload 700–702, GSSC-192 newsletter validation 703–704 — do not collide.
 GSSC-173 Members Header Greeting menu owns GSSC-MLLR-33 through GSSC-MLLR-35 (Header Public Access triad) plus CHANGE_DRIVER on GSSC-MLLR-14, 24, 27, 30 and HLR GSSC-MHLR-107; GSSC-MLLR-36 through GSSC-MLLR-39 remain free.
+GSSC5-148 PDE delete owns GSSC-MLLR-721 through GSSC-MLLR-732 (exact end 732; band 721–760); GSSC5-149 events Past/Future/All filter owns GSSC-MLLR-733 through GSSC-MLLR-736; GSSC5-150 Copy to New owns GSSC-MLLR-737 through GSSC-MLLR-744; HLR GSSC-MHLR-114..116.
 Do not reuse numbers already claimed by another ticket.
 <<<
 
@@ -12536,6 +12537,516 @@ REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-113
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-PDE-DELETE-FILTER-COPY
+TITLE: Page Data Editor Delete Filter and Copy
+
+[[SECTION]]
+UID: GSSC-MLLR-SECTION-DELETE-CONTROL
+TITLE: Section Delete Control
+
+[REQUIREMENT]
+UID: GSSC-MLLR-721
+TITLE: Semantic
+STATEMENT: >>>
+The Section Delete Control SHALL remove the selected existing section through the Unified Backend when activated by an authorized member.
+<<<
+RATIONALE: >>>
+Sections need the same remove path publications and templates already expose beside the editor.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-148
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-114
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-722
+TITLE: Syntactic
+STATEMENT: >>>
+The Section Delete Control SHALL appear with the Generic Editor host when an existing section is selected for edit, and SHALL be withheld while creating or when no section is selected.
+<<<
+RATIONALE: >>>
+Delete targets the open existing section only.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-148
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-114
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-723
+TITLE: Lexical
+STATEMENT: >>>
+The Section Delete Control SHALL use the Member Frontend sans-serif typeface and dark-red theme color for its label text.
+<<<
+RATIONALE: >>>
+Delete uses destructive accent color so it is distinct from Save and Cancel.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-148
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-114
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-SECTION-DELETE-BEHAVIOR
+TITLE: Section Delete Behavior
+
+[REQUIREMENT]
+UID: GSSC-MLLR-724
+TITLE: Section Delete Persists And Refreshes
+STATEMENT: >>>
+After a successful section delete, the Page/Section Content Editor SHALL refresh the section catalog from the Unified Backend and SHALL clear the editor selection to an idle state.
+<<<
+RATIONALE: >>>
+The catalog and editor must reflect that the section no longer exists.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-148
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-114
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-ANNOUNCEMENT-DELETE-CONTROL
+TITLE: Announcement Delete Control
+
+[REQUIREMENT]
+UID: GSSC-MLLR-725
+TITLE: Semantic
+STATEMENT: >>>
+The Announcement Delete Control SHALL remove the selected existing announcement through the Unified Backend when activated by an authorized member.
+<<<
+RATIONALE: >>>
+Announcement catalogs need a remove path matching section and event delete.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-148
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-114
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-726
+TITLE: Syntactic
+STATEMENT: >>>
+The Announcement Delete Control SHALL appear with the Generic Editor host when an existing announcement is selected for edit, and SHALL be withheld while creating or when no announcement is selected.
+<<<
+RATIONALE: >>>
+Delete targets the open existing announcement only.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-148
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-114
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-727
+TITLE: Lexical
+STATEMENT: >>>
+The Announcement Delete Control SHALL use the Member Frontend sans-serif typeface and dark-red theme color for its label text.
+<<<
+RATIONALE: >>>
+Delete uses destructive accent color so it is distinct from Save and Cancel.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-148
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-114
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-ANNOUNCEMENT-DELETE-BEHAVIOR
+TITLE: Announcement Delete Behavior
+
+[REQUIREMENT]
+UID: GSSC-MLLR-728
+TITLE: Announcement Delete Persists And Refreshes
+STATEMENT: >>>
+After a successful announcement delete, the Announcements Editor SHALL refresh the announcement catalog from the Unified Backend and SHALL clear the editor selection to an idle state.
+<<<
+RATIONALE: >>>
+The catalog and editor must reflect that the announcement no longer exists.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-148
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-114
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-EVENT-DELETE-CONTROL
+TITLE: Event Delete Control
+
+[REQUIREMENT]
+UID: GSSC-MLLR-729
+TITLE: Semantic
+STATEMENT: >>>
+The Event Delete Control SHALL remove the selected existing event through the Unified Backend when activated by an authorized member who may edit events.
+<<<
+RATIONALE: >>>
+Event catalogs need a remove path matching section and announcement delete.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-148
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-114
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-730
+TITLE: Syntactic
+STATEMENT: >>>
+The Event Delete Control SHALL appear with the Generic Editor host when an existing event is selected for edit, and SHALL be withheld while creating or when the member may not edit events.
+<<<
+RATIONALE: >>>
+Delete targets the open existing event only and respects the events edit gate.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-148
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-114
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-731
+TITLE: Lexical
+STATEMENT: >>>
+The Event Delete Control SHALL use the Member Frontend sans-serif typeface and dark-red theme color for its label text.
+<<<
+RATIONALE: >>>
+Delete uses destructive accent color so it is distinct from Save and Cancel.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-148
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-114
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-EVENT-DELETE-BEHAVIOR
+TITLE: Event Delete Behavior
+
+[REQUIREMENT]
+UID: GSSC-MLLR-732
+TITLE: Event Delete Persists And Refreshes
+STATEMENT: >>>
+After a successful event delete, the Events Editor SHALL refresh the event catalog from the Unified Backend and SHALL return the editor to a new-event create state.
+<<<
+RATIONALE: >>>
+The catalog and editor must reflect that the event no longer exists; events default to create when idle.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-148
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-114
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-EVENTS-TIME-FILTER
+TITLE: Events Catalog Time Filter Control
+
+[REQUIREMENT]
+UID: GSSC-MLLR-733
+TITLE: Semantic
+STATEMENT: >>>
+The Events Catalog Time Filter SHALL offer Past, Future, and All choices, SHALL default to Future, and SHALL determine which catalog entries appear by comparing each event's event date to the current date.
+<<<
+RATIONALE: >>>
+Editors focus on upcoming events by default while retaining access to past events and the full list.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-149
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-115
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-734
+TITLE: Syntactic
+STATEMENT: >>>
+The Events Catalog Time Filter SHALL appear in the Events Catalog heading row with the New Event control.
+<<<
+RATIONALE: >>>
+Filter and create share the catalog chrome so members change the list without leaving the catalog.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-149
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-115
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-735
+TITLE: Lexical
+STATEMENT: >>>
+The Events Catalog Time Filter SHALL use the Member Frontend sans-serif typeface and dark-green theme color for its label and options.
+<<<
+RATIONALE: >>>
+Filter chrome matches other catalog controls on the Events page.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-149
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-115
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-EVENTS-TIME-FILTER-LIST
+TITLE: Events Catalog Time Filter List
+
+[REQUIREMENT]
+UID: GSSC-MLLR-736
+TITLE: Events Catalog Lists Filtered Entries
+STATEMENT: >>>
+When Future is selected, the Events Catalog List SHALL include only events whose event date is today or later; when Past is selected, only events whose event date is before today; when All is selected, every loaded event.
+<<<
+RATIONALE: >>>
+The listed rows must match the chosen time window.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-149
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-115
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-ANNOUNCEMENT-COPY-CONTROL
+TITLE: Announcement Copy to New Control
+
+[REQUIREMENT]
+UID: GSSC-MLLR-737
+TITLE: Semantic
+STATEMENT: >>>
+The Announcement Copy to New Control SHALL open a new unsaved announcement create draft whose editable fields are prefilled from the selected or currently edited announcement, without persisting until Save.
+<<<
+RATIONALE: >>>
+Duplicating content into a create draft avoids retyping while still requiring an explicit Save.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-150
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-116
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-738
+TITLE: Syntactic
+STATEMENT: >>>
+The Announcement Copy to New Control SHALL appear in the announcements catalog heading row beside New announcement, and SHALL be enabled only when an existing announcement is selected or being edited and create is permitted.
+<<<
+RATIONALE: >>>
+Copy sits with New so members can duplicate from the catalog chrome.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-150
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-116
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-739
+TITLE: Lexical
+STATEMENT: >>>
+The Announcement Copy to New Control SHALL use the Member Frontend sans-serif typeface and dark-green theme color for its label text.
+<<<
+RATIONALE: >>>
+Copy matches New announcement chrome rather than destructive delete styling.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-150
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-116
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-ANNOUNCEMENT-COPY-BEHAVIOR
+TITLE: Announcement Copy Behavior
+
+[REQUIREMENT]
+UID: GSSC-MLLR-740
+TITLE: Announcement Copy Prefills Create Draft
+STATEMENT: >>>
+When Announcement Copy to New is activated, the Announcements Editor SHALL enter create mode with header, body, and publication target taken from the source announcement, leaving template selection for the member before Save.
+<<<
+RATIONALE: >>>
+Create still requires a content template on the Unified Backend; copied fields provide the draft content.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-150
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-116
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-EVENT-COPY-CONTROL
+TITLE: Event Copy to New Control
+
+[REQUIREMENT]
+UID: GSSC-MLLR-741
+TITLE: Semantic
+STATEMENT: >>>
+The Event Copy to New Control SHALL open a new unsaved event create draft whose editable fields are prefilled from the selected or currently edited event, without persisting until Save.
+<<<
+RATIONALE: >>>
+Duplicating an event into a create draft avoids retyping shared scheduling fields.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-150
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-116
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-742
+TITLE: Syntactic
+STATEMENT: >>>
+The Event Copy to New Control SHALL appear in the Events Catalog heading row beside New Event, and SHALL be enabled only when an existing event is selected or being edited and the member may edit events.
+<<<
+RATIONALE: >>>
+Copy sits with New so members can duplicate from the catalog chrome.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-150
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-116
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-743
+TITLE: Lexical
+STATEMENT: >>>
+The Event Copy to New Control SHALL use the Member Frontend sans-serif typeface and dark-green theme color for its label text.
+<<<
+RATIONALE: >>>
+Copy matches New Event chrome rather than destructive delete styling.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-150
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-116
+  ROLE: Refines
+
+[[/SECTION]]
+
+[[SECTION]]
+UID: GSSC-MLLR-EVENT-COPY-BEHAVIOR
+TITLE: Event Copy Behavior
+
+[REQUIREMENT]
+UID: GSSC-MLLR-744
+TITLE: Event Copy Prefills Create Draft
+STATEMENT: >>>
+When Event Copy to New is activated, the Events Editor SHALL enter create mode with event fields prefilled from the source event and with no existing event cuid selected.
+<<<
+RATIONALE: >>>
+Save must create a new event rather than overwrite the source.
+<<<
+DERIVED: True
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-150
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-116
   ROLE: Refines
 
 [[/SECTION]]

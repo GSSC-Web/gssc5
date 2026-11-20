@@ -10,6 +10,7 @@ import {
 } from '../../modules/section/section';
 import {
   SECTION_CREATE,
+  SECTION_DELETE_BY_CUID,
   SECTION_GET_BY_CUID,
   SECTION_PATCH_BY_CUID,
   SECTIONS_LIST,
@@ -46,6 +47,7 @@ export class PageSectionEditorPage implements OnInit {
   private readonly getByCuid = inject(SECTION_GET_BY_CUID);
   private readonly patchByCuid = inject(SECTION_PATCH_BY_CUID);
   private readonly createSection = inject(SECTION_CREATE);
+  private readonly deleteByCuid = inject(SECTION_DELETE_BY_CUID);
   private readonly listTemplates = inject(SECTIONS_LIST_TEMPLATES);
 
   private detailGeneration = 0;
@@ -266,6 +268,32 @@ export class PageSectionEditorPage implements OnInit {
     this.statusMessage.set('Discarded.');
   }
   // @relation(GSSC-MLLR-282, scope=range_end, role=Implementation)
+
+  // @relation(GSSC-MLLR-721, GSSC-MLLR-724, scope=range_start, role=Implementation)
+  async onDelete(): Promise<void> {
+    if (!this.permitted() || this.mode() !== 'edit') return;
+    const cuid = this.selectedCuid();
+    if (cuid == null) return;
+
+    const result = await this.deleteByCuid(cuid);
+    if (!result.ok) {
+      if (result.forbidden) {
+        this.permitted.set(false);
+        this.statusMessage.set('You do not have permission to delete this section.');
+      } else {
+        this.statusMessage.set('Delete failed.');
+      }
+      return;
+    }
+
+    await this.reloadCatalog();
+    this.mode.set('idle');
+    this.selectedCuid.set(null);
+    this.clearEditorFields();
+    this.permitted.set(true);
+    this.statusMessage.set('Section deleted.');
+  }
+  // @relation(GSSC-MLLR-721, GSSC-MLLR-724, scope=range_end, role=Implementation)
 
   protected sectionLabel(entry: SectionListEntry): string {
     const header = entry.header?.trim();

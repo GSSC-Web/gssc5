@@ -8,6 +8,7 @@ export type AnnouncementRecord = {
   resources: string[];
   tags: string[];
   index: number;
+  isPublic?: boolean;
   startMonth: number | null;
   startDay: number | null;
   startYear: number | null;
@@ -115,6 +116,15 @@ export const announcementsApi = {
       return { ok: false, status: result.status ?? 403 };
     }
     return { ok: true, data: result.data as AnnouncementRecord };
+  },
+  remove: async (
+    cuid: string,
+  ): Promise<{ ok: true } | { ok: false; status: number }> => {
+    const result = await backend.announcements({ cuid }).delete();
+    if (result.error) {
+      return { ok: false, status: result.status ?? 403 };
+    }
+    return { ok: true };
   },
   listTemplates: async (): Promise<ContentTemplateListEntry[]> => {
     const result = await backend.templates.get();

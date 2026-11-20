@@ -3,6 +3,7 @@ import { nativeElement, textContent } from '../../../test-harness';
 import { EditorSession } from '../../services/editor-session/editor-session';
 import {
   SECTION_CREATE,
+  SECTION_DELETE_BY_CUID,
   SECTION_GET_BY_CUID,
   SECTION_PATCH_BY_CUID,
   SECTIONS_LIST,
@@ -61,12 +62,17 @@ type Harness = {
   create: (
     body: SectionCreateBody,
   ) => Promise<{ ok: true; detail: SectionDetail } | { ok: false; forbidden: boolean }>;
+  deleteByCuid: (
+    cuid: string,
+  ) => Promise<{ ok: true } | { ok: false; forbidden: boolean }>;
   listTemplates: () => Promise<SectionTemplateListEntry[]>;
+  deleted: string[];
 };
 
 function defaultHarness(overrides?: Partial<Harness>): Harness {
+  const deleted: string[] = overrides?.deleted ?? [];
   return {
-    list: async () => sampleList,
+    list: async () => sampleList.filter((row) => !deleted.includes(row.cuid)),
     getByCuid: async (cuid: string) => {
       if (cuid === 'sec-a') return sampleDetailA;
       if (cuid === 'sec-b') return sampleDetailB;
@@ -111,7 +117,12 @@ function defaultHarness(overrides?: Partial<Harness>): Harness {
       },
     }),
     listTemplates: async () => sampleTemplates,
+    deleteByCuid: async (cuid: string) => {
+      deleted.push(cuid);
+      return { ok: true };
+    },
     ...overrides,
+    deleted,
   };
 }
 
@@ -126,6 +137,7 @@ async function setup(overrides?: Partial<Harness>) {
       { provide: SECTION_GET_BY_CUID, useValue: harness.getByCuid },
       { provide: SECTION_PATCH_BY_CUID, useValue: harness.patchByCuid },
       { provide: SECTION_CREATE, useValue: harness.create },
+      { provide: SECTION_DELETE_BY_CUID, useValue: harness.deleteByCuid },
       { provide: SECTIONS_LIST_TEMPLATES, useValue: harness.listTemplates },
     ],
   }).compileComponents();
@@ -790,3 +802,34 @@ test('GSSC-MLLR-692 Idle Disclaimer Lexical', async () => {
   expect(status.className).toContain('text-gssc-dark-brown');
 });
 // @relation(GSSC-MLLR-692, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-721, GSSC-MLLR-722, GSSC-MLLR-723, scope=range_start, role=Test)
+test('GSSC-MLLR-721/722/723 Section Delete Control', async () => {
+  const { root, fixture } = await setup();
+  expect(root.querySelector('[data-slot="section-delete"]')).toBeNull();
+  await selectSection(fixture, 'sec-a');
+  const del = root.querySelector<HTMLButtonElement>('[data-slot="section-delete"]')!;
+  expect(del).toBeTruthy();
+  expect(del.textContent?.trim()).toBe('Delete section');
+  expect(del.className).toContain('text-gssc-dark-red');
+  expect(del.className).toContain('font-sans');
+  fixture.componentInstance.startCreate();
+  fixture.detectChanges();
+  expect(root.querySelector('[data-slot="section-delete"]')).toBeNull();
+});
+// @relation(GSSC-MLLR-721, GSSC-MLLR-722, GSSC-MLLR-723, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-724, scope=range_start, role=Test)
+test('GSSC-MLLR-724 Section Delete Persists And Refreshes', async () => {
+  const { fixture, page, harness } = await setup();
+  await selectSection(fixture, 'sec-a');
+  await page.onDelete();
+  fixture.detectChanges();
+  await fixture.whenStable();
+  expect(harness.deleted).toEqual(['sec-a']);
+  expect(page.mode()).toBe('idle');
+  expect(page.selectedCuid()).toBeNull();
+  expect(page.sections().some((row) => row.cuid === 'sec-a')).toBe(false);
+  expect(page.statusMessage()).toContain('deleted');
+});
+// @relation(GSSC-MLLR-724, scope=range_end, role=Test)
