@@ -175,6 +175,21 @@ async function getBytes(pathName: string, token?: string) {
   return { status: response.status, bytes, contentType: response.headers.get("content-type") };
 }
 
+async function headBytes(pathName: string, token?: string) {
+  const headers: Record<string, string> = {};
+  if (token) headers.cookie = cookieHeaderForToken(token);
+  const response = await backend(
+    new Request(`http://127.0.0.1${pathName}`, { method: "HEAD", headers }),
+  );
+  const bytes = new Uint8Array(await response.arrayBuffer());
+  return {
+    status: response.status,
+    bytes,
+    contentType: response.headers.get("content-type"),
+    contentDisposition: response.headers.get("content-disposition"),
+  };
+}
+
 // @relation(GSSC-BLLR-366, scope=range_start, role=Test)
 test("GSSC-BLLR-366 Stored File Entries Table", async () => {
   const folder = await sendJson(
@@ -428,6 +443,43 @@ test("GSSC-BLLR-378 File Upload Forbidden", async () => {
   expect(denied.status).toBe(403);
 });
 // @relation(GSSC-BLLR-378, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-507, scope=range_start, role=Test)
+test("GSSC-BLLR-507 File Head is body-less with get headers", async () => {
+  const uploaded = await uploadFile("head.pdf", "%PDF-head%", {}, adminTok);
+  expect(uploaded.status).toBe(201);
+  const cuid = (uploaded.body as { cuid: string }).cuid;
+  const got = await getBytes(`/files/${cuid}`);
+  expect(got.status).toBe(200);
+  const headed = await headBytes(`/files/${cuid}`);
+  expect(headed.status).toBe(200);
+  expect(headed.bytes.byteLength).toBe(0);
+  expect(headed.contentType).toBe(got.contentType);
+  expect(headed.contentDisposition).toBeTruthy();
+
+  const privateFolder = await sendJson(
+    "POST",
+    "/files",
+    {
+      name: "private-head-parent",
+      isPublic: false,
+      readRoles: ["publicationEditor"],
+      writeRoles: ["publicationEditor"],
+    },
+    adminTok,
+  );
+  const parentCuid = (privateFolder.body as { cuid: string }).cuid;
+  const privateUpload = await uploadFile(
+    "private-head.pdf",
+    "%PDF-private-head",
+    { parent: parentCuid },
+    editorTok,
+  );
+  const privateCuid = (privateUpload.body as { cuid: string }).cuid;
+  expect((await headBytes(`/files/${privateCuid}`, memberTok)).status).toBe(403);
+  expect((await headBytes(`/files/${privateCuid}`, editorTok)).status).toBe(200);
+});
+// @relation(GSSC-BLLR-507, scope=range_end, role=Test)
 
 // @relation(GSSC-BLLR-379, scope=range_start, role=Test)
 test("GSSC-BLLR-379 File Get", async () => {

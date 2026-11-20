@@ -23,10 +23,12 @@ function filesCuid(resource: string): string {
 }
 
 /**
- * Treaty GET /files/{cuid}. Mutable so unit tests can stub without fighting Eden proxies.
+ * Treaty file probes. Mutable so unit tests can stub without fighting Eden proxies.
+ * Access checks use HEAD (body-less); object-url loads use GET.
  */
 export const filesApi = {
   get: (cuid: string) => backend.files({ cuid }).get(),
+  head: (cuid: string) => backend.files({ cuid }).head(),
 };
 
 async function objectUrlFromTreatyPayload(payload: unknown): Promise<string | null> {
@@ -73,17 +75,18 @@ export async function resolveStoredFileObjectUrl(resource: string): Promise<stri
 }
 
 /**
- * Probe Treaty GET /files/{cuid}; on success return the stable /files URL so the
+ * Probe Treaty HEAD /files/{cuid}; on success return the stable /files URL so the
  * browser PDF chrome can honor Content-Disposition filename (not a blob: UUID).
- * Absolute http(s) resources still pass through after a credentialed probe.
+ * Absolute http(s) resources still pass through after a credentialed HEAD probe.
  */
+// @relation(GSSC-PLLR-399, scope=range_start, role=Implementation)
 export async function resolveStoredFileAccessUrl(resource: string): Promise<string | null> {
   const trimmed = resource.trim();
   if (trimmed.length === 0) return null;
 
   if (/^https?:\/\//i.test(trimmed)) {
     try {
-      const response = await fetch(trimmed, { credentials: 'include', method: 'GET' });
+      const response = await fetch(trimmed, { credentials: 'include', method: 'HEAD' });
       if (!response.ok) return null;
       return trimmed;
     } catch {
@@ -92,7 +95,7 @@ export async function resolveStoredFileAccessUrl(resource: string): Promise<stri
   }
 
   try {
-    const result = await filesApi.get(filesCuid(trimmed));
+    const result = await filesApi.head(filesCuid(trimmed));
     if (result.error) return null;
     if (result.status === 403 || result.status === 404) return null;
     if (result.status < 200 || result.status >= 300) return null;
@@ -101,3 +104,4 @@ export async function resolveStoredFileAccessUrl(resource: string): Promise<stri
     return null;
   }
 }
+// @relation(GSSC-PLLR-399, scope=range_end, role=Implementation)

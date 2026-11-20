@@ -5793,6 +5793,27 @@ RELATIONS:
   VALUE: GSSC-PHLR-131
   ROLE: Refines
 
+[REQUIREMENT]
+UID: GSSC-PLLR-399
+TITLE: Issue File Access Resolve
+STATEMENT: >>>
+When the Public Frontend resolves the selected newsletter's issue file for preview or open, it SHALL perform a body-less access check against the Unified Backend file identified by that newsletter's file path, and SHALL use the resulting stable file URL for preview and open so that access check does not transfer the file bytes.
+<<<
+RATIONALE: >>>
+Preview and open need a stable file URL for PDF chrome filenames; a body-less check avoids downloading the issue twice before the iframe or new window loads those bytes once.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-145
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-PHLR-131
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-PHLR-132
+  ROLE: Refines
+
 [[/SECTION]]
 
 [[SECTION]]
