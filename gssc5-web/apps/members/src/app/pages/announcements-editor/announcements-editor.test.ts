@@ -508,8 +508,8 @@ test('GSSC-MLLR-687/690 Announcements intro and idle disclaimer', async () => {
 });
 // @relation(GSSC-MLLR-687, GSSC-MLLR-690, scope=range_end, role=Test)
 
-// @relation(GSSC-MLLR-725, GSSC-MLLR-726, GSSC-MLLR-727, scope=range_start, role=Test)
-test('GSSC-MLLR-725/726/727 Announcement Delete Control', async () => {
+// @relation(GSSC-MLLR-745, GSSC-MLLR-746, GSSC-MLLR-747, scope=range_start, role=Test)
+test('GSSC-MLLR-745/746/747 Announcement Delete Control', async () => {
   const api = createMockApi({
     list: [sampleAnnouncement({ cuid: 'a1', body: 'One', header: 'Alpha' })],
   });
@@ -524,10 +524,10 @@ test('GSSC-MLLR-725/726/727 Announcement Delete Control', async () => {
   expect(del.className).toContain('text-gssc-dark-red');
   expect(del.className).toContain('font-sans');
 });
-// @relation(GSSC-MLLR-725, GSSC-MLLR-726, GSSC-MLLR-727, scope=range_end, role=Test)
+// @relation(GSSC-MLLR-745, GSSC-MLLR-746, GSSC-MLLR-747, scope=range_end, role=Test)
 
-// @relation(GSSC-MLLR-728, scope=range_start, role=Test)
-test('GSSC-MLLR-728 Announcement Delete Persists And Refreshes', async () => {
+// @relation(GSSC-MLLR-748, scope=range_start, role=Test)
+test('GSSC-MLLR-748 Announcement Delete Persists And Refreshes', async () => {
   const api = createMockApi({
     list: [sampleAnnouncement({ cuid: 'a1', body: 'One', header: 'Alpha' })],
   });
@@ -545,10 +545,10 @@ test('GSSC-MLLR-728 Announcement Delete Persists And Refreshes', async () => {
   expect(root.querySelectorAll('.gssc-announcement-catalog__item').length).toBe(0);
   expect(textContent(root, '[data-slot="announcements-editor-status"]')).toContain('deleted');
 });
-// @relation(GSSC-MLLR-728, scope=range_end, role=Test)
+// @relation(GSSC-MLLR-748, scope=range_end, role=Test)
 
-// @relation(GSSC-MLLR-737, GSSC-MLLR-738, GSSC-MLLR-739, scope=range_start, role=Test)
-test('GSSC-MLLR-737/738/739 Announcement Copy to New Control', async () => {
+// @relation(GSSC-MLLR-757, GSSC-MLLR-758, GSSC-MLLR-759, scope=range_start, role=Test)
+test('GSSC-MLLR-757/758/759 Announcement Copy to New Control', async () => {
   const api = createMockApi({
     list: [sampleAnnouncement({ cuid: 'a1', body: 'Source body', header: 'Source' })],
     templates: [{ cuid: 't1', name: 'Public' }],
@@ -565,10 +565,10 @@ test('GSSC-MLLR-737/738/739 Announcement Copy to New Control', async () => {
   await fixture.whenStable();
   expect(copy.disabled).toBe(false);
 });
-// @relation(GSSC-MLLR-737, GSSC-MLLR-738, GSSC-MLLR-739, scope=range_end, role=Test)
+// @relation(GSSC-MLLR-757, GSSC-MLLR-758, GSSC-MLLR-759, scope=range_end, role=Test)
 
-// @relation(GSSC-MLLR-740, scope=range_start, role=Test)
-test('GSSC-MLLR-740 Announcement Copy Prefills Create Draft', async () => {
+// @relation(GSSC-MLLR-760, scope=range_start, role=Test)
+test('GSSC-MLLR-760 Announcement Copy Prefills Create Draft', async () => {
   const api = createMockApi({
     list: [sampleAnnouncement({ cuid: 'a1', body: 'Source body', header: 'Source', isPublic: false })],
     templates: [{ cuid: 't1', name: 'Public' }],
@@ -600,4 +600,4 @@ test('GSSC-MLLR-740 Announcement Copy Prefills Create Draft', async () => {
   expect(root.querySelector('gssc-form-select-field')).toBeTruthy();
   expect(textContent(root, '[data-slot="announcements-editor-status"]')).toContain('Copied');
 });
-// @relation(GSSC-MLLR-740, scope=range_end, role=Test)
+// @relation(GSSC-MLLR-760, scope=range_end, role=Test)

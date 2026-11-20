@@ -23,7 +23,7 @@
         Catalog
       </h2>
       <div class="flex flex-wrap items-center gap-2">
-        <!-- @relation(GSSC-MLLR-733, GSSC-MLLR-734, GSSC-MLLR-735, scope=range_start, role=Implementation) -->
+        <!-- @relation(GSSC-MLLR-753, GSSC-MLLR-754, GSSC-MLLR-755, scope=range_start, role=Implementation) -->
         <label
           class="gssc-events-catalog__filter inline-flex items-center gap-2 font-sans text-sm text-gssc-dark-green"
           data-slot="events-time-filter"
@@ -41,8 +41,8 @@
             }
           </select>
         </label>
-        <!-- @relation(GSSC-MLLR-733, GSSC-MLLR-734, GSSC-MLLR-735, scope=range_end, role=Implementation) -->
-        <!-- @relation(GSSC-MLLR-741, GSSC-MLLR-742, GSSC-MLLR-743, scope=range_start, role=Implementation) -->
+        <!-- @relation(GSSC-MLLR-753, GSSC-MLLR-754, GSSC-MLLR-755, scope=range_end, role=Implementation) -->
+        <!-- @relation(GSSC-MLLR-761, GSSC-MLLR-762, GSSC-MLLR-763, scope=range_start, role=Implementation) -->
         <button
           type="button"
           class="gssc-events-copy inline-flex cursor-pointer items-center justify-center rounded-md border border-gssc-dark-green bg-gssc-white px-3 py-1.5 font-sans text-sm text-gssc-dark-green hover:bg-gssc-light-green disabled:cursor-not-allowed disabled:opacity-60"
@@ -52,7 +52,7 @@
         >
           Copy to New Event
         </button>
-        <!-- @relation(GSSC-MLLR-741, GSSC-MLLR-742, GSSC-MLLR-743, scope=range_end, role=Implementation) -->
+        <!-- @relation(GSSC-MLLR-761, GSSC-MLLR-762, GSSC-MLLR-763, scope=range_end, role=Implementation) -->
         <!-- @relation(GSSC-MLLR-330, GSSC-MLLR-331, GSSC-MLLR-332, scope=range_start, role=Implementation) -->
         <button
           type="button"
@@ -162,7 +162,7 @@
         <!-- @relation(GSSC-MLLR-336, GSSC-MLLR-337, GSSC-MLLR-338, scope=range_end, role=Implementation) -->
       </gssc-editor>
       @if (canEdit() && mode() === 'edit' && editingCuid()) {
-        <!-- @relation(GSSC-MLLR-729, GSSC-MLLR-730, GSSC-MLLR-731, scope=range_start, role=Implementation) -->
+        <!-- @relation(GSSC-MLLR-749, GSSC-MLLR-750, GSSC-MLLR-751, scope=range_start, role=Implementation) -->
         <button
           type="button"
           class="gssc-events-page__delete mt-3 inline-flex cursor-pointer items-center justify-center self-start rounded-md border border-gssc-dark-red bg-gssc-white px-3 py-2 font-sans text-sm font-normal text-gssc-dark-red hover:bg-gssc-light-red"
@@ -171,7 +171,7 @@
         >
           Delete event
         </button>
-        <!-- @relation(GSSC-MLLR-729, GSSC-MLLR-730, GSSC-MLLR-731, scope=range_end, role=Implementation) -->
+        <!-- @relation(GSSC-MLLR-749, GSSC-MLLR-750, GSSC-MLLR-751, scope=range_end, role=Implementation) -->
       }
     </div>
   }

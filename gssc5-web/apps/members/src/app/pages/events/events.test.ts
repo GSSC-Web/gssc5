@@ -662,8 +662,8 @@ test('GSSC-MLLR-687/690 Events intro and idle disclaimer', async () => {
 });
 // @relation(GSSC-MLLR-687, GSSC-MLLR-690, scope=range_end, role=Test)
 
-// @relation(GSSC-MLLR-729, GSSC-MLLR-730, GSSC-MLLR-731, scope=range_start, role=Test)
-test('GSSC-MLLR-729/730/731 Event Delete Control', async () => {
+// @relation(GSSC-MLLR-749, GSSC-MLLR-750, GSSC-MLLR-751, scope=range_start, role=Test)
+test('GSSC-MLLR-749/750/751 Event Delete Control', async () => {
   const { root, fixture, restore } = await setupEvents();
   try {
     expect(root.querySelector('[data-slot="events-delete"]')).toBeNull();
@@ -679,10 +679,10 @@ test('GSSC-MLLR-729/730/731 Event Delete Control', async () => {
     restore();
   }
 });
-// @relation(GSSC-MLLR-729, GSSC-MLLR-730, GSSC-MLLR-731, scope=range_end, role=Test)
+// @relation(GSSC-MLLR-749, GSSC-MLLR-750, GSSC-MLLR-751, scope=range_end, role=Test)
 
-// @relation(GSSC-MLLR-732, scope=range_start, role=Test)
-test('GSSC-MLLR-732 Event Delete Persists And Refreshes', async () => {
+// @relation(GSSC-MLLR-752, scope=range_start, role=Test)
+test('GSSC-MLLR-752 Event Delete Persists And Refreshes', async () => {
   const { root, fixture, page, deleted, restore } = await setupEvents();
   try {
     root.querySelector<HTMLButtonElement>('.gssc-events-catalog__entry-button')!.click();
@@ -699,10 +699,10 @@ test('GSSC-MLLR-732 Event Delete Persists And Refreshes', async () => {
     restore();
   }
 });
-// @relation(GSSC-MLLR-732, scope=range_end, role=Test)
+// @relation(GSSC-MLLR-752, scope=range_end, role=Test)
 
-// @relation(GSSC-MLLR-733, GSSC-MLLR-734, GSSC-MLLR-735, scope=range_start, role=Test)
-test('GSSC-MLLR-733/734/735 Events Catalog Time Filter Control', async () => {
+// @relation(GSSC-MLLR-753, GSSC-MLLR-754, GSSC-MLLR-755, scope=range_start, role=Test)
+test('GSSC-MLLR-753/754/755 Events Catalog Time Filter Control', async () => {
   const { root, page, restore } = await setupEvents();
   try {
     expect(page.timeFilter()).toBe('future');
@@ -722,10 +722,10 @@ test('GSSC-MLLR-733/734/735 Events Catalog Time Filter Control', async () => {
     restore();
   }
 });
-// @relation(GSSC-MLLR-733, GSSC-MLLR-734, GSSC-MLLR-735, scope=range_end, role=Test)
+// @relation(GSSC-MLLR-753, GSSC-MLLR-754, GSSC-MLLR-755, scope=range_end, role=Test)
 
-// @relation(GSSC-MLLR-736, scope=range_start, role=Test)
-test('GSSC-MLLR-736 Events Catalog Lists Filtered Entries', async () => {
+// @relation(GSSC-MLLR-756, scope=range_start, role=Test)
+test('GSSC-MLLR-756 Events Catalog Lists Filtered Entries', async () => {
   const past = { ...sampleEvent, cuid: 'evt_past', name: 'Past Meetup', year: 2000, month: 1, day: 1 };
   const future = { ...sampleEvent, cuid: 'evt_future', name: 'Future Meetup', year: 2099, month: 6, day: 1 };
   const { root, fixture, page, restore } = await setupEvents({ catalog: [past, future] });
@@ -745,10 +745,10 @@ test('GSSC-MLLR-736 Events Catalog Lists Filtered Entries', async () => {
     restore();
   }
 });
-// @relation(GSSC-MLLR-736, scope=range_end, role=Test)
+// @relation(GSSC-MLLR-756, scope=range_end, role=Test)
 
-// @relation(GSSC-MLLR-741, GSSC-MLLR-742, GSSC-MLLR-743, scope=range_start, role=Test)
-test('GSSC-MLLR-741/742/743 Event Copy to New Control', async () => {
+// @relation(GSSC-MLLR-761, GSSC-MLLR-762, GSSC-MLLR-763, scope=range_start, role=Test)
+test('GSSC-MLLR-761/762/763 Event Copy to New Control', async () => {
   const { root, fixture, restore } = await setupEvents();
   try {
     const copy = root.querySelector<HTMLButtonElement>('[data-slot="events-copy"]')!;
@@ -765,10 +765,10 @@ test('GSSC-MLLR-741/742/743 Event Copy to New Control', async () => {
     restore();
   }
 });
-// @relation(GSSC-MLLR-741, GSSC-MLLR-742, GSSC-MLLR-743, scope=range_end, role=Test)
+// @relation(GSSC-MLLR-761, GSSC-MLLR-762, GSSC-MLLR-763, scope=range_end, role=Test)
 
-// @relation(GSSC-MLLR-744, scope=range_start, role=Test)
-test('GSSC-MLLR-744 Event Copy Prefills Create Draft', async () => {
+// @relation(GSSC-MLLR-764, scope=range_start, role=Test)
+test('GSSC-MLLR-764 Event Copy Prefills Create Draft', async () => {
   const { root, fixture, page, restore } = await setupEvents();
   try {
     root.querySelector<HTMLButtonElement>('.gssc-events-catalog__entry-button')!.click();
@@ -787,4 +787,4 @@ test('GSSC-MLLR-744 Event Copy Prefills Create Draft', async () => {
     restore();
   }
 });
-// @relation(GSSC-MLLR-744, scope=range_end, role=Test)
+// @relation(GSSC-MLLR-764, scope=range_end, role=Test)

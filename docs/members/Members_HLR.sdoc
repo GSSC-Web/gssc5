@@ -2045,11 +2045,43 @@ RELATIONS:
 [[/SECTION]]
 
 [[SECTION]]
+UID: GSSC-MHLR-KVS-EDITOR
+TITLE: Key-Value Store Editor Requirements
+
+[REQUIREMENT]
+UID: GSSC-MHLR-114
+TITLE: Key-Value Store Catalog Support
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL support the Unified Backend key-value store catalog for administrators who manage global website data entries.
+<<<
+RATIONALE: >>>
+Administrators need a Members surface over the Unified Backend key-value contracts so global website data can be reviewed without programming knowledge.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC-202
+REVIEW_STATUS: Approved
+
+[REQUIREMENT]
+UID: GSSC-MHLR-115
+TITLE: Key-Value Store Modification
+STATEMENT: >>>
+The GSSC Website Member Frontend SHALL let an administrator create, modify, and remove a key-value entry without programming knowledge.
+<<<
+RATIONALE: >>>
+Key-value create, value update, and delete are administrator responsibilities on the Unified Backend; the Member Frontend exposes those operations for day-to-day catalog maintenance.
+<<<
+DERIVED: True
+CHANGE_DRIVER: GSSC-202
+REVIEW_STATUS: Approved
+
+[[/SECTION]]
+
+[[SECTION]]
 UID: GSSC-MHLR-PDE-DELETE-FILTER-COPY
 TITLE: Page Data Editor Delete Filter and Copy
 
 [REQUIREMENT]
-UID: GSSC-MHLR-114
+UID: GSSC-MHLR-116
 TITLE: Page Data Editor Delete
 STATEMENT: >>>
 The GSSC Website Member Frontend SHALL let an authorized member delete a selected section, announcement, or event from the Page Data Editor through the Unified Backend, and SHALL refresh that kind's catalog and clear the editor selection after a successful delete.
@@ -2075,7 +2107,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-MHLR-115
+UID: GSSC-MHLR-117
 TITLE: Events Catalog Time Filter
 STATEMENT: >>>
 The GSSC Website Member Frontend SHALL present an Events catalog filter with Past, Future, and All choices that defaults to Future and SHALL list only events whose event date falls in the selected time window relative to the current date.
@@ -2095,7 +2127,7 @@ RELATIONS:
   ROLE: Refines
 
 [REQUIREMENT]
-UID: GSSC-MHLR-116
+UID: GSSC-MHLR-118
 TITLE: Announcements and Events Copy to New
 STATEMENT: >>>
 The GSSC Website Member Frontend SHALL present a Copy to New control beside New on the announcements catalog and on the events catalog that, when a current item is selected and create is permitted, opens a new unsaved create draft prefilled from that item.

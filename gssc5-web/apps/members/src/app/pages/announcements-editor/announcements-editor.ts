@@ -87,11 +87,11 @@ export class AnnouncementsEditorPage implements OnInit {
 
   protected readonly fieldsEnabled = computed(() => this.permitted() && this.showEditor());
 
-  // @relation(GSSC-MLLR-738, scope=range_start, role=Implementation)
+  // @relation(GSSC-MLLR-758, scope=range_start, role=Implementation)
   protected readonly canCopy = computed(
     () => this.permitted() && this.mode() === 'edit' && this.selectedCuid() != null,
   );
-  // @relation(GSSC-MLLR-738, scope=range_end, role=Implementation)
+  // @relation(GSSC-MLLR-758, scope=range_end, role=Implementation)
 
   protected readonly activePublicationOptions = computed(() =>
     this.mode() === 'edit' ? this.editPublicationOptions : this.publicationOptions,
@@ -255,7 +255,7 @@ export class AnnouncementsEditorPage implements OnInit {
   }
   // @relation(GSSC-MLLR-304, scope=range_end, role=Implementation)
 
-  // @relation(GSSC-MLLR-725, GSSC-MLLR-728, scope=range_start, role=Implementation)
+  // @relation(GSSC-MLLR-745, GSSC-MLLR-748, scope=range_start, role=Implementation)
   protected async onDelete(): Promise<void> {
     if (!this.permitted() || this.mode() !== 'edit') return;
     const cuid = this.selectedCuid();
@@ -279,9 +279,9 @@ export class AnnouncementsEditorPage implements OnInit {
     this.permitted.set(true);
     this.statusMessage.set('Announcement deleted.');
   }
-  // @relation(GSSC-MLLR-725, GSSC-MLLR-728, scope=range_end, role=Implementation)
+  // @relation(GSSC-MLLR-745, GSSC-MLLR-748, scope=range_end, role=Implementation)
 
-  // @relation(GSSC-MLLR-737, GSSC-MLLR-740, scope=range_start, role=Implementation)
+  // @relation(GSSC-MLLR-757, GSSC-MLLR-760, scope=range_start, role=Implementation)
   protected async copyToNew(): Promise<void> {
     if (!this.canCopy()) return;
     const cuid = this.selectedCuid();
@@ -316,7 +316,7 @@ export class AnnouncementsEditorPage implements OnInit {
     };
     this.statusMessage.set('Copied — choose a template and save.');
   }
-  // @relation(GSSC-MLLR-737, GSSC-MLLR-740, scope=range_end, role=Implementation)
+  // @relation(GSSC-MLLR-757, GSSC-MLLR-760, scope=range_end, role=Implementation)
 
   protected catalogLabel(row: AnnouncementListEntry): string {
     const header = row.header?.trim();

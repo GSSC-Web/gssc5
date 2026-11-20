@@ -148,9 +148,9 @@ export class EventsPage implements OnInit {
   readonly statusMessage = signal('Select an event or create a new one.');
   readonly mode = signal<'create' | 'edit'>('create');
   readonly editingCuid = signal<string | null>(null);
-  // @relation(GSSC-MLLR-733, scope=range_start, role=Implementation)
+  // @relation(GSSC-MLLR-753, scope=range_start, role=Implementation)
   readonly timeFilter = signal<EventsTimeFilter>('future');
-  // @relation(GSSC-MLLR-733, scope=range_end, role=Implementation)
+  // @relation(GSSC-MLLR-753, scope=range_end, role=Implementation)
 
   readonly timeFilterOptions: ReadonlyArray<{ value: EventsTimeFilter; label: string }> = [
     { value: 'past', label: 'Past' },
@@ -184,19 +184,19 @@ export class EventsPage implements OnInit {
   readonly canEdit = computed(() => this.memberSession.isUserMod());
   // @relation(GSSC-MLLR-344, scope=range_end, role=Implementation)
 
-  // @relation(GSSC-MLLR-742, scope=range_start, role=Implementation)
+  // @relation(GSSC-MLLR-762, scope=range_start, role=Implementation)
   readonly canCopy = computed(
     () => this.canEdit() && this.mode() === 'edit' && this.editingCuid() != null,
   );
-  // @relation(GSSC-MLLR-742, scope=range_end, role=Implementation)
+  // @relation(GSSC-MLLR-762, scope=range_end, role=Implementation)
 
-  // @relation(GSSC-MLLR-733, GSSC-MLLR-736, scope=range_start, role=Implementation)
+  // @relation(GSSC-MLLR-753, GSSC-MLLR-756, scope=range_start, role=Implementation)
   readonly filteredCatalog = computed(() => {
     const filter = this.timeFilter();
     const today = todayDateValue();
     return this.catalog().filter((event) => matchesTimeFilter(event, filter, today));
   });
-  // @relation(GSSC-MLLR-733, GSSC-MLLR-736, scope=range_end, role=Implementation)
+  // @relation(GSSC-MLLR-753, GSSC-MLLR-756, scope=range_end, role=Implementation)
 
   // @relation(GSSC-MLLR-346, scope=range_start, role=Implementation)
   readonly editorResourceId = computed(() => {
@@ -255,7 +255,7 @@ export class EventsPage implements OnInit {
     return `${event.name} · ${formatEventDate(event)}`;
   }
 
-  // @relation(GSSC-MLLR-741, GSSC-MLLR-744, scope=range_start, role=Implementation)
+  // @relation(GSSC-MLLR-761, GSSC-MLLR-764, scope=range_start, role=Implementation)
   copyToNew(): void {
     if (!this.canCopy()) return;
     const cuid = this.editingCuid();
@@ -267,9 +267,9 @@ export class EventsPage implements OnInit {
     this.applyForm(form);
     this.statusMessage.set('Copied — edit and save to create a new event.');
   }
-  // @relation(GSSC-MLLR-741, GSSC-MLLR-744, scope=range_end, role=Implementation)
+  // @relation(GSSC-MLLR-761, GSSC-MLLR-764, scope=range_end, role=Implementation)
 
-  // @relation(GSSC-MLLR-729, GSSC-MLLR-732, scope=range_start, role=Implementation)
+  // @relation(GSSC-MLLR-749, GSSC-MLLR-752, scope=range_start, role=Implementation)
   async onDelete(): Promise<void> {
     if (!this.canEdit() || this.mode() !== 'edit') return;
     const cuid = this.editingCuid();
@@ -285,7 +285,7 @@ export class EventsPage implements OnInit {
     this.startCreate({ announce: false });
     this.statusMessage.set('Event deleted.');
   }
-  // @relation(GSSC-MLLR-729, GSSC-MLLR-732, scope=range_end, role=Implementation)
+  // @relation(GSSC-MLLR-749, GSSC-MLLR-752, scope=range_end, role=Implementation)
 
   // @relation(GSSC-MLLR-340, GSSC-MLLR-342, scope=range_start, role=Implementation)
   async onSaved(): Promise<void> {

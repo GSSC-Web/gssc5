@@ -269,7 +269,7 @@ export class PageSectionEditorPage implements OnInit {
   }
   // @relation(GSSC-MLLR-282, scope=range_end, role=Implementation)
 
-  // @relation(GSSC-MLLR-721, GSSC-MLLR-724, scope=range_start, role=Implementation)
+  // @relation(GSSC-MLLR-741, GSSC-MLLR-744, scope=range_start, role=Implementation)
   async onDelete(): Promise<void> {
     if (!this.permitted() || this.mode() !== 'edit') return;
     const cuid = this.selectedCuid();
@@ -293,7 +293,7 @@ export class PageSectionEditorPage implements OnInit {
     this.permitted.set(true);
     this.statusMessage.set('Section deleted.');
   }
-  // @relation(GSSC-MLLR-721, GSSC-MLLR-724, scope=range_end, role=Implementation)
+  // @relation(GSSC-MLLR-741, GSSC-MLLR-744, scope=range_end, role=Implementation)
 
   protected sectionLabel(entry: SectionListEntry): string {
     const header = entry.header?.trim();

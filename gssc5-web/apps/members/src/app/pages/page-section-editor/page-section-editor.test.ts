@@ -803,8 +803,8 @@ test('GSSC-MLLR-692 Idle Disclaimer Lexical', async () => {
 });
 // @relation(GSSC-MLLR-692, scope=range_end, role=Test)
 
-// @relation(GSSC-MLLR-721, GSSC-MLLR-722, GSSC-MLLR-723, scope=range_start, role=Test)
-test('GSSC-MLLR-721/722/723 Section Delete Control', async () => {
+// @relation(GSSC-MLLR-741, GSSC-MLLR-742, GSSC-MLLR-743, scope=range_start, role=Test)
+test('GSSC-MLLR-741/742/743 Section Delete Control', async () => {
   const { root, fixture } = await setup();
   expect(root.querySelector('[data-slot="section-delete"]')).toBeNull();
   await selectSection(fixture, 'sec-a');
@@ -817,10 +817,10 @@ test('GSSC-MLLR-721/722/723 Section Delete Control', async () => {
   fixture.detectChanges();
   expect(root.querySelector('[data-slot="section-delete"]')).toBeNull();
 });
-// @relation(GSSC-MLLR-721, GSSC-MLLR-722, GSSC-MLLR-723, scope=range_end, role=Test)
+// @relation(GSSC-MLLR-741, GSSC-MLLR-742, GSSC-MLLR-743, scope=range_end, role=Test)
 
-// @relation(GSSC-MLLR-724, scope=range_start, role=Test)
-test('GSSC-MLLR-724 Section Delete Persists And Refreshes', async () => {
+// @relation(GSSC-MLLR-744, scope=range_start, role=Test)
+test('GSSC-MLLR-744 Section Delete Persists And Refreshes', async () => {
   const { fixture, page, harness } = await setup();
   await selectSection(fixture, 'sec-a');
   await page.onDelete();
@@ -832,4 +832,4 @@ test('GSSC-MLLR-724 Section Delete Persists And Refreshes', async () => {
   expect(page.sections().some((row) => row.cuid === 'sec-a')).toBe(false);
   expect(page.statusMessage()).toContain('deleted');
 });
-// @relation(GSSC-MLLR-724, scope=range_end, role=Test)
+// @relation(GSSC-MLLR-744, scope=range_end, role=Test)
