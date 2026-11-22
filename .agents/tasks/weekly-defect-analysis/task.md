@@ -22,7 +22,7 @@ Scan for defects: missing/wrong/extra behavior vs requirements, away-from-requir
 - Labels Backend/Frontend/Public/Member as fits.
 - Do **not** mark DoR Satisfied; do **not** auto-implement fixes in this run.
 - Prefer `requirements` / `software` / `test` profiles to classify findings only.
-- **Cross-scanner:** If `weekly-third-party-optimize` already has (or would have) the same issue, share one ticket — refine it; do not file twice.
+- **Cross-scanner:** If `weekly-third-party-optimize` or `weekly-test-optimize` already has (or would have) the same issue, share one ticket — refine it; do not file twice.
 
 ## Dedupe before create
 

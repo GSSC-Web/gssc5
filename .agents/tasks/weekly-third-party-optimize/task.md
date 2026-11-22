@@ -22,7 +22,7 @@ Compare workspace code to adopted-stack practice (Elysia, Angular, Tailwind, Ede
 - Cite docs/URL + code locus; labels Backend/Frontend/Public/Member as fits.
 - Do **not** mark DoR Satisfied; do **not** auto-implement fixes in this run.
 - Prefer `software` / `requirements` / `test` profiles only to judge findings — not to ship fixes here.
-- **Cross-scanner:** If `weekly-defect-analysis` already has (or would have) the same issue, share one ticket — refine it; do not file twice.
+- **Cross-scanner:** If `weekly-defect-analysis` or `weekly-test-optimize` already has (or would have) the same issue, share one ticket — refine it; do not file twice.
 
 ## Dedupe before create
 

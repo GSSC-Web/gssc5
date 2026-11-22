@@ -89,10 +89,11 @@ Durable stack facts (not wave status). Load the matching memory so SoftDev/TestD
 
 ## Weekly tasks
 
-Repeat every 7 days; Kaneo **Defect** tasks only — no auto-fixes. Create only when no equivalent open Defect/optimization ticket exists; otherwise refine that ticket. Cross-scanner findings that are the same issue share one ticket. New Defects always go to **Planned backlog** (`planned`), regardless of priority. Refines leave column alone unless owner policy demotes a below-High Defect still on Not Ready. See `kaneo-create-task`.
+Repeat every 7 days; Kaneo backlog tasks only — no auto-fixes. Prefer **Defect**; `weekly-test-optimize` Phase C may file **Enhancement** for pure UI/UX ideas that are not defects. Create only when no equivalent open Defect/optimization ticket exists; otherwise refine that ticket. Cross-scanner findings that are the same issue share one ticket across all three weekly scanners. New Defects always go to **Planned backlog** (`planned`), regardless of priority. Refines leave column alone unless owner policy demotes a below-High Defect still on Not Ready. See `kaneo-create-task`.
 
 - `.agents/tasks/weekly-third-party-optimize/task.md`
 - `.agents/tasks/weekly-defect-analysis/task.md`
+- `.agents/tasks/weekly-test-optimize/task.md`
 
 ## Host prompt
 
