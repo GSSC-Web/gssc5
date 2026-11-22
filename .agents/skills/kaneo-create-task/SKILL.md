@@ -24,12 +24,12 @@ Use the GSSC5 Kaneo project via MCP (list/discover projects; do not embed opaque
 3. **If match:** update that task (description, Implementation note, locus/scope as needed); add a comment with week date (when from a weekly scan) + what changed. Do **not** create a new ticket number. Leave column unless owner policy applies (e.g. demote a medium/low/no-priority Defect still on Not Ready → `planned`).
 4. **If match and nothing material changed:** skip create; report as unchanged-skipped.
 5. **If no match:** proceed with create steps below.
-6. **Cross-scanner:** a third-party optimize finding and a defect-analysis finding that are the same issue share one ticket; refine rather than file twice.
+6. **Cross-scanner:** a finding from `weekly-third-party-optimize`, `weekly-defect-analysis`, or `weekly-test-optimize` that is the same issue shares one ticket; refine rather than file twice.
 7. Callers (weekly tasks) report counts: **created** vs **refined** vs **unchanged-skipped**.
 
 ## Steps (create)
 
-1. Choose Issue Type: **Defect**, **Enhancement**, or **Planned** (Must Have when needed). Weekly scanners → **Defect**.
+1. Choose Issue Type: **Defect**, **Enhancement**, or **Planned** (Must Have when needed). Weekly scanners → **Defect** (except `weekly-test-optimize` Phase C pure UI/UX → **Enhancement**).
 2. Set title, description (scope; no GitHub `<sub>Task` line on Kaneo), priority, labels (Backend / Frontend / Public / Member as fits — new row per task id).
 3. Custom fields: Work Type as known; DoR/DoD terse; DoR Satisfied `false`; DoD Satisfied `false`; Fix Version **Future**.
 4. Add `blocks` / parent relations instead of prose-only deps when known.
