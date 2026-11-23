@@ -9867,16 +9867,17 @@ RELATIONS:
 UID: GSSC-BLLR-455
 TITLE: Account Photo GET With Position
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL allow GET of a file in the account-photos store without a login session token when a user stores that photo and has a non-empty position.
+The GSSC Website Unified Backend SHALL allow GET of a file in the account-photos store without a login session token when a user who is not soft-deleted stores that photo and has a non-empty position.
 <<<
 RATIONALE: >>>
-Public leadership display needs leader photos without requiring a member session.
+Public leadership display needs leader photos without requiring a member session. Soft-deleted users are not public leaders, so their account photos are not anonymously readable.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: >>>
 GSSC5-101
 GSSC5-131
+GSSC5-161
 <<<
 REVIEW_STATUS: Approved
 RELATIONS:

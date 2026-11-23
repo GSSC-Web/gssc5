@@ -200,6 +200,18 @@ test("GSSC-BLLR-455 GET account photo without token depends on owner position", 
 
   await prisma.user.update({
     where: { id: memberId },
+    data: { deletedAt: new Date() },
+  });
+  expect((await getPhoto(memberId)).status).toBe(403);
+
+  await prisma.user.update({
+    where: { id: memberId },
+    data: { deletedAt: null },
+  });
+  expect((await getPhoto(memberId)).status).toBe(200);
+
+  await prisma.user.update({
+    where: { id: memberId },
     data: { position: null },
   });
   expect((await getPhoto(memberId)).status).toBe(403);
