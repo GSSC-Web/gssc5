@@ -1,5 +1,6 @@
 // Password service checks. Each assertion is limited to that requirement's statement.
 import { afterEach, beforeAll, beforeEach, expect, setSystemTime, test } from "bun:test";
+import { randomUUID } from "node:crypto";
 
 import { loadConfig } from "../config";
 import { getPrisma } from "../db";
@@ -367,6 +368,51 @@ test("GSSC-BLLR-236 Password Recovery Message Sent", async () => {
   expect(sent[0]?.text.includes("recovery-token=")).toBe(true);
   // Persist-before-send: durable hash must exist before SMTP runs.
   expect(rowsAtSend).toBe(1);
+
+  const softEmail = `soft-recovery-${randomUUID().slice(0, 8)}@example.com`;
+  const softUser = await prisma().user.create({
+    data: {
+      username: `soft-recovery-${randomUUID().slice(0, 8)}`,
+      primaryEmail: softEmail,
+      passwordHash: await Bun.password.hash(STRONG, "argon2id"),
+    },
+  });
+  const softToken = await requestRecovery(softEmail);
+  expect(softToken.length).toBeGreaterThan(0);
+  const tokensBeforeSoftRequest = (
+    await prisma().passwordRecoveryToken.findMany({ where: { userId: softUser.id } })
+  ).length;
+  await prisma().user.update({
+    where: { id: softUser.id },
+    data: { deletedAt: new Date() },
+  });
+  sent.length = 0;
+  mockMail();
+  const softRequest = await postJsonResponse(backend, "/password/recovery-request", {
+    email: softEmail,
+  });
+  expect(softRequest.status).toBe(204);
+  expect(sent.length).toBe(0);
+  expect(
+    (await prisma().passwordRecoveryToken.findMany({ where: { userId: softUser.id } })).length,
+  ).toBe(tokensBeforeSoftRequest);
+
+  const beforeHash = await currentHash(softUser.id);
+  expect(
+    (
+      await postJsonResponse(backend, "/password/recover", {
+        recoveryToken: softToken,
+        primaryEmail: softEmail,
+        newPassword: STRONG_NEXT,
+      })
+    ).status,
+  ).toBe(403);
+  expect(await currentHash(softUser.id)).toBe(beforeHash);
+
+  await prisma().user.update({
+    where: { id: softUser.id },
+    data: { deletedAt: null },
+  });
 });
 // @relation(GSSC-BLLR-236, scope=range_end, role=Test)
 

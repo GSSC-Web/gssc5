@@ -251,6 +251,32 @@ test("GSSC-BLLR-9 Login Token Challenge", async () => {
   const invalid = await challenge(backend, unknown);
   expect(classifyReport(invalid)).toBe("invalid");
   expect(invalid.includes(unknown)).toBe(false);
+
+  const softUsername = `soft-challenge-${randomUUID().slice(0, 8)}`;
+  const softPassword = "soft-challenge-secret";
+  const softUser = await prisma().user.create({
+    data: {
+      username: softUsername,
+      primaryEmail: `${softUsername}@example.com`,
+      passwordHash: await Bun.password.hash(softPassword, "argon2id"),
+    },
+  });
+  const softToken = await establishedLogin(backend, {
+    password: softPassword,
+    username: softUsername,
+  });
+  expect(softToken).toEqual(expect.any(String));
+  expect(classifyReport(await challenge(backend, softToken ?? ""))).toBe("valid");
+  await prisma().user.update({
+    where: { id: softUser.id },
+    data: { deletedAt: new Date() },
+  });
+  expect(classifyReport(await challenge(backend, softToken ?? ""))).toBe("invalid");
+  await prisma().user.update({
+    where: { id: softUser.id },
+    data: { deletedAt: null },
+  });
+  expect(classifyReport(await challenge(backend, softToken ?? ""))).toBe("valid");
 });
 // @relation(GSSC-BLLR-9, scope=range_end, role=Test)
 

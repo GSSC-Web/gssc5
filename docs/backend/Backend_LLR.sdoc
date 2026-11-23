@@ -566,16 +566,17 @@ TITLE: Data Returned
 UID: GSSC-BLLR-9
 TITLE: Login Token Challenge
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL report a challenged Login Token as valid or invalid. The report is valid for a Login Token issued for a successful member login that has not expired and has not been logged out. The report does not include the contents of the Login Token.
+The GSSC Website Unified Backend SHALL report a challenged Login Token as valid or invalid. The report is valid for a Login Token issued for a successful member login that has not expired, has not been logged out, and belongs to a member who is not soft-deleted. The report does not include the contents of the Login Token.
 <<<
 RATIONALE: >>>
-The challenge tells the caller whether the Login Token is valid without returning the token contents.
+The challenge tells the caller whether the Login Token is valid without returning the token contents. Soft-deleted members must not appear logged in via a still-held cookie.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: >>>
 GSSC5-33
 GSSC5-58
+GSSC5-153
 <<<
 REVIEW_STATUS: Approved
 RELATIONS:
@@ -944,14 +945,17 @@ RELATIONS:
 UID: GSSC-BLLR-236
 TITLE: Password Recovery Message Sent
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL send a password recovery message to a member's Primary Email when the recovery request email address matches that Primary Email.
+The GSSC Website Unified Backend SHALL send a password recovery message to a member's Primary Email when the recovery request email address matches that Primary Email and that member is not soft-deleted. A recovery request for a soft-deleted member's Primary Email SHALL report success without sending a message and without storing a recovery token. Completing password recovery for a soft-deleted member SHALL be forbidden and SHALL leave that member's password hash unchanged.
 <<<
 RATIONALE: >>>
-The backend sends recovery mail only to a member's Primary Email. Message wording and layout are out of scope.
+The backend sends recovery mail only to an active member's Primary Email. Soft-deleted members stay out of collaboration, so recovery must not reset their credentials. Message wording and layout are out of scope.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-35
+CHANGE_DRIVER: >>>
+GSSC5-35
+GSSC5-162
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
