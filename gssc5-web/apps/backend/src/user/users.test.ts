@@ -2553,19 +2553,37 @@ test("GSSC-BLLR-490 User Invitation Invalid Or Duplicate", async () => {
 
 // @relation(GSSC-BLLR-518, scope=range_start, role=Test)
 test("GSSC-BLLR-518 User Update Requires Usable Name", async () => {
-  const subject = await createListedMember("name-required");
-  try {
-    const cleared = await patchUser(admin.token, subject.id, {
+  await withRow(admin.id, async () => {
+    const before = await snapshot(admin.id);
+    const cleared = await call("PATCH", `/users/${encodeURIComponent(admin.id)}`, admin.token, {
       firstName: "",
       middleName: "",
       lastName: "",
     });
     expect(cleared.status).toBe(422);
-    const rows = await allRows();
-    const row = rows.find((item) => cell(item, "id") === subject.id);
-    expect(cell(row, "firstName")).toBe(subject.values.firstName);
+    await expectUnchanged(admin.id, before);
+  });
+
+  const username = `name-req-${randomUUID().slice(0, 8)}`;
+  const created = await postUsersJson("/users", admin.token, {
+    username,
+    primaryEmail: `${username}@example.com`,
+    password: CREATE_PASSWORD,
+    firstName: "Solo",
+  });
+  expect(created.status, created.text.slice(0, 500)).toBe(201);
+  const cuid = String(created.user?.["cuid"] ?? "");
+  try {
+    const cleared = await call("PATCH", `/users/${encodeURIComponent(cuid)}`, admin.token, {
+      firstName: "",
+      middleName: "",
+      lastName: "",
+    });
+    expect(cleared.status).toBe(422);
+    const entry = await readEntry(admin.token, cuid);
+    expect(entry["firstName"]).toBe("Solo");
   } finally {
-    await deleteUserRow(subject.id);
+    await deleteUserRow(cuid);
   }
 });
 // @relation(GSSC-BLLR-518, scope=range_end, role=Test)
