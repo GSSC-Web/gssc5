@@ -4,6 +4,7 @@ import { FormTextField } from '../../modules/form-text-field/form-text-field';
 import type { AccountRecord } from '../../services/account-api';
 import {
   directoryApi,
+  directoryHasUsableName,
   directoryIsDeleted,
   directoryPhotoUrl,
   toContactRowContents,
@@ -113,7 +114,7 @@ export class DirectoryPage implements OnInit {
     this.createFormOpen.set(true);
   }
 
-  // @relation(GSSC-MLLR-607, scope=range_start, role=Implementation)
+  // @relation(GSSC-MLLR-604, GSSC-MLLR-607, scope=range_start, role=Implementation)
   async submitInvite(event?: Event): Promise<void> {
     event?.preventDefault();
     if (!this.isUserMod() || this.inviteSubmitting()) return;
@@ -124,6 +125,7 @@ export class DirectoryPage implements OnInit {
     const username = this.inviteUsername().trim();
     const firstName = this.inviteFirstName().trim();
     const lastName = this.inviteLastName().trim();
+    if (!directoryHasUsableName({ firstName, lastName })) return;
     if (username) body.username = username;
     if (firstName) body.firstName = firstName;
     if (lastName) body.lastName = lastName;
@@ -141,9 +143,9 @@ export class DirectoryPage implements OnInit {
       this.inviteSubmitting.set(false);
     }
   }
-  // @relation(GSSC-MLLR-607, scope=range_end, role=Implementation)
+  // @relation(GSSC-MLLR-604, GSSC-MLLR-607, scope=range_end, role=Implementation)
 
-  // @relation(GSSC-MLLR-627, scope=range_start, role=Implementation)
+  // @relation(GSSC-MLLR-624, GSSC-MLLR-627, scope=range_start, role=Implementation)
   async submitCreate(event?: Event): Promise<void> {
     event?.preventDefault();
     if (!this.isAdministrator() || this.createSubmitting()) return;
@@ -155,6 +157,7 @@ export class DirectoryPage implements OnInit {
     const body: DirectoryCreateBody = { username, primaryEmail, password };
     const firstName = this.createFirstName().trim();
     const lastName = this.createLastName().trim();
+    if (!directoryHasUsableName({ firstName, lastName })) return;
     if (firstName) body.firstName = firstName;
     if (lastName) body.lastName = lastName;
 
@@ -171,7 +174,7 @@ export class DirectoryPage implements OnInit {
       this.createSubmitting.set(false);
     }
   }
-  // @relation(GSSC-MLLR-627, scope=range_end, role=Implementation)
+  // @relation(GSSC-MLLR-624, GSSC-MLLR-627, scope=range_end, role=Implementation)
 
   // @relation(GSSC-MLLR-224, GSSC-MLLR-225, scope=range_start, role=Implementation)
   async onSoftDelete(entry: AccountRecord): Promise<void> {

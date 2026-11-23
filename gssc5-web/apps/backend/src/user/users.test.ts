@@ -2441,10 +2441,19 @@ test("GSSC-BLLR-486 User Creation Forbidden", async () => {
 });
 
 test("GSSC-BLLR-487 User Creation Invalid Or Duplicate", async () => {
+  const missingName = await postUsersJson("/users", admin.token, {
+    username: `noname-${randomUUID().slice(0, 8)}`,
+    primaryEmail: `noname-${randomUUID().slice(0, 8)}@example.com`,
+    password: CREATE_PASSWORD,
+  });
+  expect(missingName.status).toBe(422);
+
   const weak = await postUsersJson("/users", admin.token, {
     username: `weak-${randomUUID().slice(0, 8)}`,
     primaryEmail: `weak-${randomUUID().slice(0, 8)}@example.com`,
     password: "short",
+    firstName: "Weak",
+    lastName: "Pass",
   });
   expect(weak.status).toBe(422);
 
@@ -2452,6 +2461,8 @@ test("GSSC-BLLR-487 User Creation Invalid Or Duplicate", async () => {
     username: String(emailMember.values.username),
     primaryEmail: `unique-${randomUUID().slice(0, 8)}@example.com`,
     password: CREATE_PASSWORD,
+    firstName: "Dup",
+    lastName: "User",
   });
   expect(dupUser.status).toBe(422);
 
@@ -2459,6 +2470,8 @@ test("GSSC-BLLR-487 User Creation Invalid Or Duplicate", async () => {
     username: `dup-email-${randomUUID().slice(0, 8)}`,
     primaryEmail: String(emailMember.values.primaryEmail),
     password: CREATE_PASSWORD,
+    firstName: "Dup",
+    lastName: "Email",
   });
   expect(dupEmail.status).toBe(422);
 });
@@ -2510,8 +2523,16 @@ test("GSSC-BLLR-490 User Invitation Invalid Or Duplicate", async () => {
     },
   });
   try {
+    const missingName = await postUsersJson("/users/invite", admin.token, {
+      primaryEmail: `invite-noname-${randomUUID().slice(0, 8)}@example.com`,
+    });
+    expect(missingName.status).toBe(422);
+    expect(sent).toHaveLength(0);
+
     const dupEmail = await postUsersJson("/users/invite", admin.token, {
       primaryEmail: String(emailMember.values.primaryEmail),
+      firstName: "Dup",
+      lastName: "Invite",
     });
     expect(dupEmail.status).toBe(422);
     expect(sent).toHaveLength(0);
@@ -2519,6 +2540,8 @@ test("GSSC-BLLR-490 User Invitation Invalid Or Duplicate", async () => {
     const dupUsername = await postUsersJson("/users/invite", admin.token, {
       primaryEmail: `invite-dup-user-${randomUUID().slice(0, 8)}@example.com`,
       username: String(emailMember.values.username),
+      firstName: "Dup",
+      lastName: "Username",
     });
     expect(dupUsername.status).toBe(422);
     expect(sent).toHaveLength(0);
@@ -2527,4 +2550,23 @@ test("GSSC-BLLR-490 User Invitation Invalid Or Duplicate", async () => {
   }
 });
 // @relation(GSSC-BLLR-488, GSSC-BLLR-489, GSSC-BLLR-490, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-518, scope=range_start, role=Test)
+test("GSSC-BLLR-518 User Update Requires Usable Name", async () => {
+  const subject = await createListedMember("name-required");
+  try {
+    const cleared = await patchUser(admin.token, subject.id, {
+      firstName: "",
+      middleName: "",
+      lastName: "",
+    });
+    expect(cleared.status).toBe(422);
+    const rows = await allRows();
+    const row = rows.find((item) => cell(item, "id") === subject.id);
+    expect(cell(row, "firstName")).toBe(subject.values.firstName);
+  } finally {
+    await deleteUserRow(subject.id);
+  }
+});
+// @relation(GSSC-BLLR-518, scope=range_end, role=Test)
 
