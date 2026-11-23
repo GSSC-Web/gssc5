@@ -10285,15 +10285,18 @@ REVIEW_STATUS: Approved
 UID: GSSC-BLLR-39
 TITLE: Permanent Admin Field Exceptions
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL allow the permanent admin account to omit First Name, Last Name, Primary Phone Number, Preferred Contact Method, Home Address, and Mailing Address. The backend adds no .env configuration for account fields beyond the permanent admin username, email, password, and enable flag.
+The GSSC Website Unified Backend SHALL store a usable First Name and Last Name on the permanent admin account when it is created, and SHALL fill a usable First Name and Last Name when startup finds that account with all name parts empty; those names are not read from .env. The permanent admin account may omit Primary Phone Number, Preferred Contact Method, Home Address, and Mailing Address. The backend adds no .env configuration for account fields beyond the permanent admin username, email, password, and enable flag.
 <<<
 RATIONALE: >>>
-No high-level requirement defines the permanent admin account. That account may omit the account fields this story adds. Configuration stays the username, email, password, and enable flag already defined for the account.
+Name is required for every user, including the permanent admin, so directory identity is never empty or Username. Phone, preferred contact, and addresses stay optional for that bootstrap account. Configuration stays the username, email, password, and enable flag already defined for the account.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
-REVIEW_STATUS: Approved
+CHANGE_DRIVER: >>>
+GSSC5-34
+GSSC5-170
+<<<
+REVIEW_STATUS: Changed
 
 [REQUIREMENT]
 UID: GSSC-BLLR-40
