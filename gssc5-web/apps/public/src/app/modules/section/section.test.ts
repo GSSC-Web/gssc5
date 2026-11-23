@@ -155,13 +155,9 @@ test('GSSC-PLLR-88 Lexical', async () => {
   const body = root.querySelector<HTMLElement>('.gssc-section__body')!;
   expect(header.classList.contains('font-semibold')).toBe(true);
   expect(header.classList.contains('text-gssc-dark-green')).toBe(true);
+  // Prefer text-[1.5em] over getComputedStyle ratio (jsdom h2 UA default is also 1.5×).
   expect(header.classList.contains('text-[1.5em]')).toBe(true);
   expect(body.classList.contains('text-base')).toBe(true);
-  // 1.5× body: header uses text-[1.5em]; h2 UA default also yields 1.5× in jsdom.
-  const headerPx = Number.parseFloat(getComputedStyle(header).fontSize);
-  const bodyPx = Number.parseFloat(getComputedStyle(body).fontSize);
-  expect(bodyPx).toBeGreaterThan(0);
-  expect(headerPx / bodyPx).toBeCloseTo(1.5, 5);
 });
 // @relation(GSSC-PLLR-88, scope=range_end, role=Test)
 
@@ -360,10 +356,10 @@ test('GSSC-PLLR-139 Lexical', async () => {
   const { root } = await setupSection(sampleWithAll, { containerWidthPx: WIDE_FIT_PX });
   const buttons = [...root.querySelectorAll<HTMLElement>('.gssc-section__resource')];
   expect(buttons.length).toBeGreaterThan(1);
-  const widths = buttons.map((btn) => getComputedStyle(btn).width);
-  const heights = buttons.map((btn) => getComputedStyle(btn).height);
-  expect(new Set(widths).size).toBe(1);
-  expect(new Set(heights).size).toBe(1);
+  // Prefer shared height utility over getComputedStyle (jsdom skips Tailwind).
+  for (const btn of buttons) {
+    expect(btn.classList.contains('h-11')).toBe(true);
+  }
   expect(buttons[0]!.classList.contains('font-normal')).toBe(true);
   expect(buttons[0]!.classList.contains('text-gssc-dark-green')).toBe(true);
   expect(buttons[0]!.classList.contains('border-gssc-dark-green')).toBe(true);
