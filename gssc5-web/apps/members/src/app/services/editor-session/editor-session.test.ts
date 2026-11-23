@@ -1,6 +1,5 @@
 import { EditorSession } from './editor-session';
 
-// @relation(GSSC-MLLR-196, GSSC-MLLR-197, GSSC-MLLR-198, scope=range_start, role=Test)
 test('EditorSession exclusive and concurrent holds', () => {
   const session = new EditorSession();
 
@@ -16,4 +15,3 @@ test('EditorSession exclusive and concurrent holds', () => {
   session.release('a', 'h1');
   expect(session.tryAcquire('a', 'h2')).toBe(true);
 });
-// @relation(GSSC-MLLR-196, GSSC-MLLR-197, GSSC-MLLR-198, scope=range_end, role=Test)
