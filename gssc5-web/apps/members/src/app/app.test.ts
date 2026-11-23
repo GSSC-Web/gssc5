@@ -155,10 +155,10 @@ test('GSSC-MLLR-5 Syntactic', async () => {
 // @relation(GSSC-MLLR-6, scope=range_start, role=Test)
 test('GSSC-MLLR-6 Lexical', async () => {
   const { root } = await setupApp();
-  const host = hostOf(root);
   const header = root.querySelector<HTMLElement>('[data-slot="header"]')!;
-  expect(getComputedStyle(header).fontFamily).toBe(getComputedStyle(host).fontFamily);
-  expect(getComputedStyle(header).color).toBe(getComputedStyle(host).color);
+  // Prefer inherit utilities over getComputedStyle (jsdom does not load Tailwind).
+  expect(header.classList.contains('font-[inherit]')).toBe(true);
+  expect(header.classList.contains('text-inherit')).toBe(true);
 });
 // @relation(GSSC-MLLR-6, scope=range_end, role=Test)
 
@@ -182,10 +182,10 @@ test('GSSC-MLLR-8 Syntactic', async () => {
 // @relation(GSSC-MLLR-9, scope=range_start, role=Test)
 test('GSSC-MLLR-9 Lexical', async () => {
   const { root } = await setupApp();
-  const host = hostOf(root);
   const footer = root.querySelector<HTMLElement>('[data-slot="footer"]')!;
-  expect(getComputedStyle(footer).fontFamily).toBe(getComputedStyle(host).fontFamily);
-  expect(getComputedStyle(footer).color).toBe(getComputedStyle(host).color);
+  // Prefer inherit utilities over getComputedStyle (jsdom does not load Tailwind).
+  expect(footer.classList.contains('font-[inherit]')).toBe(true);
+  expect(footer.classList.contains('text-inherit')).toBe(true);
 });
 // @relation(GSSC-MLLR-9, scope=range_end, role=Test)
 
@@ -214,10 +214,10 @@ test('GSSC-MLLR-11 Syntactic', async () => {
 // @relation(GSSC-MLLR-12, scope=range_start, role=Test)
 test('GSSC-MLLR-12 Lexical', async () => {
   const { root } = await setupApp();
-  const host = hostOf(root);
   const page = root.querySelector<HTMLElement>('.gssc-page')!;
-  expect(getComputedStyle(page).fontFamily).toBe(getComputedStyle(host).fontFamily);
-  expect(getComputedStyle(page).color).toBe(getComputedStyle(host).color);
+  // Prefer inherit utilities over getComputedStyle (jsdom does not load Tailwind).
+  expect(page.classList.contains('font-[inherit]')).toBe(true);
+  expect(page.classList.contains('text-inherit')).toBe(true);
 });
 // @relation(GSSC-MLLR-12, scope=range_end, role=Test)
 
