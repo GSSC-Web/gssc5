@@ -9,8 +9,10 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NgTemplateOutlet } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
+import { debounceTime, from, of, Subject, switchMap } from 'rxjs';
 import { ContactOverlay } from '../../services/contact-overlay/contact-overlay';
 import { MemberSession } from '../../services/member-session';
 import { MembersApp } from '../../services/members-app';
@@ -65,10 +67,25 @@ export class Header implements OnInit, OnDestroy {
     viewChild<ElementRef<HTMLElement>>('chromeHost');
   private resizeObserver: ResizeObserver | null = null;
   private mediaQuery: MediaQueryList | null = null;
-  private quickSearchTimer: ReturnType<typeof setTimeout> | null = null;
-  private quickSearchSeq = 0;
+  private readonly quickSearchQuery$ = new Subject<string>();
 
   constructor() {
+    this.quickSearchQuery$
+      .pipe(
+        debounceTime(200),
+        switchMap((raw) => {
+          const q = raw.trim();
+          if (q.length === 0) return of([] as SiteSearchResult[]);
+          return from(
+            this.siteSearchGet({ q, limit: SEARCH_OVERLAY_LIMIT }).then(
+              (entries) => entries ?? [],
+            ),
+          );
+        }),
+        takeUntilDestroyed(),
+      )
+      .subscribe((entries) => this.quickResults.set(entries));
+
     afterNextRender(() => {
       this.installChromeObservers();
       this.recomputeChromeTier();
@@ -87,7 +104,7 @@ export class Header implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.resizeObserver?.disconnect();
     this.mediaQuery?.removeEventListener('change', this.onViewportChange);
-    if (this.quickSearchTimer !== null) clearTimeout(this.quickSearchTimer);
+    this.quickSearchQuery$.complete();
   }
 
   // @relation(GSSC-PLLR-55, GSSC-PLLR-58, scope=range_start, role=Implementation)
@@ -144,7 +161,7 @@ export class Header implements OnInit, OnDestroy {
   protected onSearchQueryInput(event: Event): void {
     const value = (event.target as HTMLInputElement).value;
     this.searchQuery.set(value);
-    this.scheduleQuickSearch(value);
+    this.quickSearchQuery$.next(value);
   }
 
   protected submitOverlaySearch(event: Event): void {
@@ -163,33 +180,7 @@ export class Header implements OnInit, OnDestroy {
   private resetSearchOverlay(): void {
     this.searchQuery.set('');
     this.quickResults.set([]);
-    if (this.quickSearchTimer !== null) {
-      clearTimeout(this.quickSearchTimer);
-      this.quickSearchTimer = null;
-    }
-  }
-
-  private scheduleQuickSearch(raw: string): void {
-    if (this.quickSearchTimer !== null) clearTimeout(this.quickSearchTimer);
-    this.quickSearchTimer = setTimeout(() => {
-      this.quickSearchTimer = null;
-      void this.runQuickSearch(raw);
-    }, 200);
-  }
-
-  private async runQuickSearch(raw: string): Promise<void> {
-    const q = raw.trim();
-    const seq = ++this.quickSearchSeq;
-    if (q.length === 0) {
-      this.quickResults.set([]);
-      return;
-    }
-    const entries = await this.siteSearchGet({
-      q,
-      limit: SEARCH_OVERLAY_LIMIT,
-    });
-    if (seq !== this.quickSearchSeq) return;
-    this.quickResults.set(entries ?? []);
+    this.quickSearchQuery$.next('');
   }
   // @relation(GSSC-PLLR-354, GSSC-PLLR-357, scope=range_end, role=Implementation)
 

@@ -577,10 +577,15 @@ test('GSSC-PLLR-354 Semantic', async () => {
   await fixture.whenStable();
 
   const input = root.querySelector<HTMLInputElement>('.gssc-header__search-query')!;
-  input.value = 'membership';
-  input.dispatchEvent(new Event('input'));
-  fixture.detectChanges();
-  await new Promise((resolve) => setTimeout(resolve, 220));
+  vi.useFakeTimers();
+  try {
+    input.value = 'membership';
+    input.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+    await vi.advanceTimersByTimeAsync(200);
+  } finally {
+    vi.useRealTimers();
+  }
   fixture.detectChanges();
   await fixture.whenStable();
 

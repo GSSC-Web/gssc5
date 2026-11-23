@@ -9,8 +9,10 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NgTemplateOutlet } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
+import { debounceTime, from, of, Subject, switchMap } from 'rxjs';
 import { MemberSession } from '../../services/member-session';
 import { PublicApp } from '../../services/public-app';
 import {
@@ -46,7 +48,7 @@ export class Header implements OnInit, OnDestroy {
   protected readonly societyContact = inject(SocietyContact);
   protected readonly brandingAssets = inject(BrandingAssets);
   readonly themeMode = inject(ThemeMode);
-  private quickSearchGeneration = 0;
+  private readonly quickSearchQuery$ = new Subject<string>();
 
   readonly loggedIn = this.memberSession.loggedIn;
   readonly displayName = this.memberSession.displayName;
@@ -66,6 +68,22 @@ export class Header implements OnInit, OnDestroy {
   private mediaQuery: MediaQueryList | null = null;
 
   constructor() {
+    this.quickSearchQuery$
+      .pipe(
+        debounceTime(200),
+        switchMap((raw) => {
+          const q = raw.trim();
+          if (q.length === 0) return of([] as SiteSearchResult[]);
+          return from(
+            this.siteSearchGet({ q, limit: QUICK_SEARCH_LIMIT }).then(
+              (rows) => rows ?? [],
+            ),
+          );
+        }),
+        takeUntilDestroyed(),
+      )
+      .subscribe((entries) => this.quickResults.set(entries));
+
     afterNextRender(() => {
       this.installChromeObservers();
       this.recomputeChromeTier();
@@ -84,6 +102,7 @@ export class Header implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.resizeObserver?.disconnect();
     this.mediaQuery?.removeEventListener('change', this.onViewportChange);
+    this.quickSearchQuery$.complete();
   }
 
   // @relation(GSSC-MLLR-33, GSSC-MLLR-34, scope=range_start, role=Implementation)
@@ -142,7 +161,7 @@ export class Header implements OnInit, OnDestroy {
   // @relation(GSSC-MLLR-462, GSSC-MLLR-465, scope=range_start, role=Implementation)
   protected onSearchQueryInput(value: string): void {
     this.searchQuery.set(value);
-    void this.refreshQuickResults(value);
+    this.quickSearchQuery$.next(value);
   }
 
   protected async onSearchSubmit(event: Event): Promise<void> {
@@ -159,25 +178,10 @@ export class Header implements OnInit, OnDestroy {
     await this.router.navigateByUrl(entry.href);
   }
 
-  private async refreshQuickResults(rawQuery: string): Promise<void> {
-    const generation = ++this.quickSearchGeneration;
-    const q = rawQuery.trim();
-    if (q.length === 0) {
-      if (generation === this.quickSearchGeneration) this.quickResults.set([]);
-      return;
-    }
-    const rows = await this.siteSearchGet({
-      q,
-      limit: QUICK_SEARCH_LIMIT,
-    });
-    if (generation !== this.quickSearchGeneration) return;
-    this.quickResults.set(rows ?? []);
-  }
-
   private resetSearchOverlay(): void {
-    this.quickSearchGeneration += 1;
     this.searchQuery.set('');
     this.quickResults.set([]);
+    this.quickSearchQuery$.next('');
   }
   // @relation(GSSC-MLLR-462, GSSC-MLLR-465, scope=range_end, role=Implementation)
 

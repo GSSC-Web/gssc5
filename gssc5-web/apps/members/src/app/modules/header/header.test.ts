@@ -29,6 +29,26 @@ import {
 import { nativeElement, setupMembersComponent, textContent } from '../../../test-harness';
 import { Header } from './header';
 
+/** Advance the header quick-search RxJS debounce (200ms) under fake timers. */
+async function flushQuickSearchDebounce(
+  input: HTMLInputElement,
+  fixture: { detectChanges: () => void; whenStable: () => Promise<unknown> },
+  value: string,
+): Promise<void> {
+  vi.useFakeTimers();
+  try {
+    input.value = value;
+    input.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+    await vi.advanceTimersByTimeAsync(200);
+  } finally {
+    vi.useRealTimers();
+  }
+  fixture.detectChanges();
+  await fixture.whenStable();
+}
+
+
 const sampleQuickResults: SiteSearchResult[] = [
   {
     title: 'Directory',
@@ -940,12 +960,7 @@ test('GSSC-MLLR-462 Semantic', async () => {
   await fixture.whenStable();
 
   const input = root.querySelector<HTMLInputElement>('.gssc-header__search-query')!;
-  input.value = 'dir';
-  input.dispatchEvent(new Event('input'));
-  fixture.detectChanges();
-  await fixture.whenStable();
-  await Promise.resolve();
-  fixture.detectChanges();
+  await flushQuickSearchDebounce(input, fixture, 'dir');
 
   expect(searchCalls.at(-1)).toEqual({ q: 'dir', limit: 5 });
   expect(textContent(root, '.gssc-header__search-result-title')).toBe('Directory');
@@ -1012,11 +1027,7 @@ test('GSSC-MLLR-465 Semantic', async () => {
   fixture.detectChanges();
   await fixture.whenStable();
   const input = root.querySelector<HTMLInputElement>('.gssc-header__search-query')!;
-  input.value = 'news';
-  input.dispatchEvent(new Event('input'));
-  fixture.detectChanges();
-  await fixture.whenStable();
-  await Promise.resolve();
+  await flushQuickSearchDebounce(input, fixture, 'news');
   expect(searchCalls.some((call) => call.q === 'news')).toBe(true);
 });
 // @relation(GSSC-MLLR-465, scope=range_end, role=Test)
@@ -1053,12 +1064,7 @@ test('GSSC-MLLR-468 Semantic', async () => {
   fixture.detectChanges();
   await fixture.whenStable();
   const input = root.querySelector<HTMLInputElement>('.gssc-header__search-query')!;
-  input.value = 'dir';
-  input.dispatchEvent(new Event('input'));
-  fixture.detectChanges();
-  await fixture.whenStable();
-  await Promise.resolve();
-  fixture.detectChanges();
+  await flushQuickSearchDebounce(input, fixture, 'dir');
   expect(textContent(root, '.gssc-header__search-result-title')).toBe('Directory');
   expect(textContent(root, '.gssc-header__search-result-snippet')).toBe(
     'Browse members',
@@ -1074,12 +1080,7 @@ test('GSSC-MLLR-469 Syntactic', async () => {
   fixture.detectChanges();
   await fixture.whenStable();
   const input = root.querySelector<HTMLInputElement>('.gssc-header__search-query')!;
-  input.value = 'dir';
-  input.dispatchEvent(new Event('input'));
-  fixture.detectChanges();
-  await fixture.whenStable();
-  await Promise.resolve();
-  fixture.detectChanges();
+  await flushQuickSearchDebounce(input, fixture, 'dir');
   const list = root.querySelector('.gssc-header__search-results')!;
   expect(list.tagName).toBe('UL');
   expect(list.querySelectorAll('.gssc-header__search-result').length).toBe(1);
@@ -1093,12 +1094,7 @@ test('GSSC-MLLR-470 Lexical', async () => {
   fixture.detectChanges();
   await fixture.whenStable();
   const input = root.querySelector<HTMLInputElement>('.gssc-header__search-query')!;
-  input.value = 'dir';
-  input.dispatchEvent(new Event('input'));
-  fixture.detectChanges();
-  await fixture.whenStable();
-  await Promise.resolve();
-  fixture.detectChanges();
+  await flushQuickSearchDebounce(input, fixture, 'dir');
   const title = root.querySelector<HTMLElement>('.gssc-header__search-result-title')!;
   const snippet = root.querySelector<HTMLElement>(
     '.gssc-header__search-result-snippet',
