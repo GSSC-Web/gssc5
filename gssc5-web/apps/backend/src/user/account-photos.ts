@@ -144,10 +144,11 @@ async function isAccountPhotoEntry(parentId: string | null): Promise<boolean> {
 }
 
 /**
- * GET allowed when the caller has a valid login session, or when some user
- * stores this photo (or owns the cuid-named photo) and has a non-empty position.
- * Cuid-named photos remain readable after replace once the user record points at
- * the new key (upload updates accountPhoto); soft-deleted priors stay 404.
+ * GET allowed when the caller has a valid login session, or when some
+ * non-soft-deleted user stores this photo (or owns the cuid-named photo) and
+ * has a non-empty position. Cuid-named photos remain readable after replace
+ * once the user record points at the new key (upload updates accountPhoto);
+ * soft-deleted priors stay 404.
  */
 // @relation(GSSC-BLLR-454, GSSC-BLLR-455, scope=range_start, role=Implementation)
 export async function canGetAccountPhoto(
@@ -159,6 +160,7 @@ export async function canGetAccountPhoto(
   const owner = await prisma.user.findFirst({
     where: {
       OR: [{ accountPhoto: photoKey }, { id: photoKey }],
+      deletedAt: null,
       NOT: [{ position: null }, { position: "" }],
     },
     select: { id: true },
