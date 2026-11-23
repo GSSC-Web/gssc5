@@ -193,6 +193,9 @@ async function ensurePermanentAdmin(): Promise<void> {
   const passwordHash = await Bun.password.hash(config.ADMIN_PASSWORD, "argon2id");
   const existing = await prisma.user.findUnique({ where: { username } });
   if (existing) {
+    const nameParts = [existing.firstName, existing.middleName, existing.lastName]
+      .map((part) => (typeof part === "string" ? part.trim() : ""))
+      .filter((part) => part.length > 0);
     await prisma.user.update({
       where: { id: existing.id },
       data: {
@@ -200,6 +203,9 @@ async function ensurePermanentAdmin(): Promise<void> {
         // @relation(GSSC-BLLR-40, scope=range_start, role=Implementation)
         isAdmin: true,
         // @relation(GSSC-BLLR-40, scope=range_end, role=Implementation)
+        // @relation(GSSC-BLLR-518, scope=range_start, role=Implementation)
+        ...(nameParts.length === 0 ? { firstName: "Admin", lastName: "User" } : {}),
+        // @relation(GSSC-BLLR-518, scope=range_end, role=Implementation)
       },
     });
     return;
@@ -209,6 +215,10 @@ async function ensurePermanentAdmin(): Promise<void> {
       username,
       passwordHash,
       ...(primaryEmail === "" ? {} : { primaryEmail }),
+      // @relation(GSSC-BLLR-518, scope=range_start, role=Implementation)
+      firstName: "Admin",
+      lastName: "User",
+      // @relation(GSSC-BLLR-518, scope=range_end, role=Implementation)
       // @relation(GSSC-BLLR-39, GSSC-BLLR-40, scope=range_start, role=Implementation)
       isAdmin: true,
       isUserMod: false,
