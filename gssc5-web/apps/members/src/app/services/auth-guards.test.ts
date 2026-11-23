@@ -135,10 +135,3 @@ test('GSSC-MLLR-94 Semantic', async () => {
 });
 // @relation(GSSC-MLLR-94, scope=range_end, role=Test)
 
-// @relation(GSSC-MLLR-95, scope=range_start, role=Test)
-test('GSSC-MLLR-95 Semantic', async () => {
-  // Post-login destination is owned by LoginPage; resolveReturnUrl is the shared rule.
-  expect(resolveReturnUrl('/deep')).toBe('/deep');
-  expect(resolveReturnUrl(null)).toBeNull();
-});
-// @relation(GSSC-MLLR-95, scope=range_end, role=Test)

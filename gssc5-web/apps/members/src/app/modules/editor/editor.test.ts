@@ -306,12 +306,27 @@ test('GSSC-MLLR-195 Permission Gate', async () => {
 
 // @relation(GSSC-MLLR-196, scope=range_start, role=Test)
 test('GSSC-MLLR-196 Exclusive Resource Edit', async () => {
-  const session = new EditorSession();
-  expect(session.tryAcquire('page-1', 'holder-a')).toBe(true);
-  expect(session.tryAcquire('page-1', 'holder-b')).toBe(false);
-  expect(session.isHeldByOther('page-1', 'holder-b')).toBe(true);
-  session.release('page-1', 'holder-a');
-  expect(session.tryAcquire('page-1', 'holder-b')).toBe(true);
+  // After exclusive modification is acquired, Save and Cancel are offered.
+  const acquired = await setupHost({ resourceId: 'resource-owned' });
+  expect(acquired.root.querySelector('.gssc-editor__save')).not.toBeNull();
+  expect(acquired.root.querySelector('.gssc-editor__cancel')).not.toBeNull();
+  expect(editorEl(acquired.root).getAttribute('data-unavailable')).toBe('false');
+
+  // When exclusive modification is not acquired, Save and Cancel are withheld.
+  TestBed.resetTestingModule();
+  await TestBed.configureTestingModule({
+    imports: [ContentionEditorsFixture],
+    providers: [EditorSession],
+  }).compileComponents();
+  const fixture = TestBed.createComponent(ContentionEditorsFixture);
+  fixture.detectChanges();
+  await fixture.whenStable();
+  const blocked = nativeElement(fixture).querySelector(
+    '.gssc-editor[data-unavailable="true"]',
+  )!;
+  expect(blocked.querySelector('.gssc-editor__save')).toBeNull();
+  expect(blocked.querySelector('.gssc-editor__cancel')).toBeNull();
+  expect(blocked.querySelector('.gssc-editor__actions')).toBeNull();
 });
 // @relation(GSSC-MLLR-196, scope=range_end, role=Test)
 

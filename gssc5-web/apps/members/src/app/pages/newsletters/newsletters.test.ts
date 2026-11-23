@@ -614,28 +614,107 @@ test('GSSC-MLLR-373 Newsletter Catalog Selection Load', async () => {
 });
 // @relation(GSSC-MLLR-373, scope=range_end, role=Test)
 
-// @relation(GSSC-MLLR-693, GSSC-MLLR-694, GSSC-MLLR-695, scope=range_start, role=Test)
-test('GSSC-MLLR-693..689 Newsletter Issue File upload control', async () => {
+// @relation(GSSC-MLLR-693, scope=range_start, role=Test)
+test('GSSC-MLLR-693 Newsletter Issue File chosen or stored name', async () => {
+  // Chosen file presents that file name.
+  {
+    const { root, fixture, page, restore } = await setupNewsletters({ list: [] });
+    try {
+      await chooseIssueFile(fixture, root, page, 'chosen-issue.pdf');
+      fixture.detectChanges();
+      expect(page.fileLabel()).toBe('chosen-issue.pdf');
+      expect(root.querySelector('.gssc-newsletters-issue-file__name')!.textContent).toContain(
+        'chosen-issue.pdf',
+      );
+    } finally {
+      restore();
+    }
+  }
+
+  // Stored issue file presents an on-file indication.
+  {
+    const { root, fixture, page, restore } = await setupNewsletters();
+    try {
+      root.querySelector<HTMLButtonElement>('.gssc-newsletters-catalog__entry')!.click();
+      fixture.detectChanges();
+      await fixture.whenStable();
+      fixture.detectChanges();
+      expect(page.fileLabel()).toContain('Current issue file');
+      expect(root.querySelector('.gssc-newsletters-issue-file__name')!.textContent).toContain(
+        'Current issue file',
+      );
+    } finally {
+      restore();
+    }
+  }
+});
+// @relation(GSSC-MLLR-693, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-694, scope=range_start, role=Test)
+test('GSSC-MLLR-694 Newsletter Issue File field-stack order and width', async () => {
   const { root, restore } = await setupNewsletters({ list: [] });
   try {
-    const field = root.querySelector('.gssc-newsletters-issue-file')!;
-    expect(field).not.toBeNull();
-    expect(root.querySelector('.gssc-newsletters-issue-file__label')!.textContent).toContain(
-      'Issue File',
-    );
-    expect(root.querySelector('.gssc-newsletters-issue-file__choose')!.textContent).toContain(
-      'Choose File',
-    );
-    expect(root.querySelector<HTMLInputElement>('#gssc-newsletter-issue-file')!.type).toBe('file');
+    const fields = root.querySelector('.gssc-editor__fields')!;
+    const volume = fields.querySelector('#gssc-newsletter-volume')!.closest('gssc-form-text-field')!;
+    const number = fields.querySelector('#gssc-newsletter-number')!.closest('gssc-form-text-field')!;
+    const month = fields.querySelector('#gssc-newsletter-month')!.closest('gssc-form-text-field')!;
+    const year = fields.querySelector('#gssc-newsletter-year')!.closest('gssc-form-text-field')!;
+    const issueFile = fields.querySelector('.gssc-newsletters-issue-file')!;
+    const keywords = fields.querySelector('#gssc-newsletter-keywords')!.closest(
+      'gssc-form-text-field',
+    )!;
+
+    expect(volume.compareDocumentPosition(number) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(number.compareDocumentPosition(month) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(month.compareDocumentPosition(year) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(year.compareDocumentPosition(issueFile) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     expect(
-      root.querySelector('#gssc-newsletter-issue-file')!.classList.contains('sr-only'),
-    ).toBe(true);
-    expect(root.querySelector('.gssc-newsletters-issue-file__name')).not.toBeNull();
+      issueFile.compareDocumentPosition(keywords) & Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+
+    expect(fields.classList.contains('w-full')).toBe(true);
+    expect(issueFile.classList.contains('gssc-field')).toBe(true);
+    expect(issueFile.classList.contains('min-w-0')).toBe(true);
   } finally {
     restore();
   }
 });
-// @relation(GSSC-MLLR-693, GSSC-MLLR-694, GSSC-MLLR-695, scope=range_end, role=Test)
+// @relation(GSSC-MLLR-694, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-695, scope=range_start, role=Test)
+test('GSSC-MLLR-695 Newsletter Issue File valid and invalid theme', async () => {
+  const { root, fixture, page, restore } = await setupNewsletters({ list: [] });
+  try {
+    const issueFile = root.querySelector<HTMLElement>('.gssc-newsletters-issue-file')!;
+    const label = root.querySelector<HTMLElement>('.gssc-newsletters-issue-file__label')!;
+    const choose = root.querySelector<HTMLElement>('.gssc-newsletters-issue-file__choose')!;
+    const name = root.querySelector<HTMLElement>('.gssc-newsletters-issue-file__name')!;
+
+    // Valid state theme.
+    expect(issueFile.classList.contains('font-sans')).toBe(true);
+    expect(issueFile.classList.contains('border-gssc-dark-green')).toBe(true);
+    expect(label.classList.contains('text-gssc-dark-green')).toBe(true);
+    expect(choose.classList.contains('bg-gssc-light-green')).toBe(true);
+    expect(name.classList.contains('text-gssc-dark-brown')).toBe(true);
+
+    // Invalid state theme.
+    await typeField(fixture, root, 'gssc-newsletter-volume', '1');
+    await typeField(fixture, root, 'gssc-newsletter-number', '1');
+    await typeField(fixture, root, 'gssc-newsletter-month', '1');
+    await typeField(fixture, root, 'gssc-newsletter-year', '2026');
+    root.querySelector<HTMLButtonElement>('.gssc-editor__save')!.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(page.fieldInvalid('issueFile')).toBe(true);
+    expect(issueFile.classList.contains('border-gssc-dark-red')).toBe(true);
+    expect(issueFile.classList.contains('bg-gssc-light-red')).toBe(true);
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-695, scope=range_end, role=Test)
 
 // @relation(GSSC-MLLR-696, scope=range_start, role=Test)
 test('GSSC-MLLR-696 Newsletter Issue File upload on edit Save', async () => {

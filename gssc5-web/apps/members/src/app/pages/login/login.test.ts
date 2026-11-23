@@ -54,6 +54,7 @@ async function setupLogin(url = '/login'): Promise<{
     // ignore
   }
 
+  TestBed.resetTestingModule();
   const fixture = await setupMembersComponent(LoginPage, {
     providers: [{ provide: KvStore, useClass: FakeKvStore }],
   });
@@ -329,11 +330,7 @@ test('GSSC-MLLR-91 Semantic', async () => {
 });
 // @relation(GSSC-MLLR-91, scope=range_end, role=Test)
 
-// @relation(GSSC-MLLR-95, scope=range_start, role=Test)
-test('GSSC-MLLR-95 Semantic login destination', async () => {
-  const { page, router, session, fixture } = await setupLogin(
-    `/login?${RETURN_URL_QUERY}=${encodeURIComponent('/deep')}`,
-  );
+async function stubSuccessfulLogin(): Promise<void> {
   memberSessionApi.login = (async () => okResponse({ status: 'ok' })) as typeof memberSessionApi.login;
   memberSessionApi.challenge = (async () =>
     okResponse({ status: 'valid', cuid: 'user_1' })) as typeof memberSessionApi.challenge;
@@ -343,24 +340,59 @@ test('GSSC-MLLR-95 Semantic login destination', async () => {
       lastName: 'Lovelace',
       username: 'ada',
     })) as typeof memberSessionApi.getUser;
+}
 
-  // Ensure /deep is a reachable authenticated route for the redirect target.
-  router.resetConfig([
-    ...routes,
-    {
-      path: 'deep',
-      pathMatch: 'full',
-      component: LoginPage,
-      canActivate: routes[1]?.canActivate,
-    },
-  ]);
-
+async function submitSuccessfulLogin(page: LoginPage, fixture: {
+  detectChanges: () => void;
+  whenStable: () => Promise<unknown>;
+}): Promise<void> {
   page.identity = 'ada';
   page.password = 'secret';
   await page.onSubmit();
   fixture.detectChanges();
   await fixture.whenStable();
-  expect(session.loggedIn()).toBe(true);
-  expect(router.url.split('?')[0]).toBe('/deep');
+}
+
+// @relation(GSSC-MLLR-95, scope=range_start, role=Test)
+test('GSSC-MLLR-95 Semantic login destination', async () => {
+  // Safe return path → that path.
+  {
+    const { page, router, session, fixture } = await setupLogin(
+      `/login?${RETURN_URL_QUERY}=${encodeURIComponent('/deep')}`,
+    );
+    await stubSuccessfulLogin();
+    router.resetConfig([
+      ...routes,
+      {
+        path: 'deep',
+        pathMatch: 'full',
+        component: LoginPage,
+        canActivate: routes[1]?.canActivate,
+      },
+    ]);
+    await submitSuccessfulLogin(page, fixture);
+    expect(session.loggedIn()).toBe(true);
+    expect(router.url.split('?')[0]).toBe('/deep');
+  }
+
+  // No return path → Member Frontend home.
+  {
+    const { page, router, session, fixture } = await setupLogin('/login');
+    await stubSuccessfulLogin();
+    await submitSuccessfulLogin(page, fixture);
+    expect(session.loggedIn()).toBe(true);
+    expect(router.url.split('?')[0]).toBe('/');
+  }
+
+  // Unsafe return path → Member Frontend home.
+  {
+    const { page, router, session, fixture } = await setupLogin(
+      `/login?${RETURN_URL_QUERY}=${encodeURIComponent('https://evil.example/')}`,
+    );
+    await stubSuccessfulLogin();
+    await submitSuccessfulLogin(page, fixture);
+    expect(session.loggedIn()).toBe(true);
+    expect(router.url.split('?')[0]).toBe('/');
+  }
 });
 // @relation(GSSC-MLLR-95, scope=range_end, role=Test)
