@@ -4,9 +4,8 @@ import {
   InjectionToken,
   signal,
 } from '@angular/core';
-import { backend } from '../../services/backend';
+import { BACKEND_ORIGIN, backend } from '../../services/backend';
 
-const RESEARCH_TOOLS_ORIGIN = 'http://localhost:3000';
 
 /** Public research tool entry from Unified Backend GET /research-tools. */
 export type ResearchToolEntry = {
@@ -42,7 +41,7 @@ async function defaultResearchToolsListGet(): Promise<ResearchToolEntry[] | null
 /** Resolve href for a research tool: stored file URL or external reference link. */
 export function researchToolHref(
   tool: Pick<ResearchToolEntry, 'cuid' | 'referenceLink' | 'hasFile'>,
-  origin: string = RESEARCH_TOOLS_ORIGIN,
+  origin: string = BACKEND_ORIGIN,
 ): string {
   // @relation(GSSC-PLLR-228, scope=range_start, role=Implementation)
   if (tool.hasFile) {

@@ -174,6 +174,26 @@ function pageEl(root: HTMLElement): HTMLElement {
   return root.querySelector('.gssc-events-page')!;
 }
 
+async function flushAsync(
+  fixture: { detectChanges: () => void; whenStable: () => Promise<unknown> },
+): Promise<void> {
+  fixture.detectChanges();
+  await fixture.whenStable();
+  await Promise.resolve();
+  await Promise.resolve();
+  fixture.detectChanges();
+  await fixture.whenStable();
+  fixture.detectChanges();
+}
+
+async function clickEventDelete(
+  fixture: { detectChanges: () => void; whenStable: () => Promise<unknown> },
+  root: HTMLElement,
+): Promise<void> {
+  root.querySelector<HTMLButtonElement>('[data-slot="events-delete"]')!.click();
+  await flushAsync(fixture);
+}
+
 async function fillRequiredFields(
   fixture: { detectChanges: () => void; whenStable: () => Promise<unknown> },
   page: EventsPage,
@@ -662,16 +682,60 @@ test('GSSC-MLLR-687/690 Events intro and idle disclaimer', async () => {
 });
 // @relation(GSSC-MLLR-687, GSSC-MLLR-690, scope=range_end, role=Test)
 
-// @relation(GSSC-MLLR-749, GSSC-MLLR-750, GSSC-MLLR-751, scope=range_start, role=Test)
-test('GSSC-MLLR-749/750/751 Event Delete Control', async () => {
-  const { root, fixture, restore } = await setupEvents();
+// @relation(GSSC-MLLR-749, scope=range_start, role=Test)
+test('GSSC-MLLR-749 Semantic event delete removes via control', async () => {
+  const { root, fixture, deleted, restore } = await setupEvents();
+  try {
+    root.querySelector<HTMLButtonElement>('.gssc-events-catalog__entry-button')!.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    await clickEventDelete(fixture, root);
+    expect(deleted).toEqual(['evt_1']);
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-749, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-750, scope=range_start, role=Test)
+test('GSSC-MLLR-750 Syntactic event delete visibility', async () => {
+  const { root, fixture, page, restore } = await setupEvents();
   try {
     expect(root.querySelector('[data-slot="events-delete"]')).toBeNull();
     root.querySelector<HTMLButtonElement>('.gssc-events-catalog__entry-button')!.click();
     fixture.detectChanges();
     await fixture.whenStable();
+    expect(root.querySelector('[data-slot="events-delete"]')).toBeTruthy();
+    expect(root.querySelector('gssc-editor')).toBeTruthy();
+    page.startCreate();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(root.querySelector('[data-slot="events-delete"]')).toBeNull();
+  } finally {
+    restore();
+  }
+  const denied = await setupEvents({
+    viewer: { cuid: 'user_1', isUserMod: false, isAdmin: false },
+  });
+  try {
+    denied.root.querySelector<HTMLButtonElement>('.gssc-events-catalog__entry-button')!.click();
+    denied.fixture.detectChanges();
+    await denied.fixture.whenStable();
+    expect(denied.root.querySelector('[data-slot="events-delete"]')).toBeNull();
+  } finally {
+    denied.restore();
+  }
+});
+// @relation(GSSC-MLLR-750, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-751, scope=range_start, role=Test)
+test('GSSC-MLLR-751 Lexical event delete chrome', async () => {
+  const { root, fixture, restore } = await setupEvents();
+  try {
+    root.querySelector<HTMLButtonElement>('.gssc-events-catalog__entry-button')!.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
     const del = root.querySelector<HTMLButtonElement>('[data-slot="events-delete"]')!;
-    expect(del).toBeTruthy();
     expect(del.textContent?.trim()).toBe('Delete event');
     expect(del.className).toContain('text-gssc-dark-red');
     expect(del.className).toContain('font-sans');
@@ -679,22 +743,20 @@ test('GSSC-MLLR-749/750/751 Event Delete Control', async () => {
     restore();
   }
 });
-// @relation(GSSC-MLLR-749, GSSC-MLLR-750, GSSC-MLLR-751, scope=range_end, role=Test)
+// @relation(GSSC-MLLR-751, scope=range_end, role=Test)
 
 // @relation(GSSC-MLLR-752, scope=range_start, role=Test)
 test('GSSC-MLLR-752 Event Delete Persists And Refreshes', async () => {
-  const { root, fixture, page, deleted, restore } = await setupEvents();
+  const { root, fixture, page, restore } = await setupEvents();
   try {
     root.querySelector<HTMLButtonElement>('.gssc-events-catalog__entry-button')!.click();
     fixture.detectChanges();
     await fixture.whenStable();
-    await page.onDelete();
-    fixture.detectChanges();
-    await fixture.whenStable();
-    expect(deleted).toEqual(['evt_1']);
+    await clickEventDelete(fixture, root);
     expect(page.mode()).toBe('create');
     expect(page.editingCuid()).toBeNull();
     expect(page.statusMessage()).toContain('deleted');
+    expect(page.catalog().some((row) => row.cuid === 'evt_1')).toBe(false);
   } finally {
     restore();
   }

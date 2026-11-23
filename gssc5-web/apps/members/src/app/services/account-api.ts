@@ -1,6 +1,5 @@
-import { backend } from './backend';
+import { BACKEND_ORIGIN, backend } from './backend';
 
-const ACCOUNT_PHOTOS_ORIGIN = 'http://localhost:3000';
 
 export type AccountRecord = {
   cuid: string;
@@ -109,7 +108,7 @@ export const accountApi = {
 /** Resolve a stored account photo cuid to the dedicated GET URL. */
 export function accountPhotoUrl(
   resource: string | null | undefined,
-  origin: string = ACCOUNT_PHOTOS_ORIGIN,
+  origin: string = BACKEND_ORIGIN,
 ): string | null {
   if (resource === null || resource === undefined) return null;
   const trimmed = resource.trim();

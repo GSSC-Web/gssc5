@@ -9599,14 +9599,17 @@ RELATIONS:
 UID: GSSC-BLLR-515
 TITLE: Branding Default Path Key-Value Stubs
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL upsert website key-value entries branding.favicon and branding.logo whose values are the default storage paths branding/favicon.ico and branding/gssc-society-logo.png.
+The GSSC Website Unified Backend SHALL ensure website key-value entries branding.favicon and branding.logo exist with default storage path values branding/favicon.ico and branding/gssc-society-logo.png when those keys are absent, and SHALL leave an existing value for either key unchanged.
 <<<
 RATIONALE: >>>
-Stubbed default paths give Public and Members a stable resolution target after database seed without embedding binary image files in the repository.
+Stubbed default paths give Public and Members a stable resolution target after database seed without embedding binary image files in the repository, while preserving operator retargets across process restarts.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-151
+CHANGE_DRIVER: >>>
+GSSC5-151
+GSSC5-160
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -9897,16 +9900,17 @@ RELATIONS:
 UID: GSSC-BLLR-455
 TITLE: Account Photo GET With Position
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL allow GET of a file in the account-photos store without a login session token when a user stores that photo and has a non-empty position.
+The GSSC Website Unified Backend SHALL allow GET of a file in the account-photos store without a login session token when a user who is not soft-deleted stores that photo and has a non-empty position.
 <<<
 RATIONALE: >>>
-Public leadership display needs leader photos without requiring a member session.
+Public leadership display needs leader photos without requiring a member session. Soft-deleted users are not public leaders, so their account photos are not anonymously readable.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: >>>
 GSSC5-101
 GSSC5-131
+GSSC5-161
 <<<
 REVIEW_STATUS: Approved
 RELATIONS:

@@ -1,6 +1,6 @@
 import { InjectionToken } from '@angular/core';
 import type { ContactCardContents } from '../../modules/contact-card-large/contact-card-large';
-import { backend } from '../backend';
+import { BACKEND_ORIGIN, backend } from '../backend';
 import { filterSectionsVisibleOn } from '../section-display-window/section-display-window';
 import {
   lintPositionSegments,
@@ -10,7 +10,6 @@ import {
 /** Backend tag that binds public Leadership Intro sections to this page. */
 export const LEADERSHIP_INTRO_TAG = 'leadership';
 
-const ACCOUNT_PHOTOS_ORIGIN = 'http://localhost:3000';
 
 /**
  * Resolve a stored Account Photo identifier to the dedicated GET URL for card
@@ -19,7 +18,7 @@ const ACCOUNT_PHOTOS_ORIGIN = 'http://localhost:3000';
 // @relation(GSSC-PLLR-382, scope=range_start, role=Implementation)
 export function accountPhotoUrl(
   resource: string | null | undefined,
-  origin: string = ACCOUNT_PHOTOS_ORIGIN,
+  origin: string = BACKEND_ORIGIN,
 ): string | null {
   if (resource === null || resource === undefined) return null;
   const trimmed = resource.trim();
