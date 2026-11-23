@@ -76,12 +76,28 @@ export function toDirectoryQuery(
   return query;
 }
 
-/** Display name from projected name parts. */
+/** Display name from projected First/Middle/Last only (never Username). */
 export function directoryDisplayName(entry: AccountRecord): string {
+  // @relation(GSSC-MLLR-228, GSSC-MLLR-768, scope=range_start, role=Implementation)
   return [entry.firstName, entry.middleName, entry.lastName]
     .map((part) => part?.trim() ?? '')
     .filter((part) => part.length > 0)
     .join(' ');
+  // @relation(GSSC-MLLR-228, GSSC-MLLR-768, scope=range_end, role=Implementation)
+}
+
+/** True when First/Middle/Last compose a non-empty directory name. */
+export function directoryHasUsableName(parts: {
+  firstName?: string | null;
+  middleName?: string | null;
+  lastName?: string | null;
+}): boolean {
+  return directoryDisplayName({
+    cuid: '',
+    firstName: parts.firstName,
+    middleName: parts.middleName,
+    lastName: parts.lastName,
+  }).length > 0;
 }
 
 /**
@@ -129,11 +145,13 @@ export function toContactRowContents(entry: AccountRecord): ContactRowContents {
   // @relation(GSSC-MLLR-661, scope=range_start, role=Implementation)
   const positions = lintPositionSegments(entry.position);
   // @relation(GSSC-MLLR-661, scope=range_end, role=Implementation)
+  // @relation(GSSC-MLLR-228, GSSC-MLLR-768, scope=range_start, role=Implementation)
   return {
-    displayName: directoryDisplayName(entry) || entry.username || entry.cuid,
+    displayName: directoryDisplayName(entry),
     ...(positions.length > 0 ? { positions } : {}),
     methods: directoryContactMethods(entry),
   };
+  // @relation(GSSC-MLLR-228, GSSC-MLLR-768, scope=range_end, role=Implementation)
 }
 
 /** Resolved account photo URL for a directory list entry, or null for silhouette. */

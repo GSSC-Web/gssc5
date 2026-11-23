@@ -332,6 +332,11 @@ export const users = new Elysia({
       if (username === null || primaryEmail === null || password === "") {
         return status(422, "Invalid" as const);
       }
+      // @relation(GSSC-BLLR-485, GSSC-BLLR-487, scope=range_start, role=Implementation)
+      if (!hasUsablePersonName(firstName, undefined, lastName)) {
+        return status(422, "Invalid" as const);
+      }
+      // @relation(GSSC-BLLR-485, GSSC-BLLR-487, scope=range_end, role=Implementation)
 
       const { prisma, config } = runtime();
       if (!passwordMeetsRules(password, config.PASSWORD_MIN_LENGTH)) {
@@ -397,6 +402,11 @@ export const users = new Elysia({
       const requestedUsername = optionalTrimmed(body.username);
       const firstName = optionalNullableName(body.firstName);
       const lastName = optionalNullableName(body.lastName);
+      // @relation(GSSC-BLLR-488, GSSC-BLLR-490, scope=range_start, role=Implementation)
+      if (!hasUsablePersonName(firstName, undefined, lastName)) {
+        return status(422, "Invalid" as const);
+      }
+      // @relation(GSSC-BLLR-488, GSSC-BLLR-490, scope=range_end, role=Implementation)
 
       const { prisma, config } = runtime();
       const username =
@@ -675,6 +685,11 @@ async function updateUserHandler({
   const built = buildPatch(bodyRecord(body), session.user, target, config.ADMIN_USERNAME);
   if (built === "forbidden") return status(403, "Forbidden" as const);
   if (built === "invalid") return status(422, "Invalid" as const);
+  // @relation(GSSC-BLLR-518, scope=range_start, role=Implementation)
+  if (!resultingNameIsUsable(target, built)) {
+    return status(422, "Invalid" as const);
+  }
+  // @relation(GSSC-BLLR-518, scope=range_end, role=Implementation)
   if (!(await identifiersAvailable(prisma, target, built))) {
     return status(422, "Invalid" as const);
   }
@@ -1201,6 +1216,48 @@ function optionalNullableName(value: unknown): string | null | undefined {
   if (typeof value !== "string") return undefined;
   const trimmed = value.trim();
   return trimmed.length > 0 ? trimmed : null;
+}
+
+function composedPersonName(
+  firstName: string | null | undefined,
+  middleName: string | null | undefined,
+  lastName: string | null | undefined,
+): string {
+  return [firstName, middleName, lastName]
+    .map((part) => (typeof part === "string" ? part.trim() : ""))
+    .filter((part) => part.length > 0)
+    .join(" ");
+}
+
+function hasUsablePersonName(
+  firstName: string | null | undefined,
+  middleName: string | null | undefined,
+  lastName: string | null | undefined,
+): boolean {
+  return composedPersonName(firstName, middleName, lastName).length > 0;
+}
+
+function patchNamePart(
+  data: Prisma.UserUpdateInput,
+  key: "firstName" | "middleName" | "lastName",
+  current: string | null,
+): string | null {
+  if (!Object.prototype.hasOwnProperty.call(data, key)) return current;
+  const value = data[key];
+  if (value === null) return null;
+  if (typeof value === "string") return value;
+  return current;
+}
+
+function resultingNameIsUsable(
+  target: StoredUser,
+  data: Prisma.UserUpdateInput,
+): boolean {
+  return hasUsablePersonName(
+    patchNamePart(data, "firstName", target.firstName),
+    patchNamePart(data, "middleName", target.middleName),
+    patchNamePart(data, "lastName", target.lastName),
+  );
 }
 
 async function createIdentifiersAvailable(

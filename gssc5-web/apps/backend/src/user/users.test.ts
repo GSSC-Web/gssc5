@@ -2505,10 +2505,20 @@ test("GSSC-BLLR-487 User Creation Invalid Or Duplicate", async () => {
   expect(missingPassword.status).toBe(422);
   expect(await userRowsMatching(stem)).toHaveLength(0);
 
+  const missingName = await postUsersJson("/users", admin.token, {
+    username: `noname-${randomUUID().slice(0, 8)}`,
+    primaryEmail: `noname-${randomUUID().slice(0, 8)}@example.com`,
+    password: CREATE_PASSWORD,
+  });
+  expect(missingName.status).toBe(422);
+  expect(await userRowCount()).toBe(before);
+
   const weak = await postUsersJson("/users", admin.token, {
     username: `weak-${randomUUID().slice(0, 8)}`,
     primaryEmail: `weak-${randomUUID().slice(0, 8)}@example.com`,
     password: "short",
+    firstName: "Weak",
+    lastName: "Pass",
   });
   expect(weak.status).toBe(422);
 
@@ -2516,6 +2526,8 @@ test("GSSC-BLLR-487 User Creation Invalid Or Duplicate", async () => {
     username: String(emailMember.values.username),
     primaryEmail: `unique-${randomUUID().slice(0, 8)}@example.com`,
     password: CREATE_PASSWORD,
+    firstName: "Dup",
+    lastName: "User",
   });
   expect(dupUser.status).toBe(422);
 
@@ -2523,6 +2535,8 @@ test("GSSC-BLLR-487 User Creation Invalid Or Duplicate", async () => {
     username: `dup-email-${randomUUID().slice(0, 8)}`,
     primaryEmail: String(emailMember.values.primaryEmail),
     password: CREATE_PASSWORD,
+    firstName: "Dup",
+    lastName: "Email",
   });
   expect(dupEmail.status).toBe(422);
   expect(await userRowCount()).toBe(before);
@@ -2610,8 +2624,16 @@ test("GSSC-BLLR-490 User Invitation Invalid Or Duplicate", async () => {
     expect(invalidEmail.status).toBe(422);
     expect(sent).toHaveLength(0);
 
+    const missingName = await postUsersJson("/users/invite", admin.token, {
+      primaryEmail: `invite-noname-${randomUUID().slice(0, 8)}@example.com`,
+    });
+    expect(missingName.status).toBe(422);
+    expect(sent).toHaveLength(0);
+
     const dupEmail = await postUsersJson("/users/invite", admin.token, {
       primaryEmail: String(emailMember.values.primaryEmail),
+      firstName: "Dup",
+      lastName: "Invite",
     });
     expect(dupEmail.status).toBe(422);
     expect(sent).toHaveLength(0);
@@ -2619,6 +2641,8 @@ test("GSSC-BLLR-490 User Invitation Invalid Or Duplicate", async () => {
     const dupUsername = await postUsersJson("/users/invite", admin.token, {
       primaryEmail: `invite-dup-user-${randomUUID().slice(0, 8)}@example.com`,
       username: String(emailMember.values.username),
+      firstName: "Dup",
+      lastName: "Username",
     });
     expect(dupUsername.status).toBe(422);
     expect(sent).toHaveLength(0);
@@ -2628,4 +2652,41 @@ test("GSSC-BLLR-490 User Invitation Invalid Or Duplicate", async () => {
   }
 });
 // @relation(GSSC-BLLR-490, scope=range_end, role=Test)
+
+// @relation(GSSC-BLLR-518, scope=range_start, role=Test)
+test("GSSC-BLLR-518 User Update Requires Usable Name", async () => {
+  await withRow(admin.id, async () => {
+    const before = await snapshot(admin.id);
+    const cleared = await call("PATCH", `/users/${encodeURIComponent(admin.id)}`, admin.token, {
+      firstName: "",
+      middleName: "",
+      lastName: "",
+    });
+    expect(cleared.status).toBe(422);
+    await expectUnchanged(admin.id, before);
+  });
+
+  const username = `name-req-${randomUUID().slice(0, 8)}`;
+  const created = await postUsersJson("/users", admin.token, {
+    username,
+    primaryEmail: `${username}@example.com`,
+    password: CREATE_PASSWORD,
+    firstName: "Solo",
+  });
+  expect(created.status, created.text.slice(0, 500)).toBe(201);
+  const cuid = String(created.user?.["cuid"] ?? "");
+  try {
+    const cleared = await call("PATCH", `/users/${encodeURIComponent(cuid)}`, admin.token, {
+      firstName: "",
+      middleName: "",
+      lastName: "",
+    });
+    expect(cleared.status).toBe(422);
+    const entry = await readEntry(admin.token, cuid);
+    expect(entry["firstName"]).toBe("Solo");
+  } finally {
+    await deleteUserRow(cuid);
+  }
+});
+// @relation(GSSC-BLLR-518, scope=range_end, role=Test)
 

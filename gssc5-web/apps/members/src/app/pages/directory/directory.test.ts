@@ -660,14 +660,23 @@ test('GSSC-MLLR-225 Undelete Persists And Refreshes', async () => {
 
 // @relation(GSSC-MLLR-226, scope=range_start, role=Test)
 test('GSSC-MLLR-226 Name Criterion Backend Filter', async () => {
-  const { page, listCalls, fixture, restore } = await setupDirectory();
+  const { root, page, listCalls, fixture, restore } = await setupDirectory({
+    list: [fellowMember],
+  });
   try {
+    fixture.detectChanges();
+    const cardName = textContent(root, '.gssc-contact-row__name');
+    expect(cardName).toBe('Grace Hopper');
+    expect(cardName).not.toContain('grace');
+
     listCalls.length = 0;
     page.name.set('Hopper');
     await settleFilters(fixture);
     expect(listCalls.at(-1)).toEqual({ name: 'Hopper' });
     expect(listCalls.at(-1)).not.toHaveProperty('firstName');
     expect(listCalls.at(-1)).not.toHaveProperty('lastName');
+    // Name filter needle matches the name-parts card title.
+    expect(cardName).toContain('Hopper');
   } finally {
     restore();
   }
@@ -795,7 +804,7 @@ test('GSSC-MLLR-603 Lexical', async () => {
 
 // @relation(GSSC-MLLR-604, scope=range_start, role=Test)
 test('GSSC-MLLR-604 Semantic', async () => {
-  const { root, page, fixture, restore } = await setupDirectory({
+  const { root, page, fixture, inviteCalls, restore } = await setupDirectory({
     viewer: { cuid: 'mod_1', isUserMod: true },
   });
   try {
@@ -808,6 +817,15 @@ test('GSSC-MLLR-604 Semantic', async () => {
     expect(
       root.querySelector('#gssc-directory-invite-primary-email')?.hasAttribute('required'),
     ).toBe(true);
+
+    page.invitePrimaryEmail.set('new@example.com');
+    page.inviteUsername.set('newbie');
+    page.inviteFirstName.set('');
+    page.inviteLastName.set('');
+    await page.submitInvite();
+    await settleFilters(fixture);
+    expect(inviteCalls).toEqual([]);
+    expect(page.inviteFormOpen()).toBe(true);
   } finally {
     restore();
   }
@@ -962,7 +980,7 @@ test('GSSC-MLLR-623 Lexical', async () => {
 
 // @relation(GSSC-MLLR-624, scope=range_start, role=Test)
 test('GSSC-MLLR-624 Semantic', async () => {
-  const { root, page, fixture, restore } = await setupDirectory({
+  const { root, page, fixture, createCalls, restore } = await setupDirectory({
     viewer: { cuid: 'admin_1', isAdmin: true },
   });
   try {
@@ -976,6 +994,16 @@ test('GSSC-MLLR-624 Semantic', async () => {
     expect(
       root.querySelector<HTMLInputElement>('#gssc-directory-create-password')!.type,
     ).toBe('password');
+
+    page.createUsername.set('brandnew');
+    page.createPrimaryEmail.set('brand@example.com');
+    page.createPassword.set('Secret1!');
+    page.createFirstName.set('');
+    page.createLastName.set('');
+    await page.submitCreate();
+    await settleFilters(fixture);
+    expect(createCalls).toEqual([]);
+    expect(page.createFormOpen()).toBe(true);
   } finally {
     restore();
   }

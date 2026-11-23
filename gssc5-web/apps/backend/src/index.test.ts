@@ -215,9 +215,17 @@ test(
       expect(username).toBeDefined();
       const row = stored.rows.find((item) => cellText(item[username ?? ""]) === "omit-admin");
       expect(row).toBeDefined();
+      const firstName = columnFor(stored.columns, "firstName");
+      const lastName = columnFor(stored.columns, "lastName");
+      expect(firstName).toBeDefined();
+      expect(lastName).toBeDefined();
+      expect(isUnset(row?.[firstName ?? ""])).toBe(false);
+      expect(isUnset(row?.[lastName ?? ""])).toBe(false);
+      expect(cellText(row?.[firstName ?? ""])).toBe("Admin");
+      expect(cellText(row?.[lastName ?? ""])).toBe("User");
+      expect(cellText(row?.[firstName ?? ""])).not.toBe("FromEnv");
+      expect(cellText(row?.[lastName ?? ""])).not.toBe("FromEnv");
       for (const concept of [
-        "firstName",
-        "lastName",
         "primaryPhone",
         "preferredContactMethod",
         "homeLine1",

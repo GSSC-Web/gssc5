@@ -119,6 +119,7 @@ Wave coordination: GSSC5-92 directory 202–214, GSSC5-102 directory refinement 
 GSSC-173 Members Header Greeting menu owns GSSC-MLLR-33 through GSSC-MLLR-35 (Header Public Access triad) plus CHANGE_DRIVER on GSSC-MLLR-14, 24, 27, 30 and HLR GSSC-MHLR-107; GSSC-MLLR-36 through GSSC-MLLR-39 remain free.
 GSSC-202 Members Key-Value Store Editor owns GSSC-MLLR-708 through GSSC-MLLR-729 (exact end 729; band 708–740); HLR GSSC-MHLR-114 / GSSC-MHLR-115.
 GSSC5-148 PDE delete owns GSSC-MLLR-741 through GSSC-MLLR-752 (exact end 752; band 741–780); GSSC5-149 events Past/Future/All filter owns GSSC-MLLR-753 through GSSC-MLLR-756; GSSC5-150 Copy to New owns GSSC-MLLR-757 through GSSC-MLLR-764; HLR GSSC-MHLR-116..118.
+GSSC5-170 Directory name required / no username card title owns GSSC-MLLR-768 (exact end 768; band 768–780 continues after PDE) and CHANGE_DRIVER on GSSC-MLLR-228, 604, 624, 226.
 Do not reuse numbers already claimed by another ticket.
 <<<
 
@@ -6205,14 +6206,17 @@ RELATIONS:
 UID: GSSC-MLLR-226
 TITLE: Name Criterion Backend Filter
 STATEMENT: >>>
-When the viewer supplies a Name criterion, the Member Frontend SHALL search First Name, Middle Name, and Last Name by sending that criterion as the Unified Backend name filter.
+When the viewer supplies a Name criterion, the Member Frontend SHALL search First Name, Middle Name, and Last Name by sending that criterion as the Unified Backend name filter, so that criterion finds directory contact cards by the name those cards show.
 <<<
 RATIONALE: >>>
-One Name field maps to the backend combined name filter across the three name parts.
+One Name field maps to the backend combined name filter across the three name parts and stays aligned with the card title composed from those parts.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-102
+CHANGE_DRIVER: >>>
+GSSC5-102
+GSSC5-170
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -6253,14 +6257,17 @@ TITLE: Directory Contact Card Layout
 UID: GSSC-MLLR-228
 TITLE: Semantic
 STATEMENT: >>>
-Each directory contact card SHALL arrange the account photo on the left, the member name and contact information left-justified to the right of that photo, and permitted Edit and soft-delete controls on the right.
+Each directory contact card SHALL arrange the account photo on the left, the member name composed from First Name, Middle Name, and Last Name only—never Username—and contact information left-justified to the right of that photo, and permitted Edit and soft-delete controls on the right.
 <<<
 RATIONALE: >>>
-Photo, identity, and actions share one horizontal composition so the directory list stays scannable.
+Photo, identity, and actions share one horizontal composition so the directory list stays scannable. The card title matches the Name filter's name-parts search.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-102
+CHANGE_DRIVER: >>>
+GSSC5-102
+GSSC5-170
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -6286,6 +6293,27 @@ REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-MHLR-55
+  ROLE: Refines
+
+[REQUIREMENT]
+UID: GSSC-MLLR-768
+TITLE: Directory Card Name From Name Parts
+STATEMENT: >>>
+The Member Frontend SHALL set each directory contact card title from First Name, Middle Name, and Last Name only, and SHALL NOT use Username or the member cuid as that title when name parts are empty.
+<<<
+RATIONALE: >>>
+Username must never appear as the directory card name so the Name filter (name parts only) can find every shown title.
+<<<
+DERIVED: False
+VERIFICATION_METHOD: Test
+CHANGE_DRIVER: GSSC5-170
+REVIEW_STATUS: Approved
+RELATIONS:
+- TYPE: Parent
+  VALUE: GSSC-MHLR-55
+  ROLE: Refines
+- TYPE: Parent
+  VALUE: GSSC-MHLR-56
   ROLE: Refines
 
 [REQUIREMENT]
@@ -11614,14 +11642,17 @@ TITLE: Directory Invite Form
 UID: GSSC-MLLR-604
 TITLE: Semantic
 STATEMENT: >>>
-The Directory Invite Form SHALL accept a required Primary Email and optional Username, First Name, and Last Name for the prospective member being invited.
+The Directory Invite Form SHALL accept a required Primary Email, a required usable name composed from First Name and/or Last Name, and optional Username for the prospective member being invited, and SHALL withhold invite persistence when that usable name is missing.
 <<<
 RATIONALE: >>>
-Primary Email is required to deliver the invitation; username and name parts may be supplied when known.
+Primary Email is required to deliver the invitation; a usable name is required so the directory card title is never empty or Username.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-118
+CHANGE_DRIVER: >>>
+GSSC5-118
+GSSC5-170
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
@@ -11782,14 +11813,17 @@ TITLE: Directory Create Form
 UID: GSSC-MLLR-624
 TITLE: Semantic
 STATEMENT: >>>
-The Directory Create Form SHALL accept a Username, a Primary Email, a password, a First Name, and a Last Name for the member account being created.
+The Directory Create Form SHALL accept a required Username, Primary Email, password, and a required usable name composed from First Name and/or Last Name for the member account being created, and SHALL withhold create persistence when that usable name is missing.
 <<<
 RATIONALE: >>>
-Administrator account creation needs identity, contact, password, and name fields before persistence.
+Administrator account creation needs identity, contact, password, and a usable name before persistence so the directory card title is never empty or Username.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-119
+CHANGE_DRIVER: >>>
+GSSC5-119
+GSSC5-170
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
