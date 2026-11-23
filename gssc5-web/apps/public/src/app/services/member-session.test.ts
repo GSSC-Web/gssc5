@@ -68,8 +68,7 @@ async function freshSession(): Promise<{ session: MemberSession; restoreChalleng
   return { session, restoreChallenge };
 }
 
-// @relation(GSSC-PLLR-64, scope=range_start, role=Test)
-test('GSSC-PLLR-64 MemberSession logout ends backend session before clearing UI', async () => {
+test('MemberSession logout ends backend session before clearing UI', async () => {
   const { session, restoreChallenge } = await freshSession();
   session.setSession('Ada');
   expect(session.loggedIn()).toBe(true);
@@ -95,7 +94,6 @@ test('GSSC-PLLR-64 MemberSession logout ends backend session before clearing UI'
     restoreChallenge();
   }
 });
-// @relation(GSSC-PLLR-64, scope=range_end, role=Test)
 
 test('MemberSession logout keeps UI logged-in when backend logout fails', async () => {
   const { session, restoreChallenge } = await freshSession();
