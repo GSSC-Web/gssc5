@@ -90,12 +90,17 @@ export const passwords = new Elysia({
     async ({ body, status }) => {
       const { prisma, config } = runtime();
 
-      // @relation(GSSC-BLLR-237, scope=range_start, role=Implementation)
+      // @relation(GSSC-BLLR-237, GSSC-BLLR-236, scope=range_start, role=Implementation)
       const user = await prisma.user.findUnique({ where: { primaryEmail: body.email } });
-      if (!user || user.primaryEmail === null || user.primaryEmail === "") {
+      if (
+        !user ||
+        user.primaryEmail === null ||
+        user.primaryEmail === "" ||
+        user.deletedAt !== null
+      ) {
         return status(204, undefined);
       }
-      // @relation(GSSC-BLLR-237, scope=range_end, role=Implementation)
+      // @relation(GSSC-BLLR-237, GSSC-BLLR-236, scope=range_end, role=Implementation)
 
       const issuedAt = new Date();
       const expiresAt = new Date(
@@ -153,6 +158,8 @@ export const passwords = new Elysia({
       if (row.usedAt) return status(403, "Forbidden");
       if (row.expiresAt.getTime() <= Date.now()) return status(403, "Forbidden");
       if (row.primaryEmail !== body.primaryEmail) return status(403, "Forbidden");
+      // Soft-deleted members cannot complete recovery (GSSC5-162 / BLLR-236).
+      if (row.user.deletedAt !== null) return status(403, "Forbidden");
       // @relation(GSSC-BLLR-254, GSSC-BLLR-255, GSSC-BLLR-256, GSSC-BLLR-257, scope=range_end, role=Implementation)
 
       // @relation(GSSC-BLLR-268, GSSC-BLLR-269, GSSC-BLLR-270, GSSC-BLLR-271, GSSC-BLLR-272, scope=range_start, role=Implementation)

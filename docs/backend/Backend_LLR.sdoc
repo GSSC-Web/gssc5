@@ -945,14 +945,17 @@ RELATIONS:
 UID: GSSC-BLLR-236
 TITLE: Password Recovery Message Sent
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL send a password recovery message to a member's Primary Email when the recovery request email address matches that Primary Email.
+The GSSC Website Unified Backend SHALL send a password recovery message to a member's Primary Email when the recovery request email address matches that Primary Email and that member is not soft-deleted. A recovery request for a soft-deleted member's Primary Email SHALL report success without sending a message and without storing a recovery token. Completing password recovery for a soft-deleted member SHALL be forbidden and SHALL leave that member's password hash unchanged.
 <<<
 RATIONALE: >>>
-The backend sends recovery mail only to a member's Primary Email. Message wording and layout are out of scope.
+The backend sends recovery mail only to an active member's Primary Email. Soft-deleted members stay out of collaboration, so recovery must not reset their credentials. Message wording and layout are out of scope.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-35
+CHANGE_DRIVER: >>>
+GSSC5-35
+GSSC5-162
+<<<
 REVIEW_STATUS: Approved
 RELATIONS:
 - TYPE: Parent
