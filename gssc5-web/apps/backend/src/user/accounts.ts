@@ -5,11 +5,11 @@ import { getPrisma } from "../db";
 import type { PrismaClient } from "../generated/prisma/client";
 import { UserPlain } from "../generated/prismabox/User";
 import {
-  classifyLoginTokenRow,
   clearLoginTokenCookie,
   hashLoginToken,
   loginTokenCookie,
   loginTokenFromCookie,
+  resolveLoginSessionUser,
   setLoginTokenCookie,
 } from "./login-session";
 
@@ -136,18 +136,14 @@ export const accounts = new Elysia({
     "/challenge",
     async ({ cookie, status }) => {
       const { prisma } = runtime();
-      const token = loginTokenFromCookie(cookie);
 
-      // @relation(GSSC-BLLR-9, GSSC-BLLR-12, GSSC-BLLR-318, GSSC-BLLR-399, scope=range_start, role=Implementation)
-      if (!token) return status(200, { status: "invalid" as const });
-      const row = await prisma.loginToken.findUnique({
-        where: { tokenHash: hashLoginToken(token) },
-      });
-      if (classifyLoginTokenRow(row) !== "ok" || !row) {
+      // @relation(GSSC-BLLR-9, GSSC-BLLR-12, GSSC-BLLR-318, GSSC-BLLR-399, GSSC-BLLR-492, scope=range_start, role=Implementation)
+      const session = await resolveLoginSessionUser(prisma, cookie, { id: true });
+      if ("failure" in session) {
         return status(200, { status: "invalid" as const });
       }
-      return status(200, { status: "valid" as const, cuid: row.userId });
-      // @relation(GSSC-BLLR-9, GSSC-BLLR-12, GSSC-BLLR-318, GSSC-BLLR-399, scope=range_end, role=Implementation)
+      return status(200, { status: "valid" as const, cuid: session.user.id });
+      // @relation(GSSC-BLLR-9, GSSC-BLLR-12, GSSC-BLLR-318, GSSC-BLLR-399, GSSC-BLLR-492, scope=range_end, role=Implementation)
     },
     {
       cookie: loginTokenCookie,
