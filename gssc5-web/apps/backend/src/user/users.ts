@@ -662,6 +662,10 @@ async function updateUserHandler({
     select: userSelect,
   });
   if (!target) return status(404, "Not Found" as const);
+  // Soft-deleted targets are not found for non-administrators (GSSC5-163).
+  if (target.deletedAt !== null && !session.user.isAdmin) {
+    return status(404, "Not Found" as const);
+  }
   // @relation(GSSC-BLLR-57, scope=range_end, role=Implementation)
 
   // @relation(GSSC-BLLR-58, GSSC-BLLR-59, GSSC-BLLR-169, GSSC-BLLR-170, GSSC-BLLR-171, scope=range_start, role=Implementation)

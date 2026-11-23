@@ -1899,6 +1899,17 @@ test("GSSC-BLLR-57 User Update Not Found", async () => {
     firstName: "Nobody",
   });
   expect((await allRows()).length).toBe(before);
+
+  await withRow(mutable.id, async () => {
+    const softDeleted = await call("DELETE", `/users/${encodeURIComponent(mutable.id)}`, admin.token);
+    expect(softDeleted.status).toBe(204);
+    const softBefore = await snapshot(mutable.id);
+    const modResult = await postField(moderator, mutable, "firstName", "ShouldNotStick Soft");
+    expect(modResult.status).toBe(404);
+    await expectUnchanged(mutable.id, softBefore);
+
+    await expectStored(admin, mutable, "firstName", "Admin Soft Edit");
+  });
 });
 // @relation(GSSC-BLLR-57, scope=range_end, role=Test)
 

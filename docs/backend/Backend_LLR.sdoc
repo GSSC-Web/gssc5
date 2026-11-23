@@ -4880,14 +4880,17 @@ RELATIONS:
 UID: GSSC-BLLR-57
 TITLE: User Update Not Found
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL report the user not found when the user update names a cuid that no user has.
+The GSSC Website Unified Backend SHALL report the user not found when the user update names a cuid that no user has, or when the named user is soft-deleted and the caller is not an administrator, and SHALL write nothing in those cases. An administrator MAY still update a soft-deleted user.
 <<<
 RATIONALE: >>>
-A cuid that belongs to no user is a missing record. The test binds this report to HTTP 404.
+A cuid that belongs to no user is a missing record. Soft-deleted accounts stay hidden from non-administrator updates, matching direct read. The test binds this report to HTTP 404.
 <<<
 DERIVED: True
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-34
+CHANGE_DRIVER: >>>
+GSSC5-34
+GSSC5-163
+<<<
 REVIEW_STATUS: Approved
 
 [REQUIREMENT]
