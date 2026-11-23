@@ -1,4 +1,5 @@
-const PUBLICATIONS_ORIGIN = 'http://localhost:3000';
+import { BACKEND_ORIGIN } from './backend';
+
 
 /**
  * Resolve a publication cuid (or publications/{cuid} path) to Unified Backend
@@ -6,7 +7,7 @@ const PUBLICATIONS_ORIGIN = 'http://localhost:3000';
  */
 export function publicationFileUrl(
   resource: string,
-  origin: string = PUBLICATIONS_ORIGIN,
+  origin: string = BACKEND_ORIGIN,
 ): string {
   const trimmed = resource.trim();
   if (/^https?:\/\//i.test(trimmed)) return trimmed;

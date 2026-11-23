@@ -1,12 +1,11 @@
-import { backend } from './backend';
+import { BACKEND_ORIGIN, backend } from './backend';
 
-const FILES_API_ORIGIN = 'http://localhost:3000';
 
 /**
  * Resolve a StoredFileEntry cuid (or /files path) to Unified Backend GET /files/{cuid}.
  * Absolute http(s) URLs still pass through.
  */
-export function filesApiUrl(resource: string, origin: string = FILES_API_ORIGIN): string {
+export function filesApiUrl(resource: string, origin: string = BACKEND_ORIGIN): string {
   const trimmed = resource.trim();
   if (/^https?:\/\//i.test(trimmed)) return trimmed;
   if (trimmed.startsWith('/files/')) return `${origin}${trimmed}`;

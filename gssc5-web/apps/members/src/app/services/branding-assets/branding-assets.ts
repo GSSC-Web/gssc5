@@ -1,7 +1,7 @@
 import { Injectable, inject, signal } from '@angular/core';
+import { BACKEND_ORIGIN } from '../backend';
 import { KvStore } from '../kv-store/kv-store';
 
-const BRANDING_ORIGIN = 'http://localhost:3000';
 
 /** KVS keys for members branding asset storage paths. */
 export const BRANDING_FAVICON_KEY = 'branding.favicon';
@@ -13,7 +13,7 @@ export const BRANDING_LOGO_KEY = 'branding.logo';
  */
 export function brandingFileUrl(
   resource: string,
-  origin: string = BRANDING_ORIGIN,
+  origin: string = BACKEND_ORIGIN,
 ): string {
   const trimmed = resource.trim();
   if (/^https?:\/\//i.test(trimmed)) return trimmed;
