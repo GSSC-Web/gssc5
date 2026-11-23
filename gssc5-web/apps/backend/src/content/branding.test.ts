@@ -49,6 +49,9 @@ test("GSSC-BLLR-514 Branding Directory Under Storage Root", async () => {
 
 // @relation(GSSC-BLLR-515, scope=range_start, role=Test)
 test("GSSC-BLLR-515 Branding Default Path KV Stubs", async () => {
+  await db().keyValue.deleteMany({
+    where: { key: { in: [BRANDING_FAVICON_KEY, BRANDING_LOGO_KEY] } },
+  });
   await prepareBrandingAssets();
   const favicon = await db().keyValue.findUnique({ where: { key: BRANDING_FAVICON_KEY } });
   const logo = await db().keyValue.findUnique({ where: { key: BRANDING_LOGO_KEY } });
@@ -63,6 +66,24 @@ test("GSSC-BLLR-515 Branding Default Path KV Stubs", async () => {
     key: BRANDING_LOGO_KEY,
     value: DEFAULT_BRANDING_LOGO_PATH,
   });
+
+  const adminFavicon = "branding/admin-favicon.ico";
+  const adminLogo = "branding/admin-logo.png";
+  await db().keyValue.update({
+    where: { key: BRANDING_FAVICON_KEY },
+    data: { value: adminFavicon },
+  });
+  await db().keyValue.update({
+    where: { key: BRANDING_LOGO_KEY },
+    data: { value: adminLogo },
+  });
+  await prepareBrandingAssets();
+  expect(
+    (await db().keyValue.findUnique({ where: { key: BRANDING_FAVICON_KEY } }))?.value,
+  ).toBe(adminFavicon);
+  expect(
+    (await db().keyValue.findUnique({ where: { key: BRANDING_LOGO_KEY } }))?.value,
+  ).toBe(adminLogo);
 });
 // @relation(GSSC-BLLR-515, scope=range_end, role=Test)
 
