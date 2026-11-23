@@ -9566,15 +9566,18 @@ RELATIONS:
 UID: GSSC-BLLR-515
 TITLE: Branding Default Path Key-Value Stubs
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL upsert website key-value entries branding.favicon and branding.logo whose values are the default storage paths branding/favicon.ico and branding/gssc-society-logo.png.
+The GSSC Website Unified Backend SHALL ensure website key-value entries branding.favicon and branding.logo exist with default storage path values branding/favicon.ico and branding/gssc-society-logo.png when those keys are absent, and SHALL leave an existing value for either key unchanged.
 <<<
 RATIONALE: >>>
-Stubbed default paths give Public and Members a stable resolution target after database seed without embedding binary image files in the repository.
+Stubbed default paths give Public and Members a stable resolution target after database seed without embedding binary image files in the repository, while preserving operator retargets across process restarts.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
-CHANGE_DRIVER: GSSC5-151
-REVIEW_STATUS: Approved
+CHANGE_DRIVER: >>>
+GSSC5-151
+GSSC5-160
+<<<
+REVIEW_STATUS: Changed
 RELATIONS:
 - TYPE: Parent
   VALUE: GSSC-BHLR-243

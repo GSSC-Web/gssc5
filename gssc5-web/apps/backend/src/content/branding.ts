@@ -127,8 +127,8 @@ export async function ensureBrandingStubFiles(): Promise<void> {
 // @relation(GSSC-BLLR-514, GSSC-BLLR-517, scope=range_end, role=Implementation)
 
 /**
- * Upsert default branding path keys into the website key-value store.
- * Safe to call repeatedly (idempotent).
+ * Ensure default branding path keys exist in the website key-value store.
+ * Creates missing keys only; leaves an existing value unchanged (no-clobber).
  */
 // @relation(GSSC-BLLR-515, scope=range_start, role=Implementation)
 export async function seedBrandingKvs(
@@ -139,7 +139,7 @@ export async function seedBrandingKvs(
     await prisma.keyValue.upsert({
       where: { key: row.key },
       create: { key: row.key, value: row.value },
-      update: { value: row.value },
+      update: {},
     });
   }
 }
