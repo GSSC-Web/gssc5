@@ -2402,7 +2402,26 @@ async function deleteUserRow(id: string): Promise<void> {
   );
 }
 
-// @relation(GSSC-BLLR-485, GSSC-BLLR-486, GSSC-BLLR-487, scope=range_start, role=Test)
+async function userRowCount(): Promise<number> {
+  return (await allRows()).length;
+}
+
+async function userRowsMatching(needle: string): Promise<Array<Record<string, unknown>>> {
+  const rows = await allRows();
+  return rows.filter((row) => {
+    const username = cell(row, "username") ?? "";
+    const email = cell(row, "primaryEmail") ?? "";
+    return username.includes(needle) || email.includes(needle);
+  });
+}
+
+async function recoveryTokenRowsFor(userId: string): Promise<Array<Record<string, unknown>>> {
+  return app.sql.query(
+    `SELECT * FROM ${quote("password_recovery_tokens")} WHERE ${quote("userId")} = ${sqlLiteral(userId)}`,
+  );
+}
+
+// @relation(GSSC-BLLR-485, scope=range_start, role=Test)
 test("GSSC-BLLR-485 User Creation", async () => {
   const username = `create-${randomUUID().slice(0, 8)}`;
   const primaryEmail = `${username}@example.com`;
@@ -2423,8 +2442,11 @@ test("GSSC-BLLR-485 User Creation", async () => {
   expect(idsOf(await listEntries(admin.token))).toContain(cuid);
   await deleteUserRow(cuid);
 });
+// @relation(GSSC-BLLR-485, scope=range_end, role=Test)
 
+// @relation(GSSC-BLLR-486, scope=range_start, role=Test)
 test("GSSC-BLLR-486 User Creation Forbidden", async () => {
+  const before = await userRowCount();
   const username = `forbid-create-${randomUUID().slice(0, 8)}`;
   const forbidden = await postUsersJson("/users", emailMember.token, {
     username,
@@ -2432,15 +2454,46 @@ test("GSSC-BLLR-486 User Creation Forbidden", async () => {
     password: CREATE_PASSWORD,
   });
   expect(forbidden.status).toBe(403);
+  expect(await userRowsMatching(username)).toHaveLength(0);
+
+  const modUsername = `${username}-mod`;
   const modForbidden = await postUsersJson("/users", moderator.token, {
-    username: `${username}-mod`,
-    primaryEmail: `${username}-mod@example.com`,
+    username: modUsername,
+    primaryEmail: `${modUsername}@example.com`,
     password: CREATE_PASSWORD,
   });
   expect(modForbidden.status).toBe(403);
+  expect(await userRowsMatching(modUsername)).toHaveLength(0);
+  expect(await userRowCount()).toBe(before);
 });
+// @relation(GSSC-BLLR-486, scope=range_end, role=Test)
 
+// @relation(GSSC-BLLR-487, scope=range_start, role=Test)
 test("GSSC-BLLR-487 User Creation Invalid Or Duplicate", async () => {
+  const before = await userRowCount();
+  const stem = `miss-${randomUUID().slice(0, 8)}`;
+
+  const missingUsername = await postUsersJson("/users", admin.token, {
+    primaryEmail: `${stem}-user@example.com`,
+    password: CREATE_PASSWORD,
+  });
+  expect(missingUsername.status).toBe(422);
+  expect(await userRowsMatching(stem)).toHaveLength(0);
+
+  const missingEmail = await postUsersJson("/users", admin.token, {
+    username: `${stem}-email`,
+    password: CREATE_PASSWORD,
+  });
+  expect(missingEmail.status).toBe(422);
+  expect(await userRowsMatching(stem)).toHaveLength(0);
+
+  const missingPassword = await postUsersJson("/users", admin.token, {
+    username: `${stem}-pass`,
+    primaryEmail: `${stem}-pass@example.com`,
+  });
+  expect(missingPassword.status).toBe(422);
+  expect(await userRowsMatching(stem)).toHaveLength(0);
+
   const weak = await postUsersJson("/users", admin.token, {
     username: `weak-${randomUUID().slice(0, 8)}`,
     primaryEmail: `weak-${randomUUID().slice(0, 8)}@example.com`,
@@ -2461,10 +2514,11 @@ test("GSSC-BLLR-487 User Creation Invalid Or Duplicate", async () => {
     password: CREATE_PASSWORD,
   });
   expect(dupEmail.status).toBe(422);
+  expect(await userRowCount()).toBe(before);
 });
-// @relation(GSSC-BLLR-485, GSSC-BLLR-486, GSSC-BLLR-487, scope=range_end, role=Test)
+// @relation(GSSC-BLLR-487, scope=range_end, role=Test)
 
-// @relation(GSSC-BLLR-488, GSSC-BLLR-489, GSSC-BLLR-490, scope=range_start, role=Test)
+// @relation(GSSC-BLLR-488, scope=range_start, role=Test)
 test("GSSC-BLLR-488 User Invitation", async () => {
   const sent: MailMessage[] = [];
   setMailTransporter({
@@ -2474,7 +2528,8 @@ test("GSSC-BLLR-488 User Invitation", async () => {
   });
   try {
     const primaryEmail = `invite-${randomUUID().slice(0, 8)}@example.com`;
-    const invited = await postUsersJson("/users/invite", moderator.token, {
+    // Administrator invite so create projection matches an administrator list entry.
+    const invited = await postUsersJson("/users/invite", admin.token, {
       primaryEmail,
       firstName: "Invited",
       lastName: "Prospect",
@@ -2488,20 +2543,42 @@ test("GSSC-BLLR-488 User Invitation", async () => {
     expect(sent[0]?.subject).toBe("Member invitation");
     expect(sent[0]?.text).toMatch(/recovery-token=/);
     const cuid = String(invited.user?.["cuid"] ?? "");
-    expect(idsOf(await listEntries(moderator.token))).toContain(cuid);
+    expect(idsOf(await listEntries(admin.token))).toContain(cuid);
+
+    const stored = await rowById(cuid);
+    const hash = cell(stored, "passwordHash");
+    expect(hash).toEqual(expect.any(String));
+    expect(hash).not.toBe("");
+    expect(hash).not.toBe(CREATE_PASSWORD);
+    expect(await Bun.password.verify("", hash ?? "", "argon2id")).toBe(false);
+    expect(await Bun.password.verify(CREATE_PASSWORD, hash ?? "", "argon2id")).toBe(false);
+    expect(await recoveryTokenRowsFor(cuid)).toHaveLength(1);
+
+    const adminListEntry = (await listEntries(admin.token)).find((entry) => idOf(entry) === cuid);
+    expect(adminListEntry).toBeDefined();
+    expect(invited.user).toEqual(adminListEntry);
+
     await deleteUserRow(cuid);
   } finally {
     setMailTransporter(undefined);
   }
 });
+// @relation(GSSC-BLLR-488, scope=range_end, role=Test)
 
+// @relation(GSSC-BLLR-489, scope=range_start, role=Test)
 test("GSSC-BLLR-489 User Invitation Forbidden", async () => {
+  const before = await userRowCount();
+  const primaryEmail = `forbid-invite-${randomUUID().slice(0, 8)}@example.com`;
   const forbidden = await postUsersJson("/users/invite", emailMember.token, {
-    primaryEmail: `forbid-invite-${randomUUID().slice(0, 8)}@example.com`,
+    primaryEmail,
   });
   expect(forbidden.status).toBe(403);
+  expect(await userRowsMatching(primaryEmail.split("@")[0] ?? primaryEmail)).toHaveLength(0);
+  expect(await userRowCount()).toBe(before);
 });
+// @relation(GSSC-BLLR-489, scope=range_end, role=Test)
 
+// @relation(GSSC-BLLR-490, scope=range_start, role=Test)
 test("GSSC-BLLR-490 User Invitation Invalid Or Duplicate", async () => {
   const sent: MailMessage[] = [];
   setMailTransporter({
@@ -2510,6 +2587,18 @@ test("GSSC-BLLR-490 User Invitation Invalid Or Duplicate", async () => {
     },
   });
   try {
+    const before = await userRowCount();
+
+    const missingEmail = await postUsersJson("/users/invite", admin.token, {});
+    expect(missingEmail.status).toBe(422);
+    expect(sent).toHaveLength(0);
+
+    const invalidEmail = await postUsersJson("/users/invite", admin.token, {
+      primaryEmail: "not-an-email",
+    });
+    expect(invalidEmail.status).toBe(422);
+    expect(sent).toHaveLength(0);
+
     const dupEmail = await postUsersJson("/users/invite", admin.token, {
       primaryEmail: String(emailMember.values.primaryEmail),
     });
@@ -2522,9 +2611,10 @@ test("GSSC-BLLR-490 User Invitation Invalid Or Duplicate", async () => {
     });
     expect(dupUsername.status).toBe(422);
     expect(sent).toHaveLength(0);
+    expect(await userRowCount()).toBe(before);
   } finally {
     setMailTransporter(undefined);
   }
 });
-// @relation(GSSC-BLLR-488, GSSC-BLLR-489, GSSC-BLLR-490, scope=range_end, role=Test)
+// @relation(GSSC-BLLR-490, scope=range_end, role=Test)
 
