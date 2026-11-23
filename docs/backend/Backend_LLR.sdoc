@@ -566,16 +566,17 @@ TITLE: Data Returned
 UID: GSSC-BLLR-9
 TITLE: Login Token Challenge
 STATEMENT: >>>
-The GSSC Website Unified Backend SHALL report a challenged Login Token as valid or invalid. The report is valid for a Login Token issued for a successful member login that has not expired and has not been logged out. The report does not include the contents of the Login Token.
+The GSSC Website Unified Backend SHALL report a challenged Login Token as valid or invalid. The report is valid for a Login Token issued for a successful member login that has not expired, has not been logged out, and belongs to a member who is not soft-deleted. The report does not include the contents of the Login Token.
 <<<
 RATIONALE: >>>
-The challenge tells the caller whether the Login Token is valid without returning the token contents.
+The challenge tells the caller whether the Login Token is valid without returning the token contents. Soft-deleted members must not appear logged in via a still-held cookie.
 <<<
 DERIVED: False
 VERIFICATION_METHOD: Test
 CHANGE_DRIVER: >>>
 GSSC5-33
 GSSC5-58
+GSSC5-153
 <<<
 REVIEW_STATUS: Approved
 RELATIONS:
