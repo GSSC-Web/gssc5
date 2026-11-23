@@ -176,6 +176,14 @@ async function clickSave(
   await flushAsync(fixture);
 }
 
+async function clickAnnouncementDelete(
+  fixture: { detectChanges: () => void; whenStable: () => Promise<unknown> },
+  root: HTMLElement,
+): Promise<void> {
+  root.querySelector<HTMLButtonElement>('[data-slot="announcement-delete"]')!.click();
+  await flushAsync(fixture);
+}
+
 // @relation(GSSC-MLLR-291, scope=range_start, role=Test)
 test('GSSC-MLLR-291 Semantic', async () => {
   const api = createMockApi({
@@ -508,39 +516,66 @@ test('GSSC-MLLR-687/690 Announcements intro and idle disclaimer', async () => {
 });
 // @relation(GSSC-MLLR-687, GSSC-MLLR-690, scope=range_end, role=Test)
 
-// @relation(GSSC-MLLR-745, GSSC-MLLR-746, GSSC-MLLR-747, scope=range_start, role=Test)
-test('GSSC-MLLR-745/746/747 Announcement Delete Control', async () => {
+// @relation(GSSC-MLLR-745, scope=range_start, role=Test)
+test('GSSC-MLLR-745 Semantic announcement delete removes via control', async () => {
   const api = createMockApi({
     list: [sampleAnnouncement({ cuid: 'a1', body: 'One', header: 'Alpha' })],
+  });
+  const { root, fixture } = await setupPage(api);
+  root.querySelector<HTMLButtonElement>('.gssc-announcement-catalog__item')!.click();
+  fixture.detectChanges();
+  await fixture.whenStable();
+  await clickAnnouncementDelete(fixture, root);
+  expect(api.deleteCalls).toEqual(['a1']);
+});
+// @relation(GSSC-MLLR-745, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-746, scope=range_start, role=Test)
+test('GSSC-MLLR-746 Syntactic announcement delete visibility', async () => {
+  const api = createMockApi({
+    list: [sampleAnnouncement({ cuid: 'a1', body: 'One', header: 'Alpha' })],
+    templates: [{ cuid: 't1', name: 'Public' }],
   });
   const { root, fixture } = await setupPage(api);
   expect(root.querySelector('[data-slot="announcement-delete"]')).toBeNull();
   root.querySelector<HTMLButtonElement>('.gssc-announcement-catalog__item')!.click();
   fixture.detectChanges();
   await fixture.whenStable();
+  expect(root.querySelector('[data-slot="announcement-delete"]')).toBeTruthy();
+  expect(root.querySelector('gssc-editor')).toBeTruthy();
+  root.querySelector<HTMLButtonElement>('.gssc-announcement-catalog__create')!.click();
+  fixture.detectChanges();
+  await fixture.whenStable();
+  expect(root.querySelector('[data-slot="announcement-delete"]')).toBeNull();
+});
+// @relation(GSSC-MLLR-746, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-747, scope=range_start, role=Test)
+test('GSSC-MLLR-747 Lexical announcement delete chrome', async () => {
+  const api = createMockApi({
+    list: [sampleAnnouncement({ cuid: 'a1', body: 'One', header: 'Alpha' })],
+  });
+  const { root, fixture } = await setupPage(api);
+  root.querySelector<HTMLButtonElement>('.gssc-announcement-catalog__item')!.click();
+  fixture.detectChanges();
+  await fixture.whenStable();
   const del = root.querySelector<HTMLButtonElement>('[data-slot="announcement-delete"]')!;
-  expect(del).toBeTruthy();
   expect(del.textContent?.trim()).toBe('Delete announcement');
   expect(del.className).toContain('text-gssc-dark-red');
   expect(del.className).toContain('font-sans');
 });
-// @relation(GSSC-MLLR-745, GSSC-MLLR-746, GSSC-MLLR-747, scope=range_end, role=Test)
+// @relation(GSSC-MLLR-747, scope=range_end, role=Test)
 
 // @relation(GSSC-MLLR-748, scope=range_start, role=Test)
 test('GSSC-MLLR-748 Announcement Delete Persists And Refreshes', async () => {
   const api = createMockApi({
     list: [sampleAnnouncement({ cuid: 'a1', body: 'One', header: 'Alpha' })],
   });
-  const { root, fixture, page } = await setupPage(api);
+  const { root, fixture } = await setupPage(api);
   root.querySelector<HTMLButtonElement>('.gssc-announcement-catalog__item')!.click();
   fixture.detectChanges();
   await fixture.whenStable();
-  await (
-    page as unknown as { onDelete: () => Promise<void> }
-  ).onDelete();
-  fixture.detectChanges();
-  await fixture.whenStable();
-  expect(api.deleteCalls).toEqual(['a1']);
+  await clickAnnouncementDelete(fixture, root);
   expect(root.querySelector('.gssc-announcement-editor')).toBeNull();
   expect(root.querySelectorAll('.gssc-announcement-catalog__item').length).toBe(0);
   expect(textContent(root, '[data-slot="announcements-editor-status"]')).toContain('deleted');
