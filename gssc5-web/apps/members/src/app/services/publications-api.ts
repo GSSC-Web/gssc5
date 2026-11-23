@@ -1,6 +1,5 @@
-import { backend } from './backend';
+import { BACKEND_ORIGIN, backend } from './backend';
 
-const PUBLICATIONS_ORIGIN = 'http://localhost:3000';
 
 export type PublicationEntry = {
   cuid: string;
@@ -79,7 +78,7 @@ export const publicationsApi = {
 /** Resolve a publication cuid to the dedicated GET file URL. */
 export function publicationFileUrl(
   cuid: string | null | undefined,
-  origin: string = PUBLICATIONS_ORIGIN,
+  origin: string = BACKEND_ORIGIN,
 ): string | null {
   if (cuid === null || cuid === undefined) return null;
   const trimmed = cuid.trim();

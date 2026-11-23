@@ -1,6 +1,5 @@
-import { backend } from './backend';
+import { BACKEND_ORIGIN, backend } from './backend';
 
-const RESEARCH_TOOLS_ORIGIN = 'http://localhost:3000';
 
 export type ResearchToolEntry = {
   cuid: string;
@@ -68,7 +67,7 @@ export const researchToolsApi = {
 /** Resolve a research-tool file cuid to the dedicated GET URL. */
 export function researchToolFileUrl(
   cuid: string,
-  origin: string = RESEARCH_TOOLS_ORIGIN,
+  origin: string = BACKEND_ORIGIN,
 ): string {
   return `${origin}/research-tools/${cuid.replace(/^\/+/, '')}/file`;
 }
