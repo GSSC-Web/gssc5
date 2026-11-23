@@ -194,6 +194,19 @@ async function clickEventDelete(
   await flushAsync(fixture);
 }
 
+async function setTimeFilterSelect(
+  fixture: { detectChanges: () => void; whenStable: () => Promise<unknown> },
+  root: HTMLElement,
+  value: string,
+): Promise<void> {
+  const select = root.querySelector<HTMLSelectElement>(
+    '[data-slot="events-time-filter"] select',
+  )!;
+  select.value = value;
+  select.dispatchEvent(new Event('change', { bubbles: true }));
+  await flushAsync(fixture);
+}
+
 async function fillRequiredFields(
   fixture: { detectChanges: () => void; whenStable: () => Promise<unknown> },
   page: EventsPage,
@@ -763,28 +776,66 @@ test('GSSC-MLLR-752 Event Delete Persists And Refreshes', async () => {
 });
 // @relation(GSSC-MLLR-752, scope=range_end, role=Test)
 
-// @relation(GSSC-MLLR-753, GSSC-MLLR-754, GSSC-MLLR-755, scope=range_start, role=Test)
-test('GSSC-MLLR-753/754/755 Events Catalog Time Filter Control', async () => {
-  const { root, page, restore } = await setupEvents();
+// @relation(GSSC-MLLR-753, scope=range_start, role=Test)
+test('GSSC-MLLR-753 Semantic events time filter choices and default', async () => {
+  const past = { ...sampleEvent, cuid: 'evt_past', name: 'Past Meetup', year: 2000, month: 1, day: 1 };
+  const future = { ...sampleEvent, cuid: 'evt_future', name: 'Future Meetup', year: 2099, month: 6, day: 1 };
+  const { root, fixture, page, restore } = await setupEvents({ catalog: [past, future] });
   try {
     expect(page.timeFilter()).toBe('future');
-    const filter = root.querySelector('[data-slot="events-time-filter"]')!;
-    expect(filter).toBeTruthy();
-    expect(filter.className).toContain('font-sans');
-    expect(filter.className).toContain('text-gssc-dark-green');
-    expect(filter.textContent).toContain('Filter');
-    const select = filter.querySelector('select')!;
+    const select = root.querySelector<HTMLSelectElement>(
+      '[data-slot="events-time-filter"] select',
+    )!;
     expect(Array.from(select.options).map((o) => o.textContent?.trim())).toEqual([
       'Past',
       'Future',
       'All',
     ]);
-    expect(root.querySelector('.gssc-events-catalog')!.contains(filter)).toBe(true);
+    expect(Array.from(select.options).map((o) => o.value)).toEqual(['past', 'future', 'all']);
+    expect(page.filteredCatalog().map((e) => e.cuid)).toEqual(['evt_future']);
+
+    await setTimeFilterSelect(fixture, root, 'past');
+    expect(page.timeFilter()).toBe('past');
+    expect(page.filteredCatalog().map((e) => e.cuid)).toEqual(['evt_past']);
   } finally {
     restore();
   }
 });
-// @relation(GSSC-MLLR-753, GSSC-MLLR-754, GSSC-MLLR-755, scope=range_end, role=Test)
+// @relation(GSSC-MLLR-753, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-754, scope=range_start, role=Test)
+test('GSSC-MLLR-754 Syntactic events time filter heading row', async () => {
+  const { root, restore } = await setupEvents();
+  try {
+    const filter = root.querySelector('[data-slot="events-time-filter"]')!;
+    const newEvent = root.querySelector('.gssc-events-new')!;
+    expect(filter).toBeTruthy();
+    expect(newEvent).toBeTruthy();
+    const headingRow = filter.parentElement!;
+    expect(headingRow.contains(newEvent)).toBe(true);
+    expect(root.querySelector('.gssc-events-catalog')!.contains(headingRow)).toBe(true);
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-754, scope=range_end, role=Test)
+
+// @relation(GSSC-MLLR-755, scope=range_start, role=Test)
+test('GSSC-MLLR-755 Lexical events time filter chrome', async () => {
+  const { root, restore } = await setupEvents();
+  try {
+    const filter = root.querySelector('[data-slot="events-time-filter"]')!;
+    expect(filter.className).toContain('font-sans');
+    expect(filter.className).toContain('text-gssc-dark-green');
+    expect(filter.textContent).toContain('Filter');
+    const select = filter.querySelector('select')!;
+    expect(select.className).toContain('font-sans');
+    expect(select.className).toContain('text-gssc-dark-green');
+  } finally {
+    restore();
+  }
+});
+// @relation(GSSC-MLLR-755, scope=range_end, role=Test)
 
 // @relation(GSSC-MLLR-756, scope=range_start, role=Test)
 test('GSSC-MLLR-756 Events Catalog Lists Filtered Entries', async () => {
@@ -796,13 +847,16 @@ test('GSSC-MLLR-756 Events Catalog Lists Filtered Entries', async () => {
     expect(page.filteredCatalog().map((e) => e.cuid)).toEqual(['evt_future']);
     expect(root.querySelectorAll('.gssc-events-catalog__entry').length).toBe(1);
 
-    page.onTimeFilterChange('past');
-    fixture.detectChanges();
+    await setTimeFilterSelect(fixture, root, 'past');
     expect(page.filteredCatalog().map((e) => e.cuid)).toEqual(['evt_past']);
+    expect(root.querySelectorAll('.gssc-events-catalog__entry').length).toBe(1);
 
-    page.onTimeFilterChange('all');
-    fixture.detectChanges();
+    await setTimeFilterSelect(fixture, root, 'all');
     expect(page.filteredCatalog().map((e) => e.cuid).sort()).toEqual(['evt_future', 'evt_past']);
+    expect(root.querySelectorAll('.gssc-events-catalog__entry').length).toBe(2);
+
+    await setTimeFilterSelect(fixture, root, 'future');
+    expect(page.filteredCatalog().map((e) => e.cuid)).toEqual(['evt_future']);
   } finally {
     restore();
   }
